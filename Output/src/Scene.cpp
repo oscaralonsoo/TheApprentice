@@ -30,7 +30,8 @@ bool Scene::Awake()
 
 	//L04: TODO 3b: Instantiate the player using the entity manager
 	player = (Player*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PLAYER);
-	
+	player->SetParameters(configParameters.child("animations").child("player"));
+
 	//L08 Create a new item using the entity manager and set the position to (200, 672) to test
 	Item* item = (Item*) Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
 	item->position = Vector2D(200, 672);
@@ -55,6 +56,9 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
+	Engine::GetInstance().render.get()->camera.x = -(player->position.getX()-300);
+	Engine::GetInstance().render.get()->camera.y = -(player->position.getY()-500);
+
 	//L03 TODO 3: Make the camera movement independent of framerate
 	float camSpeed = 1;
 

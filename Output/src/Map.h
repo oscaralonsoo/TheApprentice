@@ -49,6 +49,9 @@ struct MapLayer
     std::vector<int> tiles;
     Properties properties;
 
+    float parallaxX = 1.0f; // Parallax en X
+    float parallaxY = 1.0f; // Parallax en Y
+
     // L07: TODO 6: Short function to get the gid value of i,j
     int Get(int i, int j) const
     {

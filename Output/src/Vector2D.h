@@ -8,6 +8,9 @@ public:
     Vector2D();
     Vector2D(float x, float y);
 
+    float x;
+    float y;
+
     // Getters and Setters
     float getX() const;
     void setX(float x);
@@ -24,8 +27,4 @@ public:
 
     // Output stream operator
     friend std::ostream& operator<<(std::ostream& os, const Vector2D& vec);
-
-private:
-    float x;
-    float y;
 };

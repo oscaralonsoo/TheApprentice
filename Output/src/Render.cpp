@@ -2,6 +2,8 @@
 #include "Window.h"
 #include "Render.h"
 #include "Log.h"
+#include "Player.h"
+#include "Map.h"
 
 #define VSYNC true
 
@@ -226,3 +228,33 @@ bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uin
 
 	return ret;
 }
+
+void Render::UpdateCamera(const Vector2D& targetPosition, float smoothing)
+{
+	
+	mapWidthPx = Engine::GetInstance().map->GetMapWidth();
+	mapHeightPx = Engine::GetInstance().map->GetMapHeight();
+	
+	targetX = static_cast<int>(targetPosition.x);
+	targetY = static_cast<int>(targetPosition.y);
+	
+	camera.x += static_cast<int>((-targetX + camera.w / 2 - camera.x) * smoothing);
+	
+	followMargin = 100; 
+	cameraCenterY = -camera.y + camera.h / 2; 
+	
+	if (targetY < cameraCenterY - followMargin || targetY > cameraCenterY + followMargin)
+	{
+		
+		camera.y += static_cast<int>((-targetY + camera.h / 2 - camera.y) * smoothing);
+	}
+
+	if (camera.x > 0) camera.x = 0;  
+	if (camera.y > 0) camera.y = 0;  
+	if (camera.x < -(mapWidthPx - camera.w)) camera.x = -(mapWidthPx - camera.w);
+	if (camera.y < -(mapHeightPx - camera.h)) camera.y = -(mapHeightPx - camera.h);
+}
+
+
+
+

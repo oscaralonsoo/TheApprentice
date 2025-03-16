@@ -39,10 +39,19 @@ public:
 	// Set background color
 	void SetBackgroundColor(SDL_Color color);
 
+	void UpdateCamera(const Vector2D& targetPosition, float smoothing = 0.1f);
+
 public:
 
 	SDL_Renderer* renderer;
 	SDL_Rect camera;
 	SDL_Rect viewport;
 	SDL_Color background;
+
+	int targetY;
+	int targetX;
+	int mapWidthPx;
+	int mapHeightPx;
+	int followMargin;
+	int cameraCenterY;
 };

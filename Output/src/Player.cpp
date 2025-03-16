@@ -113,3 +113,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 	LOG("End Collision");
 }
+
+Vector2D Player::GetPosition() const {
+	return position;
+}
+

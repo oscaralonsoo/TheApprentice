@@ -26,6 +26,8 @@ public:
 	void SetParameters(pugi::xml_node parameters) {
 		this->parameters = parameters;
 	}
+	Vector2D GetPosition() const;
+
 
 private:
 	// Manejo de input
@@ -47,4 +49,5 @@ private:
 
 	// Parameters config.xml
 	pugi::xml_node parameters;
+
 };

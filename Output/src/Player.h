@@ -27,6 +27,10 @@ public:
 		this->parameters = parameters;
 	}
 
+	void SetPosition(Vector2D pos);
+
+	Vector2D GetPosition();
+
 private:
 	// Manejo de input
 	void HandleInput();

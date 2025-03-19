@@ -28,7 +28,7 @@ public:
 	}
 	Vector2D GetPosition() const;
 	int GetMovementDirection() const { return movementDirection; }
-
+	void EnableDoubleJump(bool enable) { canDoubleJump = enable; }
 
 private:
 	// Manejo de input
@@ -45,6 +45,12 @@ private:
 	float jumpForce = 10.5f;
 	bool isJumping = false;
 	int movementDirection = 0;
+
+	float jumpTime = 0.0f;
+	float maxJumpTime = 0.3f;
+
+	bool canDoubleJump = true;
+	bool hasDoubleJumped = false;
 
 	// Animaciones del jugador
 	PlayerAnimation animation;

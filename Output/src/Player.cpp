@@ -102,6 +102,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	case ColliderType::PLATFORM:
 		LOG("Collision PLATFORM");
 		isJumping = false;
+        hasDoubleJumped = false;
 		break;
 	case ColliderType::ITEM:
 		LOG("Collision ITEM");
@@ -125,14 +126,32 @@ void Player::HandleJump() {
     // Obtener la velocidad actual del jugador
     b2Vec2 velocity = pbody->body->GetLinearVelocity();
 
-    // Si el jugador presiona la tecla de salto y no está en el aire
+    // --- INICIO DEL PRIMER SALTO ---
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !isJumping) {
-        velocity.y = -jumpForce;  // Aplicamos fuerza hacia arriba
-        isJumping = true;         // Marcamos que el jugador está en el aire
+        velocity.y = -jumpForce;  // Aplicamos la fuerza inicial del salto
+        isJumping = true;
+        hasDoubleJumped = false;  // Resetear el doble salto al tocar el suelo
     }
 
-    // Aplicamos la nueva velocidad
+    // --- DOBLE SALTO ---
+    else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isJumping && !hasDoubleJumped && canDoubleJump) {
+        velocity.y = -jumpForce;  // Aplicamos la fuerza del doble salto
+        hasDoubleJumped = true;   // Marcar que ya usamos el doble salto
+    }
+
+    // --- SALTO PROGRESIVO (Mientras se mantenga presionado) ---
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && isJumping) {
+        if (jumpTime < maxJumpTime) {
+            velocity.y -= 0.3f;
+            jumpTime += 0.016f;  // Aproximadamente 1 frame a 60 FPS
+        }
+    }
+
+    // --- GRAVEDAD AUMENTADA EN LA CAÍDA ---
+    if (velocity.y > 0) {
+        velocity.y += 0.5f;
+    }
+
+    // Aplicar la nueva velocidad al jugador
     pbody->body->SetLinearVelocity(velocity);
 }
-
-

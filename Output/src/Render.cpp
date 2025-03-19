@@ -229,16 +229,17 @@ bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uin
 	return ret;
 }
 
-void Render::UpdateCamera(const Vector2D& targetPosition, float smoothing)
+void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection, float smoothing)
 {
-	
+	int offsetX = -110 * movementDirection;
+
 	mapWidthPx = Engine::GetInstance().map->GetMapWidth();
 	mapHeightPx = Engine::GetInstance().map->GetMapHeight();
 	
 	targetX = static_cast<int>(targetPosition.x);
 	targetY = static_cast<int>(targetPosition.y);
 	
-	camera.x += static_cast<int>((-targetX + camera.w / 2 - camera.x) * smoothing);
+	camera.x += static_cast<int>((-targetX + camera.w / 2 + offsetX - camera.x) * smoothing);
 	
 	followMargin = 100; 
 	cameraCenterY = -camera.y + camera.h / 2; 

@@ -27,6 +27,7 @@ public:
 		this->parameters = parameters;
 	}
 	Vector2D GetPosition() const;
+	int GetMovementDirection() const { return movementDirection; }
 
 
 private:
@@ -43,6 +44,7 @@ private:
 	PhysBody* pbody;
 	float jumpForce = 10.5f;
 	bool isJumping = false;
+	int movementDirection = 0;
 
 	// Animaciones del jugador
 	PlayerAnimation animation;

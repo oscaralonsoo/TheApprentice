@@ -73,9 +73,11 @@ bool Player::Update(float dt) {
 
 void Player::HandleInput() {
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-		state = "run_left";
+        movementDirection = -1;
+        state = "run_left";
 	}
 	else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+        movementDirection = 1;
 		state = "run_right";
 	}
 	else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {

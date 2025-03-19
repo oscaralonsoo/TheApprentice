@@ -126,11 +126,13 @@ void Player::HandleJump() {
     // Obtener la velocidad actual del jugador
     b2Vec2 velocity = pbody->body->GetLinearVelocity();
 
+    if (!canJump) return;
+
+
     // --- INICIO DEL PRIMER SALTO ---
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !isJumping) {
         velocity.y = -jumpForce;  // Aplicamos la fuerza inicial del salto
         isJumping = true;
-        hasDoubleJumped = false;  // Resetear el doble salto al tocar el suelo
     }
 
     // --- DOBLE SALTO ---
@@ -147,9 +149,51 @@ void Player::HandleJump() {
         }
     }
 
-    // --- GRAVEDAD AUMENTADA EN LA CAÍDA ---
-    if (velocity.y > 0) {
-        velocity.y += 0.5f;
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_UP && isJumping) {
+        if (velocity.y < 0) {  // Si aún está subiendo, forzamos la caída
+            velocity.y = 0;   // Reduce la velocidad de subida de golpe
+        }
+    }
+
+    // --- GRAVEDAD SUAVE Y PROGRESIVA EN LA CAÍDA ---
+    if (velocity.y > 0 && !isDashing) {
+        velocity.y += std::min(velocity.y * 0.1f, 1.0f);
+    }
+
+
+    // Aplicar la nueva velocidad al jugador
+    pbody->body->SetLinearVelocity(velocity);
+}
+
+void Player::HandleDash() {
+    // Si el dash está desactivado, no hacemos nada
+    if (!canDash) return;
+
+    // Obtener la velocidad actual del jugador
+    b2Vec2 velocity = pbody->body->GetLinearVelocity();
+
+    //  INICIO DEL DASH 
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN && !isDashing) {
+        isDashing = true;
+        dashTimer = dashDuration;  // Iniciamos el contador del dash
+
+        // Determinar la dirección del dash
+        if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+            velocity.x = -dashSpeed;  // Dash a la izquierda
+        }
+        else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+            velocity.x = dashSpeed;  // Dash a la derecha
+        }
+    }
+
+    //  MIENTRAS EL DASH ESTÉ ACTIVO 
+    if (isDashing) {
+        dashTimer--;  // Reducimos el contador del dash
+        velocity.y = 0;  // Evitamos que la gravedad afecte al dash
+
+        if (dashTimer <= 0) {
+            isDashing = false;  // Termina el dash
+        }
     }
 
     // Aplicar la nueva velocidad al jugador

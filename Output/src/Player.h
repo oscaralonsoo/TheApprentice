@@ -29,11 +29,14 @@ public:
 	Vector2D GetPosition() const;
 	int GetMovementDirection() const { return movementDirection; }
 	void EnableDoubleJump(bool enable) { canDoubleJump = enable; }
+	void EnableJump(bool enable) { canJump = enable; }
+	void EnableDash(bool enable) { canDash = enable; }
 
 private:
 	// Manejo de input
 	void HandleInput();
 	void HandleJump();
+	void HandleDash();
 
 	// Parámetros del jugador
 	float speed = 5.0f;
@@ -48,9 +51,16 @@ private:
 
 	float jumpTime = 0.0f;
 	float maxJumpTime = 0.3f;
+	bool canJump = true;
 
 	bool canDoubleJump = true;
 	bool hasDoubleJumped = false;
+
+	int dashTimer = 0;
+	int dashDuration = 12;
+	int dashSpeed = 12;
+	bool isDashing = false;
+	bool canDash = true;
 
 	// Animaciones del jugador
 	PlayerAnimation animation;

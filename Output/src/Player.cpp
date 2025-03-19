@@ -41,6 +41,7 @@ bool Player::Start() {
 bool Player::Update(float dt) {
     HandleInput();
     HandleJump();
+    HandleDash();
 
     // Movimiento con física
     b2Vec2 velocity = b2Vec2(0, pbody->body->GetLinearVelocity().y);
@@ -173,29 +174,36 @@ void Player::HandleDash() {
     b2Vec2 velocity = pbody->body->GetLinearVelocity();
 
     //  INICIO DEL DASH 
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN && !isDashing) {
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_K) == KEY_DOWN && !isDashing) {
         isDashing = true;
-        dashTimer = dashDuration;  // Iniciamos el contador del dash
+        dashRemaining = dashDistance;  //  Establecemos la distancia total del dash
 
         // Determinar la dirección del dash
         if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-            velocity.x = -dashSpeed;  // Dash a la izquierda
+            dashDirection = -1;  // Dash a la izquierda
         }
         else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-            velocity.x = dashSpeed;  // Dash a la derecha
+            dashDirection = 1;   // Dash a la derecha
+        }
+        else {
+            dashDirection = (velocity.x >= 0) ? 1 : -1;  // Dash en la dirección actual si no hay input
         }
     }
 
     //  MIENTRAS EL DASH ESTÉ ACTIVO 
     if (isDashing) {
-        dashTimer--;  // Reducimos el contador del dash
-        velocity.y = 0;  // Evitamos que la gravedad afecte al dash
-
-        if (dashTimer <= 0) {
-            isDashing = false;  // Termina el dash
+        if (dashRemaining > 0) {
+            velocity.x = dashDirection * dashSpeed;
+            velocity.y = 0; 
+            dashRemaining--;
+        }
+        else {
+            isDashing = false; // Termina el dash
         }
     }
 
     // Aplicar la nueva velocidad al jugador
     pbody->body->SetLinearVelocity(velocity);
 }
+
+

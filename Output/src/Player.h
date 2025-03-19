@@ -56,11 +56,12 @@ private:
 	bool canDoubleJump = true;
 	bool hasDoubleJumped = false;
 
-	int dashTimer = 0;
-	int dashDuration = 12;
-	int dashSpeed = 12;
-	bool isDashing = false;
 	bool canDash = true;
+	bool isDashing = false;
+	int dashSpeed = 3000.0f;
+	int dashDistance = 20;
+	int dashRemaining = 0;
+	int dashDirection = 0;
 
 	// Animaciones del jugador
 	PlayerAnimation animation;

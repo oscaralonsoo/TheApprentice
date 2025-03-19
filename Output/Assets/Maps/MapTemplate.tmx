@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="60" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="25" nextobjectid="1">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="25" nextobjectid="1">
  <tileset firstgid="1" name="MapMetadata" tilewidth="32" tileheight="32" tilecount="2" columns="2">
   <image source="MapMetadata.png" width="67" height="34"/>
  </tileset>
@@ -6065,6 +6065,7 @@
  <layer id="24" name="Collisions" width="60" height="20" parallaxx="0" parallaxy="0">
   <properties>
    <property name="Collisions" type="bool" value="true"/>
+   <property name="Navigation" type="bool" value="true"/>
   </properties>
   <data>
    <tile/>

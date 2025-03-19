@@ -32,6 +32,7 @@ public:
 private:
 	// Manejo de input
 	void HandleInput();
+	void HandleJump();
 
 	// Parámetros del jugador
 	float speed = 5.0f;
@@ -40,7 +41,7 @@ private:
 
 	// Física del jugador
 	PhysBody* pbody;
-	float jumpForce = 2.5f;
+	float jumpForce = 10.5f;
 	bool isJumping = false;
 
 	// Animaciones del jugador

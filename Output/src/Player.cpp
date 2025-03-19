@@ -40,6 +40,7 @@ bool Player::Start() {
 
 bool Player::Update(float dt) {
     HandleInput();
+    HandleJump();
 
     // Movimiento con física
     b2Vec2 velocity = b2Vec2(0, pbody->body->GetLinearVelocity().y);
@@ -117,4 +118,19 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 Vector2D Player::GetPosition() const {
 	return position;
 }
+
+void Player::HandleJump() {
+    // Obtener la velocidad actual del jugador
+    b2Vec2 velocity = pbody->body->GetLinearVelocity();
+
+    // Si el jugador presiona la tecla de salto y no está en el aire
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !isJumping) {
+        velocity.y = -jumpForce;  // Aplicamos fuerza hacia arriba
+        isJumping = true;         // Marcamos que el jugador está en el aire
+    }
+
+    // Aplicamos la nueva velocidad
+    pbody->body->SetLinearVelocity(velocity);
+}
+
 

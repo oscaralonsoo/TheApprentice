@@ -145,6 +145,9 @@ public:
         return mapData.tileHeight;
     }
 
+    int GetMapWidth() const { return mapData.width * mapData.tileWidth; }
+    int GetMapHeight() const { return mapData.height * mapData.tileHeight; }
+    
     MapLayer* GetNavigationLayer();
 
 public: 

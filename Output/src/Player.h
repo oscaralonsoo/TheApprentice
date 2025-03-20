@@ -4,6 +4,7 @@
 #include "SDL2/SDL.h"
 #include "Box2D/Box2D.h"
 #include "PlayerAnimation.h"  // Añadimos la clase de animaciones
+#include "Timer.h"
 
 struct SDL_Texture;
 
@@ -35,6 +36,7 @@ private:
 	// Manejo de input
 	void HandleInput();
 	void HandleJump();
+	void HandleDash();
 
 	// Parámetros del jugador
 	float speed = 5.0f;
@@ -54,6 +56,12 @@ private:
 	bool canDoubleJump = true;
 	bool hasDoubleJumped = false;
 
+	int lastDashDirection = 0;
+	Timer dashDuration;
+	Timer dashCooldown;
+	bool canDash = true;
+	b2Vec2 dashImpulse = b2Vec2(10.0f, 0);
+
 	// Animaciones del jugador
 	PlayerAnimation animation;
 	std::string state = "idle";
@@ -62,3 +70,5 @@ private:
 	pugi::xml_node parameters;
 
 };
+
+

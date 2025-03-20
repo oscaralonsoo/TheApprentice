@@ -8,6 +8,8 @@
 #include "Log.h"
 #include "Physics.h"
 #include "EntityManager.h"
+#include "box2D/box2d.h"
+
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -41,6 +43,7 @@ bool Player::Start() {
 bool Player::Update(float dt) {
     HandleInput();
     HandleJump();
+    HandleDash();
 
     // Movimiento con física
     b2Vec2 velocity = b2Vec2(0, pbody->body->GetLinearVelocity().y);
@@ -165,6 +168,20 @@ void Player::HandleJump() {
     pbody->body->SetLinearVelocity(velocity);
 }
 
+void Player::HandleDash() {
 
+    if (!canDash) {
+        if (dashCooldown.ReadSec() >= 2) {
+            canDash = true;
+        }
+        return; // Evitar que siga ejecutando el resto del código
+    }
 
+    // Solo iniciar el dash si el jugador presiona K y canDash es true
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_K) == KEY_DOWN) {
+        printf("ENTRAAAAAAAAAAA\n");
 
+        canDash = false;
+        dashCooldown.Start(); // Solo inicia el cooldown una vez
+    }
+}

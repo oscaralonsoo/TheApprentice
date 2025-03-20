@@ -30,13 +30,11 @@ public:
 	int GetMovementDirection() const { return movementDirection; }
 	void EnableDoubleJump(bool enable) { canDoubleJump = enable; }
 	void EnableJump(bool enable) { canJump = enable; }
-	void EnableDash(bool enable) { canDash = enable; }
 
 private:
 	// Manejo de input
 	void HandleInput();
 	void HandleJump();
-	void HandleDash();
 
 	// Parámetros del jugador
 	float speed = 5.0f;
@@ -55,13 +53,6 @@ private:
 
 	bool canDoubleJump = true;
 	bool hasDoubleJumped = false;
-
-	bool canDash = true;
-	bool isDashing = false;
-	int dashSpeed = 3000.0f;
-	int dashDistance = 20;
-	int dashRemaining = 0;
-	int dashDirection = 0;
 
 	// Animaciones del jugador
 	PlayerAnimation animation;

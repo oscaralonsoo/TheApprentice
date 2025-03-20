@@ -5,6 +5,9 @@
 #include "Map.h"
 #include "Log.h"
 #include "Physics.h"
+#include "Enemy.h"
+#include "Engine.h"
+#include "EntityManager.h"
 
 #include <math.h>
 
@@ -205,6 +208,38 @@ bool Map::Load(std::string path, std::string fileName)
                             Vector2D mapCoord = MapToWorld(i, j);
                             PhysBody* c1 = Engine::GetInstance().physics.get()->CreateRectangle(mapCoord.getX()+ mapData.tileWidth/2, mapCoord.getY()+ mapData.tileHeight/2, mapData.tileWidth, mapData.tileHeight, STATIC);
                             c1->ctype = ColliderType::PLATFORM;
+                        }
+                    }
+                }
+            }
+        }
+
+        //Iterate the layer and save enemies data
+        for (const auto& mapLayer : mapData.layers) {
+            if (mapLayer->name == "Enemies") {
+                for (int i = 0; i < mapData.width; i++) {
+                    for (int j = 0; j < mapData.height; j++) {
+                        int gid = mapLayer->Get(i, j);
+                        if (gid == 99) {
+                            // Cargar el archivo XML
+                            pugi::xml_document loadFile;
+                            pugi::xml_parse_result result = loadFile.load_file("config.xml");
+
+                            // Navegar hasta el nodo <entities>
+                            pugi::xml_node saveData = loadFile.child("config").child("scene").child("save_data");
+                            pugi::xml_node enemiesNode = saveData.child("enemies");
+
+                            // Crear un nuevo nodo <enemy>
+                            pugi::xml_node enemyNode = enemiesNode.append_child("enemy");
+                            enemyNode.append_attribute("name") = "badguy2";
+                            enemyNode.append_attribute("x") = 600;
+                            enemyNode.append_attribute("y") = 300;
+                            enemyNode.append_attribute("w") = 32;
+                            enemyNode.append_attribute("h") = 32;
+
+                            // Guardar los cambios en el archivo
+                            loadFile.save_file("config.xml");
+                            Engine::GetInstance().UpdateConfig();
                         }
                     }
                 }

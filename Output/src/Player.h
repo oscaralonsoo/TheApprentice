@@ -26,12 +26,9 @@ public:
 	void SetParameters(pugi::xml_node parameters) {
 		this->parameters = parameters;
 	}
+
 	Vector2D GetPosition() const;
-
-
 	void SetPosition(Vector2D pos);
-
-	Vector2D GetPosition();
 
 private:
 	// Manejo de input

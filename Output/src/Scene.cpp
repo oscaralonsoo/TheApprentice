@@ -37,13 +37,7 @@ bool Scene::Awake()
 	Item* item = (Item*) Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
 	item->position = Vector2D(200, 672);
 
-	// Create a enemy using the entity manager 
-	for (pugi::xml_node enemyNode = configParameters.child("save_data").child("enemies").child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy"))
-	{
-		Enemy* enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ENEMY);
-		enemy->SetParameters(enemyNode);
-		enemyList.push_back(enemy);
-	}
+	
 	return ret;
 }
 
@@ -52,6 +46,16 @@ bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
 	Engine::GetInstance().map->Load("Assets/Maps/", "MapTemplate.tmx");
+
+	//MEJORAR CONFIGFILE XML
+	//SACAR DE SCENE ESTE CODIGO
+
+	for (pugi::xml_node enemyNode = configParameters.child("save_data").child("enemies").child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy"))
+	{
+		Enemy* enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ENEMY);
+		enemy->SetParameters(enemyNode);
+		enemyList.push_back(enemy);
+	}
 
 	return true;
 }

@@ -42,7 +42,7 @@ bool Scene::Awake()
 bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
-	Engine::GetInstance().map->Load("Assets/Maps/", "MapTemplate.tmx");
+	Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx");
 
 	return true;
 }
@@ -95,4 +95,44 @@ bool Scene::CleanUp()
 	SDL_DestroyTexture(img);
 
 	return true;
+}
+
+// Called every iteration
+void Scene::Transition(float dt) 
+{
+	// fadeOut
+
+	// fadeIn
+
+}
+
+void Scene::StartTransition()
+{
+
+}
+
+void Scene::FinishTransition() 
+{
+
+}
+
+// Called before changing the scene
+void Scene::ChangeScene(int nextScene)
+{
+	Engine::GetInstance().map.get()->CleanUp(); // Previous Map CleanUp
+	// Enemies CleanUp
+	// Items CleanUp
+
+	switch (nextScene) {
+
+	case 0:
+		Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx");
+	case 1:
+		Engine::GetInstance().map->Load("Assets/Maps/", "Map1.tmx");
+	break;
+	default:
+		Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx");
+	break;
+	}
+
 }

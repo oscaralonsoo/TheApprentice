@@ -107,6 +107,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		LOG("Collision ITEM");
 		Engine::GetInstance().physics.get()->DeletePhysBody(physB);
 		break;
+    case ColliderType::DOOR:
+        LOG("Collision DOOR");
+
+        break;
 	default:
 		LOG("Collision UNKNOWN");
 		break;

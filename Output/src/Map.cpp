@@ -210,7 +210,19 @@ bool Map::Load(std::string path, std::string fileName)
                 }
             }
         }
-
+        // Iterate the layer and create the Doors Colliders
+        for (const auto& mapLayer : mapData.layers) {
+            if (mapLayer->name == "Doors") {
+                for (int i = 0; i < mapData.width; i++) {
+                    for (int j = 0; j < mapData.height; j++) {
+                            Vector2D mapCoord = MapToWorld(i, j);
+                            PhysBody* doorCollider = Engine::GetInstance().physics.get()->CreateRectangle(mapCoord.getX() + mapData.tileWidth / 2, mapCoord.getY() + mapData.tileHeight / 2, mapData.tileWidth, mapData.tileHeight, STATIC);
+                            doorCollider->ctype = ColliderType::DOOR;
+                        
+                    }
+                }
+            }
+        }
         ret = true;
 
         // L06: TODO 5: LOG all the data loaded iterate all tilesetsand LOG everything
@@ -268,7 +280,8 @@ bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
     {
         Properties::Property* p = new Properties::Property();
         p->name = propertieNode.attribute("name").as_string();
-        p->value = propertieNode.attribute("value").as_bool(); // (!!) I'm assuming that all values are bool !!
+        p->value = propertieNode.attribute("value").as_bool();
+        p->number = propertieNode.attribute("number").as_int();
 
         properties.propertyList.push_back(p);
     }

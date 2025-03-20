@@ -10,7 +10,8 @@ struct Properties
     struct Property
     {
         std::string name;
-        bool value; //We assume that we are going to work only with bool for the moment
+        bool value;
+        int number;
     };
 
     std::list<Property*> propertyList;

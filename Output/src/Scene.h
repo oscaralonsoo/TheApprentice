@@ -32,6 +32,18 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	// Called each Update Iteration
+	void Transition(float dt);
+
+	// Called before starting the Transition
+	void StartTransition();
+
+	// Called before finishing the Transition
+	void FinishTransition();
+
+	// Called before changing the scene
+	void ChangeScene(int nextScene);
+
 private:
 	SDL_Texture* img;
 

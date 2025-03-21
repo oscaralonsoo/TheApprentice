@@ -56,6 +56,7 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
+	UpdateTransition(dt);
 	Engine::GetInstance().render.get()->UpdateCamera(player->GetPosition(), player->GetMovementDirection(), 0.05);
 	
 	//L03 TODO 3: Make the camera movement independent of framerate
@@ -79,6 +80,11 @@ bool Scene::Update(float dt)
 // Called each loop iteration
 bool Scene::PostUpdate()
 {
+	if (transitioning) { // Render Fade In & Out 
+		SDL_SetRenderDrawBlendMode(Engine::GetInstance().render->renderer, SDL_BLENDMODE_BLEND);
+		SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, 0, 0, 0, (Uint8)(transitionAlpha * 255));
+		SDL_RenderFillRect(Engine::GetInstance().render->renderer, nullptr);
+	}
 	bool ret = true;
 
 	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
@@ -98,41 +104,52 @@ bool Scene::CleanUp()
 }
 
 // Called every iteration
-void Scene::Transition(float dt) 
+void Scene::UpdateTransition(float dt)
 {
-	// fadeOut
-
-	// fadeIn
-
+	if (transitioning) {
+		// Fade out
+		if (!fadingIn) {
+			transitionAlpha += dt * 1.5f;
+			if (transitionAlpha >= 1.0f) {
+				ChangeScene(nextScene);
+				fadingIn = true;
+			}
+		}
+		// Fade in
+		else {
+			transitionAlpha -= dt * 1.5f;
+			if (transitionAlpha <= 0.0f) {
+				transitioning = false;
+				fadingIn = false;
+			}
+		}
+	}
 }
 
-void Scene::StartTransition()
+void Scene::StartTransition(int nextScene)
 {
-
+	transitioning = true;
+	transitionAlpha = 0.0f;
+	this->nextScene = nextScene;
 }
 
-void Scene::FinishTransition() 
-{
-
-}
 
 // Called before changing the scene
 void Scene::ChangeScene(int nextScene)
 {
-	Engine::GetInstance().map.get()->CleanUp(); // Previous Map CleanUp
-	// Enemies CleanUp
-	// Items CleanUp
+	Engine::GetInstance().map->CleanUp(); // Previous Map CleanUp
 
-	switch (nextScene) {
+	switch (nextScene) 
+	{
+	case 0: 
+		Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx"); 
+		break;
+	case 1: 
+		Engine::GetInstance().map->Load("Assets/Maps/", "Map1.tmx"); 
+		break;
+	default: 
+		Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx"); 
+		break;
 
-	case 0:
-		Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx");
-	case 1:
-		Engine::GetInstance().map->Load("Assets/Maps/", "Map1.tmx");
-	break;
-	default:
-		Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx");
-	break;
 	}
-
 }

@@ -33,13 +33,10 @@ public:
 	bool CleanUp();
 
 	// Called each Update Iteration
-	void Transition(float dt);
+	void UpdateTransition(float dt);
 
 	// Called before starting the Transition
-	void StartTransition();
-
-	// Called before finishing the Transition
-	void FinishTransition();
+	void StartTransition(int nextScene);
 
 	// Called before changing the scene
 	void ChangeScene(int nextScene);
@@ -49,4 +46,10 @@ private:
 
 	//L03: TODO 3b: Declare a Player attribute
 	Player* player;
+
+	//transition 
+	bool transitioning = false;
+	bool fadingIn = false;
+	float transitionAlpha = 0.0f;
+	int nextScene;
 };

@@ -29,7 +29,7 @@ public:
 	Vector2D GetPosition() const;
 	int GetMovementDirection() const { return movementDirection; }
 
-
+	int targetScene= 0;
 private:
 	// Manejo de input
 	void HandleInput();

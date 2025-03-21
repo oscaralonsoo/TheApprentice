@@ -8,6 +8,7 @@
 #include "Log.h"
 #include "Physics.h"
 #include "EntityManager.h"
+#include "Map.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -98,23 +99,28 @@ bool Player::CleanUp() {
 }
 
 void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
-	switch (physB->ctype) {
-	case ColliderType::PLATFORM:
-		LOG("Collision PLATFORM");
-		isJumping = false;
-		break;
-	case ColliderType::ITEM:
-		LOG("Collision ITEM");
-		Engine::GetInstance().physics.get()->DeletePhysBody(physB);
-		break;
+    switch (physB->ctype) {
+    case ColliderType::PLATFORM:
+        LOG("Collision PLATFORM");
+        isJumping = false;
+        break;
+    case ColliderType::ITEM:
+        LOG("Collision ITEM");
+        Engine::GetInstance().physics.get()->DeletePhysBody(physB);
+        break;
     case ColliderType::DOOR:
-        LOG("Collision DOOR");
+     LOG("Collision DOOR");
+
+        // TargetScene From collider
+        targetScene = physB->targetScene;
+
+        Engine::GetInstance().scene.get()->StartTransition(targetScene); // Start Loading scene
 
         break;
-	default:
-		LOG("Collision UNKNOWN");
-		break;
-	}
+    default:
+        LOG("Collision UNKNOWN");
+        break;
+    }
 }
 
 void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {

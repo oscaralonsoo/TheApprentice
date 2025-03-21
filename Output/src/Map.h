@@ -130,11 +130,14 @@ public:
     // L07: TODO 8: Create a method that translates x,y coordinates from map positions to world positions
     Vector2D MapToWorld(int x, int y) const;
 
+
     // L09: TODO 2: Implement function to the Tileset based on a tile id
     TileSet* GetTilesetFromTileId(int gid) const;
 
+
     // L09: TODO 6: Load a group of properties 
     bool LoadProperties(pugi::xml_node& node, Properties& properties);
+
 
     int GetMapWidth() const { return mapData.width * mapData.tileWidth; }
     int GetMapHeight() const { return mapData.height * mapData.tileHeight; }

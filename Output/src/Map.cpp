@@ -195,31 +195,43 @@ bool Map::Load(std::string path, std::string fileName)
         // L08 TODO 7: Assign collider type
         // Later you can create a function here to load and create the colliders from the map
 
-        //Iterate the layer and create colliders
-        for (const auto& mapLayer : mapData.layers) {
-            if (mapLayer->name == "Collisions") {
-                for (int i = 0; i < mapData.width; i++) {
-                    for (int j = 0; j < mapData.height; j++) {
-                        int gid = mapLayer->Get(i, j);
-                        if (gid == 1) {
-                            Vector2D mapCoord = MapToWorld(i, j);
-                            PhysBody* c1 = Engine::GetInstance().physics.get()->CreateRectangle(mapCoord.getX()+ mapData.tileWidth/2, mapCoord.getY()+ mapData.tileHeight/2, mapData.tileWidth, mapData.tileHeight, STATIC);
-                            c1->ctype = ColliderType::PLATFORM;
-                        }
-                    }
+        // L08 TODO 3: Create colliders
+        for (pugi::xml_node objectGroupNode = mapFileXML.child("map").child("objectgroup"); objectGroupNode; objectGroupNode = objectGroupNode.next_sibling("objectgroup"))
+        {
+            std::string objectGroupName = objectGroupNode.attribute("name").as_string();
+            std::string layerName = objectGroupNode.attribute("name").as_string();
+
+            if (objectGroupName == "Collisions") // Objects from layer Collisions
+            {
+                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
+                {
+                    int x = objectNode.attribute("x").as_int();
+                    int y = objectNode.attribute("y").as_int();
+                    int width = objectNode.attribute("width").as_int();
+                    int height = objectNode.attribute("height").as_int();
+
+                    PhysBody* collider = Engine::GetInstance().physics->CreateRectangle(x + (width / 2), y + (height / 2), width, height, STATIC);
+                    collider->ctype = ColliderType::PLATFORM; 
+
+                    LOG("Creating collider at x: %d, y: %d, width: %d, height: %d", x + (width / 2), y + (height / 2), width, height);
                 }
             }
-        }
-        // Iterate the layer and create the Doors Colliders
-        for (const auto& mapLayer : mapData.layers) {
-            if (mapLayer->name == "Doors") {
-                for (int i = 0; i < mapData.width; i++) {
-                    for (int j = 0; j < mapData.height; j++) {
-                            Vector2D mapCoord = MapToWorld(i, j);
-                            PhysBody* doorCollider = Engine::GetInstance().physics.get()->CreateRectangle(mapCoord.getX() + mapData.tileWidth / 2, mapCoord.getY() + mapData.tileHeight / 2, mapData.tileWidth, mapData.tileHeight, STATIC);
-                            doorCollider->ctype = ColliderType::DOOR;
-                        
-                    }
+            else if (layerName == "Doors")  // Objects from layer Doors
+            {
+                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode != NULL; objectNode = objectNode.next_sibling("object"))
+                {
+                    int x = objectNode.attribute("x").as_int();
+                    int y = objectNode.attribute("y").as_int();
+                    int width = objectNode.attribute("width").as_int();
+                    int height = objectNode.attribute("height").as_int();
+
+                    // Create Door type Collider
+                    PhysBody* doorCollider = Engine::GetInstance().physics->CreateRectangle(x + (width / 2), y + (height / 2), width, height, STATIC);
+                    doorCollider->ctype = ColliderType::DOOR;
+
+                    // Acceder al atributo TargetScene
+                    doorCollider->targetScene = objectNode.child("properties").child("property").attribute("value").as_int(); // Cambia esto
+                    LOG("TargetScene: %d", doorCollider->targetScene); 
                 }
             }
         }

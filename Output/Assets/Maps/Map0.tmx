@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="40" tilewidth="32" tileheight="32" infinite="0" nextlayerid="26" nextobjectid="3">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="60" height="40" tilewidth="32" tileheight="32" infinite="0" nextlayerid="27" nextobjectid="6">
  <tileset firstgid="1" name="MapMetadata" tilewidth="32" tileheight="32" tilecount="2" columns="2">
   <image source="MapMetadata.png" width="67" height="34"/>
  </tileset>
@@ -2434,16 +2434,6 @@
    <tile/>
   </data>
  </layer>
- <objectgroup id="25" name="Doors">
-  <properties>
-   <property name="Doors" type="bool" value="true"/>
-  </properties>
-  <object id="1" x="1536" y="640" width="384" height="32">
-   <properties>
-    <property name="TargetScene" type="int" value="1"/>
-   </properties>
-  </object>
- </objectgroup>
  <layer id="20" name="Mid Background" width="60" height="40">
   <properties>
    <property name="Draw" type="bool" value="true"/>
@@ -14479,4 +14469,18 @@
    <tile/>
   </data>
  </layer>
+ <objectgroup id="25" name="Doors">
+  <properties>
+   <property name="Doors" type="bool" value="true"/>
+  </properties>
+  <object id="1" x="1536" y="640" width="384" height="32">
+   <properties>
+    <property name="TargetScene" type="int" value="1"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="26" name="Collisions">
+  <object id="3" x="-4.52643" y="513.75" width="1543.51" height="36.2115"/>
+  <object id="4" x="1326.25" y="-346.272"/>
+ </objectgroup>
 </map>

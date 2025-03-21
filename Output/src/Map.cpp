@@ -213,35 +213,38 @@ bool Map::Load(std::string path, std::string fileName)
                 }
             }
             if (mapLayer->name == "Enemies") {
+                // Load XML config file
+                pugi::xml_document loadFile;
+                pugi::xml_parse_result result = loadFile.load_file("config.xml");
+
+                // Get node save data -> enemies
+                pugi::xml_node saveData = loadFile.child("config").child("scene").child("save_data");
+                pugi::xml_node enemiesNode = saveData.child("enemies");
+
+                // Remove all children
+                enemiesNode.remove_children();
+
                 for (int i = 0; i < mapData.width; i++) {
                     for (int j = 0; j < mapData.height; j++) {
                         int gid = mapLayer->Get(i, j);
                         if (gid == 99) {
-                            // Cargar el archivo XML
-                            pugi::xml_document loadFile;
-                            pugi::xml_parse_result result = loadFile.load_file("config.xml");
-
-                            // Navegar hasta el nodo <entities>
-                            pugi::xml_node saveData = loadFile.child("config").child("scene").child("save_data");
-                            pugi::xml_node enemiesNode = saveData.child("enemies");
-
                             // Convertir coordenadas del mapa a coordenadas del mundo
                             Vector2D mapCoord = MapToWorld(i, j);
 
                             // Crear un nuevo nodo <enemy>
                             pugi::xml_node enemyNode = enemiesNode.append_child("enemy");
                             enemyNode.append_attribute("type") = "badguy2";
-                            enemyNode.append_attribute("x") = mapCoord.x;  // Usar coordenada convertida
-                            enemyNode.append_attribute("y") = mapCoord.y;  // Usar coordenada convertida
+                            enemyNode.append_attribute("x") = mapCoord.x;
+                            enemyNode.append_attribute("y") = mapCoord.y;
                             enemyNode.append_attribute("w") = 32;
                             enemyNode.append_attribute("h") = 32;
-
-                            // Guardar los cambios en el archivo
-                            loadFile.save_file("config.xml");
-                            Engine::GetInstance().UpdateConfig();
                         }
                     }
                 }
+
+                // Guardar los cambios en el archivo
+                loadFile.save_file("config.xml");
+                Engine::GetInstance().UpdateConfig();
             }
         }
 

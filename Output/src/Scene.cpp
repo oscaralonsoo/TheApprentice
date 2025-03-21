@@ -47,8 +47,7 @@ bool Scene::Start()
 	//L06 TODO 3: Call the function to load the map. 
 	Engine::GetInstance().map->Load("Assets/Maps/", "MapTemplate.tmx");
 
-	//MEJORAR CONFIGFILE XML
-	//SACAR DE SCENE ESTE CODIGO
+	//TO DO - SACAR DE SCENE ESTE CODIGO!!!
 
 	for (pugi::xml_node enemyNode = configParameters.child("save_data").child("enemies").child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy"))
 	{

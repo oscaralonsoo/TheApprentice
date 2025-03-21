@@ -68,7 +68,7 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
-	Engine::GetInstance().render.get()->UpdateCamera(player->GetPosition(), 0.07f);
+	Engine::GetInstance().render.get()->UpdateCamera(player->GetPosition(), player->GetMovementDirection(), 0.05);
 	
 	//L03 TODO 3: Make the camera movement independent of framerate
 	float camSpeed = 1;

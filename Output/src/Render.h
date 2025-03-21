@@ -39,7 +39,7 @@ public:
 	// Set background color
 	void SetBackgroundColor(SDL_Color color);
 
-	void UpdateCamera(const Vector2D& targetPosition, float smoothing = 0.1f);
+	void UpdateCamera(const Vector2D& targetPosition, int movementDirection, float smoothing);
 
 public:
 

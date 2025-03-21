@@ -52,7 +52,20 @@
 				</die>
 			</player>
 			<enemies>
-				<enemy name="badguy2" w="32" h="32" texture="Assets/Textures/enemy/Idle.png">
+				<enemy type="badguy1" w="32" h="32" texture="Assets/Textures/enemy/Idle.png">
+					<idle loop="true" speed="0.5">
+						<frame x="0" y="0" w="32" h="32" />
+						<frame x="32" y="0" w="32" h="32" />
+						<frame x="64" y="0" w="32" h="32" />
+						<frame x="96" y="0" w="32" h="32" />
+						<frame x="128" y="0" w="32" h="32" />
+						<frame x="160" y="0" w="32" h="32" />
+						<frame x="192" y="0" w="32" h="32" />
+						<frame x="224" y="0" w="32" h="32" />
+						<frame x="256" y="0" w="32" h="32" />
+					</idle>
+				</enemy>
+				<enemy type="badguy2" w="32" h="32" texture="Assets/Textures/enemy/Idle.png">
 					<idle loop="true" speed="0.5">
 						<frame x="0" y="0" w="32" h="32" />
 						<frame x="32" y="0" w="32" h="32" />
@@ -70,8 +83,21 @@
 		<save_data>
 			<player x="170" y="110" w="44" h="54" />
 			<enemies>
-				<enemy name="badguy2" x="600" y="300" w="32" h="32" />
-				<enemy name="badguy2" x="600" y="300" w="32" h="32" />
+				<enemy type="badguy2" x="160" y="320" w="32" h="32" />
+				<enemy type="badguy2" x="480" y="320" w="32" h="32" />
+				<enemy type="badguy2" x="960" y="320" w="32" h="32" />
+				<enemy type="badguy2" x="1408" y="320" w="32" h="32" />
+				<enemy type="badguy2" x="1856" y="320" w="32" h="32" />
+				<enemy type="badguy2" x="160" y="320" w="32" h="32" />
+				<enemy type="badguy2" x="480" y="320" w="32" h="32" />
+				<enemy type="badguy2" x="960" y="320" w="32" h="32" />
+				<enemy type="badguy2" x="1408" y="320" w="32" h="32" />
+				<enemy type="badguy2" x="1856" y="320" w="32" h="32" />
+				<enemy type="badguy2" x="160" y="320" w="32" h="32" />
+				<enemy type="badguy2" x="480" y="320" w="32" h="32" />
+				<enemy type="badguy2" x="960" y="320" w="32" h="32" />
+				<enemy type="badguy2" x="1408" y="320" w="32" h="32" />
+				<enemy type="badguy2" x="1856" y="320" w="32" h="32" />
 			</enemies>
 		</save_data>
 	</scene>

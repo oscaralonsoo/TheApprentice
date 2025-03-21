@@ -212,10 +212,6 @@ bool Map::Load(std::string path, std::string fileName)
                     }
                 }
             }
-        }
-
-        //Iterate the layer and save enemies data
-        for (const auto& mapLayer : mapData.layers) {
             if (mapLayer->name == "Enemies") {
                 for (int i = 0; i < mapData.width; i++) {
                     for (int j = 0; j < mapData.height; j++) {
@@ -229,11 +225,14 @@ bool Map::Load(std::string path, std::string fileName)
                             pugi::xml_node saveData = loadFile.child("config").child("scene").child("save_data");
                             pugi::xml_node enemiesNode = saveData.child("enemies");
 
+                            // Convertir coordenadas del mapa a coordenadas del mundo
+                            Vector2D mapCoord = MapToWorld(i, j);
+
                             // Crear un nuevo nodo <enemy>
                             pugi::xml_node enemyNode = enemiesNode.append_child("enemy");
-                            enemyNode.append_attribute("name") = "badguy2";
-                            enemyNode.append_attribute("x") = 600;
-                            enemyNode.append_attribute("y") = 300;
+                            enemyNode.append_attribute("type") = "badguy2";
+                            enemyNode.append_attribute("x") = mapCoord.x;  // Usar coordenada convertida
+                            enemyNode.append_attribute("y") = mapCoord.y;  // Usar coordenada convertida
                             enemyNode.append_attribute("w") = 32;
                             enemyNode.append_attribute("h") = 32;
 

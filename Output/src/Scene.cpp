@@ -137,7 +137,8 @@ void Scene::StartTransition(int nextScene)
 // Called before changing the scene
 void Scene::ChangeScene(int nextScene)
 {
-	Engine::GetInstance().map->CleanUp(); // Previous Map CleanUp
+
+	Engine::GetInstance().map.get()->CleanUp(); // Previous Map CleanUp
 
 	switch (nextScene) 
 	{

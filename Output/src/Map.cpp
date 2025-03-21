@@ -1,11 +1,10 @@
-
 #include "Engine.h"
 #include "Render.h"
 #include "Textures.h"
 #include "Map.h"
 #include "Log.h"
 #include "Physics.h"
-
+#include "Window.h"
 #include <math.h>
 
 Map::Map() : Module(), mapLoaded(false)
@@ -33,6 +32,7 @@ bool Map::Start() {
 
 bool Map::Update(float dt)
 {
+    SDL_RenderClear(Engine::GetInstance().render.get()->renderer);
     bool ret = true;
 
     if (mapLoaded) {
@@ -91,15 +91,17 @@ bool Map::CleanUp()
 {
     LOG("Unloading map");
 
-    // L06: TODO 2: Make sure you clean up any memory allocated from tilesets/map
+    for (PhysBody* body : Engine::GetInstance().physics->listToDelete) {
+        Engine::GetInstance().physics->DeletePhysBody(body);
+    }
+    Engine::GetInstance().physics->listToDelete.clear();
+
     for (const auto& tileset : mapData.tilesets) {
         delete tileset;
     }
     mapData.tilesets.clear();
 
-    // L07 TODO 2: clean up all layer data
-    for (const auto& layer : mapData.layers)
-    {
+    for (const auto& layer : mapData.layers) {
         delete layer;
     }
     mapData.layers.clear();
@@ -210,8 +212,10 @@ bool Map::Load(std::string path, std::string fileName)
                     int width = objectNode.attribute("width").as_int();
                     int height = objectNode.attribute("height").as_int();
 
-                    PhysBody* collider = Engine::GetInstance().physics->CreateRectangle(x + (width / 2), y + (height / 2), width, height, STATIC);
-                    collider->ctype = ColliderType::PLATFORM; 
+                    PhysBody* platformCollider = Engine::GetInstance().physics->CreateRectangle(x + (width / 2), y + (height / 2), width, height, STATIC);
+                    platformCollider->ctype = ColliderType::PLATFORM;
+
+                    Engine::GetInstance().physics->listToDelete.push_back(platformCollider);
 
                     LOG("Creating collider at x: %d, y: %d, width: %d, height: %d", x + (width / 2), y + (height / 2), width, height);
                 }
@@ -232,6 +236,10 @@ bool Map::Load(std::string path, std::string fileName)
                     // Acceder al atributo TargetScene
                     doorCollider->targetScene = objectNode.child("properties").child("property").attribute("value").as_int(); // Cambia esto
                     LOG("TargetScene: %d", doorCollider->targetScene); 
+
+                    Engine::GetInstance().physics->listToDelete.push_back(doorCollider);
+
+                    LOG("Creating Door at x: %d, y: %d, width: %d, height: %d", x + (width / 2), y + (height / 2), width, height);
                 }
             }
         }

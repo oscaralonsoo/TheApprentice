@@ -85,6 +85,8 @@ public:
 	// List of physics bodies
 
 	std::list<PhysBody*> bodiesToDelete;
+
+	std::list<PhysBody*> listToDelete;
 private:
 
 	// Debug mode

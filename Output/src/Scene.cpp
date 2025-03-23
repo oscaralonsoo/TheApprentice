@@ -139,16 +139,17 @@ void Scene::ChangeScene(int nextScene)
 {
 	Engine::GetInstance().map->CleanUp();
 
-	switch (nextScene)
-	{
-	case 0:
-		Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx");
-		break;
-	case 1:
-		Engine::GetInstance().map->Load("Assets/Maps/", "Map1.tmx");
-		break;
-	default:
-		Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx");
-		break;
+	std::string mapKey = "Map_" + std::to_string(nextScene);
+
+	// Look for the XML node
+	pugi::xml_node mapNode = configParameters.child("maps").child(mapKey.c_str());
+
+	if (mapNode) {
+		std::string path = mapNode.attribute("path").as_string();
+		std::string name = mapNode.attribute("name").as_string();
+
+		if (!path.empty() && !name.empty()) {
+			Engine::GetInstance().map->Load(path, name);
+		}
 	}
 }

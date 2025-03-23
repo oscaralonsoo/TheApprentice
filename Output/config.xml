@@ -16,13 +16,11 @@
 		<resizable value="false"/>
 		<fullscreen_window value="false"/>
 	</window>
-
 	<scene>
 		<maps>
-			<map0 path="Assets/Maps/" name="Map0.tmx"/>
-			<map1 path="Assets/Maps/" name="Map1.tmx"/>
+			<Map_0 path="Assets/Maps/" name="Map0.tmx"/>
+			<Map_1 path="Assets/Maps/" name="Map1.tmx"/>
 		</maps>
-
 		<animations>
 			<player  w="44" h="54" texture="Assets/Textures/test.png">
 				<idle loop="true" speed="0.08">

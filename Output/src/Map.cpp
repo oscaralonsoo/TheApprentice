@@ -32,7 +32,7 @@ bool Map::Start() {
 
 bool Map::Update(float dt)
 {
-    SDL_RenderClear(Engine::GetInstance().render.get()->renderer);
+
     bool ret = true;
 
     if (mapLoaded) {

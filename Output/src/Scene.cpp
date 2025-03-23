@@ -80,15 +80,15 @@ bool Scene::Update(float dt)
 // Called each loop iteration
 bool Scene::PostUpdate()
 {
-	if (transitioning) { // Render Fade In & Out 
+	bool ret = true;
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+		ret = false;
+
+	if (transitioning) {
 		SDL_SetRenderDrawBlendMode(Engine::GetInstance().render->renderer, SDL_BLENDMODE_BLEND);
-		SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, 0, 0, 0, (Uint8)(transitionAlpha * 255));
+		SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, 0, 0, 0, static_cast<Uint8>(transitionAlpha * 255));
 		SDL_RenderFillRect(Engine::GetInstance().render->renderer, nullptr);
 	}
-	bool ret = true;
-
-	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		ret = false;
 
 	return ret;
 }
@@ -102,55 +102,53 @@ bool Scene::CleanUp()
 
 	return true;
 }
-
+void Scene::StartTransition(int nextScene)
+{
+	if (!transitioning) {
+		transitioning = true;
+		fadingIn = false;
+		transitionAlpha = 0.0f;
+		this->nextScene = nextScene;
+	}
+}
 // Called every iteration
 void Scene::UpdateTransition(float dt)
 {
-	if (transitioning) {
-		// Fade out
-		if (!fadingIn) {
-			transitionAlpha += dt * 1.5f;
-			if (transitionAlpha >= 1.0f) {
-				ChangeScene(nextScene);
-				fadingIn = true;
-			}
+	if (!transitioning) return;
+
+	if (!fadingIn) { // Fade Out
+		transitionAlpha += dt * 0.0025f;
+		if (transitionAlpha >= 1.0f) {
+			transitionAlpha = 1.0f;
+			fadingIn = true;
+
+			ChangeScene(nextScene);
 		}
-		// Fade in
-		else {
-			transitionAlpha -= dt * 1.5f;
-			if (transitionAlpha <= 0.0f) {
-				transitioning = false;
-				fadingIn = false;
-			}
+	}
+	else { // Fade In
+		transitionAlpha -= dt * 0.0025f;
+		if (transitionAlpha <= 0.0f) {
+			transitionAlpha = 0.0f;
+			transitioning = false;
 		}
 	}
 }
 
-void Scene::StartTransition(int nextScene)
-{
-	transitioning = true;
-	transitionAlpha = 0.0f;
-	this->nextScene = nextScene;
-}
-
-
 // Called before changing the scene
 void Scene::ChangeScene(int nextScene)
 {
+	Engine::GetInstance().map->CleanUp();
 
-	Engine::GetInstance().map.get()->CleanUp(); // Previous Map CleanUp
-
-	switch (nextScene) 
+	switch (nextScene)
 	{
-	case 0: 
-		Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx"); 
+	case 0:
+		Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx");
 		break;
-	case 1: 
-		Engine::GetInstance().map->Load("Assets/Maps/", "Map1.tmx"); 
+	case 1:
+		Engine::GetInstance().map->Load("Assets/Maps/", "Map1.tmx");
 		break;
-	default: 
-		Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx"); 
+	default:
+		Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx");
 		break;
-
 	}
 }

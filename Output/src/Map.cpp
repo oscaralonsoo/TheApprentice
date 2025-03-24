@@ -5,9 +5,6 @@
 #include "Log.h"
 #include "Physics.h"
 #include "Window.h"
-#include "Enemy.h"
-#include "Engine.h"
-#include "EntityManager.h"
 #include <math.h>
 
 Map::Map() : Module(), mapLoaded(false)
@@ -58,7 +55,7 @@ bool Map::Update(float dt)
                                 // Convertir coordenadas del mapa a coordenadas de pantalla
                                 Vector2D mapCoord = MapToWorld(i, j);
 
-                                // Aplicar el efecto parallax en base a la cï¿½mara
+                                // Aplicar el efecto parallax en base a la cámara
                                 int renderX = (int)(mapCoord.getX() - (Engine::GetInstance().render->camera.x * mapLayer->parallaxX));
                                 int renderY = (int)(mapCoord.getY() - (Engine::GetInstance().render->camera.y * mapLayer->parallaxY));
 
@@ -200,6 +197,7 @@ bool Map::Load(std::string path, std::string fileName)
         // L08 TODO 7: Assign collider type
         // Later you can create a function here to load and create the colliders from the map
 
+<<<<<<< Updated upstream
         // L08 TODO 3: Create colliders
         for (pugi::xml_node objectGroupNode = mapFileXML.child("map").child("objectgroup"); objectGroupNode; objectGroupNode = objectGroupNode.next_sibling("objectgroup"))
         {
@@ -221,6 +219,20 @@ bool Map::Load(std::string path, std::string fileName)
                     Engine::GetInstance().physics->listToDelete.push_back(platformCollider);
 
                     LOG("Creating collider at x: %d, y: %d, width: %d, height: %d", x + (width / 2), y + (height / 2), width, height);
+=======
+        //Iterate the layer and create colliders
+        for (const auto& mapLayer : mapData.layers) {
+            if (mapLayer->name == "Collisions") {
+                for (int i = 0; i < mapData.width; i++) {
+                    for (int j = 0; j < mapData.height; j++) {
+                        int gid = mapLayer->Get(i, j);
+                        if (gid == 4801) {
+                            Vector2D mapCoord = MapToWorld(i, j);
+                            PhysBody* c1 = Engine::GetInstance().physics.get()->CreateRectangle(mapCoord.getX()+ mapData.tileWidth/2, mapCoord.getY()+ mapData.tileHeight/2, mapData.tileWidth, mapData.tileHeight, STATIC);
+                            c1->ctype = ColliderType::PLATFORM;
+                        }
+                    }
+>>>>>>> Stashed changes
                 }
             }
             else if (layerName == "Doors")  // Objects from layer Doors
@@ -241,6 +253,7 @@ bool Map::Load(std::string path, std::string fileName)
                     {
                         std::string propertyName = propertyNode.attribute("name").as_string();
 
+<<<<<<< Updated upstream
                         if (propertyName == "TargetScene")
                         {
                             doorCollider->targetScene = propertyNode.attribute("value").as_int();
@@ -255,6 +268,22 @@ bool Map::Load(std::string path, std::string fileName)
                         {
                             doorCollider->playerPosY = propertyNode.attribute("value").as_float();
                             LOG("PlayerPosY: %f", doorCollider->playerPosY);
+=======
+                for (int i = 0; i < mapData.width; i++) {
+                    for (int j = 0; j < mapData.height; j++) {
+                        int gid = mapLayer->Get(i, j);
+                        if (gid == 4802) {
+                            // Convertir coordenadas del mapa a coordenadas del mundo
+                            Vector2D mapCoord = MapToWorld(i, j);
+
+                            // Crear un nuevo nodo <enemy>
+                            pugi::xml_node enemyNode = enemiesNode.append_child("enemy");
+                            enemyNode.append_attribute("type") = "Bloodrusher";
+                            enemyNode.append_attribute("x") = mapCoord.x;
+                            enemyNode.append_attribute("y") = mapCoord.y;
+                            enemyNode.append_attribute("w") = 64;
+                            enemyNode.append_attribute("h") = 64;
+>>>>>>> Stashed changes
                         }
                     }
 
@@ -262,40 +291,6 @@ bool Map::Load(std::string path, std::string fileName)
 
                     LOG("Creating Door at x: %d, y: %d, width: %d, height: %d", x + (width / 2), y + (height / 2), width, height);
                 }
-            }
-            if (mapLayer->name == "Enemies") {
-                // Load XML config file
-                pugi::xml_document loadFile;
-                pugi::xml_parse_result result = loadFile.load_file("config.xml");
-
-                // Get node save data -> enemies
-                pugi::xml_node saveData = loadFile.child("config").child("scene").child("save_data");
-                pugi::xml_node enemiesNode = saveData.child("enemies");
-
-                // Remove all children
-                enemiesNode.remove_children();
-
-                for (int i = 0; i < mapData.width; i++) {
-                    for (int j = 0; j < mapData.height; j++) {
-                        int gid = mapLayer->Get(i, j);
-                        if (gid == 99) {
-                            // Convertir coordenadas del mapa a coordenadas del mundo
-                            Vector2D mapCoord = MapToWorld(i, j);
-
-                            // Crear un nuevo nodo <enemy>
-                            pugi::xml_node enemyNode = enemiesNode.append_child("enemy");
-                            enemyNode.append_attribute("type") = "badguy2";
-                            enemyNode.append_attribute("x") = mapCoord.x;
-                            enemyNode.append_attribute("y") = mapCoord.y;
-                            enemyNode.append_attribute("w") = 32;
-                            enemyNode.append_attribute("h") = 32;
-                        }
-                    }
-                }
-
-                // Guardar los cambios en el archivo
-                loadFile.save_file("config.xml");
-                Engine::GetInstance().UpdateConfig();
             }
         }
         ret = true;
@@ -346,17 +341,6 @@ Vector2D Map::MapToWorld(int x, int y) const
     return ret;
 }
 
-// L10: TODO 5: Add method WorldToMap to obtain  map coordinates from screen coordinates 
-Vector2D Map::WorldToMap(int x, int y) {
-
-    Vector2D ret(0, 0);
-
-    ret.setX(x / mapData.tileWidth);
-    ret.setY(y / mapData.tileHeight);
-
-    return ret;
-}
-
 // L09: TODO 6: Load a group of properties from a node and fill a list with it
 bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
 {
@@ -373,29 +357,6 @@ bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
     }
 
     return ret;
-}
-
-MapLayer* Map::GetNavigationLayer() {
-    for (const auto& layer : mapData.layers) {
-        if (layer->properties.GetProperty("Navigation") != NULL &&
-            layer->properties.GetProperty("Navigation")->value) {
-            return layer;
-        }
-    }
-
-    return nullptr;
-}
-
-// L09: TODO 7: Implement a method to get the value of a custom property
-Properties::Property* Properties::GetProperty(const char* name)
-{
-    for (const auto& property : propertyList) {
-        if (property->name == name) {
-            return property;
-        }
-    }
-
-    return nullptr;
 }
 
 

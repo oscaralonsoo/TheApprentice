@@ -146,14 +146,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Audio.cpp" />
+<<<<<<< Updated upstream
+=======
+    <ClCompile Include="src\Bloodrusher.cpp" />
     <ClCompile Include="src\Enemy.cpp" />
+>>>>>>> Stashed changes
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\EntityManager.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\Item.cpp" />
     <ClCompile Include="src\Log.cpp" />
     <ClCompile Include="src\Map.cpp" />
-    <ClCompile Include="src\Pathfinding.cpp" />
     <ClCompile Include="src\PerfTimer.cpp" />
     <ClCompile Include="src\Physics.cpp" />
     <ClCompile Include="src\PlatformGame.cpp" />
@@ -169,7 +172,11 @@
   <ItemGroup>
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\Audio.h" />
+<<<<<<< Updated upstream
+=======
+    <ClInclude Include="src\Bloodrusher.h" />
     <ClInclude Include="src\Enemy.h" />
+>>>>>>> Stashed changes
     <ClInclude Include="src\Engine.h" />
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\EntityManager.h" />
@@ -178,7 +185,6 @@
     <ClInclude Include="src\Log.h" />
     <ClInclude Include="src\Map.h" />
     <ClInclude Include="src\Module.h" />
-    <ClInclude Include="src\Pathfinding.h" />
     <ClInclude Include="src\PerfTimer.h" />
     <ClInclude Include="src\Physics.h" />
     <ClInclude Include="src\Player.h" />

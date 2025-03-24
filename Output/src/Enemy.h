@@ -11,7 +11,7 @@ class Enemy : public Entity
 {
 public:
 
-	Enemy();
+	Enemy(EntityType type);
 	virtual ~Enemy();
 
 	bool Awake();
@@ -38,6 +38,8 @@ public:
 
 public:
 
+protected:
+	PhysBody* pbody;
 private:
 
 	SDL_Texture* texture;
@@ -46,6 +48,5 @@ private:
 	pugi::xml_node parameters;
 	Animation* currentAnimation = nullptr;
 	Animation idle;
-	PhysBody* pbody;
 	Pathfinding* pathfinding;
 };

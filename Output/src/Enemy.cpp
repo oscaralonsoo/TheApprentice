@@ -10,7 +10,7 @@
 #include "Map.h"
 #include "EntityManager.h"
 
-Enemy::Enemy() : Entity(EntityType::ENEMY)
+Enemy::Enemy(EntityType type) : Entity(type)
 {
 
 }

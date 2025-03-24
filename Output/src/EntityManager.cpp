@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "Log.h"
 #include "Item.h"
+#include "Bloodrusher.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -75,9 +76,12 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::ITEM:
 		entity = new Item();
 		break;
-	case EntityType::ENEMY:
-		entity = new Enemy();
+<<<<<<< Updated upstream
+=======
+	case EntityType::BLOODRUSHER:
+		entity = new Bloodrusher();
 		break;
+>>>>>>> Stashed changes
 	default:
 		break;
 	}

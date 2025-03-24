@@ -138,7 +138,9 @@ void Scene::UpdateTransition(float dt)
 // Called before changing the scene
 void Scene::ChangeScene(int nextScene)
 {
+	// CleanUp of the previous Map
 	Engine::GetInstance().map->CleanUp();
+	//Engine::GetInstance().entityManager->DestroyEntity();
 
 	std::string mapKey = "Map_" + std::to_string(nextScene);
 
@@ -152,8 +154,12 @@ void Scene::ChangeScene(int nextScene)
 		if (!path.empty() && !name.empty()) {
 			Engine::GetInstance().map->Load(path, name); // Load New Map
 		
-		 player->position = Vector2D(newPosition.x, newPosition.y); // Establecer la nueva posición del jugador
-        player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, newPosition.y / PIXELS_PER_METER), 0); // Actualizar la física del jugador
+		player->pbody->body->SetLinearVelocity(b2Vec2(0, 0)); // Stop All Movement
+
+        player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, newPosition.y / PIXELS_PER_METER), 0); // Set New Player Position
+
+		// Create New Map Enemies
+
 		}
 	}
 }

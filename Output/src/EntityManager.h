@@ -3,6 +3,7 @@
 #include "Module.h"
 #include "Entity.h"
 #include <list>
+#include "Enemy.h"
 
 class EntityManager : public Module
 {
@@ -34,8 +35,13 @@ public:
 
 	void AddEntity(Entity* entity);
 
+	void CreateEnemiesFromXML(pugi::xml_node enemyNodes);
+
 public:
+
+	std::list<Enemy*> enemyList; // Lista de enemigos
 
 	std::list<Entity*> entities;
 
+	PhysBody* pbody;
 };

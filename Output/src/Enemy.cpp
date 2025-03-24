@@ -53,7 +53,6 @@ bool Enemy::Start() {
 
 	//Add a physics to an item - initialize the physics body
 	pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, bodyType::DYNAMIC);
-
 	//Assign collider type
 	pbody->ctype = ColliderType::ENEMY;
 
@@ -102,6 +101,7 @@ bool Enemy::Update(float dt)
 bool Enemy::CleanUp()
 {
 	Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+	pbody = nullptr;
 	return true;
 }
 

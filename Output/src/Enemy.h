@@ -36,7 +36,6 @@ public:
 
 	void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
-	void CreateEnemy();
 
 public:
 	int steps = 0;

@@ -70,6 +70,4 @@ private:
 	bool fadingIn = false;
 	float transitionAlpha = 0.0f;
 	int nextScene;
-
-	std::vector<Enemy*> enemyList;
 };

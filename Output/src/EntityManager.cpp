@@ -115,7 +115,7 @@ void EntityManager::DestroyAllEntities() {
 			++it;
 		}
 	}
-	LOG("All enemies removed.");
+	LOG("All entities removed.");
 }
 
 // Function to add a Specific Entity
@@ -133,4 +133,18 @@ bool EntityManager::Update(float dt)
 		ret = entity->Update(dt);
 	}
 	return ret;
+}
+void EntityManager::CreateEnemiesFromXML(pugi::xml_node enemyNodes)
+{
+	for (pugi::xml_node enemyNode = enemyNodes.child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy"))
+	{
+		Enemy* enemy = (Enemy*)CreateEntity(EntityType::ENEMY);
+		if (enemy)
+		{
+			enemy->SetParameters(enemyNode);
+			enemyList.push_back(enemy);
+			LOG("Enemy Created");
+		}
+	}
+
 }

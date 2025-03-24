@@ -6,6 +6,15 @@
 
 struct SDL_Texture;
 
+enum class SceneState 
+{
+	MAINMENU,
+	NEWGAME,
+	CONTINUE,
+	PAUSE,
+	SETTINGS,
+	CREDITS,
+};
 class Scene : public Module
 {
 public:
@@ -44,6 +53,9 @@ public:
 
 	// Return the player position
 	Vector2D GetPlayerPosition();
+
+public:
+
 	Vector2D newPosition;
 
 private:

@@ -140,7 +140,7 @@ void Scene::UpdateTransition(float dt)
 		}
 	}
 	else { // Fade In
-		transitionAlpha -= dt * 0.0025f;
+		transitionAlpha -= dt * 0.0020f;
 		if (transitionAlpha <= 0.0f) {
 			transitionAlpha = 0.0f;
 			transitioning = false;
@@ -153,7 +153,7 @@ void Scene::ChangeScene(int nextScene)
 {
 	// CleanUp of the previous Map
 	Engine::GetInstance().map->CleanUp();
-	//Engine::GetInstance().entityManager->DestroyEntity();
+	// TODO --- Enemies & Entities CleanUp
 
 	std::string mapKey = "Map_" + std::to_string(nextScene);
 
@@ -165,14 +165,12 @@ void Scene::ChangeScene(int nextScene)
 		std::string name = mapNode.attribute("name").as_string();
 
 		if (!path.empty() && !name.empty()) {
+			player->pbody->body->SetLinearVelocity(b2Vec2(0, 0)); // Stop All Movement
+			player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, newPosition.y / PIXELS_PER_METER), 0); // Set New Player Position
+
 			Engine::GetInstance().map->Load(path, name); // Load New Map
 		
-		player->pbody->body->SetLinearVelocity(b2Vec2(0, 0)); // Stop All Movement
-
-        player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, newPosition.y / PIXELS_PER_METER), 0); // Set New Player Position
-
 		// Create New Map Enemies
-
 		}
 	}
 }

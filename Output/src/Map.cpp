@@ -201,44 +201,6 @@ bool Map::Load(std::string path, std::string fileName)
         // Later you can create a function here to load and create the colliders from the map
 
         // L08 TODO 3: Create colliders
-
-
-        for (const auto& mapLayer : mapData.layers) {
-             if (mapLayer->name == "Enemies") {
-                 // Load XML config file
-                 pugi::xml_document loadFile;
-                 pugi::xml_parse_result result = loadFile.load_file("config.xml");
-
-                 // Get node save data -> enemies
-                 pugi::xml_node saveData = loadFile.child("config").child("scene").child("save_data");
-                 pugi::xml_node enemiesNode = saveData.child("enemies");
-
-                 // Remove all children
-                 enemiesNode.remove_children();
-
-                 for (int i = 0; i < mapData.width; i++) {
-                     for (int j = 0; j < mapData.height; j++) {
-                         int gid = mapLayer->Get(i, j);
-                         if (gid == 98) {
-                             // Convertir coordenadas del mapa a coordenadas del mundo
-                             Vector2D mapCoord = MapToWorld(i, j);
-
-                             // Crear un nuevo nodo <enemy>
-                             pugi::xml_node enemyNode = enemiesNode.append_child("enemy");
-                             enemyNode.append_attribute("type") = "badguy2";
-                             enemyNode.append_attribute("x") = mapCoord.x;
-                             enemyNode.append_attribute("y") = mapCoord.y;
-                             enemyNode.append_attribute("w") = 32;
-                             enemyNode.append_attribute("h") = 32;
-                         }
-                     }
-                 }
-
-                // Guardar los cambios en el archivo
-                loadFile.save_file("config.xml");
-                Engine::GetInstance().UpdateConfig();
-             }
-        }
         for (pugi::xml_node objectGroupNode = mapFileXML.child("map").child("objectgroup"); objectGroupNode; objectGroupNode = objectGroupNode.next_sibling("objectgroup"))
         {
             std::string objectGroupName = objectGroupNode.attribute("name").as_string();
@@ -301,7 +263,42 @@ bool Map::Load(std::string path, std::string fileName)
                     LOG("Creating Door at x: %d, y: %d, width: %d, height: %d", x + (width / 2), y + (height / 2), width, height);
                 }
             }
+        }
+        for (const auto& mapLayer : mapData.layers) {
+            if (mapLayer->name == "Enemies") {
+                // Load XML config file
+                pugi::xml_document loadFile;
+                pugi::xml_parse_result result = loadFile.load_file("config.xml");
 
+                // Get node save data -> enemies
+                pugi::xml_node saveData = loadFile.child("config").child("scene").child("save_data");
+                pugi::xml_node enemiesNode = saveData.child("enemies");
+
+                // Remove all children
+                enemiesNode.remove_children();
+
+                for (int i = 0; i < mapData.width; i++) {
+                    for (int j = 0; j < mapData.height; j++) {
+                        int gid = mapLayer->Get(i, j);
+                        if (gid == 99) {
+                            // Convertir coordenadas del mapa a coordenadas del mundo
+                            Vector2D mapCoord = MapToWorld(i, j);
+
+                            // Crear un nuevo nodo <enemy>
+                            pugi::xml_node enemyNode = enemiesNode.append_child("enemy");
+                            enemyNode.append_attribute("type") = "badguy2";
+                            enemyNode.append_attribute("x") = mapCoord.x;
+                            enemyNode.append_attribute("y") = mapCoord.y;
+                            enemyNode.append_attribute("w") = 32;
+                            enemyNode.append_attribute("h") = 32;
+                        }
+                    }
+                }
+
+                // Guardar los cambios en el archivo
+                loadFile.save_file("config.xml");
+                Engine::GetInstance().UpdateConfig();
+            }
         }
         ret = true;
 

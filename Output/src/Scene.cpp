@@ -11,6 +11,7 @@
 #include "Player.h"
 #include "Map.h"
 #include "Item.h"
+#include "Physics.h"
 
 Scene::Scene() : Module()
 {
@@ -149,7 +150,10 @@ void Scene::ChangeScene(int nextScene)
 		std::string name = mapNode.attribute("name").as_string();
 
 		if (!path.empty() && !name.empty()) {
-			Engine::GetInstance().map->Load(path, name);
+			Engine::GetInstance().map->Load(path, name); // Load New Map
+		
+		 player->position = Vector2D(newPosition.x, newPosition.y); // Establecer la nueva posición del jugador
+        player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, newPosition.y / PIXELS_PER_METER), 0); // Actualizar la física del jugador
 		}
 	}
 }

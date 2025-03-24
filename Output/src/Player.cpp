@@ -114,6 +114,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         // TargetScene From collider
         targetScene = physB->targetScene;
 
+        // Player Position From Collider
+        Engine::GetInstance().scene->newPosition.x = physB->playerPosX;
+        Engine::GetInstance().scene->newPosition.y = physB->playerPosY;
+
         Engine::GetInstance().scene.get()->StartTransition(targetScene); // Start Loading scene
 
         break;

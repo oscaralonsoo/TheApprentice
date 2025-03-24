@@ -41,6 +41,8 @@ public:
 	// Called before changing the scene
 	void ChangeScene(int nextScene);
 
+	Vector2D newPosition;
+
 private:
 	SDL_Texture* img;
 

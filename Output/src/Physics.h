@@ -49,7 +49,10 @@ public:
 public:
 	int width = 0;
 	int height = 0;
+	// Door Values
 	int targetScene = 0;
+	float playerPosX = 0.0f;
+	float playerPosY = 0.0f;
 	b2Body* body;
 	Entity* listener;
 	ColliderType ctype;

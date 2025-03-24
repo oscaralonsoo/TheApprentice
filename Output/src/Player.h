@@ -30,6 +30,7 @@ public:
 	int GetMovementDirection() const { return movementDirection; }
 
 	int targetScene= 0;
+	PhysBody* pbody;
 private:
 	// Manejo de input
 	void HandleInput();
@@ -41,7 +42,7 @@ private:
 	int texW, texH;
 
 	// Física del jugador
-	PhysBody* pbody;
+
 	float jumpForce = 10.5f;
 	bool isJumping = false;
 	int movementDirection = 0;

@@ -233,9 +233,27 @@ bool Map::Load(std::string path, std::string fileName)
                     PhysBody* doorCollider = Engine::GetInstance().physics->CreateRectangle(x + (width / 2), y + (height / 2), width, height, STATIC);
                     doorCollider->ctype = ColliderType::DOOR;
 
-                    // Acceder al atributo TargetScene
-                    doorCollider->targetScene = objectNode.child("properties").child("property").attribute("value").as_int(); // Cambia esto
-                    LOG("TargetScene: %d", doorCollider->targetScene); 
+                    // Access Properties by Name
+                    for (pugi::xml_node propertyNode = objectNode.child("properties").child("property"); propertyNode != NULL; propertyNode = propertyNode.next_sibling("property"))
+                    {
+                        std::string propertyName = propertyNode.attribute("name").as_string();
+
+                        if (propertyName == "TargetScene")
+                        {
+                            doorCollider->targetScene = propertyNode.attribute("value").as_int();
+                            LOG("TargetScene: %d", doorCollider->targetScene);
+                        }
+                        else if (propertyName == "PlayerPosX")
+                        {
+                            doorCollider->playerPosX = propertyNode.attribute("value").as_float();
+                            LOG("PlayerPosX: %f", doorCollider->playerPosX);
+                        }
+                        else if (propertyName == "PlayerPosY")
+                        {
+                            doorCollider->playerPosY = propertyNode.attribute("value").as_float();
+                            LOG("PlayerPosY: %f", doorCollider->playerPosY);
+                        }
+                    }
 
                     Engine::GetInstance().physics->listToDelete.push_back(doorCollider);
 

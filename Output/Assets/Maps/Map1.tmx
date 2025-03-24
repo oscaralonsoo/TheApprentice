@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="3">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="3">
  <tileset firstgid="1" name="TX Tileset Ground" tilewidth="32" tileheight="32" tilecount="256" columns="16">
   <image source="../Parallax/TX Tileset Ground.png" width="512" height="512"/>
  </tileset>
@@ -9,19 +9,6 @@
  <tileset firstgid="259" name="sky" tilewidth="32" tileheight="32" tilecount="70" columns="10">
   <image source="../Parallax/sky.png" width="320" height="240"/>
  </tileset>
- <objectgroup id="3" name="Doors">
-  <properties>
-   <property name="Doors" type="bool" value="true"/>
-  </properties>
-  <object id="1" x="0" y="0" width="214" height="32">
-   <properties>
-    <property name="TargetScene" type="int" value="0"/>
-   </properties>
-  </object>
- </objectgroup>
- <objectgroup id="4" name="Collisions">
-  <object id="2" x="0" y="864" width="1920" height="32"/>
- </objectgroup>
  <layer id="5" name="Static Background" width="60" height="30">
   <properties>
    <property name="Draw" type="bool" value="true"/>
@@ -3636,4 +3623,17 @@
    <tile gid="35"/>
   </data>
  </layer>
+ <objectgroup id="3" name="Doors">
+  <properties>
+   <property name="Doors" type="bool" value="true"/>
+  </properties>
+  <object id="1" x="0" y="0" width="214" height="32">
+   <properties>
+    <property name="TargetScene" type="int" value="0"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="4" name="Collisions">
+  <object id="2" x="0" y="864" width="1920" height="32"/>
+ </objectgroup>
 </map>

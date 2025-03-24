@@ -12,7 +12,6 @@
 #include "Map.h"
 #include "Item.h"
 #include "Physics.h"
-#include "Enemy.h"
 
 Scene::Scene() : Module()
 {
@@ -37,8 +36,6 @@ bool Scene::Awake()
 	//L08 Create a new item using the entity manager and set the position to (200, 672) to test
 	Item* item = (Item*) Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
 	item->position = Vector2D(200, 672);
-
-	
 	return ret;
 }
 
@@ -47,15 +44,6 @@ bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
 	Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx");
-
-	//TO DO - SACAR DE SCENE ESTE CODIGO!!!
-
-	for (pugi::xml_node enemyNode = configParameters.child("save_data").child("enemies").child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy"))
-	{
-		Enemy* enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ENEMY);
-		enemy->SetParameters(enemyNode);
-		enemyList.push_back(enemy);
-	}
 
 	return true;
 }
@@ -115,7 +103,6 @@ bool Scene::CleanUp()
 
 	return true;
 }
-
 void Scene::StartTransition(int nextScene)
 {
 	if (!transitioning) {
@@ -173,10 +160,4 @@ void Scene::ChangeScene(int nextScene)
 		// Create New Map Enemies
 		}
 	}
-}
-// Return the player position
-Vector2D Scene::GetPlayerPosition()
-{
-	return player->GetPosition();
-
 }

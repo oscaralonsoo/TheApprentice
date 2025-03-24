@@ -2,7 +2,6 @@
 
 #include "Module.h"
 #include "Player.h"
-#include "Enemy.h"
 
 struct SDL_Texture;
 
@@ -60,15 +59,14 @@ public:
 
 private:
 	SDL_Texture* img;
-	Player* player;
 
+	//L03: TODO 3b: Declare a Player attribute
+	Player* player;
 
 	//transition 
 	bool transitioning = false;
 	bool fadingIn = false;
 	float transitionAlpha = 0.0f;
 	int nextScene;
-
-	std::vector<Enemy*> enemyList;
 
 };

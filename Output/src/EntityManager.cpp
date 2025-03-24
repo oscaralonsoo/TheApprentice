@@ -79,9 +79,6 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::BLOODRUSHER:
 		entity = new Bloodrusher();
 		break;
-	case EntityType::ENEMY:
-		entity = new Enemy();
-		break;
 	default:
 		break;
 	}
@@ -142,7 +139,7 @@ void EntityManager::CreateEnemiesFromXML(pugi::xml_node enemyNodes)
 {
 	for (pugi::xml_node enemyNode = enemyNodes.child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy"))
 	{
-		Enemy* enemy = (Enemy*)CreateEntity(EntityType::ENEMY);
+		Enemy* enemy = (Enemy*)CreateEntity(EntityType::BLOODRUSHER);
 		if (enemy)
 		{
 			enemy->SetParameters(enemyNode);

@@ -286,7 +286,7 @@ bool Map::Load(std::string path, std::string fileName)
 
                             // Crear un nuevo nodo <enemy>
                             pugi::xml_node enemyNode = enemiesNode.append_child("enemy");
-                            enemyNode.append_attribute("type") = "badguy2";
+                            enemyNode.append_attribute("type") = "Bloodrusher";
                             enemyNode.append_attribute("x") = mapCoord.x;
                             enemyNode.append_attribute("y") = mapCoord.y;
                             enemyNode.append_attribute("w") = 32;

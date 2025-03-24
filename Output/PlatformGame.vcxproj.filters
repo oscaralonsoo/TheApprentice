@@ -97,7 +97,13 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\PlayerAnimation.cpp">
-      <Filter>Source Files\Game</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Enemy.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pathfinding.cpp">
+      <Filter>Source Files\Entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -155,11 +161,13 @@
     <ClInclude Include="src\Physics.h">
       <Filter>Source Files\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Animation.h">
-      <Filter>Source Files\Utils</Filter>
+    <ClInclude Include="src\Animation.h" />
+    <ClInclude Include="src\PlayerAnimation.h" />
+    <ClInclude Include="src\Enemy.h">
+      <Filter>Source Files\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="src\PlayerAnimation.h">
-      <Filter>Source Files\Game</Filter>
+    <ClInclude Include="src\Pathfinding.h">
+      <Filter>Source Files\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

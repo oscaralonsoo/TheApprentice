@@ -102,7 +102,10 @@
     <ClCompile Include="src\Bloodrusher.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="src\Bloodrusher.cpp">
+    <ClCompile Include="src\Enemy.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pathfinding.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
   </ItemGroup>
@@ -170,7 +173,12 @@
     <ClInclude Include="src\Bloodrusher.h">
       <Filter>Source Files\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="src\Bloodrusher.h">
+    <ClInclude Include="src\Animation.h" />
+    <ClInclude Include="src\PlayerAnimation.h" />
+    <ClInclude Include="src\Enemy.h">
+      <Filter>Source Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pathfinding.h">
       <Filter>Source Files\Entities</Filter>
     </ClInclude>
   </ItemGroup>

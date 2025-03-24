@@ -41,11 +41,11 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	bool UpdateConfig();
+
 	float GetDt() const {
 		return dt;
 	}
-
-	bool UpdateConfig();
 
 private:
 
@@ -74,6 +74,8 @@ private:
 
 	// Load config file
 	bool LoadConfig();
+
+
 
 	std::list<std::shared_ptr<Module>> moduleList;
 
@@ -127,7 +129,7 @@ private:
 	//Maximun frame duration in miliseconds.
 	int maxFrameDuration = 16;
 
-	std::string gameTitle = "The Apprentice";
+	std::string gameTitle = "Platformer Game";
 
 	//L05 TODO 2: Declare a xml_document to load the config file
 	pugi::xml_document configFile;

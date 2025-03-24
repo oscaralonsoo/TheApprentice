@@ -299,7 +299,7 @@ bool Engine::UpdateConfig()
         // Recargar las configuraciones de cada modulo
         bool result = true;
         for (const auto& module : moduleList) {
-            // Recargar los parametros para cada m�dulo
+            // Recargar los parometros para cada modulo
             module.get()->LoadParameters(configFile.child("config").child(module.get()->name.c_str()));
         }
 
@@ -310,4 +310,3 @@ bool Engine::UpdateConfig()
         return false;
     }
 }
-

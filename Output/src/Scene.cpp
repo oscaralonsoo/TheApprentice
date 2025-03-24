@@ -14,6 +14,7 @@
 #include "Physics.h"
 #include "Enemy.h"
 
+
 Scene::Scene() : Module()
 {
 	name = "scene";
@@ -46,14 +47,7 @@ bool Scene::Start()
 	//L06 TODO 3: Call the function to load the map. 
 	Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx");
 
-	//TO DO - SACAR DE SCENE ESTE CODIGO!!!
-
-	for (pugi::xml_node enemyNode = configParameters.child("save_data").child("enemies").child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy"))
-	{
-		Enemy* enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BLOODRUSHER);
-		enemy->SetParameters(enemyNode);
-		enemyList.push_back(enemy);
-	}
+	Engine::GetInstance().entityManager->CreateEnemiesFromXML(configParameters.child("save_data").child("enemies"));
 
 	return true;
 }
@@ -137,7 +131,7 @@ void Scene::UpdateTransition(float dt)
 		}
 	}
 	else { // Fade In
-		transitionAlpha -= dt * 0.0025f;
+		transitionAlpha -= dt * 0.0020f;
 		if (transitionAlpha <= 0.0f) {
 			transitionAlpha = 0.0f;
 			transitioning = false;
@@ -150,11 +144,12 @@ void Scene::ChangeScene(int nextScene)
 {
 	// CleanUp of the previous Map
 	Engine::GetInstance().map->CleanUp();
-	//Engine::GetInstance().entityManager->DestroyEntity();
+	// TODO --- Enemies & Entities CleanUp
+	Engine::GetInstance().entityManager.get()->DestroyAllEntities();
 
+
+		// Look for the XML node
 	std::string mapKey = "Map_" + std::to_string(nextScene);
-
-	// Look for the XML node
 	pugi::xml_node mapNode = configParameters.child("maps").child(mapKey.c_str());
 
 	if (mapNode) {
@@ -163,13 +158,12 @@ void Scene::ChangeScene(int nextScene)
 
 		if (!path.empty() && !name.empty()) {
 			Engine::GetInstance().map->Load(path, name); // Load New Map
-		
-		player->pbody->body->SetLinearVelocity(b2Vec2(0, 0)); // Stop All Movement
 
-        player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, newPosition.y / PIXELS_PER_METER), 0); // Set New Player Position
+			player->pbody->body->SetLinearVelocity(b2Vec2(0, 0)); // Stop All Movement
+			player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, newPosition.y / PIXELS_PER_METER), 0); // Set New Player Position
 
 		// Create New Map Enemies
-
+			Engine::GetInstance().entityManager->CreateEnemiesFromXML(configParameters.child("save_data").child("enemies"));
 		}
 	}
 }
@@ -177,5 +171,4 @@ void Scene::ChangeScene(int nextScene)
 Vector2D Scene::GetPlayerPosition()
 {
 	return player->GetPosition();
-
 }

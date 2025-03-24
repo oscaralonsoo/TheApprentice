@@ -36,12 +36,15 @@ public:
 
 	void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
+
 public:
+	int steps = 0;
+	int maxSteps = 100;
 
 protected:
 	PhysBody* pbody;
 private:
-
+	bool showPath = false;
 	SDL_Texture* texture;
 	const char* texturePath;
 	int texW, texH;
@@ -49,4 +52,6 @@ private:
 	Animation* currentAnimation = nullptr;
 	Animation idle;
 	Pathfinding* pathfinding;
+
+	std::vector<Enemy*> enemyList;
 };

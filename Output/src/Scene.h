@@ -6,6 +6,16 @@
 
 struct SDL_Texture;
 
+enum class SceneState 
+{
+	MAINMENU,
+	NEWGAME,
+	CONTINUE,
+	PAUSE,
+	SETTINGS,
+	CREDITS,
+	EXIT
+};
 class Scene : public Module
 {
 public:
@@ -44,6 +54,8 @@ public:
 
 	Vector2D GetPlayerPosition();
 
+public:
+
 	Vector2D newPosition;
 
 private:
@@ -57,6 +69,4 @@ private:
 	bool fadingIn = false;
 	float transitionAlpha = 0.0f;
 	int nextScene;
-
-	std::vector<Enemy*> enemyList;
 };

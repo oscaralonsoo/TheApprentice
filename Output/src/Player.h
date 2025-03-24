@@ -55,5 +55,4 @@ private:
 
 	// Parameters config.xml
 	pugi::xml_node parameters;
-
 };

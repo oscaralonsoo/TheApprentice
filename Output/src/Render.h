@@ -41,6 +41,9 @@ public:
 
 	void UpdateCamera(const Vector2D& targetPosition, int movementDirection, float smoothing);
 
+	// To render Text
+	bool DrawText(const std::string& text, int x, int y, SDL_Color color);
+
 public:
 
 	SDL_Renderer* renderer;

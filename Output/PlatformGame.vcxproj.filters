@@ -102,6 +102,9 @@
     <ClCompile Include="src\Bloodrusher.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="src\Bloodrusher.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine.h">
@@ -163,6 +166,9 @@
     </ClInclude>
     <ClInclude Include="src\PlayerAnimation.h">
       <Filter>Source Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Bloodrusher.h">
+      <Filter>Source Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="src\Bloodrusher.h">
       <Filter>Source Files\Entities</Filter>

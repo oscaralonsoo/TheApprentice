@@ -7,10 +7,7 @@ enum class EntityType
 {
 	PLAYER,
 	ITEM,
-<<<<<<< Updated upstream
-=======
 	BLOODRUSHER,
->>>>>>> Stashed changes
 	UNKNOWN
 };
 

@@ -76,12 +76,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::ITEM:
 		entity = new Item();
 		break;
-<<<<<<< Updated upstream
-=======
 	case EntityType::BLOODRUSHER:
 		entity = new Bloodrusher();
 		break;
->>>>>>> Stashed changes
 	default:
 		break;
 	}

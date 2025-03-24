@@ -55,7 +55,7 @@ bool Map::Update(float dt)
                                 // Convertir coordenadas del mapa a coordenadas de pantalla
                                 Vector2D mapCoord = MapToWorld(i, j);
 
-                                // Aplicar el efecto parallax en base a la cámara
+                                // Aplicar el efecto parallax en base a la cï¿½mara
                                 int renderX = (int)(mapCoord.getX() - (Engine::GetInstance().render->camera.x * mapLayer->parallaxX));
                                 int renderY = (int)(mapCoord.getY() - (Engine::GetInstance().render->camera.y * mapLayer->parallaxY));
 
@@ -197,7 +197,6 @@ bool Map::Load(std::string path, std::string fileName)
         // L08 TODO 7: Assign collider type
         // Later you can create a function here to load and create the colliders from the map
 
-<<<<<<< Updated upstream
         // L08 TODO 3: Create colliders
         for (pugi::xml_node objectGroupNode = mapFileXML.child("map").child("objectgroup"); objectGroupNode; objectGroupNode = objectGroupNode.next_sibling("objectgroup"))
         {
@@ -219,20 +218,6 @@ bool Map::Load(std::string path, std::string fileName)
                     Engine::GetInstance().physics->listToDelete.push_back(platformCollider);
 
                     LOG("Creating collider at x: %d, y: %d, width: %d, height: %d", x + (width / 2), y + (height / 2), width, height);
-=======
-        //Iterate the layer and create colliders
-        for (const auto& mapLayer : mapData.layers) {
-            if (mapLayer->name == "Collisions") {
-                for (int i = 0; i < mapData.width; i++) {
-                    for (int j = 0; j < mapData.height; j++) {
-                        int gid = mapLayer->Get(i, j);
-                        if (gid == 4801) {
-                            Vector2D mapCoord = MapToWorld(i, j);
-                            PhysBody* c1 = Engine::GetInstance().physics.get()->CreateRectangle(mapCoord.getX()+ mapData.tileWidth/2, mapCoord.getY()+ mapData.tileHeight/2, mapData.tileWidth, mapData.tileHeight, STATIC);
-                            c1->ctype = ColliderType::PLATFORM;
-                        }
-                    }
->>>>>>> Stashed changes
                 }
             }
             else if (layerName == "Doors")  // Objects from layer Doors
@@ -253,7 +238,6 @@ bool Map::Load(std::string path, std::string fileName)
                     {
                         std::string propertyName = propertyNode.attribute("name").as_string();
 
-<<<<<<< Updated upstream
                         if (propertyName == "TargetScene")
                         {
                             doorCollider->targetScene = propertyNode.attribute("value").as_int();
@@ -268,22 +252,21 @@ bool Map::Load(std::string path, std::string fileName)
                         {
                             doorCollider->playerPosY = propertyNode.attribute("value").as_float();
                             LOG("PlayerPosY: %f", doorCollider->playerPosY);
-=======
-                for (int i = 0; i < mapData.width; i++) {
-                    for (int j = 0; j < mapData.height; j++) {
-                        int gid = mapLayer->Get(i, j);
-                        if (gid == 4802) {
-                            // Convertir coordenadas del mapa a coordenadas del mundo
-                            Vector2D mapCoord = MapToWorld(i, j);
+                        }
+                    for (int i = 0; i < mapData.width; i++) {
+                        for (int j = 0; j < mapData.height; j++) {
+                            int gid = mapLayer->Get(i, j);
+                            if (gid == 4802) {
+                                // Convertir coordenadas del mapa a coordenadas del mundo
+                                Vector2D mapCoord = MapToWorld(i, j);
 
-                            // Crear un nuevo nodo <enemy>
-                            pugi::xml_node enemyNode = enemiesNode.append_child("enemy");
-                            enemyNode.append_attribute("type") = "Bloodrusher";
-                            enemyNode.append_attribute("x") = mapCoord.x;
-                            enemyNode.append_attribute("y") = mapCoord.y;
-                            enemyNode.append_attribute("w") = 64;
-                            enemyNode.append_attribute("h") = 64;
->>>>>>> Stashed changes
+                                // Crear un nuevo nodo <enemy>
+                                pugi::xml_node enemyNode = enemiesNode.append_child("enemy");
+                                enemyNode.append_attribute("type") = "Bloodrusher";
+                                enemyNode.append_attribute("x") = mapCoord.x;
+                                enemyNode.append_attribute("y") = mapCoord.y;
+                                enemyNode.append_attribute("w") = 64;
+                                enemyNode.append_attribute("h") = 64;
                         }
                     }
 

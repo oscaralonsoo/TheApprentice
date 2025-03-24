@@ -109,7 +109,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         Engine::GetInstance().physics.get()->DeletePhysBody(physB);
         break;
     case ColliderType::DOOR:
-     LOG("Collision DOOR");
+         LOG("Collision DOOR");
 
         // TargetScene From collider
         targetScene = physB->targetScene;
@@ -121,6 +121,12 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         Engine::GetInstance().scene.get()->StartTransition(targetScene); // Start Loading scene
 
         break;
+    case ColliderType::ENEMY:
+         LOG("Collision ENEMY");
+
+            // TODO --- DESTRUCCIÓN DE ENEMIGO & PLAYER DAMAGE LOGIC
+
+         break;
     default:
         LOG("Collision UNKNOWN");
         break;

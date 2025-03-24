@@ -87,6 +87,7 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	return entity;
 }
 
+// Function to destroy a specific Entity
 void EntityManager::DestroyEntity(Entity* entity)
 {
 	for (auto it = entities.begin(); it != entities.end(); ++it)
@@ -100,6 +101,24 @@ void EntityManager::DestroyEntity(Entity* entity)
 	}
 }
 
+// Function to destroy All Entities & Not The Player
+void EntityManager::DestroyAllEntities() {
+
+	for (auto it = entities.begin(); it != entities.end(); ) {
+		if ((*it)->type != EntityType::PLAYER) {
+			LOG("Destroying entity at position: (%f, %f)", (*it)->position.getX(), (*it)->position.getY());
+			(*it)->CleanUp();
+			delete* it;
+			it = entities.erase(it);
+		}
+		else {
+			++it;
+		}
+	}
+	LOG("All enemies removed.");
+}
+
+// Function to add a Specific Entity
 void EntityManager::AddEntity(Entity* entity)
 {
 	if ( entity != nullptr) entities.push_back(entity);

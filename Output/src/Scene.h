@@ -14,6 +14,7 @@ enum class SceneState
 	PAUSE,
 	SETTINGS,
 	CREDITS,
+	EXIT
 };
 class Scene : public Module
 {

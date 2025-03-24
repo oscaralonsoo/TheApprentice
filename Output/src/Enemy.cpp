@@ -1,14 +1,19 @@
-#include "Enemy.h"
 #include "Engine.h"
+#include "Input.h"
 #include "Textures.h"
 #include "Audio.h"
-#include "Input.h"
 #include "Render.h"
+#include "Window.h"
 #include "Scene.h"
 #include "Log.h"
-#include "Physics.h"
-#include "Map.h"
+#include "Entity.h"
 #include "EntityManager.h"
+#include "Player.h"
+#include "Map.h"
+#include "Item.h"
+#include "Physics.h"
+#include "Scene.h"
+#include "Module.h"
 
 Enemy::Enemy() : Entity(EntityType::ENEMY)
 {
@@ -67,10 +72,12 @@ bool Enemy::Start() {
 bool Enemy::Update(float dt)
 {
 	// Propagate the pathfinding algorithm using A* with the selected heuristic
-	ResetPath();
-	while (pathfinding->pathTiles.empty())
-	{
+	ResetPath();	
+
+	steps = 0;
+	while (pathfinding->pathTiles.empty() && steps < maxSteps) {
 		pathfinding->PropagateAStar(SQUARED);
+		steps++;
 	}
 
 	// L08 TODO 4: Add a physics to an item - update the position of the object from the physics.  
@@ -81,8 +88,13 @@ bool Enemy::Update(float dt)
 	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
 	currentAnimation->Update();
 
-	// Draw pathfinding 
-	pathfinding->DrawPath();
+	//Show|Hide Path
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {
+		showPath = !showPath;
+	}
+	if (showPath) {
+		pathfinding->DrawPath();
+	}
 
 	return true;
 }

@@ -48,7 +48,6 @@ bool Scene::Start()
 	Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx");
 
 	//TO DO - SACAR DE SCENE ESTE CODIGO!!!
-
 	for (pugi::xml_node enemyNode = configParameters.child("save_data").child("enemies").child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy"))
 	{
 		Enemy* enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ENEMY);
@@ -152,10 +151,11 @@ void Scene::ChangeScene(int nextScene)
 	// CleanUp of the previous Map
 	Engine::GetInstance().map->CleanUp();
 	// TODO --- Enemies & Entities CleanUp
+	Engine::GetInstance().entityManager.get()->DestroyAllEntities();
 
+
+		// Look for the XML node
 	std::string mapKey = "Map_" + std::to_string(nextScene);
-
-	// Look for the XML node
 	pugi::xml_node mapNode = configParameters.child("maps").child(mapKey.c_str());
 
 	if (mapNode) {
@@ -176,5 +176,4 @@ void Scene::ChangeScene(int nextScene)
 Vector2D Scene::GetPlayerPosition()
 {
 	return player->GetPosition();
-
 }

@@ -27,16 +27,7 @@ struct Properties
     }
 
     // L09: DONE 7: Method to ask for the value of a custom property
-    Property* GetProperty(const char* name)
-    {
-        for (const auto& property : propertyList) {
-            if (property->name == name) {
-                return property;
-            }
-        }
-
-        return nullptr;
-    }
+    Property* GetProperty(const char* name);
 
 };
 
@@ -130,6 +121,9 @@ public:
     // L07: TODO 8: Create a method that translates x,y coordinates from map positions to world positions
     Vector2D MapToWorld(int x, int y) const;
 
+    // L10: TODO 5: Add method WorldToMap to obtain  map coordinates from screen coordinates 
+    Vector2D WorldToMap(int x, int y);
+
 
     // L09: TODO 2: Implement function to the Tileset based on a tile id
     TileSet* GetTilesetFromTileId(int gid) const;
@@ -138,9 +132,26 @@ public:
     // L09: TODO 6: Load a group of properties 
     bool LoadProperties(pugi::xml_node& node, Properties& properties);
 
+    int GetWidth() {
+        return mapData.width;
+    }
+
+    int GetHeight() {
+        return mapData.height;
+    }
+
+    int GetTileWidth() {
+        return mapData.tileWidth;
+    }
+
+    int GetTileHeight() {
+        return mapData.tileHeight;
+    }
 
     int GetMapWidth() const { return mapData.width * mapData.tileWidth; }
     int GetMapHeight() const { return mapData.height * mapData.tileHeight; }
+    
+    MapLayer* GetNavigationLayer();
 
 public: 
     std::string mapFileName;

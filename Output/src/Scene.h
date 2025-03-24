@@ -2,6 +2,7 @@
 
 #include "Module.h"
 #include "Player.h"
+#include "Enemy.h"
 
 struct SDL_Texture;
 
@@ -41,6 +42,8 @@ public:
 	// Called before changing the scene
 	void ChangeScene(int nextScene);
 
+	Vector2D GetPlayerPosition();
+
 	Vector2D newPosition;
 
 private:
@@ -55,4 +58,5 @@ private:
 	float transitionAlpha = 0.0f;
 	int nextScene;
 
+	std::vector<Enemy*> enemyList;
 };

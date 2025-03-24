@@ -1,4 +1,4 @@
-#include "Engine.h"
+﻿#include "Engine.h"
 #include <iostream>
 #include <sstream>
 #include <iomanip>
@@ -289,4 +289,25 @@ bool Engine::LoadConfig()
     return ret;
 }
 
+bool Engine::UpdateConfig()
+{
+    bool ret = configFile.load_file("config.xml");
+
+    if (ret) {
+        LOG("Config file saved successfully");
+
+        // Recargar las configuraciones de cada modulo
+        bool result = true;
+        for (const auto& module : moduleList) {
+            // Recargar los parametros para cada m�dulo
+            module.get()->LoadParameters(configFile.child("config").child(module.get()->name.c_str()));
+        }
+
+        return result;
+    }
+    else {
+        LOG("Error saving config file");
+        return false;
+    }
+}
 

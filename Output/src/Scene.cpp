@@ -12,6 +12,7 @@
 #include "Map.h"
 #include "Item.h"
 #include "Physics.h"
+#include "Enemy.h"
 
 Scene::Scene() : Module()
 {
@@ -43,10 +44,7 @@ bool Scene::Awake()
 bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
-<<<<<<< Updated upstream
 	Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx");
-=======
-	Engine::GetInstance().map->Load("Assets/Maps/", "MapTemplate.tmx");
 
 	//TO DO - SACAR DE SCENE ESTE CODIGO!!!
 
@@ -56,7 +54,6 @@ bool Scene::Start()
 		enemy->SetParameters(enemyNode);
 		enemyList.push_back(enemy);
 	}
->>>>>>> Stashed changes
 
 	return true;
 }
@@ -175,4 +172,10 @@ void Scene::ChangeScene(int nextScene)
 
 		}
 	}
+}
+
+Vector2D Scene::GetPlayerPosition()
+{
+	return player->GetPosition();
+
 }

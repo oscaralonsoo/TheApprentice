@@ -26,11 +26,13 @@ public:
 	void SetParameters(pugi::xml_node parameters) {
 		this->parameters = parameters;
 	}
+	void SetPosition(Vector2D pos);
 	Vector2D GetPosition() const;
 	int GetMovementDirection() const { return movementDirection; }
 
 	int targetScene= 0;
 	PhysBody* pbody;
+
 private:
 	// Manejo de input
 	void HandleInput();

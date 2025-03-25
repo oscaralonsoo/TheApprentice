@@ -280,7 +280,7 @@ bool Map::Load(std::string path, std::string fileName)
                 for (int i = 0; i < mapData.width; i++) {
                     for (int j = 0; j < mapData.height; j++) {
                         int gid = mapLayer->Get(i, j);
-                        if (gid == 99) {
+                        if (gid == 2 || gid == 258) {
                             // Convertir coordenadas del mapa a coordenadas del mundo
                             Vector2D mapCoord = MapToWorld(i, j);
 

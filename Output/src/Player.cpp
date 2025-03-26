@@ -41,9 +41,21 @@ bool Player::Start() {
 }
 
 bool Player::Update(float dt) {
+    
+    if (isStunned) {
+        printf("ENTRAAAAAAAAAAAA");
+        stunTimer += dt;
+        if (stunTimer >= stunDuration) {
+            isStunned = false;
+            state = "idle";
+        }
+        return true; // Saltamos input y movimiento mientras está aturdido
+    }
+    
     HandleInput();
     HandleJump();
     HandleDash();
+    HandleFall();
 
     // Movimiento con física
     b2Vec2 velocity = b2Vec2(0, pbody->body->GetLinearVelocity().y);
@@ -104,8 +116,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype) {
 	case ColliderType::PLATFORM:
 		LOG("Collision PLATFORM");
+        CheckFallImpact();
 		isJumping = false;
         hasDoubleJumped = false;
+        canJump = true;
 		break;
 	case ColliderType::ITEM:
 		LOG("Collision ITEM");
@@ -185,3 +199,25 @@ void Player::HandleDash() {
         dashCooldown.Start(); // Solo inicia el cooldown una vez
     }
 }
+
+void Player::HandleFall() {
+    b2Vec2 velocity = pbody->body->GetLinearVelocity();
+
+    if (velocity.y > 0.1f && !isJumping) {
+        isJumping = true;
+        fallStartY = position.getY(); // Guardamos altura inicial
+        state = "fall";
+    }
+}
+
+void Player::CheckFallImpact() {
+    float fallEndY = position.getY();
+    float fallDistance = fallEndY - fallStartY;
+
+    if (fallDistance >= fallDistanceThreshold) {
+        isStunned = true;
+        stunTimer = 0.0f;
+        state = "stunned";
+    }
+}
+

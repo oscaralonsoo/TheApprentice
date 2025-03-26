@@ -37,6 +37,8 @@ private:
 	void HandleInput();
 	void HandleJump();
 	void HandleDash();
+	void HandleFall(); 
+	void CheckFallImpact();
 
 	// Parámetros del jugador
 	float speed = 5.0f;
@@ -61,6 +63,12 @@ private:
 	Timer dashCooldown;
 	bool canDash = true;
 	b2Vec2 dashImpulse = b2Vec2(10.0f, 0);
+
+	bool isStunned = false;
+	float stunDuration = 10.0f;
+	float stunTimer = 0.0f;
+	float fallStartY = 0.0f;          // Posición Y cuando empieza la caída
+	float fallDistanceThreshold = 30.0f; // En píxeles
 
 	// Animaciones del jugador
 	PlayerAnimation animation;

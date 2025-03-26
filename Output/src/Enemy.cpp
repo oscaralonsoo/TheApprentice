@@ -71,6 +71,7 @@ bool Enemy::Start() {
 bool Enemy::Update(float dt)
 {
 	// Propagate the pathfinding algorithm using A* with the selected heuristic
+
 	ResetPath();	
 
 	steps = 0;

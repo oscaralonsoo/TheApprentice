@@ -35,7 +35,7 @@ public:
 
 	void AddEntity(Entity* entity);
 
-	void CreateEnemiesFromXML(pugi::xml_node enemyNodes);
+	void CreateEnemiesFromXML(pugi::xml_node enemyNodes, bool initialize);
 
 public:
 

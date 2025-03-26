@@ -47,7 +47,7 @@ bool Scene::Start()
 	//L06 TODO 3: Call the function to load the map. 
 	Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx");
 
-	Engine::GetInstance().entityManager->CreateEnemiesFromXML(configParameters.child("save_data").child("enemies"));
+	Engine::GetInstance().entityManager->CreateEnemiesFromXML(configParameters.child("save_data").child("enemies"),false);
 
 	return true;
 }
@@ -142,13 +142,12 @@ void Scene::UpdateTransition(float dt)
 // Called before changing the scene
 void Scene::ChangeScene(int nextScene)
 {
-	// CleanUp of the previous Map
-	Engine::GetInstance().map->CleanUp();
-	// TODO --- Enemies & Entities CleanUp
-	Engine::GetInstance().entityManager.get()->DestroyAllEntities();
 
+	Engine::GetInstance().map->CleanUp(); 	// CleanUp of the previous Map
 
-		// Look for the XML node
+	Engine::GetInstance().entityManager.get()->DestroyAllEntities(); // Previous Enemies CleanUp
+
+	// Look for the XML node
 	std::string mapKey = "Map_" + std::to_string(nextScene);
 	pugi::xml_node mapNode = configParameters.child("maps").child(mapKey.c_str());
 
@@ -162,8 +161,7 @@ void Scene::ChangeScene(int nextScene)
 			player->pbody->body->SetLinearVelocity(b2Vec2(0, 0)); // Stop All Movement
 			player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, newPosition.y / PIXELS_PER_METER), 0); // Set New Player Position
 
-		// Create New Map Enemies
-			Engine::GetInstance().entityManager->CreateEnemiesFromXML(configParameters.child("save_data").child("enemies"));
+			Engine::GetInstance().entityManager->CreateEnemiesFromXML(configParameters.child("save_data").child("enemies"),true); // Create New Map Enemies
 		}
 	}
 }

@@ -16,6 +16,8 @@ enum class SceneState
 	CREDITS,
 	EXIT
 };
+
+
 class Scene : public Module
 {
 public:
@@ -60,6 +62,7 @@ public:
 	Vector2D newPosition;
 
 private:
+	SceneState currentState;
 	SDL_Texture* img;
 
 	//L03: TODO 3b: Declare a Player attribute

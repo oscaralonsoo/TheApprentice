@@ -42,8 +42,6 @@ public:
 	int steps = 0;
 	int maxSteps = 100;
 
-protected:
-	PhysBody* pbody;
 private:
 
 	SDL_Texture* texture;

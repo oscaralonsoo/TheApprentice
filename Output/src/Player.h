@@ -79,10 +79,6 @@ private:
 	float dashMaxCoolDown = 1.0f;
 	bool dashUnlocked = false;
 
-	//Wall Slide
-	bool isTouchingWall = false;
-	bool isWallSliding = false;
-
 	//Fall Stun
 	bool isStunned = false;
 	float stunDuration = 1.0f;
@@ -91,6 +87,13 @@ private:
 	float fallDistanceThreshold = 300.0f; 
 	float fallEndY;
 	float fallDistance;
+
+	//Bajar la camara al lado de bajadas
+	bool wasInDownCameraZone = false;
+
+	//Wall Slide
+	bool isWallSliding = false;
+
 
 	// Animaciones del jugador
 	PlayerAnimation animation;

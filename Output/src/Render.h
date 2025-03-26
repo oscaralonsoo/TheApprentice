@@ -3,6 +3,7 @@
 #include "Module.h"
 #include "Vector2D.h"
 #include "SDL2/SDL.h"
+#include "Timer.h"
 
 class Render : public Module
 {
@@ -41,17 +42,57 @@ public:
 
 	void UpdateCamera(const Vector2D& targetPosition, int movementDirection, float smoothing);
 
-public:
+	float EaseInOut(float current, float target, float t);
 
-	SDL_Renderer* renderer;
-	SDL_Rect camera;
-	SDL_Rect viewport;
-	SDL_Color background;
+	//Camera Dash
+	int cameraImpulseX = 0;
+	float cameraImpulseSmoothing = 0.1f;
 
+	//Camera Movement
 	int targetY;
 	int targetX;
 	int mapWidthPx;
 	int mapHeightPx;
-	int followMargin;
-	int cameraCenterY;
+	int followMargin = 100;
+	int cameraCenterY = -camera.y + camera.h / 2;
+	int cameraVerticalViewOffset = 150;
+	int cameraLookAheadTarget = 0;
+	float cameraLookAheadOffset = 0.0f;
+	float lookAheadSmoothing = 0.1f;
+	int lookAheadDelayFrames = 10;
+	int lookAheadCounter = 0;
+	int lastMoveDir = 0;
+	int lookAheadDistance = 55;
+
+
+	//Camera Shake
+	Timer shakeTimer;
+	bool isShaking = false;
+	int shakeDurationSec = 0;
+	int shakeIntensity = 0;
+	int shakeOffsetX = 0;
+	int shakeOffsetY = 0;
+
+	//Camera Lock in the center
+	bool cameraLocked = false;
+
+	//Bajar camera al lado de bajada
+	float cameraYOffset = 0.0f;
+	float targetCameraYOffset = 0.0f;
+	float yOffsetSmoothing = 0.05f;
+	int defaultYOffset = -200;
+	bool isYOffsetLocked = false;
+
+
+public:
+
+	void DashCameraImpulse(int direction, int intensity);
+	void StartCameraShake(int durationSec, int intensity);
+	void ToggleCameraLock();
+	void ToggleVerticalOffsetLock();
+	
+	SDL_Renderer* renderer;
+	SDL_Rect camera;
+	SDL_Rect viewport;
+	SDL_Color background;
 };

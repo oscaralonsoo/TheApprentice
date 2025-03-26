@@ -59,7 +59,7 @@ bool Player::Update(float dt) {
     HandleJump();
     HandleDash();
     HandleFall();
-    //HandleWallSlide();
+    HandleWallSlide();
 
     // Movimiento con f�sica
 
@@ -86,6 +86,15 @@ bool Player::Update(float dt) {
     }
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && !isJumping) {
         EnableDash(!dashUnlocked);
+    }
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_4) == KEY_DOWN && !isJumping) {
+        Engine::GetInstance().render.get()->StartCameraShake(5, 100);  
+    }
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_5) == KEY_DOWN && !isJumping) {
+        Engine::GetInstance().render.get()->ToggleCameraLock();
+    }
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_6) == KEY_DOWN && !isJumping) {
+        Engine::GetInstance().render.get()->ToggleVerticalOffsetLock();
     }
 
     // Apply the velocity
@@ -139,15 +148,22 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		break;
     case ColliderType::WALL:
         //LOG("Collision WALL");
-
         if (isDashing) {
             CancelDash();
         }
+
+        isWallSliding = true;
+
         break;
 	case ColliderType::ITEM:
 		//LOG("Collision ITEM");
 		Engine::GetInstance().physics.get()->DeletePhysBody(physB);
 		break;
+    case ColliderType::DOWN_CAMERA:
+        if (!wasInDownCameraZone) {
+            Engine::GetInstance().render.get()->ToggleVerticalOffsetLock();
+            wasInDownCameraZone = true;
+        }
 	default:
 		//LOG("Collision UNKNOWN");
 		break;
@@ -160,9 +176,12 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         isOnGround = false;
         break;
     case ColliderType::WALL:
-        //LOG("End Collision WALL");
+        isWallSliding = false;
         break;
     case ColliderType::ITEM:
+        break;
+    case ColliderType::DOWN_CAMERA:
+        wasInDownCameraZone = false;
         break;
     default:
         break;
@@ -232,6 +251,8 @@ void Player::HandleDash() {
         dashStartPosition = position;
 
         pbody->body->SetGravityScale(0.0f);
+
+        Engine::GetInstance().render.get()->DashCameraImpulse(movementDirection, 100); 
     }
 
     if (isDashing) {
@@ -268,14 +289,17 @@ void Player::CheckFallImpact() {
         isStunned = true;
         state = "stunned";
         stunTimer.Start();
+        Engine::GetInstance().render.get()->StartCameraShake(1, 1);
     }
 }
 
-
-void Player::HandleWallSlide() {
-
-
-
+void Player::HandleWallSlide()
+{
+    if (isWallSliding)
+    {
+        pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+        state = "wall_slide";
+    }
 }
 
 void Player::CancelDash() {

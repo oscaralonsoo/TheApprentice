@@ -28,6 +28,7 @@ enum class ColliderType {
 	ITEM,
 	PLATFORM,
 	WALL,
+	DOWN_CAMERA,
 	UNKNOWN
 	// ..
 };

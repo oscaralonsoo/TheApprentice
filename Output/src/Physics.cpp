@@ -82,6 +82,7 @@ PhysBody* Physics::CreateRectangle(int x, int y, int width, int height, bodyType
 	b2FixtureDef fixture;
 	fixture.shape = &box;
 	fixture.density = 1.0f;
+	fixture.restitution = 0.0f;
 	b->ResetMassData();
 
 	b->CreateFixture(&fixture);
@@ -117,6 +118,7 @@ PhysBody* Physics::CreateCircle(int x, int y, int radious, bodyType type)
 	b2FixtureDef fixture;
 	fixture.shape = &circle;
 	fixture.density = 1.0f;
+	fixture.restitution = 0.0f;
 	b->ResetMassData();
 
 	// Add fixture to the BODY

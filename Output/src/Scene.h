@@ -54,7 +54,6 @@ public:
 	// Called before changing the scene
 	void ChangeScene(int nextScene);
 
-	// Return the player position
 	Vector2D GetPlayerPosition();
 
 public:

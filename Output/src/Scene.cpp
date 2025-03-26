@@ -165,7 +165,7 @@ void Scene::ChangeScene(int nextScene)
 		}
 	}
 }
-// Return the player position
+
 Vector2D Scene::GetPlayerPosition()
 {
 	return player->GetPosition();

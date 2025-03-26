@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "Log.h"
 #include "Item.h"
+#include "Bloodrusher.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -72,11 +73,11 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::PLAYER:
 		entity = new Player();
 		break;
-	case EntityType::ENEMY:
-		entity = new Enemy();
-		break;
 	case EntityType::ITEM:
 		entity = new Item();
+		break;
+	case EntityType::BLOODRUSHER:
+		entity = new Bloodrusher();
 		break;
 	default:
 		break;

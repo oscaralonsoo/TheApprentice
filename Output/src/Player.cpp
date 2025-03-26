@@ -144,6 +144,7 @@ void Player::SetPosition(Vector2D pos) {
     pbody->body->SetTransform(bodyPos, 0);
 }
 
+
 Vector2D Player::GetPosition() const {
 	return position;
 }

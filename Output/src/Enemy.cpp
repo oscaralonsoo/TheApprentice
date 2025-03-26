@@ -15,7 +15,7 @@
 #include "Scene.h"
 #include "Module.h"
 
-Enemy::Enemy() : Entity(EntityType::ENEMY)
+Enemy::Enemy(EntityType type) : Entity(type)
 {
 
 }

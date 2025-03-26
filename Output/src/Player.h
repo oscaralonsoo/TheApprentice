@@ -29,8 +29,12 @@ public:
 	}
 	Vector2D GetPosition() const;
 	int GetMovementDirection() const { return movementDirection; }
-	void EnableDoubleJump(bool enable) { canDoubleJump = enable; }
-	void EnableJump(bool enable) { canJump = enable; }
+
+	//Unlock Abilities
+	void EnableDoubleJump(bool enable) { doubleJumpUnlocked = enable; }
+	void EnableJump(bool enable) { jumpUnlocked = enable; }
+	void EnableDash(bool enable) { dashUnlocked = enable; }
+
 
 private:
 	// Manejo de input
@@ -39,6 +43,8 @@ private:
 	void HandleDash();
 	void HandleFall(); 
 	void CheckFallImpact();
+	void HandleWallSlide();
+	void CancelDash();
 
 	// Parámetros del jugador
 	float speed = 5.0f;
@@ -47,28 +53,44 @@ private:
 
 	// Física del jugador
 	PhysBody* pbody;
+	bool isOnGround = false;
+	
+	//Know Direction
+	int movementDirection = 1;
+	
+	//Jump
 	float jumpForce = 10.5f;
 	bool isJumping = false;
-	int movementDirection = 0;
-
 	float jumpTime = 0.0f;
 	float maxJumpTime = 0.3f;
-	bool canJump = true;
+	bool jumpUnlocked = false;
 
-	bool canDoubleJump = true;
+	//DoubleJump
+	bool doubleJumpUnlocked = false;
 	bool hasDoubleJumped = false;
 
-	int lastDashDirection = 0;
-	Timer dashDuration;
-	Timer dashCooldown;
+	//Dash
+	bool isDashing = false;
 	bool canDash = true;
-	b2Vec2 dashImpulse = b2Vec2(10.0f, 0);
+	float dashSpeed = 15.0f;         
+	Vector2D dashStartPosition;
+	float maxDashDistance = 100.0f; 
+	Timer dashCooldown;
+	float dashMaxCoolDown = 1.0f;
+	bool dashUnlocked = false;
 
+	//Wall Slide
+	bool isTouchingWall = false;
+	bool isWallSliding = false;
+
+	//Fall Stun
 	bool isStunned = false;
-	float stunDuration = 10.0f;
-	float stunTimer = 0.0f;
-	float fallStartY = 0.0f;          // Posición Y cuando empieza la caída
-	float fallDistanceThreshold = 30.0f; // En píxeles
+	float stunDuration = 1.0f;
+	Timer stunTimer;
+	float fallStartY = 0.0f;
+	float fallDistanceThreshold = 300.0f; 
+	float fallEndY;
+	float fallDistance;
 
 	// Animaciones del jugador
 	PlayerAnimation animation;

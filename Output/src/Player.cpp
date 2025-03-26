@@ -43,36 +43,52 @@ bool Player::Start() {
 bool Player::Update(float dt) {
     
     if (isStunned) {
-        printf("ENTRAAAAAAAAAAAA");
-        stunTimer += dt;
-        if (stunTimer >= stunDuration) {
+        pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+        if (stunTimer.ReadSec() >= stunDuration) {
             isStunned = false;
             state = "idle";
+
+            fallStartY = position.getY();
+            fallEndY = position.getY();
+            fallDistance = 0.0f;
         }
-        return true; // Saltamos input y movimiento mientras está aturdido
+        return true;
     }
     
     HandleInput();
     HandleJump();
     HandleDash();
     HandleFall();
+    //HandleWallSlide();
 
-    // Movimiento con física
-    b2Vec2 velocity = b2Vec2(0, pbody->body->GetLinearVelocity().y);
+    // Movimiento con fï¿½sica
 
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-        velocity.x = -speed;
+    if (!isDashing) {
+
+        b2Vec2 velocity = b2Vec2(0, pbody->body->GetLinearVelocity().y);
+
+        velocity.x = 0; // Reset horizontal por defecto
+
+        if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+            velocity.x = -speed;
+        }
+        if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+            velocity.x = speed;
+        }
+        pbody->body->SetLinearVelocity(velocity);
     }
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-        velocity.x = speed;
+
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_1) == KEY_DOWN && !isJumping) {
+        EnableJump(!jumpUnlocked);
     }
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !isJumping) {
-        pbody->body->ApplyLinearImpulseToCenter(b2Vec2(0, -jumpForce), true);
-        isJumping = true;
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_2) == KEY_DOWN && !isJumping) {
+        EnableDoubleJump(!doubleJumpUnlocked);
+    }
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && !isJumping) {
+        EnableDash(!dashUnlocked);
     }
 
     // Apply the velocity
-    pbody->body->SetLinearVelocity(velocity);
     b2Transform pbodyPos = pbody->body->GetTransform();
 
     // Update the position of the texture based on the body's position
@@ -95,9 +111,6 @@ void Player::HandleInput() {
         movementDirection = 1;
 		state = "run_right";
 	}
-	else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
-		state = "jump";
-	}
 	else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
 		state = "attack";
 	}
@@ -115,24 +128,45 @@ bool Player::CleanUp() {
 void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype) {
 	case ColliderType::PLATFORM:
-		LOG("Collision PLATFORM");
+		//LOG("Collision PLATFORM");
         CheckFallImpact();
 		isJumping = false;
         hasDoubleJumped = false;
-        canJump = true;
+        if (jumpUnlocked) {
+            EnableJump(true);
+        }
+        isOnGround = true;
 		break;
+    case ColliderType::WALL:
+        //LOG("Collision WALL");
+
+        if (isDashing) {
+            CancelDash();
+        }
+        break;
 	case ColliderType::ITEM:
-		LOG("Collision ITEM");
+		//LOG("Collision ITEM");
 		Engine::GetInstance().physics.get()->DeletePhysBody(physB);
 		break;
 	default:
-		LOG("Collision UNKNOWN");
+		//LOG("Collision UNKNOWN");
 		break;
 	}
 }
 
 void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
-	LOG("End Collision");
+    switch (physB->ctype) {
+    case ColliderType::PLATFORM:
+        isOnGround = false;
+        break;
+    case ColliderType::WALL:
+        //LOG("End Collision WALL");
+        break;
+    case ColliderType::ITEM:
+        break;
+    default:
+        break;
+    }
 }
 
 Vector2D Player::GetPosition() const {
@@ -140,20 +174,20 @@ Vector2D Player::GetPosition() const {
 }
 
 void Player::HandleJump() {
+
+    if (!jumpUnlocked) return;
     // Obtener la velocidad actual del jugador
     b2Vec2 velocity = pbody->body->GetLinearVelocity();
-
-    if (!canJump) return;
-
 
     // --- INICIO DEL PRIMER SALTO ---
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !isJumping) {
         velocity.y = -jumpForce;  // Aplicamos la fuerza inicial del salto
         isJumping = true;
+        state = "jump";
     }
 
     // --- DOBLE SALTO ---
-    else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isJumping && !hasDoubleJumped && canDoubleJump) {
+    else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isJumping && !hasDoubleJumped && doubleJumpUnlocked) {
         velocity.y = -jumpForce;  // Aplicamos la fuerza del doble salto
         hasDoubleJumped = true;   // Marcar que ya usamos el doble salto
     }
@@ -167,14 +201,14 @@ void Player::HandleJump() {
     }
 
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_UP && isJumping) {
-        if (velocity.y < 0) {  // Si aún está subiendo, forzamos la caída
+        if (velocity.y < 0) {  // Si aï¿½n estï¿½ subiendo, forzamos la caï¿½da
             velocity.y = 0;   // Reduce la velocidad de subida de golpe
         }
     }
 
-    // --- GRAVEDAD SUAVE Y PROGRESIVA EN LA CAÍDA ---
-    if (velocity.y > 0) {
-        velocity.y += std::min(velocity.y * 0.1f, 1.0f);
+    // --- GRAVEDAD SUAVE Y PROGRESIVA EN LA CAï¿½DA ---
+    if (velocity.y > 0 && !isDashing && !isWallSliding) {
+        velocity.y += std::min(velocity.y * 0.1f, 0.5f);
     }
 
 
@@ -184,19 +218,35 @@ void Player::HandleJump() {
 
 void Player::HandleDash() {
 
-    if (!canDash) {
-        if (dashCooldown.ReadSec() >= 2) {
-            canDash = true;
-        }
-        return; // Evitar que siga ejecutando el resto del código
+    if (!dashUnlocked) return;
+
+    if (!canDash && dashCooldown.ReadSec() >= dashMaxCoolDown) {
+        canDash = true;
     }
 
-    // Solo iniciar el dash si el jugador presiona K y canDash es true
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_K) == KEY_DOWN) {
-        printf("ENTRAAAAAAAAAAA\n");
-
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_K) == KEY_DOWN && canDash) {
+        isDashing = true;
         canDash = false;
-        dashCooldown.Start(); // Solo inicia el cooldown una vez
+        dashCooldown.Start();
+
+        dashStartPosition = position;
+
+        pbody->body->SetGravityScale(0.0f);
+    }
+
+    if (isDashing) {
+        // Aplica velocidad
+        b2Vec2 vel(dashSpeed * movementDirection, 0.0f);
+        pbody->body->SetLinearVelocity(vel);
+
+        // Calcula distancia recorrida
+        float distance = abs(position.getX() - dashStartPosition.getX());
+
+        if (distance >= maxDashDistance) {
+            if (distance >= maxDashDistance) {
+                CancelDash();
+            }
+        }
     }
 }
 
@@ -205,19 +255,34 @@ void Player::HandleFall() {
 
     if (velocity.y > 0.1f && !isJumping) {
         isJumping = true;
-        fallStartY = position.getY(); // Guardamos altura inicial
+        fallStartY = position.getY(); 
         state = "fall";
     }
 }
 
 void Player::CheckFallImpact() {
-    float fallEndY = position.getY();
-    float fallDistance = fallEndY - fallStartY;
+    fallEndY = position.getY();
+    fallDistance = fallEndY - fallStartY;
 
     if (fallDistance >= fallDistanceThreshold) {
         isStunned = true;
-        stunTimer = 0.0f;
         state = "stunned";
+        stunTimer.Start();
     }
 }
 
+
+void Player::HandleWallSlide() {
+
+
+
+}
+
+void Player::CancelDash() {
+    isDashing = false;
+    pbody->body->SetGravityScale(1.0f);
+
+    b2Vec2 stop = pbody->body->GetLinearVelocity();
+    stop.x = 0.0f;
+    pbody->body->SetLinearVelocity(stop);
+}

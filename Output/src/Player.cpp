@@ -9,7 +9,7 @@
 #include "Physics.h"
 #include "EntityManager.h"
 #include "box2D/box2d.h"
-
+#include "Map.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -187,6 +187,25 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             Engine::GetInstance().render.get()->ToggleVerticalOffsetLock();
             wasInDownCameraZone = true;
         }
+            case ColliderType::DOOR:
+         LOG("Collision DOOR");
+
+        // TargetScene From collider
+        targetScene = physB->targetScene;
+
+        // Player Position From Collider
+        Engine::GetInstance().scene->newPosition.x = physB->playerPosX;
+        Engine::GetInstance().scene->newPosition.y = physB->playerPosY;
+
+        Engine::GetInstance().scene.get()->StartTransition(targetScene); // Start Loading scene
+
+        break;
+    case ColliderType::ENEMY:
+         LOG("Collision ENEMY");
+
+            // TODO --- DESTRUCCI�N DE ENEMIGO & PLAYER DAMAGE LOGIC
+
+         break;
 	default:
 		//LOG("Collision UNKNOWN");
 		break;
@@ -210,6 +229,14 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         break;
     }
 }
+
+void Player::SetPosition(Vector2D pos) {
+    pos.setX(pos.getX() + texW / 2);
+    pos.setY(pos.getY() + texH / 2);
+    b2Vec2 bodyPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
+    pbody->body->SetTransform(bodyPos, 0);
+}
+
 
 Vector2D Player::GetPosition() const {
 	return position;

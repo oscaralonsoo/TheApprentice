@@ -2,8 +2,21 @@
 
 #include "Module.h"
 #include "Player.h"
+#include "Enemy.h"
 
 struct SDL_Texture;
+
+enum class SceneState 
+{
+	MAINMENU,
+	NEWGAME,
+	CONTINUE,
+	PAUSE,
+	SETTINGS,
+	CREDITS,
+	EXIT
+};
+
 
 class Scene : public Module
 {
@@ -32,9 +45,31 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	// Called each Update Iteration
+	void UpdateTransition(float dt);
+
+	// Called before starting the Transition
+	void StartTransition(int nextScene);
+
+	// Called before changing the scene
+	void ChangeScene(int nextScene);
+
+	Vector2D GetPlayerPosition();
+
+public:
+
+	Vector2D newPosition;
+
 private:
+	SceneState currentState;
 	SDL_Texture* img;
 
 	//L03: TODO 3b: Declare a Player attribute
 	Player* player;
+
+	//transition 
+	bool transitioning = false;
+	bool fadingIn = false;
+	float transitionAlpha = 0.0f;
+	int nextScene;
 };

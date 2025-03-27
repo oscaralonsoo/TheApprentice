@@ -41,6 +41,8 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	bool UpdateConfig();
+
 	float GetDt() const {
 		return dt;
 	}
@@ -72,6 +74,8 @@ private:
 
 	// Load config file
 	bool LoadConfig();
+
+
 
 	std::list<std::shared_ptr<Module>> moduleList;
 

@@ -43,6 +43,10 @@ public:
 	void UpdateCamera(const Vector2D& targetPosition, int movementDirection, float smoothing);
 
 	float EaseInOut(float current, float target, float t);
+	// To render Text
+	bool DrawText(const std::string& text, int x, int y, SDL_Color color);
+
+public:
 
 	//Camera Dash
 	int cameraImpulseX = 0;

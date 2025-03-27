@@ -26,10 +26,12 @@ enum bodyType {
 enum class ColliderType {
 	PLAYER, 
 	ITEM,
-	PLATFORM,
 	WALL,
 	DOWN_CAMERA,
 	ATTACK,
+	ENEMY,
+	PLATFORM, 
+	DOOR,
 	UNKNOWN
 	// ..
 };
@@ -51,6 +53,10 @@ public:
 public:
 	int width = 0;
 	int height = 0;
+	// Door Values
+	int targetScene = 0;
+	float playerPosX = 0.0f;
+	float playerPosY = 0.0f;
 	b2Body* body;
 	Entity* listener;
 	ColliderType ctype;
@@ -83,6 +89,11 @@ public:
 
 	void DeletePhysBody(PhysBody* physBody);
 
+	// List of physics bodies
+
+	std::list<PhysBody*> bodiesToDelete;
+
+	std::list<PhysBody*> listToDelete;
 private:
 
 	// Debug mode
@@ -91,6 +102,4 @@ private:
 	// Box2D World
 	b2World* world;
 
-	// List of physics bodies
-	std::list<PhysBody*> bodiesToDelete;
 };

@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "Log.h"
 #include "Item.h"
+#include "Bloodrusher.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -75,6 +76,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::ITEM:
 		entity = new Item();
 		break;
+	case EntityType::BLOODRUSHER:
+		entity = new Bloodrusher();
+		break;
 	default:
 		break;
 	}
@@ -84,6 +88,7 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	return entity;
 }
 
+// Function to destroy a specific Entity
 void EntityManager::DestroyEntity(Entity* entity)
 {
 	for (auto it = entities.begin(); it != entities.end(); ++it)
@@ -97,6 +102,24 @@ void EntityManager::DestroyEntity(Entity* entity)
 	}
 }
 
+// Function to destroy All Entities & Not The Player
+void EntityManager::DestroyAllEntities() {
+
+	for (auto it = entities.begin(); it != entities.end(); ) {
+		if ((*it)->type != EntityType::PLAYER) {
+			LOG("Destroying entity at position: (%f, %f)", (*it)->position.getX(), (*it)->position.getY());
+			(*it)->CleanUp();
+			delete* it;
+			it = entities.erase(it);
+		}
+		else {
+			++it;
+		}
+	}
+	LOG("All entities removed.");
+}
+
+// Function to add a Specific Entity
 void EntityManager::AddEntity(Entity* entity)
 {
 	if ( entity != nullptr) entities.push_back(entity);
@@ -111,4 +134,20 @@ bool EntityManager::Update(float dt)
 		ret = entity->Update(dt);
 	}
 	return ret;
+}
+void EntityManager::CreateEnemiesFromXML(pugi::xml_node enemyNodes, bool initialize)
+{
+	for (pugi::xml_node enemyNode = enemyNodes.child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy"))
+	{
+		Enemy* enemy = (Enemy*)CreateEntity(EntityType::BLOODRUSHER);
+		enemy->SetParameters(enemyNode);
+
+		if(initialize)
+		enemy->Start();
+
+		enemyList.push_back(enemy);
+		LOG("Enemy Created");
+		
+	}
+
 }

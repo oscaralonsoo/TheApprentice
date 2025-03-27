@@ -87,7 +87,9 @@ bool Scene::PostUpdate()
 {
 	bool ret = true;
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		ret = false;
+	{
+
+	}
 
 	if (transitioning) {
 		SDL_SetRenderDrawBlendMode(Engine::GetInstance().render->renderer, SDL_BLENDMODE_BLEND);

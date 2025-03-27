@@ -108,7 +108,7 @@
     <ClCompile Include="src\PlayerAnimation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Menus.cpp">
+    <ClCompile Include="src\Menus.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
@@ -180,7 +180,7 @@
     </ClInclude>
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\PlayerAnimation.h" />
-    <ClInclude Include="Menus.h">
+    <ClInclude Include="src\Menus.h">
       <Filter>Source Files\Scenes</Filter>
     </ClInclude>
   </ItemGroup>

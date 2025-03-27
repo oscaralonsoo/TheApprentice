@@ -13,6 +13,7 @@
 #include "Item.h"
 #include "Physics.h"
 #include "Enemy.h"
+#include "Menus.h"
 
 
 Scene::Scene() : Module()
@@ -86,10 +87,6 @@ bool Scene::Update(float dt)
 bool Scene::PostUpdate()
 {
 	bool ret = true;
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-	{
-
-	}
 
 	if (transitioning) {
 		SDL_SetRenderDrawBlendMode(Engine::GetInstance().render->renderer, SDL_BLENDMODE_BLEND);

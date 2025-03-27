@@ -61,6 +61,11 @@ bool Player::Update(float dt) {
     HandleFall();
     HandleWallSlide();
 
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_J) == KEY_DOWN && attackSensor == nullptr)
+    {
+        CreateAttackSensor();
+    }
+
     // Movimiento con f�sica
 
     if (!isDashing) {
@@ -103,6 +108,24 @@ bool Player::Update(float dt) {
     // Update the position of the texture based on the body's position
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texW / 2);
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
+
+    // Actualizar posición del sensor si está activo
+    if (attackSensor != nullptr)
+    {
+        LOG("Attack Timer: %.3f / %.3f", attackTimer.ReadSec(), attackDuration);
+        int offsetX = (movementDirection > 0) ? size / 2 : -size / 2;
+
+        int playerX = METERS_TO_PIXELS(pbody->body->GetPosition().x) + offsetX;
+        int playerY = METERS_TO_PIXELS(pbody->body->GetPosition().y);
+
+        b2Vec2 newPos(PIXEL_TO_METERS(playerX), PIXEL_TO_METERS(playerY));
+        attackSensor->body->SetTransform(newPos, 0);
+
+        if (attackTimer.ReadMSec() >= attackDuration)
+        {
+            DestroyAttackSensor();
+        }
+    }
 
     // Update animation based on the new position
     animation.Update(dt, state, position.getX(), position.getY());
@@ -253,6 +276,11 @@ void Player::HandleDash() {
         pbody->body->SetGravityScale(0.0f);
 
         Engine::GetInstance().render.get()->DashCameraImpulse(movementDirection, 100); 
+
+        if (attackSensor != nullptr)
+        {
+            DestroyAttackSensor();
+        }
     }
 
     if (isDashing) {
@@ -274,7 +302,7 @@ void Player::HandleDash() {
 void Player::HandleFall() {
     b2Vec2 velocity = pbody->body->GetLinearVelocity();
 
-    if (velocity.y > 0.1f && !isJumping) {
+    if (velocity.y > 0.5f && !isJumping) {
         isJumping = true;
         fallStartY = position.getY(); 
         state = "fall";
@@ -309,4 +337,28 @@ void Player::CancelDash() {
     b2Vec2 stop = pbody->body->GetLinearVelocity();
     stop.x = 0.0f;
     pbody->body->SetLinearVelocity(stop);
+}
+
+void Player::CreateAttackSensor()
+{
+
+    int offsetX = (movementDirection > 0) ? size / 2 : -size / 2;
+
+    playerAttackX = METERS_TO_PIXELS(pbody->body->GetPosition().x) + offsetX;
+    playerAttackY = METERS_TO_PIXELS(pbody->body->GetPosition().y);
+
+    attackSensor = Engine::GetInstance().physics.get()->CreateRectangleSensor(playerAttackX, playerAttackY, size, size, KINEMATIC);
+    attackSensor->ctype = ColliderType::ATTACK;
+    attackSensor->listener = this;
+
+    attackTimer.Start();
+}
+
+void Player::DestroyAttackSensor()
+{
+    if (attackSensor != nullptr)
+    {
+        Engine::GetInstance().physics.get()->DeletePhysBody(attackSensor);
+        attackSensor = nullptr;
+    }
 }

@@ -29,6 +29,7 @@ enum class ColliderType {
 	PLATFORM,
 	WALL,
 	DOWN_CAMERA,
+	ATTACK,
 	UNKNOWN
 	// ..
 };

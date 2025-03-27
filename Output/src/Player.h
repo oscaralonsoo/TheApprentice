@@ -45,6 +45,8 @@ private:
 	void CheckFallImpact();
 	void HandleWallSlide();
 	void CancelDash();
+	void CreateAttackSensor();
+	void DestroyAttackSensor();
 
 	// Parámetros del jugador
 	float speed = 5.0f;
@@ -93,6 +95,14 @@ private:
 
 	//Wall Slide
 	bool isWallSliding = false;
+
+	//Attack
+	PhysBody* attackSensor = nullptr;
+	Timer attackTimer;
+	float attackDuration = 200.0f;
+	int size = 50;
+	int playerAttackX;
+	int playerAttackY;
 
 
 	// Animaciones del jugador

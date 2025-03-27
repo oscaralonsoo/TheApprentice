@@ -15,6 +15,8 @@ enum class MenusState
     PAUSE,
     SETTINGS,
     CREDITS,
+    GAME,
+    NONE,
     EXIT
 };
 
@@ -33,43 +35,67 @@ public:
     // Called before the first frame
     bool Start();
 
-    bool PreUpdate();
+    void LoadTextures();
+
     // Called each loop iteration
     bool Update(float dt);
 
+    void HandleInput();
+
     bool PostUpdate();
+
+    void DrawBackground();
+
+    void ApplyTransitionEffect();
     // Called before quitting
     bool CleanUp();
 
     // Called When Game Starts
     void CheckCurrentState(float dt);
 
-    void MainMenu();
+    void MainMenu(float dt);
 
     void NewGame();
 
     void Continue();
 
-    void Pause();
+    void Pause( float dt);
 
     void Settings();
 
     void Credits();
 
+    void HandlePause();
+
+    void SetPauseTransition(bool fast, MenusState newState);
+
     void Transition(float dt);
 
+
 public:
+    
     MenusState currentState;
+    MenusState nextState;
+
+    bool isPaused = false;
+    bool inMainMenu = false;
+
 private:
-    bool inPause;
-    bool inTransition;
-    bool ret; 
 
+    //Flags
+    bool inTransition = false;
+    bool fastTransition = false;
     bool transitioning = false;
-
     bool fadingIn = false;
 
+    //Floats
     float transitionAlpha = 0.0f;
+    float transitionSpeed = 0.0f;
 
-    SDL_Texture* pauseMenuImage;
+    //Textures
+    SDL_Texture* menuBackground = nullptr;
+    SDL_Texture* pauseBackground = nullptr;
+    SDL_Texture* creditsBackground = nullptr;
+    SDL_Texture* settingsBackground = nullptr;
+
 };

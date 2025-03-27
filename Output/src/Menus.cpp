@@ -3,157 +3,218 @@
 #include "Input.h"
 #include <SDL2/SDL.h>
 #include "Render.h"
+#include "Window.h"
 
-Menus::Menus() : currentState(MenusState::MAINMENU), ret(false), transitionAlpha(0.0f)
-{
-}
+Menus::Menus() : currentState(MenusState::MAINMENU), transitionAlpha(0.0f), inTransition(false), transitioning(false), fadingIn(false), nextState(MenusState::NONE), 
+fastTransition(false), menuBackground(nullptr), pauseBackground(nullptr) {}
 
-Menus::~Menus()
-{
-}
+Menus::~Menus() {}
 
-bool Menus::Awake()
-{
-	return true;
-}
+bool Menus::Awake(){ return true; }
 
 bool Menus::Start()
 {
-	currentState = MenusState::MAINMENU;
-
-	pauseMenuImage;
-	return true;
+    currentState = MenusState::MAINMENU;
+    LoadTextures();
+    return true;
 }
 
-bool Menus::PreUpdate()
+void Menus::LoadTextures()
 {
-	return true;
+    menuBackground = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/MainMenuBackGround.png");
+    pauseBackground = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/PauseMenu.png");
+    creditsBackground = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/PauseMenu.png");
+    settingsBackground = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/PauseMenu.png");
 }
+
 
 bool Menus::Update(float dt)
 {
-	CheckCurrentState(dt);
+    CheckCurrentState(dt); // Check current menu state
+    Transition(dt);
+    HandleInput();
+    return true;
+}
 
-	if (inTransition)
-	{
-		Transition(dt);
-	}
-
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-	{
-		if (currentState == MenusState::PAUSE)
-		{
-			inTransition = true;
-			fadingIn = false; 
-
-		}
-	}
-	else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN && currentState == MenusState::PAUSE)
-	{
-		MenusState::MAINMENU;
-		{
-			inTransition = true;
-			fadingIn = false;
-		}
-	}
-
-	return true;
+void Menus::HandleInput()
+{
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {HandlePause();} // Handles Pause state change
 }
 
 bool Menus::PostUpdate()
 {
-	if (transitioning)
-	{
-		// Dibujar un rectángulo negro con opacidad variable
-		SDL_SetRenderDrawBlendMode(Engine::GetInstance().render->renderer, SDL_BLENDMODE_BLEND);
-		SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, 0, 0, 0, static_cast<Uint8>(transitionAlpha * 255));
-		SDL_RenderFillRect(Engine::GetInstance().render->renderer, nullptr);
-	}
+    DrawBackground();
 
-	return true;
+    if (inTransition)
+        ApplyTransitionEffect();
+
+    return true;
+}
+
+void Menus::DrawBackground() // Draw background depending on the MenusState
+{
+    switch (currentState)
+    {
+    case MenusState::MAINMENU:
+        Engine::GetInstance().render->DrawTexture(menuBackground, 0, 0, nullptr);
+        break;
+    case MenusState::PAUSE:
+        SDL_Rect cameraRect = { 0, 0,Engine::GetInstance().window.get()->width,Engine::GetInstance().window.get()->height };
+        Engine::GetInstance().render->DrawTexture(pauseBackground, cameraRect.x - Engine::GetInstance().render->camera.x, cameraRect.y - Engine::GetInstance().render->camera.y, &cameraRect);
+        break;
+    case MenusState::SETTINGS:
+        Engine::GetInstance().render->DrawTexture(settingsBackground, 0, 0, nullptr);
+        break;
+    case MenusState::CREDITS:
+        Engine::GetInstance().render->DrawTexture(creditsBackground, 0, 0, nullptr);
+        break;
+    }
+}
+
+void Menus::ApplyTransitionEffect() //Draws Transition (Render)
+{
+    SDL_SetRenderDrawBlendMode(Engine::GetInstance().render->renderer, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, 0, 0, 0, static_cast<Uint8>(transitionAlpha * 255));
+    SDL_RenderFillRect(Engine::GetInstance().render->renderer, nullptr);
 }
 
 bool Menus::CleanUp()
 {
-	return true;
+    SDL_DestroyTexture(menuBackground);
+    SDL_DestroyTexture(pauseBackground);
+    SDL_DestroyTexture(settingsBackground);
+    SDL_DestroyTexture(creditsBackground);
+    return true;
 }
 
-void Menus::CheckCurrentState(float dt)
+void Menus::CheckCurrentState(float dt) //Checks current Screen State
 {
-	switch (currentState)
-	{
-	case MenusState::MAINMENU:
-		MainMenu();
-		break;
-	case MenusState::NEWGAME:
-		NewGame();
-		break;
-	case MenusState::CONTINUE:
-		Continue();
-		break;
-	case MenusState::PAUSE:
-		Pause();
-		break;
-	case MenusState::SETTINGS:
-		Settings();
-		break;
-	case MenusState::CREDITS:
-		Credits();
-		break;
-	case MenusState::EXIT:
-		ret = true;
-		break;
-	}
+    if (inTransition) return;
+
+    switch (currentState)
+    {
+    case MenusState::MAINMENU:
+        MainMenu(dt);
+        break;
+    case MenusState::GAME:
+        break;
+    case MenusState::NEWGAME:
+        NewGame();
+        break;
+    case MenusState::CONTINUE:
+        Continue();
+        break;
+    case MenusState::PAUSE:
+        Pause(dt);
+        break;
+    case MenusState::SETTINGS:
+        Settings();
+        break;
+    case MenusState::CREDITS:
+        Credits();
+        break;
+    case MenusState::EXIT:
+        Engine::GetInstance().EXIT;
+        break;
+    }
 }
 
-void Menus::MainMenu()
+void Menus::MainMenu(float dt)
 {
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+    {
+        fastTransition = false;
+        fadingIn = false;
+        transitioning = true;
+        inTransition = true;
+        nextState = MenusState::GAME;
+    }
+
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+    {
+        currentState = MenusState::EXIT;
+    }
 }
 
 void Menus::NewGame()
 {
-
+    // Erase Previous Game, Create New Game
 }
 
 void Menus::Continue()
 {
+    // Load Previous Game
 }
 
-void Menus::Pause()
+void Menus::Pause(float dt)
 {
-	/*Engine::GetInstance().render.get()->DrawTexture(pauseMenuImage,);*/
+    if (inTransition)
+    {
+        Transition(dt);
+    }
 }
 
 void Menus::Settings()
 {
-
+    // Show Settings
 }
 
 void Menus::Credits()
 {
-
+    // Show Credits
 }
+
+// Pause Logic
+void Menus::HandlePause()
+{
+    if (currentState == MenusState::GAME)
+    {
+        SetPauseTransition(true, MenusState::PAUSE);
+    }
+    else if (currentState == MenusState::PAUSE)
+    {
+        SetPauseTransition(true, MenusState::GAME);
+    }
+}
+
+void Menus::SetPauseTransition(bool fast, MenusState newState)
+{
+    inTransition = true;
+    fadingIn = false;
+    transitioning = true;
+    isPaused = !isPaused;
+    nextState = newState;
+    fastTransition = fast;
+}
+
+// Transition Logic
 void Menus::Transition(float dt)
 {
-	// Fade Out
-	if (!fadingIn)
-	{
-		transitionAlpha += dt * 0.0025f;
-		if (transitionAlpha >= 1.0f)
-		{
-			transitionAlpha = 1.0f;
-			fadingIn = true;
-			transitioning = true; 
-		}
-	}
-	else // Fade In
-	{
-		transitionAlpha += dt * 0.0020f;
-		if (transitionAlpha <= 0.0f)
-		{
-			transitionAlpha = 0.0f;
-			transitioning = false; 
-			inTransition = false;  
-		}
-	}
+    transitionSpeed = fastTransition ? 0.005f : 0.0015f;
+
+    if (!fadingIn) // Fade Out
+    {
+        transitionAlpha += dt * transitionSpeed;
+        if (transitionAlpha >= 1.0f)
+        {
+            transitionAlpha = 1.0f;
+            fadingIn = true;
+            if (nextState != MenusState::NONE)
+            {
+                currentState = nextState;
+                nextState = MenusState::NONE;
+            }
+        }
+    }
+    else // Fade In
+    {
+        transitionAlpha -= dt * transitionSpeed;
+        if (transitionAlpha <= 0.0f)
+        {
+            transitionAlpha = 0.0f;
+            transitioning = false; // Reset Transition Flags
+            inTransition = false;
+            fastTransition = false; 
+        }
+    }
 }

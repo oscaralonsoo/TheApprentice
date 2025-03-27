@@ -62,7 +62,11 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
+	if (Engine::GetInstance().menus->currentState != MenusState::GAME)
+		return true;
+
 	UpdateTransition(dt);
+
 	Engine::GetInstance().render.get()->UpdateCamera(player->GetPosition(), player->GetMovementDirection(), 0.05);
 	
 	//L03 TODO 3: Make the camera movement independent of framerate

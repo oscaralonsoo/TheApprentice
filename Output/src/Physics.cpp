@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "Window.h"
 #include "box2D/box2d.h"
+#include "Menus.h"
 
 Physics::Physics() : Module()
 {
@@ -40,6 +41,9 @@ bool Physics::Start()
 bool Physics::PreUpdate()
 {
 	bool ret = true;
+	if (Engine::GetInstance().menus->isPaused || Engine::GetInstance().menus->currentState == MenusState::MAINMENU)
+	{return ret; }
+
 
 	// Step (update) the World
 	//Get the dt form the engine. Note that dt is in miliseconds and steps in Box2D are in seconds
@@ -215,6 +219,10 @@ PhysBody* Physics::CreateChain(int x, int y, int* points, int size, bodyType typ
 bool Physics::PostUpdate()
 {
 	bool ret = true;
+	if (Engine::GetInstance().menus->isPaused || Engine::GetInstance().menus->currentState == MenusState::MAINMENU)
+	{
+		return ret;
+	}
 
 	// Activate or deactivate debug mode
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)

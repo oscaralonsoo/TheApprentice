@@ -19,7 +19,7 @@ Player::Player() : Entity(EntityType::PLAYER)
 Player::~Player() {}
 
 bool Player::Awake() {
-	position = Vector2D(96, 96);
+	position = Vector2D(128, 96);
 	return true;
 }
 
@@ -33,7 +33,7 @@ bool Player::Start() {
     animation.LoadAnimations(parameters, texture);
 
     // Create the body at the same position, and ensure it's centered
-    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), texW / 2, bodyType::DYNAMIC);
+    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() , (int)position.getY() + 300, 128,128, bodyType::DYNAMIC);
     pbody->listener = this;
     pbody->ctype = ColliderType::PLAYER;
 
@@ -187,7 +187,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             Engine::GetInstance().render.get()->ToggleVerticalOffsetLock();
             wasInDownCameraZone = true;
         }
-            case ColliderType::DOOR:
+        break;
+    case ColliderType::DOOR:
          LOG("Collision DOOR");
 
         // TargetScene From collider

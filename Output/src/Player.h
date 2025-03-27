@@ -57,7 +57,6 @@ private:
 	int texW, texH;
 
 	// Física del jugador
-	PhysBody* pbody;
 	bool isOnGround = false;
 	
 	//Know Direction

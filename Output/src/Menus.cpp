@@ -14,13 +14,14 @@ bool Menus::Awake(){ return true; }
 
 bool Menus::Start()
 {
-    currentState = MenusState::MAINMENU;
+    currentState = MenusState::INTRO;
     LoadTextures();
     return true;
 }
 
 void Menus::LoadTextures()
 {
+    groupLogo = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/Logo.png");
     menuBackground = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/MainMenuBackGround.png");
     pauseBackground = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/PauseMenu.png");
     creditsBackground = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/PauseMenu.png");
@@ -32,13 +33,24 @@ bool Menus::Update(float dt)
 {
     CheckCurrentState(dt); // Check current menu state
     Transition(dt);
-    HandleInput();
+    HandlePause();
     return true;
 }
-
-void Menus::HandleInput()
+// Pause Logic
+void Menus::HandlePause()
 {
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {HandlePause();} // Handles Pause state change
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) 
+    {
+        if (currentState == MenusState::GAME)
+        {
+            SetPauseTransition(true, MenusState::PAUSE);
+        }
+        else if (currentState == MenusState::PAUSE)
+        {
+            SetPauseTransition(true, MenusState::GAME);
+        }
+    } // Handles Pause state change
+
 }
 
 bool Menus::PostUpdate()
@@ -53,14 +65,19 @@ bool Menus::PostUpdate()
 
 void Menus::DrawBackground() // Draw background depending on the MenusState
 {
+    SDL_Rect cameraRect = { 0, 0,Engine::GetInstance().window.get()->width,Engine::GetInstance().window.get()->height };
     switch (currentState)
     {
+    case MenusState::INTRO:
+        Engine::GetInstance().render->DrawTexture(groupLogo, 0, 0, nullptr, logoAlpha); // Assuming DrawTexture can take alpha
+        break;
+        break;
     case MenusState::MAINMENU:
         Engine::GetInstance().render->DrawTexture(menuBackground, 0, 0, nullptr);
         break;
     case MenusState::PAUSE:
-        SDL_Rect cameraRect = { 0, 0,Engine::GetInstance().window.get()->width,Engine::GetInstance().window.get()->height };
-        Engine::GetInstance().render->DrawTexture(pauseBackground, cameraRect.x - Engine::GetInstance().render->camera.x, cameraRect.y - Engine::GetInstance().render->camera.y, &cameraRect);
+        Engine::GetInstance().render->DrawTexture(pauseBackground, cameraRect.x - Engine::GetInstance().render->camera.x, 
+            cameraRect.y - Engine::GetInstance().render->camera.y, &cameraRect);
         break;
     case MenusState::SETTINGS:
         Engine::GetInstance().render->DrawTexture(settingsBackground, 0, 0, nullptr);
@@ -80,6 +97,7 @@ void Menus::ApplyTransitionEffect() //Draws Transition (Render)
 
 bool Menus::CleanUp()
 {
+    SDL_DestroyTexture(groupLogo);
     SDL_DestroyTexture(menuBackground);
     SDL_DestroyTexture(pauseBackground);
     SDL_DestroyTexture(settingsBackground);
@@ -93,6 +111,9 @@ void Menus::CheckCurrentState(float dt) //Checks current Screen State
 
     switch (currentState)
     {
+    case MenusState::INTRO:
+        Intro(dt);
+        break;
     case MenusState::MAINMENU:
         MainMenu(dt);
         break;
@@ -118,7 +139,36 @@ void Menus::CheckCurrentState(float dt) //Checks current Screen State
         break;
     }
 }
+void Menus::Intro(float dt)
+{
+    introTimer += dt;
 
+    // Fade in the logo
+    if (logoAlpha < 1.0f) {
+        logoAlpha += dt * 0.5f; // Increase alpha gradually for the fade-in effect
+        if (logoAlpha > 1.0f) {
+            logoAlpha = 1.0f;
+        }
+    }
+
+    if (introTimer >= 2000.0f)  // Transition to MAINMENU after 3 seconds
+    {
+        fastTransition = false;
+        fadingIn = false;
+        transitioning = true;
+        inTransition = true;
+        nextState = MenusState::MAINMENU;
+    }
+
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) // Transition to MAINMENU after SPACE is pressed 
+    {
+        fastTransition = false;
+        fadingIn = false;
+        transitioning = true;
+        inTransition = true;
+        nextState = MenusState::MAINMENU;
+    }
+}
 void Menus::MainMenu(float dt)
 {
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
@@ -164,18 +214,7 @@ void Menus::Credits()
     // Show Credits
 }
 
-// Pause Logic
-void Menus::HandlePause()
-{
-    if (currentState == MenusState::GAME)
-    {
-        SetPauseTransition(true, MenusState::PAUSE);
-    }
-    else if (currentState == MenusState::PAUSE)
-    {
-        SetPauseTransition(true, MenusState::GAME);
-    }
-}
+
 
 void Menus::SetPauseTransition(bool fast, MenusState newState)
 {
@@ -190,7 +229,7 @@ void Menus::SetPauseTransition(bool fast, MenusState newState)
 // Transition Logic
 void Menus::Transition(float dt)
 {
-    transitionSpeed = fastTransition ? 0.005f : 0.0015f;
+    transitionSpeed = fastTransition ? 0.007f : 0.0015f;
 
     if (!fadingIn) // Fade Out
     {

@@ -9,6 +9,7 @@
 
 enum class MenusState
 {
+    INTRO,
     MAINMENU,
     NEWGAME,
     CONTINUE,
@@ -53,6 +54,8 @@ public:
     // Called When Game Starts
     void CheckCurrentState(float dt);
 
+    void Intro(float dt);
+
     void MainMenu(float dt);
 
     void NewGame();
@@ -89,6 +92,8 @@ private:
     bool fadingIn = false;
 
     //Floats
+    float introTimer = 0.0f;
+    float logoAlpha = 0.0f;
     float transitionAlpha = 0.0f;
     float transitionSpeed = 0.0f;
 
@@ -97,5 +102,6 @@ private:
     SDL_Texture* pauseBackground = nullptr;
     SDL_Texture* creditsBackground = nullptr;
     SDL_Texture* settingsBackground = nullptr;
+    SDL_Texture* groupLogo = nullptr;
 
 };

@@ -41,8 +41,7 @@ bool Physics::Start()
 bool Physics::PreUpdate()
 {
 	bool ret = true;
-	if (Engine::GetInstance().menus->isPaused || Engine::GetInstance().menus->currentState == MenusState::MAINMENU)
-	{return ret; }
+	if (Engine::GetInstance().menus->currentState != MenusState::GAME) {return ret; }
 
 
 	// Step (update) the World

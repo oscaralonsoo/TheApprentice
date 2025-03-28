@@ -42,7 +42,8 @@ bool Player::Start() {
 
 bool Player::Update(float dt) {
     animation.Update(dt, state, position.getX(), position.getY());
-    if (Engine::GetInstance().menus->isPaused || Engine::GetInstance().menus->currentState == MenusState::MAINMENU)
+    if (Engine::GetInstance().menus->isPaused || Engine::GetInstance().menus->currentState == MenusState::MAINMENU || 
+        Engine::GetInstance().menus->currentState == MenusState::INTRO)
         return true;
 
     HandleInput();

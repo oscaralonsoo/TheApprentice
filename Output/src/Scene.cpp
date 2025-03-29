@@ -145,9 +145,7 @@ void Scene::UpdateTransition(float dt)
 // Called before changing the scene
 void Scene::ChangeScene(int nextScene)
 {
-
 	Engine::GetInstance().map->CleanUp(); 	// CleanUp of the previous Map
-
 	Engine::GetInstance().entityManager.get()->DestroyAllEntities(); // Previous Enemies CleanUp
 
 	// Look for the XML node

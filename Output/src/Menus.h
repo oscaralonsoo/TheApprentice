@@ -88,7 +88,6 @@ private:
     //Flags
     bool inTransition = false;
     bool fastTransition = false;
-    bool transitioning = false;
     bool fadingIn = false;
 
     //Floats

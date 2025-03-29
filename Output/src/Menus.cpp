@@ -5,7 +5,7 @@
 #include "Render.h"
 #include "Window.h"
 
-Menus::Menus() : currentState(MenusState::MAINMENU), transitionAlpha(0.0f), inTransition(false), transitioning(false), fadingIn(false), nextState(MenusState::NONE), 
+Menus::Menus() : currentState(MenusState::MAINMENU), transitionAlpha(0.0f), inTransition(false), fadingIn(false), nextState(MenusState::NONE), 
 fastTransition(false), menuBackground(nullptr), pauseBackground(nullptr) {}
 
 Menus::~Menus() {}
@@ -39,7 +39,7 @@ bool Menus::Update(float dt)
 // Pause Logic
 void Menus::HandlePause()
 {
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) 
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE)&&!inTransition)
     {
         if (currentState == MenusState::GAME)
         {
@@ -50,7 +50,6 @@ void Menus::HandlePause()
             SetPauseTransition(true, MenusState::GAME);
         }
     } // Handles Pause state change
-
 }
 
 bool Menus::PostUpdate()
@@ -155,7 +154,6 @@ void Menus::Intro(float dt)
     {
         fastTransition = false;
         fadingIn = false;
-        transitioning = true;
         inTransition = true;
         nextState = MenusState::MAINMENU;
     }
@@ -164,7 +162,6 @@ void Menus::Intro(float dt)
     {
         fastTransition = false;
         fadingIn = false;
-        transitioning = true;
         inTransition = true;
         nextState = MenusState::MAINMENU;
     }
@@ -175,7 +172,6 @@ void Menus::MainMenu(float dt)
     {
         fastTransition = false;
         fadingIn = false;
-        transitioning = true;
         inTransition = true;
         nextState = MenusState::GAME;
     }
@@ -220,7 +216,6 @@ void Menus::SetPauseTransition(bool fast, MenusState newState)
 {
     inTransition = true;
     fadingIn = false;
-    transitioning = true;
     isPaused = !isPaused;
     nextState = newState;
     fastTransition = fast;
@@ -251,7 +246,6 @@ void Menus::Transition(float dt)
         if (transitionAlpha <= 0.0f)
         {
             transitionAlpha = 0.0f;
-            transitioning = false; // Reset Transition Flags
             inTransition = false;
             fastTransition = false; 
         }

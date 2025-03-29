@@ -47,7 +47,7 @@ public:
 public:
 
 	Vector2D newPosition;
-
+	bool transitioning = false;
 private:
 	SDL_Texture* img;
 
@@ -55,7 +55,7 @@ private:
 	Player* player;
 
 	//transition 
-	bool transitioning = false;
+
 	bool fadingIn = false;
 	float transitionAlpha = 0.0f;
 	int nextScene;

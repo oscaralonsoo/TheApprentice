@@ -27,7 +27,7 @@
  <tileset firstgid="364" name="TX Tileset Ground" tilewidth="32" tileheight="32" tilecount="256" columns="16">
   <image source="../Parallax/TX Tileset Ground.png" width="512" height="512"/>
  </tileset>
- <layer id="19" name="Static Background" width="60" height="40" parallaxx="0" parallaxy="0">
+ <layer id="19" name="Static Background" width="60" height="40" visible="0" parallaxx="0" parallaxy="0">
   <properties>
    <property name="Draw" type="bool" value="true"/>
   </properties>
@@ -2434,7 +2434,7 @@
    <tile gid="359"/>
   </data>
  </layer>
- <layer id="20" name="Mid Background" width="60" height="40" parallaxx="-0.03" parallaxy="-0.03">
+ <layer id="20" name="Mid Background" width="60" height="40" visible="0" parallaxx="-0.03" parallaxy="-0.03">
   <properties>
    <property name="Draw" type="bool" value="true"/>
   </properties>
@@ -4841,7 +4841,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="21" name="Far Background" width="60" height="40" parallaxx="-0.01" parallaxy="-0.01">
+ <layer id="21" name="Far Background" width="60" height="40" visible="0" parallaxx="-0.01" parallaxy="-0.01">
   <properties>
    <property name="Draw" type="bool" value="true"/>
   </properties>
@@ -7248,7 +7248,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="22" name="Near Background" width="60" height="40" parallaxx="-0.08" parallaxy="-0.08">
+ <layer id="22" name="Near Background" width="60" height="40" visible="0" parallaxx="-0.08" parallaxy="-0.08">
   <properties>
    <property name="Draw" type="bool" value="true"/>
   </properties>
@@ -12887,6 +12887,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="105"/>
    <tile/>
    <tile/>
    <tile/>

@@ -38,9 +38,6 @@ public:
 	void CreateEnemiesFromXML(pugi::xml_node enemyNodes);
 
 public:
-
-	std::list<Enemy*> enemyList; // Lista de enemigos
-
 	std::list<Entity*> entities;
 
 	PhysBody* pbody;

@@ -32,9 +32,9 @@ public:
 
 	void ResetPath();
 
-	void OnCollision(PhysBody* physA, PhysBody* physB);
+	virtual void OnCollision(PhysBody* physA, PhysBody* physB);
 
-	void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
+	virtual void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
 
 public:
@@ -52,6 +52,4 @@ private:
 	Animation* currentAnimation = nullptr;
 	Animation idle;
 	Pathfinding* pathfinding;
-
-	std::vector<Enemy*> enemyList;
 };

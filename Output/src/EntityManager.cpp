@@ -140,12 +140,7 @@ void EntityManager::CreateEnemiesFromXML(pugi::xml_node enemyNodes)
 	for (pugi::xml_node enemyNode = enemyNodes.child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy"))
 	{
 		Enemy* enemy = (Enemy*)CreateEntity(EntityType::BLOODRUSHER);
-		if (enemy)
-		{
-			enemy->SetParameters(enemyNode);
-			enemyList.push_back(enemy);
-			LOG("Enemy Created");
-		}
+		enemy->SetParameters(enemyNode);
 	}
 
 }

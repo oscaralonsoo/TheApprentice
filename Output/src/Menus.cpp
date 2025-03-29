@@ -14,7 +14,7 @@ bool Menus::Awake(){ return true; }
 
 bool Menus::Start()
 {
-    currentState = MenusState::INTRO;
+    currentState = MenusState::GAME;
     LoadTextures();
     return true;
 }

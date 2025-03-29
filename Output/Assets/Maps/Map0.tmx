@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="60" height="40" tilewidth="32" tileheight="32" infinite="0" nextlayerid="31" nextobjectid="34">
- <tileset firstgid="1" name="MapMetadata" tilewidth="32" tileheight="32" tilecount="8" columns="4">
-  <image source="MapMetadata.png" width="128" height="64"/>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="40" tilewidth="32" tileheight="32" infinite="0" nextlayerid="31" nextobjectid="34">
+ <tileset firstgid="1" name="MapMetadata" tilewidth="32" tileheight="32" tilecount="2" columns="2">
+  <image source="MapMetadata.png" width="67" height="34"/>
  </tileset>
  <tileset firstgid="9" name="test" tilewidth="32" tileheight="32" tilecount="75" columns="5">
   <image source="../Textures/test.png" width="176" height="500"/>
@@ -12066,7 +12066,7 @@
   <properties>
    <property name="Doors" type="bool" value="true"/>
   </properties>
-  <object id="1" x="1536" y="1344" width="384" height="32">
+  <object id="1" x="371.212" y="474.321" width="384" height="32">
    <properties>
     <property name="PlayerPosX" type="float" value="96"/>
     <property name="PlayerPosY" type="float" value="0"/>
@@ -12766,6 +12766,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>

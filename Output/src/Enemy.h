@@ -38,18 +38,22 @@ public:
 
 
 public:
+	//Pathfinding
 	int steps = 0;
 	int maxSteps = 100;
 
-protected:
-	PhysBody* pbody;
 private:
-	bool showPath = false;
+
 	SDL_Texture* texture;
-	const char* texturePath;
+
 	int texW, texH;
 	pugi::xml_node parameters;
 	Animation* currentAnimation = nullptr;
 	Animation idle;
+	PhysBody* pbody;
+
+	//Pathfinding
+	bool showPath = false;
+	const char* texturePath;
 	Pathfinding* pathfinding;
 };

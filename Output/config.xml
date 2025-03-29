@@ -53,6 +53,19 @@
 				</die>
 			</player>
 			<enemies>
+				<enemy type="badguy1" w="32" h="32" texture="Assets/Textures/enemy/Idle.png">
+					<idle loop="true" speed="0.5">
+						<frame x="0" y="0" w="32" h="32" />
+						<frame x="32" y="0" w="32" h="32" />
+						<frame x="64" y="0" w="32" h="32" />
+						<frame x="96" y="0" w="32" h="32" />
+						<frame x="128" y="0" w="32" h="32" />
+						<frame x="160" y="0" w="32" h="32" />
+						<frame x="192" y="0" w="32" h="32" />
+						<frame x="224" y="0" w="32" h="32" />
+						<frame x="256" y="0" w="32" h="32" />
+					</idle>
+				</enemy>
 				<enemy type="Bloodrusher" w="32" h="32" texture="Assets/Textures/enemy/Idle.png">
 					<idle loop="true" speed="0.5">
 						<frame x="0" y="0" w="32" h="32" />
@@ -76,7 +89,7 @@
 		<save_data>
 			<player x="170" y="110" w="44" h="54" />
 			<enemies>
-				<enemy type="Bloodrusher" x="256" y="416" w="32" h="32" />
+				<enemy type="Bloodrusher" x="320" y="672" w="32" h="32" />
 			</enemies>
 			<enemies />
 		</save_data>

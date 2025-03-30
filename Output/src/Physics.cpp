@@ -65,7 +65,7 @@ bool Physics::PreUpdate()
 	return ret;
 }
 
-PhysBody* Physics::CreateRectangle(int x, int y, int width, int height, bodyType type)
+PhysBody* Physics::CreateRectangle(int x, int y, int width, int height, bodyType type, float offsetX, float offsetY)
 {
 	b2BodyDef body;
 
@@ -77,18 +77,23 @@ PhysBody* Physics::CreateRectangle(int x, int y, int width, int height, bodyType
 
 	b2Body* b = world->CreateBody(&body);
 	b2PolygonShape box;
-	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f);
+
+	// Convertir el offset de píxeles a metros
+	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f,
+		b2Vec2(PIXEL_TO_METERS(offsetX), PIXEL_TO_METERS(offsetY)), 0);
 
 	b2FixtureDef fixture;
 	fixture.shape = &box;
 	fixture.density = 1.0f;
+	fixture.friction = 0.0f;
+	b->SetFixedRotation(true);
 	b->ResetMassData();
 
 	b->CreateFixture(&fixture);
 
 	PhysBody* pbody = new PhysBody();
 	pbody->body = b;
-	b->GetUserData().pointer = (uintptr_t) pbody;
+	b->GetUserData().pointer = (uintptr_t)pbody;
 	pbody->width = width * 0.5f;
 	pbody->height = height * 0.5f;
 

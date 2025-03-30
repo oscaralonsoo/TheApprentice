@@ -10,6 +10,7 @@
 #include "EntityManager.h"
 #include "box2D/box2d.h"
 #include "Map.h"
+#include "Menus.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -42,6 +43,12 @@ bool Player::Start() {
 
 bool Player::Update(float dt) {
     
+    animation.Update(dt, state, position.getX(), position.getY());
+    if (Engine::GetInstance().menus->isPaused || Engine::GetInstance().menus->currentState == MenusState::MAINMENU || 
+        Engine::GetInstance().menus->currentState == MenusState::INTRO)
+        return true;
+    }
+    
     if (isStunned) {
         pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
         if (stunTimer.ReadSec() >= stunDuration) {
@@ -54,7 +61,6 @@ bool Player::Update(float dt) {
         }
         return true;
     }
-    
     HandleInput();
     HandleJump();
     HandleDash();
@@ -128,7 +134,7 @@ bool Player::Update(float dt) {
     }
 
     // Update animation based on the new position
-    animation.Update(dt, state, position.getX(), position.getY());
+  
 
     return true;
 }

@@ -145,7 +145,6 @@ void EntityManager::CreateEnemiesFromXML(pugi::xml_node enemyNodes, bool initial
 		if(initialize)
 		enemy->Start();
 
-		enemyList.push_back(enemy);
 		LOG("Enemy Created");
 		
 	}

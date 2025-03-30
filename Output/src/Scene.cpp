@@ -13,6 +13,7 @@
 #include "Item.h"
 #include "Physics.h"
 #include "Enemy.h"
+#include "Menus.h"
 
 
 Scene::Scene() : Module()
@@ -61,7 +62,11 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
+	if (Engine::GetInstance().menus->currentState != MenusState::GAME)
+		return true;
+
 	UpdateTransition(dt);
+
 	Engine::GetInstance().render.get()->UpdateCamera(player->GetPosition(), player->GetMovementDirection(), 0.05);
 	
 	//L03 TODO 3: Make the camera movement independent of framerate
@@ -86,8 +91,6 @@ bool Scene::Update(float dt)
 bool Scene::PostUpdate()
 {
 	bool ret = true;
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		ret = false;
 
 	if (transitioning) {
 		SDL_SetRenderDrawBlendMode(Engine::GetInstance().render->renderer, SDL_BLENDMODE_BLEND);
@@ -142,9 +145,7 @@ void Scene::UpdateTransition(float dt)
 // Called before changing the scene
 void Scene::ChangeScene(int nextScene)
 {
-
 	Engine::GetInstance().map->CleanUp(); 	// CleanUp of the previous Map
-
 	Engine::GetInstance().entityManager.get()->DestroyAllEntities(); // Previous Enemies CleanUp
 
 	// Look for the XML node

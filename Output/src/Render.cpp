@@ -4,6 +4,7 @@
 #include "Log.h"
 #include "Player.h"
 #include "Map.h"
+#include <SDL2/SDL_image.h>
 
 #define VSYNC true
 
@@ -313,6 +314,19 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 	if (camera.y > 0) camera.y = 0;  
 	if (camera.x < -(mapWidthPx - camera.w)) camera.x = -(mapWidthPx - camera.w);
 	if (camera.y < -(mapHeightPx - camera.h)) camera.y = -(mapHeightPx - camera.h);
+}
+bool Render::DrawText(const std::string& text, int x, int y, SDL_Color color)
+{
+	return false;
+}
+SDL_Texture* Render::LoadTexture(const char* path)
+{
+	SDL_Texture* texture = IMG_LoadTexture(renderer, path);
+	if (!texture)
+	{
+		LOG("Failed to load texture: %s", SDL_GetError());
+	}
+	return texture;
 }
 
 void Render::DashCameraImpulse(int direction, int intensity)

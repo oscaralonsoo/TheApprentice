@@ -86,8 +86,8 @@
 				</enemy>
 			</enemies>
 			<props>
-				<cave_drop texture="Assets/Textures/caveDrop/caveDropStart.png">
-					<start loop="true" speed="0.05">
+				<cave_drop w="20" h="20" texture="Assets/Textures/caveDrop/caveDropStart.png">
+					<start loop="false" speed="0.05">
 						<frame x="0" y="0" w="20" h="20" />
 						<frame x="20" y="0" w="20" h="20" />
 						<frame x="40" y="0" w="20" h="20" />

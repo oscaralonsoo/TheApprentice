@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include "Render.h"
 #include "Window.h"
+#include "Engine.h"
 
 Menus::Menus() : currentState(MenusState::MAINMENU), transitionAlpha(0.0f), inTransition(false), fadingIn(false), nextState(MenusState::NONE), 
 fastTransition(false), menuBackground(nullptr), pauseBackground(nullptr) {}
@@ -18,51 +19,50 @@ bool Menus::Start()
     LoadTextures();
     return true;
 }
-
 void Menus::LoadTextures()
 {
-    //Load Background Textures
-    groupLogo = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/Logo.png");
-    menuBackground = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/MainMenuBackground.png");
-    pauseBackground = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/PauseMenuBackground.png");
-    creditsBackground = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/CreditsBackground.png");
-    settingsBackground = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/SettingsBackground.png");
+    // Background Textures Load
+    std::vector<std::pair<SDL_Texture**, std::string>> backgrounds = {
+        { &groupLogo, "Logo" },
+        { &menuBackground, "MainMenuBackground" },
+        { &pauseBackground, "PauseMenuBackground" },
+        { &creditsBackground, "CreditsBackground" },
+        { &settingsBackground, "SettingsBackground" }
+    };
 
+    for (auto& bg : backgrounds) {
+        *bg.first = Engine::GetInstance().render->LoadTexture(("Assets/Textures/Menus/" + bg.second + ".png").c_str());
+    }
+
+    // Button Config
     const int screenWidth = Engine::GetInstance().window->width;
     const int buttonWidth = 200;
     const int buttonHeight = 50;
     const int startX = (screenWidth - buttonWidth) / 2;
-    const int startY = 180;
-    const int buttonSpacing = 90;
 
-    mainMenuButtons.clear();
-    pauseMenuButtons.clear();
-
-    std::vector<std::tuple<std::string, int>> buttonData = {
-        {"NewGame", startY},
-        {"Continue", startY + buttonSpacing},
-        {"Settings", startY + buttonSpacing * 2},
-        {"Credits", startY + buttonSpacing * 3},
-        {"Exit", startY + buttonSpacing * 4}
+    std::vector<std::pair<std::vector<MenuButton>&, std::vector<std::string>>> menus = {
+        { mainMenuButtons, { "NewGame", "Continue", "Settings", "Credits", "Exit" } },
+        { pauseMenuButtons, { "Continue", "Settings", "Exit" } }
     };
 
-    // Create Buttons
-    for (size_t i = 0; i < buttonData.size(); ++i)
-    {
-        const std::string& buttonName = std::get<0>(buttonData[i]);
-        const int posY = std::get<1>(buttonData[i]);
+    std::vector<int> startY = { 180, 150 }; // Posiciones iniciales de los menús
+    std::vector<int> spacing = { 100, 200 }; 
+    //Buttons Load
+    for (size_t i = 0; i < menus.size(); ++i) {
+        menus[i].first.clear();
+        for (size_t j = 0; j < menus[i].second.size(); ++j) {
+            int posY = startY[i] + j * spacing[i];
 
-        MenuButton btn;
-        btn.texDeselected = Engine::GetInstance().render->LoadTexture(("Assets/Textures/Menus/Buttons/" + buttonName + "_disselected.png").c_str());
-        btn.texSelected = Engine::GetInstance().render->LoadTexture(("Assets/Textures/Menus/Buttons/" + buttonName + "_Selected.png").c_str());
-        btn.rect = { startX, posY, buttonWidth, buttonHeight };
+            MenuButton btn;
+            std::string buttonName = menus[i].second[j];
+            btn.texDeselected = Engine::GetInstance().render->LoadTexture(("Assets/Textures/Menus/Buttons/" + buttonName + "_disselected.png").c_str());
+            btn.texSelected = Engine::GetInstance().render->LoadTexture(("Assets/Textures/Menus/Buttons/" + buttonName + "_Selected.png").c_str());
+            btn.rect = { startX, posY, buttonWidth, buttonHeight };
 
-        mainMenuButtons.push_back(btn);
-        if (buttonName != "Credits" || buttonName != "NewGame")
-            pauseMenuButtons.push_back(btn);
+            menus[i].first.push_back(btn);
+        }
     }
 }
-
 
 bool Menus::Update(float dt)
 {
@@ -97,6 +97,12 @@ bool Menus::PostUpdate()
 
     if (inTransition)
         ApplyTransitionEffect();
+
+    if (isExit)
+    {
+        return false;
+    }
+
     return true;
 }
 
@@ -195,7 +201,7 @@ void Menus::CheckCurrentState(float dt)
     case MenusState::NEWGAME:
         NewGame();
         break;
-    case MenusState::CONTINUE:
+    case MenusState::LOADGAME:
         Continue();
         break;
     case MenusState::PAUSE:
@@ -208,7 +214,7 @@ void Menus::CheckCurrentState(float dt)
         Credits();
         break;
     case MenusState::EXIT:
-        exit(1);
+        isExit = true;
         break;
     }
 }

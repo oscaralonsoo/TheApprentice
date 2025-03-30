@@ -10,8 +10,10 @@ enum class MenusState
     INTRO,
     MAINMENU,
     NEWGAME,
+    LOADGAME,
     GAME,
     SETTINGS,
+    SAVEGAME,
     CREDITS,
     PAUSE,
     NONE,
@@ -58,7 +60,7 @@ public:
     MenusState previousState;
     bool isPaused = false;
     bool inMainMenu = false;
-
+    bool isExit = false;
 private:
 
     //Flags

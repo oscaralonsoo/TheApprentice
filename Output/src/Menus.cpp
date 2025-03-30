@@ -28,24 +28,22 @@ void Menus::LoadTextures()
     creditsBackground = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/CreditsBackground.png");
     settingsBackground = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/SettingsBackground.png");
 
-
     const int screenWidth = Engine::GetInstance().window->width;
     const int buttonWidth = 200;
     const int buttonHeight = 50;
     const int startX = (screenWidth - buttonWidth) / 2;
-    const int startY = 230;
-    const int buttonSpacing = 110;    
-
+    const int startY = 180;
+    const int buttonSpacing = 90;
 
     mainMenuButtons.clear();
     pauseMenuButtons.clear();
 
-
     std::vector<std::tuple<std::string, int>> buttonData = {
-        {"Continue", startY},
-        {"Settings", startY + buttonSpacing},
-        {"Credits", startY + buttonSpacing * 2},
-        {"Exit", startY + buttonSpacing * 3}
+        {"NewGame", startY},
+        {"Continue", startY + buttonSpacing},
+        {"Settings", startY + buttonSpacing * 2},
+        {"Credits", startY + buttonSpacing * 3},
+        {"Exit", startY + buttonSpacing * 4}
     };
 
     // Create Buttons
@@ -60,15 +58,11 @@ void Menus::LoadTextures()
         btn.rect = { startX, posY, buttonWidth, buttonHeight };
 
         mainMenuButtons.push_back(btn);
-        if (buttonName != "Credits") 
+        if (buttonName != "Credits" || buttonName != "NewGame")
             pauseMenuButtons.push_back(btn);
     }
-
-    for (size_t i = 0; i < pauseMenuButtons.size(); ++i)
-    {
-        pauseMenuButtons[i].rect.y = startY + (i * buttonSpacing); 
-    }
 }
+
 
 bool Menus::Update(float dt)
 {
@@ -251,18 +245,21 @@ void Menus::MainMenu(float dt)
     {
         switch (selectedButton)
         {
-        case 0: // Continue
+        case 0: // New Game
+            StartTransition(true, MenusState::NEWGAME);
+            break;
+        case 1: // Continue
             StartTransition(true, MenusState::GAME);
             break;
-        case 1: // Settings
+        case 2: // Settings
             inConfig = true;
             StartTransition(true, MenusState::SETTINGS);
             break;
-        case 2: // Credits
+        case 3: // Credits
             inCredits = true;
             StartTransition(true, MenusState::CREDITS);
             break;
-        case 3: // Exit
+        case 4: // Exit
             currentState = MenusState::EXIT;
             break;
         }
@@ -271,12 +268,13 @@ void Menus::MainMenu(float dt)
 
 void Menus::NewGame()
 {
-    // TODO --- New Game
+    // TODO --- NEW GAME LOGIC
+    StartTransition(true, MenusState::GAME);
 }
 
 void Menus::Continue()
 {
-    // TODO --- Load Previous Game
+    StartTransition(true, MenusState::GAME);
 }
 
 void Menus::Pause(float dt)

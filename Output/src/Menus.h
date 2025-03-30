@@ -10,11 +10,10 @@ enum class MenusState
     INTRO,
     MAINMENU,
     NEWGAME,
-    CONTINUE,
-    PAUSE,
+    GAME,
     SETTINGS,
     CREDITS,
-    GAME,
+    PAUSE,
     NONE,
     EXIT
 };

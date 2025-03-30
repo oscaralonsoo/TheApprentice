@@ -21,60 +21,53 @@ bool Menus::Start()
 
 void Menus::LoadTextures()
 {
+    //Load Background Textures
     groupLogo = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/Logo.png");
-    menuBackground = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/MainMenuBackGround.png");
-    pauseBackground = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/PauseMenu.png");
-    creditsBackground = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/PauseMenu.png");
-    settingsBackground = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/PauseMenu.png");
+    menuBackground = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/MainMenuBackground.png");
+    pauseBackground = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/PauseMenuBackground.png");
+    creditsBackground = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/CreditsBackground.png");
+    settingsBackground = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/SettingsBackground.png");
 
-    mainMenuButtons.clear();
-    pauseMenuButtons.clear();
+
     const int screenWidth = Engine::GetInstance().window->width;
     const int buttonWidth = 200;
     const int buttonHeight = 50;
     const int startX = (screenWidth - buttonWidth) / 2;
     const int startY = 230;
-    const int spacing = 110;
+    const int buttonSpacing = 110;    
 
-    // Buttons
+
     mainMenuButtons.clear();
     pauseMenuButtons.clear();
 
-    // CONTINUE
-    MenuButton btnContinue;
-    btnContinue.texDeselected = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/Buttons/Continue_disselected.png");
-    btnContinue.texSelected = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/Buttons/Continue_Selected.png");
-    btnContinue.rect = { startX, startY, buttonWidth, buttonHeight };
-    mainMenuButtons.push_back(btnContinue);
-    pauseMenuButtons.push_back(btnContinue);
 
-    // SETTINGS
-    MenuButton btnSettings;
-    btnSettings.texDeselected = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/Buttons/Settings_disselected.png");
-    btnSettings.texSelected = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/Buttons/Settings_Selected.png");
-    btnSettings.rect = { startX, startY + spacing, buttonWidth, buttonHeight };
-    mainMenuButtons.push_back(btnSettings);
-    pauseMenuButtons.push_back(btnSettings);
+    std::vector<std::tuple<std::string, int>> buttonData = {
+        {"Continue", startY},
+        {"Settings", startY + buttonSpacing},
+        {"Credits", startY + buttonSpacing * 2},
+        {"Exit", startY + buttonSpacing * 3}
+    };
 
-    // CREDITS
-    MenuButton btnCredits;
-    btnCredits.texDeselected = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/Buttons/Credits_disselected.png");
-    btnCredits.texSelected = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/Buttons/Credits_Selected.png");
-    btnCredits.rect = { startX, startY + spacing * 2, buttonWidth, buttonHeight };
-    mainMenuButtons.push_back(btnCredits);
+    // Create Buttons
+    for (size_t i = 0; i < buttonData.size(); ++i)
+    {
+        const std::string& buttonName = std::get<0>(buttonData[i]);
+        const int posY = std::get<1>(buttonData[i]);
 
-    // EXIT
-    MenuButton btnExit;
-    btnExit.texDeselected = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/Buttons/Exit_disselected.png");
-    btnExit.texSelected = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/Buttons/Exit_Selected.png");
+        MenuButton btn;
+        btn.texDeselected = Engine::GetInstance().render->LoadTexture(("Assets/Textures/Menus/Buttons/" + buttonName + "_disselected.png").c_str());
+        btn.texSelected = Engine::GetInstance().render->LoadTexture(("Assets/Textures/Menus/Buttons/" + buttonName + "_Selected.png").c_str());
+        btn.rect = { startX, posY, buttonWidth, buttonHeight };
 
-    // In MainMenu
-    btnExit.rect = { startX, startY + spacing * 3, buttonWidth, buttonHeight };
-    mainMenuButtons.push_back(btnExit);
+        mainMenuButtons.push_back(btn);
+        if (buttonName != "Credits") 
+            pauseMenuButtons.push_back(btn);
+    }
 
-    // In PauseMenu
-    btnExit.rect = { startX, startY + spacing * 2, buttonWidth, buttonHeight };
-    pauseMenuButtons.push_back(btnExit);
+    for (size_t i = 0; i < pauseMenuButtons.size(); ++i)
+    {
+        pauseMenuButtons[i].rect.y = startY + (i * buttonSpacing); 
+    }
 }
 
 bool Menus::Update(float dt)
@@ -87,15 +80,17 @@ bool Menus::Update(float dt)
 // Pause Logic
 void Menus::HandlePause()
 {
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE)&&!inTransition)
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN && !inTransition && !inConfig)
     {
-        if (currentState == MenusState::GAME)
+        if (currentState == MenusState::PAUSE)
         {
-            SetPauseTransition(true, MenusState::PAUSE);
+            StartTransition(true, MenusState::GAME);
+            isPaused = false;
         }
-        else if (currentState == MenusState::PAUSE)
+        else if (currentState == MenusState::GAME)
         {
-            SetPauseTransition(true, MenusState::GAME);
+            StartTransition(true, MenusState::PAUSE);
+            isPaused = true;
         }
     }
 }
@@ -128,7 +123,8 @@ void Menus::DrawBackground() // Draw background depending on the MenusState
             cameraRect.y - Engine::GetInstance().render->camera.y, &cameraRect);
         break;
     case MenusState::SETTINGS:
-        Engine::GetInstance().render->DrawTexture(settingsBackground, 0, 0, nullptr);
+        Engine::GetInstance().render->DrawTexture(settingsBackground, cameraRect.x - Engine::GetInstance().render->camera.x,
+            cameraRect.y - Engine::GetInstance().render->camera.y, &cameraRect);
         break;
     case MenusState::CREDITS:
         Engine::GetInstance().render->DrawTexture(creditsBackground, 0, 0, nullptr);
@@ -230,25 +226,12 @@ void Menus::Intro(float dt)
     // Fade in the logo
     if (logoAlpha < 1.0f) {
         logoAlpha += dt * 0.5f; 
-        if (logoAlpha > 1.0f) {
-            logoAlpha = 1.0f;
-        }
+        if (logoAlpha > 1.0f) logoAlpha = 1.0f;
     }
 
-    if (introTimer >= 2000.0f)  // Transition to MAINMENU after 3 seconds
+    if (introTimer >= 2000.0f || Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
     {
-        fastTransition = false;
-        fadingIn = false;
-        inTransition = true;
-        nextState = MenusState::MAINMENU;
-    }
-
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) // Transition to MAINMENU after SPACE is pressed 
-    {
-        fastTransition = false;
-        fadingIn = false;
-        inTransition = true;
-        nextState = MenusState::MAINMENU;
+        StartTransition(false, MenusState::MAINMENU);
     }
 }
 
@@ -257,15 +240,11 @@ void Menus::MainMenu(float dt)
     // Navigation
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_DOWN)
     {
-        selectedButton--;
-        if (selectedButton < 0)
-            selectedButton = mainMenuButtons.size() - 1;
+        selectedButton = (selectedButton == 0) ? mainMenuButtons.size() - 1 : selectedButton - 1;
     }
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
     {
-        selectedButton++;
-        if (selectedButton >= mainMenuButtons.size())
-            selectedButton = 0;
+        selectedButton = (selectedButton == mainMenuButtons.size() - 1) ? 0 : selectedButton + 1;
     }
 
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
@@ -273,17 +252,15 @@ void Menus::MainMenu(float dt)
         switch (selectedButton)
         {
         case 0: // Continue
-            fastTransition = false;
-            fadingIn = false;
-            inTransition = true;
-            nextState = MenusState::GAME;
+            StartTransition(true, MenusState::GAME);
             break;
         case 1: // Settings
-            nextState = MenusState::SETTINGS;
+            inConfig = true;
+            StartTransition(true, MenusState::SETTINGS);
             break;
         case 2: // Credits
-
-            nextState = MenusState::CREDITS;
+            inCredits = true;
+            StartTransition(true, MenusState::CREDITS);
             break;
         case 3: // Exit
             currentState = MenusState::EXIT;
@@ -306,17 +283,14 @@ void Menus::Pause(float dt)
 {
     if (inTransition) return;
 
+    // Navigation for Pause Menu
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_DOWN)
     {
-        selectedButton--;
-        if (selectedButton < 0)
-            selectedButton = pauseMenuButtons.size() - 1;
+        selectedButton = (selectedButton == 0) ? pauseMenuButtons.size() - 1 : selectedButton - 1;
     }
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
     {
-        selectedButton++;
-        if (selectedButton >= pauseMenuButtons.size())
-            selectedButton = 0;
+        selectedButton = (selectedButton == pauseMenuButtons.size() - 1) ? 0 : selectedButton + 1;
     }
 
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
@@ -324,10 +298,12 @@ void Menus::Pause(float dt)
         switch (selectedButton)
         {
         case 0: // Continue
-            SetPauseTransition(true, MenusState::GAME);
+            isPaused = false;
+            StartTransition(true, MenusState::GAME);
             break;
         case 1: // Settings
-            nextState = MenusState::SETTINGS;
+            inConfig = true;
+            StartTransition(true,MenusState::SETTINGS);
             break;
         case 2: // Exit
             currentState = MenusState::EXIT;
@@ -339,22 +315,48 @@ void Menus::Pause(float dt)
 
 void Menus::Settings()
 {
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+    {
 
-    //  TODO --- Show Settings
+        if (previousState == MenusState::PAUSE)
+        {
+            nextState = MenusState::PAUSE;
+        }
+        else
+        {
+            nextState = previousState; 
+        }
+        inConfig = false;
+        StartTransition(true, nextState);
+        previousState = MenusState::NONE; 
+    }
 }
 
 void Menus::Credits()
 {
-    // TODO --- Show Credits
-}
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+    {
 
-void Menus::SetPauseTransition(bool fast, MenusState newState)
+        if (previousState == MenusState::PAUSE)
+        {
+            nextState = MenusState::PAUSE;
+        }
+        else
+        {
+            nextState = previousState;
+        }
+        inCredits = false;
+        StartTransition(true, nextState);
+        previousState = MenusState::NONE;
+    }
+}
+void Menus::StartTransition(bool fast, MenusState newState)
 {
-    inTransition = true;
-    fadingIn = false;
-    isPaused = !isPaused;
-    nextState = newState;
+    previousState = currentState; 
     fastTransition = fast;
+    fadingIn = false;
+    inTransition = true;
+    nextState = newState;
 }
 
 // Transition Logic

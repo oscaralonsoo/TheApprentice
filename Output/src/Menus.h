@@ -47,8 +47,8 @@ public:
     void Pause(float dt);
     void Settings();
     void Credits();
+    void StartTransition(bool fast, MenusState newState);
     void HandlePause();
-    void SetPauseTransition(bool fast, MenusState newState);
     void Transition(float dt);
 
 public:
@@ -56,6 +56,7 @@ public:
     //Menu States
     MenusState currentState;
     MenusState nextState;
+    MenusState previousState;
     bool isPaused = false;
     bool inMainMenu = false;
 
@@ -65,6 +66,8 @@ private:
     bool inTransition = false;
     bool fastTransition = false;
     bool fadingIn = false;
+    bool inConfig = false;
+    bool inCredits = false;
 
     // Transitions
     float introTimer = 0.0f;

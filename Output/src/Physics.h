@@ -24,13 +24,12 @@ enum bodyType {
 };
 
 enum class ColliderType {
-	PLAYER, 
-	ITEM,
+	PLAYER,
+	CAVEDROP,
 	ENEMY,
 	PLATFORM, 
 	DOOR,
 	UNKNOWN
-	// ..
 };
 
 // Small class to return to other modules to track position and rotation of physics bodies

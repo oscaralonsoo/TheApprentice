@@ -104,10 +104,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         LOG("Collision PLATFORM");
         isJumping = false;
         break;
-    case ColliderType::ITEM:
-        LOG("Collision ITEM");
-        Engine::GetInstance().physics.get()->DeletePhysBody(physB);
-        break;
     case ColliderType::DOOR:
          LOG("Collision DOOR");
 

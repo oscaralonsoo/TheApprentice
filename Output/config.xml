@@ -85,12 +85,27 @@
 					</run>
 				</enemy>
 			</enemies>
+			<props>
+				<cave_drop texture="Assets/Textures/caveDrop/caveDropStart.png">
+					<start loop="true" speed="0.05">
+						<frame x="0" y="0" w="20" h="20" />
+						<frame x="20" y="0" w="20" h="20" />
+						<frame x="40" y="0" w="20" h="20" />
+						<frame x="0" y="20" w="20" h="20" />
+						<frame x="20" y="20" w="20" h="20" />
+						<frame x="40" y="20" w="20" h="20" />
+						<frame x="0" y="40" w="20" h="20" />
+						<frame x="20" y="40" w="20" h="20" />
+						<frame x="40" y="40" w="20" h="20" />
+						<frame x="0" y="60" w="20" h="20" />
+					</start>
+					<fall />
+				</cave_drop>
+			</props>
 		</animations>
 		<save_data>
 			<player x="170" y="110" w="44" h="54" />
-			<enemies>
-				<enemy type="Bloodrusher" x="320" y="672" w="32" h="32" />
-			</enemies>
+			<enemies />
 			<enemies />
 		</save_data>
 	</scene>

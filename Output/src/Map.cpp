@@ -7,6 +7,7 @@
 #include "Window.h"
 #include <math.h>
 #include "Enemy.h"
+#include "CaveDrop.h"
 #include "Engine.h"
 #include "EntityManager.h"
 
@@ -298,6 +299,21 @@ bool Map::Load(std::string path, std::string fileName)
                 // Guardar los cambios en el archivo
                 loadFile.save_file("config.xml");
                 Engine::GetInstance().UpdateConfig();
+            }
+            if (mapLayer->name == "CaveDrop") {
+                for (int i = 0; i < mapData.width; i++) {
+                    for (int j = 0; j < mapData.height; j++) {
+                        int gid = mapLayer->Get(i, j);
+                        if (gid != 0)
+                        {
+                            Vector2D mapCoord = MapToWorld(i, j);
+
+                            CaveDrop* caveDrop = (CaveDrop*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CAVEDROP);
+                            caveDrop->position = Vector2D(mapCoord.x, mapCoord.y);
+                            caveDrop->Start();
+                        }
+                    }
+                }
             }
         }
         ret = true;

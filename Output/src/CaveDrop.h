@@ -2,15 +2,16 @@
 
 #include "Entity.h"
 #include "SDL2/SDL.h"
+#include "Animation.h"
 
 struct SDL_Texture;
 
-class Item : public Entity
+class CaveDrop : public Entity
 {
 public:
 
-	Item();
-	virtual ~Item();
+	CaveDrop();
+	virtual ~CaveDrop();
 
 	bool Awake();
 
@@ -22,13 +23,13 @@ public:
 
 public:
 
-	bool isPicked = false;
-
 private:
 
 	SDL_Texture* texture;
 	const char* texturePath;
 	int texW, texH;
+	Animation* currentAnimation = nullptr;
+	Animation startAnim;
 
 	//L08 TODO 4: Add a physics to an item
 	PhysBody* pbody;

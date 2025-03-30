@@ -47,7 +47,6 @@ bool Player::Update(float dt) {
     if (Engine::GetInstance().menus->isPaused || Engine::GetInstance().menus->currentState == MenusState::MAINMENU || 
         Engine::GetInstance().menus->currentState == MenusState::INTRO)
         return true;
-    }
     
     if (isStunned) {
         pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));

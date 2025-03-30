@@ -53,11 +53,6 @@ public:
 	int cameraImpulseX = 0;
 	float cameraImpulseSmoothing = 0.1f;
 
-	SDL_Renderer* renderer;
-	SDL_Rect camera;
-	SDL_Rect viewport;
-	SDL_Color background;
-
 	//Camera Movement
 	int targetY;
 	int targetX;

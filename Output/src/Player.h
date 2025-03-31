@@ -3,8 +3,11 @@
 #include "Entity.h"
 #include "SDL2/SDL.h"
 #include "Box2D/Box2D.h"
-#include "PlayerAnimation.h"  // Añadimos la clase de animaciones
+#include "PlayerAnimation.h"
 #include "Timer.h"
+
+// Añadido
+#include "PlayerMechanics.h"
 
 struct SDL_Texture;
 
@@ -29,91 +32,25 @@ public:
 	}
 	void SetPosition(Vector2D pos);
 	Vector2D GetPosition() const;
-	int GetMovementDirection() const { return movementDirection; }
 
-	//Unlock Abilities
-	void EnableDoubleJump(bool enable) { doubleJumpUnlocked = enable; }
-	void EnableJump(bool enable) { jumpUnlocked = enable; }
-	void EnableDash(bool enable) { dashUnlocked = enable; }
+	// Esto lo usa Mechanics
+	void SetState(const std::string& newState) { state = newState; }
+	const std::string& GetState() const { return state; }
 
-	int targetScene= 0;
+	int targetScene = 0;
 	PhysBody* pbody;
 
-private:
-	// Manejo de input
-	void HandleInput();
-	void HandleJump();
-	void HandleDash();
-	void HandleFall(); 
-	void CheckFallImpact();
-	void HandleWallSlide();
-	void CancelDash();
-	void CreateAttackSensor();
-	void DestroyAttackSensor();
+	int GetMovementDirection() const;
 
-	// Parámetros del jugador
-	float speed = 5.0f;
-	SDL_Texture* texture = NULL;
+private:
+	SDL_Texture* texture = nullptr;
 	int texW, texH;
 
-	// Física del jugador
-	bool isOnGround = false;
-	
-	//Know Direction
-	int movementDirection = 1;
-	
-	//Jump
-	float jumpForce = 10.5f;
-	bool isJumping = false;
-	float jumpTime = 0.0f;
-	float maxJumpTime = 0.3f;
-	bool jumpUnlocked = false;
-
-	//DoubleJump
-	bool doubleJumpUnlocked = false;
-	bool hasDoubleJumped = false;
-
-	//Dash
-	bool isDashing = false;
-	bool canDash = true;
-	float dashSpeed = 15.0f;         
-	Vector2D dashStartPosition;
-	float maxDashDistance = 100.0f; 
-	Timer dashCooldown;
-	float dashMaxCoolDown = 1.0f;
-	bool dashUnlocked = false;
-
-	//Fall Stun
-	bool isStunned = false;
-	float stunDuration = 1.0f;
-	Timer stunTimer;
-	float fallStartY = 0.0f;
-	float fallDistanceThreshold = 300.0f; 
-	float fallEndY;
-	float fallDistance;
-
-	//Bajar la camara al lado de bajadas
-	bool wasInDownCameraZone = false;
-
-	//Wall Slide
-	bool isWallSliding = false;
-
-	//Attack
-	PhysBody* attackSensor = nullptr;
-	Timer attackTimer;
-	float attackDuration = 200.0f;
-	int size = 50;
-	int playerAttackX;
-	int playerAttackY;
-
-
-	// Animaciones del jugador
 	PlayerAnimation animation;
 	std::string state = "idle";
 
-	// Parameters config.xml
 	pugi::xml_node parameters;
 
+	// Nueva clase para manejar todas las mecánicas
+	PlayerMechanics mechanics;
 };
-
-

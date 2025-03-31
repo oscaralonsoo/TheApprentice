@@ -25,383 +25,93 @@ bool Player::Awake() {
 }
 
 bool Player::Start() {
-    texture = Engine::GetInstance().textures.get()->Load(parameters.attribute("texture").as_string());
+	texture = Engine::GetInstance().textures->Load(parameters.attribute("texture").as_string());
 
-    texW = parameters.attribute("w").as_int();
-    texH = parameters.attribute("h").as_int();
+	texW = parameters.attribute("w").as_int();
+	texH = parameters.attribute("h").as_int();
 
-    // Load animations with the texture (if necessary)
-    animation.LoadAnimations(parameters, texture);
+	animation.LoadAnimations(parameters, texture);
 
-    // Create the body at the same position, and ensure it's centered
-    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() , (int)position.getY() + 300, 64,64, bodyType::DYNAMIC);
-    pbody->listener = this;
-    pbody->ctype = ColliderType::PLAYER;
+	pbody = Engine::GetInstance().physics->CreateRectangle((int)position.getX(), (int)position.getY() + 300, 64, 64, bodyType::DYNAMIC);
+	pbody->listener = this;
+	pbody->ctype = ColliderType::PLAYER;
 
-    return true;
+	mechanics.Init(this);
+
+	return true;
 }
 
 bool Player::Update(float dt) {
-    
-    animation.Update(dt, state, position.getX(), position.getY());
-    if (Engine::GetInstance().menus->isPaused || Engine::GetInstance().menus->currentState == MenusState::MAINMENU || 
-        Engine::GetInstance().menus->currentState == MenusState::INTRO)
-        return true;
-    
-    if (isStunned) {
-        pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
-        if (stunTimer.ReadSec() >= stunDuration) {
-            isStunned = false;
-            state = "idle";
+	animation.Update(dt, state, position.getX(), position.getY());
 
-            fallStartY = position.getY();
-            fallEndY = position.getY();
-            fallDistance = 0.0f;
-        }
-        return true;
-    }
-    HandleInput();
-    HandleJump();
-    HandleDash();
-    HandleFall();
-    HandleWallSlide();
+	mechanics.Update(dt);
 
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_J) == KEY_DOWN && attackSensor == nullptr)
-    {
-        CreateAttackSensor();
-    }
+	b2Transform pbodyPos = pbody->body->GetTransform();
+	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texW / 2);
+	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
-    // Movimiento con f�sica
-
-    if (!isDashing) {
-
-        b2Vec2 velocity = b2Vec2(0, pbody->body->GetLinearVelocity().y);
-
-        velocity.x = 0; // Reset horizontal por defecto
-
-        if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-            velocity.x = -speed;
-        }
-        if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-            velocity.x = speed;
-        }
-        pbody->body->SetLinearVelocity(velocity);
-    }
-
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_1) == KEY_DOWN && !isJumping) {
-        EnableJump(!jumpUnlocked);
-    }
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_2) == KEY_DOWN && !isJumping) {
-        EnableDoubleJump(!doubleJumpUnlocked);
-    }
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && !isJumping) {
-        EnableDash(!dashUnlocked);
-    }
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_4) == KEY_DOWN && !isJumping) {
-        Engine::GetInstance().render.get()->StartCameraShake(5, 100);  
-    }
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_5) == KEY_DOWN && !isJumping) {
-        Engine::GetInstance().render.get()->ToggleCameraLock();
-    }
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_6) == KEY_DOWN && !isJumping) {
-        Engine::GetInstance().render.get()->ToggleVerticalOffsetLock();
-    }
-
-    // Apply the velocity
-    b2Transform pbodyPos = pbody->body->GetTransform();
-
-    // Update the position of the texture based on the body's position
-    position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texW / 2);
-    position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
-
-    // Actualizar posición del sensor si está activo
-    if (attackSensor != nullptr)
-    {
-        LOG("Attack Timer: %.3f / %.3f", attackTimer.ReadSec(), attackDuration);
-        int offsetX = (movementDirection > 0) ? size / 2 : -size / 2;
-
-        int playerX = METERS_TO_PIXELS(pbody->body->GetPosition().x) + offsetX;
-        int playerY = METERS_TO_PIXELS(pbody->body->GetPosition().y);
-
-        b2Vec2 newPos(PIXEL_TO_METERS(playerX), PIXEL_TO_METERS(playerY));
-        attackSensor->body->SetTransform(newPos, 0);
-
-        if (attackTimer.ReadMSec() >= attackDuration)
-        {
-            DestroyAttackSensor();
-        }
-    }
-
-    // Update animation based on the new position
-  
-
-    return true;
-}
-
-
-void Player::HandleInput() {
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-        movementDirection = -1;
-        state = "run_left";
+	// Teclas de debug / efectos visuales
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
+		mechanics.EnableJump(true);
 	}
-	else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-        movementDirection = 1;
-		state = "run_right";
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) {
+		mechanics.EnableDoubleJump(true);
 	}
-	else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
-		state = "attack";
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_3) == KEY_DOWN) {
+		mechanics.EnableDash(true);
 	}
-    else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_W) == KEY_DOWN && Engine::GetInstance().scene->saveGameZone && !Engine::GetInstance().menus->inTransition)
-    {
-        Engine::GetInstance().scene.get()->SaveGameXML();
-    }
-	else {
-		state = "idle";
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_4) == KEY_DOWN) {
+		Engine::GetInstance().render->StartCameraShake(5, 100);
 	}
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_5) == KEY_DOWN) {
+		Engine::GetInstance().render->ToggleCameraLock();
+	}
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_6) == KEY_DOWN) {
+		Engine::GetInstance().render->ToggleVerticalOffsetLock();
+	}
+
+	return true;
 }
 
 bool Player::CleanUp() {
 	LOG("Cleanup player");
-	Engine::GetInstance().textures.get()->UnLoad(texture);
+	Engine::GetInstance().textures->UnLoad(texture);
 	return true;
 }
 
 void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype) {
-	case ColliderType::PLATFORM:
-		//LOG("Collision PLATFORM");
-        CheckFallImpact();
-		isJumping = false;
-        hasDoubleJumped = false;
-        if (jumpUnlocked) {
-            EnableJump(true);
-        }
-        isOnGround = true;
+	case ColliderType::DOOR:
+		LOG("Collision DOOR");
+		targetScene = physB->targetScene;
+
+		Engine::GetInstance().scene->newPosition.x = physB->playerPosX;
+		Engine::GetInstance().scene->newPosition.y = physB->playerPosY;
+
+		Engine::GetInstance().scene.get()->StartTransition(targetScene);
 		break;
-    case ColliderType::WALL:
-        //LOG("Collision WALL");
-        if (isDashing) {
-            CancelDash();
-        }
 
-        isWallSliding = true;
-
-        break;
-	case ColliderType::ITEM:
-		//LOG("Collision ITEM");
-		Engine::GetInstance().physics.get()->DeletePhysBody(physB);
+	default:
+		mechanics.OnCollision(physA, physB);
 		break;
-    case ColliderType::DOWN_CAMERA:
-        if (!wasInDownCameraZone) {
-            Engine::GetInstance().render.get()->ToggleVerticalOffsetLock();
-            wasInDownCameraZone = true;
-        }
-        break;
-    case ColliderType::DOOR:
-         LOG("Collision DOOR");
-        targetScene = physB->targetScene; // TargetScene From collider
-
-        // Player Position From Collider
-        Engine::GetInstance().scene->newPosition.x = physB->playerPosX;
-        Engine::GetInstance().scene->newPosition.y = physB->playerPosY;
-
-        Engine::GetInstance().scene.get()->StartTransition(targetScene); // Start Loading scene
-        break;
-    case ColliderType::ENEMY:
-         LOG("Collision ENEMY");
-        // TODO --- DESTRUCCI�N DE ENEMIGO & PLAYER DAMAGE LOGIC
-        break;
-    case ColliderType::SAVEGAME:
-        LOG("Collision SAVEGAME");
-        Engine::GetInstance().scene->saveGameZone = true;
-        break;
-    default:
-            //LOG("Collision UNKNOWN");
-        break;
-    }
-}                    
+	}
+}
 
 void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
-    switch (physB->ctype) {
-    case ColliderType::PLATFORM:
-        isOnGround = false;
-        break;
-    case ColliderType::WALL:
-        isWallSliding = false;
-        break;
-    case ColliderType::ITEM:
-        break;
-    case ColliderType::DOWN_CAMERA:
-        wasInDownCameraZone = false;
-        break;
-    case ColliderType::SAVEGAME:
-        LOG("Collision SAVEGAME");
-        Engine::GetInstance().scene->saveGameZone = false;
-        break;
-    default:
-        LOG("Collision UNKNOWN");
-        break;
-    }
+	mechanics.OnCollisionEnd(physA, physB);
 }
 
 void Player::SetPosition(Vector2D pos) {
-    pos.setX(pos.getX() + texW / 2);
-    pos.setY(pos.getY() + texH / 2);
-    b2Vec2 bodyPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
-    pbody->body->SetTransform(bodyPos, 0);
+	pos.setX(pos.getX() + texW / 2);
+	pos.setY(pos.getY() + texH / 2);
+	b2Vec2 bodyPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
+	pbody->body->SetTransform(bodyPos, 0);
 }
-
 
 Vector2D Player::GetPosition() const {
 	return position;
 }
 
-void Player::HandleJump() {
-
-    if (!jumpUnlocked) return;
-    // Obtener la velocidad actual del jugador
-    b2Vec2 velocity = pbody->body->GetLinearVelocity();
-
-    // --- INICIO DEL PRIMER SALTO ---
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !isJumping) {
-        velocity.y = -jumpForce;  // Aplicamos la fuerza inicial del salto
-        isJumping = true;
-        state = "jump";
-    }
-
-    // --- DOBLE SALTO ---
-    else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isJumping && !hasDoubleJumped && doubleJumpUnlocked) {
-        velocity.y = -jumpForce;  // Aplicamos la fuerza del doble salto
-        hasDoubleJumped = true;   // Marcar que ya usamos el doble salto
-    }
-
-    // --- SALTO PROGRESIVO (Mientras se mantenga presionado) ---
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && isJumping) {
-        if (jumpTime < maxJumpTime) {
-            velocity.y -= 0.3f;
-            jumpTime += 0.016f;  // Aproximadamente 1 frame a 60 FPS
-        }
-    }
-
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_UP && isJumping) {
-        if (velocity.y < 0) {  // Si a�n est� subiendo, forzamos la ca�da
-            velocity.y = 0;   // Reduce la velocidad de subida de golpe
-        }
-    }
-
-    // --- GRAVEDAD SUAVE Y PROGRESIVA EN LA CA�DA ---
-    if (velocity.y > 0 && !isDashing && !isWallSliding) {
-        velocity.y += std::min(velocity.y * 0.1f, 0.5f);
-    }
-
-
-    // Aplicar la nueva velocidad al jugador
-    pbody->body->SetLinearVelocity(velocity);
-}
-
-void Player::HandleDash() {
-
-    if (!dashUnlocked) return;
-
-    if (!canDash && dashCooldown.ReadSec() >= dashMaxCoolDown) {
-        canDash = true;
-    }
-
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_K) == KEY_DOWN && canDash) {
-        isDashing = true;
-        canDash = false;
-        dashCooldown.Start();
-
-        dashStartPosition = position;
-
-        pbody->body->SetGravityScale(0.0f);
-
-        Engine::GetInstance().render.get()->DashCameraImpulse(movementDirection, 100); 
-
-        if (attackSensor != nullptr)
-        {
-            DestroyAttackSensor();
-        }
-    }
-
-    if (isDashing) {
-        // Aplica velocidad
-        b2Vec2 vel(dashSpeed * movementDirection, 0.0f);
-        pbody->body->SetLinearVelocity(vel);
-
-        // Calcula distancia recorrida
-        float distance = abs(position.getX() - dashStartPosition.getX());
-
-        if (distance >= maxDashDistance) {
-            if (distance >= maxDashDistance) {
-                CancelDash();
-            }
-        }
-    }
-}
-
-void Player::HandleFall() {
-    b2Vec2 velocity = pbody->body->GetLinearVelocity();
-
-    if (velocity.y > 0.5f && !isJumping) {
-        isJumping = true;
-        fallStartY = position.getY(); 
-        state = "fall";
-    }
-}
-
-void Player::CheckFallImpact() {
-    fallEndY = position.getY();
-    fallDistance = fallEndY - fallStartY;
-
-    if (fallDistance >= fallDistanceThreshold) {
-        isStunned = true;
-        state = "stunned";
-        stunTimer.Start();
-        Engine::GetInstance().render.get()->StartCameraShake(1, 1);
-    }
-}
-
-void Player::HandleWallSlide()
-{
-    if (isWallSliding)
-    {
-        b2Vec2 velocity = b2Vec2(pbody->body->GetLinearVelocity());
-        velocity.y = 0;
-        state = "wall_slide";
-        pbody->body->SetLinearVelocity(velocity);
-    }
-}
-
-void Player::CancelDash() {
-    isDashing = false;
-    pbody->body->SetGravityScale(1.0f);
-
-    b2Vec2 stop = pbody->body->GetLinearVelocity();
-    stop.x = 0.0f;
-    pbody->body->SetLinearVelocity(stop);
-}
-
-void Player::CreateAttackSensor()
-{
-
-    int offsetX = (movementDirection > 0) ? size / 2 : -size / 2;
-
-    playerAttackX = METERS_TO_PIXELS(pbody->body->GetPosition().x) + offsetX;
-    playerAttackY = METERS_TO_PIXELS(pbody->body->GetPosition().y);
-
-    attackSensor = Engine::GetInstance().physics.get()->CreateRectangleSensor(playerAttackX, playerAttackY, size, size, KINEMATIC);
-    attackSensor->ctype = ColliderType::ATTACK;
-    attackSensor->listener = this;
-
-    attackTimer.Start();
-}
-
-void Player::DestroyAttackSensor()
-{
-    if (attackSensor != nullptr)
-    {
-        Engine::GetInstance().physics.get()->DeletePhysBody(attackSensor);
-        attackSensor = nullptr;
-    }
+int Player::GetMovementDirection() const {
+	return mechanics.GetMovementDirection();
 }

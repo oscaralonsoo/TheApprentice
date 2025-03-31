@@ -12,7 +12,7 @@
 		<fullscreen value="false" />
 		<borderless value="false" />
 		<resizable value="false" />
-		<fullscreen_window value="false" />
+		<fullscreen_window value="true" />
 	</window>
 	<scene>
 		<maps>
@@ -85,6 +85,23 @@
 					</run>
 				</enemy>
 			</enemies>
+			<props>
+				<cave_drop w="22" h="22" texture="Assets/Props/caveDrop.png">
+					<start loop="false" speed="0.13">
+						<frame x="0" y="0" w="22" h="22" />
+						<frame x="22" y="0" w="22" h="22" />
+						<frame x="44" y="0" w="22" h="22" />
+						<frame x="0" y="22" w="22" h="22" />
+						<frame x="22" y="22" w="22" h="22" />
+						<frame x="44" y="22" w="22" h="22" />
+						<frame x="0" y="44" w="22" h="22" />
+						<frame x="22" y="44" w="22" h="22" />
+					</start>
+					<fall loop="true" speed="0">
+						<frame x="44" y="44" w="22" h="22" />
+					</fall>
+				</cave_drop>
+			</props>
 		</animations>
 		<save_data isSaved="0">
 			<player x="180" y="50" w="44" h="54" />

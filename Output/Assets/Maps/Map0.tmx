@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="40" tilewidth="32" tileheight="32" infinite="0" nextlayerid="31" nextobjectid="34">
- <tileset firstgid="1" name="MapMetadata" tilewidth="32" tileheight="32" tilecount="2" columns="2">
-  <image source="MapMetadata.png" width="67" height="34"/>
+ <tileset firstgid="1" name="MapMetadata" tilewidth="32" tileheight="32" tilecount="8" columns="4">
+  <image source="MapMetadata.png" width="128" height="64"/>
  </tileset>
  <tileset firstgid="9" name="test" tilewidth="32" tileheight="32" tilecount="75" columns="5">
   <image source="../Textures/test.png" width="176" height="500"/>

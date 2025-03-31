@@ -9,6 +9,7 @@
 #include "Physics.h"
 #include "EntityManager.h"
 #include "Map.h"
+#include "Menus.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -40,6 +41,11 @@ bool Player::Start() {
 }
 
 bool Player::Update(float dt) {
+    animation.Update(dt, state, position.getX(), position.getY());
+    if (Engine::GetInstance().menus->isPaused || Engine::GetInstance().menus->currentState == MenusState::MAINMENU || 
+        Engine::GetInstance().menus->currentState == MenusState::INTRO)
+        return true;
+
     HandleInput();
     HandleJump();
 
@@ -66,7 +72,7 @@ bool Player::Update(float dt) {
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
     // Update animation based on the new position
-    animation.Update(dt, state, position.getX(), position.getY());
+  
 
     return true;
 }

@@ -3,7 +3,6 @@
 #include <sstream>
 #include <iomanip>
 #include "Log.h"
-
 #include "Window.h"
 #include "Input.h"
 #include "Render.h"
@@ -39,6 +38,7 @@ Engine::Engine() {
     scene = std::make_shared<Scene>();
     map = std::make_shared<Map>();
     entityManager = std::make_shared<EntityManager>();
+    menus = std::make_shared<Menus>();
 
     // Ordered for awake / Start / Update
     // Reverse order of CleanUp
@@ -53,6 +53,7 @@ Engine::Engine() {
     AddModule(std::static_pointer_cast<Module>(entityManager));
 
     // Render last 
+    AddModule(std::static_pointer_cast<Module>(menus));
     AddModule(std::static_pointer_cast<Module>(render));
 
     LOG("Timer App Constructor: %f", timer.ReadMSec());

@@ -6,6 +6,7 @@
 #include "Timer.h"
 #include "PerfTimer.h"
 #include "pugixml.hpp"
+#include "Menus.h"
 
 // Modules
 class Window;
@@ -16,6 +17,7 @@ class Audio;
 class Scene;
 class EntityManager;
 class Map;
+class Menus;
 //L08 TODO 2: Add Physics module
 class Physics;
 
@@ -102,6 +104,7 @@ public:
 	// L04: TODO 1: Add the EntityManager Module to the Engine
 	std::shared_ptr<EntityManager> entityManager;
 	std::shared_ptr<Map> map;
+	std::shared_ptr<Menus> menus;
 	// L08: TODO 2: Add Physics module
 	std::shared_ptr<Physics> physics;
 

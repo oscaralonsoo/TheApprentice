@@ -44,7 +44,9 @@ public:
 	// To render Text
 	bool DrawText(const std::string& text, int x, int y, SDL_Color color);
 
+	SDL_Texture* LoadTexture(const char* path);
 public:
+
 
 	SDL_Renderer* renderer;
 	SDL_Rect camera;

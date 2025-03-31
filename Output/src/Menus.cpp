@@ -28,52 +28,28 @@ bool Menus::Start()
 }
 void Menus::LoadTextures()
 {
-    // Background Textures Load
-    std::vector<std::pair<SDL_Texture**, std::string>> backgrounds = {
-        { &groupLogo, "Logo" },
-        { &menuBackground, "MainMenuBackground" },
-        { &pauseBackground, "PauseMenuBackground" },
-        { &creditsBackground, "CreditsBackground" },
-        { &settingsBackground, "SettingsBackground" }
-    };
+    // Cargar fondos
+    groupLogo = Engine::GetInstance().render->LoadTexture("assets/textures/Menus/Logo.png");
+    menuBackground = Engine::GetInstance().render->LoadTexture("assets/textures/Menus/MainMenuBackGround.png");
+    pauseBackground = Engine::GetInstance().render->LoadTexture("assets/textures/Menus/PauseMenuBackground.png");
+    settingsBackground = Engine::GetInstance().render->LoadTexture("assets/textures/Menus/SettingsBackground.png");
+    creditsBackground = Engine::GetInstance().render->LoadTexture("assets/textures/Menus/CreditsBackground.png");
 
-    for (auto& bg : backgrounds) {
-        *bg.first = Engine::GetInstance().render->LoadTexture(("Assets/Textures/Menus/" + bg.second + ".png").c_str());
+    // Cargar botones dinámicamente
+    std::vector<std::string> buttonNames = { "NewGame", "Continue", "Settings", "Credits", "Exit" };
+    for (const auto& name : buttonNames) {
+        MenuButton button;
+        button.texDeselected = Engine::GetInstance().render->LoadTexture(("assets/textures/Menus/buttons/" + name + "_deselected.png").c_str());
+        button.texSelected = Engine::GetInstance().render->LoadTexture(("assets/textures/Menus/buttons/" + name + "_selected.png").c_str());
+        mainMenuButtons.push_back(button);
     }
 
-    // Obtener tamaño de la pantalla
-    SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
-
-    float scaleFactor = isFullScreen ? 1.5f : 1.0f;
-    int buttonWidth = static_cast<int>(200 * scaleFactor);
-    int buttonHeight = static_cast<int>(50 * scaleFactor);
-    int startX = (width - buttonWidth) / 2;
-
-    std::vector<std::pair<std::vector<MenuButton>&, std::vector<std::string>>> menus = {
-        { mainMenuButtons, { "NewGame", "Continue", "Settings", "Credits", "Exit" } },
-        { pauseMenuButtons, { "Continue", "Settings", "Exit" } }
-    };
-
-    std::vector<int> baseStartY = { 180, 150 }; // Valores base de la posición Y
-    std::vector<float> spacingFactor = { 0.1f, 0.15f }; // Espaciado proporcional a la pantalla
-
-    // Cargar botones
-    for (size_t i = 0; i < menus.size(); ++i) {
-        menus[i].first.clear();
-        int startY = static_cast<int>(baseStartY[i] * scaleFactor);
-        int spacing = static_cast<int>(height * spacingFactor[i]); // Espaciado dinámico
-
-        for (size_t j = 0; j < menus[i].second.size(); ++j) {
-            int posY = startY + j * spacing;
-
-            MenuButton btn;
-            std::string buttonName = menus[i].second[j];
-            btn.texDeselected = Engine::GetInstance().render->LoadTexture(("Assets/Textures/Menus/Buttons/" + buttonName + "_disselected.png").c_str());
-            btn.texSelected = Engine::GetInstance().render->LoadTexture(("Assets/Textures/Menus/Buttons/" + buttonName + "_Selected.png").c_str());
-            btn.rect = { startX, posY, buttonWidth, buttonHeight };
-
-            menus[i].first.push_back(btn);
-        }
+    std::vector<std::string> pauseButtonNames = { "Continue", "Settings", "Exit" };
+    for (const auto& name : pauseButtonNames) {
+        MenuButton button;
+        button.texDeselected = Engine::GetInstance().render->LoadTexture(("assets/textures/Menus/buttons/" + name + "_deselected.png").c_str());
+        button.texSelected = Engine::GetInstance().render->LoadTexture(("assets/textures/Menus/buttons/" + name + "_selected.png").c_str());
+        pauseMenuButtons.push_back(button);
     }
 }
 
@@ -148,32 +124,28 @@ void Menus::DrawBackground() // Draw background depending on the MenusState
 void Menus::DrawButtons()
 {
     std::vector<MenuButton>* buttons = nullptr;
-
-    if (currentState == MenusState::MAINMENU)
+    if (currentState == MenusState::MAINMENU) {
         buttons = &mainMenuButtons;
-    else if (currentState == MenusState::PAUSE)
+    }
+    else if (currentState == MenusState::PAUSE) {
         buttons = &pauseMenuButtons;
+    }
 
-    if (buttons && !buttons->empty())
-    {
-        SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
+    if (!buttons) return;
 
-        float scaleFactor = isFullScreen ? 1.5f : 1.0f;
+    int yOffset = height / 2 - buttons->size() * 50 / 2;
+    for (size_t i = 0; i < buttons->size(); ++i) {
+        SDL_Texture* tex = (i == selectedButton) ? (*buttons)[i].texSelected : (*buttons)[i].texDeselected;
 
-        int buttonWidth = static_cast<int>(width * 0.2f); // Botón 20% del ancho de la pantalla
-        int buttonHeight = static_cast<int>(height * 0.1f); // Botón 10% de la altura de la pantalla
-        int startX = (width - buttonWidth) / 2;
-        int spacing = static_cast<int>(height * 0.12f); // Espaciado del 12% de la altura de la pantalla
-        int startY = static_cast<int>(height * 0.3f); // Posición inicial en 30% de la altura
+        int xPos = width / 2 - 100;
+        int yPos = yOffset + i * 100;
 
-        for (size_t i = 0; i < buttons->size(); ++i)
-        {
-            auto& button = (*buttons)[i];
-            button.rect = { startX, startY + static_cast<int>(i * spacing), buttonWidth, buttonHeight };
-
-            SDL_Texture* tex = (&button == &(*buttons)[selectedButton]) ? button.texSelected : button.texDeselected;
-            Engine::GetInstance().render->DrawTexture(tex, button.rect.x, button.rect.y, nullptr);
+        if (currentState == MenusState::PAUSE) {
+            xPos -= Engine::GetInstance().render->camera.x;
+            yPos -= Engine::GetInstance().render->camera.y;
         }
+
+        Engine::GetInstance().render->DrawTexture(tex, xPos, yPos);
     }
 }
 

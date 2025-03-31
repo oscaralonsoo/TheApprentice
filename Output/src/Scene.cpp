@@ -95,6 +95,8 @@ bool Scene::PostUpdate()
 		SDL_RenderFillRect(Engine::GetInstance().render->renderer, nullptr);
 	}
 
+	Vignette(300, 0.8);
+
 	return ret;
 }
 
@@ -185,7 +187,7 @@ void Scene::SaveGameXML()
 		playerNode.attribute("x") = playerPos.x;
 		playerNode.attribute("y") = playerPos.y;
 
-	pugi::xml_node sceneNode = saveData.child("scene"); 	//Save Actual Scene
+	pugi::xml_node sceneNode = saveData.child("scene"); //Save Actual Scene
 		sceneNode.attribute("actualScene") = nextScene;
 		saveData.attribute("isSaved") = Engine::GetInstance().menus->isSaved;
 	config.save_file("config.xml");	//Save Changes
@@ -216,4 +218,34 @@ void Scene::LoadGameXML()
 		}
 	}
 	isLoad = false;
+}
+void Scene::Vignette(int size, float strength)
+{
+	SDL_Renderer* renderer = Engine::GetInstance().render->renderer;
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
+	int width, height;
+	SDL_GetRendererOutputSize(renderer, &width, &height);
+
+	vignetteSize = size;
+	vignetteStrength = strength;
+
+	for (int i = 0; i < vignetteSize; i++)
+	{
+		float distFactor = (float)i / vignetteSize;
+		float opacity = powf(1.0f - distFactor, 2) * vignetteStrength;
+		Uint8 alpha = static_cast<Uint8>(opacity * 255);
+
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, alpha);
+
+		SDL_Rect top = { 0, i, width, 1 };
+		SDL_Rect bottom = { 0, height - i - 1, width, 1 };
+		SDL_Rect left = { i, 0, 1, height };
+		SDL_Rect right = { width - i - 1, 0, 1, height };
+
+		SDL_RenderFillRect(renderer, &top);
+		SDL_RenderFillRect(renderer, &bottom);
+		SDL_RenderFillRect(renderer, &left);
+		SDL_RenderFillRect(renderer, &right);
+	}
 }

@@ -48,12 +48,19 @@ public:
 	// Called When Loading Game
 	void LoadGameXML();
 
+	void Vignette(int size, float strength);
+
 public:
 
 	Vector2D newPosition;
 	bool transitioning = false;
 	bool saveGameZone = false;
 	int nextScene = 0;
+
+	//Vignette
+	int vignetteSize = 300;
+	float vignetteStrength = 0.8f;
+
 private:
 	SDL_Texture* img;
 	//L03: TODO 3b: Declare a Player attribute

@@ -20,6 +20,8 @@ bool Menus::Start()
     pugi::xml_document config;
     pugi::xml_parse_result result = config.load_file("config.xml");
     pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
+    pugi::xml_node fullScreenData = config.child("config").child("window").child("fullscreen_window");
+    isFullScreen = fullScreenData.attribute("value").as_bool();
 
     isSaved = saveData.attribute("isSaved").as_int();
     return true;
@@ -39,24 +41,30 @@ void Menus::LoadTextures()
         *bg.first = Engine::GetInstance().render->LoadTexture(("Assets/Textures/Menus/" + bg.second + ".png").c_str());
     }
 
-    // Button Config
-    const int screenWidth = Engine::GetInstance().window->width;
-    const int buttonWidth = 200;
-    const int buttonHeight = 50;
-    const int startX = (screenWidth - buttonWidth) / 2;
+    // Obtener tamaño de la pantalla
+    SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
+
+    float scaleFactor = isFullScreen ? 1.5f : 1.0f;
+    int buttonWidth = static_cast<int>(200 * scaleFactor);
+    int buttonHeight = static_cast<int>(50 * scaleFactor);
+    int startX = (width - buttonWidth) / 2;
 
     std::vector<std::pair<std::vector<MenuButton>&, std::vector<std::string>>> menus = {
         { mainMenuButtons, { "NewGame", "Continue", "Settings", "Credits", "Exit" } },
         { pauseMenuButtons, { "Continue", "Settings", "Exit" } }
     };
 
-    std::vector<int> startY = { 180, 150 }; // Posiciones iniciales de los menús
-    std::vector<int> spacing = { 100, 200 }; 
-    //Buttons Load
+    std::vector<int> baseStartY = { 180, 150 }; // Valores base de la posición Y
+    std::vector<float> spacingFactor = { 0.1f, 0.15f }; // Espaciado proporcional a la pantalla
+
+    // Cargar botones
     for (size_t i = 0; i < menus.size(); ++i) {
         menus[i].first.clear();
+        int startY = static_cast<int>(baseStartY[i] * scaleFactor);
+        int spacing = static_cast<int>(height * spacingFactor[i]); // Espaciado dinámico
+
         for (size_t j = 0; j < menus[i].second.size(); ++j) {
-            int posY = startY[i] + j * spacing[i];
+            int posY = startY + j * spacing;
 
             MenuButton btn;
             std::string buttonName = menus[i].second[j];
@@ -107,21 +115,21 @@ bool Menus::PostUpdate()
     {
         return false;
     }
-
     return true;
 }
 
 void Menus::DrawBackground() // Draw background depending on the MenusState
 {
-    SDL_Rect cameraRect = { 0, 0,Engine::GetInstance().window.get()->width,Engine::GetInstance().window.get()->height };
+    SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
+    SDL_Rect cameraRect = { 0, 0,width, height };
     switch (currentState)
     {
     case MenusState::INTRO:
-        Engine::GetInstance().render->DrawTexture(groupLogo, 0, 0, nullptr, logoAlpha);
+        Engine::GetInstance().render->DrawTexture(groupLogo, 0, 0, &cameraRect, logoAlpha);
         break;
         break;
     case MenusState::MAINMENU:
-        Engine::GetInstance().render->DrawTexture(menuBackground, 0, 0, nullptr);
+        Engine::GetInstance().render->DrawTexture(menuBackground, 0, 0, &cameraRect);
         break;
     case MenusState::PAUSE:
         Engine::GetInstance().render->DrawTexture(pauseBackground, cameraRect.x - Engine::GetInstance().render->camera.x, 
@@ -132,7 +140,7 @@ void Menus::DrawBackground() // Draw background depending on the MenusState
             cameraRect.y - Engine::GetInstance().render->camera.y, &cameraRect);
         break;
     case MenusState::CREDITS:
-        Engine::GetInstance().render->DrawTexture(creditsBackground, 0, 0, nullptr);
+        Engine::GetInstance().render->DrawTexture(creditsBackground, 0, 0, &cameraRect);
         break;
     }
 }
@@ -146,22 +154,25 @@ void Menus::DrawButtons()
     else if (currentState == MenusState::PAUSE)
         buttons = &pauseMenuButtons;
 
-    if (buttons)
+    if (buttons && !buttons->empty())
     {
-        for (size_t i = 0; i < buttons->size(); i++)
+        SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
+
+        float scaleFactor = isFullScreen ? 1.5f : 1.0f;
+
+        int buttonWidth = static_cast<int>(width * 0.2f); // Botón 20% del ancho de la pantalla
+        int buttonHeight = static_cast<int>(height * 0.1f); // Botón 10% de la altura de la pantalla
+        int startX = (width - buttonWidth) / 2;
+        int spacing = static_cast<int>(height * 0.12f); // Espaciado del 12% de la altura de la pantalla
+        int startY = static_cast<int>(height * 0.3f); // Posición inicial en 30% de la altura
+
+        for (size_t i = 0; i < buttons->size(); ++i)
         {
-            SDL_Texture* tex = (i == selectedButton) ? (*buttons)[i].texSelected : (*buttons)[i].texDeselected;
+            auto& button = (*buttons)[i];
+            button.rect = { startX, startY + static_cast<int>(i * spacing), buttonWidth, buttonHeight };
 
-            int adjustedX = (*buttons)[i].rect.x;
-            int adjustedY = (*buttons)[i].rect.y;
-
-            if (currentState == MenusState::PAUSE)  
-            {
-                adjustedX -= Engine::GetInstance().render->camera.x;
-                adjustedY -= Engine::GetInstance().render->camera.y;
-            }
-
-            Engine::GetInstance().render->DrawTexture(tex, adjustedX, adjustedY, nullptr);
+            SDL_Texture* tex = (&button == &(*buttons)[selectedButton]) ? button.texSelected : button.texDeselected;
+            Engine::GetInstance().render->DrawTexture(tex, button.rect.x, button.rect.y, nullptr);
         }
     }
 }
@@ -267,7 +278,7 @@ void Menus::MainMenu(float dt)
         case 1: // Continue 
             if (isSaved > 0) {
                 Engine::GetInstance().scene.get()->LoadGameXML();
-                currentState = MenusState::GAME;
+                StartTransition(false, MenusState::GAME);
             }
             break;
         case 2: // Settings
@@ -284,9 +295,6 @@ void Menus::MainMenu(float dt)
         }
     }
 }
-
-
-
 
 void Menus::NewGame()
 {
@@ -372,8 +380,9 @@ void Menus::Settings()
 void Menus::Credits()
 {
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-    {
-
+    {   
+        isFullScreen = !isFullScreen;
+        Engine::GetInstance().window->SetFullScreen(isFullScreen);
         if (previousState == MenusState::PAUSE)
         {
             nextState = MenusState::PAUSE;

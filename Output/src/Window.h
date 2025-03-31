@@ -25,6 +25,7 @@ public:
 	// Retrive window size
 	void GetWindowSize(int& width, int& height) const;
 
+	void SetFullScreen(bool isFullScreen);
 	// Retrieve window scale
 	int GetScale() const;
 
@@ -33,7 +34,7 @@ public:
 	SDL_Window* window;
 
 	std::string title;
-	int width = 1920;
-	int height = 1080;
+	int width = 1280;
+	int height = 720;
 	int scale = 1;
 };

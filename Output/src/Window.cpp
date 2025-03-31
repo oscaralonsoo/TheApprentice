@@ -51,7 +51,6 @@ bool Window::Awake()
 			ret = false;
 		}
 	}
-
 	return ret;
 }
 
@@ -81,6 +80,22 @@ void Window::GetWindowSize(int& width, int& height) const
 {
 	width = this->width;
 	height = this->height;
+}
+
+void Window::SetFullScreen(bool isFullScreen)
+{
+	if (isFullScreen)
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+	else
+		SDL_SetWindowFullscreen(window, 0);
+
+	// Save Config
+	pugi::xml_document config;
+	pugi::xml_parse_result result = config.load_file("config.xml");
+	pugi::xml_node fullScreenData = config.child("config").child("window").child("fullscreen_window");
+	fullScreenData.attribute("value") = isFullScreen;
+
+	config.save_file("config.xml");
 }
 
 int Window::GetScale() const

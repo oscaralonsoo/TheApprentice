@@ -17,6 +17,11 @@ bool Menus::Start()
 {
     currentState = MenusState::MAINMENU;
     LoadTextures();
+    pugi::xml_document config;
+    pugi::xml_parse_result result = config.load_file("config.xml");
+    pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
+
+    isSaved = saveData.attribute("isSaved").as_int();
     return true;
 }
 void Menus::LoadTextures()
@@ -198,12 +203,6 @@ void Menus::CheckCurrentState(float dt)
         break;
     case MenusState::GAME:
         break;
-    case MenusState::NEWGAME:
-        NewGame();
-        break;
-    case MenusState::LOADGAME:
-        Continue();
-        break;
     case MenusState::PAUSE:
         Pause(dt);
         break;
@@ -244,7 +243,18 @@ void Menus::MainMenu(float dt)
     }
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
     {
-        selectedButton = (selectedButton == mainMenuButtons.size() - 1) ? 0 : selectedButton + 1;
+        if (isSaved == 0 && selectedButton == 0)
+        {
+            selectedButton = 2; 
+        }
+        else
+        {
+            selectedButton = (selectedButton == mainMenuButtons.size() - 1) ? 0 : selectedButton + 1;
+        }
+    }
+
+    if (isSaved == 0 && selectedButton == 1) {
+        selectedButton = (selectedButton == 0) ? 2 : selectedButton - 1; 
     }
 
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
@@ -252,10 +262,13 @@ void Menus::MainMenu(float dt)
         switch (selectedButton)
         {
         case 0: // New Game
-            StartTransition(true, MenusState::NEWGAME);
+            NewGame();
             break;
-        case 1: // Continue
-            StartTransition(true, MenusState::GAME);
+        case 1: // Continue 
+            if (isSaved > 0) {
+                Engine::GetInstance().scene.get()->LoadGameXML();
+                currentState = MenusState::GAME;
+            }
             break;
         case 2: // Settings
             inConfig = true;
@@ -272,15 +285,35 @@ void Menus::MainMenu(float dt)
     }
 }
 
+
+
+
 void Menus::NewGame()
 {
-    // TODO --- NEW GAME LOGIC
-    StartTransition(true, MenusState::GAME);
-}
+    isSaved = 0;
+    //Load xml
+    pugi::xml_document config;
+    pugi::xml_parse_result result = config.load_file("config.xml");
+    pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
 
-void Menus::Continue()
-{
-    StartTransition(true, MenusState::GAME);
+    Vector2D playerPos = Engine::GetInstance().scene->GetPlayerPosition();	//Reset Player Pos
+    pugi::xml_node playerNode = saveData.child("player");
+    if (playerNode) {
+        playerNode.attribute("x") = 180;
+        playerNode.attribute("y") = 50;
+    }
+
+    pugi::xml_node sceneNode = saveData.child("scene"); 	
+    if (sceneNode) {
+        sceneNode.attribute("actualScene") = 0; //Reset Actual Scene
+    }
+    if (saveData)
+    {
+        saveData.attribute("isSaved") = Engine::GetInstance().menus->isSaved;
+    }
+    config.save_file("config.xml");	//Save Changes
+ 
+    StartTransition(false, MenusState::GAME);
 }
 
 void Menus::Pause(float dt)

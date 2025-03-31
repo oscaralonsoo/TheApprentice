@@ -28,6 +28,7 @@ enum class ColliderType {
 	ITEM,
 	ENEMY,
 	PLATFORM, 
+	SAVEGAME,
 	DOOR,
 	UNKNOWN
 	// ..

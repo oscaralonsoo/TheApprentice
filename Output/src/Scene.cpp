@@ -159,8 +159,11 @@ void Scene::ChangeScene(int nextScene)
 		if (!path.empty() && !name.empty()) {
 			Engine::GetInstance().map->Load(path, name); // Load New Map
 
-			player->pbody->body->SetLinearVelocity(b2Vec2(0, 0)); // Stop All Movement
-			player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, newPosition.y / PIXELS_PER_METER), 0); // Set New Player Position
+			if (!isLoad)
+			{
+				player->pbody->body->SetLinearVelocity(b2Vec2(0, 0)); // Stop All Movement
+				player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, newPosition.y / PIXELS_PER_METER), 0); // Set New Player Position
+			}
 
 			Engine::GetInstance().entityManager->CreateEnemiesFromXML(configParameters.child("save_data").child("enemies"),true); // Create New Map Enemies
 		}
@@ -170,4 +173,50 @@ void Scene::ChangeScene(int nextScene)
 Vector2D Scene::GetPlayerPosition()
 {
 	return player->GetPosition();
+}
+
+void Scene::SaveGameXML()
+{
+	Engine::GetInstance().menus->isSaved = 1;
+	//Load xml
+	pugi::xml_document config;
+	pugi::xml_parse_result result = config.load_file("config.xml");
+	pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
+
+	Vector2D playerPos = GetPlayerPosition();	//Save Player Pos
+	pugi::xml_node playerNode = saveData.child("player");
+		playerNode.attribute("x") = playerPos.x;
+		playerNode.attribute("y") = playerPos.y;
+
+	pugi::xml_node sceneNode = saveData.child("scene"); 	//Save Actual Scene
+		sceneNode.attribute("actualScene") = nextScene;
+		saveData.attribute("isSaved") = Engine::GetInstance().menus->isSaved;
+	config.save_file("config.xml");	//Save Changes
+
+	Engine::GetInstance().menus->StartTransition(false, Engine::GetInstance().menus->currentState);	// Final Transition
+}
+void Scene::LoadGameXML()
+{
+	isLoad = true;
+	pugi::xml_document config;
+	pugi::xml_parse_result result = config.load_file("config.xml");
+
+	pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
+
+	if (saveData) {
+		pugi::xml_node playerNode = saveData.child("player");
+		if (playerNode) {
+			float playerX = playerNode.attribute("x").as_float();
+			float playerY = playerNode.attribute("y").as_float();
+			player->SetPosition(Vector2D(playerX, playerY)); 
+		}
+
+		pugi::xml_node sceneNode = saveData.child("scene");
+		if (sceneNode) {
+			int savedScene = sceneNode.attribute("actualScene").as_int();
+			nextScene = savedScene;
+			ChangeScene(savedScene);
+		}
+	}
+	isLoad = false;
 }

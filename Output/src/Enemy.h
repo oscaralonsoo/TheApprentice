@@ -32,26 +32,28 @@ public:
 
 	void ResetPath();
 
-	void OnCollision(PhysBody* physA, PhysBody* physB);
+	virtual void OnCollision(PhysBody* physA, PhysBody* physB);
 
-	void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
+	virtual void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
 
 public:
+	//Pathfinding
 	int steps = 0;
 	int maxSteps = 100;
 
-protected:
-	PhysBody* pbody;
 private:
-	bool showPath = false;
+
 	SDL_Texture* texture;
-	const char* texturePath;
+
 	int texW, texH;
 	pugi::xml_node parameters;
 	Animation* currentAnimation = nullptr;
 	Animation idle;
-	Pathfinding* pathfinding;
+	PhysBody* pbody;
 
-	std::vector<Enemy*> enemyList;
+	//Pathfinding
+	bool showPath = false;
+	const char* texturePath;
+	Pathfinding* pathfinding;
 };

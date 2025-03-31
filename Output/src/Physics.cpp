@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "Window.h"
 #include "box2D/box2d.h"
+#include "Menus.h"
 
 Physics::Physics() : Module()
 {
@@ -40,6 +41,8 @@ bool Physics::Start()
 bool Physics::PreUpdate()
 {
 	bool ret = true;
+	if (Engine::GetInstance().menus->currentState != MenusState::GAME) {return ret; }
+
 
 	// Step (update) the World
 	//Get the dt form the engine. Note that dt is in miliseconds and steps in Box2D are in seconds
@@ -78,13 +81,14 @@ PhysBody* Physics::CreateRectangle(int x, int y, int width, int height, bodyType
 	b2Body* b = world->CreateBody(&body);
 	b2PolygonShape box;
 
-	// Convertir el offset de píxeles a metros
+	// Convertir el offset de pï¿½xeles a metros
 	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f,
 		b2Vec2(PIXEL_TO_METERS(offsetX), PIXEL_TO_METERS(offsetY)), 0);
 
 	b2FixtureDef fixture;
 	fixture.shape = &box;
 	fixture.density = 1.0f;
+	fixture.restitution = 0.0f;
 	fixture.friction = 0.0f;
 	b->SetFixedRotation(true);
 	b->ResetMassData();
@@ -122,6 +126,7 @@ PhysBody* Physics::CreateCircle(int x, int y, int radious, bodyType type)
 	b2FixtureDef fixture;
 	fixture.shape = &circle;
 	fixture.density = 1.0f;
+	fixture.restitution = 0.0f;
 	b->ResetMassData();
 
 	// Add fixture to the BODY
@@ -160,6 +165,8 @@ PhysBody* Physics::CreateRectangleSensor(int x, int y, int width, int height, bo
 	fixture.density = 1.0f;
 	fixture.isSensor = true;
 
+	fixture.friction = 0.0f;
+	b->SetFixedRotation(true);
 	// Add fixture to the BODY
 	b->CreateFixture(&fixture);
 
@@ -220,6 +227,10 @@ PhysBody* Physics::CreateChain(int x, int y, int* points, int size, bodyType typ
 bool Physics::PostUpdate()
 {
 	bool ret = true;
+	if (Engine::GetInstance().menus->isPaused || Engine::GetInstance().menus->currentState == MenusState::MAINMENU)
+	{
+		return ret;
+	}
 
 	// Activate or deactivate debug mode
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
@@ -374,19 +385,30 @@ void Physics::EndContact(b2Contact* contact)
 	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData().pointer;
 	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData().pointer;
 
-	if (physA && physA->listener != NULL) {
+	if (physA && physA->listener != NULL && !IsPendingToDelete(physA)) {
 		if (physB) // Ensure physB is also valid
 		{
 			physA->listener->OnCollisionEnd(physA, physB);
 		}
 	}
 
-	if (physB && physB->listener != NULL) {
+	if (physB && physB->listener != NULL && !IsPendingToDelete(physB)) {
 		if (physA) // Ensure physA is also valid
 		{
 			physB->listener->OnCollisionEnd(physB, physA);
 		}
 	}
+}
+
+bool Physics::IsPendingToDelete(PhysBody* physBody) {
+	bool pendingToDelete = false;
+	for (PhysBody* _physBody : bodiesToDelete) {
+		if (_physBody == physBody) {
+			pendingToDelete = true;
+			break;
+		}
+	}
+	return pendingToDelete;
 }
 
 void Physics::DeletePhysBody(PhysBody* physBody) {

@@ -10,7 +10,6 @@
 #include "EntityManager.h"
 #include "Player.h"
 #include "Map.h"
-#include "Item.h"
 #include "Physics.h"
 #include "Scene.h"
 #include "Module.h"
@@ -71,6 +70,7 @@ bool Enemy::Start() {
 bool Enemy::Update(float dt)
 {
 	// Propagate the pathfinding algorithm using A* with the selected heuristic
+
 	ResetPath();	
 
 	steps = 0;
@@ -127,8 +127,9 @@ void Enemy::ResetPath() {
 void Enemy::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
 	{
-	case ColliderType::PLAYER:
+	case ColliderType::ATTACK:
 		LOG("Collided with player - DESTROY");
+
 		Engine::GetInstance().entityManager.get()->DestroyEntity(this);
 		break;
 	}
@@ -138,8 +139,10 @@ void Enemy::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
 {
 	switch (physB->ctype)
 	{
-	case ColliderType::PLAYER:
-		LOG("Collision player");
+	case ColliderType::ATTACK:
+		LOG("Collided with player - DESTROY");
+
+		Engine::GetInstance().entityManager.get()->DestroyEntity(this);
 		break;
 	}
 }

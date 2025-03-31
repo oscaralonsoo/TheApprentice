@@ -25,7 +25,9 @@ public:
 	}
 
 	void Reset() {
-		currentFrame = 0;
+		currentFrame = 0.0f;
+		loopCount = 0;
+		pingpongDirection = 1;
 	}
 
 	bool HasFinished() {

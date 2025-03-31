@@ -10,9 +10,10 @@
 #include "EntityManager.h"
 #include "Player.h"
 #include "Map.h"
-#include "Item.h"
+#include "CaveDrop.h"
 #include "Physics.h"
 #include "Enemy.h"
+#include "Menus.h"
 
 
 Scene::Scene() : Module()
@@ -35,9 +36,6 @@ bool Scene::Awake()
 	player = (Player*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PLAYER);
 	player->SetParameters(configParameters.child("animations").child("player"));
 
-	//L08 Create a new item using the entity manager and set the position to (200, 672) to test
-	Item* item = (Item*) Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
-	item->position = Vector2D(200, 672);
 	return ret;
 }
 
@@ -47,7 +45,7 @@ bool Scene::Start()
 	//L06 TODO 3: Call the function to load the map. 
 	Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx");
 
-	Engine::GetInstance().entityManager->CreateEnemiesFromXML(configParameters.child("save_data").child("enemies"));
+	Engine::GetInstance().entityManager->CreateEnemiesFromXML(configParameters.child("save_data").child("enemies"),false);
 
 	return true;
 }
@@ -61,7 +59,11 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
+	if (Engine::GetInstance().menus->currentState != MenusState::GAME)
+		return true;
+
 	UpdateTransition(dt);
+
 	Engine::GetInstance().render.get()->UpdateCamera(player->GetPosition(), player->GetMovementDirection(), 0.05);
 	
 	//L03 TODO 3: Make the camera movement independent of framerate
@@ -86,8 +88,6 @@ bool Scene::Update(float dt)
 bool Scene::PostUpdate()
 {
 	bool ret = true;
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		ret = false;
 
 	if (transitioning) {
 		SDL_SetRenderDrawBlendMode(Engine::GetInstance().render->renderer, SDL_BLENDMODE_BLEND);
@@ -142,13 +142,10 @@ void Scene::UpdateTransition(float dt)
 // Called before changing the scene
 void Scene::ChangeScene(int nextScene)
 {
-	// CleanUp of the previous Map
-	Engine::GetInstance().map->CleanUp();
-	// TODO --- Enemies & Entities CleanUp
-	Engine::GetInstance().entityManager.get()->DestroyAllEntities();
+	Engine::GetInstance().map->CleanUp(); 	// CleanUp of the previous Map
+	Engine::GetInstance().entityManager.get()->DestroyAllEntities(); // Previous Enemies CleanUp
 
-
-		// Look for the XML node
+	// Look for the XML node
 	std::string mapKey = "Map_" + std::to_string(nextScene);
 	pugi::xml_node mapNode = configParameters.child("maps").child(mapKey.c_str());
 
@@ -159,11 +156,13 @@ void Scene::ChangeScene(int nextScene)
 		if (!path.empty() && !name.empty()) {
 			Engine::GetInstance().map->Load(path, name); // Load New Map
 
-			player->pbody->body->SetLinearVelocity(b2Vec2(0, 0)); // Stop All Movement
-			player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, newPosition.y / PIXELS_PER_METER), 0); // Set New Player Position
+			if (!isLoad)
+			{
+				player->pbody->body->SetLinearVelocity(b2Vec2(0, 0)); // Stop All Movement
+				player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, newPosition.y / PIXELS_PER_METER), 0); // Set New Player Position
+			}
 
-		// Create New Map Enemies
-			Engine::GetInstance().entityManager->CreateEnemiesFromXML(configParameters.child("save_data").child("enemies"));
+			Engine::GetInstance().entityManager->CreateEnemiesFromXML(configParameters.child("save_data").child("enemies"),true); // Create New Map Enemies
 		}
 	}
 }
@@ -171,4 +170,50 @@ void Scene::ChangeScene(int nextScene)
 Vector2D Scene::GetPlayerPosition()
 {
 	return player->GetPosition();
+}
+
+void Scene::SaveGameXML()
+{
+	Engine::GetInstance().menus->isSaved = 1;
+	//Load xml
+	pugi::xml_document config;
+	pugi::xml_parse_result result = config.load_file("config.xml");
+	pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
+
+	Vector2D playerPos = GetPlayerPosition();	//Save Player Pos
+	pugi::xml_node playerNode = saveData.child("player");
+		playerNode.attribute("x") = playerPos.x;
+		playerNode.attribute("y") = playerPos.y;
+
+	pugi::xml_node sceneNode = saveData.child("scene"); 	//Save Actual Scene
+		sceneNode.attribute("actualScene") = nextScene;
+		saveData.attribute("isSaved") = Engine::GetInstance().menus->isSaved;
+	config.save_file("config.xml");	//Save Changes
+
+	Engine::GetInstance().menus->StartTransition(false, Engine::GetInstance().menus->currentState);	// Final Transition
+}
+void Scene::LoadGameXML()
+{
+	isLoad = true;
+	pugi::xml_document config;
+	pugi::xml_parse_result result = config.load_file("config.xml");
+
+	pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
+
+	if (saveData) {
+		pugi::xml_node playerNode = saveData.child("player");
+		if (playerNode) {
+			float playerX = playerNode.attribute("x").as_float();
+			float playerY = playerNode.attribute("y").as_float();
+			player->SetPosition(Vector2D(playerX, playerY)); 
+		}
+
+		pugi::xml_node sceneNode = saveData.child("scene");
+		if (sceneNode) {
+			int savedScene = sceneNode.attribute("actualScene").as_int();
+			nextScene = savedScene;
+			ChangeScene(savedScene);
+		}
+	}
+	isLoad = false;
 }

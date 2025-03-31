@@ -6,16 +6,6 @@
 
 struct SDL_Texture;
 
-enum class SceneState 
-{
-	MAINMENU,
-	NEWGAME,
-	CONTINUE,
-	PAUSE,
-	SETTINGS,
-	CREDITS,
-	EXIT
-};
 class Scene : public Module
 {
 public:
@@ -53,20 +43,24 @@ public:
 	void ChangeScene(int nextScene);
 
 	Vector2D GetPlayerPosition();
+	// Called When Saving Game
+	void SaveGameXML();
+	// Called When Loading Game
+	void LoadGameXML();
 
 public:
 
 	Vector2D newPosition;
-
+	bool transitioning = false;
+	bool saveGameZone = false;
+	int nextScene = 0;
 private:
 	SDL_Texture* img;
-
 	//L03: TODO 3b: Declare a Player attribute
 	Player* player;
-
+	bool isLoad = false;
 	//transition 
-	bool transitioning = false;
 	bool fadingIn = false;
 	float transitionAlpha = 0.0f;
-	int nextScene;
+
 };

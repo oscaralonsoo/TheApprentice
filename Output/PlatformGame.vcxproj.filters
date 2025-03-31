@@ -63,9 +63,6 @@
     <ClCompile Include="src\EntityManager.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="src\Item.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="src\Player.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
@@ -96,9 +93,6 @@
     <ClCompile Include="src\PlatformGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\PlayerAnimation.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
     <ClCompile Include="src\Bloodrusher.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
@@ -106,6 +100,18 @@
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="src\Pathfinding.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PlayerAnimation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Menus.cpp">
+      <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CaveDrop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PlayerMechanics.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
   </ItemGroup>
@@ -132,9 +138,6 @@
       <Filter>Source Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="src\EntityManager.h">
-      <Filter>Source Files\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Item.h">
       <Filter>Source Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="src\Player.h">
@@ -164,12 +167,6 @@
     <ClInclude Include="src\Physics.h">
       <Filter>Source Files\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Animation.h">
-      <Filter>Source Files\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\PlayerAnimation.h">
-      <Filter>Source Files\Game</Filter>
-    </ClInclude>
     <ClInclude Include="src\Bloodrusher.h">
       <Filter>Source Files\Entities</Filter>
     </ClInclude>
@@ -179,6 +176,15 @@
       <Filter>Source Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="src\Pathfinding.h">
+      <Filter>Source Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Animation.h" />
+    <ClInclude Include="src\PlayerAnimation.h" />
+    <ClInclude Include="src\Menus.h">
+      <Filter>Source Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CaveDrop.h" />
+    <ClInclude Include="src\PlayerMechanics.h">
       <Filter>Source Files\Entities</Filter>
     </ClInclude>
   </ItemGroup>

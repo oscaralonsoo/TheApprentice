@@ -26,11 +26,15 @@ enum bodyType {
 enum class ColliderType {
 	PLAYER, 
 	ITEM,
+	WALL,
+	DOWN_CAMERA,
+	ATTACK,
+	CAVEDROP,
 	ENEMY,
 	PLATFORM, 
+	SAVEGAME,
 	DOOR,
 	UNKNOWN
-	// ..
 };
 
 // Small class to return to other modules to track position and rotation of physics bodies
@@ -85,6 +89,7 @@ public:
 	void EndContact(b2Contact* contact);
 
 	void DeletePhysBody(PhysBody* physBody);
+	bool IsPendingToDelete(PhysBody* physBody);
 
 	// List of physics bodies
 

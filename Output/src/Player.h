@@ -3,7 +3,11 @@
 #include "Entity.h"
 #include "SDL2/SDL.h"
 #include "Box2D/Box2D.h"
-#include "PlayerAnimation.h"  // Añadimos la clase de animaciones
+#include "PlayerAnimation.h"
+#include "Timer.h"
+
+// Añadido
+#include "PlayerMechanics.h"
 
 struct SDL_Texture;
 
@@ -28,31 +32,25 @@ public:
 	}
 	void SetPosition(Vector2D pos);
 	Vector2D GetPosition() const;
-	int GetMovementDirection() const { return movementDirection; }
 
-	int targetScene= 0;
+	// Esto lo usa Mechanics
+	void SetState(const std::string& newState) { state = newState; }
+	const std::string& GetState() const { return state; }
+
+	int targetScene = 0;
 	PhysBody* pbody;
 
-private:
-	// Manejo de input
-	void HandleInput();
-	void HandleJump();
+	int GetMovementDirection() const;
 
-	// Parámetros del jugador
-	float speed = 5.0f;
-	SDL_Texture* texture = NULL;
+private:
+	SDL_Texture* texture = nullptr;
 	int texW, texH;
 
-	// Física del jugador
-
-	float jumpForce = 10.5f;
-	bool isJumping = false;
-	int movementDirection = 0;
-
-	// Animaciones del jugador
 	PlayerAnimation animation;
 	std::string state = "idle";
 
-	// Parameters config.xml
 	pugi::xml_node parameters;
+
+	// Nueva clase para manejar todas las mecánicas
+	PlayerMechanics mechanics;
 };

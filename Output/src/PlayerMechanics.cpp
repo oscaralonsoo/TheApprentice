@@ -55,7 +55,7 @@ void PlayerMechanics::Update(float dt) {
     }
 
     if (attackSensor != nullptr) {
-        int offsetX = (movementDirection > 0) ? size / 2 : -size / 2;
+        int offsetX = (movementDirection > 0) ? 48 : -48;
         int playerX = METERS_TO_PIXELS(player->pbody->body->GetPosition().x) + offsetX;
         int playerY = METERS_TO_PIXELS(player->pbody->body->GetPosition().y);
 
@@ -232,12 +232,12 @@ void PlayerMechanics::HandleWallSlide() {
 }
 
 void PlayerMechanics::CreateAttackSensor() {
-    int offsetX = (movementDirection > 0) ? size / 2 : -size / 2;
+    int offsetX = (movementDirection > 0) ? 48 : -48;
 
     playerAttackX = METERS_TO_PIXELS(player->pbody->body->GetPosition().x) + offsetX;
     playerAttackY = METERS_TO_PIXELS(player->pbody->body->GetPosition().y);
 
-    attackSensor = Engine::GetInstance().physics->CreateRectangleSensor(playerAttackX, playerAttackY, size, size, KINEMATIC);
+    attackSensor = Engine::GetInstance().physics->CreateRectangleSensor(playerAttackX, playerAttackY, 32, 64, KINEMATIC);
     attackSensor->ctype = ColliderType::ATTACK;
     attackSensor->listener = player;
 

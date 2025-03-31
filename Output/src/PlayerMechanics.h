@@ -82,7 +82,6 @@ private:
     PhysBody* attackSensor = nullptr;
     Timer attackTimer;
     float attackDuration = 200.0f;
-    int size = 50;
     int playerAttackX;
     int playerAttackY;
 };

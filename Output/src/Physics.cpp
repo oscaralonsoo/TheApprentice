@@ -82,6 +82,8 @@ PhysBody* Physics::CreateRectangle(int x, int y, int width, int height, bodyType
 	b2FixtureDef fixture;
 	fixture.shape = &box;
 	fixture.density = 1.0f;
+	fixture.friction = 0.0f;
+	b->SetFixedRotation(true);
 	b->ResetMassData();
 
 	b->CreateFixture(&fixture);
@@ -155,6 +157,8 @@ PhysBody* Physics::CreateRectangleSensor(int x, int y, int width, int height, bo
 	fixture.density = 1.0f;
 	fixture.isSensor = true;
 
+	fixture.friction = 0.0f;
+	b->SetFixedRotation(true);
 	// Add fixture to the BODY
 	b->CreateFixture(&fixture);
 

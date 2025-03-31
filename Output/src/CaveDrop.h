@@ -4,14 +4,19 @@
 #include "SDL2/SDL.h"
 #include "Animation.h"
 #include "Physics.h"
+#include "Timer.h"
 
 struct SDL_Texture;
+
+const int MIN_RANDOM_TIME = 1;
+const int MAX_RANDOM_TIME = 10;
 
 enum class CaveDropStates
 {
 	START,
 	FALL,
-	SPLASH
+	SPLASH,
+	DISABLED
 };
 
 class CaveDrop : public Entity
@@ -25,10 +30,6 @@ public:
 	bool Update(float dt);
 	bool CleanUp();
 
-	void ChangeState(CaveDropStates newState);
-	bool HasHitGround();
-	void MarkForDeletion();
-
 	void OnCollision(PhysBody* physA, PhysBody* physB);
 	void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
@@ -41,7 +42,11 @@ private:
 	Animation fallAnim;
 	Animation splashAnim;
 
+	Vector2D initPos;
 	CaveDropStates state = CaveDropStates::START;
+
+	int randomTime;
+	Timer dropTimer;
 
 	PhysBody* pbody;
 };

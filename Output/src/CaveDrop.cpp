@@ -7,8 +7,10 @@
 #include "Scene.h"
 #include "Log.h"
 #include "Physics.h"
+#include <cstdlib>
+#include <ctime>
 
-CaveDrop::CaveDrop() : Entity(EntityType::CAVEDROP), state(CaveDropStates::START)
+CaveDrop::CaveDrop() : Entity(EntityType::CAVEDROP), state(CaveDropStates::DISABLED)
 {
     name = "CaveDrop";
 }
@@ -28,8 +30,7 @@ bool CaveDrop::Start() {
     // Cargar textura y animaciones
     texture = Engine::GetInstance().textures->Load(caveDropNode.attribute("texture").as_string());
     startAnim.LoadAnimations(caveDropNode.child("start"));
-    //fallAnim.LoadAnimations(caveDropNode.child("fall"));
-    //splashAnim.LoadAnimations(caveDropNode.child("splash"));
+    fallAnim.LoadAnimations(caveDropNode.child("fall"));
 
     texW = caveDropNode.attribute("w").as_int();
     texH = caveDropNode.attribute("h").as_int();
@@ -38,69 +39,72 @@ bool CaveDrop::Start() {
     pbody = Engine::GetInstance().physics->CreateRectangleSensor((int)position.getX(), (int)position.getY(), texW, texH, bodyType::DYNAMIC);
     pbody->ctype = ColliderType::CAVEDROP;
     pbody->listener = this;
+    pbody->body->SetGravityScale(0);
 
     currentAnimation = &startAnim;
+    initPos = position;
+
+    randomTime = (std::rand() % MAX_RANDOM_TIME * 1000) + MIN_RANDOM_TIME * 1000;
+    dropTimer.Start();
+
     return true;
 }
 
 bool CaveDrop::Update(float dt) {
+    b2Vec2 velocity = b2Vec2(pbody->body->GetLinearVelocity());
+
+    switch (state) {
+    case CaveDropStates::DISABLED:
+        currentAnimation = nullptr;
+
+        if (dropTimer.ReadMSec() >= randomTime || dropTimer.ReadMSec() == 0) {
+            state = CaveDropStates::START;
+            dropTimer.Start();
+        }
+        break;
+    case CaveDropStates::START:
+        if (currentAnimation != &startAnim) {
+            currentAnimation = &startAnim;
+            currentAnimation->Reset();
+        }
+        if (position != initPos) pbody->body->SetTransform(b2Vec2(initPos.x / PIXELS_PER_METER, initPos.y / PIXELS_PER_METER), 0);
+        if (currentAnimation->HasFinished()) state = CaveDropStates::FALL;
+        break;
+
+    case CaveDropStates::FALL:
+        if (currentAnimation != &fallAnim) {
+            currentAnimation = &fallAnim;
+            currentAnimation->Reset();
+        }
+        if (velocity.y == 0) pbody->body->ApplyForceToCenter(b2Vec2(0, 0.1f), true);
+        pbody->body->SetGravityScale(3.0f);
+        break;
+
+    case CaveDropStates::SPLASH:
+        currentAnimation = nullptr;
+
+        pbody->body->SetGravityScale(0);
+        pbody->body->SetLinearVelocity(b2Vec2_zero);
+
+        state = CaveDropStates::DISABLED;
+
+        randomTime = (std::rand() % MAX_RANDOM_TIME * 1000) + MIN_RANDOM_TIME * 1000;
+        dropTimer.Start();
+        break;
+    }
+
     // Actualizar posición basada en el cuerpo físico
     b2Transform pbodyPos = pbody->body->GetTransform();
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
-    // Manejo de estados
-    switch (state) {
-    case CaveDropStates::START:
-        if (currentAnimation->HasFinished()) {
-            ChangeState(CaveDropStates::FALL);
-        }
-        break;
-
-    case CaveDropStates::FALL:
-        // Aquí podrías añadir condiciones como colisión con el suelo
-        if (HasHitGround()) {
-            ChangeState(CaveDropStates::SPLASH);
-        }
-        break;
-
-    case CaveDropStates::SPLASH:
-        if (currentAnimation->HasFinished()) {
-            MarkForDeletion(); // Si necesitas eliminar la gota después del splash
-        }
-        break;
-    }
-
     // Dibujar animación actual
-    Engine::GetInstance().render->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
-    currentAnimation->Update();
+    if (currentAnimation != nullptr) {
+        Engine::GetInstance().render->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
+        currentAnimation->Update();
+    }
 
     return true;
-}
-
-void CaveDrop::ChangeState(CaveDropStates newState) {
-    state = newState;
-
-    switch (state) {
-    case CaveDropStates::START:
-        currentAnimation = &startAnim;
-        break;
-    case CaveDropStates::FALL:
-        currentAnimation = &fallAnim;
-        break;
-    case CaveDropStates::SPLASH:
-        currentAnimation = &splashAnim;
-        break;
-    }
-    currentAnimation->Reset();
-}
-
-bool CaveDrop::HasHitGround() {
-    return position.getY();
-}
-
-void CaveDrop::MarkForDeletion() {
-    LOG("CaveDrop eliminado");
 }
 
 bool CaveDrop::CleanUp() {
@@ -108,9 +112,8 @@ bool CaveDrop::CleanUp() {
 }
 
 void CaveDrop::OnCollision(PhysBody* physA, PhysBody* physB) {
-    printf("entra");
+    if (state == CaveDropStates::FALL) state = CaveDropStates::SPLASH;
 }
 
 void CaveDrop::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
-
 }

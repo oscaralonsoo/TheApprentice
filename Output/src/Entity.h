@@ -6,9 +6,9 @@
 enum class EntityType
 {
 	PLAYER,
-	ITEM,
 	ENEMY,
 	BLOODRUSHER,
+	CAVEDROP,
 	UNKNOWN
 };
 

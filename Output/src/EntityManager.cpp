@@ -4,7 +4,7 @@
 #include "Textures.h"
 #include "Scene.h"
 #include "Log.h"
-#include "Item.h"
+#include "CaveDrop.h"
 #include "Bloodrusher.h"
 
 EntityManager::EntityManager() : Module()
@@ -73,8 +73,8 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::PLAYER:
 		entity = new Player();
 		break;
-	case EntityType::ITEM:
-		entity = new Item();
+	case EntityType::CAVEDROP:
+		entity = new CaveDrop();
 		break;
 	case EntityType::BLOODRUSHER:
 		entity = new Bloodrusher();

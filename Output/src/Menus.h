@@ -9,12 +9,10 @@ enum class MenusState
 {
     INTRO,
     MAINMENU,
-    NEWGAME,
-    CONTINUE,
-    PAUSE,
+    GAME,
     SETTINGS,
     CREDITS,
-    GAME,
+    PAUSE,
     NONE,
     EXIT
 };
@@ -43,7 +41,6 @@ public:
     void Intro(float dt);
     void MainMenu(float dt);
     void NewGame();
-    void Continue();
     void Pause(float dt);
     void Settings();
     void Credits();
@@ -59,11 +56,12 @@ public:
     MenusState previousState;
     bool isPaused = false;
     bool inMainMenu = false;
-
+    bool isExit = false;
+    bool inTransition = false;
+    int isSaved = 0;
 private:
 
     //Flags
-    bool inTransition = false;
     bool fastTransition = false;
     bool fadingIn = false;
     bool inConfig = false;

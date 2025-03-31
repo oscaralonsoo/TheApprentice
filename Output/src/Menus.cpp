@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include "Render.h"
 #include "Window.h"
+#include "Engine.h"
 
 Menus::Menus() : currentState(MenusState::MAINMENU), transitionAlpha(0.0f), inTransition(false), fadingIn(false), nextState(MenusState::NONE), 
 fastTransition(false), menuBackground(nullptr), pauseBackground(nullptr) {}
@@ -16,57 +17,55 @@ bool Menus::Start()
 {
     currentState = MenusState::MAINMENU;
     LoadTextures();
+    pugi::xml_document config;
+    pugi::xml_parse_result result = config.load_file("config.xml");
+    pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
+
+    isSaved = saveData.attribute("isSaved").as_int();
     return true;
 }
-
 void Menus::LoadTextures()
 {
-    //Load Background Textures
-    groupLogo = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/Logo.png");
-    menuBackground = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/MainMenuBackground.png");
-    pauseBackground = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/PauseMenuBackground.png");
-    creditsBackground = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/CreditsBackground.png");
-    settingsBackground = Engine::GetInstance().render->LoadTexture("Assets/Textures/Menus/SettingsBackground.png");
+    // Background Textures Load
+    std::vector<std::pair<SDL_Texture**, std::string>> backgrounds = {
+        { &groupLogo, "Logo" },
+        { &menuBackground, "MainMenuBackground" },
+        { &pauseBackground, "PauseMenuBackground" },
+        { &creditsBackground, "CreditsBackground" },
+        { &settingsBackground, "SettingsBackground" }
+    };
 
+    for (auto& bg : backgrounds) {
+        *bg.first = Engine::GetInstance().render->LoadTexture(("Assets/Textures/Menus/" + bg.second + ".png").c_str());
+    }
 
+    // Button Config
     const int screenWidth = Engine::GetInstance().window->width;
     const int buttonWidth = 200;
     const int buttonHeight = 50;
     const int startX = (screenWidth - buttonWidth) / 2;
-    const int startY = 230;
-    const int buttonSpacing = 110;    
 
-
-    mainMenuButtons.clear();
-    pauseMenuButtons.clear();
-
-
-    std::vector<std::tuple<std::string, int>> buttonData = {
-        {"Continue", startY},
-        {"Settings", startY + buttonSpacing},
-        {"Credits", startY + buttonSpacing * 2},
-        {"Exit", startY + buttonSpacing * 3}
+    std::vector<std::pair<std::vector<MenuButton>&, std::vector<std::string>>> menus = {
+        { mainMenuButtons, { "NewGame", "Continue", "Settings", "Credits", "Exit" } },
+        { pauseMenuButtons, { "Continue", "Settings", "Exit" } }
     };
 
-    // Create Buttons
-    for (size_t i = 0; i < buttonData.size(); ++i)
-    {
-        const std::string& buttonName = std::get<0>(buttonData[i]);
-        const int posY = std::get<1>(buttonData[i]);
+    std::vector<int> startY = { 180, 150 }; // Posiciones iniciales de los menús
+    std::vector<int> spacing = { 100, 200 }; 
+    //Buttons Load
+    for (size_t i = 0; i < menus.size(); ++i) {
+        menus[i].first.clear();
+        for (size_t j = 0; j < menus[i].second.size(); ++j) {
+            int posY = startY[i] + j * spacing[i];
 
-        MenuButton btn;
-        btn.texDeselected = Engine::GetInstance().render->LoadTexture(("Assets/Textures/Menus/Buttons/" + buttonName + "_disselected.png").c_str());
-        btn.texSelected = Engine::GetInstance().render->LoadTexture(("Assets/Textures/Menus/Buttons/" + buttonName + "_Selected.png").c_str());
-        btn.rect = { startX, posY, buttonWidth, buttonHeight };
+            MenuButton btn;
+            std::string buttonName = menus[i].second[j];
+            btn.texDeselected = Engine::GetInstance().render->LoadTexture(("Assets/Textures/Menus/Buttons/" + buttonName + "_disselected.png").c_str());
+            btn.texSelected = Engine::GetInstance().render->LoadTexture(("Assets/Textures/Menus/Buttons/" + buttonName + "_Selected.png").c_str());
+            btn.rect = { startX, posY, buttonWidth, buttonHeight };
 
-        mainMenuButtons.push_back(btn);
-        if (buttonName != "Credits") 
-            pauseMenuButtons.push_back(btn);
-    }
-
-    for (size_t i = 0; i < pauseMenuButtons.size(); ++i)
-    {
-        pauseMenuButtons[i].rect.y = startY + (i * buttonSpacing); 
+            menus[i].first.push_back(btn);
+        }
     }
 }
 
@@ -103,6 +102,12 @@ bool Menus::PostUpdate()
 
     if (inTransition)
         ApplyTransitionEffect();
+
+    if (isExit)
+    {
+        return false;
+    }
+
     return true;
 }
 
@@ -198,12 +203,6 @@ void Menus::CheckCurrentState(float dt)
         break;
     case MenusState::GAME:
         break;
-    case MenusState::NEWGAME:
-        NewGame();
-        break;
-    case MenusState::CONTINUE:
-        Continue();
-        break;
     case MenusState::PAUSE:
         Pause(dt);
         break;
@@ -214,7 +213,7 @@ void Menus::CheckCurrentState(float dt)
         Credits();
         break;
     case MenusState::EXIT:
-        exit(1);
+        isExit = true;
         break;
     }
 }
@@ -244,39 +243,77 @@ void Menus::MainMenu(float dt)
     }
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
     {
-        selectedButton = (selectedButton == mainMenuButtons.size() - 1) ? 0 : selectedButton + 1;
+        if (isSaved == 0 && selectedButton == 0)
+        {
+            selectedButton = 2; 
+        }
+        else
+        {
+            selectedButton = (selectedButton == mainMenuButtons.size() - 1) ? 0 : selectedButton + 1;
+        }
+    }
+
+    if (isSaved == 0 && selectedButton == 1) {
+        selectedButton = (selectedButton == 0) ? 2 : selectedButton - 1; 
     }
 
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
     {
         switch (selectedButton)
         {
-        case 0: // Continue
-            StartTransition(true, MenusState::GAME);
+        case 0: // New Game
+            NewGame();
             break;
-        case 1: // Settings
+        case 1: // Continue 
+            if (isSaved > 0) {
+                Engine::GetInstance().scene.get()->LoadGameXML();
+                currentState = MenusState::GAME;
+            }
+            break;
+        case 2: // Settings
             inConfig = true;
             StartTransition(true, MenusState::SETTINGS);
             break;
-        case 2: // Credits
+        case 3: // Credits
             inCredits = true;
             StartTransition(true, MenusState::CREDITS);
             break;
-        case 3: // Exit
+        case 4: // Exit
             currentState = MenusState::EXIT;
             break;
         }
     }
 }
 
+
+
+
 void Menus::NewGame()
 {
-    // TODO --- New Game
-}
+    isSaved = 0;
+    //Load xml
+    pugi::xml_document config;
+    pugi::xml_parse_result result = config.load_file("config.xml");
+    pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
 
-void Menus::Continue()
-{
-    // TODO --- Load Previous Game
+    Vector2D playerPos = Engine::GetInstance().scene->GetPlayerPosition();	//Reset Player Pos
+    pugi::xml_node playerNode = saveData.child("player");
+    if (playerNode) {
+        playerNode.attribute("x") = 180;
+        playerNode.attribute("y") = 50;
+    }
+
+    pugi::xml_node sceneNode = saveData.child("scene"); 	
+    if (sceneNode) {
+        sceneNode.attribute("actualScene") = 0; //Reset Actual Scene
+    }
+    if (saveData)
+    {
+        saveData.attribute("isSaved") = Engine::GetInstance().menus->isSaved;
+    }
+    config.save_file("config.xml");	//Save Changes
+ 
+    StartTransition(false, MenusState::GAME);
 }
 
 void Menus::Pause(float dt)

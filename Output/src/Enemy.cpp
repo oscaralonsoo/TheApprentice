@@ -10,7 +10,6 @@
 #include "EntityManager.h"
 #include "Player.h"
 #include "Map.h"
-#include "Item.h"
 #include "Physics.h"
 #include "Scene.h"
 #include "Module.h"

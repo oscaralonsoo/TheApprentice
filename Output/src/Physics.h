@@ -29,11 +29,12 @@ enum class ColliderType {
 	WALL,
 	DOWN_CAMERA,
 	ATTACK,
+	CAVEDROP,
 	ENEMY,
 	PLATFORM, 
+	SAVEGAME,
 	DOOR,
 	UNKNOWN
-	// ..
 };
 
 // Small class to return to other modules to track position and rotation of physics bodies

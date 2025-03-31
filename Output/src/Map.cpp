@@ -7,6 +7,7 @@
 #include "Window.h"
 #include <math.h>
 #include "Enemy.h"
+#include "CaveDrop.h"
 #include "Engine.h"
 #include "EntityManager.h"
 
@@ -223,7 +224,7 @@ bool Map::Load(std::string path, std::string fileName)
                     LOG("Creating collider at x: %d, y: %d, width: %d, height: %d", x + (width / 2), y + (height / 2), width, height);
                 }
             }
-            if (objectGroupName == "Wall") // Objects from layer Collisions
+            else if (objectGroupName == "Wall") // Objects from layer Collisions
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
                 {
@@ -236,23 +237,6 @@ bool Map::Load(std::string path, std::string fileName)
                     wallCollider->ctype = ColliderType::WALL;
 
                     Engine::GetInstance().physics->listToDelete.push_back(wallCollider);
-
-                    LOG("Creating collider at x: %d, y: %d, width: %d, height: %d", x + (width / 2), y + (height / 2), width, height);
-                }
-            }
-            else if (objectGroupName == "Down_Camera") // Objects from layer Collisions
-            {
-                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
-                {
-                    int x = objectNode.attribute("x").as_int();
-                    int y = objectNode.attribute("y").as_int();
-                    int width = objectNode.attribute("width").as_int();
-                    int height = objectNode.attribute("height").as_int();
-
-                    PhysBody* sensorDownCamera = Engine::GetInstance().physics->CreateRectangleSensor(x + (width / 2), y + (height / 2), width, height, STATIC);
-                    sensorDownCamera->ctype = ColliderType::DOWN_CAMERA;
-
-                    Engine::GetInstance().physics->listToDelete.push_back(sensorDownCamera);
 
                     LOG("Creating collider at x: %d, y: %d, width: %d, height: %d", x + (width / 2), y + (height / 2), width, height);
                 }
@@ -296,6 +280,12 @@ bool Map::Load(std::string path, std::string fileName)
 
                     LOG("Creating Door at x: %d, y: %d, width: %d, height: %d", x + (width / 2), y + (height / 2), width, height);
                 }
+            }
+            else if (objectGroupName == "SaveGame") // Objects from layer SaveGame
+            {   PhysBody* saveGameCollider = Engine::GetInstance().physics->CreateRectangle(x + (width / 2), y + (height / 2), width, height, STATIC);
+                saveGameCollider->ctype = ColliderType::SAVEGAME;
+
+                Engine::GetInstance().physics->listToDelete.push_back(saveGameCollider);
             }
         }
         for (const auto& mapLayer : mapData.layers) {
@@ -345,18 +335,21 @@ bool Map::Load(std::string path, std::string fileName)
                 loadFile.save_file("config.xml");
                 Engine::GetInstance().UpdateConfig();
             }
-            //if (mapLayer->name == "Trigger") {
-            //    for (int i = 0; i < mapData.width; i++) {
-            //        for (int j = 0; j < mapData.height; j++) {
-            //            int gid = mapLayer->Get(i, j);
-            //            if (gid == 2) {
-            //                Vector2D mapCoord = MapToWorld(i, j);
-            //                PhysBody* c1 = Engine::GetInstance().physics.get()->CreateRectangleSensor(mapCoord.getX() + mapData.tileWidth / 2, mapCoord.getY() + mapData.tileHeight / 2, mapData.tileWidth, mapData.tileHeight, STATIC);
-            //                c1->ctype = ColliderType::DOWN_CAMERA;
-            //            }
-            //        }
-            //    }
-            //}
+            if (mapLayer->name == "CaveDrop") {
+                for (int i = 0; i < mapData.width; i++) {
+                    for (int j = 0; j < mapData.height; j++) {
+                        int gid = mapLayer->Get(i, j);
+                        if (gid != 0)
+                        {
+                            Vector2D mapCoord = MapToWorld(i, j);
+
+                            CaveDrop* caveDrop = (CaveDrop*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CAVEDROP);
+                            caveDrop->position = Vector2D(mapCoord.x, mapCoord.y);
+                            caveDrop->Start();
+                        }
+                    }
+                }
+            }
         }
         
         ret = true;

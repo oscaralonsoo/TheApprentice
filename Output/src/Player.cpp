@@ -151,6 +151,10 @@ void Player::HandleInput() {
 	else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
 		state = "attack";
 	}
+    else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_W) == KEY_DOWN && Engine::GetInstance().scene->saveGameZone && !Engine::GetInstance().menus->inTransition)
+    {
+        Engine::GetInstance().scene.get()->SaveGameXML();
+    }
 	else {
 		state = "idle";
 	}
@@ -195,28 +199,23 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::DOOR:
          LOG("Collision DOOR");
-
-        // TargetScene From collider
-        targetScene = physB->targetScene;
+        targetScene = physB->targetScene; // TargetScene From collider
 
         // Player Position From Collider
         Engine::GetInstance().scene->newPosition.x = physB->playerPosX;
         Engine::GetInstance().scene->newPosition.y = physB->playerPosY;
 
         Engine::GetInstance().scene.get()->StartTransition(targetScene); // Start Loading scene
-
         break;
     case ColliderType::ENEMY:
          LOG("Collision ENEMY");
-
-            // TODO --- DESTRUCCI�N DE ENEMIGO & PLAYER DAMAGE LOGIC
-
-         break;
-	default:
-		//LOG("Collision UNKNOWN");
-		break;
-	}
-}
+        // TODO --- DESTRUCCI�N DE ENEMIGO & PLAYER DAMAGE LOGIC
+        break;
+    default:
+            //LOG("Collision UNKNOWN");
+        break;
+    }
+}                    
 
 void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
@@ -231,7 +230,22 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     case ColliderType::DOWN_CAMERA:
         wasInDownCameraZone = false;
         break;
+    case ColliderType::SAVEGAME:
+        LOG("Collision SAVEGAME");
+        Engine::GetInstance().scene->saveGameZone = true;
+        break;
     default:
+        LOG("Collision UNKNOWN");
+        break;
+    }
+}
+
+void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
+	LOG("End Collision");
+    switch (physB->ctype) {
+    case ColliderType::SAVEGAME:
+        LOG("Collision SAVEGAME");
+       Engine::GetInstance().scene->saveGameZone = false;
         break;
     }
 }

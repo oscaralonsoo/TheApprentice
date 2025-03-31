@@ -31,6 +31,7 @@ bool CaveDrop::Start() {
     texture = Engine::GetInstance().textures->Load(caveDropNode.attribute("texture").as_string());
     startAnim.LoadAnimations(caveDropNode.child("start"));
     fallAnim.LoadAnimations(caveDropNode.child("fall"));
+    splashAnim.LoadAnimations(caveDropNode.child("splash"));
 
     texW = caveDropNode.attribute("w").as_int();
     texH = caveDropNode.attribute("h").as_int();
@@ -81,15 +82,21 @@ bool CaveDrop::Update(float dt) {
         break;
 
     case CaveDropStates::SPLASH:
-        currentAnimation = nullptr;
+        if (currentAnimation != &splashAnim) {
+            currentAnimation = &splashAnim;
+            currentAnimation->Reset();
+        }
 
         pbody->body->SetGravityScale(0);
         pbody->body->SetLinearVelocity(b2Vec2_zero);
 
-        state = CaveDropStates::DISABLED;
+        if (currentAnimation->HasFinished()) {
+            state = CaveDropStates::DISABLED;
 
-        randomTime = (std::rand() % MAX_RANDOM_TIME * 1000) + MIN_RANDOM_TIME * 1000;
-        dropTimer.Start();
+            randomTime = (std::rand() % MAX_RANDOM_TIME * 1000) + MIN_RANDOM_TIME * 1000;
+            dropTimer.Start();
+        }
+            
         break;
     }
 

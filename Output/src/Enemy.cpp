@@ -127,7 +127,7 @@ void Enemy::ResetPath() {
 void Enemy::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
 	{
-	case ColliderType::PLAYER:
+	case ColliderType::ATTACK:
 		LOG("Collided with player - DESTROY");
 
 		Engine::GetInstance().entityManager.get()->DestroyEntity(this);
@@ -139,7 +139,7 @@ void Enemy::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
 {
 	switch (physB->ctype)
 	{
-	case ColliderType::PLAYER:
+	case ColliderType::ATTACK:
 		LOG("Collided with player - DESTROY");
 
 		Engine::GetInstance().entityManager.get()->DestroyEntity(this);

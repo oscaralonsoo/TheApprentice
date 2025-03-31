@@ -233,6 +233,11 @@ bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uin
 
 void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection, float smoothing)
 {
+	if (cameraLocked)
+		return;
+
+	cameraYOffset += (targetCameraYOffset - cameraYOffset) * yOffsetSmoothing;
+	
 	int offsetX = -110 * movementDirection;
 
 	mapWidthPx = Engine::GetInstance().map->GetMapWidth();
@@ -240,17 +245,71 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 	
 	targetX = static_cast<int>(targetPosition.x);
 	targetY = static_cast<int>(targetPosition.y);
-	
-	camera.x += static_cast<int>((-targetX + camera.w / 2 + offsetX - camera.x) * smoothing);
-	
-	followMargin = 100; 
-	cameraCenterY = -camera.y + camera.h / 2; 
-	
-	if (targetY < cameraCenterY - followMargin || targetY > cameraCenterY + followMargin)
-	{
-		
-		camera.y += static_cast<int>((-targetY + camera.h / 2 - camera.y) * smoothing);
+
+	// ----------- Cámara look-ahead horizontal con retardo -----------
+
+	if (movementDirection != 0) {
+		if (movementDirection == lastMoveDir) {
+			lookAheadCounter++;
+			if (lookAheadCounter >= lookAheadDelayFrames) {
+				cameraLookAheadTarget = lookAheadDistance * movementDirection;
+			}
+		}
+		else {
+			lookAheadCounter = 0;
+			cameraLookAheadTarget = 0;
+		}
+		lastMoveDir = movementDirection;
 	}
+	else {
+		cameraLookAheadTarget = 0;
+		lookAheadCounter = 0;
+		lastMoveDir = 0;
+	}
+
+	// Suavizado del desplazamiento hacia el objetivo
+	cameraLookAheadOffset = EaseInOut(cameraLookAheadOffset, cameraLookAheadTarget, lookAheadSmoothing);
+	
+	int targetCamX = -targetX + camera.w / 2 - static_cast<int>(cameraLookAheadOffset) + cameraImpulseX;
+	camera.x += static_cast<int>((targetCamX - camera.x) * smoothing);
+
+	cameraImpulseX = static_cast<int>(cameraImpulseX * (1.0f - cameraImpulseSmoothing));
+
+	if (!isYOffsetLocked)
+	{
+		cameraCenterY = -camera.y + camera.h / 2 - static_cast<int>(cameraYOffset);
+
+		if (targetY < cameraCenterY - followMargin || targetY > cameraCenterY + followMargin)
+		{
+			camera.y += static_cast<int>((-targetY + camera.h / 2 + cameraVerticalViewOffset - camera.y) * smoothing);
+		}
+	}
+	else
+	{
+		int lockedY = -targetY + camera.h / 2 + static_cast<int>(cameraYOffset) + cameraVerticalViewOffset;
+		camera.y += static_cast<int>((lockedY - camera.y) * smoothing);
+	}
+
+
+	// Aplicar shake
+	if (isShaking) {
+		if (shakeTimer.ReadSec() >= shakeDurationSec) {
+			isShaking = false;
+			shakeOffsetX = 0;
+			shakeOffsetY = 0;
+		}
+		else {
+			shakeOffsetX = (rand() % (shakeIntensity * 2 + 1)) - shakeIntensity;
+			shakeOffsetY = (rand() % (shakeIntensity * 2 + 1)) - shakeIntensity;
+		}
+	}
+	else {
+		shakeOffsetX = 0;
+		shakeOffsetY = 0;
+	}
+
+	camera.x += shakeOffsetX;
+	camera.y += shakeOffsetY;
 
 	if (camera.x > 0) camera.x = 0;  
 	if (camera.y > 0) camera.y = 0;  
@@ -271,6 +330,53 @@ SDL_Texture* Render::LoadTexture(const char* path)
 	return texture;
 }
 
+void Render::DashCameraImpulse(int direction, int intensity)
+{
+	cameraImpulseX = -direction * intensity;
+}
 
+void Render::StartCameraShake(int durationSec, int intensity)
+{
+	isShaking = true;
+	shakeDurationSec = durationSec;
+	shakeIntensity = intensity;
+	shakeTimer.Start();
+}
+
+void Render::ToggleCameraLock()
+{
+	cameraLocked = !cameraLocked;
+
+	if (cameraLocked)
+	{
+		// Centrar la cámara en el centro del mapa (o donde prefieras)
+		mapWidthPx = Engine::GetInstance().map->GetMapWidth();
+		mapHeightPx = Engine::GetInstance().map->GetMapHeight();
+
+		camera.x = -(mapWidthPx / 2 - camera.w / 2);
+		camera.y = -(mapHeightPx / 2 - camera.h / 2);
+	}
+}
+
+void Render::ToggleVerticalOffsetLock()
+{
+	isYOffsetLocked = !isYOffsetLocked;
+
+	if (isYOffsetLocked)
+	{
+		targetCameraYOffset = static_cast<float>(defaultYOffset);
+	}
+	else
+	{
+		targetCameraYOffset = 0.0f;
+	}
+}
+
+float Render::EaseInOut(float current, float target, float t)
+{
+	float delta = target - current;
+	float easedT = t * t * (3 - 2 * t); // curva tipo easeInOutCubic
+	return current + delta * easedT;
+}
 
 

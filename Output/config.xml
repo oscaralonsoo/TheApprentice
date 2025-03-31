@@ -20,36 +20,27 @@
 			<Map_1 path="Assets/Maps/" name="Map1.tmx" />
 		</maps>
 		<animations>
-			<player w="44" h="54" texture="Assets/Textures/test.png">
+			<player w="128" h="128" texture="Assets/Textures/slime.png">
 				<idle loop="true" speed="0.08">
-					<frame x="0" y="0" w="44" h="54" />
-					<frame x="44" y="0" w="44" h="54" />
-					<frame x="88" y="0" w="44" h="54" />
-					<frame x="132" y="0" w="44" h="54" />
+					<frame x="0" y="0" w="128" h="128" />
 				</idle>
 				<run_right loop="true" speed="0.2">
-					<frame x="0" y="54" w="44" h="54" />
-					<frame x="44" y="54" w="44" h="54" />
-					<frame x="88" y="54" w="44" h="54" />
+					<frame x="0" y="0" w="128" h="128" />
 				</run_right>
 				<jump loop="false" speed="0.15">
-					<frame x="0" y="108" w="44" h="54" />
-					<frame x="44" y="108" w="44" h="54" />
-					<frame x="88" y="108" w="44" h="54" />
+					<frame x="0" y="0" w="128" h="128" />
 				</jump>
 				<fall loop="false" speed="0.15">
-					<frame x="0" y="162" w="44" h="54" />
+					<frame x="0" y="0" w="128" h="128" />
 				</fall>
 				<run_left loop="true" speed="0.2">
-					<frame x="0" y="216" w="44" h="54" />
-					<frame x="44" y="216" w="44" h="54" />
-					<frame x="88" y="216" w="44" h="54" />
+					<frame x="0" y="0" w="128" h="128" />
 				</run_left>
 				<duck loop="false" speed="0">
-					<frame x="0" y="270" w="56" h="54" />
+					<frame x="0" y="0" w="128" h="128" />
 				</duck>
 				<die loop="false" speed="0">
-					<frame x="0" y="324" w="45" h="47" />
+					<frame x="0" y="0" w="128" h="128" />
 				</die>
 			</player>
 			<enemies>
@@ -100,15 +91,20 @@
 					<fall loop="true" speed="0">
 						<frame x="44" y="44" w="22" h="22" />
 					</fall>
+					<splash loop="false" speed="0.4">
+						<frame x="0" y="66" w="22" h="22" />
+						<frame x="22" y="66" w="22" h="22" />
+						<frame x="44" y="66" w="22" h="22" />
+						<frame x="0" y="88" w="22" h="22" />
+						<frame x="22" y="88" w="22" h="22" />
+					</splash>
 				</cave_drop>
 			</props>
 		</animations>
 		<save_data isSaved="0">
 			<player x="180" y="50" w="44" h="54" />
 			<scene actualScene="0" />
-			<enemies>
-				<enemy type="Bloodrusher" x="288" y="416" w="32" h="32" />
-			</enemies>
+			<enemies />
 		</save_data>
 	</scene>
 </config>

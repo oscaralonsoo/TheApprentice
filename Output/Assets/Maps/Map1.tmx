@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="3">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="5">
  <tileset firstgid="1" name="TX Tileset Ground" tilewidth="32" tileheight="32" tilecount="256" columns="16">
   <image source="../Parallax/TX Tileset Ground.png" width="512" height="512"/>
  </tileset>
- <tileset firstgid="257" name="MapMetadata" tilewidth="32" tileheight="32" tilecount="8" columns="2">
-  <image source="MapMetadata.png" width="67" height="34"/>
+ <tileset firstgid="257" name="MapMetadata" tilewidth="32" tileheight="32" tilecount="8" columns="4">
+  <image source="MapMetadata.png" width="128" height="64"/>
  </tileset>
  <tileset firstgid="265" name="sky" tilewidth="32" tileheight="32" tilecount="70" columns="10">
   <image source="../Parallax/sky.png" width="320" height="240"/>
@@ -5441,5 +5441,8 @@
  </layer>
  <objectgroup id="4" name="Collisions">
   <object id="2" x="0" y="864" width="2032" height="32"/>
+ </objectgroup>
+ <objectgroup id="8" name="Wall">
+  <object id="4" x="570.667" y="424" width="112" height="410.667"/>
  </objectgroup>
 </map>

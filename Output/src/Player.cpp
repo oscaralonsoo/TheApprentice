@@ -34,7 +34,7 @@ bool Player::Start() {
     animation.LoadAnimations(parameters, texture);
 
     // Create the body at the same position, and ensure it's centered
-    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() , (int)position.getY() + 300, 128,128, bodyType::DYNAMIC);
+    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() , (int)position.getY() + 300, 64,64, bodyType::DYNAMIC);
     pbody->listener = this;
     pbody->ctype = ColliderType::PLAYER;
 
@@ -358,8 +358,10 @@ void Player::HandleWallSlide()
 {
     if (isWallSliding)
     {
-        pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+        b2Vec2 velocity = b2Vec2(pbody->body->GetLinearVelocity());
+        velocity.y = 0;
         state = "wall_slide";
+        pbody->body->SetLinearVelocity(velocity);
     }
 }
 

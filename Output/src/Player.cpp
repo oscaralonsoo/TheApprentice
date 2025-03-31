@@ -8,6 +8,7 @@
 #include "Log.h"
 #include "Physics.h"
 #include "EntityManager.h"
+#include "box2D/box2d.h"
 #include "Map.h"
 #include "Menus.h"
 
@@ -19,150 +20,98 @@ Player::Player() : Entity(EntityType::PLAYER)
 Player::~Player() {}
 
 bool Player::Awake() {
-	position = Vector2D(96, 96);
+	position = Vector2D(128, 96);
 	return true;
 }
 
 bool Player::Start() {
-    texture = Engine::GetInstance().textures.get()->Load(parameters.attribute("texture").as_string());
+	texture = Engine::GetInstance().textures->Load(parameters.attribute("texture").as_string());
 
-    texW = parameters.attribute("w").as_int();
-    texH = parameters.attribute("h").as_int();
+	texW = parameters.attribute("w").as_int();
+	texH = parameters.attribute("h").as_int();
 
-    // Load animations with the texture (if necessary)
-    animation.LoadAnimations(parameters, texture);
+	animation.LoadAnimations(parameters, texture);
 
-    // Create the body at the same position, and ensure it's centered
-    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), texW / 2, bodyType::DYNAMIC);
-    pbody->listener = this;
-    pbody->ctype = ColliderType::PLAYER;
+	pbody = Engine::GetInstance().physics->CreateRectangle((int)position.getX(), (int)position.getY() + 300, 64, 64, bodyType::DYNAMIC);
+	pbody->listener = this;
+	pbody->ctype = ColliderType::PLAYER;
 
-    return true;
+	mechanics.Init(this);
+
+	return true;
 }
 
 bool Player::Update(float dt) {
-    animation.Update(dt, state, position.getX(), position.getY());
-    if (Engine::GetInstance().menus->isPaused || Engine::GetInstance().menus->currentState == MenusState::MAINMENU || 
-        Engine::GetInstance().menus->currentState == MenusState::INTRO)
-        return true;
+	animation.Update(dt, state, position.getX(), position.getY());
 
-    HandleInput();
-    HandleJump();
+	mechanics.Update(dt);
 
-    // Movimiento con física
-    b2Vec2 velocity = b2Vec2(0, pbody->body->GetLinearVelocity().y);
+	b2Transform pbodyPos = pbody->body->GetTransform();
+	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texW / 2);
+	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-        velocity.x = -speed;
-    }
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-        velocity.x = speed;
-    }
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !isJumping) {
-        pbody->body->ApplyLinearImpulseToCenter(b2Vec2(0, -jumpForce), true);
-        isJumping = true;
-    }
-
-    // Apply the velocity
-    pbody->body->SetLinearVelocity(velocity);
-    b2Transform pbodyPos = pbody->body->GetTransform();
-
-    // Update the position of the texture based on the body's position
-    position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texW / 2);
-    position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
-
-    // Update animation based on the new position
-  
-
-    return true;
-}
-
-
-void Player::HandleInput() {
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-        movementDirection = -1;
-        state = "run_left";
+	// Teclas de debug / efectos visuales
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
+		mechanics.EnableJump(true);
 	}
-	else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-        movementDirection = 1;
-		state = "run_right";
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) {
+		mechanics.EnableDoubleJump(true);
 	}
-	else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
-		state = "jump";
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_3) == KEY_DOWN) {
+		mechanics.EnableDash(true);
 	}
-	else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
-		state = "attack";
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_4) == KEY_DOWN) {
+		Engine::GetInstance().render->StartCameraShake(5, 100);
 	}
-	else {
-		state = "idle";
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_5) == KEY_DOWN) {
+		Engine::GetInstance().render->ToggleCameraLock();
 	}
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_6) == KEY_DOWN) {
+		Engine::GetInstance().render->ToggleVerticalOffsetLock();
+	}
+
+	return true;
 }
 
 bool Player::CleanUp() {
 	LOG("Cleanup player");
-	Engine::GetInstance().textures.get()->UnLoad(texture);
+	Engine::GetInstance().textures->UnLoad(texture);
 	return true;
 }
 
 void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
-    switch (physB->ctype) {
-    case ColliderType::PLATFORM:
-        LOG("Collision PLATFORM");
-        isJumping = false;
-        break;
-    case ColliderType::DOOR:
-         LOG("Collision DOOR");
+	switch (physB->ctype) {
+	case ColliderType::DOOR:
+		LOG("Collision DOOR");
+		targetScene = physB->targetScene;
 
-        // TargetScene From collider
-        targetScene = physB->targetScene;
+		Engine::GetInstance().scene->newPosition.x = physB->playerPosX;
+		Engine::GetInstance().scene->newPosition.y = physB->playerPosY;
 
-        // Player Position From Collider
-        Engine::GetInstance().scene->newPosition.x = physB->playerPosX;
-        Engine::GetInstance().scene->newPosition.y = physB->playerPosY;
+		Engine::GetInstance().scene.get()->StartTransition(targetScene);
+		break;
 
-        Engine::GetInstance().scene.get()->StartTransition(targetScene); // Start Loading scene
-
-        break;
-    case ColliderType::ENEMY:
-         LOG("Collision ENEMY");
-
-            // TODO --- DESTRUCCIÓN DE ENEMIGO & PLAYER DAMAGE LOGIC
-
-         break;
-    default:
-        LOG("Collision UNKNOWN");
-        break;
-    }
+	default:
+		mechanics.OnCollision(physA, physB);
+		break;
+	}
 }
 
 void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
-	LOG("End Collision");
+	mechanics.OnCollisionEnd(physA, physB);
 }
 
 void Player::SetPosition(Vector2D pos) {
-    pos.setX(pos.getX() + texW / 2);
-    pos.setY(pos.getY() + texH / 2);
-    b2Vec2 bodyPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
-    pbody->body->SetTransform(bodyPos, 0);
+	pos.setX(pos.getX() + texW / 2);
+	pos.setY(pos.getY() + texH / 2);
+	b2Vec2 bodyPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
+	pbody->body->SetTransform(bodyPos, 0);
 }
-
 
 Vector2D Player::GetPosition() const {
 	return position;
 }
 
-void Player::HandleJump() {
-    // Obtener la velocidad actual del jugador
-    b2Vec2 velocity = pbody->body->GetLinearVelocity();
-
-    // Si el jugador presiona la tecla de salto y no está en el aire
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !isJumping) {
-        velocity.y = -jumpForce;  // Aplicamos fuerza hacia arriba
-        isJumping = true;         // Marcamos que el jugador está en el aire
-    }
-
-    // Aplicamos la nueva velocidad
-    pbody->body->SetLinearVelocity(velocity);
+int Player::GetMovementDirection() const {
+	return mechanics.GetMovementDirection();
 }
-
-

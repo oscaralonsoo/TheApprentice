@@ -63,9 +63,6 @@
     <ClCompile Include="src\EntityManager.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="src\Item.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="src\Player.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
@@ -111,6 +108,12 @@
     <ClCompile Include="src\Menus.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="src\CaveDrop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PlayerMechanics.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine.h">
@@ -135,9 +138,6 @@
       <Filter>Source Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="src\EntityManager.h">
-      <Filter>Source Files\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Item.h">
       <Filter>Source Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="src\Player.h">
@@ -182,6 +182,10 @@
     <ClInclude Include="src\PlayerAnimation.h" />
     <ClInclude Include="src\Menus.h">
       <Filter>Source Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CaveDrop.h" />
+    <ClInclude Include="src\PlayerMechanics.h">
+      <Filter>Source Files\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

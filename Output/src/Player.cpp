@@ -211,6 +211,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
          LOG("Collision ENEMY");
         // TODO --- DESTRUCCI�N DE ENEMIGO & PLAYER DAMAGE LOGIC
         break;
+    case ColliderType::SAVEGAME:
+        LOG("Collision SAVEGAME");
+        Engine::GetInstance().scene->saveGameZone = true;
+        break;
     default:
             //LOG("Collision UNKNOWN");
         break;
@@ -232,20 +236,10 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::SAVEGAME:
         LOG("Collision SAVEGAME");
-        Engine::GetInstance().scene->saveGameZone = true;
+        Engine::GetInstance().scene->saveGameZone = false;
         break;
     default:
         LOG("Collision UNKNOWN");
-        break;
-    }
-}
-
-void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
-	LOG("End Collision");
-    switch (physB->ctype) {
-    case ColliderType::SAVEGAME:
-        LOG("Collision SAVEGAME");
-       Engine::GetInstance().scene->saveGameZone = false;
         break;
     }
 }

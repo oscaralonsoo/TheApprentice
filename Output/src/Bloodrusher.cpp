@@ -2,8 +2,6 @@
 #include "Engine.h"
 
 Bloodrusher::Bloodrusher() : Enemy(EntityType::BLOODRUSHER) {
-	Awake();
-	Start();
 }
 
 Bloodrusher::~Bloodrusher() {

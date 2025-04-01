@@ -104,7 +104,9 @@
 		<save_data isSaved="0">
 			<player x="180" y="50" w="44" h="54" />
 			<scene actualScene="0" />
-			<enemies />
+			<enemies>
+				<enemy type="Bloodrusher" x="320" y="672" w="32" h="32" />
+			</enemies>
 		</save_data>
 	</scene>
 </config>

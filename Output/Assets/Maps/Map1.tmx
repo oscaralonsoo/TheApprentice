@@ -1825,7 +1825,7 @@
   </properties>
   <object id="1" x="0" y="640" width="32" height="225">
    <properties>
-    <property name="PlayerPosX" type="float" value="4"/>
+    <property name="PlayerPosX" type="float" value="500"/>
     <property name="PlayerPosY" type="float" value="500"/>
     <property name="TargetScene" type="int" value="0"/>
    </properties>
@@ -3183,6 +3183,15 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="4"/>
+   <tile/>
+   <tile/>
+   <tile gid="4"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile gid="4"/>
    <tile/>
    <tile/>
    <tile/>
@@ -3190,15 +3199,12 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="4"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="4"/>
    <tile/>
    <tile/>
    <tile/>

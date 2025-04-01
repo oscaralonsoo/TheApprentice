@@ -115,6 +115,7 @@ bool CaveDrop::Update(float dt) {
 }
 
 bool CaveDrop::CleanUp() {
+    Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
     return true;
 }
 

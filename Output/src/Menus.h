@@ -93,6 +93,8 @@ private:
     // Botones
     std::unordered_map<MenusState, MenuData> menuConfigurations;
     GuiControlButton* guiBt;
+    int buttonWidth = 300;
+    int centerX = 0;
     int selectedButton = 0;
     float glowEffect = 0.0f;
     bool increasingGlow = true;

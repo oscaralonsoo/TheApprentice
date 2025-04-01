@@ -7,12 +7,17 @@
 #include "Input.h"
 #include "Menus.h"
 
-GuiControlButton::GuiControlButton(int id, SDL_Rect bounds, const char* text)
-    : GuiControl(GuiControlType::BUTTON, id), canClick(true), drawBasic(false)
+GuiControlButton::GuiControlButton(int id, SDL_Rect bounds, const char* text) : GuiControl(GuiControlType::BUTTON, id)
+{
+	this->bounds = bounds;
+	this->text = text;
+
+	canClick = true;
+	drawBasic = false;
+}
+GuiControlButton::~GuiControlButton()
 {
 }
-
-GuiControlButton::~GuiControlButton() = default;
 
 bool GuiControlButton::Update(float dt)
 {

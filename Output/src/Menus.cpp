@@ -39,9 +39,7 @@ void Menus::LoadTextures()
 }
 void Menus::InitializeMenus() {
     SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
-
-    const int buttonWidth = 300;
-    const int centerX = (width - buttonWidth) / 2;
+    centerX = (width - buttonWidth) / 2;
 
     // Menú principal
     menuConfigurations[MenusState::MAINMENU] = {
@@ -64,8 +62,8 @@ void Menus::InitializeMenus() {
     };
     menuConfigurations[MenusState::SETTINGS] = {
     MenusState::SETTINGS, {
-        {{centerX, 400, buttonWidth, 115}, "Toggle Fullscreen", GuiControlType::CHECKBOX},
-        // Otros botones de configuración
+        {{centerX, 400, buttonWidth, 115}, "TogglScreen", GuiControlType::CHECKBOX},
+        //Other Buttons
     }
     };
 }
@@ -190,7 +188,6 @@ void Menus::Intro(float dt)
         StartTransition(false, MenusState::MAINMENU);
     }
 }
-
 void Menus::MainMenu(float dt)
 {
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
@@ -268,8 +265,6 @@ void Menus::Pause(float dt)
 
 void Menus::Settings()
 {
-    int MousePosX, MousePosY;
-    Engine::GetInstance().input->GetMousePosition(MousePosX, MousePosY);
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
     {
         if (previousState == MenusState::PAUSE)
@@ -288,11 +283,9 @@ void Menus::Settings()
     for (size_t i = 0; i < menuConfigurations[MenusState::SETTINGS].buttons.size(); ++i)
     {
         auto& button = menuConfigurations[MenusState::SETTINGS].buttons[i];
-        if (button.type == GuiControlType::CHECKBOX)
+        if (button.text == "TogglScreen")
         {
-            if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN &&
-                button.bounds.x <= MousePosX && MousePosX <= button.bounds.x + button.bounds.w &&
-                button.bounds.y <= MousePosY && MousePosY <= button.bounds.y + button.bounds.h)
+            if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN))
             {
                 isFullScreen = !isFullScreen;
                 Engine::GetInstance().window->SetFullScreen(isFullScreen);
@@ -319,7 +312,6 @@ void Menus::Credits()
         previousState = MenusState::NONE;
     }
 }
-
 
 void Menus::StartTransition(bool fast, MenusState newState)
 {
@@ -360,16 +352,21 @@ void Menus::Transition(float dt) // Transition Logic
         }
     }
 }
+
 void Menus::HandleInput() {
     if (menuConfigurations.find(currentState) == menuConfigurations.end()) return;
     size_t buttonCount = menuConfigurations[currentState].buttons.size();
+
     if (buttonCount == 0) return;
 
     Input* input = Engine::GetInstance().input.get();
-    if (input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) selectedButton = (selectedButton + 1) % buttonCount;
-    else if (input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) selectedButton = (selectedButton - 1 + buttonCount) % buttonCount;
-}
 
+    if (input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) 
+        selectedButton = (selectedButton + 1) % buttonCount;
+
+    else if (input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) 
+        selectedButton = (selectedButton - 1 + buttonCount) % buttonCount;
+}
 
 void Menus::DrawButtons()
 {

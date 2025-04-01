@@ -17,6 +17,27 @@ bool Menus::Start()
 {
     currentState = MenusState::MAINMENU;
     LoadTextures();
+
+    menuConfigurations[MenusState::MAINMENU] = {
+    MenusState::MAINMENU,
+    {
+        { {100, 200, 200, 50}, "New Game", GuiControlType::BUTTON },
+        { {100, 260, 200, 50}, "Continue", GuiControlType::BUTTON },
+        { {100, 320, 200, 50}, "Settings", GuiControlType::BUTTON },
+        { {100, 380, 200, 50}, "Credits", GuiControlType::BUTTON },
+        { {100, 440, 200, 50}, "Exit", GuiControlType::BUTTON }
+    }
+    };
+
+    menuConfigurations[MenusState::PAUSE] = {
+        MenusState::PAUSE,
+        {
+            { {100, 200, 200, 50}, "Resume", GuiControlType::BUTTON },
+            { {100, 260, 200, 50}, "Settings", GuiControlType::BUTTON },
+            { {100, 320, 200, 50}, "Exit", GuiControlType::BUTTON }
+        }
+    };
+
     pugi::xml_document config;
     pugi::xml_parse_result result = config.load_file("config.xml");
     pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
@@ -39,6 +60,7 @@ void Menus::LoadTextures()
 bool Menus::Update(float dt)
 {
     CheckCurrentState(dt);
+
     Transition(dt);
     HandlePause();
     return true;
@@ -62,8 +84,9 @@ void Menus::HandlePause()
 }
 
 bool Menus::PostUpdate()
-{
+{   
     DrawBackground();
+    DrawButtons();
 
     if (inTransition)
         ApplyTransitionEffect();
@@ -116,12 +139,6 @@ bool Menus::CleanUp()
     SDL_DestroyTexture(pauseBackground);
     SDL_DestroyTexture(settingsBackground);
     SDL_DestroyTexture(creditsBackground);
-
-    for (auto& btn : mainMenuButtons)
-    {
-        SDL_DestroyTexture(btn.texDeselected);
-        SDL_DestroyTexture(btn.texSelected);
-    }
     return true;
 }
 
@@ -135,6 +152,7 @@ void Menus::CheckCurrentState(float dt)
         Intro(dt);
         break;
     case MenusState::MAINMENU:
+
         MainMenu(dt);
         break;
     case MenusState::GAME:
@@ -210,19 +228,13 @@ void Menus::NewGame()
 
     Vector2D playerPos = Engine::GetInstance().scene->GetPlayerPosition();	//Reset Player Pos
     pugi::xml_node playerNode = saveData.child("player");
-    if (playerNode) {
         playerNode.attribute("x") = 180;
         playerNode.attribute("y") = 50;
-    }
 
     pugi::xml_node sceneNode = saveData.child("scene"); 	
-    if (sceneNode) {
         sceneNode.attribute("actualScene") = 0; //Reset Actual Scene
-    }
-    if (saveData)
-    {
         saveData.attribute("isSaved") = Engine::GetInstance().menus->isSaved;
-    }
+ 
     config.save_file("config.xml");	//Save Changes
  
     StartTransition(false, MenusState::GAME);
@@ -290,6 +302,21 @@ void Menus::Credits()
         previousState = MenusState::NONE;
     }
 }
+void Menus::DrawButtons()
+{
+    // Verificar si el estado actual tiene una configuración válida en el mapa
+    if (menuConfigurations.find(currentState) != menuConfigurations.end()) {
+        auto& buttons = menuConfigurations[currentState].buttons;
+        std::cout << "Number of buttons: " << buttons.size() << std::endl;
+
+        for (size_t i = 0; i < buttons.size(); ++i) {
+            Engine::GetInstance().guiManager->CreateGuiControl(
+                GuiControlType::BUTTON, i + 1, buttons[i].text.c_str(), buttons[i].bounds, this
+            );
+        }
+    }
+}
+
 void Menus::StartTransition(bool fast, MenusState newState)
 {
     previousState = currentState; 
@@ -299,7 +326,7 @@ void Menus::StartTransition(bool fast, MenusState newState)
     nextState = newState;
 }
 
-void Menus::Transition(float dt)
+void Menus::Transition(float dt) // Transition Logic
 {
     transitionSpeed = fastTransition ? 0.007f : 0.0015f;
 
@@ -329,4 +356,4 @@ void Menus::Transition(float dt)
         }
     }
 
-}// Transition Logic // Transition Logic
+}

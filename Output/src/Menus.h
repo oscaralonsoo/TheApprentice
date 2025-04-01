@@ -7,16 +7,26 @@
 #include "GuiControlButton.h"
 #include "GuiControl.h"
 #include "GuiManager.h"
+#include <unordered_map>
 
+// Enum de los estados del menú
 enum class MenusState {
-    INTRO, MAINMENU, GAME, SETTINGS, CREDITS, PAUSE, NONE, EXIT
+    NONE, INTRO, MAINMENU, GAME, PAUSE, SETTINGS, CREDITS, EXIT
 };
 
+// Estructura para definir un botón
 struct MenuButton {
-    SDL_Rect rect;
-    SDL_Texture* texSelected;
-    SDL_Texture* texDeselected;
+    SDL_Rect bounds;
+    std::string text;
+    GuiControlType type;
 };
+
+// Estructura para manejar los menús y sus botones
+struct MenuData {
+    MenusState state;
+    std::vector<MenuButton> buttons;
+};
+
 
 class Menus : public Module {
 public:
@@ -40,6 +50,10 @@ public:
     void Pause(float dt);
     void Settings();
     void Credits();
+
+    //Buttons
+    void DrawButtons();
+
 
 public:
     // Estado del menú
@@ -72,8 +86,8 @@ private:
     SDL_Texture* settingsBackground;
 
     // Botones
-    std::vector<MenuButton> mainMenuButtons;
-    std::vector<MenuButton> pauseMenuButtons;
+    std::unordered_map<MenusState, MenuData> menuConfigurations;
+    GuiControlButton* guiBt;
     int selectedButton = 0;
 
     // Configuración de pantalla

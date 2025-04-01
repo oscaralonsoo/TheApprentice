@@ -37,6 +37,9 @@ GuiControl* GuiManager::CreateGuiControl(GuiControlType type, int id, const char
 
 bool GuiManager::Update(float dt)
 {
+	if (Engine::GetInstance().menus->currentState == MenusState::GAME)
+		return true;
+
 	static int selectedButton = 0;
 	int totalButtons = GetTotalButtons();
 	Input* input = Engine::GetInstance().input.get();

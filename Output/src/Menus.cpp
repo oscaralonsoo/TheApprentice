@@ -13,38 +13,19 @@ Menus::~Menus() {}
 
 bool Menus::Awake(){ return true; }
 
-bool Menus::Start()
-{
+bool Menus::Start() {
     currentState = MenusState::MAINMENU;
     LoadTextures();
+    InitializeMenus();
 
-    menuConfigurations[MenusState::MAINMENU] = {
-    MenusState::MAINMENU,
-    {
-        { {100, 200, 200, 50}, "New Game", GuiControlType::BUTTON },
-        { {100, 260, 200, 50}, "Continue", GuiControlType::BUTTON },
-        { {100, 320, 200, 50}, "Settings", GuiControlType::BUTTON },
-        { {100, 380, 200, 50}, "Credits", GuiControlType::BUTTON },
-        { {100, 440, 200, 50}, "Exit", GuiControlType::BUTTON }
-    }
-    };
-
-    menuConfigurations[MenusState::PAUSE] = {
-        MenusState::PAUSE,
-        {
-            { {100, 200, 200, 50}, "Resume", GuiControlType::BUTTON },
-            { {100, 260, 200, 50}, "Settings", GuiControlType::BUTTON },
-            { {100, 320, 200, 50}, "Exit", GuiControlType::BUTTON }
-        }
-    };
-
+    //Load Config
     pugi::xml_document config;
-    pugi::xml_parse_result result = config.load_file("config.xml");
-    pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
-    pugi::xml_node fullScreenData = config.child("config").child("window").child("fullscreen_window");
-    isFullScreen = fullScreenData.attribute("value").as_bool();
-
-    isSaved = saveData.attribute("isSaved").as_int();
+    if (config.load_file("config.xml")) {
+        pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
+        pugi::xml_node fullScreenData = config.child("config").child("window").child("fullscreen_window");
+        isFullScreen = fullScreenData.attribute("value").as_bool();
+        isSaved = saveData.attribute("isSaved").as_int();
+    }
     return true;
 }
 void Menus::LoadTextures()
@@ -56,27 +37,56 @@ void Menus::LoadTextures()
     settingsBackground = Engine::GetInstance().render->LoadTexture("assets/textures/Menus/SettingsBackground.png");
     creditsBackground = Engine::GetInstance().render->LoadTexture("assets/textures/Menus/CreditsBackground.png");
 }
+void Menus::InitializeMenus() {
+    SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
 
-bool Menus::Update(float dt)
-{
+    const int buttonWidth = 300;
+    const int centerX = (width - buttonWidth) / 2;
+
+    // Menú principal
+    menuConfigurations[MenusState::MAINMENU] = {
+        MenusState::MAINMENU, {
+            {{centerX, 400, buttonWidth, 115}, "New Game", GuiControlType::BUTTON},
+            {{centerX, 520, buttonWidth, 115}, "Continue", GuiControlType::BUTTON},
+            {{centerX, 640, buttonWidth, 115}, "Settings", GuiControlType::BUTTON},
+            {{centerX, 760, buttonWidth, 115}, "Credits", GuiControlType::BUTTON},
+            {{centerX, 880, buttonWidth, 115}, "Exit", GuiControlType::BUTTON}
+        }
+    };
+
+    // Menú de pausa
+    menuConfigurations[MenusState::PAUSE] = {
+        MenusState::PAUSE, {
+            {{centerX, 400, buttonWidth, 115}, "Resume", GuiControlType::BUTTON},
+            {{centerX, 520, buttonWidth, 115}, "Settings", GuiControlType::BUTTON},
+            {{centerX, 640, buttonWidth, 115}, "Exit", GuiControlType::BUTTON}
+        }
+    };
+    menuConfigurations[MenusState::SETTINGS] = {
+    MenusState::SETTINGS, {
+        {{centerX, 400, buttonWidth, 115}, "Toggle Fullscreen", GuiControlType::CHECKBOX},
+        // Otros botones de configuración
+    }
+    };
+}
+
+
+bool Menus::Update(float dt) {
+    HandleInput();
     CheckCurrentState(dt);
-
     Transition(dt);
     HandlePause();
     return true;
 }
+
 // Pause Logic
-void Menus::HandlePause()
-{
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN && !inTransition && !inConfig)
-    {
-        if (currentState == MenusState::PAUSE)
-        {
+void Menus::HandlePause() {
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN && !inTransition && !inConfig) {
+        if (currentState == MenusState::PAUSE) {
             StartTransition(true, MenusState::GAME);
             isPaused = false;
         }
-        else if (currentState == MenusState::GAME)
-        {
+        else if (currentState == MenusState::GAME) {
             StartTransition(true, MenusState::PAUSE);
             isPaused = true;
         }
@@ -87,14 +97,8 @@ bool Menus::PostUpdate()
 {   
     DrawBackground();
     DrawButtons();
-
-    if (inTransition)
-        ApplyTransitionEffect();
-
-    if (isExit)
-    {
-        return false;
-    }
+    if (inTransition) ApplyTransitionEffect();
+    if (isExit) return false;
     return true;
 }
 
@@ -112,7 +116,7 @@ void Menus::DrawBackground() // Draw background depending on the MenusState
         Engine::GetInstance().render->DrawTexture(menuBackground, 0, 0, &cameraRect);
         break;
     case MenusState::PAUSE:
-        Engine::GetInstance().render->DrawTexture(pauseBackground, cameraRect.x - Engine::GetInstance().render->camera.x, 
+        Engine::GetInstance().render->DrawTexture(pauseBackground, cameraRect.x - Engine::GetInstance().render->camera.x,
             cameraRect.y - Engine::GetInstance().render->camera.y, &cameraRect);
         break;
     case MenusState::SETTINGS:
@@ -125,8 +129,7 @@ void Menus::DrawBackground() // Draw background depending on the MenusState
     }
 }
 
-void Menus::ApplyTransitionEffect()
-{
+void Menus::ApplyTransitionEffect() {
     SDL_SetRenderDrawBlendMode(Engine::GetInstance().render->renderer, SDL_BLENDMODE_BLEND);
     SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, 0, 0, 0, static_cast<Uint8>(transitionAlpha * 255));
     SDL_RenderFillRect(Engine::GetInstance().render->renderer, nullptr);
@@ -263,23 +266,38 @@ void Menus::Pause(float dt)
     }
 }
 
-
 void Menus::Settings()
 {
+    int MousePosX, MousePosY;
+    Engine::GetInstance().input->GetMousePosition(MousePosX, MousePosY);
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
     {
-
         if (previousState == MenusState::PAUSE)
         {
             nextState = MenusState::PAUSE;
         }
         else
         {
-            nextState = previousState; 
+            nextState = previousState;
         }
         inConfig = false;
         StartTransition(true, nextState);
-        previousState = MenusState::NONE; 
+        previousState = MenusState::NONE;
+    }
+
+    for (size_t i = 0; i < menuConfigurations[MenusState::SETTINGS].buttons.size(); ++i)
+    {
+        auto& button = menuConfigurations[MenusState::SETTINGS].buttons[i];
+        if (button.type == GuiControlType::CHECKBOX)
+        {
+            if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN &&
+                button.bounds.x <= MousePosX && MousePosX <= button.bounds.x + button.bounds.w &&
+                button.bounds.y <= MousePosY && MousePosY <= button.bounds.y + button.bounds.h)
+            {
+                isFullScreen = !isFullScreen;
+                Engine::GetInstance().window->SetFullScreen(isFullScreen);
+            }
+        }
     }
 }
 
@@ -287,8 +305,7 @@ void Menus::Credits()
 {
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
     {   
-        //isFullScreen = !isFullScreen;
-        //Engine::GetInstance().window->SetFullScreen(isFullScreen);
+
         if (previousState == MenusState::PAUSE)
         {
             nextState = MenusState::PAUSE;
@@ -302,20 +319,7 @@ void Menus::Credits()
         previousState = MenusState::NONE;
     }
 }
-void Menus::DrawButtons()
-{
-    // Verificar si el estado actual tiene una configuración válida en el mapa
-    if (menuConfigurations.find(currentState) != menuConfigurations.end()) {
-        auto& buttons = menuConfigurations[currentState].buttons;
-        std::cout << "Number of buttons: " << buttons.size() << std::endl;
 
-        for (size_t i = 0; i < buttons.size(); ++i) {
-            Engine::GetInstance().guiManager->CreateGuiControl(
-                GuiControlType::BUTTON, i + 1, buttons[i].text.c_str(), buttons[i].bounds, this
-            );
-        }
-    }
-}
 
 void Menus::StartTransition(bool fast, MenusState newState)
 {
@@ -355,5 +359,55 @@ void Menus::Transition(float dt) // Transition Logic
             Engine::GetInstance().scene->saving = false;
         }
     }
-
 }
+void Menus::HandleInput() {
+    if (menuConfigurations.find(currentState) == menuConfigurations.end()) return;
+    size_t buttonCount = menuConfigurations[currentState].buttons.size();
+    if (buttonCount == 0) return;
+
+    Input* input = Engine::GetInstance().input.get();
+    if (input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) selectedButton = (selectedButton + 1) % buttonCount;
+    else if (input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) selectedButton = (selectedButton - 1 + buttonCount) % buttonCount;
+}
+
+
+void Menus::DrawButtons()
+{
+    if (menuConfigurations.find(currentState) == menuConfigurations.end()) return;
+    auto& buttons = menuConfigurations[currentState].buttons;
+
+    // Glow Effect
+    if (increasingGlow) {
+        glowEffect += 2.0f;
+        if (glowEffect >= 150.0f) increasingGlow = false;
+    }
+    else {
+        glowEffect -= 2.0f;
+        if (glowEffect <= 40.0f) increasingGlow = true;
+    }
+
+    for (size_t i = 0; i < buttons.size(); ++i)
+    {
+        bool isSelected = (selectedButton == static_cast<int>(i));
+
+        // Text Color
+        SDL_Color textColor = isSelected ? SDL_Color{ 255, 255, 255, 255 } : SDL_Color{ 200, 200, 200, 255 };
+
+        if (isSelected) {
+            int glowRadius = 10;
+
+            for (int layer = glowRadius; layer > 0; layer--) {
+                Uint8 alpha = static_cast<Uint8>(glowEffect / (layer * 1.5f));
+                SDL_Color glowColor = { 255, 255, 255, alpha };
+
+                Engine::GetInstance().render->DrawText(buttons[i].text.c_str(), buttons[i].bounds.x - layer, buttons[i].bounds.y, buttons[i].bounds.w, buttons[i].bounds.h, glowColor);
+                Engine::GetInstance().render->DrawText(buttons[i].text.c_str(), buttons[i].bounds.x + layer, buttons[i].bounds.y, buttons[i].bounds.w, buttons[i].bounds.h, glowColor);
+                Engine::GetInstance().render->DrawText(buttons[i].text.c_str(), buttons[i].bounds.x, buttons[i].bounds.y - layer, buttons[i].bounds.w, buttons[i].bounds.h, glowColor);
+                Engine::GetInstance().render->DrawText(buttons[i].text.c_str(), buttons[i].bounds.x, buttons[i].bounds.y + layer, buttons[i].bounds.w, buttons[i].bounds.h, glowColor);
+            }
+        }
+        // Draw Text
+        Engine::GetInstance().render->DrawText(buttons[i].text.c_str(), buttons[i].bounds.x, buttons[i].bounds.y, buttons[i].bounds.w, buttons[i].bounds.h, textColor);
+    }
+}
+

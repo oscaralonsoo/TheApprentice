@@ -19,6 +19,7 @@ struct MenuButton {
     SDL_Rect bounds;
     std::string text;
     GuiControlType type;
+    GuiControlButton* guiButton = nullptr;
 };
 
 // Estructura para manejar los menús y sus botones
@@ -35,6 +36,7 @@ public:
     bool Awake() override;
     bool Start() override;
     bool Update(float dt) override;
+    void InitializeMenus();
     bool PostUpdate() override;
     bool CleanUp() override;
     void LoadTextures();
@@ -44,6 +46,7 @@ public:
     void ApplyTransitionEffect();
     void StartTransition(bool fast, MenusState newState);
     void Transition(float dt);
+    void HandleInput();
     void Intro(float dt);
     void MainMenu(float dt);
     void NewGame();
@@ -71,6 +74,8 @@ public:
     int isSaved = 0;
 
 private:
+
+
     // Variables de transición
     float introTimer = 0.0f;
     float logoAlpha = 0.0f;
@@ -89,8 +94,11 @@ private:
     std::unordered_map<MenusState, MenuData> menuConfigurations;
     GuiControlButton* guiBt;
     int selectedButton = 0;
+    float glowEffect = 0.0f;
+    bool increasingGlow = true;
 
     // Configuración de pantalla
-    int width = 0, height = 0;
+    int width = 0; 
+    int height = 0;
     bool isFullScreen = false;
 };

@@ -320,9 +320,8 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 	if (camera.x < -(mapWidthPx - camera.w)) camera.x = -(mapWidthPx - camera.w);
 	if (camera.y < -(mapHeightPx - camera.h)) camera.y = -(mapHeightPx - camera.h);
 }
-bool Render::DrawText(const char* text, int posx, int posy, int w, int h) const
+bool Render::DrawText(const char* text, int posx, int posy, int w, int h, SDL_Color color) const
 {
-	SDL_Color color = { 255, 255, 255 };
 	SDL_Surface* surface = TTF_RenderText_Solid(font, text, color);
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 	int texW = 0;

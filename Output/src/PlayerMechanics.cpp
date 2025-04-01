@@ -32,10 +32,10 @@ void PlayerMechanics::Update(float dt) {
     }
 
     HandleInput();
+    HandleWallSlide();
     HandleJump();
     HandleDash();
     HandleFall();
-    HandleWallSlide();
 
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN && attackSensor == nullptr) {
         CreateAttackSensor();
@@ -80,6 +80,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::WALL:
         if (isDashing) CancelDash();
         isWallSliding = true;
+        isJumping = false;
         break;
     case ColliderType::ITEM:
         Engine::GetInstance().physics->DeletePhysBody(physB);
@@ -101,7 +102,10 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
 void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM: isOnGround = false; break;
-    case ColliderType::WALL: isWallSliding = false; break;
+    case ColliderType::WALL: 
+        isWallSliding = false;
+        player->pbody->body->SetGravityScale(1.0f);
+        break;
     case ColliderType::DOWN_CAMERA: wasInDownCameraZone = false; break;
     case ColliderType::SAVEGAME: Engine::GetInstance().scene->saveGameZone = false; break;
     default: break;
@@ -133,17 +137,23 @@ void PlayerMechanics::HandleJump() {
 
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
 
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !isJumping) {
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !isJumping && !isWallSliding) {
         velocity.y = -jumpForce;
         isJumping = true;
         player->SetState("jump");
     }
-    else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isJumping && !hasDoubleJumped && doubleJumpUnlocked) {
+    else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !isJumping && wallJumpUnlocked) {
+        velocity.y = -jumpForce;
+        velocity.x = jumpForceWallSlideX;
+        isJumping = true;
+        player->SetState("jump");
+    }
+    else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isJumping && !hasDoubleJumped && doubleJumpUnlocked && !isWallSliding) {
         velocity.y = -jumpForce;
         hasDoubleJumped = true;
     }
 
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && isJumping) {
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && isJumping && !isWallSliding) {
         if (jumpTime < maxJumpTime) {
             velocity.y -= 0.3f;
             jumpTime += 0.016f;
@@ -203,7 +213,7 @@ void PlayerMechanics::CancelDash() {
 void PlayerMechanics::HandleFall() {
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
 
-    if (velocity.y > 0.5f && !isJumping) {
+    if (velocity.y > 0.5f && !isJumping && !isWallSliding) {
         isJumping = true;
         fallStartY = player->GetPosition().getY();
         player->SetState("fall");
@@ -224,10 +234,7 @@ void PlayerMechanics::CheckFallImpact() {
 
 void PlayerMechanics::HandleWallSlide() {
     if (isWallSliding) {
-        b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
-        velocity.y = 0;
-        player->SetState("wall_slide");
-        player->pbody->body->SetLinearVelocity(velocity);
+        player->pbody->body->SetGravityScale(0.05f);
     }
 }
 

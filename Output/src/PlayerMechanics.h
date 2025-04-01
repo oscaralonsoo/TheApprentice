@@ -75,8 +75,11 @@ private:
     float fallEndY;
     float fallDistance;
 
+    // WallSlide 
     bool wasInDownCameraZone = false;
     bool isWallSliding = false;
+    bool wallJumpUnlocked = true;
+    float jumpForceWallSlideX = 10.5f;
 
     // Attack
     PhysBody* attackSensor = nullptr;

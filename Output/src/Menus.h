@@ -4,6 +4,9 @@
 #include <SDL2/SDL.h>
 #include "Render.h"
 #include <vector>
+#include "GuiControlButton.h"
+#include "GuiControl.h"
+#include "GuiManager.h"
 
 enum class MenusState {
     INTRO, MAINMENU, GAME, SETTINGS, CREDITS, PAUSE, NONE, EXIT
@@ -28,7 +31,6 @@ public:
     void CheckCurrentState(float dt);
     void HandlePause();
     void DrawBackground();
-    void DrawButtons();
     void ApplyTransitionEffect();
     void StartTransition(bool fast, MenusState newState);
     void Transition(float dt);

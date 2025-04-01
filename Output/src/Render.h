@@ -4,7 +4,7 @@
 #include "Vector2D.h"
 #include "SDL2/SDL.h"
 #include "Timer.h"
-
+#include "SDL2/SDL_ttf.h"
 class Render : public Module
 {
 public:
@@ -43,8 +43,9 @@ public:
 	void UpdateCamera(const Vector2D& targetPosition, int movementDirection, float smoothing);
 
 	float EaseInOut(float current, float target, float t);
+
 	// To render Text
-	bool DrawText(const std::string& text, int x, int y, SDL_Color color);
+	bool DrawText(const char* text, int posX, int posY, int w, int h) const;
 
 	SDL_Texture* LoadTexture(const char* path);
 public:
@@ -100,4 +101,7 @@ public:
 	SDL_Rect camera;
 	SDL_Rect viewport;
 	SDL_Color background;
+
+	// Text
+	TTF_Font* font;
 };

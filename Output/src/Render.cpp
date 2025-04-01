@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Map.h"
 #include <SDL2/SDL_image.h>
+#include "SDL2/SDL_ttf.h"
 
 #define VSYNC true
 
@@ -51,7 +52,10 @@ bool Render::Awake()
 		camera.x = 0;
 		camera.y = 0;
 	}
-
+	//Initialize the TTF library
+	TTF_Init();
+	//Load a font into memory
+	font = TTF_OpenFont("Assets/Fonts/ChangesModern.ttf", 72);
 	return ret;
 }
 
@@ -316,9 +320,19 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 	if (camera.x < -(mapWidthPx - camera.w)) camera.x = -(mapWidthPx - camera.w);
 	if (camera.y < -(mapHeightPx - camera.h)) camera.y = -(mapHeightPx - camera.h);
 }
-bool Render::DrawText(const std::string& text, int x, int y, SDL_Color color)
+bool Render::DrawText(const char* text, int posx, int posy, int w, int h) const
 {
-	return false;
+	SDL_Color color = { 255, 255, 255 };
+	SDL_Surface* surface = TTF_RenderText_Solid(font, text, color);
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+	int texW = 0;
+	int texH = 0;
+	SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
+	SDL_Rect dstrect = { posx, posy, w, h };
+	SDL_RenderCopy(renderer, texture, NULL, &dstrect);
+	SDL_DestroyTexture(texture);
+	SDL_FreeSurface(surface);
+	return true;
 }
 SDL_Texture* Render::LoadTexture(const char* path)
 {

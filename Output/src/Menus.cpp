@@ -404,6 +404,8 @@ void Menus::Transition(float dt)
             transitionAlpha = 0.0f;
             inTransition = false;
             fastTransition = false; 
+            Engine::GetInstance().scene->saving = false;
         }
     }
+
 }

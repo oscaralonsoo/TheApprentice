@@ -176,6 +176,7 @@ Vector2D Scene::GetPlayerPosition()
 
 void Scene::SaveGameXML()
 {
+	saving = true;
 	Engine::GetInstance().menus->isSaved = 1;
 	//Load xml
 	pugi::xml_document config;
@@ -221,10 +222,9 @@ void Scene::LoadGameXML()
 }
 void Scene::Vignette(int size, float strength)
 {
-	SDL_Renderer* renderer = Engine::GetInstance().render->renderer;
-	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+	renderer = Engine::GetInstance().render->renderer;
 
-	int width, height;
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_GetRendererOutputSize(renderer, &width, &height);
 
 	vignetteSize = size;
@@ -232,16 +232,16 @@ void Scene::Vignette(int size, float strength)
 
 	for (int i = 0; i < vignetteSize; i++)
 	{
-		float distFactor = (float)i / vignetteSize;
-		float opacity = powf(1.0f - distFactor, 2) * vignetteStrength;
-		Uint8 alpha = static_cast<Uint8>(opacity * 255);
+		distFactor = (float)i / vignetteSize;
+		opacity = powf(1.0f - distFactor, 2) * vignetteStrength;
+		alpha = static_cast<Uint8>(opacity * 255);
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, alpha);
 
-		SDL_Rect top = { 0, i, width, 1 };
-		SDL_Rect bottom = { 0, height - i - 1, width, 1 };
-		SDL_Rect left = { i, 0, 1, height };
-		SDL_Rect right = { width - i - 1, 0, 1, height };
+		top = { 0, i, width, 1 };
+		bottom = { 0, height - i - 1, width, 1 };
+		left = { i, 0, 1, height };
+		right = { width - i - 1, 0, 1, height };
 
 		SDL_RenderFillRect(renderer, &top);
 		SDL_RenderFillRect(renderer, &bottom);

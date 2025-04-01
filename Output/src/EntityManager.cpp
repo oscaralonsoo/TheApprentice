@@ -127,6 +127,9 @@ void EntityManager::AddEntity(Entity* entity)
 
 bool EntityManager::Update(float dt)
 {
+	if (Engine::GetInstance().menus->currentState != MenusState::GAME)
+		return true;
+
 	bool ret = true;
 	for(const auto entity : entities)
 	{

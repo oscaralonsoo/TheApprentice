@@ -13,9 +13,7 @@ void PlayerMechanics::Init(Player* player) {
 }
 
 void PlayerMechanics::Update(float dt) {
-    if (Engine::GetInstance().menus->isPaused ||
-        Engine::GetInstance().menus->currentState == MenusState::MAINMENU ||
-        Engine::GetInstance().menus->currentState == MenusState::INTRO)
+    if( Engine::GetInstance().scene->saving == true)
         return;
 
     if (isStunned) {
@@ -225,7 +223,7 @@ void PlayerMechanics::CheckFallImpact() {
 void PlayerMechanics::HandleWallSlide() {
     if (isWallSliding) {
         b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
-        velocity.y = 0;
+        velocity.y = 2.5f;
         player->SetState("wall_slide");
         player->pbody->body->SetLinearVelocity(velocity);
     }

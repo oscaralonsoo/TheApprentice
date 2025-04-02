@@ -7,7 +7,6 @@
 #include "GuiControlButton.h"
 #include "GuiControl.h"
 #include "GuiManager.h"
-#include <unordered_map>
 
 // Enum de los estados del menú
 enum class MenusState {
@@ -15,10 +14,10 @@ enum class MenusState {
 };
 
 struct ButtonInfo {
-    std::string text; 
-    SDL_Rect bounds; 
-    int id;           
-    bool isCheckBox;
+    std::string text;
+    SDL_Rect bounds;
+    int id;
+    bool isCheckBox = false; // Por defecto, no es un checkbox
 };
 
 class Menus : public Module {
@@ -43,62 +42,45 @@ public:
     void Pause(float dt);
     void Settings();
     void Credits();
-
     void CreateButtons();
-
     void DrawButtons();
 
+    void DrawCheckBox(const ButtonInfo& button, bool isSelected, const SDL_Color& color);
 
 public:
-    // Estado del menú
     MenusState currentState = MenusState::MAINMENU;
     MenusState nextState = MenusState::NONE;
     MenusState previousState = MenusState::NONE;
     bool isPaused = false;
-    bool inMainMenu = false;
     bool isExit = false;
     bool inTransition = false;
     bool fastTransition = false;
-    bool fadingIn = false;  
-    bool inConfig = false;  
+    bool fadingIn = false;
+    bool inConfig = false;
     bool inCredits = false;
     int isSaved = 0;
     int selectedButton = 0;
-    std::vector<ButtonInfo> buttons; // Vector de botones
+    std::vector<ButtonInfo> buttons;
+
 private:
-    int boxSize = 30;
-    int borderThickness = 0;
-    // Variables de transición
-    float introTimer = 0.0f;
-    float logoAlpha = 0.0f;
-    float transitionAlpha = 0.0f; 
-    float transitionSpeed = 0.0f;
+    int baseWidth, baseHeight, width, height;
     float scaleX = 1.0f;
     float scaleY = 1.0f;
-    // Texturas
-    SDL_Texture* textures;
+    float transitionAlpha = 0.0f;
+    float transitionSpeed = 0.0f;
+    float logoAlpha = 0.0f;
+    float introTimer = 0.0f;
     SDL_Texture* groupLogo;
     SDL_Texture* menuBackground;
     SDL_Texture* pauseBackground;
     SDL_Texture* creditsBackground;
     SDL_Texture* settingsBackground;
 
-    // Botones
-    GuiManager* guiManager; // Instancia del gestor de GUI
-
-
-    // Configuración de pantalla
-    int baseWidth, baseHeight, width, height;
+    GuiManager* guiManager;
 
     bool isFullScreen = false;
     bool isVSync = false;
 
-    // Colors
     SDL_Color WHITE = { 255, 255, 255, 255 };
-    SDL_Color BLACK = { 0, 0, 0, 255 };
-    SDL_Color RED = { 255, 0, 0, 255 };
-    SDL_Color MAGENTA = { 255, 0, 255, 255 };
-    SDL_Color YELLOW = { 255, 255, 0, 255 };
     SDL_Color GRAY = { 200, 200, 200, 255 };
-
 };

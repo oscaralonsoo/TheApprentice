@@ -336,16 +336,11 @@ bool Map::Load(std::string path, std::string fileName)
                             enemyNode.append_attribute("y") = mapCoord.y;
                             enemyNode.append_attribute("w") = 32;
                             enemyNode.append_attribute("h") = 32;
-
-                            Enemy* enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BLOODRUSHER);
-                            enemy->SetParameters(enemyNode);
-                            enemy->Start();
-
-                            
+                            enemyNode.append_attribute("gravity") = true;
                         }
                     }
                 }
-
+                
                 // Guardar los cambios en el archivo
                 loadFile.save_file("config.xml");
                 Engine::GetInstance().UpdateConfig();

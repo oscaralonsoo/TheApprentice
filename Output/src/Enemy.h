@@ -42,18 +42,18 @@ public:
 	int steps = 0;
 	int maxSteps = 100;
 
-private:
+protected:
+	Pathfinding* pathfinding;
+	PhysBody* pbody;
 
 	SDL_Texture* texture;
 
 	int texW, texH;
 	pugi::xml_node parameters;
 	Animation* currentAnimation = nullptr;
-	Animation idle;
-	PhysBody* pbody;
 
 	//Pathfinding
 	bool showPath = false;
 	const char* texturePath;
-	Pathfinding* pathfinding;
+
 };

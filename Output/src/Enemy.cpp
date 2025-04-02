@@ -28,27 +28,11 @@ bool Enemy::Awake() {
 }
 
 bool Enemy::Start() {
-
-	pugi::xml_document loadFile;
-	pugi::xml_parse_result result = loadFile.load_file("config.xml");
-
-	for (pugi::xml_node enemyNode = loadFile.child("config").child("scene").child("animations").child("enemies").child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy"))
-	{
-		if (std::string(enemyNode.attribute("type").as_string()) == std::string(parameters.attribute("type").as_string()))
-		{
-			texture = Engine::GetInstance().textures.get()->Load(enemyNode.attribute("texture").as_string());
-			idle.LoadAnimations(enemyNode.child("idle"));
-		}
-	}
-
-	//initilize textures
 	position.setX(parameters.attribute("x").as_int());
 	position.setY(parameters.attribute("y").as_int());
 	texW = parameters.attribute("w").as_int();
 	texH = parameters.attribute("h").as_int();
 
-
-	currentAnimation = &idle;
 
 	//Add a physics to an item - initialize the physics body
 	pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, bodyType::DYNAMIC);

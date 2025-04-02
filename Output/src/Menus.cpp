@@ -5,6 +5,7 @@
 #include "Render.h"
 #include "Window.h"
 #include "Engine.h"
+#include "pugixml.hpp"
 
 Menus::Menus() : currentState(MenusState::MAINMENU), transitionAlpha(0.0f), inTransition(false), fadingIn(false), nextState(MenusState::NONE),
 fastTransition(false), menuBackground(nullptr), pauseBackground(nullptr) {}
@@ -16,6 +17,7 @@ bool Menus::Awake() { return true; }
 bool Menus::Start() {
     LoadTextures();
     CreateButtons();
+
     // Load Config
     pugi::xml_document config;
     if (config.load_file("config.xml")) {
@@ -30,11 +32,44 @@ bool Menus::Start() {
 }
 
 void Menus::LoadTextures() {
-    groupLogo = Engine::GetInstance().render->LoadTexture("assets/textures/Menus/Logo.png");
-    menuBackground = Engine::GetInstance().render->LoadTexture("assets/textures/Menus/MainMenuBackGround.png");
-    pauseBackground = Engine::GetInstance().render->LoadTexture("assets/textures/Menus/PauseMenuBackground.png");
-    settingsBackground = Engine::GetInstance().render->LoadTexture("assets/textures/Menus/SettingsBackground.png");
-    creditsBackground = Engine::GetInstance().render->LoadTexture("assets/textures/Menus/CreditsBackground.png");
+    pugi::xml_document doc;
+    if (!doc.load_file("textures.xml")) {
+        SDL_Log("Error al cargar textures.xml");
+        return;
+    }
+
+    pugi::xml_node backgrounds = doc.child("textures").child("UI").child("menu").child("backgrounds");
+    pugi::xml_node buttons = doc.child("textures").child("UI").child("menu").child("buttons");
+
+    // Cargar fondos
+    for (pugi::xml_node bg = backgrounds.first_child(); bg; bg = bg.next_sibling()) {
+        std::string path = bg.attribute("path").as_string();
+        std::string name = bg.attribute("name").as_string();
+        std::string fullPath = path + name;
+
+        SDL_Texture* texture = Engine::GetInstance().render->LoadTexture(fullPath.c_str());
+        if (!texture) {
+            SDL_Log("Error al cargar textura de fondo: %s", fullPath.c_str());
+        }
+        else {
+            backgroundTextures.insert({ bg.name(), texture });
+        }
+    }
+    // Cargar botones
+    for (pugi::xml_node btn = buttons.first_child(); btn; btn = btn.next_sibling()) {
+        std::string path = btn.attribute("path").as_string();
+        std::string name = btn.attribute("name").as_string();
+        std::string fullPath = path + name;
+
+        SDL_Texture* texture = Engine::GetInstance().render->LoadTexture(fullPath.c_str());
+        if (!texture) {
+            SDL_Log("Error al cargar textura de botón: %s", fullPath.c_str());
+        }
+        else {
+            buttonTextures.insert({ name, texture }); // Usa el nombre de la textura como clave
+            SDL_Log("Textura de botón cargada: %s", fullPath.c_str()); // Agregado para verificar
+        }
+    }
 }
 
 bool Menus::Update(float dt) {
@@ -47,39 +82,46 @@ bool Menus::Update(float dt) {
 void Menus::HandlePause() {
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN && !inTransition && !inConfig) {
         if (currentState == MenusState::PAUSE) {
-            StartTransition(true, MenusState::GAME); 
+            StartTransition(true, MenusState::GAME);
             isPaused = false;
         }
         else if (currentState == MenusState::GAME) {
-            StartTransition(true, MenusState::PAUSE); 
+            StartTransition(true, MenusState::PAUSE);
             isPaused = true;
         }
     }
 }
-
 bool Menus::PostUpdate() {
     SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
     DrawBackground();
+
     DrawButtons();
     if (inTransition) ApplyTransitionEffect();
     return !isExit;
 }
-
 void Menus::DrawBackground() {
     SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
-    SDL_Rect cameraRect = { 0, 0, width, height };
-    SDL_Texture* backgroundTexture = nullptr;
 
+    SDL_Rect cameraRect = { 0, 0, width, height };
+
+    std::string bgKey;
     switch (currentState) {
-    case MenusState::INTRO: backgroundTexture = groupLogo; break;
-    case MenusState::MAINMENU: backgroundTexture = menuBackground; break;
-    case MenusState::PAUSE: backgroundTexture = pauseBackground; break;
-    case MenusState::SETTINGS: backgroundTexture = settingsBackground; break;
-    case MenusState::CREDITS: backgroundTexture = creditsBackground; break;
+    case MenusState::INTRO: bgKey = "intro"; break;
+    case MenusState::MAINMENU: bgKey = "main"; break;
+    case MenusState::PAUSE: bgKey = "pause"; break;
+    case MenusState::SETTINGS: bgKey = "settings"; break;
+    case MenusState::CREDITS: bgKey = "credits"; break;
     }
 
-    if (backgroundTexture) {
-        Engine::GetInstance().render->DrawTexture(backgroundTexture, cameraRect.x - Engine::GetInstance().render->camera.x, cameraRect.y - Engine::GetInstance().render->camera.y, &cameraRect);
+    auto it = backgroundTextures.find(bgKey);
+    if (it != backgroundTextures.end()) {
+        SDL_Texture* bgTexture = it->second;
+        if (bgTexture) {
+            Engine::GetInstance().render->DrawTexture(bgTexture, 
+                cameraRect.x - Engine::GetInstance().render->camera.x, 
+                cameraRect.y - Engine::GetInstance().render->camera.y,
+                &cameraRect);
+        }
     }
 }
 
@@ -90,11 +132,12 @@ void Menus::ApplyTransitionEffect() {
 }
 
 bool Menus::CleanUp() {
-    SDL_DestroyTexture(groupLogo);
-    SDL_DestroyTexture(menuBackground);
-    SDL_DestroyTexture(pauseBackground);
-    SDL_DestroyTexture(settingsBackground);
-    SDL_DestroyTexture(creditsBackground);
+    for (auto& pair : backgroundTextures) {
+        SDL_DestroyTexture(pair.second);
+    }
+    for (auto& pair : buttonTextures) {
+        SDL_DestroyTexture(pair.second);
+    }
     return true;
 }
 
@@ -116,7 +159,6 @@ void Menus::CheckCurrentState(float dt) {
 void Menus::Intro(float dt) {
     introTimer += dt;
     logoAlpha = std::min(logoAlpha + dt * 0.5f, 1.0f);
-
     if (introTimer >= 2000.0f || Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
         StartTransition(false, MenusState::MAINMENU);
     }
@@ -220,7 +262,8 @@ void Menus::Transition(float dt) {
     }
 }
 void Menus::CreateButtons() {
-    Engine::GetInstance().window->GetWindowSize(baseWidth, baseHeight); SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
+    Engine::GetInstance().window->GetWindowSize(baseWidth, baseHeight);
+    SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
 
     scaleX = static_cast<float>(width) / baseWidth;
     scaleY = static_cast<float>(height) / baseHeight;
@@ -233,52 +276,52 @@ void Menus::CreateButtons() {
     int startY = height / 2 - (buttonHeight * numButtons / 2) + 100;
 
     buttons.clear();
-    std::vector<ButtonInfo> buttonConfig;
+    std::vector<std::string> buttonNames = (currentState == MenusState::MAINMENU) ?
+        std::vector<std::string>{"newGame", "continue", "settings", "credits", "exit"} :
+        std::vector<std::string>{ "continue", "settings", "exit" };
 
-    if (currentState == MenusState::MAINMENU) {
-        buttonConfig = {
-            { "New Game", { centerX + 25, startY, buttonWidth - 50, buttonHeight }, 0 },
-            { "Continue", { centerX + 75, startY + buttonHeight, buttonWidth - 150, buttonHeight }, 1 },
-            { "Settings", { centerX + 75, startY + buttonHeight * 2, buttonWidth - 150, buttonHeight }, 2 },
-            { "Credits", { centerX + 100, startY + buttonHeight * 3, buttonWidth - 200, buttonHeight }, 3 },
-            { "Exit", { centerX + 150, startY + buttonHeight * 4, buttonWidth - 275, buttonHeight }, 4 }
-        };
-    }
-    else if (currentState == MenusState::PAUSE) {
-        buttonConfig = {
-            { "Resume", { centerX + 100, startY - 300, buttonWidth - 200, buttonHeight }, 0 },
-            { "Settings", { centerX + 75, startY - 250 + buttonHeight, buttonWidth - 150, buttonHeight }, 1 },
-            { "Exit", { centerX + 150, startY - 200 + buttonHeight * 2, buttonWidth - 275, buttonHeight }, 2 }
-        };
-    }
-    else if (currentState == MenusState::SETTINGS) {
-        buttonConfig = {
-            { "FullScreen", { centerX - 100, startY - 250, buttonWidth, buttonHeight }, 0, true },
-            { "VSync", { centerX, startY - 250 + buttonHeight, buttonWidth - 200, buttonHeight }, 1, true }
-        };
-    }
+    SDL_Log("Creando botones para el estado PAUSE. Número de botones: %zu", buttonNames.size());
+    for (size_t i = 0; i < buttonNames.size(); ++i) {
+        std::string unhoveredKey = buttonNames[i] + "_unhovered.png";
+        std::string hoveredKey = buttonNames[i] + "_hovered.png";
 
-    for (const auto& button : buttonConfig) {
-        buttons.push_back(button);
-        Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, button.id, button.text.c_str(), button.bounds, this);
+        auto unhoveredIt = buttonTextures.find(unhoveredKey);
+        auto hoveredIt = buttonTextures.find(hoveredKey);
+
+        SDL_Texture* unhoveredTex = (unhoveredIt != buttonTextures.end()) ? unhoveredIt->second : nullptr;
+        SDL_Texture* hoveredTex = (hoveredIt != buttonTextures.end()) ? hoveredIt->second : nullptr;
+
+        if (!unhoveredTex) SDL_Log("Textura de botón no encontrada: %s", unhoveredKey.c_str());
+        if (!hoveredTex) SDL_Log("Textura de botón no encontrada: %s", hoveredKey.c_str());
+
+        SDL_Rect buttonRect = { centerX, startY + static_cast<int>(i) * buttonHeight, buttonWidth, buttonHeight };
+        buttons.emplace_back("", buttonRect, static_cast<int>(i), false, "", "");
+        buttons.back().unhoveredTexture = unhoveredTex;
+        buttons.back().hoveredTexture = hoveredTex;
+
+        // Imprimir la posición de cada botón
+        SDL_Log("Botón %s en posición: (%d, %d)", buttonNames[i].c_str(), buttonRect.x, buttonRect.y);
     }
 }
-
 void Menus::DrawButtons() {
     if (currentState == MenusState::MAINMENU || currentState == MenusState::PAUSE || currentState == MenusState::SETTINGS) {
         for (size_t i = 0; i < buttons.size(); ++i) {
             bool isSelected = (i == selectedButton);
-            SDL_Color color = isSelected ? WHITE : GRAY;
+            SDL_Texture* buttonTexture = isSelected ? buttons[i].hoveredTexture : buttons[i].unhoveredTexture;
+            SDL_Rect buttonRect = buttons[i].bounds;
 
-            Engine::GetInstance().render->DrawText(buttons[i].text.c_str(), buttons[i].bounds.x, buttons[i].bounds.y, buttons[i].bounds.w, buttons[i].bounds.h, color);
-
-            if (buttons[i].isCheckBox) {
-                DrawCheckBox(buttons[i], isSelected, color);
+            if (buttonTexture) {
+                Engine::GetInstance().render->DrawTexture(buttonTexture, buttonRect.x, buttonRect.y, &buttonRect);
+            }
+            else {
+                // Dibuja un rectángulo de prueba
+                SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, 255, 0, 0, 255); // Color rojo
+                SDL_RenderFillRect(Engine::GetInstance().render->renderer, &buttonRect);
+                SDL_Log("Dibujando rectángulo de prueba en: (%d, %d)", buttonRect.x, buttonRect.y);
             }
         }
     }
 }
-
 void Menus::DrawCheckBox(const ButtonInfo& button, bool isSelected, const SDL_Color& color) {
     int boxSize = static_cast<int>(30 * scaleX);
     int borderThickness = static_cast<int>(isSelected ? 6 * scaleX : 4 * scaleX);

@@ -7,6 +7,7 @@
 #include "GuiControlButton.h"
 #include "GuiControl.h"
 #include "GuiManager.h"
+#include <unordered_map> 
 
 // Enum de los estados del menú
 enum class MenusState {
@@ -14,10 +15,24 @@ enum class MenusState {
 };
 
 struct ButtonInfo {
-    std::string text;
+    std::string text; // Se puede dejar vacío si no se usa texto
     SDL_Rect bounds;
     int id;
     bool isCheckBox = false; // Por defecto, no es un checkbox
+    SDL_Texture* unhoveredTexture = nullptr; // Textura cuando no está seleccionada
+    SDL_Texture* hoveredTexture = nullptr; // Textura cuando está seleccionada
+
+    // Constructor
+    ButtonInfo(const std::string& text, const SDL_Rect& bounds, int id, bool isCheckBox, const std::string& unhoveredPath, const std::string& hoveredPath)
+        : text(text), bounds(bounds), id(id), isCheckBox(isCheckBox) {
+        // Aquí puedes cargar las texturas si lo deseas, pero es mejor hacerlo en LoadTextures
+        unhoveredTexturePath = unhoveredPath;
+        hoveredTexturePath = hoveredPath;
+    }
+
+    // Rutas de las texturas
+    std::string unhoveredTexturePath;
+    std::string hoveredTexturePath;
 };
 
 class Menus : public Module {
@@ -61,8 +76,12 @@ public:
     int isSaved = 0;
     int selectedButton = 0;
     std::vector<ButtonInfo> buttons;
+    std::vector<std::string> buttonNames; 
 
 private:
+    std::unordered_map<std::string, SDL_Texture*> backgroundTextures;
+    std::unordered_map<std::string, SDL_Texture*> buttonTextures;
+
     int baseWidth, baseHeight, width, height;
     float scaleX = 1.0f;
     float scaleY = 1.0f;

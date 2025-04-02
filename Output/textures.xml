@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<textures>
+	<UI>
+		<menu>
+			<backgrounds>
+				<intro path="Assets/Textures/UI/Backgrounds/" name="intro.png"/>
+				<main path="Assets/Textures/UI/Backgrounds/" name="mainMenu.png"/>
+				<pause path="Assets/Textures/UI/Backgrounds/" name="pauseMenu.png"/>
+				<settings path="Assets/Textures/UI/Backgrounds/" name="settingsMenu.png"/>
+				<credits path="Assets/Textures/UI/Backgrounds/" name="creditsMenu.png"/>
+			</backgrounds>
+			<buttons>
+				<button path="Assets/Textures/UI/Buttons/" name="newGame_unhovered.png"/>
+				<button path="Assets/Textures/UI/Buttons/" name="newGame_hovered.png"/>
+				<button path="Assets/Textures/UI/Buttons/" name="continue_unhovered.png"/>
+				<button path="Assets/Textures/UI/Buttons/" name="continue_hovered.png"/>
+				<button path="Assets/Textures/UI/Buttons/" name="settings_unhovered.png"/>
+				<button path="Assets/Textures/UI/Buttons/" name="settings_hovered.png"/>
+				<button path="Assets/Textures/UI/Buttons/" name="credits_unhovered.png"/>
+				<button path="Assets/Textures/UI/Buttons/" name="credits_hovered.png"/>
+				<button path="Assets/Textures/UI/Buttons/" name="exit_unhovered.png"/>
+				<button path="Assets/Textures/UI/Buttons/" name="exit_hovered.png"/>
+			</buttons>
+		</menu>
+		<game>
+		</game>
+	</UI>
+	<entities>
+		
+	</entities>
+</textures>

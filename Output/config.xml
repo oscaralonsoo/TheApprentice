@@ -5,14 +5,14 @@
 		<maxFrameDuration value="16" />
 	</engine>
 	<render>
-		<vsync value="true" />
+		<vsync value="false" />
 	</render>
 	<window>
 		<resolution width="1280" height="720" scale="1" />
 		<fullscreen value="false" />
 		<borderless value="false" />
 		<resizable value="false" />
-		<fullscreen_window value="true" />
+		<fullscreen_window value="false" />
 	</window>
 	<scene>
 		<maps>

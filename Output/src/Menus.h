@@ -11,7 +11,7 @@
 
 // Enum de los estados del menú
 enum class MenusState {
-    NONE, INTRO, MAINMENU, GAME, PAUSE, SETTINGS, CREDITS, EXIT
+    NONE, INTRO, MAINMENU, GAME, PAUSE, SETTINGS, CREDITS, DEAD, GAMEOVER, EXIT
 };
 
 // Estructura para definir un botón
@@ -56,6 +56,8 @@ public:
 
     //Buttons
     void DrawButtons();
+
+    void DrawTexts(MenusState state);
 
 
 public:
@@ -103,4 +105,14 @@ private:
     int width = 0; 
     int height = 0;
     bool isFullScreen = false;
+    bool isVSync = false;
+
+    // Colors
+    SDL_Color WHITE = { 255, 255, 255, 255 };
+    SDL_Color BLACK = { 0, 0, 0, 255 };
+    SDL_Color RED = { 255, 0, 0, 255 };
+    SDL_Color MAGENTA = { 255, 0, 255, 255 };
+    SDL_Color YELLOW = { 255, 255, 0, 255 };
+    SDL_Color GRAY = { 200, 200, 200, 255 };
+
 };

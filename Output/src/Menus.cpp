@@ -63,7 +63,7 @@ void Menus::InitializeMenus() {
     menuConfigurations[MenusState::SETTINGS] = {
     MenusState::SETTINGS, {
         {{centerX, 400, buttonWidth, 115}, "TogglScreen", GuiControlType::CHECKBOX},
-        //Other Buttons
+        {{centerX, 500, buttonWidth, 115}, "Vsync", GuiControlType::CHECKBOX},
     }
     };
 }
@@ -92,13 +92,18 @@ void Menus::HandlePause() {
 }
 
 bool Menus::PostUpdate()
-{   
+{
+    SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
+    centerX = (width - buttonWidth) / 2; // Recalcular el centro dinámicamente
+
     DrawBackground();
     DrawButtons();
+    DrawTexts(currentState);
     if (inTransition) ApplyTransitionEffect();
     if (isExit) return false;
     return true;
 }
+
 
 void Menus::DrawBackground() // Draw background depending on the MenusState
 {
@@ -262,37 +267,29 @@ void Menus::Pause(float dt)
         }
     }
 }
-
 void Menus::Settings()
 {
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
     {
-        if (previousState == MenusState::PAUSE)
-        {
-            nextState = MenusState::PAUSE;
-        }
-        else
-        {
-            nextState = previousState;
-        }
+        nextState = (previousState == MenusState::PAUSE) ? MenusState::PAUSE : previousState;
         inConfig = false;
         StartTransition(true, nextState);
         previousState = MenusState::NONE;
     }
 
-    for (size_t i = 0; i < menuConfigurations[MenusState::SETTINGS].buttons.size(); ++i)
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
     {
-        auto& button = menuConfigurations[MenusState::SETTINGS].buttons[i];
-        if (button.text == "TogglScreen")
-        {
-            if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN))
-            {
-                isFullScreen = !isFullScreen;
-                Engine::GetInstance().window->SetFullScreen(isFullScreen);
-            }
+        if (selectedButton == 0) { // FullScreen Checkbox
+            isFullScreen = !isFullScreen;
+            Engine::GetInstance().window->SetFullScreen(isFullScreen);
+        }
+        else if (selectedButton == 1) { // VSync Checkbox
+            isVSync = !isVSync;
+            SDL_GL_SetSwapInterval(isVSync ? 1 : 0); // Activa o desactiva VSync
         }
     }
 }
+
 
 void Menus::Credits()
 {
@@ -367,44 +364,86 @@ void Menus::HandleInput() {
     else if (input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) 
         selectedButton = (selectedButton - 1 + buttonCount) % buttonCount;
 }
-
 void Menus::DrawButtons()
 {
     if (menuConfigurations.find(currentState) == menuConfigurations.end()) return;
     auto& buttons = menuConfigurations[currentState].buttons;
 
-    // Glow Effect
-    if (increasingGlow) {
-        glowEffect += 2.0f;
-        if (glowEffect >= 150.0f) increasingGlow = false;
-    }
-    else {
-        glowEffect -= 2.0f;
-        if (glowEffect <= 40.0f) increasingGlow = true;
-    }
+    static float glowIntensity = 0.5f; // Intensidad de brillo (se animará)
+    static bool increasing = true; // Para hacer un efecto pulsante
 
     for (size_t i = 0; i < buttons.size(); ++i)
     {
         bool isSelected = (selectedButton == static_cast<int>(i));
 
-        // Text Color
-        SDL_Color textColor = isSelected ? SDL_Color{ 255, 255, 255, 255 } : SDL_Color{ 200, 200, 200, 255 };
+        int buttonX = centerX;
+        int buttonY = buttons[i].bounds.y * (height / 1080.0f); // Ajuste de resolución
 
+        SDL_Color textColor = isSelected ? WHITE : GRAY;
+
+        // Efecto de brillo mejorado
         if (isSelected) {
-            int glowRadius = 10;
+            // Hacer que el brillo pulse
+            if (increasing) {
+                glowIntensity += 0.02f;
+                if (glowIntensity >= 1.0f) increasing = false;
+            }
+            else {
+                glowIntensity -= 0.02f;
+                if (glowIntensity <= 0.5f) increasing = true;
+            }
 
-            for (int layer = glowRadius; layer > 0; layer--) {
-                Uint8 alpha = static_cast<Uint8>(glowEffect / (layer * 1.5f));
-                SDL_Color glowColor = { 255, 255, 255, alpha };
+            Uint8 glowAlpha = static_cast<Uint8>(glowIntensity * 255); // Convertir intensidad a 0-255
+            SDL_Color glowColor = { 255, 255, 255, glowAlpha };
 
-                Engine::GetInstance().render->DrawText(buttons[i].text.c_str(), buttons[i].bounds.x - layer, buttons[i].bounds.y, buttons[i].bounds.w, buttons[i].bounds.h, glowColor);
-                Engine::GetInstance().render->DrawText(buttons[i].text.c_str(), buttons[i].bounds.x + layer, buttons[i].bounds.y, buttons[i].bounds.w, buttons[i].bounds.h, glowColor);
-                Engine::GetInstance().render->DrawText(buttons[i].text.c_str(), buttons[i].bounds.x, buttons[i].bounds.y - layer, buttons[i].bounds.w, buttons[i].bounds.h, glowColor);
-                Engine::GetInstance().render->DrawText(buttons[i].text.c_str(), buttons[i].bounds.x, buttons[i].bounds.y + layer, buttons[i].bounds.w, buttons[i].bounds.h, glowColor);
+            // Dibujar múltiples capas de brillo para mejorar el efecto
+            for (int j = 3; j > 0; --j) {
+                int expand = j * 6; // Tamaño del resplandor
+                SDL_Rect glowRect = { buttonX - expand, buttonY - expand, buttons[i].bounds.w + (expand * 2), buttons[i].bounds.h + (expand * 2) };
+                Engine::GetInstance().render->DrawRectangle(glowRect, glowColor.r, glowColor.g, glowColor.b, glowColor.a / j, true);
+            }
+
+        }
+
+        // Dibujar el texto del botón (solo si no es un checkbox)
+        if (buttons[i].type != GuiControlType::CHECKBOX) {
+            Engine::GetInstance().render->DrawText(buttons[i].text.c_str(), buttonX, buttonY, buttons[i].bounds.w, buttons[i].bounds.h, textColor);
+        }
+
+        // Dibujar CheckBox (para FullScreen y VSync)
+        if (currentState == MenusState::SETTINGS && (i == 0 || i == 1))
+        {
+            int borderThickness = isSelected ? 6 : 4;
+            SDL_Rect checkBox = { buttonX + 250, buttonY + 30, 40, 40 };
+
+            // Dibujar el borde más grueso si está seleccionado
+            for (int j = 0; j < borderThickness; j++)
+            {
+                SDL_Rect outline = { checkBox.x - j, checkBox.y - j, checkBox.w + (j * 2), checkBox.h + (j * 2) };
+                Engine::GetInstance().render->DrawRectangle(outline, 255, 255, 255, 255, false);
+            }
+
+            // Dibujar el interior si está activado
+            if ((i == 0 && isFullScreen) || (i == 1 && isVSync))
+            {
+                SDL_Rect innerBox = { checkBox.x + 5, checkBox.y + 5, checkBox.w - 10, checkBox.h - 10 };
+                Engine::GetInstance().render->DrawRectangle(innerBox, 255, 255, 255, 255, true);
             }
         }
-        // Draw Text
-        Engine::GetInstance().render->DrawText(buttons[i].text.c_str(), buttons[i].bounds.x, buttons[i].bounds.y, buttons[i].bounds.w, buttons[i].bounds.h, textColor);
     }
 }
+
+void Menus::DrawTexts(MenusState state)
+{
+    switch (state)
+    {
+    case MenusState::SETTINGS:
+        Engine::GetInstance().render->DrawText("Full Screen", centerX-350, height * 0.3f, 300, 150, WHITE);
+        Engine::GetInstance().render->DrawText("Vsync", centerX-350, height * 0.45f, 300, 150, WHITE);
+        Engine::GetInstance().render->DrawText("Music Volume", centerX-350, height * 0.6f, 300, 150, WHITE);
+        Engine::GetInstance().render->DrawText("Fx Volume", centerX-350, height * 0.75f, 300, 150, WHITE);
+        break;
+    }
+}
+
 

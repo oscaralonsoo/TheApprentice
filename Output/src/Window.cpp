@@ -1,7 +1,7 @@
 #include "Window.h"
 #include "Log.h"
 #include "Engine.h"
-
+#include "Menus.h"
 Window::Window() : Module()
 {
 	window = NULL;
@@ -96,6 +96,7 @@ void Window::SetFullScreen(bool isFullScreen)
 	fullScreenData.attribute("value") = isFullScreen;
 
 	config.save_file("config.xml");
+	Engine::GetInstance().menus->CreateButtons();
 }
 
 int Window::GetScale() const

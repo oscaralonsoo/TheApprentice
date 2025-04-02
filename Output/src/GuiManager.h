@@ -2,7 +2,7 @@
 
 #include "Module.h"
 #include "GuiControl.h"
-
+#include "GuiControlButton.h"
 #include <vector>
 
 class GuiManager : public Module
@@ -29,8 +29,9 @@ public:
 	// Additional methods
 	GuiControl* CreateGuiControl(GuiControlType type, int id, const char* text, SDL_Rect bounds, Module* observer, SDL_Rect sliderBounds = { 0,0,0,0 });
 
-public:
 
+public:
+	GuiControlButton* controlButton = nullptr;
 	std::vector<GuiControl*> guiControlsList;
 	SDL_Texture* texture;
 

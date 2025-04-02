@@ -14,20 +14,12 @@ enum class MenusState {
     NONE, INTRO, MAINMENU, GAME, PAUSE, SETTINGS, CREDITS, DEAD, GAMEOVER, EXIT
 };
 
-// Estructura para definir un botón
-struct MenuButton {
-    SDL_Rect bounds;
-    std::string text;
-    GuiControlType type;
-    GuiControlButton* guiButton = nullptr;
+struct ButtonInfo {
+    std::string text; 
+    SDL_Rect bounds; 
+    int id;           
+    bool isCheckBox;
 };
-
-// Estructura para manejar los menús y sus botones
-struct MenuData {
-    MenusState state;
-    std::vector<MenuButton> buttons;
-};
-
 
 class Menus : public Module {
 public:
@@ -36,7 +28,6 @@ public:
     bool Awake() override;
     bool Start() override;
     bool Update(float dt) override;
-    void InitializeMenus();
     bool PostUpdate() override;
     bool CleanUp() override;
     void LoadTextures();
@@ -46,7 +37,6 @@ public:
     void ApplyTransitionEffect();
     void StartTransition(bool fast, MenusState newState);
     void Transition(float dt);
-    void HandleInput();
     void Intro(float dt);
     void MainMenu(float dt);
     void NewGame();
@@ -54,10 +44,9 @@ public:
     void Settings();
     void Credits();
 
-    //Buttons
-    void DrawButtons();
+    void CreateButtons();
 
-    void DrawTexts(MenusState state);
+    void DrawButtons();
 
 
 public:
@@ -74,16 +63,18 @@ public:
     bool inConfig = false;  
     bool inCredits = false;
     int isSaved = 0;
-
+    int selectedButton = 0;
+    std::vector<ButtonInfo> buttons; // Vector de botones
 private:
-
-
+    int boxSize = 30;
+    int borderThickness = 0;
     // Variables de transición
     float introTimer = 0.0f;
     float logoAlpha = 0.0f;
     float transitionAlpha = 0.0f; 
     float transitionSpeed = 0.0f;
-
+    float scaleX = 1.0f;
+    float scaleY = 1.0f;
     // Texturas
     SDL_Texture* textures;
     SDL_Texture* groupLogo;
@@ -93,17 +84,12 @@ private:
     SDL_Texture* settingsBackground;
 
     // Botones
-    std::unordered_map<MenusState, MenuData> menuConfigurations;
-    GuiControlButton* guiBt;
-    int buttonWidth = 300;
-    int centerX = 0;
-    int selectedButton = 0;
-    float glowEffect = 0.0f;
-    bool increasingGlow = true;
+    GuiManager* guiManager; // Instancia del gestor de GUI
+
 
     // Configuración de pantalla
-    int width = 0; 
-    int height = 0;
+    int baseWidth, baseHeight, width, height;
+
     bool isFullScreen = false;
     bool isVSync = false;
 

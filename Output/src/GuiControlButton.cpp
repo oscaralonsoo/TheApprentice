@@ -44,21 +44,21 @@ bool GuiControlButton::Update(float dt)
 	}
 	else {
 
-	/*	switch (state)
-		{
-		case GuiControlState::NORMAL:
-			Engine::GetInstance().render->DrawText(button.text, 200, 200, 200, 100, true, false);
-			break;
-		case GuiControlState::FOCUSED:
-
-			Engine::GetInstance().render->DrawText(button.text, 0, 180, 255, 100, true, false);
-			break;
-		case GuiControlState::PRESSED:
-			Engine::GetInstance().render->DrawText(button.text, 0, 255, 150, 100, true, false);
-			break;
-		case GuiControlState::DISABLED:
-			Engine::GetInstance().render->DrawText(button.text, );*/
-
 		}
     return false;
 }
+void GuiControlButton::ButtonNavigation()
+{
+	if (Engine::GetInstance().menus->currentState == MenusState::MAINMENU ||
+		Engine::GetInstance().menus->currentState == MenusState::PAUSE ||
+		Engine::GetInstance().menus->currentState == MenusState::SETTINGS)
+	{
+		if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
+			Engine::GetInstance().menus->selectedButton = (Engine::GetInstance().menus->selectedButton + 1) % Engine::GetInstance().menus->buttons.size();
+		}
+		if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
+			Engine::GetInstance().menus->selectedButton = (Engine::GetInstance().menus->selectedButton - 1 + Engine::GetInstance().menus->buttons.size()) % Engine::GetInstance().menus->buttons.size();
+		}
+	}
+}
+

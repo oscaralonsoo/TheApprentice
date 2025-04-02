@@ -14,6 +14,10 @@ public:
 	// Called each loop iteration
 	bool Update(float dt);
 
+	void ButtonNavigation();
+
+
+
 private:
 
 	bool canClick = true;

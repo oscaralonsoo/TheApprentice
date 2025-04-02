@@ -391,5 +391,14 @@ float Render::EaseInOut(float current, float target, float t)
 	float easedT = t * t * (3 - 2 * t); // curva tipo easeInOutCubic
 	return current + delta * easedT;
 }
+void Render::SetVSync(bool enable)
+{
+	// Save Config
+	pugi::xml_document config;
+	pugi::xml_parse_result result = config.load_file("config.xml");
+	pugi::xml_node vSyncData = config.child("config").child("render").child("vsync");
+	vSyncData.attribute("value") = enable;
 
+	config.save_file("config.xml");
+}
 

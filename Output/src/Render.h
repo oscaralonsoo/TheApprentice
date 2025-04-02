@@ -46,6 +46,8 @@ public:
 
 	float EaseInOut(float current, float target, float t);
 
+	void SetVSync(bool enable);
+
 	SDL_Texture* LoadTexture(const char* path);
 public:
 

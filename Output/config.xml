@@ -5,7 +5,7 @@
 		<maxFrameDuration value="16" />
 	</engine>
 	<render>
-		<vsync value="false" />
+		<vsync value="true" />
 	</render>
 	<window>
 		<resolution width="1280" height="720" scale="1" />
@@ -101,9 +101,9 @@
 				</cave_drop>
 			</props>
 		</animations>
-		<save_data isSaved="0">
-			<player x="180" y="50" w="44" h="54" />
-			<scene actualScene="0" />
+		<save_data isSaved="1">
+			<player x="396" y="704" w="44" h="54" />
+			<scene actualScene="1" />
 			<enemies />
 		</save_data>
 	</scene>

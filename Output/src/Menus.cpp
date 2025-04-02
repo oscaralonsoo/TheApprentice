@@ -9,21 +9,24 @@
 Menus::Menus() : currentState(MenusState::MAINMENU), transitionAlpha(0.0f), inTransition(false), fadingIn(false), nextState(MenusState::NONE), 
 fastTransition(false), menuBackground(nullptr), pauseBackground(nullptr) {}
 
-Menus::~Menus() {}
+Menus::~Menus() {
+}
 
 bool Menus::Awake(){ return true; }
 
 bool Menus::Start() {
     currentState = MenusState::MAINMENU;
     LoadTextures();
-    InitializeMenus();
+    CreateButtons();
 
     //Load Config
     pugi::xml_document config;
     if (config.load_file("config.xml")) {
         pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
         pugi::xml_node fullScreenData = config.child("config").child("window").child("fullscreen_window");
+        pugi::xml_node vSyncData = config.child("config").child("render").child("vsync");
         isFullScreen = fullScreenData.attribute("value").as_bool();
+        isVSync = vSyncData.attribute("value").as_bool();
         isSaved = saveData.attribute("isSaved").as_int();
     }
     return true;
@@ -37,40 +40,9 @@ void Menus::LoadTextures()
     settingsBackground = Engine::GetInstance().render->LoadTexture("assets/textures/Menus/SettingsBackground.png");
     creditsBackground = Engine::GetInstance().render->LoadTexture("assets/textures/Menus/CreditsBackground.png");
 }
-void Menus::InitializeMenus() {
-    SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
-    centerX = (width - buttonWidth) / 2;
-
-    // Menú principal
-    menuConfigurations[MenusState::MAINMENU] = {
-        MenusState::MAINMENU, {
-            {{centerX, 400, buttonWidth, 115}, "New Game", GuiControlType::BUTTON},
-            {{centerX, 520, buttonWidth, 115}, "Continue", GuiControlType::BUTTON},
-            {{centerX, 640, buttonWidth, 115}, "Settings", GuiControlType::BUTTON},
-            {{centerX, 760, buttonWidth, 115}, "Credits", GuiControlType::BUTTON},
-            {{centerX, 880, buttonWidth, 115}, "Exit", GuiControlType::BUTTON}
-        }
-    };
-
-    // Menú de pausa
-    menuConfigurations[MenusState::PAUSE] = {
-        MenusState::PAUSE, {
-            {{centerX, 400, buttonWidth, 115}, "Resume", GuiControlType::BUTTON},
-            {{centerX, 520, buttonWidth, 115}, "Settings", GuiControlType::BUTTON},
-            {{centerX, 640, buttonWidth, 115}, "Exit", GuiControlType::BUTTON}
-        }
-    };
-    menuConfigurations[MenusState::SETTINGS] = {
-    MenusState::SETTINGS, {
-        {{centerX, 400, buttonWidth, 115}, "TogglScreen", GuiControlType::CHECKBOX},
-        {{centerX, 500, buttonWidth, 115}, "Vsync", GuiControlType::CHECKBOX},
-    }
-    };
-}
 
 
 bool Menus::Update(float dt) {
-    HandleInput();
     CheckCurrentState(dt);
     Transition(dt);
     HandlePause();
@@ -93,17 +65,17 @@ void Menus::HandlePause() {
 
 bool Menus::PostUpdate()
 {
+    // Obtener el tamaño actual de la ventana
     SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
-    centerX = (width - buttonWidth) / 2; // Recalcular el centro dinámicamente
 
     DrawBackground();
     DrawButtons();
-    DrawTexts(currentState);
     if (inTransition) ApplyTransitionEffect();
+
+
     if (isExit) return false;
     return true;
 }
-
 
 void Menus::DrawBackground() // Draw background depending on the MenusState
 {
@@ -152,6 +124,8 @@ void Menus::CheckCurrentState(float dt)
 {
     if (inTransition) return;
 
+    Engine::GetInstance().guiManager->controlButton->ButtonNavigation();
+
     switch (currentState)
     {
     case MenusState::INTRO:
@@ -193,16 +167,17 @@ void Menus::Intro(float dt)
         StartTransition(false, MenusState::MAINMENU);
     }
 }
-void Menus::MainMenu(float dt)
-{
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
-    {
-        switch (selectedButton)
-        {
+void Menus::MainMenu(float dt) {
+    // Manejo de la entrada del teclado para seleccionar botones
+  
+
+    // Manejo de la selección del botón
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+        switch (selectedButton) {
         case 0: // New Game
             NewGame();
             break;
-        case 1: // Continue 
+        case 1: // Continue
             if (isSaved > 0) {
                 Engine::GetInstance().scene.get()->LoadGameXML();
                 StartTransition(false, MenusState::GAME);
@@ -267,26 +242,25 @@ void Menus::Pause(float dt)
         }
     }
 }
-void Menus::Settings()
-{
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-    {
+void Menus::Settings() {
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
         nextState = (previousState == MenusState::PAUSE) ? MenusState::PAUSE : previousState;
         inConfig = false;
         StartTransition(true, nextState);
         previousState = MenusState::NONE;
     }
-
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
-    {
-        if (selectedButton == 0) { // FullScreen Checkbox
+    else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+        switch (selectedButton) {
+        case 0: // FullScreen
             isFullScreen = !isFullScreen;
             Engine::GetInstance().window->SetFullScreen(isFullScreen);
-        }
-        else if (selectedButton == 1) { // VSync Checkbox
+            break;
+        case 1: // VSync
             isVSync = !isVSync;
-            SDL_GL_SetSwapInterval(isVSync ? 1 : 0); // Activa o desactiva VSync
+            Engine::GetInstance().render->SetVSync(isVSync);
+            break;
         }
+        CreateButtons(); // Para actualizar los botones después de cambiar el estado
     }
 }
 
@@ -334,6 +308,7 @@ void Menus::Transition(float dt) // Transition Logic
             {
                 currentState = nextState;
                 nextState = MenusState::NONE;
+                CreateButtons();
             }
         }
     }
@@ -349,101 +324,113 @@ void Menus::Transition(float dt) // Transition Logic
         }
     }
 }
+void Menus::CreateButtons() {
+    Engine::GetInstance().window->GetWindowSize(baseWidth, baseHeight);
+    SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
 
-void Menus::HandleInput() {
-    if (menuConfigurations.find(currentState) == menuConfigurations.end()) return;
-    size_t buttonCount = menuConfigurations[currentState].buttons.size();
+    scaleX = static_cast<float>(width) / baseWidth;
+    scaleY = static_cast<float>(height) / baseHeight;
 
-    if (buttonCount == 0) return;
+    int buttonWidth = static_cast<int>(300 * scaleX);
+    int buttonHeight = static_cast<int>(50 * scaleY);
 
-    Input* input = Engine::GetInstance().input.get();
+    int numButtons = 0;
+    if (currentState == MenusState::MAINMENU) numButtons = 5;
+    else if (currentState == MenusState::PAUSE) numButtons = 3;
+    else if (currentState == MenusState::SETTINGS) numButtons = 2;
 
-    if (input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) 
-        selectedButton = (selectedButton + 1) % buttonCount;
+    int centerX = (width - buttonWidth) / 2;
+    int startY = height / 2 - (buttonHeight * numButtons / 2) + 100;
 
-    else if (input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) 
-        selectedButton = (selectedButton - 1 + buttonCount) % buttonCount;
+    buttons.clear();
+
+    // Se definen las posiciones de los botones en función del estado
+    std::vector<ButtonInfo> buttonConfig;
+
+    if (currentState == MenusState::MAINMENU) {
+        buttonConfig = {
+            { "New Game", { centerX+25, startY, buttonWidth-50, buttonHeight }, 0 },
+            { "Continue", { centerX + 75, startY + buttonHeight, buttonWidth - 150, buttonHeight }, 1 },
+            { "Settings", { centerX + 75, startY + buttonHeight * 2, buttonWidth - 150, buttonHeight }, 2 },
+            { "Credits", { centerX + 100, startY + buttonHeight * 3, buttonWidth - 200, buttonHeight }, 3 },
+            { "Exit", { centerX + 150, startY + buttonHeight * 4, buttonWidth - 275, buttonHeight }, 4 }
+        };
+    }
+    else if (currentState == MenusState::PAUSE) {
+        buttonConfig = {
+            { "Resume", { centerX+100, startY-300, buttonWidth-200, buttonHeight }, 0 },
+            { "Settings", { centerX + 75, startY-250 + buttonHeight, buttonWidth - 150, buttonHeight }, 1 },
+            { "Exit", { centerX + 150, startY-200 + buttonHeight * 2, buttonWidth - 275, buttonHeight }, 2 }
+        };
+    }
+    else if (currentState == MenusState::SETTINGS) {
+        buttonConfig = {
+            { "FullScreen", { centerX - 100, startY - 250, buttonWidth, buttonHeight }, 0, true },
+            { "VSync", { centerX, startY - 250 + buttonHeight, buttonWidth - 200, buttonHeight }, 1, true }
+        };
+    }
+
+    // Poblamos el vector de botones con la configuración
+    for (const auto& button : buttonConfig) {
+        buttons.push_back(button);
+    }
+
+    // Crear los botones en el GuiManager
+    for (const auto& button : buttons) {
+        Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, button.id, button.text.c_str(), button.bounds, this);
+    }
 }
-void Menus::DrawButtons()
-{
-    if (menuConfigurations.find(currentState) == menuConfigurations.end()) return;
-    auto& buttons = menuConfigurations[currentState].buttons;
+void Menus::DrawButtons() {
+    // Solo se dibujan los botones si estamos en uno de los estados correspondientes
+    if (currentState == MenusState::MAINMENU || currentState == MenusState::PAUSE || currentState == MenusState::SETTINGS) {
+        for (size_t i = 0; i < buttons.size(); ++i) {
+            bool isSelected = (i == selectedButton);
+            SDL_Color color = isSelected ? WHITE : GRAY;
 
-    static float glowIntensity = 0.5f; // Intensidad de brillo (se animará)
-    static bool increasing = true; // Para hacer un efecto pulsante
+            Engine::GetInstance().render->DrawText(buttons[i].text.c_str(), buttons[i].bounds.x, buttons[i].bounds.y, buttons[i].bounds.w, buttons[i].bounds.h, color);
 
-    for (size_t i = 0; i < buttons.size(); ++i)
-    {
-        bool isSelected = (selectedButton == static_cast<int>(i));
+            // Dibuja el checkmark si el botón es un checkbox
+            if (buttons[i].isCheckBox) {
+                int boxSize = static_cast<int>(30 * scaleX);
+                int borderThickness = static_cast<int>(isSelected ? 6 * scaleX : 4 * scaleX);
 
-        int buttonX = centerX;
-        int buttonY = buttons[i].bounds.y * (height / 1080.0f); // Ajuste de resolución
+                SDL_Rect boxRect = {
+                    buttons[i].bounds.x + 100 + buttons[i].bounds.w - boxSize - static_cast<int>(10 * scaleX),
+                    buttons[i].bounds.y + (buttons[i].bounds.h - boxSize) / 2,
+                    boxSize,
+                    boxSize
+                };
 
-        SDL_Color textColor = isSelected ? WHITE : GRAY;
+                // Dibuja el borde exterior de la checkbox
+                SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, color.r, color.g, color.b, 255);
+                for (int j = 0; j < borderThickness; ++j) {
+                    SDL_Rect outerBoxRect = { boxRect.x - j, boxRect.y - j, boxRect.w + 2 * j, boxRect.h + 2 * j };
+                    SDL_RenderDrawRect(Engine::GetInstance().render->renderer, &outerBoxRect);
+                }
 
-        // Efecto de brillo mejorado
-        if (isSelected) {
-            // Hacer que el brillo pulse
-            if (increasing) {
-                glowIntensity += 0.02f;
-                if (glowIntensity >= 1.0f) increasing = false;
-            }
-            else {
-                glowIntensity -= 0.02f;
-                if (glowIntensity <= 0.5f) increasing = true;
-            }
+                // Si el checkbox está marcado, dibuja el checkmark
+                if ((i == 0 && isFullScreen) || (i == 1 && isVSync)) {
+                    float scaleFactor = isSelected ? 0.7f : 0.5f;
+                    int innerSize = static_cast<int>(boxSize * scaleFactor);
+                    int offset = (boxSize - innerSize) / 2;
 
-            Uint8 glowAlpha = static_cast<Uint8>(glowIntensity * 255); // Convertir intensidad a 0-255
-            SDL_Color glowColor = { 255, 255, 255, glowAlpha };
+                    SDL_Rect checkMark = {
+                        boxRect.x + offset,
+                        boxRect.y + offset,
+                        innerSize,
+                        innerSize
+                    };
 
-            // Dibujar múltiples capas de brillo para mejorar el efecto
-            for (int j = 3; j > 0; --j) {
-                int expand = j * 6; // Tamaño del resplandor
-                SDL_Rect glowRect = { buttonX - expand, buttonY - expand, buttons[i].bounds.w + (expand * 2), buttons[i].bounds.h + (expand * 2) };
-                Engine::GetInstance().render->DrawRectangle(glowRect, glowColor.r, glowColor.g, glowColor.b, glowColor.a / j, true);
-            }
-
-        }
-
-        // Dibujar el texto del botón (solo si no es un checkbox)
-        if (buttons[i].type != GuiControlType::CHECKBOX) {
-            Engine::GetInstance().render->DrawText(buttons[i].text.c_str(), buttonX, buttonY, buttons[i].bounds.w, buttons[i].bounds.h, textColor);
-        }
-
-        // Dibujar CheckBox (para FullScreen y VSync)
-        if (currentState == MenusState::SETTINGS && (i == 0 || i == 1))
-        {
-            int borderThickness = isSelected ? 6 : 4;
-            SDL_Rect checkBox = { buttonX + 250, buttonY + 30, 40, 40 };
-
-            // Dibujar el borde más grueso si está seleccionado
-            for (int j = 0; j < borderThickness; j++)
-            {
-                SDL_Rect outline = { checkBox.x - j, checkBox.y - j, checkBox.w + (j * 2), checkBox.h + (j * 2) };
-                Engine::GetInstance().render->DrawRectangle(outline, 255, 255, 255, 255, false);
-            }
-
-            // Dibujar el interior si está activado
-            if ((i == 0 && isFullScreen) || (i == 1 && isVSync))
-            {
-                SDL_Rect innerBox = { checkBox.x + 5, checkBox.y + 5, checkBox.w - 10, checkBox.h - 10 };
-                Engine::GetInstance().render->DrawRectangle(innerBox, 255, 255, 255, 255, true);
+                    SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, color.r, color.g, color.b, 255);
+                    SDL_RenderFillRect(Engine::GetInstance().render->renderer, &checkMark);
+                }
             }
         }
     }
 }
 
-void Menus::DrawTexts(MenusState state)
-{
-    switch (state)
-    {
-    case MenusState::SETTINGS:
-        Engine::GetInstance().render->DrawText("Full Screen", centerX-350, height * 0.3f, 300, 150, WHITE);
-        Engine::GetInstance().render->DrawText("Vsync", centerX-350, height * 0.45f, 300, 150, WHITE);
-        Engine::GetInstance().render->DrawText("Music Volume", centerX-350, height * 0.6f, 300, 150, WHITE);
-        Engine::GetInstance().render->DrawText("Fx Volume", centerX-350, height * 0.75f, 300, 150, WHITE);
-        break;
-    }
-}
+
+
+
 
 

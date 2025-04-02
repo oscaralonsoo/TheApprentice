@@ -7,16 +7,16 @@
 
 enum class GuiControlType
 {
-	BUTTON,
-	TOGGLE,
-	CHECKBOX,
-	SLIDER,
-	SLIDERBAR,
-	COMBOBOX,
-	DROPDOWNBOX,
-	INPUTBOX,
-	VALUEBOX,
-	SPINNER
+    BUTTON,
+    TOGGLE,
+    CHECKBOX,
+    SLIDER,
+    SLIDERBAR,
+    COMBOBOX,
+    DROPDOWNBOX,
+    INPUTBOX,
+    VALUEBOX,
+    SPINNER
 };
 
 enum class GuiControlState
@@ -49,6 +49,15 @@ public:
 	// Called each loop iteration
 	virtual bool Update(float dt)
 	{
+		if (type == GuiControlType::CHECKBOX)
+		{
+			if (state == GuiControlState::PRESSED)
+			{
+				// Cambiar el estado del checkbox
+				state = (state == GuiControlState::NORMAL) ? GuiControlState::SELECTED : GuiControlState::NORMAL;
+				NotifyObserver();
+			}
+		}
 		return true;
 	}
 

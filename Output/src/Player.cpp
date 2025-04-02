@@ -110,7 +110,7 @@ void Player::SetPosition(Vector2D pos) {
 }
 
 Vector2D Player::GetPosition() const {
-	return position;
+	return Vector2D(position.getX() + texW / 2, position.getY() + texH / 2);
 }
 
 int Player::GetMovementDirection() const {

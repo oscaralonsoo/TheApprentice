@@ -79,7 +79,6 @@ private:
     bool wasInDownCameraZone = false;
     bool isWallSliding = false;
     bool wallJumpUnlocked = true;
-    float jumpForceWallSlideX = 10.5f;
 
     // Attack
     PhysBody* attackSensor = nullptr;

@@ -142,12 +142,6 @@ void PlayerMechanics::HandleJump() {
         isJumping = true;
         player->SetState("jump");
     }
-    else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !isJumping && wallJumpUnlocked) {
-        velocity.y = -jumpForce;
-        velocity.x = jumpForceWallSlideX;
-        isJumping = true;
-        player->SetState("jump");
-    }
     else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isJumping && !hasDoubleJumped && doubleJumpUnlocked && !isWallSliding) {
         velocity.y = -jumpForce;
         hasDoubleJumped = true;

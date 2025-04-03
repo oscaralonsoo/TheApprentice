@@ -101,7 +101,6 @@ bool Enemy::Update(float dt)
 bool Enemy::CleanUp()
 {
 	Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
-	pbody = nullptr;
 	return true;
 }
 

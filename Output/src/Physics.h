@@ -79,7 +79,7 @@ public:
 	bool CleanUp();
 
 	// Create basic physics objects
-	PhysBody* CreateRectangle(int x, int y, int width, int height, bodyType type);
+	PhysBody* CreateRectangle(int x, int y, int width, int height, bodyType type, float offsetX = 0, float offsetY = 0);
 	PhysBody* CreateCircle(int x, int y, int radious, bodyType type);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, bodyType type);
 	PhysBody* CreateChain(int x, int y, int* points, int size, bodyType type);

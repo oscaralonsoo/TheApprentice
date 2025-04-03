@@ -127,6 +127,9 @@ void EntityManager::AddEntity(Entity* entity)
 
 bool EntityManager::Update(float dt)
 {
+	if (Engine::GetInstance().menus->currentState != MenusState::GAME)
+		return true;
+
 	bool ret = true;
 	for(const auto entity : entities)
 	{
@@ -134,19 +137,4 @@ bool EntityManager::Update(float dt)
 		ret = entity->Update(dt);
 	}
 	return ret;
-}
-void EntityManager::CreateEnemiesFromXML(pugi::xml_node enemyNodes, bool initialize)
-{
-	for (pugi::xml_node enemyNode = enemyNodes.child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy"))
-	{
-		Enemy* enemy = (Enemy*)CreateEntity(EntityType::BLOODRUSHER);
-		enemy->SetParameters(enemyNode);
-
-		if(initialize)
-		enemy->Start();
-
-		LOG("Enemy Created");
-		
-	}
-
 }

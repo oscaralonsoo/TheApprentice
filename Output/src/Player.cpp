@@ -20,7 +20,7 @@ Player::Player() : Entity(EntityType::PLAYER)
 Player::~Player() {}
 
 bool Player::Awake() {
-	position = Vector2D(128, 96);
+	position = Vector2D(500, 500);
 	return true;
 }
 
@@ -32,9 +32,10 @@ bool Player::Start() {
 
 	animation.LoadAnimations(parameters, texture);
 
-	pbody = Engine::GetInstance().physics->CreateRectangle((int)position.getX(), (int)position.getY() + 300, 64, 64, bodyType::DYNAMIC);
-	pbody->listener = this;
-	pbody->ctype = ColliderType::PLAYER;
+    // Create the body at the same position, and ensure it's centered
+    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX(), (int)position.getY(), 43, 43, bodyType::DYNAMIC, 22, 9);
+    pbody->listener = this;
+    pbody->ctype = ColliderType::PLAYER;
 
 	mechanics.Init(this);
 
@@ -109,7 +110,7 @@ void Player::SetPosition(Vector2D pos) {
 }
 
 Vector2D Player::GetPosition() const {
-	return position;
+	return Vector2D(position.getX() + texW / 2, position.getY() + texH / 2);
 }
 
 int Player::GetMovementDirection() const {

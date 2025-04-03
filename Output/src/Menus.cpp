@@ -20,52 +20,36 @@ bool Menus::Start()
     pugi::xml_document config;
     pugi::xml_parse_result result = config.load_file("config.xml");
     pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
+    pugi::xml_node fullScreenData = config.child("config").child("window").child("fullscreen_window");
+    isFullScreen = fullScreenData.attribute("value").as_bool();
 
     isSaved = saveData.attribute("isSaved").as_int();
     return true;
 }
 void Menus::LoadTextures()
 {
-    // Background Textures Load
-    std::vector<std::pair<SDL_Texture**, std::string>> backgrounds = {
-        { &groupLogo, "Logo" },
-        { &menuBackground, "MainMenuBackground" },
-        { &pauseBackground, "PauseMenuBackground" },
-        { &creditsBackground, "CreditsBackground" },
-        { &settingsBackground, "SettingsBackground" }
-    };
+    // Cargar fondos
+    groupLogo = Engine::GetInstance().render->LoadTexture("assets/textures/Menus/Logo.png");
+    menuBackground = Engine::GetInstance().render->LoadTexture("assets/textures/Menus/MainMenuBackGround.png");
+    pauseBackground = Engine::GetInstance().render->LoadTexture("assets/textures/Menus/PauseMenuBackground.png");
+    settingsBackground = Engine::GetInstance().render->LoadTexture("assets/textures/Menus/SettingsBackground.png");
+    creditsBackground = Engine::GetInstance().render->LoadTexture("assets/textures/Menus/CreditsBackground.png");
 
-    for (auto& bg : backgrounds) {
-        *bg.first = Engine::GetInstance().render->LoadTexture(("Assets/Textures/Menus/" + bg.second + ".png").c_str());
+    // Cargar botones dinámicamente
+    std::vector<std::string> buttonNames = { "NewGame", "Continue", "Settings", "Credits", "Exit" };
+    for (const auto& name : buttonNames) {
+        MenuButton button;
+        button.texDeselected = Engine::GetInstance().render->LoadTexture(("assets/textures/Menus/buttons/" + name + "_deselected.png").c_str());
+        button.texSelected = Engine::GetInstance().render->LoadTexture(("assets/textures/Menus/buttons/" + name + "_selected.png").c_str());
+        mainMenuButtons.push_back(button);
     }
 
-    // Button Config
-    const int screenWidth = Engine::GetInstance().window->width;
-    const int buttonWidth = 200;
-    const int buttonHeight = 50;
-    const int startX = (screenWidth - buttonWidth) / 2;
-
-    std::vector<std::pair<std::vector<MenuButton>&, std::vector<std::string>>> menus = {
-        { mainMenuButtons, { "NewGame", "Continue", "Settings", "Credits", "Exit" } },
-        { pauseMenuButtons, { "Continue", "Settings", "Exit" } }
-    };
-
-    std::vector<int> startY = { 180, 150 }; // Posiciones iniciales de los menús
-    std::vector<int> spacing = { 100, 200 }; 
-    //Buttons Load
-    for (size_t i = 0; i < menus.size(); ++i) {
-        menus[i].first.clear();
-        for (size_t j = 0; j < menus[i].second.size(); ++j) {
-            int posY = startY[i] + j * spacing[i];
-
-            MenuButton btn;
-            std::string buttonName = menus[i].second[j];
-            btn.texDeselected = Engine::GetInstance().render->LoadTexture(("Assets/Textures/Menus/Buttons/" + buttonName + "_disselected.png").c_str());
-            btn.texSelected = Engine::GetInstance().render->LoadTexture(("Assets/Textures/Menus/Buttons/" + buttonName + "_Selected.png").c_str());
-            btn.rect = { startX, posY, buttonWidth, buttonHeight };
-
-            menus[i].first.push_back(btn);
-        }
+    std::vector<std::string> pauseButtonNames = { "Continue", "Settings", "Exit" };
+    for (const auto& name : pauseButtonNames) {
+        MenuButton button;
+        button.texDeselected = Engine::GetInstance().render->LoadTexture(("assets/textures/Menus/buttons/" + name + "_deselected.png").c_str());
+        button.texSelected = Engine::GetInstance().render->LoadTexture(("assets/textures/Menus/buttons/" + name + "_selected.png").c_str());
+        pauseMenuButtons.push_back(button);
     }
 }
 
@@ -107,21 +91,21 @@ bool Menus::PostUpdate()
     {
         return false;
     }
-
     return true;
 }
 
 void Menus::DrawBackground() // Draw background depending on the MenusState
 {
-    SDL_Rect cameraRect = { 0, 0,Engine::GetInstance().window.get()->width,Engine::GetInstance().window.get()->height };
+    SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
+    SDL_Rect cameraRect = { 0, 0,width, height };
     switch (currentState)
     {
     case MenusState::INTRO:
-        Engine::GetInstance().render->DrawTexture(groupLogo, 0, 0, nullptr, logoAlpha);
+        Engine::GetInstance().render->DrawTexture(groupLogo, 0, 0, &cameraRect, logoAlpha);
         break;
         break;
     case MenusState::MAINMENU:
-        Engine::GetInstance().render->DrawTexture(menuBackground, 0, 0, nullptr);
+        Engine::GetInstance().render->DrawTexture(menuBackground, 0, 0, &cameraRect);
         break;
     case MenusState::PAUSE:
         Engine::GetInstance().render->DrawTexture(pauseBackground, cameraRect.x - Engine::GetInstance().render->camera.x, 
@@ -132,7 +116,7 @@ void Menus::DrawBackground() // Draw background depending on the MenusState
             cameraRect.y - Engine::GetInstance().render->camera.y, &cameraRect);
         break;
     case MenusState::CREDITS:
-        Engine::GetInstance().render->DrawTexture(creditsBackground, 0, 0, nullptr);
+        Engine::GetInstance().render->DrawTexture(creditsBackground, 0, 0, &cameraRect);
         break;
     }
 }
@@ -140,29 +124,28 @@ void Menus::DrawBackground() // Draw background depending on the MenusState
 void Menus::DrawButtons()
 {
     std::vector<MenuButton>* buttons = nullptr;
-
-    if (currentState == MenusState::MAINMENU)
+    if (currentState == MenusState::MAINMENU) {
         buttons = &mainMenuButtons;
-    else if (currentState == MenusState::PAUSE)
+    }
+    else if (currentState == MenusState::PAUSE) {
         buttons = &pauseMenuButtons;
+    }
 
-    if (buttons)
-    {
-        for (size_t i = 0; i < buttons->size(); i++)
-        {
-            SDL_Texture* tex = (i == selectedButton) ? (*buttons)[i].texSelected : (*buttons)[i].texDeselected;
+    if (!buttons) return;
 
-            int adjustedX = (*buttons)[i].rect.x;
-            int adjustedY = (*buttons)[i].rect.y;
+    int yOffset = height / 2 - buttons->size() * 50 / 2;
+    for (size_t i = 0; i < buttons->size(); ++i) {
+        SDL_Texture* tex = (i == selectedButton) ? (*buttons)[i].texSelected : (*buttons)[i].texDeselected;
 
-            if (currentState == MenusState::PAUSE)  
-            {
-                adjustedX -= Engine::GetInstance().render->camera.x;
-                adjustedY -= Engine::GetInstance().render->camera.y;
-            }
+        int xPos = width / 2 - 100;
+        int yPos = yOffset + i * 100;
 
-            Engine::GetInstance().render->DrawTexture(tex, adjustedX, adjustedY, nullptr);
+        if (currentState == MenusState::PAUSE) {
+            xPos -= Engine::GetInstance().render->camera.x;
+            yPos -= Engine::GetInstance().render->camera.y;
         }
+
+        Engine::GetInstance().render->DrawTexture(tex, xPos, yPos);
     }
 }
 
@@ -267,7 +250,7 @@ void Menus::MainMenu(float dt)
         case 1: // Continue 
             if (isSaved > 0) {
                 Engine::GetInstance().scene.get()->LoadGameXML();
-                currentState = MenusState::GAME;
+                StartTransition(false, MenusState::GAME);
             }
             break;
         case 2: // Settings
@@ -284,9 +267,6 @@ void Menus::MainMenu(float dt)
         }
     }
 }
-
-
-
 
 void Menus::NewGame()
 {
@@ -372,8 +352,9 @@ void Menus::Settings()
 void Menus::Credits()
 {
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-    {
-
+    {   
+        isFullScreen = !isFullScreen;
+        Engine::GetInstance().window->SetFullScreen(isFullScreen);
         if (previousState == MenusState::PAUSE)
         {
             nextState = MenusState::PAUSE;
@@ -423,6 +404,8 @@ void Menus::Transition(float dt)
             transitionAlpha = 0.0f;
             inTransition = false;
             fastTransition = false; 
+            Engine::GetInstance().scene->saving = false;
         }
     }
+
 }

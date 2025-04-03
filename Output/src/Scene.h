@@ -48,19 +48,38 @@ public:
 	// Called When Loading Game
 	void LoadGameXML();
 
+	void Vignette(int size, float strength);
+
 public:
 
 	Vector2D newPosition;
 	bool transitioning = false;
 	bool saveGameZone = false;
+	bool saving = false;
 	int nextScene = 0;
+
+	//Vignette
+	int vignetteSize = 300;
+	float vignetteStrength = 0.8f;
+
 private:
 	SDL_Texture* img;
 	//L03: TODO 3b: Declare a Player attribute
 	Player* player;
 	bool isLoad = false;
+
 	//transition 
 	bool fadingIn = false;
 	float transitionAlpha = 0.0f;
+
+	//Vignette
+	float distFactor = 0.0f;
+	float opacity = 0.0f;
+	int width, height;
+	Uint8 alpha;
+	SDL_Rect top, bottom, left, right;
+
+	//Renderer
+	SDL_Renderer* renderer;
 
 };

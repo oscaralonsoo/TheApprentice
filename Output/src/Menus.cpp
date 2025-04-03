@@ -292,6 +292,8 @@ void Menus::NewGame()
         saveData.attribute("isSaved") = Engine::GetInstance().menus->isSaved;
     }
     config.save_file("config.xml");	//Save Changes
+
+    Engine::GetInstance().scene.get()->SaveGameXML();
  
     StartTransition(false, MenusState::GAME);
 }

@@ -97,7 +97,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 		Engine::GetInstance().scene.get()->StartTransition(targetScene);
 		break;
-
 	default:
 		mechanics.OnCollision(physA, physB);
 		break;

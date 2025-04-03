@@ -32,6 +32,9 @@
     <Filter Include="Source Files\Map">
       <UniqueIdentifier>{e612b070-460c-4213-a69d-33f700892cfa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Entities\Player">
+      <UniqueIdentifier>{a0c895d4-8ede-4d87-9380-19736f4e69b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="vcpkg.json">
@@ -61,9 +64,6 @@
       <Filter>Source Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\EntityManager.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Player.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="src\Render.cpp">
@@ -102,17 +102,20 @@
     <ClCompile Include="src\Pathfinding.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="src\PlayerAnimation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Menus.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="src\PlayerAnimation.cpp">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClCompile>
     <ClCompile Include="src\CaveDrop.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player.cpp">
+      <Filter>Source Files\Entities\Player</Filter>
     </ClCompile>
     <ClCompile Include="src\PlayerMechanics.cpp">
-      <Filter>Source Files\Entities</Filter>
+      <Filter>Source Files\Entities\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -138,9 +141,6 @@
       <Filter>Source Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="src\EntityManager.h">
-      <Filter>Source Files\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Player.h">
       <Filter>Source Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="src\Render.h">
@@ -170,8 +170,6 @@
     <ClInclude Include="src\Bloodrusher.h">
       <Filter>Source Files\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="src\Animation.h" />
-    <ClInclude Include="src\PlayerAnimation.h" />
     <ClInclude Include="src\Enemy.h">
       <Filter>Source Files\Entities</Filter>
     </ClInclude>
@@ -183,9 +181,20 @@
     <ClInclude Include="src\Menus.h">
       <Filter>Source Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="src\CaveDrop.h" />
-    <ClInclude Include="src\PlayerMechanics.h">
+    <ClInclude Include="src\PlayerAnimation.h">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Animation.h">
       <Filter>Source Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CaveDrop.h">
+      <Filter>Source Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Player.h">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PlayerMechanics.h">
+      <Filter>Source Files\Entities\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

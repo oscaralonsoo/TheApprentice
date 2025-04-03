@@ -226,7 +226,8 @@ void PlayerMechanics::CheckFallImpact() {
 
 void PlayerMechanics::HandleWallSlide() {
     if (isWallSliding) {
-        player->pbody->body->SetGravityScale(0.05f);
+        player->pbody->body->SetGravityScale(5.0f);
+        player->pbody->body->SetLinearVelocity(b2Vec2_zero);
         player->SetState("wall_slide");
     }
 }

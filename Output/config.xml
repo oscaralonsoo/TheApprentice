@@ -57,26 +57,26 @@
 				</enemy>
 			</enemies>
 			<props>
-				<cave_drop w="22" h="22" texture="Assets/Props/caveDrop.png">
+				<cave_drop w="16" h="16" texture="Assets/Props/caveDrop.png">
 					<start loop="false" speed="0.13">
-						<frame x="0" y="0" w="22" h="22" />
-						<frame x="22" y="0" w="22" h="22" />
-						<frame x="44" y="0" w="22" h="22" />
-						<frame x="0" y="22" w="22" h="22" />
-						<frame x="22" y="22" w="22" h="22" />
-						<frame x="44" y="22" w="22" h="22" />
-						<frame x="0" y="44" w="22" h="22" />
-						<frame x="22" y="44" w="22" h="22" />
+						<frame x="0" y="0" w="16" h="16" />
+						<frame x="16" y="0" w="16" h="16" />
+						<frame x="32" y="0" w="16" h="16" />
+						<frame x="0" y="16" w="16" h="16" />
+						<frame x="16" y="16" w="16" h="16" />
+						<frame x="32" y="16" w="16" h="16" />
+						<frame x="0" y="32" w="16" h="16" />
+						<frame x="16" y="32" w="16" h="16" />
 					</start>
 					<fall loop="true" speed="0">
-						<frame x="44" y="44" w="22" h="22" />
+						<frame x="32" y="32" w="16" h="16" />
 					</fall>
 					<splash loop="false" speed="0.4">
-						<frame x="0" y="66" w="22" h="22" />
-						<frame x="22" y="66" w="22" h="22" />
-						<frame x="44" y="66" w="22" h="22" />
-						<frame x="0" y="88" w="22" h="22" />
-						<frame x="22" y="88" w="22" h="22" />
+						<frame x="0" y="48" w="16" h="16" />
+						<frame x="16" y="48" w="16" h="16" />
+						<frame x="32" y="48" w="16" h="16" />
+						<frame x="0" y="64" w="16" h="16" />
+						<frame x="16" y="64" w="16" h="16" />
 					</splash>
 				</cave_drop>
 			</props>
@@ -85,7 +85,7 @@
 			<player x="180" y="50" w="44" h="54" />
 			<scene actualScene="0" />
 			<enemies>
-				<enemy type="Bloodrusher" x="896" y="768" w="32" h="32" gravity="true" />
+				<enemy type="Bloodrusher" x="832" y="1600" w="32" h="32" gravity="true" />
 			</enemies>
 		</save_data>
 	</scene>

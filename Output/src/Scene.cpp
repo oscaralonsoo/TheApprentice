@@ -45,8 +45,6 @@ bool Scene::Start()
 	//L06 TODO 3: Call the function to load the map. 
 	Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx");
 
-	Engine::GetInstance().entityManager->CreateEnemiesFromXML(configParameters.child("save_data").child("enemies"), false);
-
 	return true;
 }
 
@@ -164,7 +162,7 @@ void Scene::ChangeScene(int nextScene)
 				player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, newPosition.y / PIXELS_PER_METER), 0); // Set New Player Position
 			}
 
-			Engine::GetInstance().entityManager->CreateEnemiesFromXML(configParameters.child("save_data").child("enemies"), true);
+			Engine::GetInstance().entityManager->Start();
 		}
 	}
 }

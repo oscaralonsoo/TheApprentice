@@ -53,4 +53,6 @@ private:
 
 	// Nueva clase para manejar todas las mecánicas
 	PlayerMechanics mechanics;
+
+	bool initialized = false;
 };

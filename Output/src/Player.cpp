@@ -25,6 +25,10 @@ bool Player::Awake() {
 }
 
 bool Player::Start() {
+	if (initialized) {
+		return true;
+	}
+
 	texture = Engine::GetInstance().textures->Load(parameters.attribute("texture").as_string());
 
 	texW = parameters.attribute("w").as_int();
@@ -38,6 +42,8 @@ bool Player::Start() {
     pbody->ctype = ColliderType::PLAYER;
 
 	mechanics.Init(this);
+
+	initialized = true;
 
 	return true;
 }

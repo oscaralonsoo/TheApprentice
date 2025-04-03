@@ -42,7 +42,7 @@ bool Bloodrusher::Update(float dt) {
             currentState = BloodrusherState::ATTACKING;
         }
     }
-
+    GetPosition();
     switch (currentState)
     {
     case BloodrusherState::IDLE:

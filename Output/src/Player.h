@@ -43,6 +43,7 @@ public:
 	int GetMovementDirection() const;
 
 private:
+
 	SDL_Texture* texture = nullptr;
 	int texW, texH;
 

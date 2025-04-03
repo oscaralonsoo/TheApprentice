@@ -19,10 +19,7 @@ public:
     void EnableJump(bool enable) { jumpUnlocked = enable; }
     void EnableDoubleJump(bool enable) { doubleJumpUnlocked = enable; }
     void EnableDash(bool enable) { dashUnlocked = enable; }
-
-public:
     int GetMovementDirection() const { return movementDirection; }
-
 
 private:
     void HandleInput();
@@ -71,7 +68,7 @@ private:
     float stunDuration = 1.0f;
     Timer stunTimer;
     float fallStartY = 0.0f;
-    float fallDistanceThreshold = 300.0f;
+    float fallDistanceThreshold = 500.0f;
     float fallEndY;
     float fallDistance;
 
@@ -86,4 +83,5 @@ private:
     float attackDuration = 200.0f;
     int playerAttackX;
     int playerAttackY;
+    bool isAttacking = false;
 };

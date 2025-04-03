@@ -338,23 +338,17 @@ bool Map::Load(std::string path, std::string fileName)
                             enemyNode.append_attribute("h") = 32;
                             enemyNode.append_attribute("gravity") = true;
 
-                            // Guardar los cambios en el archivo
-                            loadFile.save_file("config.xml");
-                            Engine::GetInstance().UpdateConfig();
+                            Enemy* enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BLOODRUSHER);
+                            enemy->SetParameters(enemyNode);
+                            
                         }
                     }
                 }
 
 
-
-                for (pugi::xml_node enemyNode = enemiesNode.child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy"))
-                {
-                    Enemy* enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BLOODRUSHER);
-                    enemy->SetParameters(enemyNode);
-
-                    LOG("Enemy Created");
-
-                }
+                // Guardar los cambios en el archivo
+                loadFile.save_file("config.xml");
+                Engine::GetInstance().UpdateConfig();
                 
             }
             if (mapLayer->name == "CaveDrop") {

@@ -24,6 +24,13 @@ public:
 
 	void SetParameters(pugi::xml_node parameters) {
 		this->parameters = parameters;
+
+		position.x = parameters.attribute("x").as_int();
+		position.y = parameters.attribute("y").as_int();
+		texW = parameters.attribute("w").as_int();
+		texH = parameters.attribute("h").as_int();
+		type = parameters.attribute("type").as_string();
+		gravity = parameters.attribute("gravity").as_bool();
 	}
 
 	void SetPosition(Vector2D pos);
@@ -48,6 +55,8 @@ protected:
 
 	SDL_Texture* texture;
 
+	bool gravity;
+	std::string type;
 	int texW, texH;
 	pugi::xml_node parameters;
 	Animation* currentAnimation = nullptr;

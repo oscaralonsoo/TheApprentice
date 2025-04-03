@@ -28,12 +28,6 @@ bool Enemy::Awake() {
 }
 
 bool Enemy::Start() {
-	position.setX(parameters.attribute("x").as_int());
-	position.setY(parameters.attribute("y").as_int());
-	texW = parameters.attribute("w").as_int();
-	texH = parameters.attribute("h").as_int();
-
-
 	//Add a physics to an item - initialize the physics body
 	pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, bodyType::DYNAMIC);
 	//Assign collider type
@@ -42,7 +36,7 @@ bool Enemy::Start() {
 	pbody->listener = this;
 
 	// Set the gravity of the body
-	if (!parameters.attribute("gravity").as_bool()) pbody->body->SetGravityScale(0);
+	if (!gravity) pbody->body->SetGravityScale(0);
 
 	// Initialize pathfinding
 	pathfinding = new Pathfinding();

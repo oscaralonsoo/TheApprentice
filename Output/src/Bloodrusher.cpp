@@ -22,7 +22,7 @@ bool Bloodrusher::Start() {
 
     for (pugi::xml_node enemyNode = loadFile.child("config").child("scene").child("animations").child("enemies").child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy"))
     {
-        if (std::string(enemyNode.attribute("type").as_string()) == std::string(parameters.attribute("type").as_string()))
+        if (std::string(enemyNode.attribute("type").as_string()) == type)
         {
             texture = Engine::GetInstance().textures.get()->Load(enemyNode.attribute("texture").as_string());
             idleAnim.LoadAnimations(enemyNode.child("idle"));

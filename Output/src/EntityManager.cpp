@@ -127,7 +127,7 @@ void EntityManager::AddEntity(Entity* entity)
 
 bool EntityManager::Update(float dt)
 {
-	if (Engine::GetInstance().menus->currentState != MenusState::GAME)
+	if (Engine::GetInstance().menus->currentState != MenusState::GAME|| Engine::GetInstance().menus->isPaused)
 		return true;
 
 	bool ret = true;

@@ -31,58 +31,39 @@ bool Menus::Start() {
     }
     return true;
 }
-
 void Menus::LoadTextures() {
     pugi::xml_document doc;
-    if (!doc.load_file("art.xml")) {
-        SDL_Log("Error al cargar textures.xml");
+    pugi::xml_parse_result result = doc.load_file("art.xml");
+    if (!result) {
+        LOG("Error cargando art.xml: %s", result.description());
         return;
     }
 
-    pugi::xml_node backgrounds = doc.child("art").child("textures").child("UI").child("menu").child("backgrounds");
-    pugi::xml_node buttons = doc.child("art").child("textures").child("UI").child("menu").child("buttons");
-    pugi::xml_node checkboxes = doc.child("art").child("textures").child("UI").child("menu").child("checkbox");
-
-    // Cargar texturas de checkbox
-    std::string checkboxPath = checkboxes.child("checkbox").attribute("path").as_string();
-    std::string checkboxName = checkboxes.child("checkbox").attribute("name").as_string();
-    std::string fillPath = checkboxes.child("fill").attribute("path").as_string();
-    std::string fillName = checkboxes.child("fill").attribute("name").as_string();
-
-    checkboxTexture = Engine::GetInstance().render->LoadTexture((checkboxPath + checkboxName).c_str());
-    fillTexture = Engine::GetInstance().render->LoadTexture((fillPath + fillName).c_str());
-
-    if (!checkboxTexture) SDL_Log("Error al cargar checkbox.png");
-    if (!fillTexture) SDL_Log("Error al cargar fill.png");
-
     // Cargar fondos
+    pugi::xml_node backgrounds = doc.child("art").child("textures").child("UI").child("menu").child("backgrounds");
     for (pugi::xml_node bg = backgrounds.first_child(); bg; bg = bg.next_sibling()) {
-        std::string path = bg.attribute("path").as_string();
-        std::string name = bg.attribute("name").as_string();
-        std::string fullPath = path + name;
-
-        SDL_Texture* texture = Engine::GetInstance().render->LoadTexture(fullPath.c_str());
-        if (!texture) {
-            SDL_Log("Error al cargar textura de fondo: %s", fullPath.c_str());
-        }
-        else {
-            backgroundTextures.insert({ bg.name(), texture });
-        }
+        std::string name = bg.name();
+        std::string path = std::string(bg.attribute("path").value()) + bg.attribute("name").value();
+        backgroundTextures[name] = Engine::GetInstance().render->LoadTexture(path.c_str());
     }
-    // Cargar botones
-    for (pugi::xml_node btn = buttons.first_child(); btn; btn = btn.next_sibling()) {
-        std::string path = btn.attribute("path").as_string();
-        std::string name = btn.attribute("name").as_string();
-        std::string fullPath = path + name;
 
-        SDL_Texture* texture = Engine::GetInstance().render->LoadTexture(fullPath.c_str());
-        if (!texture) {
-            SDL_Log("Error al cargar textura de botón: %s", fullPath.c_str());
-        }
-        else {
-            buttonTextures.insert({ name, texture }); // Usa el nombre de la textura como clave
-            SDL_Log("Textura de botón cargada: %s", fullPath.c_str()); // Agregado para verificar
-        }
+    // Cargar botones
+    pugi::xml_node buttonsNode = doc.child("art").child("textures").child("UI").child("menu").child("buttons");
+    int id = 0;
+    for (pugi::xml_node btn = buttonsNode.first_child(); btn; btn = btn.next_sibling()) {
+        std::string path = std::string(btn.attribute("path").value()) + btn.attribute("name").value();
+        buttonTextures[btn.attribute("name").value()] = Engine::GetInstance().render->LoadTexture(path.c_str());
+    }
+
+    // Cargar checkbox correctamente
+    pugi::xml_node checkboxNode = doc.child("art").child("textures").child("UI").child("menu").child("checkbox");
+    if (checkboxNode) {
+        std::string checkboxPath = std::string(checkboxNode.child("checkbox").attribute("path").value()) +
+            checkboxNode.child("checkbox").attribute("name").value();
+        std::string fillPath = std::string(checkboxNode.child("fill").attribute("path").value()) +
+            checkboxNode.child("fill").attribute("name").value();
+        checkboxTexture = Engine::GetInstance().render->LoadTexture(checkboxPath.c_str());
+        fillTexture = Engine::GetInstance().render->LoadTexture(fillPath.c_str());
     }
 }
 
@@ -152,6 +133,7 @@ bool Menus::CleanUp() {
     for (auto& pair : buttonTextures) {
         SDL_DestroyTexture(pair.second);
     }
+
     return true;
 }
 
@@ -229,7 +211,7 @@ void Menus::Settings() {
         case 0: isFullScreen = !isFullScreen; Engine::GetInstance().window->SetFullScreen(isFullScreen); break;
         case 1: isVSync = !isVSync; Engine::GetInstance().render->SetVSync(isVSync); break;
         }
-        CreateButtons(); // Actualiza los botones después de cambiar el estado
+        CreateButtons(); 
     }
 }
 
@@ -276,69 +258,81 @@ void Menus::Transition(float dt) {
     }
 }
 void Menus::CreateButtons() {
-    Engine::GetInstance().window->GetWindowSize(baseWidth, baseHeight);
+    buttons.clear();
+    std::vector<std::string> names;
+
+    switch (currentState) {
+    case MenusState::MAINMENU:
+        names = { "newGame", "continue", "settings", "credits", "exit" };
+        break;
+    case MenusState::PAUSE:
+        names = { "continue", "settings", "exit" };
+        break;
+    case MenusState::SETTINGS:
+        names = { "fullscreen", "vsync" };
+        break;
+    default:
+        return;
+    }
+
     SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
 
-    scaleX = static_cast<float>(width) / baseWidth;
-    scaleY = static_cast<float>(height) / baseHeight;
+    float scaleX = static_cast<float>(width) / Engine::GetInstance().window->width;
+    float scaleY = static_cast<float>(height) / Engine::GetInstance().window->height;
+    float scale = std::min(scaleX, scaleY);
 
-    int buttonWidth = static_cast<int>(300 * scaleX);
-    int buttonHeight = static_cast<int>(50 * scaleY);
-    int numButtons = (currentState == MenusState::MAINMENU) ? 5 : (currentState == MenusState::PAUSE) ? 3 : 2;
+    int buttonWidth = static_cast<int>(200 * scale);
+    int buttonHeight = static_cast<int>(15 * scale);
+    int spacing = static_cast<int>(70 * scale);
+    int totalHeight = names.size() * (buttonHeight + spacing) - spacing;
 
-    int centerX = (width - buttonWidth) / 2;
-    int startY = height / 2 - (buttonHeight * numButtons / 2) + 100;
+    int startX = (width - buttonWidth) / 2;
+    int startY = (height - totalHeight) / 2 + static_cast<int>(50 * scale); 
 
-    buttons.clear();
-    std::vector<std::string> buttonNames = (currentState == MenusState::MAINMENU) ?
-        std::vector<std::string>{"newGame", "continue", "settings", "credits", "exit"} :
-        std::vector<std::string>{ "continue", "settings", "exit" };
+    if (currentState == MenusState::PAUSE) {
+        startY -= static_cast<int>(150 * scale);
+    }
+    for (size_t i = 0; i < names.size(); ++i) {
+        std::string unhovered = names[i] + "_unhovered.png";
+        std::string hovered = names[i] + "_hovered.png";
 
-    SDL_Log("Creando botones para el estado PAUSE. Número de botones: %zu", buttonNames.size());
-    for (size_t i = 0; i < buttonNames.size(); ++i) {
-        std::string unhoveredKey = buttonNames[i] + "_unhovered.png";
-        std::string hoveredKey = buttonNames[i] + "_hovered.png";
+        SDL_Rect bounds = {
+            startX,
+            startY + static_cast<int>(i * (buttonHeight + spacing)),
+            buttonWidth,
+            buttonHeight
+        };
 
-        auto unhoveredIt = buttonTextures.find(unhoveredKey);
-        auto hoveredIt = buttonTextures.find(hoveredKey);
-
-        SDL_Texture* unhoveredTex = (unhoveredIt != buttonTextures.end()) ? unhoveredIt->second : nullptr;
-        SDL_Texture* hoveredTex = (hoveredIt != buttonTextures.end()) ? hoveredIt->second : nullptr;
-
-        if (!unhoveredTex) SDL_Log("Textura de botón no encontrada: %s", unhoveredKey.c_str());
-        if (!hoveredTex) SDL_Log("Textura de botón no encontrada: %s", hoveredKey.c_str());
-
-        SDL_Rect buttonRect = { centerX, startY + static_cast<int>(i) * buttonHeight, buttonWidth, buttonHeight };
-        buttons.emplace_back("", buttonRect, static_cast<int>(i), false, "", "");
-        buttons.back().unhoveredTexture = unhoveredTex;
-        buttons.back().hoveredTexture = hoveredTex;
-
-        // Imprimir la posición de cada botón
-        SDL_Log("Botón %s en posición: (%d, %d)", buttonNames[i].c_str(), buttonRect.x, buttonRect.y);
+        buttons.emplace_back(names[i], bounds, static_cast<int>(i), false, unhovered, hovered);
+        buttons.back().unhoveredTexture = buttonTextures[unhovered];
+        buttons.back().hoveredTexture = buttonTextures[hovered];
     }
 }
 void Menus::DrawButtons() {
-    if (currentState == MenusState::MAINMENU || currentState == MenusState::PAUSE || currentState == MenusState::SETTINGS) {
-        for (size_t i = 0; i < buttons.size(); ++i) {
-            bool isSelected = (i == selectedButton);
-            SDL_Texture* buttonTexture = isSelected ? buttons[i].hoveredTexture : buttons[i].unhoveredTexture;
-            SDL_Rect buttonRect = buttons[i].bounds;
-
-            if (buttonTexture) {
-                Engine::GetInstance().render->DrawTexture(buttonTexture, buttonRect.x, buttonRect.y, &buttonRect);
-            }
-
-            // Si estamos en el menú de configuración, dibujar checkboxes en los botones de opciones
-            if (currentState == MenusState::SETTINGS && (buttons[i].id == 0 || buttons[i].id == 1)) {
-                DrawCheckBox(buttons[i], isSelected);
-            }
+    for (size_t i = 0; i < buttons.size(); ++i) {
+        ButtonInfo& button = buttons[i];
+        SDL_Texture* tex = (i == selectedButton) ? button.hoveredTexture : button.unhoveredTexture;
+        if (tex) {
+            Engine::GetInstance().render->DrawTexture(
+                tex,
+                button.bounds.x - Engine::GetInstance().render->camera.x,
+                button.bounds.y - Engine::GetInstance().render->camera.y
+            );
+        }
+        else if (currentState == MenusState::SETTINGS) {
+            DrawCheckBox(button, i == selectedButton);
         }
     }
 }
 void Menus::DrawCheckBox(const ButtonInfo& button, bool isSelected) {
     if (!checkboxTexture || !fillTexture) return;
 
-    int boxSize = static_cast<int>(30 * scaleX);
+    SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
+    float scaleX = static_cast<float>(width) / Engine::GetInstance().window->width;
+    float scaleY = static_cast<float>(height) / Engine::GetInstance().window->height;
+    float scale = std::min(scaleX, scaleY);
+
+    int boxSize = static_cast<int>(30 * scale);
     SDL_Rect boxRect = {
         button.bounds.x + button.bounds.w - boxSize - static_cast<int>(10 * scaleX),
         button.bounds.y + (button.bounds.h - boxSize) / 2,
@@ -346,12 +340,11 @@ void Menus::DrawCheckBox(const ButtonInfo& button, bool isSelected) {
         boxSize
     };
 
-    // Dibujar la caja de checkbox
     Engine::GetInstance().render->DrawTexture(checkboxTexture, boxRect.x, boxRect.y, &boxRect);
 
-    // Si está activado, dibujar el "fill" encima
     bool isChecked = (button.id == 0 && isFullScreen) || (button.id == 1 && isVSync);
     if (isChecked) {
         Engine::GetInstance().render->DrawTexture(fillTexture, boxRect.x, boxRect.y, &boxRect);
     }
 }
+

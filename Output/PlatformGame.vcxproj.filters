@@ -176,8 +176,6 @@
     <ClInclude Include="src\Pathfinding.h">
       <Filter>Source Files\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="src\Animation.h" />
-    <ClInclude Include="src\PlayerAnimation.h" />
     <ClInclude Include="src\Menus.h">
       <Filter>Source Files\Scenes</Filter>
     </ClInclude>
@@ -194,6 +192,12 @@
       <Filter>Source Files\Entities\Player</Filter>
     </ClInclude>
     <ClInclude Include="src\PlayerMechanics.h">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Animation.h">
+      <Filter>Source Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PlayerAnimation.h">
       <Filter>Source Files\Entities\Player</Filter>
     </ClInclude>
   </ItemGroup>

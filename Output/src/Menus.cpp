@@ -216,10 +216,15 @@ void Menus::Settings() {
     }
     else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
         switch (selectedButton) {
-        case 0: isFullScreen = !isFullScreen; Engine::GetInstance().window->SetFullScreen(isFullScreen); break;
-        case 1: isVSync = !isVSync; Engine::GetInstance().render->SetVSync(isVSync); break;
+        case 0: 
+            isFullScreen = !isFullScreen;
+            Engine::GetInstance().window->SetFullScreen(isFullScreen);
+            break;
+        case 1:
+            isVSync = !isVSync;
+            Engine::GetInstance().render->SetVSync(isVSync);
+            break;
         }
-        CreateButtons(); 
     }
 }
 
@@ -341,18 +346,24 @@ void Menus::DrawButtons() {
         }
     }
 }
-
 void Menus::DrawCheckBox(const ButtonInfo& button, bool isSelected) {
- 
-    if (isSelected)
-    {
-        Engine::GetInstance().render->DrawTexture(checkboxTexture, 100, 100); // mas grande
-    }
-    else {
-        Engine::GetInstance().render->DrawTexture(checkboxTexture, 100, 100); // mas pequeña
-    }
+    int baseSize = 50;
+    float scale = isSelected ? 1.3f : 1.0f; // Ajusta la escala para que sea más visible
+    int size = static_cast<int>(baseSize * scale);
 
-    //si esta marcado
-    Engine::GetInstance().render->DrawTexture(fillTexture,100,100);
+    int x = button.bounds.x + button.bounds.w / 2 - size / 2;  // Centra correctamente
+    int y = button.bounds.y + button.bounds.h / 2 - size / 2;
+
+    SDL_Rect dstRect = { x, y, size, size };
+
+    // Dibuja la checkbox base
+    SDL_RenderCopy(Engine::GetInstance().render->renderer, checkboxTexture, nullptr, &dstRect);
+
+    // Si la opción está activada, dibuja la textura de relleno encima
+    if ((button.text == "fullscreen" && isFullScreen) || (button.text == "vsync" && isVSync)) {
+        SDL_RenderCopy(Engine::GetInstance().render->renderer, fillTexture, nullptr, &dstRect);
+    }
 }
+
+
 

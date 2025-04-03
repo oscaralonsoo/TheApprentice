@@ -6,6 +6,7 @@
 #include "Window.h"
 #include "Engine.h"
 #include "pugixml.hpp"
+#include "Log.h"
 
 Menus::Menus() : currentState(MenusState::MAINMENU), transitionAlpha(0.0f), inTransition(false), fadingIn(false), nextState(MenusState::NONE),
 fastTransition(false), menuBackground(nullptr), pauseBackground(nullptr) {}
@@ -33,13 +34,26 @@ bool Menus::Start() {
 
 void Menus::LoadTextures() {
     pugi::xml_document doc;
-    if (!doc.load_file("textures.xml")) {
+    if (!doc.load_file("art.xml")) {
         SDL_Log("Error al cargar textures.xml");
         return;
     }
 
-    pugi::xml_node backgrounds = doc.child("textures").child("UI").child("menu").child("backgrounds");
-    pugi::xml_node buttons = doc.child("textures").child("UI").child("menu").child("buttons");
+    pugi::xml_node backgrounds = doc.child("art").child("textures").child("UI").child("menu").child("backgrounds");
+    pugi::xml_node buttons = doc.child("art").child("textures").child("UI").child("menu").child("buttons");
+    pugi::xml_node checkboxes = doc.child("art").child("textures").child("UI").child("menu").child("checkbox");
+
+    // Cargar texturas de checkbox
+    std::string checkboxPath = checkboxes.child("checkbox").attribute("path").as_string();
+    std::string checkboxName = checkboxes.child("checkbox").attribute("name").as_string();
+    std::string fillPath = checkboxes.child("fill").attribute("path").as_string();
+    std::string fillName = checkboxes.child("fill").attribute("name").as_string();
+
+    checkboxTexture = Engine::GetInstance().render->LoadTexture((checkboxPath + checkboxName).c_str());
+    fillTexture = Engine::GetInstance().render->LoadTexture((fillPath + fillName).c_str());
+
+    if (!checkboxTexture) SDL_Log("Error al cargar checkbox.png");
+    if (!fillTexture) SDL_Log("Error al cargar fill.png");
 
     // Cargar fondos
     for (pugi::xml_node bg = backgrounds.first_child(); bg; bg = bg.next_sibling()) {
@@ -313,44 +327,31 @@ void Menus::DrawButtons() {
             if (buttonTexture) {
                 Engine::GetInstance().render->DrawTexture(buttonTexture, buttonRect.x, buttonRect.y, &buttonRect);
             }
-            else {
-                // Dibuja un rectángulo de prueba
-                SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, 255, 0, 0, 255); // Color rojo
-                SDL_RenderFillRect(Engine::GetInstance().render->renderer, &buttonRect);
-                SDL_Log("Dibujando rectángulo de prueba en: (%d, %d)", buttonRect.x, buttonRect.y);
+
+            // Si estamos en el menú de configuración, dibujar checkboxes en los botones de opciones
+            if (currentState == MenusState::SETTINGS && (buttons[i].id == 0 || buttons[i].id == 1)) {
+                DrawCheckBox(buttons[i], isSelected);
             }
         }
     }
 }
-void Menus::DrawCheckBox(const ButtonInfo& button, bool isSelected, const SDL_Color& color) {
+void Menus::DrawCheckBox(const ButtonInfo& button, bool isSelected) {
+    if (!checkboxTexture || !fillTexture) return;
+
     int boxSize = static_cast<int>(30 * scaleX);
-    int borderThickness = static_cast<int>(isSelected ? 6 * scaleX : 4 * scaleX);
     SDL_Rect boxRect = {
-        button.bounds.x + 100 + button.bounds.w - boxSize - static_cast<int>(10 * scaleX),
+        button.bounds.x + button.bounds.w - boxSize - static_cast<int>(10 * scaleX),
         button.bounds.y + (button.bounds.h - boxSize) / 2,
         boxSize,
         boxSize
     };
 
-    SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, color.r, color.g, color.b, 255);
-    for (int j = 0; j < borderThickness; ++j) {
-        SDL_Rect outerBoxRect = { boxRect.x - j, boxRect.y - j, boxRect.w + 2 * j, boxRect.h + 2 * j };
-        SDL_RenderDrawRect(Engine::GetInstance().render->renderer, &outerBoxRect);
-    }
+    // Dibujar la caja de checkbox
+    Engine::GetInstance().render->DrawTexture(checkboxTexture, boxRect.x, boxRect.y, &boxRect);
 
-    if ((button.id == 0 && isFullScreen) || (button.id == 1 && isVSync)) {
-        float scaleFactor = isSelected ? 0.7f : 0.5f;
-        int innerSize = static_cast<int>(boxSize * scaleFactor);
-        int offset = (boxSize - innerSize) / 2;
-
-        SDL_Rect checkMark = {
-            boxRect.x + offset,
-            boxRect.y + offset,
-            innerSize,
-            innerSize
-        };
-
-        SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, color.r, color.g, color.b, 255);
-        SDL_RenderFillRect(Engine::GetInstance().render->renderer, &checkMark);
+    // Si está activado, dibujar el "fill" encima
+    bool isChecked = (button.id == 0 && isFullScreen) || (button.id == 1 && isVSync);
+    if (isChecked) {
+        Engine::GetInstance().render->DrawTexture(fillTexture, boxRect.x, boxRect.y, &boxRect);
     }
 }

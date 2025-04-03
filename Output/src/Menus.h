@@ -60,7 +60,8 @@ public:
     void CreateButtons();
     void DrawButtons();
 
-    void DrawCheckBox(const ButtonInfo& button, bool isSelected, const SDL_Color& color);
+    void DrawCheckBox(const ButtonInfo& button, bool isSelected);
+
 
 public:
     MenusState currentState = MenusState::MAINMENU;
@@ -81,7 +82,8 @@ public:
 private:
     std::unordered_map<std::string, SDL_Texture*> backgroundTextures;
     std::unordered_map<std::string, SDL_Texture*> buttonTextures;
-
+    SDL_Texture* checkboxTexture = nullptr;
+    SDL_Texture* fillTexture = nullptr;
     int baseWidth, baseHeight, width, height;
     float scaleX = 1.0f;
     float scaleY = 1.0f;

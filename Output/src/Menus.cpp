@@ -49,21 +49,29 @@ void Menus::LoadTextures() {
 
     // Cargar botones
     pugi::xml_node buttonsNode = doc.child("art").child("textures").child("UI").child("menu").child("buttons");
-    int id = 0;
     for (pugi::xml_node btn = buttonsNode.first_child(); btn; btn = btn.next_sibling()) {
         std::string path = std::string(btn.attribute("path").value()) + btn.attribute("name").value();
         buttonTextures[btn.attribute("name").value()] = Engine::GetInstance().render->LoadTexture(path.c_str());
     }
 
-    // Cargar checkbox correctamente
+    // Cargar checkbox
     pugi::xml_node checkboxNode = doc.child("art").child("textures").child("UI").child("menu").child("checkbox");
     if (checkboxNode) {
-        std::string checkboxPath = std::string(checkboxNode.child("checkbox").attribute("path").value()) +
-            checkboxNode.child("checkbox").attribute("name").value();
-        std::string fillPath = std::string(checkboxNode.child("fill").attribute("path").value()) +
-            checkboxNode.child("fill").attribute("name").value();
-        checkboxTexture = Engine::GetInstance().render->LoadTexture(checkboxPath.c_str());
-        fillTexture = Engine::GetInstance().render->LoadTexture(fillPath.c_str());
+        pugi::xml_node checkboxImg = checkboxNode.child("checkbox");
+        pugi::xml_node fillImg = checkboxNode.child("fill");
+
+        if (checkboxImg && fillImg) {
+            std::string checkboxPath = std::string(checkboxImg.attribute("path").value()) +
+                checkboxImg.attribute("name").value();
+            std::string fillPath = std::string(fillImg.attribute("path").value()) +
+                fillImg.attribute("name").value();
+
+            checkboxTexture = Engine::GetInstance().render->LoadTexture(checkboxPath.c_str());
+            fillTexture = Engine::GetInstance().render->LoadTexture(fillPath.c_str());
+
+            LOG("Checkbox texture loaded: %s -> %p", checkboxPath.c_str(), checkboxTexture);
+            LOG("Fill texture loaded: %s -> %p", fillPath.c_str(), fillTexture);
+        }
     }
 }
 
@@ -287,11 +295,12 @@ void Menus::CreateButtons() {
     int totalHeight = names.size() * (buttonHeight + spacing) - spacing;
 
     int startX = (width - buttonWidth) / 2;
-    int startY = (height - totalHeight) / 2 + static_cast<int>(50 * scale); 
+    int startY = (height - totalHeight) / 2 + static_cast<int>(50 * scale);
 
     if (currentState == MenusState::PAUSE) {
         startY -= static_cast<int>(150 * scale);
     }
+
     for (size_t i = 0; i < names.size(); ++i) {
         std::string unhovered = names[i] + "_unhovered.png";
         std::string hovered = names[i] + "_hovered.png";
@@ -303,48 +312,47 @@ void Menus::CreateButtons() {
             buttonHeight
         };
 
-        buttons.emplace_back(names[i], bounds, static_cast<int>(i), false, unhovered, hovered);
-        buttons.back().unhoveredTexture = buttonTextures[unhovered];
-        buttons.back().hoveredTexture = buttonTextures[hovered];
+        bool isCheckBox = (currentState == MenusState::SETTINGS);
+        buttons.emplace_back(names[i], bounds, static_cast<int>(i), isCheckBox, unhovered, hovered);
+
+        if (!isCheckBox) {
+            buttons.back().unhoveredTexture = buttonTextures[unhovered];
+            buttons.back().hoveredTexture = buttonTextures[hovered];
+        }
     }
 }
+
 void Menus::DrawButtons() {
     for (size_t i = 0; i < buttons.size(); ++i) {
         ButtonInfo& button = buttons[i];
-        SDL_Texture* tex = (i == selectedButton) ? button.hoveredTexture : button.unhoveredTexture;
-        if (tex) {
-            Engine::GetInstance().render->DrawTexture(
-                tex,
-                button.bounds.x - Engine::GetInstance().render->camera.x,
-                button.bounds.y - Engine::GetInstance().render->camera.y
-            );
-        }
-        else if (currentState == MenusState::SETTINGS) {
+
+        if (button.isCheckBox) {
             DrawCheckBox(button, i == selectedButton);
+        }
+        else {
+            SDL_Texture* tex = (i == selectedButton) ? button.hoveredTexture : button.unhoveredTexture;
+            if (tex) {
+                Engine::GetInstance().render->DrawTexture(
+                    tex,
+                    button.bounds.x - Engine::GetInstance().render->camera.x,
+                    button.bounds.y - Engine::GetInstance().render->camera.y
+                );
+            }
         }
     }
 }
+
 void Menus::DrawCheckBox(const ButtonInfo& button, bool isSelected) {
-    if (!checkboxTexture || !fillTexture) return;
-
-    SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
-    float scaleX = static_cast<float>(width) / Engine::GetInstance().window->width;
-    float scaleY = static_cast<float>(height) / Engine::GetInstance().window->height;
-    float scale = std::min(scaleX, scaleY);
-
-    int boxSize = static_cast<int>(30 * scale);
-    SDL_Rect boxRect = {
-        button.bounds.x + button.bounds.w - boxSize - static_cast<int>(10 * scaleX),
-        button.bounds.y + (button.bounds.h - boxSize) / 2,
-        boxSize,
-        boxSize
-    };
-
-    Engine::GetInstance().render->DrawTexture(checkboxTexture, boxRect.x, boxRect.y, &boxRect);
-
-    bool isChecked = (button.id == 0 && isFullScreen) || (button.id == 1 && isVSync);
-    if (isChecked) {
-        Engine::GetInstance().render->DrawTexture(fillTexture, boxRect.x, boxRect.y, &boxRect);
+ 
+    if (isSelected)
+    {
+        Engine::GetInstance().render->DrawTexture(checkboxTexture, 100, 100); // mas grande
     }
+    else {
+        Engine::GetInstance().render->DrawTexture(checkboxTexture, 100, 100); // mas pequeña
+    }
+
+    //si esta marcado
+    Engine::GetInstance().render->DrawTexture(fillTexture,100,100);
 }
 

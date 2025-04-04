@@ -26,7 +26,6 @@ public:
     void Slide(float dt);
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
 
-public:
 
 private:
     BloodrusherState currentState = BloodrusherState::IDLE;

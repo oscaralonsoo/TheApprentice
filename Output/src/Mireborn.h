@@ -4,9 +4,8 @@
 #include "SDL2/SDL.h"
 
 enum class MirebornState {
-    IDLE,       
-    ATTACKING,   
-    SLIDING,
+    IDLE,         
+    WALKING,
     DEAD
 };
 
@@ -23,12 +22,27 @@ public:
     bool CleanUp() override;
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
 
+    void Idle(float dt);
+
+    void Walk(float dt);
+
+    void Divide();
+
 public:
 
 private:
-    MirebornState currentState = MirebornState::IDLE;
+    float jumpCooldown = 0.0f;
+    float jumpInterval = 750.0f;; //Time Between Jumps
+    float jumpForceY = -35.0f;
+    float jumpForceX = 15.0f;
+    bool hasJumped = false;
+    bool isOnGround = false;
 
+    bool playerInRange = false;
+    int size = 128;
+
+    MirebornState currentState = MirebornState::IDLE;
+    PhysBody* physBody = nullptr;
     Animation idleAnim;
-    Animation attackAnim;
-    Animation slideAnim;
+    Animation walkAnim;
 };

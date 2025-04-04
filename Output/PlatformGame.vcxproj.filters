@@ -74,6 +74,10 @@
     <ClCompile Include="src\Scene.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="src\AbilityZone.cpp" />
+    <ClCompile Include="src\Mireborn.cpp">
+      <Filter>Source Files\Entities\Enemies\Mireborn</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Bloodrusher.h">
@@ -159,6 +163,10 @@
     </ClInclude>
     <ClInclude Include="src\Scene.h">
       <Filter>Source Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AbilityZone.h" />
+    <ClInclude Include="src\Mireborn.h">
+      <Filter>Source Files\Entities\Enemies\Mireborn</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

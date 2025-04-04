@@ -77,7 +77,7 @@ public:
     void DrawSlider(int minX, int y, int& sliderX, bool isSelected, const std::string& label);
 
 public:
-    MenusState currentState = MenusState::MAINMENU;
+    MenusState currentState = MenusState::INTRO;
     MenusState nextState = MenusState::NONE;
     MenusState previousState = MenusState::NONE;
 

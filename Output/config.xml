@@ -55,6 +55,14 @@
 						<frame x="0" y="160" w="80" h="80" />
 					</slide>
 				</enemy>
+				<enemy type="Mireborn" w="128" h="128" texture="Assets/Textures/enemy/mireborn.png">
+					<idle loop="true" speed="0.1">
+						<frame x="0" y="0" w="128" h="128" />
+					</idle>
+					<walking loop="false" speed="0.1">
+						<frame x="0" y="0" w="128" h="128" />
+					</walking>
+				</enemy>
 			</enemies>
 			<props>
 				<cave_drop w="16" h="16" texture="Assets/Props/caveDrop.png">
@@ -85,7 +93,7 @@
 			<player x="564" y="564" w="44" h="54" />
 			<scene actualScene="0" />
 			<enemies>
-				<enemy type="Mireborn" x="576" y="640" w="32" h="32" gravity="true" />
+				<enemy type="Mireborn" x="576" y="640" w="128" h="128" gravity="true" />
 			</enemies>
 		</save_data>
 	</scene>

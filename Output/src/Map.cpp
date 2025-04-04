@@ -381,8 +381,8 @@ bool Map::Load(std::string path, std::string fileName)
                             enemyNode.append_attribute("type") = "Mireborn";
                             enemyNode.append_attribute("x") = mapCoord.x;
                             enemyNode.append_attribute("y") = mapCoord.y;
-                            enemyNode.append_attribute("w") = 32;
-                            enemyNode.append_attribute("h") = 32;
+                            enemyNode.append_attribute("w") = 128;
+                            enemyNode.append_attribute("h") = 128;
                             enemyNode.append_attribute("gravity") = true;
 
                             Enemy* enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::MIREBORN);

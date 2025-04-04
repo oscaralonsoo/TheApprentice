@@ -17,8 +17,6 @@ const std::string CHECKBOX_PATH = "art/textures/UI/menu/checkbox";
 const int BUTTON_WIDTH = 200;
 const int BUTTON_HEIGHT = 15;
 const int BUTTON_SPACING = 70;
-const int SLIDER_MIN_X = 1100;
-const int SLIDER_MAX_X = 1510;
 const int SLIDER_STEP = 25;
 
 Menus::Menus() : currentState(MenusState::MAINMENU), transitionAlpha(0.0f), inTransition(false), fadingIn(false), nextState(MenusState::NONE),
@@ -242,25 +240,28 @@ void Menus::HandleVolumeSliders() {
     if (selectedButton == 2) {
         AdjustVolume(musicVolumeSliderX);
     }
-    if (selectedButton == 3) {
+    else if (selectedButton == 3) {
         AdjustVolume(fxVolumeSliderX);
+    }
+    else if (selectedButton == 4) {
+        AdjustVolume(masterVolumeSliderX);
     }
 }
 
 void Menus::AdjustVolume(int& sliderX) {
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
         sliderX -= VOLUME_ADJUSTMENT_STEP;
-        sliderX = std::max(sliderX, SLIDER_MIN_X);
+        sliderX = std::max(sliderX, SLIDER_MIN);
     }
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
         sliderX += VOLUME_ADJUSTMENT_STEP;
-        sliderX = std::min(sliderX, SLIDER_MAX_X);
+        sliderX = std::min(sliderX, SLIDER_MAX);
     }
     UpdateVolume(sliderX);
 }
 
 void Menus::UpdateVolume(int sliderX) {
-    float volume = (float)(sliderX - SLIDER_MIN_X) / (SLIDER_MAX_X - SLIDER_MIN_X);
+    float volume = (float)(sliderX - SLIDER_MIN) / (SLIDER_MAX - SLIDER_MIN);
     volume = (volume < 0.0f) ? 0.0f : (volume > 1.0f) ? 1.0f : volume;
     int sdlVolume = static_cast<int>(volume * MIX_MAX_VOLUME);
     if (selectedButton == 2) {
@@ -268,6 +269,10 @@ void Menus::UpdateVolume(int sliderX) {
     }
     else if (selectedButton == 3) {
         Mix_Volume(-1, sdlVolume);
+    }
+    else if (selectedButton == 4) {
+        Mix_Volume(-1, sdlVolume);       
+        Mix_VolumeMusic(sdlVolume);       
     }
 }
 
@@ -344,7 +349,7 @@ std::vector<std::string> Menus::GetButtonNamesForCurrentState() const {
     switch (currentState) {
     case MenusState::MAINMENU: return { "newGame", "continue", "settings", "credits", "exit" };
     case MenusState::PAUSE: return { "continue", "settings", "exit" };
-    case MenusState::SETTINGS: return { "Full Screen", "Vsync", "Music Volume", "FX Volume" };
+    case MenusState::SETTINGS: return { "Full Screen", "Vsync", "Music Volume", "FX Volume", "Master Volume" };
     default: return {};
     }
 }
@@ -384,7 +389,7 @@ void Menus::DrawCheckBox(const ButtonInfo& button, bool isSelected) {
     int size = static_cast<int>(baseSize * scale);
 
     int checkboxOffsetX = 175;
-    int checkboxOffsetY = -175;
+    int checkboxOffsetY = -75;
     int x = button.bounds.x + button.bounds.w / 2 - size / 2 + checkboxOffsetX;
     int y = button.bounds.y + button.bounds.h / 2 - size / 2 + checkboxOffsetY;
     SDL_Rect dstRect = { x, y, size, size };
@@ -395,7 +400,7 @@ void Menus::DrawCheckBox(const ButtonInfo& button, bool isSelected) {
     }
 
     int textOffsetX = -100;
-    int textOffsetY = -200;
+    int textOffsetY = -100;
     int textX = button.bounds.x + textOffsetX;
     int textY = button.bounds.y + (button.bounds.h / 2) - 10 + textOffsetY;
 
@@ -404,8 +409,9 @@ void Menus::DrawCheckBox(const ButtonInfo& button, bool isSelected) {
 }
 
 void Menus::DrawSliders() {
-    DrawSlider(SLIDER_MIN_X, 509, musicVolumeSliderX, selectedButton == 2, "Music Volume");
-    DrawSlider(SLIDER_MIN_X, 629, fxVolumeSliderX, selectedButton == 3, "FX Volume");
+    DrawSlider(SLIDER_MIN, 509, musicVolumeSliderX, selectedButton == 2, "Music Volume");
+    DrawSlider(SLIDER_MIN, 629, fxVolumeSliderX, selectedButton == 3, "FX Volume");
+    DrawSlider(SLIDER_MIN, 749, masterVolumeSliderX, selectedButton == 4, "Master Volume");
 }
 
 void Menus::DrawSlider(int minX, int y, int& sliderX, bool isSelected, const std::string& label) {

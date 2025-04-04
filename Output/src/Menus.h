@@ -102,6 +102,7 @@ private:
 
     int musicVolumeSliderX = SLIDER_MIN;
     int fxVolumeSliderX = SLIDER_MIN;
+    int masterVolumeSliderX = SLIDER_MAX;
 
     std::unordered_map<std::string, SDL_Texture*> backgroundTextures;
     std::unordered_map<std::string, SDL_Texture*> buttonTextures;

@@ -10,7 +10,7 @@
 #include <cstdlib>
 #include <ctime>
 
-CaveDrop::CaveDrop() : Entity(EntityType::CAVEDROP), state(CaveDropStates::DISABLED)
+CaveDrop::CaveDrop() : Entity(EntityType::CAVE_DROP), state(CaveDropStates::DISABLED)
 {
     name = "CaveDrop";
 }

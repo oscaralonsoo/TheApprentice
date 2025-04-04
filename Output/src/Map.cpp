@@ -315,7 +315,7 @@ bool Map::Load(std::string path, std::string fileName)
             }
         }
         for (const auto& mapLayer : mapData.layers) {
-            if (mapLayer->name == "Enemies") {
+            if (mapLayer->name == "Bloodrusher") {
                 // Load XML config file
                 pugi::xml_document loadFile;
                 pugi::xml_parse_result result = loadFile.load_file("config.xml");
@@ -356,6 +356,47 @@ bool Map::Load(std::string path, std::string fileName)
                 Engine::GetInstance().UpdateConfig();
                 
             }
+            if (mapLayer->name == "Mireborn") {
+                // Load XML config file
+                pugi::xml_document loadFile;
+                pugi::xml_parse_result result = loadFile.load_file("config.xml");
+
+                // Get node save data -> enemies
+                pugi::xml_node saveData = loadFile.child("config").child("scene").child("save_data");
+                pugi::xml_node enemiesNode = saveData.child("enemies");
+
+                // Remove all children
+                enemiesNode.remove_children();
+
+                for (int i = 0; i < mapData.width; i++) {
+                    for (int j = 0; j < mapData.height; j++) {
+                        int gid = mapLayer->Get(i, j);
+                        if (gid != 0) {
+                            // Convertir coordenadas del mapa a coordenadas del mundo
+                            Vector2D mapCoord = MapToWorld(i, j);
+
+                            // Crear un nuevo nodo <enemy>
+                            pugi::xml_node enemyNode = enemiesNode.append_child("enemy");
+                            enemyNode.append_attribute("type") = "Mireborn";
+                            enemyNode.append_attribute("x") = mapCoord.x;
+                            enemyNode.append_attribute("y") = mapCoord.y;
+                            enemyNode.append_attribute("w") = 32;
+                            enemyNode.append_attribute("h") = 32;
+                            enemyNode.append_attribute("gravity") = true;
+
+                            Enemy* enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::MIREBORN);
+                            enemy->SetParameters(enemyNode);
+
+                        }
+                    }
+                }
+
+
+                // Guardar los cambios en el archivo
+                loadFile.save_file("config.xml");
+                Engine::GetInstance().UpdateConfig();
+
+            }
             if (mapLayer->name == "CaveDrop") {
                 for (int i = 0; i < mapData.width; i++) {
                     for (int j = 0; j < mapData.height; j++) {
@@ -364,7 +405,7 @@ bool Map::Load(std::string path, std::string fileName)
                         {
                             Vector2D mapCoord = MapToWorld(i, j);
 
-                            CaveDrop* caveDrop = (CaveDrop*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CAVEDROP);
+                            CaveDrop* caveDrop = (CaveDrop*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CAVE_DROP);
                             caveDrop->position = Vector2D(mapCoord.x, mapCoord.y);
                         }
                     }

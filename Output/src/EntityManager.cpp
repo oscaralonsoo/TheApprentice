@@ -6,6 +6,8 @@
 #include "Log.h"
 #include "CaveDrop.h"
 #include "Bloodrusher.h"
+#include "Mireborn.h"
+#include "AbilityZone.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -73,11 +75,17 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::PLAYER:
 		entity = new Player();
 		break;
-	case EntityType::CAVEDROP:
+	case EntityType::CAVE_DROP:
 		entity = new CaveDrop();
 		break;
 	case EntityType::BLOODRUSHER:
 		entity = new Bloodrusher();
+		break;
+	case EntityType::MIREBORN:
+		entity = new Mireborn();
+		break;
+	case EntityType::ABILITY_ZONE:
+		entity = new AbilityZone();
 		break;
 	default:
 		break;

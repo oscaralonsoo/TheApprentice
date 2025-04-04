@@ -138,18 +138,3 @@ bool EntityManager::Update(float dt)
 	}
 	return ret;
 }
-void EntityManager::CreateEnemiesFromXML(pugi::xml_node enemyNodes, bool initialize)
-{
-	for (pugi::xml_node enemyNode = enemyNodes.child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy"))
-	{
-		Enemy* enemy = (Enemy*)CreateEntity(EntityType::BLOODRUSHER);
-		enemy->SetParameters(enemyNode);
-
-		if(initialize)
-		enemy->Start();
-
-		LOG("Enemy Created");
-		
-	}
-
-}

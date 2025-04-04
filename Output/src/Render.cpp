@@ -285,7 +285,9 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 
 		if (targetY < cameraCenterY - followMargin || targetY > cameraCenterY + followMargin)
 		{
-			camera.y += static_cast<int>((-targetY + camera.h / 2 + cameraVerticalViewOffset - camera.y) * smoothing);
+			int verticalOffset = (targetY < cameraCenterY) ? -cameraVerticalViewOffset : cameraVerticalViewOffset;
+
+			camera.y += static_cast<int>((-targetY + camera.h / 2 + verticalOffset - camera.y) * smoothing);
 		}
 	}
 	else

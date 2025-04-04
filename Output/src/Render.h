@@ -60,7 +60,7 @@ public:
 	int targetX;
 	int mapWidthPx;
 	int mapHeightPx;
-	int followMargin = 100;
+	int followMargin = 200;
 	int cameraCenterY = -camera.y + camera.h / 2;
 	int cameraVerticalViewOffset = 150;
 	int cameraLookAheadTarget = 0;

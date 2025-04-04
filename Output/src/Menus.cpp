@@ -185,6 +185,18 @@ void Menus::NewGame() {
     saveData.attribute("isSaved") = isSaved;
 
     config.save_file(CONFIG_FILE.c_str());
+    pugi::xml_node sceneNode = saveData.child("scene"); 	
+    if (sceneNode) {
+        sceneNode.attribute("actualScene") = 0; //Reset Actual Scene
+    }
+    if (saveData)
+    {
+        saveData.attribute("isSaved") = Engine::GetInstance().menus->isSaved;
+    }
+    config.save_file("config.xml");	//Save Changes
+
+    Engine::GetInstance().scene.get()->SaveGameXML();
+ 
     StartTransition(false, MenusState::GAME);
 }
 

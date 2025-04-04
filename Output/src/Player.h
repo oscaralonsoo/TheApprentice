@@ -43,6 +43,7 @@ public:
 	int GetMovementDirection() const;
 
 private:
+
 	SDL_Texture* texture = nullptr;
 	int texW, texH;
 
@@ -53,4 +54,6 @@ private:
 
 	// Nueva clase para manejar todas las mecánicas
 	PlayerMechanics mechanics;
+
+	bool initialized = false;
 };

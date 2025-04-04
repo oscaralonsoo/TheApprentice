@@ -38,7 +38,7 @@ bool CaveDrop::Start() {
 
     // Crear cuerpo físico
     pbody = Engine::GetInstance().physics->CreateRectangleSensor((int)position.getX(), (int)position.getY(), texW, texH, bodyType::DYNAMIC);
-    pbody->ctype = ColliderType::CAVEDROP;
+    pbody->ctype = ColliderType::CAVE_DROP;
     pbody->listener = this;
     pbody->body->SetGravityScale(0);
 

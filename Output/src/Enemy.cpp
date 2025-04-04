@@ -11,7 +11,6 @@
 #include "Player.h"
 #include "Map.h"
 #include "Physics.h"
-#include "Scene.h"
 #include "Module.h"
 
 Enemy::Enemy(EntityType type) : Entity(type)

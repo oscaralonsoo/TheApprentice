@@ -145,6 +145,8 @@
     <None Include="vcpkg.json" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Brood.cpp" />
+    <ClCompile Include="Broodheart.cpp" />
     <ClCompile Include="src\AbilityZone.cpp" />
     <ClCompile Include="src\Audio.cpp" />
     <ClCompile Include="src\Bloodrusher.cpp" />
@@ -174,6 +176,8 @@
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Brood.h" />
+    <ClInclude Include="Broodheart.h" />
     <ClInclude Include="src\AbilityZone.h" />
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\Audio.h" />

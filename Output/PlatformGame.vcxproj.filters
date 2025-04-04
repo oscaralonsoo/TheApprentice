@@ -78,6 +78,12 @@
     <ClCompile Include="src\Mireborn.cpp">
       <Filter>Source Files\Entities\Enemies\Mireborn</Filter>
     </ClCompile>
+    <ClCompile Include="Broodheart.cpp">
+      <Filter>Source Files\Entities\Enemies\broodheart</Filter>
+    </ClCompile>
+    <ClCompile Include="Brood.cpp">
+      <Filter>Source Files\Entities\Enemies\broodheart\Brood</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Bloodrusher.h">
@@ -168,6 +174,12 @@
     <ClInclude Include="src\Mireborn.h">
       <Filter>Source Files\Entities\Enemies\Mireborn</Filter>
     </ClInclude>
+    <ClInclude Include="Broodheart.h">
+      <Filter>Source Files\Entities\Enemies\broodheart</Filter>
+    </ClInclude>
+    <ClInclude Include="Brood.h">
+      <Filter>Source Files\Entities\Enemies\broodheart\Brood</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="config.xml">
@@ -233,6 +245,12 @@
     </Filter>
     <Filter Include="Source Files\Entities\Enemies\Mireborn">
       <UniqueIdentifier>{43f15cd9-1d1a-4260-9f8b-a4bf50ab2836}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Enemies\broodheart">
+      <UniqueIdentifier>{56d10a6d-9cc1-4fa3-8c26-f9a7088d5834}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Enemies\broodheart\Brood">
+      <UniqueIdentifier>{0148d086-43f5-4449-861f-67cdeb9b632c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

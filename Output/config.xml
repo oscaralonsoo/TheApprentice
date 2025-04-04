@@ -63,6 +63,22 @@
 						<frame x="0" y="0" w="128" h="128" />
 					</walking>
 				</enemy>
+				<enemy type="Broodheart" w="64" h="64" texture="Assets/Textures/enemy/broodheart.png">
+					<idle loop="true" speed="0.1">
+						<frame x="0" y="0" w="64" h="64" />
+					</idle>
+					<walking loop="false" speed="0.1">
+						<frame x="0" y="0" w="64" h="64" />
+					</walking>
+				</enemy>
+				<enemy type="Brood" w="32" h="32" texture="Assets/Textures/enemy/brood.png">
+					<idle loop="true" speed="0.1">
+						<frame x="0" y="0" w="32" h="32" />
+					</idle>
+					<walking loop="false" speed="0.1">
+						<frame x="0" y="0" w="32" h="32" />
+					</walking>
+				</enemy>
 			</enemies>
 			<props>
 				<cave_drop w="16" h="16" texture="Assets/Props/caveDrop.png">

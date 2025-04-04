@@ -95,10 +95,18 @@ public:
     std::vector<std::string> buttonNames;
 
 private:
+    const std::string CONFIG_FILE = "config.xml";
+    const std::string ART_FILE = "art.xml";
+    const std::string BACKGROUND_PATH = "art/textures/UI/menu/backgrounds";
+    const std::string BUTTON_PATH = "art/textures/UI/menu/buttons";
+    const std::string CHECKBOX_PATH = "art/textures/UI/menu/checkbox";
 
     const int VOLUME_ADJUSTMENT_STEP = 5;
     const int SLIDER_MIN = 1100;
     const int SLIDER_MAX = 1510;
+    const int BUTTON_WIDTH = 200;
+    const int BUTTON_HEIGHT = 15;
+    const int BUTTON_SPACING = 70;
 
     int musicVolumeSliderX = SLIDER_MIN;
     int fxVolumeSliderX = SLIDER_MIN;

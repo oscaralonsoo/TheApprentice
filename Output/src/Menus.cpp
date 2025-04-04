@@ -9,15 +9,7 @@
 #include "Log.h"
 #include <SDL2/SDL_mixer.h>
 
-const std::string CONFIG_FILE = "config.xml";
-const std::string ART_FILE = "art.xml";
-const std::string BACKGROUND_PATH = "art/textures/UI/menu/backgrounds";
-const std::string BUTTON_PATH = "art/textures/UI/menu/buttons";
-const std::string CHECKBOX_PATH = "art/textures/UI/menu/checkbox";
-const int BUTTON_WIDTH = 200;
-const int BUTTON_HEIGHT = 15;
-const int BUTTON_SPACING = 70;
-const int SLIDER_STEP = 25;
+
 
 Menus::Menus() : currentState(MenusState::MAINMENU), transitionAlpha(0.0f), inTransition(false), fadingIn(false), nextState(MenusState::NONE),
 fastTransition(false), menuBackground(nullptr), pauseBackground(nullptr) {}

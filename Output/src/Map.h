@@ -128,7 +128,7 @@ public:
     // L09: TODO 2: Implement function to the Tileset based on a tile id
     TileSet* GetTilesetFromTileId(int gid) const;
 
-
+    void GetEnemyDimensionsFromConfig(const std::string& enemyName, int& width, int& height);
     // L09: TODO 6: Load a group of properties 
     bool LoadProperties(pugi::xml_node& node, Properties& properties);
 

@@ -33,8 +33,8 @@ public:
 private:
     float jumpCooldown = 0.0f;
     float jumpInterval = 750.0f;; //Time Between Jumps
-    float jumpForceY = -35.0f;
-    float jumpForceX = 15.0f;
+    float jumpForceY = -30.0f;
+    float jumpForceX = 20.0f;
     bool hasJumped = false;
     bool isOnGround = false;
 

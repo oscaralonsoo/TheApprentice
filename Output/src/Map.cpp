@@ -10,6 +10,7 @@
 #include "CaveDrop.h"
 #include "Engine.h"
 #include "EntityManager.h"
+#include "AbilityZone.h"
 
 Map::Map() : Module(), mapLoaded(false)
 {
@@ -364,8 +365,22 @@ bool Map::Load(std::string path, std::string fileName)
                         {
                             Vector2D mapCoord = MapToWorld(i, j);
 
-                            CaveDrop* caveDrop = (CaveDrop*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CAVEDROP);
+                            CaveDrop* caveDrop = (CaveDrop*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CAVE_DROP);
                             caveDrop->position = Vector2D(mapCoord.x, mapCoord.y);
+                        }
+                    }
+                }
+            }
+            if (mapLayer->name == "AbilityZone") {
+                for (int i = 0; i < mapData.width; i++) {
+                    for (int j = 0; j < mapData.height; j++) {
+                        int gid = mapLayer->Get(i, j);
+                        if (gid != 0)
+                        {
+                            Vector2D mapCoord = MapToWorld(i, j);
+
+                            AbilityZone* abilityZone = (AbilityZone*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ABILITY_ZONE);
+                            abilityZone->position = Vector2D(mapCoord.x, mapCoord.y);
                         }
                     }
                 }

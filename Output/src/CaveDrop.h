@@ -23,7 +23,7 @@ class CaveDrop : public Entity
 {
 public:
 	CaveDrop();
-	virtual ~CaveDrop();
+	~CaveDrop();
 
 	bool Awake();
 	bool Start();

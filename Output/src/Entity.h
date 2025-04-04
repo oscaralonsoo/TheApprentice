@@ -7,7 +7,8 @@ enum class EntityType
 {
 	PLAYER,
 	BLOODRUSHER,
-	CAVEDROP,
+	CAVE_DROP,
+	ABILITY_ZONE,
 	UNKNOWN
 };
 

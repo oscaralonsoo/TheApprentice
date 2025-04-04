@@ -82,9 +82,11 @@
 			</props>
 		</animations>
 		<save_data isSaved="1">
-			<player x="415" y="704" w="44" h="54" />
-			<scene actualScene="1" />
-			<enemies />
+			<player x="564" y="564" w="44" h="54" />
+			<scene actualScene="0" />
+			<enemies>
+				<enemy type="Bloodrusher" x="832" y="640" w="32" h="32" gravity="true" />
+			</enemies>
 		</save_data>
 	</scene>
 </config>

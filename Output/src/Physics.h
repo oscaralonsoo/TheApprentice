@@ -30,11 +30,12 @@ enum class ColliderType {
 	WALL,
 	DOWN_CAMERA,
 	ATTACK,
-	CAVEDROP,
+	CAVE_DROP,
 	ENEMY,
 	PLATFORM, 
 	SAVEGAME,
 	DOOR,
+	ABILITY_ZONE,
 	UNKNOWN
 };
 

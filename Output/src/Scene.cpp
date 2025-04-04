@@ -174,6 +174,7 @@ Vector2D Scene::GetPlayerPosition()
 
 void Scene::SaveGameXML()
 {
+
 	saving = true;
 	Engine::GetInstance().menus->isSaved = 1;
 	//Load xml

@@ -358,7 +358,7 @@ bool Map::Load(std::string path, std::string fileName)
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BLOODRUSHER);
                     else if (enemyName == "Mireborn")
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::MIREBORN);
-
+                    //More enemies
                     if (enemy != nullptr)
                     {
                         enemy->SetParameters(enemyNode);

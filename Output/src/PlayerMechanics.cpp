@@ -137,6 +137,10 @@ void PlayerMechanics::HandleInput() {
     }
 
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && Engine::GetInstance().scene->saveGameZone) {
+        // TODO JAVI ---- Si guardas mientras te mueves en el eje x, te guardas moviendote y tendrias que estar quieto
+        b2Vec2 currentVelocity = player->pbody->body->GetLinearVelocity();
+        currentVelocity.x = 0; 
+        player->pbody->body->SetLinearVelocity(currentVelocity);
         Engine::GetInstance().scene->SaveGameXML();
     }
 }

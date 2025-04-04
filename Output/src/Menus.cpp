@@ -40,7 +40,6 @@ void Menus::LoadTextures() {
         LOG("Error cargando art.xml: %s", doc.load_file(ART_FILE.c_str()).description());
         return;
     }
-
     LoadBackgroundTextures(doc);
     LoadButtonTextures(doc);
     LoadCheckboxTextures(doc);

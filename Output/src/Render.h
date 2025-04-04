@@ -41,8 +41,8 @@ public:
 	void SetBackgroundColor(SDL_Color color);
 
 	void UpdateCamera(const Vector2D& targetPosition, int movementDirection, float smoothing);
+	bool DrawText(const char* text, int posx, int posy, SDL_Color color, int fontSize) const;
 	// To render Text
-	bool DrawText(const char* text, int posx, int posy, int w, int h, SDL_Color color) const;
 
 	float EaseInOut(float current, float target, float t);
 

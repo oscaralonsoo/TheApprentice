@@ -1,3 +1,4 @@
+// Menus.h
 #pragma once
 #include "Engine.h"
 #include "Module.h"
@@ -9,64 +10,77 @@
 #include "GuiManager.h"
 #include <unordered_map> 
 
-// Enum de los estados del menú
 enum class MenusState {
     NONE, INTRO, MAINMENU, GAME, PAUSE, SETTINGS, CREDITS, DEAD, GAMEOVER, EXIT
 };
 
 struct ButtonInfo {
-    std::string text; // Se puede dejar vacío si no se usa texto
+    std::string text;
     SDL_Rect bounds;
     int id;
-    bool isCheckBox = false; // Por defecto, no es un checkbox
-    SDL_Texture* unhoveredTexture = nullptr; // Textura cuando no está seleccionada
-    SDL_Texture* hoveredTexture = nullptr; // Textura cuando está seleccionada
-
-    // Constructor
-    ButtonInfo(const std::string& text, const SDL_Rect& bounds, int id, bool isCheckBox, const std::string& unhoveredPath, const std::string& hoveredPath)
-        : text(text), bounds(bounds), id(id), isCheckBox(isCheckBox) {
-        // Aquí puedes cargar las texturas si lo deseas, pero es mejor hacerlo en LoadTextures
-        unhoveredTexturePath = unhoveredPath;
-        hoveredTexturePath = hoveredPath;
-    }
-
-    // Rutas de las texturas
+    bool isCheckBox = false;
+    SDL_Texture* unhoveredTexture = nullptr;
+    SDL_Texture* hoveredTexture = nullptr;
     std::string unhoveredTexturePath;
     std::string hoveredTexturePath;
+
+    ButtonInfo(const std::string& text, const SDL_Rect& bounds, int id, bool isCheckBox,
+        const std::string& unhoveredPath, const std::string& hoveredPath)
+        : text(text), bounds(bounds), id(id), isCheckBox(isCheckBox),
+        unhoveredTexturePath(unhoveredPath), hoveredTexturePath(hoveredPath) {}
 };
 
 class Menus : public Module {
 public:
     Menus();
     virtual ~Menus();
+
     bool Awake() override;
     bool Start() override;
+    void LoadConfig();
+    void LoadButtonTextures(pugi::xml_document& doc);
+    void LoadCheckboxTextures(pugi::xml_document& doc);
+    void LoadCheckboxTexture(pugi::xml_node node, SDL_Texture*& texture);
     bool Update(float dt) override;
     bool PostUpdate() override;
     bool CleanUp() override;
+
     void LoadTextures();
+    void LoadBackgroundTextures(pugi::xml_document& doc);
     void CheckCurrentState(float dt);
     void HandlePause();
     void DrawBackground();
+    std::string GetBackgroundKey() const;
     void ApplyTransitionEffect();
     void StartTransition(bool fast, MenusState newState);
     void Transition(float dt);
+    void CreateButtons();
+    std::vector<std::string> GetButtonNamesForCurrentState() const;
     void Intro(float dt);
     void MainMenu(float dt);
     void NewGame();
     void Pause(float dt);
     void Settings();
+    void HandleSettingsSelection();
+    void ToggleFullScreen();
+    void ToggleVSync();
+    void HandleVolumeSliders();
+    void AdjustVolume(int& sliderX);
+    void UpdateVolume(int sliderX);
     void Credits();
-    void CreateButtons();
+    void CreateButton(const std::string& name, int startX, int startY, int buttonWidth, int buttonHeight, int index);
     void DrawButtons();
-
     void DrawCheckBox(const ButtonInfo& button, bool isSelected);
 
+    void DrawSliders();
+
+    void DrawSlider(int minX, int y, int& sliderX, bool isSelected, const std::string& label);
 
 public:
     MenusState currentState = MenusState::MAINMENU;
     MenusState nextState = MenusState::NONE;
     MenusState previousState = MenusState::NONE;
+
     bool isPaused = false;
     bool isExit = false;
     bool inTransition = false;
@@ -74,16 +88,27 @@ public:
     bool fadingIn = false;
     bool inConfig = false;
     bool inCredits = false;
+
     int isSaved = 0;
     int selectedButton = 0;
     std::vector<ButtonInfo> buttons;
-    std::vector<std::string> buttonNames; 
+    std::vector<std::string> buttonNames;
 
 private:
+
+    const int VOLUME_ADJUSTMENT_STEP = 5;
+    const int SLIDER_MIN = 1100;
+    const int SLIDER_MAX = 1510;
+
+    int musicVolumeSliderX = SLIDER_MIN;
+    int fxVolumeSliderX = SLIDER_MIN;
+
     std::unordered_map<std::string, SDL_Texture*> backgroundTextures;
     std::unordered_map<std::string, SDL_Texture*> buttonTextures;
     SDL_Texture* checkboxTexture = nullptr;
     SDL_Texture* fillTexture = nullptr;
+
+    int previousSelectedButton = 0;
     int baseWidth, baseHeight, width, height;
     float scaleX = 1.0f;
     float scaleY = 1.0f;
@@ -91,13 +116,14 @@ private:
     float transitionSpeed = 0.0f;
     float logoAlpha = 0.0f;
     float introTimer = 0.0f;
-    SDL_Texture* groupLogo;
-    SDL_Texture* menuBackground;
-    SDL_Texture* pauseBackground;
-    SDL_Texture* creditsBackground;
-    SDL_Texture* settingsBackground;
 
-    GuiManager* guiManager;
+    SDL_Texture* groupLogo = nullptr;
+    SDL_Texture* menuBackground = nullptr;
+    SDL_Texture* pauseBackground = nullptr;
+    SDL_Texture* creditsBackground = nullptr;
+    SDL_Texture* settingsBackground = nullptr;
+
+    GuiManager* guiManager = nullptr;
 
     bool isFullScreen = false;
     bool isVSync = false;

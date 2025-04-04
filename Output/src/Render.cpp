@@ -55,7 +55,7 @@ bool Render::Awake()
 	//Initialize the TTF library
 	TTF_Init();
 	//Load a font into memory
-	font = TTF_OpenFont("Assets/Fonts/ChangesModern.ttf", 72);
+	
 	return ret;
 }
 
@@ -320,17 +320,36 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 	if (camera.x < -(mapWidthPx - camera.w)) camera.x = -(mapWidthPx - camera.w);
 	if (camera.y < -(mapHeightPx - camera.h)) camera.y = -(mapHeightPx - camera.h);
 }
-bool Render::DrawText(const char* text, int posx, int posy, int w, int h, SDL_Color color) const
-{
-	SDL_Surface* surface = TTF_RenderText_Solid(font, text, color);
+bool Render::DrawText(const char* text, int posx, int posy, SDL_Color color, int fontSize) const {
+	TTF_Font* customFont = TTF_OpenFont("Assets/Fonts/ChangesModern.ttf", fontSize);
+	if (!customFont) {
+		LOG("Failed to load font: %s", TTF_GetError());
+		return false;
+	}
+
+	SDL_Surface* surface = TTF_RenderText_Solid(customFont, text, color);
+	if (!surface) {
+		LOG("Failed to create surface: %s", TTF_GetError());
+		TTF_CloseFont(customFont);
+		return false;
+	}
+
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-	int texW = 0;
-	int texH = 0;
+	if (!texture) {
+		LOG("Failed to create texture: %s", SDL_GetError());
+		SDL_FreeSurface(surface);
+		TTF_CloseFont(customFont);
+		return false;
+	}
+
+	int texW = 0, texH = 0;
 	SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
-	SDL_Rect dstrect = { posx, posy, w, h };
+	SDL_Rect dstrect = { posx, posy, texW, texH };
 	SDL_RenderCopy(renderer, texture, NULL, &dstrect);
+
 	SDL_DestroyTexture(texture);
 	SDL_FreeSurface(surface);
+	TTF_CloseFont(customFont);
 	return true;
 }
 SDL_Texture* Render::LoadTexture(const char* path)

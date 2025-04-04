@@ -13,8 +13,8 @@ class Broodheart : public Enemy
 {
 public:
 
-    Mireborn();
-    ~Mireborn() override;
+    Broodheart();
+    ~Broodheart() override;
 
     bool Awake() override;
     bool Start() override;
@@ -24,7 +24,7 @@ public:
 
     void Idle(float dt);
 
-    void Walk(float dt);
+    void Spawn(float dt);
 
 
 public:
@@ -34,11 +34,9 @@ private:
     float SpawnTimer = 0.0f;
 
     bool playerInRange = false;
-    int size = 128;
 
     BroodheartState currentState = BroodheartState::IDLE;
     PhysBody* physBody = nullptr;
     Animation idleAnim;
-    Animation walkAnim;
 };
 #pragma once

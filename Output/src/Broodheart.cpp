@@ -8,10 +8,10 @@
 #include "EntityManager.h"
 #include "Log.h"
 
-Broodheart::Mireborn() : Enemy(EntityType::MIREBORN) {
+Broodheart::Broodheart() : Enemy(EntityType::BROODHEART) {
 }
 
-Broodheart::~Mireborn() {
+Broodheart::~Broodheart() {
 }
 
 bool Broodheart::Awake() {
@@ -30,7 +30,6 @@ bool Broodheart::Start() {
             texture = Engine::GetInstance().textures.get()->Load(enemyNode.attribute("texture").as_string());
 
             idleAnim.LoadAnimations(enemyNode.child("idle"));
-            walkAnim.LoadAnimations(enemyNode.child("walking"));
 
             currentAnimation = &idleAnim;
             break;
@@ -41,21 +40,15 @@ bool Broodheart::Start() {
 }
 
 bool Broodheart::Update(float dt) {
-    if (pathfinding->HasFoundPlayer()) {
-        if (currentState == MirebornState::IDLE) {
-            currentState = MirebornState::WALKING;
-        }
-    }
-    GetPosition();
     switch (currentState)
     {
-    case MirebornState::IDLE:
+    case BroodheartState::IDLE:
         Idle(dt);
         break;
-    case MirebornState::WALKING:
-        Walk(dt);
+    case BroodheartState::SPAWN:
+        Spawn(dt);
         break;
-    case MirebornState::DEAD:
+    case BroodheartState::DEAD:
         break;
     }
     return Enemy::Update(dt);
@@ -67,56 +60,22 @@ bool Broodheart::CleanUp() {
 
 void Broodheart::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
-    case ColliderType::PLATFORM:
-        isOnGround = true;
         break;
     case ColliderType::PLAYER:
         // Damage the player
         break;
     case ColliderType::ATTACK:
-        Divide();
-        currentState = MirebornState::DEAD;
+        currentState = BroodheartState::DEAD;
         break;
     }
 }
 
 void Broodheart::Idle(float dt) {
-    currentAnimation = &idleAnim;
 
-    jumpCooldown += dt;
-
-    if (jumpCooldown >= 1.0f) {
-        currentState = MirebornState::WALKING;
-        jumpCooldown = 0.0f;
-    }
 }
 
-void Broodheart::Walk(float dt)
+void Broodheart::Spawn(float dt)
 {
-    currentAnimation = &walkAnim;
-    jumpCooldown += dt;
-
-    // Verify Jump
-    if (!hasJumped && jumpCooldown >= jumpInterval)
-    {
-        isOnGround = false;
-        hasJumped = true;
-        jumpCooldown = 0.0f;
-
-        Vector2D nextTile = pathfinding->pathTiles.front();
-        Vector2D nextTileWorld = Engine::GetInstance().map.get()->MapToWorld(nextTile.getX(), nextTile.getY());
-
-        float direction = (nextTileWorld.getX() > position.getX()) ? 1.0f :
-            (nextTileWorld.getX() < position.getX() ? -1.0f : 0.0f);
-
-        pbody->body->ApplyLinearImpulseToCenter(b2Vec2(jumpForceX * direction, jumpForceY), true);
-    }
-    // Verify Grounded
-    if (isOnGround) {
-        pbody->body->SetLinearVelocity(b2Vec2(0, 0));
-        hasJumped = false;
-        jumpCooldown = 0.0f;
-        isOnGround = false;
-    }
+  
 }
 

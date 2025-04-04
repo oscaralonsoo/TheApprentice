@@ -8,6 +8,8 @@
 #include "Bloodrusher.h"
 #include "Mireborn.h"
 #include "AbilityZone.h"
+#include "Brood.h"
+#include "Broodheart.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -83,6 +85,12 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::MIREBORN:
 		entity = new Mireborn();
+		break;
+	case EntityType::BROODHEART:
+		entity = new Broodheart();
+		break;
+	case EntityType::BROOD:
+		entity = new Brood();
 		break;
 	case EntityType::ABILITY_ZONE:
 		entity = new AbilityZone();

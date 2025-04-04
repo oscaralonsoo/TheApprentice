@@ -78,10 +78,10 @@
     <ClCompile Include="src\Mireborn.cpp">
       <Filter>Source Files\Entities\Enemies\Mireborn</Filter>
     </ClCompile>
-    <ClCompile Include="Broodheart.cpp">
+    <ClCompile Include="src\Broodheart.cpp">
       <Filter>Source Files\Entities\Enemies\broodheart</Filter>
     </ClCompile>
-    <ClCompile Include="Brood.cpp">
+    <ClCompile Include="src\Brood.cpp">
       <Filter>Source Files\Entities\Enemies\broodheart\Brood</Filter>
     </ClCompile>
   </ItemGroup>
@@ -174,10 +174,10 @@
     <ClInclude Include="src\Mireborn.h">
       <Filter>Source Files\Entities\Enemies\Mireborn</Filter>
     </ClInclude>
-    <ClInclude Include="Broodheart.h">
+    <ClInclude Include="src\Broodheart.h">
       <Filter>Source Files\Entities\Enemies\broodheart</Filter>
     </ClInclude>
-    <ClInclude Include="Brood.h">
+    <ClInclude Include="src\Brood.h">
       <Filter>Source Files\Entities\Enemies\broodheart\Brood</Filter>
     </ClInclude>
   </ItemGroup>

@@ -172,7 +172,6 @@ void Menus::Intro(float dt) {
 }
 
 void Menus::MainMenu(float dt) {
-    previousSelectedButton = selectedButton;
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
         switch (selectedButton) {
         case 0: NewGame(); break;
@@ -279,15 +278,15 @@ void Menus::Credits() {
         StartTransition(true, nextState);
     }
 }
-
 void Menus::StartTransition(bool fast, MenusState newState) {
     previousState = currentState;
     fastTransition = fast;
     fadingIn = false;
     inTransition = true;
     nextState = newState;
-}
 
+    previousSelectedButton[currentState] = selectedButton;
+}
 void Menus::Transition(float dt) {
     transitionSpeed = fastTransition ? 0.007f : 0.0015f;
 
@@ -300,7 +299,13 @@ void Menus::Transition(float dt) {
                 currentState = nextState;
                 nextState = MenusState::NONE;
                 CreateButtons();
-                    selectedButton = previousSelectedButton; 
+
+                if (currentState == MenusState::SETTINGS) {
+                    selectedButton = 0; 
+                }
+                else if (previousSelectedButton.find(currentState) != previousSelectedButton.end()) {
+                    selectedButton = previousSelectedButton[currentState];
+                }
             }
         }
     }
@@ -314,7 +319,6 @@ void Menus::Transition(float dt) {
         }
     }
 }
-
 void Menus::CreateButtons() {
     buttons.clear();
     std::vector<std::string> names = GetButtonNamesForCurrentState();
@@ -333,6 +337,7 @@ void Menus::CreateButtons() {
     for (size_t i = 0; i < names.size(); ++i) {
         CreateButton(names[i], startX, startY + static_cast<int>(i * (buttonHeight + spacing)), buttonWidth, buttonHeight, i);
     }
+
 }
 
 std::vector<std::string> Menus::GetButtonNamesForCurrentState() const {

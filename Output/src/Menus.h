@@ -108,7 +108,7 @@ private:
     SDL_Texture* checkboxTexture = nullptr;
     SDL_Texture* fillTexture = nullptr;
 
-    int previousSelectedButton = 0;
+    std::unordered_map<MenusState, int> previousSelectedButton; 
     int baseWidth, baseHeight, width, height;
     float scaleX = 1.0f;
     float scaleY = 1.0f;

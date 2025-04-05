@@ -51,4 +51,5 @@ private:
 	int texH = 50;
 	pugi::xml_node parameters;
 	AbilityZoneStates state = AbilityZoneStates::WAITING;
+	bool playerInside = false;
 };

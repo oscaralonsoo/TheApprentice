@@ -11,6 +11,7 @@
 #include "Physics.h"
 #include "Module.h"
 #include "AbilityZone.h"
+#include "Player.h"
 
 AbilityZone::AbilityZone() : Entity(EntityType::CAVE_DROP), state(AbilityZoneStates::WAITING)
 {
@@ -42,6 +43,36 @@ bool AbilityZone::Update(float dt)
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
+	if (playerInside)
+	{
+		// Buscar al jugador sin necesidad de GetPlayer()
+		Entity* player = nullptr;
+		for (Entity* e : Engine::GetInstance().entityManager->entities)
+		{
+			if (e->type == EntityType::PLAYER)
+			{
+				player = e;
+				break;
+			}
+		}
+
+		if (player != nullptr)
+		{
+			float zoneCenterX = GetPosition().getX();  // centro del collider
+			float playerX = player->position.getX();
+
+			float dx = fabs(playerX - zoneCenterX); // distancia en eje X
+			float maxDistance = texW / 2.0f; // radio horizontal
+			float t = std::min(dx / maxDistance, 1.0f); // normalizado
+
+			float minZoom = 1.0f;
+			float maxZoom = 1.4f;
+			float zoomValue = maxZoom - (maxZoom - minZoom) * t;
+
+			Engine::GetInstance().render->SetCameraZoom(zoomValue);
+		}
+	}
+
 	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY());
 
 	return true;
@@ -67,10 +98,25 @@ Vector2D AbilityZone::GetPosition() {
 }
 
 void AbilityZone::OnCollision(PhysBody* physA, PhysBody* physB) {
-
+	switch (physB->ctype) {
+	case ColliderType::PLAYER:	
+		printf("ENTRAAAA");
+		playerInside = true;
+		break;
+	default:
+		break;
+	}
 }
 
 void AbilityZone::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
 {
-
+	switch (physB->ctype) {
+	case ColliderType::PLAYER:
+		printf("SALEEE");
+		playerInside = false;
+		Engine::GetInstance().render->SetCameraZoom(1.0f);
+		break;
+	default:
+		break;
+	}
 }

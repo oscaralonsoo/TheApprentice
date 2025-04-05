@@ -49,6 +49,8 @@ bool Render::Awake()
 	{
 		camera.w = Engine::GetInstance().window.get()->width * scale;
 		camera.h = Engine::GetInstance().window.get()->height * scale;
+		cameraZoom = 1.0f;
+		targetCameraZoom = 1.0f;
 		camera.x = 0;
 		camera.y = 0;
 	}
@@ -115,11 +117,12 @@ void Render::ResetViewPort()
 bool Render::DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* section, float speed, double angle, int pivotX, int pivotY) const
 {
 	bool ret = true;
-	int scale = Engine::GetInstance().window.get()->GetScale();
+	float scale = Engine::GetInstance().window->GetScale() * cameraZoom;
 
 	SDL_Rect rect;
-	rect.x = (int)(camera.x * speed) + x * scale;
-	rect.y = (int)(camera.y * speed) + y * scale;
+	rect.x = static_cast<int>(camera.x * speed + x * scale);
+	rect.y = static_cast<int>(camera.y * speed + y * scale);
+
 
 	if(section != NULL)
 	{
@@ -131,8 +134,9 @@ bool Render::DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* sec
 		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
 	}
 
-	rect.w *= scale;
-	rect.h *= scale;
+	rect.w = static_cast<int>(rect.w * scale);
+	rect.h = static_cast<int>(rect.h * scale);
+
 
 	SDL_Point* p = NULL;
 	SDL_Point pivot;
@@ -156,7 +160,7 @@ bool Render::DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* sec
 bool Render::DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera) const
 {
 	bool ret = true;
-	int scale = Engine::GetInstance().window.get()->GetScale();
+	float scale = Engine::GetInstance().window->GetScale() * cameraZoom;
 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
@@ -164,10 +168,10 @@ bool Render::DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint
 	SDL_Rect rec(rect);
 	if(use_camera)
 	{
-		rec.x = (int)(camera.x + rect.x * scale);
-		rec.y = (int)(camera.y + rect.y * scale);
-		rec.w *= scale;
-		rec.h *= scale;
+		rec.x = static_cast<int>(camera.x + rect.x * scale);
+		rec.y = static_cast<int>(camera.y + rect.y * scale);
+		rec.w = static_cast<int>(rect.w * scale);
+		rec.h = static_cast<int>(rect.h * scale);
 	}
 
 	int result = (filled) ? SDL_RenderFillRect(renderer, &rec) : SDL_RenderDrawRect(renderer, &rec);
@@ -184,17 +188,25 @@ bool Render::DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint
 bool Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
 {
 	bool ret = true;
-	int scale = Engine::GetInstance().window.get()->GetScale();
+	float scale = Engine::GetInstance().window->GetScale() * cameraZoom;
 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
 
 	int result = -1;
 
-	if(use_camera)
-		result = SDL_RenderDrawLine(renderer, camera.x + x1 * scale, camera.y + y1 * scale, camera.x + x2 * scale, camera.y + y2 * scale);
+	if (use_camera)
+		result = SDL_RenderDrawLine(renderer,
+			static_cast<int>(camera.x + x1 * scale),
+			static_cast<int>(camera.y + y1 * scale),
+			static_cast<int>(camera.x + x2 * scale),
+			static_cast<int>(camera.y + y2 * scale));
 	else
-		result = SDL_RenderDrawLine(renderer, x1 * scale, y1 * scale, x2 * scale, y2 * scale);
+		result = SDL_RenderDrawLine(renderer,
+			static_cast<int>(x1 * scale),
+			static_cast<int>(y1 * scale),
+			static_cast<int>(x2 * scale),
+			static_cast<int>(y2 * scale));
 
 	if(result != 0)
 	{
@@ -208,7 +220,7 @@ bool Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b,
 bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
 {
 	bool ret = true;
-	int scale = Engine::GetInstance().window.get()->GetScale();
+	float scale = Engine::GetInstance().window->GetScale() * cameraZoom;
 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
@@ -218,10 +230,14 @@ bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uin
 
 	float factor = (float)M_PI / 180.0f;
 
-	for(int i = 0; i < 360; ++i)
+	for (int i = 0; i < 360; ++i)
 	{
-		points[i].x = (int)(x * scale + camera.x) + (int)(radius * cos(i * factor));
-		points[i].y = (int)(y * scale + camera.y) + (int)(radius * sin(i * factor));
+		int cx = static_cast<int>(x * scale);
+		int cy = static_cast<int>(y * scale);
+		int cr = static_cast<int>(radius * scale);
+
+		points[i].x = (use_camera ? static_cast<int>(camera.x) : 0) + cx + static_cast<int>(cr * cos(i * factor));
+		points[i].y = (use_camera ? static_cast<int>(camera.y) : 0) + cy + static_cast<int>(cr * sin(i * factor));
 	}
 
 	result = SDL_RenderDrawPoints(renderer, points, 360);
@@ -239,6 +255,16 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 {
 	if (cameraLocked)
 		return;
+
+	if (cameraZoom != targetCameraZoom)
+		cameraZoom += (targetCameraZoom - cameraZoom) * cameraZoomSmoothing;
+
+	// Ajuste real del tamaño de la cámara (viewport)
+	int baseW = Engine::GetInstance().window->width;
+	int baseH = Engine::GetInstance().window->height;
+
+	camera.w = static_cast<int>(baseW / cameraZoom);
+	camera.h = static_cast<int>(baseH / cameraZoom);
 
 	cameraYOffset += (targetCameraYOffset - cameraYOffset) * yOffsetSmoothing;
 	
@@ -423,3 +449,14 @@ void Render::SetVSync(bool enable)
 	config.save_file("config.xml");
 }
 
+void Render::SetCameraZoom(float zoom, bool immediate)
+{
+	targetCameraZoom = zoom;
+	if (immediate)
+		cameraZoom = zoom;
+}
+
+float Render::GetCameraZoom() const
+{
+	return cameraZoom;
+}

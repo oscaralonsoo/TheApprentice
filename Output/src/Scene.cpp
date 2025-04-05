@@ -161,6 +161,8 @@ void Scene::ChangeScene(int nextScene)
 				player->pbody->body->SetLinearVelocity(b2Vec2(0, 0)); // Stop All Movement
 				player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, newPosition.y / PIXELS_PER_METER), 0); // Set New Player Position
 			}
+
+			Engine::GetInstance().entityManager->Start();
 		}
 	}
 }
@@ -172,6 +174,7 @@ Vector2D Scene::GetPlayerPosition()
 
 void Scene::SaveGameXML()
 {
+
 	saving = true;
 	Engine::GetInstance().menus->isSaved = 1;
 	//Load xml

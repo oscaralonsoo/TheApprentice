@@ -5,284 +5,185 @@
 #include "Render.h"
 #include "Window.h"
 #include "Engine.h"
+#include "pugixml.hpp"
+#include "Log.h"
+#include <SDL2/SDL_mixer.h>
 
-Menus::Menus() : currentState(MenusState::MAINMENU), transitionAlpha(0.0f), inTransition(false), fadingIn(false), nextState(MenusState::NONE), 
+
+
+Menus::Menus() : currentState(MenusState::INTRO), transitionAlpha(0.0f), inTransition(false), fadingIn(false), nextState(MenusState::NONE),
 fastTransition(false), menuBackground(nullptr), pauseBackground(nullptr) {}
 
 Menus::~Menus() {}
 
-bool Menus::Awake(){ return true; }
+bool Menus::Awake() { return true; }
 
-bool Menus::Start()
-{
-    currentState = MenusState::MAINMENU;
+bool Menus::Start() {
     LoadTextures();
-    pugi::xml_document config;
-    pugi::xml_parse_result result = config.load_file("config.xml");
-    pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
-    pugi::xml_node fullScreenData = config.child("config").child("window").child("fullscreen_window");
-    isFullScreen = fullScreenData.attribute("value").as_bool();
-
-    isSaved = saveData.attribute("isSaved").as_int();
+    CreateButtons();
+    LoadConfig();
     return true;
 }
-void Menus::LoadTextures()
-{
-    // Cargar fondos
-    groupLogo = Engine::GetInstance().render->LoadTexture("assets/textures/Menus/Logo.png");
-    menuBackground = Engine::GetInstance().render->LoadTexture("assets/textures/Menus/MainMenuBackGround.png");
-    pauseBackground = Engine::GetInstance().render->LoadTexture("assets/textures/Menus/PauseMenuBackground.png");
-    settingsBackground = Engine::GetInstance().render->LoadTexture("assets/textures/Menus/SettingsBackground.png");
-    creditsBackground = Engine::GetInstance().render->LoadTexture("assets/textures/Menus/CreditsBackground.png");
 
-    // Cargar botones dinámicamente
-    std::vector<std::string> buttonNames = { "NewGame", "Continue", "Settings", "Credits", "Exit" };
-    for (const auto& name : buttonNames) {
-        MenuButton button;
-        button.texDeselected = Engine::GetInstance().render->LoadTexture(("assets/textures/Menus/buttons/" + name + "_deselected.png").c_str());
-        button.texSelected = Engine::GetInstance().render->LoadTexture(("assets/textures/Menus/buttons/" + name + "_selected.png").c_str());
-        mainMenuButtons.push_back(button);
-    }
-
-    std::vector<std::string> pauseButtonNames = { "Continue", "Settings", "Exit" };
-    for (const auto& name : pauseButtonNames) {
-        MenuButton button;
-        button.texDeselected = Engine::GetInstance().render->LoadTexture(("assets/textures/Menus/buttons/" + name + "_deselected.png").c_str());
-        button.texSelected = Engine::GetInstance().render->LoadTexture(("assets/textures/Menus/buttons/" + name + "_selected.png").c_str());
-        pauseMenuButtons.push_back(button);
+void Menus::LoadConfig() {
+    pugi::xml_document config;
+    if (config.load_file(CONFIG_FILE.c_str())) {
+        isFullScreen = config.child("config").child("window").child("fullscreen_window").attribute("value").as_bool();
+        isVSync = config.child("config").child("render").child("vsync").attribute("value").as_bool();
+        isSaved = config.child("config").child("scene").child("save_data").attribute("isSaved").as_int();
     }
 }
 
-bool Menus::Update(float dt)
-{
+void Menus::LoadTextures() {
+    pugi::xml_document doc;
+    if (!doc.load_file(ART_FILE.c_str())) {
+        LOG("Error cargando art.xml: %s", doc.load_file(ART_FILE.c_str()).description());
+        return;
+    }
+    LoadBackgroundTextures(doc);
+    LoadButtonTextures(doc);
+    LoadCheckboxTextures(doc);
+}
+
+void Menus::LoadBackgroundTextures(pugi::xml_document& doc) {
+    for (pugi::xml_node bg = doc.child("art").child("textures").child("UI").child("menu").child("backgrounds").first_child(); bg; bg = bg.next_sibling()) {
+        std::string name = bg.name();
+        std::string path = std::string(bg.attribute("path").value()) + bg.attribute("name").value();
+        backgroundTextures[name] = Engine::GetInstance().render->LoadTexture(path.c_str()); 
+    }
+}
+
+void Menus::LoadButtonTextures(pugi::xml_document& doc) {
+    for (pugi::xml_node btn = doc.child("art").child("textures").child("UI").child("menu").child("buttons").first_child(); btn; btn = btn.next_sibling()) {
+        std::string path = std::string(btn.attribute("path").value()) + btn.attribute("name").value();
+        buttonTextures[btn.attribute("name").value()] = Engine::GetInstance().render->LoadTexture(path.c_str()); 
+    }
+}
+
+void Menus::LoadCheckboxTextures(pugi::xml_document& doc) {
+    pugi::xml_node checkboxNode = doc.child("art").child("textures").child("UI").child("menu").child("checkbox");
+    if (checkboxNode) {
+        LoadCheckboxTexture(checkboxNode.child("checkbox"), checkboxTexture);
+        LoadCheckboxTexture(checkboxNode.child("fill"), fillTexture);
+    }
+}
+
+void Menus::LoadCheckboxTexture(pugi::xml_node node, SDL_Texture*& texture) {
+    if (node) {
+        std::string path = std::string(node.attribute("path").value()) + node.attribute("name").value();
+        texture = Engine::GetInstance().render->LoadTexture(path.c_str());
+        LOG("Checkbox texture loaded: %s -> %p", path.c_str(), texture);
+    }
+}
+
+bool Menus::Update(float dt) {
     CheckCurrentState(dt);
     Transition(dt);
     HandlePause();
     return true;
 }
-// Pause Logic
-void Menus::HandlePause()
-{
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN && !inTransition && !inConfig)
-    {
-        if (currentState == MenusState::PAUSE)
-        {
-            StartTransition(true, MenusState::GAME);
-            isPaused = false;
-        }
-        else if (currentState == MenusState::GAME)
-        {
+
+void Menus::HandlePause() {
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN && !inTransition && !inConfig) {
+        if (currentState == MenusState::GAME) {
             StartTransition(true, MenusState::PAUSE);
-            isPaused = true;
         }
     }
 }
 
-bool Menus::PostUpdate()
-{
-    DrawBackground();
-
-    DrawButtons();
-
-    if (inTransition)
-        ApplyTransitionEffect();
-
-    if (isExit)
-    {
-        return false;
-    }
-    return true;
-}
-
-void Menus::DrawBackground() // Draw background depending on the MenusState
-{
+bool Menus::PostUpdate() {
     SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
-    SDL_Rect cameraRect = { 0, 0,width, height };
-    switch (currentState)
-    {
-    case MenusState::INTRO:
-        Engine::GetInstance().render->DrawTexture(groupLogo, 0, 0, &cameraRect, logoAlpha);
-        break;
-        break;
-    case MenusState::MAINMENU:
-        Engine::GetInstance().render->DrawTexture(menuBackground, 0, 0, &cameraRect);
-        break;
-    case MenusState::PAUSE:
-        Engine::GetInstance().render->DrawTexture(pauseBackground, cameraRect.x - Engine::GetInstance().render->camera.x, 
-            cameraRect.y - Engine::GetInstance().render->camera.y, &cameraRect);
-        break;
-    case MenusState::SETTINGS:
-        Engine::GetInstance().render->DrawTexture(settingsBackground, cameraRect.x - Engine::GetInstance().render->camera.x,
-            cameraRect.y - Engine::GetInstance().render->camera.y, &cameraRect);
-        break;
-    case MenusState::CREDITS:
-        Engine::GetInstance().render->DrawTexture(creditsBackground, 0, 0, &cameraRect);
-        break;
+    DrawBackground();
+    DrawButtons();
+    if (inTransition) ApplyTransitionEffect();
+    return !isExit;
+}
+
+void Menus::DrawBackground() {
+    SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
+    SDL_Rect cameraRect = { 0, 0, width, height };
+
+    std::string bgKey = GetBackgroundKey();
+    auto it = backgroundTextures.find(bgKey);
+    if (it != backgroundTextures.end() && it->second) {
+        Engine::GetInstance().render->DrawTexture(it->second, cameraRect.x - Engine::GetInstance().render->camera.x, cameraRect.y - Engine::GetInstance().render->camera.y, &cameraRect);
     }
 }
 
-void Menus::DrawButtons()
-{
-    std::vector<MenuButton>* buttons = nullptr;
-    if (currentState == MenusState::MAINMENU) {
-        buttons = &mainMenuButtons;
-    }
-    else if (currentState == MenusState::PAUSE) {
-        buttons = &pauseMenuButtons;
-    }
-
-    if (!buttons) return;
-
-    int yOffset = height / 2 - buttons->size() * 50 / 2;
-    for (size_t i = 0; i < buttons->size(); ++i) {
-        SDL_Texture* tex = (i == selectedButton) ? (*buttons)[i].texSelected : (*buttons)[i].texDeselected;
-
-        int xPos = width / 2 - 100;
-        int yPos = yOffset + i * 100;
-
-        if (currentState == MenusState::PAUSE) {
-            xPos -= Engine::GetInstance().render->camera.x;
-            yPos -= Engine::GetInstance().render->camera.y;
-        }
-
-        Engine::GetInstance().render->DrawTexture(tex, xPos, yPos);
+std::string Menus::GetBackgroundKey() const {
+    switch (currentState) {
+    case MenusState::INTRO: return "intro";
+    case MenusState::MAINMENU: return "main";
+    case MenusState::PAUSE: return "pause";
+    case MenusState::SETTINGS: return "settings";
+    case MenusState::CREDITS: return "credits";
+    default: return "";
     }
 }
 
-void Menus::ApplyTransitionEffect()
-{
+void Menus::ApplyTransitionEffect() {
     SDL_SetRenderDrawBlendMode(Engine::GetInstance().render->renderer, SDL_BLENDMODE_BLEND);
     SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, 0, 0, 0, static_cast<Uint8>(transitionAlpha * 255));
     SDL_RenderFillRect(Engine::GetInstance().render->renderer, nullptr);
 }
 
-bool Menus::CleanUp()
-{
-    SDL_DestroyTexture(groupLogo);
-    SDL_DestroyTexture(menuBackground);
-    SDL_DestroyTexture(pauseBackground);
-    SDL_DestroyTexture(settingsBackground);
-    SDL_DestroyTexture(creditsBackground);
-
-    for (auto& btn : mainMenuButtons)
-    {
-        SDL_DestroyTexture(btn.texDeselected);
-        SDL_DestroyTexture(btn.texSelected);
+bool Menus::CleanUp() {
+    for (auto& pair : backgroundTextures) {
+        SDL_DestroyTexture(pair.second);
+    }
+    for (auto& pair : buttonTextures) {
+        SDL_DestroyTexture(pair.second);
     }
     return true;
 }
 
-void Menus::CheckCurrentState(float dt) 
-{
+void Menus::CheckCurrentState(float dt) {
     if (inTransition) return;
+    Engine::GetInstance().guiManager->controlButton->ButtonNavigation();
 
-    switch (currentState)
-    {
-    case MenusState::INTRO:
-        Intro(dt);
-        break;
-    case MenusState::MAINMENU:
-        MainMenu(dt);
-        break;
-    case MenusState::GAME:
-        break;
-    case MenusState::PAUSE:
-        Pause(dt);
-        break;
-    case MenusState::SETTINGS:
-        Settings();
-        break;
-    case MenusState::CREDITS:
-        Credits();
-        break;
-    case MenusState::EXIT:
-        isExit = true;
-        break;
+    switch (currentState) {
+    case MenusState::INTRO: Intro(dt); break;
+    case MenusState::MAINMENU: MainMenu(dt); break;
+    case MenusState::GAME: break;
+    case MenusState::PAUSE: Pause(dt); break;
+    case MenusState::SETTINGS: Settings(); break;
+    case MenusState::CREDITS: Credits(); break;
+    case MenusState::EXIT: isExit = true; break;
     }
 }
 
-void Menus::Intro(float dt)
-{
+void Menus::Intro(float dt) {
     introTimer += dt;
-
-    // Fade in the logo
-    if (logoAlpha < 1.0f) {
-        logoAlpha += dt * 0.5f; 
-        if (logoAlpha > 1.0f) logoAlpha = 1.0f;
-    }
-
-    if (introTimer >= 2000.0f || Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-    {
+    logoAlpha = std::min(logoAlpha + dt * 0.5f, 1.0f);
+    if (introTimer >= 2000.0f || Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
         StartTransition(false, MenusState::MAINMENU);
     }
 }
 
-void Menus::MainMenu(float dt)
-{
-    // Navigation
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_DOWN)
-    {
-        selectedButton = (selectedButton == 0) ? mainMenuButtons.size() - 1 : selectedButton - 1;
-    }
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
-    {
-        if (isSaved == 0 && selectedButton == 0)
-        {
-            selectedButton = 2; 
-        }
-        else
-        {
-            selectedButton = (selectedButton == mainMenuButtons.size() - 1) ? 0 : selectedButton + 1;
-        }
-    }
-
-    if (isSaved == 0 && selectedButton == 1) {
-        selectedButton = (selectedButton == 0) ? 2 : selectedButton - 1; 
-    }
-
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
-    {
-        switch (selectedButton)
-        {
-        case 0: // New Game
-            NewGame();
-            break;
-        case 1: // Continue 
-            if (isSaved > 0) {
-                Engine::GetInstance().scene.get()->LoadGameXML();
-                StartTransition(false, MenusState::GAME);
-            }
-            break;
-        case 2: // Settings
-            inConfig = true;
-            StartTransition(true, MenusState::SETTINGS);
-            break;
-        case 3: // Credits
-            inCredits = true;
-            StartTransition(true, MenusState::CREDITS);
-            break;
-        case 4: // Exit
-            currentState = MenusState::EXIT;
-            break;
+void Menus::MainMenu(float dt) {
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+        switch (selectedButton) {
+        case 0: NewGame(); break;
+        case 1: if (isSaved > 0) { Engine::GetInstance().scene.get()->LoadGameXML(); StartTransition(false, MenusState::GAME); } break;
+        case 2: inConfig = true; StartTransition(true, MenusState::SETTINGS);  break;
+        case 3: inCredits = true; StartTransition(true, MenusState::CREDITS); break;
+        case 4: currentState = MenusState::EXIT; break;
         }
     }
 }
 
-void Menus::NewGame()
-{
+void Menus::NewGame() {
     isSaved = 0;
-    //Load xml
     pugi::xml_document config;
-    pugi::xml_parse_result result = config.load_file("config.xml");
-    pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
+    config.load_file(CONFIG_FILE.c_str());
+    auto saveData = config.child("config").child("scene").child("save_data");
 
-    Vector2D playerPos = Engine::GetInstance().scene->GetPlayerPosition();	//Reset Player Pos
-    pugi::xml_node playerNode = saveData.child("player");
-    if (playerNode) {
-        playerNode.attribute("x") = 180;
-        playerNode.attribute("y") = 50;
-    }
+    saveData.child("player").attribute("x") = 180;
+    saveData.child("player").attribute("y") = 50;
+    saveData.child("scene").attribute("actualScene") = 0;
+    saveData.attribute("isSaved") = isSaved;
 
+    config.save_file(CONFIG_FILE.c_str());
     pugi::xml_node sceneNode = saveData.child("scene"); 	
     if (sceneNode) {
         sceneNode.attribute("actualScene") = 0; //Reset Actual Scene
@@ -298,116 +199,235 @@ void Menus::NewGame()
     StartTransition(false, MenusState::GAME);
 }
 
-void Menus::Pause(float dt)
-{
+void Menus::Pause(float dt) {
     if (inTransition) return;
-
-    // Navigation for Pause Menu
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_DOWN)
-    {
-        selectedButton = (selectedButton == 0) ? pauseMenuButtons.size() - 1 : selectedButton - 1;
-    }
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
-    {
-        selectedButton = (selectedButton == pauseMenuButtons.size() - 1) ? 0 : selectedButton + 1;
-    }
-
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
-    {
-        switch (selectedButton)
-        {
-        case 0: // Continue
-            isPaused = false;
-            StartTransition(true, MenusState::GAME);
-            break;
-        case 1: // Settings
-            inConfig = true;
-            StartTransition(true,MenusState::SETTINGS);
-            break;
-        case 2: // Exit
-            currentState = MenusState::EXIT;
-            break;
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+        switch (selectedButton) {
+        case 0: isPaused = false; StartTransition(true, MenusState::GAME); break;
+        case 1: inConfig = true; StartTransition(true, MenusState::SETTINGS); break;
+        case 2: currentState = MenusState::EXIT; break;
         }
     }
 }
 
-
-void Menus::Settings()
-{
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-    {
-
-        if (previousState == MenusState::PAUSE)
-        {
-            nextState = MenusState::PAUSE;
-        }
-        else
-        {
-            nextState = previousState; 
-        }
+void Menus::Settings() {
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+        nextState = (previousState == MenusState::PAUSE) ? MenusState::PAUSE : previousState;
         inConfig = false;
         StartTransition(true, nextState);
-        previousState = MenusState::NONE; 
+    }
+    else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+        HandleSettingsSelection();
+    }
+    HandleVolumeSliders();
+}
+
+void Menus::HandleSettingsSelection() {
+    switch (selectedButton) {
+    case 0: ToggleFullScreen(); break;
+    case 1: ToggleVSync(); break;
     }
 }
 
-void Menus::Credits()
-{
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-    {   
-        isFullScreen = !isFullScreen;
-        Engine::GetInstance().window->SetFullScreen(isFullScreen);
-        if (previousState == MenusState::PAUSE)
-        {
-            nextState = MenusState::PAUSE;
-        }
-        else
-        {
-            nextState = previousState;
-        }
-        inCredits = false;
-        StartTransition(true, nextState);
-        previousState = MenusState::NONE;
+void Menus::ToggleFullScreen() {
+    isFullScreen = !isFullScreen;
+    Engine::GetInstance().window->SetFullScreen(isFullScreen);
+}
+
+void Menus::ToggleVSync() {
+    isVSync = !isVSync;
+    Engine::GetInstance().render->SetVSync(isVSync);
+}
+
+void Menus::HandleVolumeSliders() {
+    if (selectedButton == 2) {
+        AdjustVolume(musicVolumeSliderX);
+    }
+    else if (selectedButton == 3) {
+        AdjustVolume(fxVolumeSliderX);
+    }
+    else if (selectedButton == 4) {
+        AdjustVolume(masterVolumeSliderX);
     }
 }
-void Menus::StartTransition(bool fast, MenusState newState)
-{
-    previousState = currentState; 
+
+void Menus::AdjustVolume(int& sliderX) {
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+        sliderX -= VOLUME_ADJUSTMENT_STEP;
+        sliderX = std::max(sliderX, SLIDER_MIN);
+    }
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+        sliderX += VOLUME_ADJUSTMENT_STEP;
+        sliderX = std::min(sliderX, SLIDER_MAX);
+    }
+    UpdateVolume(sliderX);
+}
+
+void Menus::UpdateVolume(int sliderX) {
+    float volume = (float)(sliderX - SLIDER_MIN) / (SLIDER_MAX - SLIDER_MIN);
+    volume = (volume < 0.0f) ? 0.0f : (volume > 1.0f) ? 1.0f : volume;
+    int sdlVolume = static_cast<int>(volume * MIX_MAX_VOLUME);
+    if (selectedButton == 2) {
+        Mix_VolumeMusic(sdlVolume);
+    }
+    else if (selectedButton == 3) {
+        Mix_Volume(-1, sdlVolume);
+    }
+    else if (selectedButton == 4) {
+        Mix_Volume(-1, sdlVolume);       
+        Mix_VolumeMusic(sdlVolume);       
+    }
+}
+
+void Menus::Credits() {
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+        nextState = (previousState == MenusState::PAUSE) ? MenusState::PAUSE : previousState;
+        inCredits = false;
+        StartTransition(true, nextState);
+    }
+}
+void Menus::StartTransition(bool fast, MenusState newState) {
+    previousState = currentState;
     fastTransition = fast;
     fadingIn = false;
     inTransition = true;
     nextState = newState;
-}
 
-// Transition Logic
-void Menus::Transition(float dt)
-{
+    previousSelectedButton[currentState] = selectedButton;
+}
+void Menus::Transition(float dt) {
     transitionSpeed = fastTransition ? 0.007f : 0.0015f;
 
-    if (!fadingIn) // Fade Out
-    {
+    if (!fadingIn) { // Fade Out
         transitionAlpha += dt * transitionSpeed;
-        if (transitionAlpha >= 1.0f)
-        {
+        if (transitionAlpha >= 1.0f) {
             transitionAlpha = 1.0f;
             fadingIn = true;
-            if (nextState != MenusState::NONE)
-            {
+            if (nextState != MenusState::NONE) {
                 currentState = nextState;
                 nextState = MenusState::NONE;
+                CreateButtons();
+
+                if (currentState == MenusState::SETTINGS) {
+                    selectedButton = 0; 
+                }
+                else if (previousSelectedButton.find(currentState) != previousSelectedButton.end()) {
+                    selectedButton = previousSelectedButton[currentState];
+                }
             }
         }
     }
-    else // Fade In
-    {
+    else { // Fade In
         transitionAlpha -= dt * transitionSpeed;
-        if (transitionAlpha <= 0.0f)
-        {
+        if (transitionAlpha <= 0.0f) {
             transitionAlpha = 0.0f;
             inTransition = false;
-            fastTransition = false; 
+            fastTransition = false;
             Engine::GetInstance().scene->saving = false;
         }
     }
+}
+void Menus::CreateButtons() {
+    buttons.clear();
+    std::vector<std::string> names = GetButtonNamesForCurrentState();
 
+    SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
+    float scale = std::min(static_cast<float>(width) / Engine::GetInstance().window->width, static_cast<float>(height) / Engine::GetInstance().window->height);
+
+    int buttonWidth = static_cast<int>(BUTTON_WIDTH * scale);
+    int buttonHeight = static_cast<int>(BUTTON_HEIGHT * scale);
+    int spacing = static_cast<int>(BUTTON_SPACING * scale);
+    int totalHeight = names.size() * (buttonHeight + spacing) - spacing;
+
+    int startX = (width - buttonWidth) / 2;
+    int startY = (height - totalHeight) / 2 + static_cast<int>(50 * scale);
+
+    for (size_t i = 0; i < names.size(); ++i) {
+        CreateButton(names[i], startX, startY + static_cast<int>(i * (buttonHeight + spacing)), buttonWidth, buttonHeight, i);
+    }
+
+}
+
+std::vector<std::string> Menus::GetButtonNamesForCurrentState() const {
+    switch (currentState) {
+    case MenusState::MAINMENU: return { "newGame", "continue", "settings", "credits", "exit" };
+    case MenusState::PAUSE: return { "continue", "settings", "exit" };
+    case MenusState::SETTINGS: return { "Full Screen", "Vsync", "Music Volume", "FX Volume", "Master Volume" };
+    default: return {};
+    }
+}
+
+void Menus::CreateButton(const std::string& name, int startX, int startY, int buttonWidth, int buttonHeight, int index) {
+    std::string unhovered = name + "_unhovered.png";
+    std::string hovered = name + "_hovered.png";
+
+    SDL_Rect bounds = { startX, startY, buttonWidth, buttonHeight };
+    bool isCheckBox = (currentState == MenusState::SETTINGS && (index == 0 || index == 1));
+    buttons.emplace_back(name, bounds, index, isCheckBox, unhovered, hovered);
+
+    if (!isCheckBox) {
+        buttons.back().unhoveredTexture = buttonTextures[unhovered];
+        buttons.back().hoveredTexture = buttonTextures[hovered];
+    }
+}
+
+void Menus::DrawButtons() {
+    for (size_t i = 0; i < buttons.size(); ++i) {
+        ButtonInfo& button = buttons[i];
+        if (button.isCheckBox) {
+            DrawCheckBox(button, i == selectedButton);
+        }
+        else {
+            SDL_Texture* tex = (i == selectedButton) ? button.hoveredTexture : button.unhoveredTexture;
+            if (tex) {
+                Engine::GetInstance().render->DrawTexture(tex, button.bounds.x - Engine::GetInstance().render->camera.x, button.bounds.y - Engine::GetInstance().render->camera.y);
+            }
+        }
+    }
+}
+
+void Menus::DrawCheckBox(const ButtonInfo& button, bool isSelected) {
+    int baseSize = 60;
+    float scale = isSelected ? 1.4f : 1.1f;
+    int size = static_cast<int>(baseSize * scale);
+
+    int checkboxOffsetX = 175;
+    int checkboxOffsetY = -75;
+    int x = button.bounds.x + button.bounds.w / 2 - size / 2 + checkboxOffsetX;
+    int y = button.bounds.y + button.bounds.h / 2 - size / 2 + checkboxOffsetY;
+    SDL_Rect dstRect = { x, y, size, size };
+    SDL_RenderCopy(Engine::GetInstance().render->renderer, checkboxTexture, nullptr, &dstRect);
+
+    if ((button.text == "Full Screen" && isFullScreen) || (button.text == "Vsync" && isVSync)) {
+        SDL_RenderCopy(Engine::GetInstance().render->renderer, fillTexture, nullptr, &dstRect);
+    }
+
+    int textOffsetX = -100;
+    int textOffsetY = -100;
+    int textX = button.bounds.x + textOffsetX;
+    int textY = button.bounds.y + (button.bounds.h / 2) - 10 + textOffsetY;
+
+    Engine::GetInstance().render->DrawText(button.text.c_str(), textX, textY, WHITE, 45);
+    DrawSliders();
+}
+
+void Menus::DrawSliders() {
+    DrawSlider(SLIDER_MIN, 509, musicVolumeSliderX, selectedButton == 2, "Music Volume");
+    DrawSlider(SLIDER_MIN, 629, fxVolumeSliderX, selectedButton == 3, "FX Volume");
+    DrawSlider(SLIDER_MIN, 749, masterVolumeSliderX, selectedButton == 4, "Master Volume");
+}
+
+void Menus::DrawSlider(int minX, int y, int& sliderX, bool isSelected, const std::string& label) {
+    Engine::GetInstance().render->DrawRectangle({ minX, y, 400 + 20, 19 }, 200, 200, 200, 255, true, false);
+
+    int width = isSelected ? 25 : 20;
+    int height = isSelected ? 45 : 35;
+    int color = isSelected ? 255 : 150;
+
+    Engine::GetInstance().render->DrawRectangle(
+        { sliderX - (width - 20) / 2, y - (height - 35/2) / 2, width, height },
+        color, color, color, 255, true, false
+    );
+
+    Engine::GetInstance().render->DrawText(label.c_str(), 710, y - 20, WHITE, 45);
 }

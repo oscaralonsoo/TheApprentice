@@ -6,6 +6,10 @@
 #include "Log.h"
 #include "CaveDrop.h"
 #include "Bloodrusher.h"
+#include "Mireborn.h"
+#include "AbilityZone.h"
+#include "Brood.h"
+#include "Broodheart.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -73,11 +77,23 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::PLAYER:
 		entity = new Player();
 		break;
-	case EntityType::CAVEDROP:
+	case EntityType::CAVE_DROP:
 		entity = new CaveDrop();
 		break;
 	case EntityType::BLOODRUSHER:
 		entity = new Bloodrusher();
+		break;
+	case EntityType::MIREBORN:
+		entity = new Mireborn();
+		break;
+	case EntityType::BROODHEART:
+		entity = new Broodheart();
+		break;
+	case EntityType::BROOD:
+		entity = new Brood();
+		break;
+	case EntityType::ABILITY_ZONE:
+		entity = new AbilityZone();
 		break;
 	default:
 		break;
@@ -127,7 +143,7 @@ void EntityManager::AddEntity(Entity* entity)
 
 bool EntityManager::Update(float dt)
 {
-	if (Engine::GetInstance().menus->currentState != MenusState::GAME)
+	if (Engine::GetInstance().menus->currentState != MenusState::GAME|| Engine::GetInstance().menus->isPaused)
 		return true;
 
 	bool ret = true;

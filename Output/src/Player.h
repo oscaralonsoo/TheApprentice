@@ -37,10 +37,11 @@ public:
 	void SetState(const std::string& newState) { state = newState; }
 	const std::string& GetState() const { return state; }
 
+	int GetMovementDirection() const;
+
 	int targetScene = 0;
 	PhysBody* pbody;
 
-	int GetMovementDirection() const;
 
 private:
 
@@ -54,4 +55,6 @@ private:
 
 	// Nueva clase para manejar todas las mecánicas
 	PlayerMechanics mechanics;
+
+	bool initialized = false;
 };

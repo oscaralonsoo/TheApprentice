@@ -12,6 +12,7 @@
 #include "EntityManager.h"
 #include "Map.h"
 #include "Physics.h"
+#include "GuiManager.h"
 
 // Constructor
 Engine::Engine() {
@@ -39,6 +40,7 @@ Engine::Engine() {
     map = std::make_shared<Map>();
     entityManager = std::make_shared<EntityManager>();
     menus = std::make_shared<Menus>();
+    guiManager = std::make_shared<GuiManager>();
 
     // Ordered for awake / Start / Update
     // Reverse order of CleanUp
@@ -51,9 +53,9 @@ Engine::Engine() {
     AddModule(std::static_pointer_cast<Module>(map));
     AddModule(std::static_pointer_cast<Module>(scene));
     AddModule(std::static_pointer_cast<Module>(entityManager));
-
-    // Render last 
     AddModule(std::static_pointer_cast<Module>(menus));
+    AddModule(std::static_pointer_cast<Module>(guiManager));
+    // Render last 
     AddModule(std::static_pointer_cast<Module>(render));
 
     LOG("Timer App Constructor: %f", timer.ReadMSec());

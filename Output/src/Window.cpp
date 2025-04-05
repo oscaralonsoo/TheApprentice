@@ -1,7 +1,7 @@
 #include "Window.h"
 #include "Log.h"
 #include "Engine.h"
-
+#include "Menus.h"
 Window::Window() : Module()
 {
 	window = NULL;
@@ -84,18 +84,21 @@ void Window::GetWindowSize(int& width, int& height) const
 
 void Window::SetFullScreen(bool isFullScreen)
 {
-	if (isFullScreen)
+	if (isFullScreen) {
 		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
-	else
+	}
+	else {
 		SDL_SetWindowFullscreen(window, 0);
+	}
+	SDL_GetWindowSize(window, &width, &height);
 
-	// Save Config
+	// Guarda la configuración
 	pugi::xml_document config;
 	pugi::xml_parse_result result = config.load_file("config.xml");
 	pugi::xml_node fullScreenData = config.child("config").child("window").child("fullscreen_window");
 	fullScreenData.attribute("value") = isFullScreen;
-
 	config.save_file("config.xml");
+
 }
 
 int Window::GetScale() const

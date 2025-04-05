@@ -2,7 +2,7 @@
 
 #include <string>
 #include "pugixml.hpp"
-
+class GuiControl;
 class Module
 {
 public:
@@ -55,6 +55,10 @@ public:
 	virtual bool LoadParameters(pugi::xml_node parameters)
 	{
 		configParameters = parameters;
+		return true;
+	}
+	virtual bool OnGuiMouseClickEvent(GuiControl* control)
+	{
 		return true;
 	}
 

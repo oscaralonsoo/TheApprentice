@@ -39,6 +39,9 @@
 				<duck loop="false" speed="0">
 					<frame x="0" y="0" w="128" h="128" />
 				</duck>
+				<wall_slide loop="false" speed="0">
+					<frame x="50" y="0" w="128" h="128" />
+				</wall_slide>
 				<die loop="false" speed="0">
 					<frame x="0" y="0" w="128" h="128" />
 				</die>

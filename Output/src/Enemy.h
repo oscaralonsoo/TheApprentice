@@ -20,9 +20,11 @@ public:
 
 	bool Update(float dt);
 
+	bool PostUpdate();
+
 	bool CleanUp();
 
-	void SetParameters(pugi::xml_node parameters) {
+	virtual void SetParameters(pugi::xml_node parameters) {
 		this->parameters = parameters;
 
 		position.x = parameters.attribute("x").as_int();
@@ -48,10 +50,11 @@ public:
 	//Pathfinding
 	int steps = 0;
 	int maxSteps = 100;
+	PhysBody* pbody;
+
 
 protected:
 	Pathfinding* pathfinding;
-	PhysBody* pbody;
 
 	SDL_Texture* texture;
 

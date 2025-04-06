@@ -245,7 +245,7 @@ bool Engine::DoUpdate()
     //Iterates the module list and calls Update on each module
     bool result = true;
     for (const auto& module : moduleList) {
-        result = module.get()->Update(dt);
+         result = module.get()->Update(dt);
         if (!result) {
             break;
         }

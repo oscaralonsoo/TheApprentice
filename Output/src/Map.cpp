@@ -348,16 +348,18 @@ bool Map::Load(std::string path, std::string fileName)
                     enemyNode.append_attribute("type") = enemyName.c_str();
                     enemyNode.append_attribute("x") = x;
                     enemyNode.append_attribute("y") = y;
-                    enemyNode.append_attribute("w") = width; 
-                    enemyNode.append_attribute("h") = height; 
+                    enemyNode.append_attribute("w") = width;
+                    enemyNode.append_attribute("h") = height;
                     enemyNode.append_attribute("gravity") = true;
 
                     Enemy* enemy = nullptr;
 
                     if (enemyName == "Bloodrusher")
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BLOODRUSHER);
-                    else if (enemyName == "Mireborn")
+                    else if (enemyName == "Mireborn") {
+                        enemyNode.append_attribute("tier") = "Alpha";
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::MIREBORN);
+                    }
                     else if (enemyName == "Broodheart")
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BROODHEART);
                     else if (enemyName == "Brood")

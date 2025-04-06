@@ -75,6 +75,11 @@ bool Enemy::Update(float dt)
 	return true;
 }
 
+bool Enemy::PostUpdate()
+{
+	return true;
+}
+
 bool Enemy::CleanUp()
 {
 	Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
@@ -105,8 +110,7 @@ void Enemy::OnCollision(PhysBody* physA, PhysBody* physB) {
 	{
 	case ColliderType::ATTACK:
 		LOG("Collided with player - DESTROY");
-
-		Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+		//Engine::GetInstance().entityManager.get()->DestroyEntity(this);
 		break;
 	}
 }

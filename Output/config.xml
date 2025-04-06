@@ -44,18 +44,18 @@
 				</die>
 			</player>
 			<enemies>
-				<enemy type="Bloodrusher" w="32" h="32" texture="Assets/Textures/enemy/bloodrusher.png">
+				<enemy type="Bloodrusher" w="130" h="130" texture="Assets/Enemies/bloodrusher.png">
 					<idle loop="true" speed="0.1">
-						<frame x="0" y="0" w="80" h="80" />
+						<frame x="0" y="0" w="130" h="130" />
 					</idle>
 					<attack loop="true" speed="0.1">
-						<frame x="0" y="80" w="80" h="80" />
+						<frame x="0" y="0" w="130" h="130" />
 					</attack>
 					<slide loop="true" speed="0.1">
-						<frame x="0" y="160" w="80" h="80" />
+						<frame x="0" y="0" w="130" h="130" />
 					</slide>
 				</enemy>
-				<enemy type="Mireborn" w="128" h="128" texture="Assets/Textures/enemy/mireborn.png">
+				<enemy type="Mireborn" w="128" h="128" texture="Assets/Enemies/mireborn.png">
 					<idle loop="true" speed="0.1">
 						<frame x="0" y="0" w="128" h="128" />
 					</idle>
@@ -108,9 +108,7 @@
 		<save_data isSaved="1">
 			<player x="564" y="564" w="44" h="54" />
 			<scene actualScene="0" />
-			<enemies>
-				<enemy type="Mireborn" x="576" y="640" w="128" h="128" gravity="true" />
-			</enemies>
+			<enemies />
 		</save_data>
 	</scene>
 </config>

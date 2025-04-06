@@ -154,3 +154,14 @@ bool EntityManager::Update(float dt)
 	}
 	return ret;
 }
+
+bool EntityManager::PostUpdate()
+{
+	bool ret = true;
+	for (const auto entity : entities)
+	{
+		if (entity->active == false) continue;
+		ret = entity->PostUpdate();
+	}
+	return ret;
+}

@@ -20,7 +20,7 @@
 			<Map_1 path="Assets/Maps/" name="Map1.tmx" />
 		</maps>
 		<animations>
-			<player w="128" h="128" texture="Assets/Textures/slime.png">
+			<player w="128" h="128" texture="Assets/Slime/slime.png">
 				<idle loop="true" speed="0.08">
 					<frame x="0" y="0" w="128" h="128" />
 				</idle>
@@ -44,23 +44,39 @@
 				</die>
 			</player>
 			<enemies>
-				<enemy type="Bloodrusher" w="130" h="130" texture="Assets/Enemies/bloodrusher.png">
+				<enemy type="Bloodrusher" w="200" h="200" texture="Assets/Enemies/bloodrusher.png">
 					<idle loop="true" speed="0.1">
-						<frame x="0" y="0" w="130" h="130" />
+						<frame x="0" y="0" w="200" h="200" />
 					</idle>
 					<attack loop="true" speed="0.1">
-						<frame x="0" y="0" w="130" h="130" />
+						<frame x="0" y="0" w="200" h="200" />
 					</attack>
 					<slide loop="true" speed="0.1">
-						<frame x="0" y="0" w="130" h="130" />
+						<frame x="0" y="0" w="200" h="200" />
 					</slide>
 				</enemy>
-				<enemy type="Mireborn" w="128" h="128" texture="Assets/Enemies/mireborn.png">
+				<enemy type="Mireborn" tier="Alpha" w="128" h="128" texture="Assets/Enemies/mireborn.png">
 					<idle loop="true" speed="0.1">
 						<frame x="0" y="0" w="128" h="128" />
 					</idle>
 					<walking loop="false" speed="0.1">
 						<frame x="0" y="0" w="128" h="128" />
+					</walking>
+				</enemy>
+				<enemy type="Mireborn" tier="Beta" w="64" h="64" texture="Assets/Enemies/mireborn.png">
+					<idle loop="true" speed="0.1">
+						<frame x="320" y="64" w="64" h="64" />
+					</idle>
+					<walking loop="false" speed="0.1">
+						<frame x="320" y="64" w="64" h="64" />
+					</walking>
+				</enemy>
+				<enemy type="Mireborn" tier="Gamma" w="128" h="128" texture="Assets/Enemies/mireborn.png">
+					<idle loop="true" speed="0.1">
+						<frame x="0" y="0" w="32" h="32" />
+					</idle>
+					<walking loop="false" speed="0.1">
+						<frame x="0" y="0" w="32" h="32" />
 					</walking>
 				</enemy>
 				<enemy type="Broodheart" w="64" h="64" texture="Assets/Textures/enemy/broodheart.png">

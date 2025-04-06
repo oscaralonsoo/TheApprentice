@@ -44,7 +44,7 @@
 				</die>
 			</player>
 			<enemies>
-				<enemy type="Bloodrusher" w="200" h="200" texture="Assets/Enemies/bloodrusher.png">
+				<enemy type="Bloodrusher" w="100" h="100" texture="Assets/Enemies/bloodrusher.png">
 					<idle loop="true" speed="0.1">
 						<frame x="0" y="0" w="200" h="200" />
 					</idle>
@@ -73,10 +73,10 @@
 				</enemy>
 				<enemy type="Mireborn" tier="Gamma" w="128" h="128" texture="Assets/Enemies/mireborn.png">
 					<idle loop="true" speed="0.1">
-						<frame x="0" y="0" w="32" h="32" />
+						<frame x="320" y="0" w="32" h="32" />
 					</idle>
 					<walking loop="false" speed="0.1">
-						<frame x="0" y="0" w="32" h="32" />
+						<frame x="320" y="0" w="32" h="32" />
 					</walking>
 				</enemy>
 				<enemy type="Broodheart" w="64" h="64" texture="Assets/Textures/enemy/broodheart.png">

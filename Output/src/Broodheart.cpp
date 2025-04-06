@@ -40,20 +40,23 @@ bool Broodheart::Start() {
 }
 
 bool Broodheart::Update(float dt) {
-    switch (currentState)
-    {
-    case BroodheartState::IDLE:
-        Idle(dt);
-        break;
-    case BroodheartState::SPAWN:
-        Spawn(dt);
-        break;
-    case BroodheartState::DEAD:
-        break;
+    spawnCooldown += dt;
+
+    if (spawnCooldown >= spawnInterval) {
+        shouldSpawn = true;
+        spawnCooldown = 0.0f;
     }
+
     return Enemy::Update(dt);
 }
+bool Broodheart::PostUpdate() {
+    if (shouldSpawn) {
+        Spawn();
+        shouldSpawn = false;
+    }
 
+    return Enemy::PostUpdate();
+}
 bool Broodheart::CleanUp() {
     return Enemy::CleanUp();
 }
@@ -62,20 +65,47 @@ void Broodheart::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
         break;
     case ColliderType::PLAYER:
-        // Damage the player
+
         break;
     case ColliderType::ATTACK:
-        currentState = BroodheartState::DEAD;
+        
         break;
     }
 }
 
-void Broodheart::Idle(float dt) {
+void Broodheart::Spawn() {
+    const float spawnRadius = 100.0f;
 
+
+    // Solo permite el spawn si hay menos de 6 Broods
+    if (broodCount < 6) {
+        for (int i = 0; i < 2; ++i) {
+            if (broodCount >= 6) break; // Salir si ya hay 6 Broods
+
+            float angle = (float)(rand() % 360) * M_PI / 180.0f;
+            float distance = 40.0f + (rand() / (float)RAND_MAX) * (spawnRadius - 40.0f);
+
+            float offsetX = cosf(angle) * distance;
+            float offsetY = sinf(angle) * distance;
+
+            pugi::xml_document tempDoc;
+            pugi::xml_node enemyNode = tempDoc.append_child("enemy");
+
+            enemyNode.append_attribute("type") = type.c_str();
+            enemyNode.append_attribute("x") = position.x + offsetX;
+            enemyNode.append_attribute("y") = position.y + offsetY;
+            enemyNode.append_attribute("w") = texW / 2;
+            enemyNode.append_attribute("h") = texH / 2;
+            enemyNode.append_attribute("gravity") = true;
+
+            Enemy* child = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BROOD);
+            child->SetParameters(enemyNode);
+            child->Start();
+
+            // Incrementar el contador de Broods después de crear uno
+            broodCount++;
+        }
+    }
 }
 
-void Broodheart::Spawn(float dt)
-{
-  
-}
 

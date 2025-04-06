@@ -38,6 +38,9 @@ public:
 
 	void AddEntity(Entity* entity);
 
+	const std::list<Entity*>& GetEntities() const { return entities; }
+
+
 public:
 	std::list<Entity*> entities;
 

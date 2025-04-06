@@ -8,7 +8,8 @@
 #include "EntityManager.h"
 #include "Log.h"
 
-Brood::Brood() : Enemy(EntityType::BROODHEART) {
+Brood::Brood() : Enemy(EntityType::BROOD)
+{
 }
 
 Brood::~Brood() {
@@ -40,42 +41,49 @@ bool Brood::Start() {
 }
 
 bool Brood::Update(float dt) {
+    if (pathfinding->HasFoundPlayer()) {
+        if (currentState == BroodState::IDLE) {
+            currentState = BroodState::CHASING;
+        }
+    }
     switch (currentState)
     {
     case BroodState::IDLE:
         Idle(dt);
         break;
-    case BroodState::ATTACK:
-        Attack(dt);
+    case BroodState::CHASING:
+        Chase(dt);
+        break;
+    case BroodState::RETURNING:
+        ReturnToPlayer(dt);
         break;
     case BroodState::DEAD:
         break;
     }
     return Enemy::Update(dt);
 }
-
 bool Brood::CleanUp() {
     return Enemy::CleanUp();
 }
 
 void Brood::OnCollision(PhysBody* physA, PhysBody* physB) {
-    switch (physB->ctype) {
-        break;
-    case ColliderType::PLAYER:
-        // Damage the player
-        break;
-    case ColliderType::ATTACK:
-        currentState = BroodState::DEAD;
-        break;
-    }
+    
+        if (physA->ctype == ColliderType::PLAYER)
+        {
+            currentState = BroodState::DEAD;
+        }
 }
 
 void Brood::Idle(float dt) {
 
 }
 
-void Brood::Attack(float dt)
-{
+void Brood::Chase(float dt) {
+
+
 
 }
 
+void Brood::ReturnToPlayer(float dt) {
+
+}

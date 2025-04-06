@@ -1,11 +1,12 @@
 #pragma once
-
+#include "Broodheart.h"
 #include "Enemy.h"
 #include "SDL2/SDL.h"
 
 enum class BroodState {
     IDLE,
-    ATTACK,
+    CHASING,
+    RETURNING,
     DEAD
 };
 
@@ -24,14 +25,19 @@ public:
 
     void Idle(float dt);
 
-    void Attack(float dt);
+    void Chase(float dt);
 
 
-public:
+    void ReturnToPlayer(float dt);
 
 private:
-    float SpawnCooldown = 0.0f;
-    float SpawnTimer = 0.0f;
+    float speed = 4.0f;
+    float circleAngle = 0.0f;
+    float returnRadius = 60.0f;
+    float angularSpeed = 2.0f;
+    Vector2D returnCenter;
+    float returnStartAngle = 0.0f;
+    Vector2D lastDirection;
 
     bool playerInRange = false;
 
@@ -39,5 +45,4 @@ private:
     PhysBody* physBody = nullptr;
     Animation idleAnim;
 };
-#pragma once
 #pragma once

@@ -3,40 +3,44 @@
 #include "Enemy.h"
 #include "SDL2/SDL.h"
 
-enum class BroodheartState {
-    IDLE,
-    SPAWN,
-    DEAD
-};
 
 class Broodheart : public Enemy
 {
 public:
 
     Broodheart();
+
     ~Broodheart() override;
 
     bool Awake() override;
+
     bool Start() override;
+
     bool Update(float dt) override;
+
+    bool PostUpdate();
+
     bool CleanUp() override;
+
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
 
-    void Idle(float dt);
+    void Spawn();
 
-    void Spawn(float dt);
-
-
-public:
-
+    int broodCount = 0;
 private:
-    float SpawnCooldown = 0.0f;
-    float SpawnTimer = 0.0f;
 
     bool playerInRange = false;
 
-    BroodheartState currentState = BroodheartState::IDLE;
     PhysBody* physBody = nullptr;
+
     Animation idleAnim;
+
+    //Summon
+
+    float spawnCooldown = 0.0f;
+    float spawnInterval = 5000.0f;
+    bool shouldSpawn = false;
+    const float spawnRadius = 150.0f;
+
 };
 #pragma once

@@ -1,4 +1,3 @@
-
 #include "Broodheart.h"
 #include "Brood.h"
 #include "Engine.h"
@@ -7,35 +6,36 @@
 #include "EntityManager.h"
 #include "Textures.h"
 #include "Entity.h"
-#include "EntityManager.h"
 #include "Log.h"
 
-Broodheart::Broodheart() : Enemy(EntityType::BROODHEART) {
-}
+constexpr int MAX_BROODS = 6;
+constexpr int BROODS_PER_SPAWN = 2;
+constexpr int MAX_SPAWN_ATTEMPTS = 10;
+constexpr float MIN_SPAWN_DISTANCE = 60.0f;
+constexpr float MIN_DISTANCE_BETWEEN_BROODS_SQ = 2500.0f;
 
-Broodheart::~Broodheart() {
-}
+Broodheart::Broodheart() : Enemy(EntityType::BROODHEART) {}
+
+Broodheart::~Broodheart() {}
 
 bool Broodheart::Awake() {
     return Enemy::Awake();
 }
 
 bool Broodheart::Start() {
-
     spawnInterval = 4500.0f + static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2500.0f;
 
-    pugi::xml_document loadFile;
-    pugi::xml_parse_result result = loadFile.load_file("config.xml");
-    std::string type = "Broodheart";
+    pugi::xml_document configDoc;
+    if (!configDoc.load_file("config.xml")) {
+        LOG("Failed to load config.xml for Broodheart");
+        return false;
+    }
 
-    for (pugi::xml_node enemyNode = loadFile.child("config").child("scene").child("animations").child("enemies").child("enemy");
-        enemyNode; enemyNode = enemyNode.next_sibling("enemy")) {
-
-        if (std::string(enemyNode.attribute("type").as_string()) == type) {
-            texture = Engine::GetInstance().textures.get()->Load(enemyNode.attribute("texture").as_string());
-
-            idleAnim.LoadAnimations(enemyNode.child("idle"));
-
+    std::string typeName = "Broodheart";
+    for (pugi::xml_node node : configDoc.child("config").child("scene").child("animations").child("enemies").children("enemy")) {
+        if (node.attribute("type").as_string() == typeName) {
+            texture = Engine::GetInstance().textures->Load(node.attribute("texture").as_string());
+            idleAnim.LoadAnimations(node.child("idle"));
             currentAnimation = &idleAnim;
             break;
         }
@@ -43,24 +43,24 @@ bool Broodheart::Start() {
 
     return Enemy::Start();
 }
+
 bool Broodheart::Update(float dt) {
     spawnCooldown += dt;
-
     if (spawnCooldown >= spawnInterval) {
         shouldSpawn = true;
         spawnCooldown = 0.0f;
     }
-
     return Enemy::Update(dt);
 }
+
 bool Broodheart::PostUpdate() {
     if (shouldSpawn) {
         Spawn();
         shouldSpawn = false;
     }
-
     return Enemy::PostUpdate();
 }
+
 bool Broodheart::CleanUp() {
     for (Brood* brood : broodsAlive) {
         brood->SetParent(nullptr);
@@ -71,77 +71,59 @@ bool Broodheart::CleanUp() {
 
 void Broodheart::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
-        break;
     case ColliderType::PLAYER:
-
-        break;
     case ColliderType::ATTACK:
-
+       
         break;
     }
 }
+
 void Broodheart::Spawn() {
-    if (broodsAlive.size() < 6) {
-        std::vector<SDL_FPoint> newPositions;
+    if (broodsAlive.size() >= MAX_BROODS) return;
 
-        for (int i = 0; i < 2; ++i) {
-            if (broodsAlive.size() >= 6) break;
+    std::vector<SDL_FPoint> newPositions;
 
-            SDL_FPoint spawnPos;
-            bool validPos = false;
+    for (int i = 0; i < BROODS_PER_SPAWN && broodsAlive.size() < MAX_BROODS; ++i) {
+        SDL_FPoint spawnPos;
+        bool validPos = false;
 
-            int attempts = 0;
-            while (!validPos && attempts < 10) {
-                float angle = (float)(rand() % 360) * M_PI / 180.0f;
-                float distance = 60.0f + (rand() / (float)RAND_MAX) * (spawnRadius - 60.0f);
+        for (int attempt = 0; attempt < MAX_SPAWN_ATTEMPTS && !validPos; ++attempt) {
+            float angle = static_cast<float>(rand() % 360) * M_PI / 180.0f;
+            float distance = MIN_SPAWN_DISTANCE + static_cast<float>(rand()) / RAND_MAX * (spawnRadius - MIN_SPAWN_DISTANCE);
 
-                float offsetX = cosf(angle) * distance;
-                float offsetY = sinf(angle) * distance;
+            spawnPos.x = position.x + cosf(angle) * distance;
+            spawnPos.y = position.y + sinf(angle) * distance;
 
-                spawnPos.x = position.x + offsetX;
-                spawnPos.y = position.y + offsetY;
-
-                validPos = true;
-                for (const SDL_FPoint& pos : newPositions) {
-                    float dx = spawnPos.x - pos.x;
-                    float dy = spawnPos.y - pos.y;
-                    float distSq = dx * dx + dy * dy;
-                    if (distSq < 2500.0f) { 
-                        validPos = false;
-                        break;
-                    }
-                }
-                attempts++;
-            }
-
-            if (!validPos) continue; 
-
-            newPositions.push_back(spawnPos);
-
-            pugi::xml_document tempDoc;
-            pugi::xml_node enemyNode = tempDoc.append_child("enemy");
-
-            enemyNode.append_attribute("type") = type.c_str();
-            enemyNode.append_attribute("x") = spawnPos.x;
-            enemyNode.append_attribute("y") = spawnPos.y;
-            enemyNode.append_attribute("w") = texW / 2;
-            enemyNode.append_attribute("h") = texH / 2;
-            enemyNode.append_attribute("gravity") = false;
-
-            Brood* child = (Brood*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BROOD);
-            child->SetParameters(enemyNode);
-            child->Start();
-            child->SetParent(this);
-
-            broodsAlive.push_back(child);
+            validPos = std::all_of(newPositions.begin(), newPositions.end(), [&](const SDL_FPoint& pos) {
+                float dx = spawnPos.x - pos.x;
+                float dy = spawnPos.y - pos.y;
+                return (dx * dx + dy * dy) >= MIN_DISTANCE_BETWEEN_BROODS_SQ;
+                });
         }
+
+        if (!validPos) continue;
+        newPositions.push_back(spawnPos);
+
+        pugi::xml_document tempDoc;
+        pugi::xml_node enemyNode = tempDoc.append_child("enemy");
+
+        enemyNode.append_attribute("type") = type.c_str();
+        enemyNode.append_attribute("x") = spawnPos.x;
+        enemyNode.append_attribute("y") = spawnPos.y;
+        enemyNode.append_attribute("w") = texW / 2;
+        enemyNode.append_attribute("h") = texH / 2;
+        enemyNode.append_attribute("gravity") = false;
+
+        auto* brood = static_cast<Brood*>(Engine::GetInstance().entityManager->CreateEntity(EntityType::BROOD));
+        brood->SetParameters(enemyNode);
+        brood->Start();
+        brood->SetParent(this);
+
+        broodsAlive.push_back(brood);
     }
 }
 
-void Broodheart::OnBroodDeath(Brood* brood)
-{
+void Broodheart::OnBroodDeath(Brood* brood) {
     broodsAlive.remove(brood);
     spawnCooldown = 0.0f;
 }
-
-

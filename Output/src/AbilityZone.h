@@ -47,6 +47,8 @@ private:
 	PhysBody* pbody;
 	SDL_Texture* texture;
 	std::string type;
+	Animation idleAnim;
+	Animation* currentAnimation = nullptr;
 	int texW = 50;
 	int texH = 50;
 	pugi::xml_node parameters;

@@ -68,8 +68,6 @@ bool Map::Update(float dt)
                             // Limpiar los bits de flip para obtener el ID real
                             uint32_t clean_gid = raw_gid & ~(FLIPPED_HORIZONTALLY_FLAG | FLIPPED_VERTICALLY_FLAG);
 
-                            LOG("raw_gid = %u (0x%X)", raw_gid, raw_gid);
-
                             TileSet* tileSet = GetTilesetFromTileId(clean_gid);
                             if (tileSet != nullptr) {
                                 SDL_Rect tileRect = tileSet->GetRect(clean_gid);

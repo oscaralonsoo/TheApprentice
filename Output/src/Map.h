@@ -113,7 +113,7 @@ public:
     bool Update(float dt);
 
     // Called each loop after iteration
-    bool PostUpdate(float dt);
+    bool PostUpdate();
 
     // Called before quitting
     bool CleanUp();
@@ -121,12 +121,13 @@ public:
     // Load new map
     bool Load(std::string path, std::string mapFileName);
 
+    void DrawMapLayers(bool forwardOnly);
+
     // L07: TODO 8: Create a method that translates x,y coordinates from map positions to world positions
     Vector2D MapToWorld(int x, int y) const;
 
     // L10: TODO 5: Add method WorldToMap to obtain  map coordinates from screen coordinates 
     Vector2D WorldToMap(int x, int y);
-
 
     // L09: TODO 2: Implement function to the Tileset based on a tile id
     TileSet* GetTilesetFromTileId(uint32_t gid) const;

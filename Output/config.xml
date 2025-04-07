@@ -20,7 +20,7 @@
 			<Map_1 path="Assets/Maps/" name="Map1.tmx" />
 		</maps>
 		<animations>
-			<player w="128" h="128" texture="Assets/Slime/slime.png">
+			<player w="89" h="100" texture="Assets/Slime/wall_slide.png">
 				<idle loop="true" speed="0.08">
 					<frame x="0" y="0" w="128" h="128" />
 				</idle>
@@ -39,8 +39,12 @@
 				<duck loop="false" speed="0">
 					<frame x="0" y="0" w="128" h="128" />
 				</duck>
-				<wall_slide loop="false" speed="0">
-					<frame x="50" y="0" w="128" h="128" />
+				<wall_slide loop="true" speed="0.1">
+					<frame x="0" y="0" w="89" h="100" />
+					<frame x="89" y="0" w="89" h="100" />
+					<frame x="178" y="0" w="89" h="100" />
+					<frame x="0" y="0" w="89" h="100" />
+					<frame x="89" y="100" w="89" h="100" />
 				</wall_slide>
 				<die loop="false" speed="0">
 					<frame x="0" y="0" w="128" h="128" />
@@ -125,8 +129,8 @@
 			</props>
 		</animations>
 		<save_data isSaved="1">
-			<player x="564" y="564" w="44" h="54" />
-			<scene actualScene="0" />
+			<player x="472" y="768" w="44" h="54" />
+			<scene actualScene="1" />
 			<enemies />
 		</save_data>
 	</scene>

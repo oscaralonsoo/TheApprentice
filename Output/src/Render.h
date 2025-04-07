@@ -4,7 +4,7 @@
 #include "Vector2D.h"
 #include "SDL2/SDL.h"
 #include "Timer.h"
-
+#include "SDL2/SDL_ttf.h"
 class Render : public Module
 {
 public:
@@ -32,7 +32,7 @@ public:
 	void ResetViewPort();
 
 	// Drawing
-	bool DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* section = NULL, float speed = 1.0f, double angle = 0, int pivotX = INT_MAX, int pivotY = INT_MAX) const;
+	bool DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SDL_Rect* section = NULL, float speed = 1.0f, double angle = 0, uint32_t pivotX = INT_MAX, uint32_t pivotY = INT_MAX, SDL_RendererFlip flip = SDL_FLIP_NONE) const;
 	bool DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool filled = true, bool useCamera = true) const;
 	bool DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool useCamera = true) const;
 	bool DrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool useCamera = true) const;
@@ -41,10 +41,12 @@ public:
 	void SetBackgroundColor(SDL_Color color);
 
 	void UpdateCamera(const Vector2D& targetPosition, int movementDirection, float smoothing);
+	bool DrawText(const char* text, int posx, int posy, SDL_Color color, int fontSize) const;
+	// To render Text
 
 	float EaseInOut(float current, float target, float t);
-	// To render Text
-	bool DrawText(const std::string& text, int x, int y, SDL_Color color);
+
+	void SetVSync(bool enable);
 
 	SDL_Texture* LoadTexture(const char* path);
 public:
@@ -58,7 +60,7 @@ public:
 	int targetX;
 	int mapWidthPx;
 	int mapHeightPx;
-	int followMargin = 100;
+	int followMargin = 200;
 	int cameraCenterY = -camera.y + camera.h / 2;
 	int cameraVerticalViewOffset = 150;
 	int cameraLookAheadTarget = 0;
@@ -100,4 +102,7 @@ public:
 	SDL_Rect camera;
 	SDL_Rect viewport;
 	SDL_Color background;
+
+	// Text
+	TTF_Font* font;
 };

@@ -30,10 +30,10 @@ void PlayerMechanics::Update(float dt) {
     }
 
     HandleInput();
+    HandleWallSlide();
     HandleJump();
     HandleDash();
     HandleFall();
-    HandleWallSlide();
 
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN && attackSensor == nullptr) {
         CreateAttackSensor();
@@ -53,7 +53,7 @@ void PlayerMechanics::Update(float dt) {
     }
 
     if (attackSensor != nullptr) {
-        int offsetX = (movementDirection > 0) ? 48 : -48;
+        int offsetX = (movementDirection > 0) ? 60 : -15;
         int playerX = METERS_TO_PIXELS(player->pbody->body->GetPosition().x) + offsetX;
         int playerY = METERS_TO_PIXELS(player->pbody->body->GetPosition().y);
 
@@ -75,9 +75,14 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (jumpUnlocked) EnableJump(true);
         isOnGround = true;
         break;
-    case ColliderType::WALL:
+    case ColliderType::WALL_SLIDE:
         if (isDashing) CancelDash();
         isWallSliding = true;
+        isJumping = false;
+        break;
+    case ColliderType::WALL:
+        if (isDashing) CancelDash();
+        isJumping = false;
         break;
     case ColliderType::ITEM:
         Engine::GetInstance().physics->DeletePhysBody(physB);
@@ -91,6 +96,8 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::SAVEGAME:
         Engine::GetInstance().scene->saveGameZone = true;
         break;
+    case ColliderType::ENEMY:
+        break;
     default:
         break;
     }
@@ -99,7 +106,11 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
 void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM: isOnGround = false; break;
-    case ColliderType::WALL: isWallSliding = false; break;
+    case ColliderType::WALL_SLIDE: 
+        isWallSliding = false;
+        player->pbody->body->SetGravityScale(1.0f);
+        break;
+    case ColliderType::WALL: break;
     case ColliderType::DOWN_CAMERA: wasInDownCameraZone = false; break;
     case ColliderType::SAVEGAME: Engine::GetInstance().scene->saveGameZone = false; break;
     default: break;
@@ -107,41 +118,50 @@ void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 }
 
 void PlayerMechanics::HandleInput() {
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-        movementDirection = -1;
-        player->SetState("run_left");
+    if (!isAttacking) {
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+            movementDirection = -1;
+            player->SetState("run_left");
+        }
+        else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+            movementDirection = 1;
+            player->SetState("run_right");
+        }
+        else {
+            player->SetState("idle");
+        }
     }
-    else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-        movementDirection = 1;
-        player->SetState("run_right");
-    }
-    else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
+
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
         player->SetState("attack");
     }
-    else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && Engine::GetInstance().scene->saveGameZone) {
+
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && Engine::GetInstance().scene->saveGameZone) {
+        // TODO JAVI ---- Si guardas mientras te mueves en el eje x, te guardas moviendote y tendrias que estar quieto
+        b2Vec2 currentVelocity = player->pbody->body->GetLinearVelocity();
+        currentVelocity.x = 0; 
+        player->pbody->body->SetLinearVelocity(currentVelocity);
         Engine::GetInstance().scene->SaveGameXML();
     }
-    else {
-        player->SetState("idle");
-    }
 }
+
 
 void PlayerMechanics::HandleJump() {
     if (!jumpUnlocked) return;
 
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
 
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !isJumping) {
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !isJumping && !isWallSliding) {
         velocity.y = -jumpForce;
         isJumping = true;
         player->SetState("jump");
     }
-    else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isJumping && !hasDoubleJumped && doubleJumpUnlocked) {
+    else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isJumping && !hasDoubleJumped && doubleJumpUnlocked && !isWallSliding) {
         velocity.y = -jumpForce;
         hasDoubleJumped = true;
     }
 
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && isJumping) {
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && isJumping && !isWallSliding) {
         if (jumpTime < maxJumpTime) {
             velocity.y -= 0.3f;
             jumpTime += 0.016f;
@@ -201,7 +221,7 @@ void PlayerMechanics::CancelDash() {
 void PlayerMechanics::HandleFall() {
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
 
-    if (velocity.y > 0.5f && !isJumping) {
+    if (velocity.y > 0.5f && !isJumping && !isWallSliding) {
         isJumping = true;
         fallStartY = player->GetPosition().getY();
         player->SetState("fall");
@@ -222,15 +242,14 @@ void PlayerMechanics::CheckFallImpact() {
 
 void PlayerMechanics::HandleWallSlide() {
     if (isWallSliding) {
-        b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
-        velocity.y = 2.5f;
+        player->pbody->body->SetGravityScale(5.0f);
+        player->pbody->body->SetLinearVelocity(b2Vec2_zero);
         player->SetState("wall_slide");
-        player->pbody->body->SetLinearVelocity(velocity);
     }
 }
 
 void PlayerMechanics::CreateAttackSensor() {
-    int offsetX = (movementDirection > 0) ? 48 : -48;
+    int offsetX = (movementDirection > 0) ? 60 : -15;
 
     playerAttackX = METERS_TO_PIXELS(player->pbody->body->GetPosition().x) + offsetX;
     playerAttackY = METERS_TO_PIXELS(player->pbody->body->GetPosition().y);
@@ -239,6 +258,7 @@ void PlayerMechanics::CreateAttackSensor() {
     attackSensor->ctype = ColliderType::ATTACK;
     attackSensor->listener = player;
 
+    isAttacking = true;
     attackTimer.Start();
 }
 
@@ -246,5 +266,6 @@ void PlayerMechanics::DestroyAttackSensor() {
     if (attackSensor != nullptr) {
         Engine::GetInstance().physics->DeletePhysBody(attackSensor);
         attackSensor = nullptr;
+        isAttacking = false;
     }
 }

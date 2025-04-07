@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Map.h"
 #include <SDL2/SDL_image.h>
+#include "SDL2/SDL_ttf.h"
 
 #define VSYNC true
 
@@ -51,7 +52,10 @@ bool Render::Awake()
 		camera.x = 0;
 		camera.y = 0;
 	}
-
+	//Initialize the TTF library
+	TTF_Init();
+	//Load a font into memory
+	
 	return ret;
 }
 
@@ -108,7 +112,7 @@ void Render::ResetViewPort()
 }
 
 // Blit to screen
-bool Render::DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* section, float speed, double angle, int pivotX, int pivotY) const
+bool  Render::DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SDL_Rect* section, float speed, double angle, uint32_t pivotX, uint32_t pivotY, SDL_RendererFlip flip) const
 {
 	bool ret = true;
 	int scale = Engine::GetInstance().window.get()->GetScale();
@@ -140,7 +144,7 @@ bool Render::DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* sec
 		p = &pivot;
 	}
 
-	if(SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, SDL_FLIP_NONE) != 0)
+	if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, flip) != 0)
 	{
 		LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
 		ret = false;
@@ -281,7 +285,9 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 
 		if (targetY < cameraCenterY - followMargin || targetY > cameraCenterY + followMargin)
 		{
-			camera.y += static_cast<int>((-targetY + camera.h / 2 + cameraVerticalViewOffset - camera.y) * smoothing);
+			int verticalOffset = (targetY < cameraCenterY) ? -cameraVerticalViewOffset : cameraVerticalViewOffset;
+
+			camera.y += static_cast<int>((-targetY + camera.h / 2 + verticalOffset - camera.y) * smoothing);
 		}
 	}
 	else
@@ -316,9 +322,37 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 	if (camera.x < -(mapWidthPx - camera.w)) camera.x = -(mapWidthPx - camera.w);
 	if (camera.y < -(mapHeightPx - camera.h)) camera.y = -(mapHeightPx - camera.h);
 }
-bool Render::DrawText(const std::string& text, int x, int y, SDL_Color color)
-{
-	return false;
+bool Render::DrawText(const char* text, int posx, int posy, SDL_Color color, int fontSize) const {
+	TTF_Font* customFont = TTF_OpenFont("Assets/Fonts/ChangesModern.ttf", fontSize);
+	if (!customFont) {
+		LOG("Failed to load font: %s", TTF_GetError());
+		return false;
+	}
+
+	SDL_Surface* surface = TTF_RenderText_Solid(customFont, text, color);
+	if (!surface) {
+		LOG("Failed to create surface: %s", TTF_GetError());
+		TTF_CloseFont(customFont);
+		return false;
+	}
+
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+	if (!texture) {
+		LOG("Failed to create texture: %s", SDL_GetError());
+		SDL_FreeSurface(surface);
+		TTF_CloseFont(customFont);
+		return false;
+	}
+
+	int texW = 0, texH = 0;
+	SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
+	SDL_Rect dstrect = { posx, posy, texW, texH };
+	SDL_RenderCopy(renderer, texture, NULL, &dstrect);
+
+	SDL_DestroyTexture(texture);
+	SDL_FreeSurface(surface);
+	TTF_CloseFont(customFont);
+	return true;
 }
 SDL_Texture* Render::LoadTexture(const char* path)
 {
@@ -378,5 +412,14 @@ float Render::EaseInOut(float current, float target, float t)
 	float easedT = t * t * (3 - 2 * t); // curva tipo easeInOutCubic
 	return current + delta * easedT;
 }
+void Render::SetVSync(bool enable)
+{
+	// Save Config
+	pugi::xml_document config;
+	pugi::xml_parse_result result = config.load_file("config.xml");
+	pugi::xml_node vSyncData = config.child("config").child("render").child("vsync");
+	vSyncData.attribute("value") = enable;
 
+	config.save_file("config.xml");
+}
 

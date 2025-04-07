@@ -63,7 +63,7 @@ void Pathfinding::DrawPath() {
     // Draw visited
     for (const auto& pathTile : visited) {
     	Vector2D pathTileWorld = Engine::GetInstance().map.get()->MapToWorld(pathTile.getX(), pathTile.getY());
-        SDL_Rect rect = { 32,0,32,32 };
+        SDL_Rect rect = { 64,0,64,64 };
         Engine::GetInstance().render.get()->DrawTexture(pathTex, pathTileWorld.getX(), pathTileWorld.getY(),&rect);
     }
 
@@ -80,7 +80,7 @@ void Pathfinding::DrawPath() {
         //Get the position of the frontier tile in the world
         Vector2D pos = Engine::GetInstance().map.get()->MapToWorld(frontierTile.getX(), frontierTile.getY());
         //Draw the frontier tile
-        SDL_Rect rect = { 0,0,32,32 };
+        SDL_Rect rect = { 0,0,64,64 };
         Engine::GetInstance().render.get()->DrawTexture(pathTex, pos.getX(), pos.getY(), &rect);
         //Remove the front element from the queue
         frontierCopy.pop();
@@ -99,7 +99,7 @@ void Pathfinding::DrawPath() {
         //Get the position of the frontier tile in the world
         Vector2D pos = Engine::GetInstance().map.get()->MapToWorld(frontierTile.getX(), frontierTile.getY());
         //Draw the frontier tile
-        SDL_Rect rect = { 0,0,32,32 };
+        SDL_Rect rect = { 0,0,64,64 };
         Engine::GetInstance().render.get()->DrawTexture(pathTex, pos.getX(), pos.getY(), &rect);
         //Remove the front element from the queue
         frontierDijkstraCopy.pop();
@@ -118,7 +118,7 @@ void Pathfinding::DrawPath() {
         //Get the position of the frontier tile in the world
         Vector2D pos = Engine::GetInstance().map.get()->MapToWorld(frontierTile.getX(), frontierTile.getY());
         //Draw the frontier tile
-        SDL_Rect rect = { 0,0,32,32 };
+        SDL_Rect rect = { 0,0,64,64 };
         Engine::GetInstance().render.get()->DrawTexture(pathTex, pos.getX(), pos.getY(), &rect);
         //Remove the front element from the queue
         frontierAStarCopy.pop();
@@ -379,6 +379,10 @@ void Pathfinding::ComputePath(int x, int y)
         // Find the position of the current tile in the visited list
         index = Find(visited, currentTile);
     }
+}
+
+bool Pathfinding::HasFoundPlayer() const {
+    return !pathTiles.empty();  // Si hay tiles en el camino, significa que encontró al jugador
 }
 
 int Pathfinding::Find(std::vector<Vector2D> vector,Vector2D elem)

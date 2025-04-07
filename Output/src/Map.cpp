@@ -10,6 +10,7 @@
 #include "CaveDrop.h"
 #include "Engine.h"
 #include "EntityManager.h"
+#include "AbilityZone.h"
 
 Map::Map() : Module(), mapLoaded(false)
 {
@@ -50,33 +51,50 @@ bool Map::Update(float dt)
                 for (int i = 0; i < mapData.width; i++) {
                     for (int j = 0; j < mapData.height; j++) {
 
-                        int gid = mapLayer->Get(i, j);
-                        if (gid != 0) {
-                            TileSet* tileSet = GetTilesetFromTileId(gid);
+                        uint32_t raw_gid = static_cast<uint32_t>(mapLayer->Get(i, j));
+                        if (raw_gid != 0) {
+                            // Definir los flags de flip de Tiled
+                            const uint32_t FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
+                            const uint32_t FLIPPED_VERTICALLY_FLAG = 0x40000000;
+                            // const uint32_t FLIPPED_DIAGONALLY_FLAG    = 0x20000000; // si lo necesitas más adelante
+
+                            // Extraer el flip del gid
+                            SDL_RendererFlip flip = SDL_FLIP_NONE;
+                            if (raw_gid & FLIPPED_HORIZONTALLY_FLAG)
+                                flip = (SDL_RendererFlip)(flip | SDL_FLIP_HORIZONTAL);
+                            if (raw_gid & FLIPPED_VERTICALLY_FLAG)
+                                flip = (SDL_RendererFlip)(flip | SDL_FLIP_VERTICAL);
+
+                            // Limpiar los bits de flip para obtener el ID real
+                            uint32_t clean_gid = raw_gid & ~(FLIPPED_HORIZONTALLY_FLAG | FLIPPED_VERTICALLY_FLAG);
+
+                            LOG("raw_gid = %u (0x%X)", raw_gid, raw_gid);
+
+                            TileSet* tileSet = GetTilesetFromTileId(clean_gid);
                             if (tileSet != nullptr) {
-                                SDL_Rect tileRect = tileSet->GetRect(gid);
+                                SDL_Rect tileRect = tileSet->GetRect(clean_gid);
 
                                 // Convertir coordenadas del mapa a coordenadas de pantalla
                                 Vector2D mapCoord = MapToWorld(i, j);
 
-                                // Aplicar el efecto parallax en base a la c mara
-                                int renderX = (int)(mapCoord.getX() - (Engine::GetInstance().render->camera.x * mapLayer->parallaxX));
-                                int renderY = (int)(mapCoord.getY() - (Engine::GetInstance().render->camera.y * mapLayer->parallaxY));
+                                uint32_t renderX = (uint32_t)(mapCoord.getX() - (Engine::GetInstance().render->camera.x * mapLayer->parallaxX));
+                                uint32_t renderY = (uint32_t)(mapCoord.getY() - (Engine::GetInstance().render->camera.y * mapLayer->parallaxY));
 
-                                Engine::GetInstance().render->DrawTexture(tileSet->texture, renderX, renderY, &tileRect);
+                                Engine::GetInstance().render->DrawTexture(tileSet->texture, renderX, renderY, &tileRect, 1.0f, 0.0, INT_MAX, INT_MAX, flip);
                             }
                         }
                     }
                 }
             }
         }
+
     }
 
     return ret;
 }
 
 // L09: TODO 2: Implement function to the Tileset based on a tile id
-TileSet* Map::GetTilesetFromTileId(int gid) const
+TileSet* Map::GetTilesetFromTileId(uint32_t gid) const
 {
     TileSet* set = nullptr;
 
@@ -89,7 +107,6 @@ TileSet* Map::GetTilesetFromTileId(int gid) const
 
     return set;
 }
-
 // Called before quitting
 bool Map::CleanUp()
 {
@@ -179,7 +196,7 @@ bool Map::Load(std::string path, std::string fileName)
 
             //Iterate over all the tiles and assign the values in the data array
             for (pugi::xml_node tileNode = layerNode.child("data").child("tile"); tileNode != NULL; tileNode = tileNode.next_sibling("tile")) {
-                mapLayer->tiles.push_back(tileNode.attribute("gid").as_int());
+                mapLayer->tiles.push_back(tileNode.attribute("gid").as_uint());
             }
 
             // Dentro del bucle que itera sobre cada capa en Load()
@@ -220,6 +237,23 @@ bool Map::Load(std::string path, std::string fileName)
                     platformCollider->ctype = ColliderType::PLATFORM;
 
                     Engine::GetInstance().physics->listToDelete.push_back(platformCollider);
+
+                    LOG("Creating collider at x: %d, y: %d, width: %d, height: %d", x + (width / 2), y + (height / 2), width, height);
+                }
+            }
+            else if (objectGroupName == "WallSlide") // Objects from layer Collisions
+            {
+                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
+                {
+                    int x = objectNode.attribute("x").as_int();
+                    int y = objectNode.attribute("y").as_int();
+                    int width = objectNode.attribute("width").as_int();
+                    int height = objectNode.attribute("height").as_int();
+
+                    PhysBody* wallSlideCollider = Engine::GetInstance().physics->CreateRectangle(x + (width / 2), y + (height / 2), width, height, STATIC);
+                    wallSlideCollider->ctype = ColliderType::WALL_SLIDE;
+
+                    Engine::GetInstance().physics->listToDelete.push_back(wallSlideCollider);
 
                     LOG("Creating collider at x: %d, y: %d, width: %d, height: %d", x + (width / 2), y + (height / 2), width, height);
                 }
@@ -296,60 +330,66 @@ bool Map::Load(std::string path, std::string fileName)
                     Engine::GetInstance().physics->listToDelete.push_back(saveGameCollider);
                 }
             }
+            else if (objectGroupName == "Particles") // Load Particles partículas
+            {
+                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
+                {
+                    std::string objectName = objectNode.attribute("name").as_string();
+                    if (objectName == "CaveDrop") // Load Cavedrop
+                    {
+                        int x = objectNode.attribute("x").as_int();
+                        int y = objectNode.attribute("y").as_int();
+
+                        CaveDrop* caveDrop = (CaveDrop*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CAVE_DROP);
+                        caveDrop->position = Vector2D(x, y); 
+
+                        LOG("Created CaveDrop at x: %d, y: %d", x, y);
+                    }
+                    // Mas Particulas
+                }
+            }
+            else if (objectGroupName == "Enemies") //Enemies from object layer "Enemies"
+            {
+                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
+                {
+                    std::string enemyName = objectNode.attribute("name").as_string();
+                    int x = objectNode.attribute("x").as_int();
+                    int y = objectNode.attribute("y").as_int();
+
+                    int width, height;
+                    GetEnemyDimensionsFromConfig(enemyName, width, height); // Obtain dimensions from config.xml
+
+                    pugi::xml_document tempDoc;
+                    pugi::xml_node enemyNode = tempDoc.append_child("enemy");
+
+                    enemyNode.append_attribute("type") = enemyName.c_str();
+                    enemyNode.append_attribute("x") = x;
+                    enemyNode.append_attribute("y") = y;
+                    enemyNode.append_attribute("w") = width;
+                    enemyNode.append_attribute("h") = height;
+                    enemyNode.append_attribute("gravity") = true;
+
+                    Enemy* enemy = nullptr;
+
+                    if (enemyName == "Bloodrusher")
+                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BLOODRUSHER);
+                    else if (enemyName == "Mireborn") {
+                        enemyNode.append_attribute("tier") = "Alpha";
+                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::MIREBORN);
+                    }
+                    else if (enemyName == "Broodheart")
+                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BROODHEART);
+                    else if (enemyName == "Brood")
+                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BROOD);
+                    if (enemy != nullptr)
+                    {
+                        enemy->SetParameters(enemyNode);
+                        LOG("Created enemy '%s' at x: %d, y: %d", enemyName.c_str(), x, y);
+                    }
+                }
+            }
         }
         for (const auto& mapLayer : mapData.layers) {
-            if (mapLayer->name == "Collisions") {
-                for (int i = 0; i < mapData.width; i++) {
-                    for (int j = 0; j < mapData.height; j++) {
-                        int gid = mapLayer->Get(i, j);
-                        if (gid == 2) {
-                            Vector2D mapCoord = MapToWorld(i, j);
-                            PhysBody* c1 = Engine::GetInstance().physics.get()->CreateRectangle(mapCoord.getX() + mapData.tileWidth / 2, mapCoord.getY() + mapData.tileHeight / 2, mapData.tileWidth, mapData.tileHeight, STATIC);
-                            c1->ctype = ColliderType::WALL;
-                        }
-                    }
-                }
-            }
-            if (mapLayer->name == "Enemies") {
-                // Load XML config file
-                pugi::xml_document loadFile;
-                pugi::xml_parse_result result = loadFile.load_file("config.xml");
-
-                // Get node save data -> enemies
-                pugi::xml_node saveData = loadFile.child("config").child("scene").child("save_data");
-                pugi::xml_node enemiesNode = saveData.child("enemies");
-
-                // Remove all children
-                enemiesNode.remove_children();
-
-                for (int i = 0; i < mapData.width; i++) {
-                    for (int j = 0; j < mapData.height; j++) {
-                        int gid = mapLayer->Get(i, j);
-                        if (gid != 0) {
-                            // Convertir coordenadas del mapa a coordenadas del mundo
-                            Vector2D mapCoord = MapToWorld(i, j);
-
-                            // Crear un nuevo nodo <enemy>
-                            pugi::xml_node enemyNode = enemiesNode.append_child("enemy");
-                            enemyNode.append_attribute("type") = "Bloodrusher";
-                            enemyNode.append_attribute("x") = mapCoord.x;
-                            enemyNode.append_attribute("y") = mapCoord.y;
-                            enemyNode.append_attribute("w") = 32;
-                            enemyNode.append_attribute("h") = 32;
-
-                            Enemy* enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BLOODRUSHER);
-                            enemy->SetParameters(enemyNode);
-                            enemy->Start();
-
-                            
-                        }
-                    }
-                }
-
-                // Guardar los cambios en el archivo
-                loadFile.save_file("config.xml");
-                Engine::GetInstance().UpdateConfig();
-            }
             if (mapLayer->name == "CaveDrop") {
                 for (int i = 0; i < mapData.width; i++) {
                     for (int j = 0; j < mapData.height; j++) {
@@ -358,9 +398,22 @@ bool Map::Load(std::string path, std::string fileName)
                         {
                             Vector2D mapCoord = MapToWorld(i, j);
 
-                            CaveDrop* caveDrop = (CaveDrop*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CAVEDROP);
+                            CaveDrop* caveDrop = (CaveDrop*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CAVE_DROP);
                             caveDrop->position = Vector2D(mapCoord.x, mapCoord.y);
-                            caveDrop->Start();
+                        }
+                    }
+                }
+            }
+            if (mapLayer->name == "AbilityZone") {
+                for (int i = 0; i < mapData.width; i++) {
+                    for (int j = 0; j < mapData.height; j++) {
+                        int gid = mapLayer->Get(i, j);
+                        if (gid != 0)
+                        {
+                            Vector2D mapCoord = MapToWorld(i, j);
+
+                            AbilityZone* abilityZone = (AbilityZone*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ABILITY_ZONE);
+                            abilityZone->position = Vector2D(mapCoord.x, mapCoord.y);
                         }
                     }
                 }
@@ -461,5 +514,21 @@ Properties::Property* Properties::GetProperty(const char* name)
     }
 
     return nullptr;
+}
+void Map::GetEnemyDimensionsFromConfig(const std::string& enemyName, int& width, int& height)
+{
+    pugi::xml_document configDoc;
+    configDoc.load_file("config.xml");
+
+    // Look at xml by "type"
+    pugi::xml_node enemyNode = configDoc.child("config").child("scene").child("animations").child("enemies").child("enemy");
+    while (enemyNode) {
+        if (enemyNode.attribute("type").as_string() == enemyName) {
+            width = enemyNode.attribute("w").as_int();
+            height = enemyNode.attribute("h").as_int();
+            return;
+        }
+        enemyNode = enemyNode.next_sibling("enemy");
+    }
 }
 

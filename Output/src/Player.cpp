@@ -25,6 +25,10 @@ bool Player::Awake() {
 }
 
 bool Player::Start() {
+	if (initialized) {
+		return true;
+	}
+
 	texture = Engine::GetInstance().textures->Load(parameters.attribute("texture").as_string());
 
 	texW = parameters.attribute("w").as_int();
@@ -38,6 +42,8 @@ bool Player::Start() {
     pbody->ctype = ColliderType::PLAYER;
 
 	mechanics.Init(this);
+
+	initialized = true;
 
 	return true;
 }
@@ -91,7 +97,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 		Engine::GetInstance().scene.get()->StartTransition(targetScene);
 		break;
-
 	default:
 		mechanics.OnCollision(physA, physB);
 		break;
@@ -110,7 +115,7 @@ void Player::SetPosition(Vector2D pos) {
 }
 
 Vector2D Player::GetPosition() const {
-	return position;
+	return Vector2D(position.getX() + texW / 2, position.getY() + texH / 2);
 }
 
 int Player::GetMovementDirection() const {

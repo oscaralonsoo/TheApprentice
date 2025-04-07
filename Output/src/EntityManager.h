@@ -23,6 +23,9 @@ public:
 	// Called every frame
 	bool Update(float dt);
 
+	// Called after Update
+	bool PostUpdate();
+
 	// Called before quitting
 	bool CleanUp();
 
@@ -34,8 +37,6 @@ public:
 	void DestroyAllEntities();
 
 	void AddEntity(Entity* entity);
-
-	void CreateEnemiesFromXML(pugi::xml_node enemyNodes, bool initialize);
 
 public:
 	std::list<Entity*> entities;

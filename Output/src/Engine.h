@@ -20,7 +20,7 @@ class Map;
 class Menus;
 //L08 TODO 2: Add Physics module
 class Physics;
-
+class GuiManager;
 class Engine
 {
 public:
@@ -107,7 +107,7 @@ public:
 	std::shared_ptr<Menus> menus;
 	// L08: TODO 2: Add Physics module
 	std::shared_ptr<Physics> physics;
-
+	std::shared_ptr<GuiManager> guiManager;
 
 private: 
 

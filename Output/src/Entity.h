@@ -7,7 +7,11 @@ enum class EntityType
 {
 	PLAYER,
 	BLOODRUSHER,
-	CAVEDROP,
+	MIREBORN,
+	BROODHEART,
+	BROOD,
+	CAVE_DROP,
+	ABILITY_ZONE,
 	UNKNOWN
 };
 
@@ -30,6 +34,11 @@ public:
 	}
 
 	virtual bool Update(float dt)
+	{
+		return true;
+	}
+
+	virtual bool PostUpdate()
 	{
 		return true;
 	}

@@ -1,4 +1,4 @@
-#include "Engine.h"
+ï»¿#include "Engine.h"
 #include "Window.h"
 #include "Render.h"
 #include "Log.h"
@@ -250,7 +250,7 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 	targetX = static_cast<int>(targetPosition.x);
 	targetY = static_cast<int>(targetPosition.y);
 
-	// ----------- Cámara look-ahead horizontal con retardo -----------
+	// ----------- CÃ¡mara look-ahead horizontal con retardo -----------
 
 	if (movementDirection != 0) {
 		if (movementDirection == lastMoveDir) {
@@ -383,7 +383,7 @@ void Render::ToggleCameraLock()
 
 	if (cameraLocked)
 	{
-		// Centrar la cámara en el centro del mapa (o donde prefieras)
+		// Centrar la cÃ¡mara en el centro del mapa (o donde prefieras)
 		mapWidthPx = Engine::GetInstance().map->GetMapWidth();
 		mapHeightPx = Engine::GetInstance().map->GetMapHeight();
 

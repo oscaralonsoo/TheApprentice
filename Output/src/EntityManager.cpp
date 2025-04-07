@@ -165,3 +165,13 @@ bool EntityManager::PostUpdate()
 	}
 	return ret;
 }
+void EntityManager::QueueEntityForDestruction(Entity* entity) {
+	pendingDestroy.push_back(entity);
+}
+
+void EntityManager::ProcessPendingDestructions() {
+	for (Entity* e : pendingDestroy) {
+		DestroyEntity(e); 
+	}
+	pendingDestroy.clear();
+}

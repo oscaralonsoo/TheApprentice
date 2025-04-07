@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Broodheart.h"
 #include "Enemy.h"
 #include "SDL2/SDL.h"
@@ -6,14 +7,12 @@
 enum class BroodState {
     IDLE,
     CHASING,
-    RETURNING,
     DEAD
 };
 
 class Brood : public Enemy
 {
 public:
-
     Brood();
     ~Brood() override;
 
@@ -23,26 +22,28 @@ public:
     bool CleanUp() override;
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
 
+    // Brood Methods
     void Idle(float dt);
-
     void Chase(float dt);
 
-
-    void ReturnToPlayer(float dt);
+    // Setters
+    void SetParent(Broodheart* p) { parent = p; }
 
 private:
-    float speed = 4.0f;
-    float circleAngle = 0.0f;
-    float returnRadius = 60.0f;
-    float angularSpeed = 2.0f;
-    Vector2D returnCenter;
-    float returnStartAngle = 0.0f;
-    Vector2D lastDirection;
+    Broodheart* parent = nullptr;
 
+    float timePassed = 0.0f;
+    float dirX = 0.0f;
+    float dirY = 0.0f;
+    float launchSpeed = 0.05f;
+    bool launched = false;
+    float waveOffset = 0.0f;
+
+    Vector2D direction = { 0, 0 };
     bool playerInRange = false;
 
     BroodState currentState = BroodState::IDLE;
+
     PhysBody* physBody = nullptr;
     Animation idleAnim;
 };
-#pragma once

@@ -26,6 +26,10 @@ public:
 	// Called after Update
 	bool PostUpdate();
 
+	void QueueEntityForDestruction(Entity* entity);
+
+	void ProcessPendingDestructions();
+
 	// Called before quitting
 	bool CleanUp();
 
@@ -43,6 +47,6 @@ public:
 
 public:
 	std::list<Entity*> entities;
-
+	std::vector<Entity*> pendingDestroy;
 	PhysBody* pbody;
 };

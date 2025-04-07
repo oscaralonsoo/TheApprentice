@@ -360128,13 +360128,6 @@
   <properties>
    <property name="Doors" type="bool" value="true"/>
   </properties>
-  <object id="184" x="1280" y="768" width="64" height="64">
-   <properties>
-    <property name="PlayerPosX" type="float" value="96"/>
-    <property name="PlayerPosY" type="float" value="0"/>
-    <property name="TargetScene" type="int" value="1"/>
-   </properties>
-  </object>
  </objectgroup>
  <objectgroup id="26" name="Collisions">
   <object id="86" x="2560" y="384" width="256" height="64"/>
@@ -360235,10 +360228,7 @@
   <object id="317" x="6784" y="2816" width="448" height="64"/>
  </objectgroup>
  <objectgroup id="57" name="WallSlide">
-  <object id="319" x="2752" y="640" width="64" height="320"/>
+  <object id="319" x="2752" y="576" width="64" height="320"/>
  </objectgroup>
- <objectgroup id="59" name="Enemies">
-  <object id="320" name="Hypnoviper" x="1792" y="768" width="64" height="64"/>
-  <object id="323" name="Bloodrusher" x="1472" y="576" width="64" height="64"/>
- </objectgroup>
+ <objectgroup id="59" name="Enemies"/>
 </map>

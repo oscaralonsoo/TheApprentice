@@ -112,6 +112,9 @@ public:
     // Called each loop iteration
     bool Update(float dt);
 
+    // Called each loop after iteration
+    bool PostUpdate(float dt);
+
     // Called before quitting
     bool CleanUp();
 

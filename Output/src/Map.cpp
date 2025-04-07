@@ -404,6 +404,8 @@ bool Map::Load(std::string path, std::string fileName)
 
                     if (enemyName == "Bloodrusher")
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BLOODRUSHER);
+                    else if (enemyName == "Hypnoviper")
+                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::HYPNOVIPER);
                     else if (enemyName == "Mireborn") {
                         enemyNode.append_attribute("tier") = "Alpha";
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::MIREBORN);
@@ -412,6 +414,7 @@ bool Map::Load(std::string path, std::string fileName)
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BROODHEART);
                     else if (enemyName == "Brood")
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BROOD);
+
                     if (enemy != nullptr)
                     {
                         enemy->SetParameters(enemyNode);

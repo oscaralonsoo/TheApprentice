@@ -20,7 +20,7 @@
 			<Map_1 path="Assets/Maps/" name="Map1.tmx" />
 		</maps>
 		<animations>
-			<player w="89" h="100" texture="Assets/Slime/wall_slide.png">
+			<player w="89" h="100" texture="Assets/Slime/slime.png">
 				<idle loop="true" speed="0.08">
 					<frame x="0" y="0" w="128" h="128" />
 				</idle>
@@ -61,6 +61,24 @@
 					<slide loop="true" speed="0.1">
 						<frame x="0" y="0" w="200" h="200" />
 					</slide>
+				</enemy>
+				<enemy type="Hypnoviper" w="512" h="256" texture="Assets/Enemies/hypnoviper.png">
+					<sleep loop="true" speed="0.15">
+						<frame x="0" y="0" w="512" h="256" />
+						<frame x="512" y="0" w="512" h="256" />
+						<frame x="1024" y="0" w="512" h="256" />
+						<frame x="0" y="256" w="512" h="256" />
+						<frame x="512" y="256" w="512" h="256" />
+						<frame x="1024" y="256" w="512" h="256" />
+						<frame x="0" y="512" w="512" h="256" />
+						<frame x="512" y="512" w="512" h="256" />
+						<frame x="1024" y="512" w="512" h="256" />
+						<frame x="0" y="768" w="512" h="256" />
+						<frame x="512" y="768" w="512" h="256" />
+					</sleep>
+					<dead loop="true" speed="0.1">
+						<frame x="0" y="0" w="512" h="256" />
+					</dead>
 				</enemy>
 				<enemy type="Mireborn" tier="Alpha" w="128" h="128" texture="Assets/Enemies/mireborn.png">
 					<idle loop="true" speed="0.1">

@@ -6,6 +6,7 @@
 #include "Log.h"
 #include "CaveDrop.h"
 #include "Bloodrusher.h"
+#include "Hypnoviper.h"
 #include "Mireborn.h"
 #include "AbilityZone.h"
 #include "Brood.h"
@@ -82,6 +83,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::BLOODRUSHER:
 		entity = new Bloodrusher();
+		break;
+	case EntityType::HYPNOVIPER:
+		entity = new Hypnoviper();
 		break;
 	case EntityType::MIREBORN:
 		entity = new Mireborn();

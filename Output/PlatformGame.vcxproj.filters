@@ -84,6 +84,9 @@
     <ClCompile Include="src\Brood.cpp">
       <Filter>Source Files\Entities\Enemies\broodheart\Brood</Filter>
     </ClCompile>
+    <ClCompile Include="src\Hypnoviper.cpp">
+      <Filter>Source Files\Entities\Enemies\Hypnoviper</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Bloodrusher.h">
@@ -180,6 +183,9 @@
     <ClInclude Include="src\Brood.h">
       <Filter>Source Files\Entities\Enemies\broodheart\Brood</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hypnoviper.h">
+      <Filter>Source Files\Entities\Enemies\Hypnoviper</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="config.xml">
@@ -251,6 +257,9 @@
     </Filter>
     <Filter Include="Source Files\Entities\Enemies\broodheart\Brood">
       <UniqueIdentifier>{0148d086-43f5-4449-861f-67cdeb9b632c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Enemies\Hypnoviper">
+      <UniqueIdentifier>{c37d4129-e611-4c49-bd92-e6280e2c9c9c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

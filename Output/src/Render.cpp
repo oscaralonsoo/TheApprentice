@@ -1,4 +1,4 @@
-#include "Engine.h"
+ï»¿#include "Engine.h"
 #include "Window.h"
 #include "Render.h"
 #include "Log.h"
@@ -112,7 +112,7 @@ void Render::ResetViewPort()
 }
 
 // Blit to screen
-bool Render::DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* section, float speed, double angle, int pivotX, int pivotY) const
+bool  Render::DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SDL_Rect* section, float speed, double angle, uint32_t pivotX, uint32_t pivotY, SDL_RendererFlip flip) const
 {
 	bool ret = true;
 	int scale = Engine::GetInstance().window.get()->GetScale();
@@ -144,7 +144,7 @@ bool Render::DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* sec
 		p = &pivot;
 	}
 
-	if(SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, SDL_FLIP_NONE) != 0)
+	if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, flip) != 0)
 	{
 		LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
 		ret = false;
@@ -250,7 +250,7 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 	targetX = static_cast<int>(targetPosition.x);
 	targetY = static_cast<int>(targetPosition.y);
 
-	// ----------- Cámara look-ahead horizontal con retardo -----------
+	// ----------- CÃ¡mara look-ahead horizontal con retardo -----------
 
 	if (movementDirection != 0) {
 		if (movementDirection == lastMoveDir) {
@@ -383,7 +383,7 @@ void Render::ToggleCameraLock()
 
 	if (cameraLocked)
 	{
-		// Centrar la cámara en el centro del mapa (o donde prefieras)
+		// Centrar la cÃ¡mara en el centro del mapa (o donde prefieras)
 		mapWidthPx = Engine::GetInstance().map->GetMapWidth();
 		mapHeightPx = Engine::GetInstance().map->GetMapHeight();
 

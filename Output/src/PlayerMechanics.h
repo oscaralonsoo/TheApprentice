@@ -36,7 +36,7 @@ private:
     Player* player = nullptr;
 
     // Parámetros del jugador
-    float speed = 5.0f;
+    float speed = 8.0f;
 
     // Física
     bool isOnGround = false;

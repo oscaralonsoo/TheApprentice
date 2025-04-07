@@ -51,33 +51,81 @@ bool Map::Update(float dt)
                 for (int i = 0; i < mapData.width; i++) {
                     for (int j = 0; j < mapData.height; j++) {
 
-                        int gid = mapLayer->Get(i, j);
-                        if (gid != 0) {
-                            TileSet* tileSet = GetTilesetFromTileId(gid);
+                        uint32_t raw_gid = static_cast<uint32_t>(mapLayer->Get(i, j));
+                        if (raw_gid != 0) {
+                            const uint32_t FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
+                            const uint32_t FLIPPED_VERTICALLY_FLAG = 0x40000000;
+                            const uint32_t FLIPPED_DIAGONALLY_FLAG = 0x20000000;
+
+                            SDL_RendererFlip flip = SDL_FLIP_NONE;
+                            double angle = 0.0;
+
+                            bool flipped_horizontally = (raw_gid & FLIPPED_HORIZONTALLY_FLAG);
+                            bool flipped_vertically = (raw_gid & FLIPPED_VERTICALLY_FLAG);
+                            bool flipped_diagonally = (raw_gid & FLIPPED_DIAGONALLY_FLAG);
+
+                            if (flipped_diagonally) {
+                                if (!flipped_horizontally && !flipped_vertically) {
+                                    angle = 270;
+                                    flip = SDL_FLIP_HORIZONTAL;
+                                }
+                                else if (flipped_horizontally && !flipped_vertically) {
+                                    angle = 90;
+                                    flip = SDL_FLIP_NONE;
+                                }
+                                else if (!flipped_horizontally && flipped_vertically) {
+                                    angle = 270;
+                                    flip = SDL_FLIP_NONE;
+                                }
+                                else if (flipped_horizontally && flipped_vertically) {
+                                    angle = 270;
+                                    flip = SDL_FLIP_VERTICAL;
+                                }
+                            }
+                            else {
+                                angle = 0;
+                                if (flipped_horizontally && flipped_vertically) {
+                                    flip = (SDL_RendererFlip)(SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL);
+                                }
+                                else if (flipped_horizontally) {
+                                    flip = SDL_FLIP_HORIZONTAL;
+                                }
+                                else if (flipped_vertically) {
+                                    flip = SDL_FLIP_VERTICAL;
+                                }
+                            }
+
+
+
+                            // Limpiar los bits de flip para obtener el ID real
+                            uint32_t clean_gid = raw_gid & ~(FLIPPED_HORIZONTALLY_FLAG | FLIPPED_VERTICALLY_FLAG | FLIPPED_DIAGONALLY_FLAG);
+
+                            TileSet* tileSet = GetTilesetFromTileId(clean_gid);
                             if (tileSet != nullptr) {
-                                SDL_Rect tileRect = tileSet->GetRect(gid);
+                                SDL_Rect tileRect = tileSet->GetRect(clean_gid);
 
                                 // Convertir coordenadas del mapa a coordenadas de pantalla
                                 Vector2D mapCoord = MapToWorld(i, j);
 
-                                // Aplicar el efecto parallax en base a la c mara
-                                int renderX = (int)(mapCoord.getX() - (Engine::GetInstance().render->camera.x * mapLayer->parallaxX));
-                                int renderY = (int)(mapCoord.getY() - (Engine::GetInstance().render->camera.y * mapLayer->parallaxY));
+                                uint32_t renderX = (uint32_t)(mapCoord.getX() - (Engine::GetInstance().render->camera.x * mapLayer->parallaxX));
+                                uint32_t renderY = (uint32_t)(mapCoord.getY() - (Engine::GetInstance().render->camera.y * mapLayer->parallaxY));
 
-                                Engine::GetInstance().render->DrawTexture(tileSet->texture, renderX, renderY, &tileRect);
+                                uint32_t pivot = tileRect.w / 2;
+                                Engine::GetInstance().render->DrawTexture(tileSet->texture, renderX, renderY, &tileRect, 1.0f, angle, pivot, pivot, flip);
                             }
                         }
                     }
                 }
             }
         }
+
     }
 
     return ret;
 }
 
 // L09: TODO 2: Implement function to the Tileset based on a tile id
-TileSet* Map::GetTilesetFromTileId(int gid) const
+TileSet* Map::GetTilesetFromTileId(uint32_t gid) const
 {
     TileSet* set = nullptr;
 
@@ -179,7 +227,7 @@ bool Map::Load(std::string path, std::string fileName)
 
             //Iterate over all the tiles and assign the values in the data array
             for (pugi::xml_node tileNode = layerNode.child("data").child("tile"); tileNode != NULL; tileNode = tileNode.next_sibling("tile")) {
-                mapLayer->tiles.push_back(tileNode.attribute("gid").as_int());
+                mapLayer->tiles.push_back(tileNode.attribute("gid").as_uint());
             }
 
             // Dentro del bucle que itera sobre cada capa en Load()
@@ -356,6 +404,8 @@ bool Map::Load(std::string path, std::string fileName)
 
                     if (enemyName == "Bloodrusher")
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BLOODRUSHER);
+                    else if (enemyName == "Hypnoviper")
+                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::HYPNOVIPER);
                     else if (enemyName == "Mireborn") {
                         enemyNode.append_attribute("tier") = "Alpha";
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::MIREBORN);
@@ -364,6 +414,7 @@ bool Map::Load(std::string path, std::string fileName)
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BROODHEART);
                     else if (enemyName == "Brood")
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BROOD);
+
                     if (enemy != nullptr)
                     {
                         enemy->SetParameters(enemyNode);

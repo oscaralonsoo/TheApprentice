@@ -38,14 +38,14 @@ struct MapLayer
     std::string name;
     int width;
     int height;
-    std::vector<int> tiles;
+    std::vector<uint32_t> tiles;
     Properties properties;
 
     float parallaxX = 1.0f; // Parallax en X
     float parallaxY = 1.0f; // Parallax en Y
 
     // L07: TODO 6: Short function to get the gid value of i,j
-    int Get(int i, int j) const
+    uint32_t Get(uint32_t i, uint32_t j) const
     {
         return tiles[(j * width) + i];
     }
@@ -67,10 +67,10 @@ struct TileSet
     SDL_Texture* texture;
 
     // L07: TODO 7: Implement the method that receives the gid and returns a Rect
-    SDL_Rect GetRect(unsigned int gid) {
+    SDL_Rect GetRect(uint32_t gid) {
         SDL_Rect rect = { 0 };
 
-        int relativeIndex = gid - firstGid;
+        uint32_t relativeIndex = gid - firstGid;
         rect.w = tileWidth;
         rect.h = tileHeight;
         rect.x = margin + (tileWidth + spacing) * (relativeIndex % columns);
@@ -112,6 +112,9 @@ public:
     // Called each loop iteration
     bool Update(float dt);
 
+    // Called each loop after iteration
+    bool PostUpdate(float dt);
+
     // Called before quitting
     bool CleanUp();
 
@@ -126,7 +129,7 @@ public:
 
 
     // L09: TODO 2: Implement function to the Tileset based on a tile id
-    TileSet* GetTilesetFromTileId(int gid) const;
+    TileSet* GetTilesetFromTileId(uint32_t gid) const;
 
     void GetEnemyDimensionsFromConfig(const std::string& enemyName, int& width, int& height);
     // L09: TODO 6: Load a group of properties 

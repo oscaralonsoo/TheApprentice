@@ -22,7 +22,7 @@ bool Mireborn::Start() {
 
     for (pugi::xml_node enemyNode = loadFile.child("config").child("scene").child("animations").child("enemies").child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy"))
     {
-        if (std::string(enemyNode.attribute("type").as_string()) == type)
+        if (std::string(enemyNode.attribute("type").as_string()) == type && std::string(enemyNode.attribute("tier").as_string()) == tier)
         {
             texture = Engine::GetInstance().textures.get()->Load(enemyNode.attribute("texture").as_string());
             idleAnim.LoadAnimations(enemyNode.child("idle"));
@@ -55,7 +55,7 @@ bool Mireborn::Update(float dt) {
 }
 
 bool Mireborn::PostUpdate() {
-    if (isDivided) {
+    if (isDivided && tier != "Gamma") {
         Divide();
         isDivided = false;
     }
@@ -131,7 +131,13 @@ void Mireborn::Divide() {
         enemyNode.append_attribute("w") = texW / 2;
         enemyNode.append_attribute("h") = texH / 2;
         enemyNode.append_attribute("gravity") = true;
-        enemyNode.append_attribute("tier") = tier.c_str();
+        if (tier == "Alpha")
+        {
+            enemyNode.append_attribute("tier") = "Beta";
+        }
+        else if(tier == "Beta") {
+            enemyNode.append_attribute("tier") = "Gamma";
+        }
 
         Enemy* clone = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::MIREBORN);
         clone->SetParameters(enemyNode);

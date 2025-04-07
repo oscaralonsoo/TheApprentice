@@ -37,92 +37,98 @@ bool Map::Start() {
 
 bool Map::Update(float dt)
 {
-
-    bool ret = true;
-
     if (mapLoaded) {
+        DrawMapLayers(false); // solo capas que NO son Forward
+    }
+    return true;
+}
+bool Map::PostUpdate()
+{
+    if (mapLoaded) {
+        DrawMapLayers(true); // solo capas que SÍ son Forward
+    }
+    return true;
+}
 
-        // L07 TODO 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
-        // iterate all tiles in a layer
-        for (const auto& mapLayer : mapData.layers) {
-            if (mapLayer->properties.GetProperty("Draw") != NULL &&
-                mapLayer->properties.GetProperty("Draw")->value == true) {
+void Map::DrawMapLayers(bool forwardOnly)
+{
+    for (const auto& mapLayer : mapData.layers) {
+        bool isForwardLayer = (mapLayer->properties.GetProperty("Forward") != NULL &&
+            mapLayer->properties.GetProperty("Forward")->value == true);
 
-                for (int i = 0; i < mapData.width; i++) {
-                    for (int j = 0; j < mapData.height; j++) {
+        // Filtrar según parámetro
+        if (isForwardLayer != forwardOnly) continue;
 
-                        uint32_t raw_gid = static_cast<uint32_t>(mapLayer->Get(i, j));
-                        if (raw_gid != 0) {
-                            const uint32_t FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
-                            const uint32_t FLIPPED_VERTICALLY_FLAG = 0x40000000;
-                            const uint32_t FLIPPED_DIAGONALLY_FLAG = 0x20000000;
+        if (mapLayer->properties.GetProperty("Draw") != NULL &&
+            mapLayer->properties.GetProperty("Draw")->value == true) {
 
-                            SDL_RendererFlip flip = SDL_FLIP_NONE;
-                            double angle = 0.0;
+            for (int i = 0; i < mapData.width; i++) {
+                for (int j = 0; j < mapData.height; j++) {
 
-                            bool flipped_horizontally = (raw_gid & FLIPPED_HORIZONTALLY_FLAG);
-                            bool flipped_vertically = (raw_gid & FLIPPED_VERTICALLY_FLAG);
-                            bool flipped_diagonally = (raw_gid & FLIPPED_DIAGONALLY_FLAG);
+                    uint32_t raw_gid = static_cast<uint32_t>(mapLayer->Get(i, j));
+                    if (raw_gid != 0) {
+                        const uint32_t FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
+                        const uint32_t FLIPPED_VERTICALLY_FLAG = 0x40000000;
+                        const uint32_t FLIPPED_DIAGONALLY_FLAG = 0x20000000;
 
-                            if (flipped_diagonally) {
-                                if (!flipped_horizontally && !flipped_vertically) {
-                                    angle = 270;
-                                    flip = SDL_FLIP_HORIZONTAL;
-                                }
-                                else if (flipped_horizontally && !flipped_vertically) {
-                                    angle = 90;
-                                    flip = SDL_FLIP_NONE;
-                                }
-                                else if (!flipped_horizontally && flipped_vertically) {
-                                    angle = 270;
-                                    flip = SDL_FLIP_NONE;
-                                }
-                                else if (flipped_horizontally && flipped_vertically) {
-                                    angle = 270;
-                                    flip = SDL_FLIP_VERTICAL;
-                                }
+                        SDL_RendererFlip flip = SDL_FLIP_NONE;
+                        double angle = 0.0;
+
+                        bool flipped_horizontally = (raw_gid & FLIPPED_HORIZONTALLY_FLAG);
+                        bool flipped_vertically = (raw_gid & FLIPPED_VERTICALLY_FLAG);
+                        bool flipped_diagonally = (raw_gid & FLIPPED_DIAGONALLY_FLAG);
+
+                        if (flipped_diagonally) {
+                            if (!flipped_horizontally && !flipped_vertically) {
+                                angle = 270;
+                                flip = SDL_FLIP_HORIZONTAL;
                             }
-                            else {
-                                angle = 0;
-                                if (flipped_horizontally && flipped_vertically) {
-                                    flip = (SDL_RendererFlip)(SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL);
-                                }
-                                else if (flipped_horizontally) {
-                                    flip = SDL_FLIP_HORIZONTAL;
-                                }
-                                else if (flipped_vertically) {
-                                    flip = SDL_FLIP_VERTICAL;
-                                }
+                            else if (flipped_horizontally && !flipped_vertically) {
+                                angle = 90;
+                                flip = SDL_FLIP_NONE;
                             }
-
-
-
-                            // Limpiar los bits de flip para obtener el ID real
-                            uint32_t clean_gid = raw_gid & ~(FLIPPED_HORIZONTALLY_FLAG | FLIPPED_VERTICALLY_FLAG | FLIPPED_DIAGONALLY_FLAG);
-
-                            TileSet* tileSet = GetTilesetFromTileId(clean_gid);
-                            if (tileSet != nullptr) {
-                                SDL_Rect tileRect = tileSet->GetRect(clean_gid);
-
-                                // Convertir coordenadas del mapa a coordenadas de pantalla
-                                Vector2D mapCoord = MapToWorld(i, j);
-
-                                uint32_t renderX = (uint32_t)(mapCoord.getX() - (Engine::GetInstance().render->camera.x * mapLayer->parallaxX));
-                                uint32_t renderY = (uint32_t)(mapCoord.getY() - (Engine::GetInstance().render->camera.y * mapLayer->parallaxY));
-
-                                uint32_t pivot = tileRect.w / 2;
-                                Engine::GetInstance().render->DrawTexture(tileSet->texture, renderX, renderY, &tileRect, 1.0f, angle, pivot, pivot, flip);
+                            else if (!flipped_horizontally && flipped_vertically) {
+                                angle = 270;
+                                flip = SDL_FLIP_NONE;
                             }
+                            else if (flipped_horizontally && flipped_vertically) {
+                                angle = 270;
+                                flip = SDL_FLIP_VERTICAL;
+                            }
+                        }
+                        else {
+                            angle = 0;
+                            if (flipped_horizontally && flipped_vertically) {
+                                flip = (SDL_RendererFlip)(SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL);
+                            }
+                            else if (flipped_horizontally) {
+                                flip = SDL_FLIP_HORIZONTAL;
+                            }
+                            else if (flipped_vertically) {
+                                flip = SDL_FLIP_VERTICAL;
+                            }
+                        }
+
+                        uint32_t clean_gid = raw_gid & ~(FLIPPED_HORIZONTALLY_FLAG | FLIPPED_VERTICALLY_FLAG | FLIPPED_DIAGONALLY_FLAG);
+
+                        TileSet* tileSet = GetTilesetFromTileId(clean_gid);
+                        if (tileSet != nullptr) {
+                            SDL_Rect tileRect = tileSet->GetRect(clean_gid);
+                            Vector2D mapCoord = MapToWorld(i, j);
+
+                            uint32_t renderX = (uint32_t)(mapCoord.getX() - (Engine::GetInstance().render->camera.x * mapLayer->parallaxX));
+                            uint32_t renderY = (uint32_t)(mapCoord.getY() - (Engine::GetInstance().render->camera.y * mapLayer->parallaxY));
+
+                            uint32_t pivot = tileRect.w / 2;
+                            Engine::GetInstance().render->DrawTexture(tileSet->texture, renderX, renderY, &tileRect, 1.0f, angle, pivot, pivot, flip);
                         }
                     }
                 }
             }
         }
-
     }
-
-    return ret;
 }
+
 
 // L09: TODO 2: Implement function to the Tileset based on a tile id
 TileSet* Map::GetTilesetFromTileId(uint32_t gid) const

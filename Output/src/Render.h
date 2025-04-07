@@ -98,7 +98,7 @@ public:
 // Camera Zoom
 	float cameraZoom = 1.0f;
 	float targetCameraZoom = 1.0f;
-	float cameraZoomSmoothing = 0.1f;
+	float cameraZoomSmoothing = 0.01f;
 
 public:
 

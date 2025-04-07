@@ -39,4 +39,5 @@ public:
 	std::list<Entity*> entities;
 
 	PhysBody* pbody;
+
 };

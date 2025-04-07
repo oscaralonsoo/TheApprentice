@@ -313,21 +313,44 @@ bool Map::Load(std::string path, std::string fileName)
                     Engine::GetInstance().physics->listToDelete.push_back(saveGameCollider);
                 }
             }
-            else if (objectGroupName == "abilities") // Objects from layer Collisions
+            else if (objectGroupName == "abilities") //Enemies from object layer "Enemies"
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
                 {
+                    std::string abilityName = objectNode.attribute("name").as_string();
                     int x = objectNode.attribute("x").as_int();
                     int y = objectNode.attribute("y").as_int();
-                    int width = objectNode.attribute("width").as_int();
-                    int height = objectNode.attribute("height").as_int();
 
-                    PhysBody* abilityCollider = Engine::GetInstance().physics->CreateRectangleSensor(x + (width / 2), y + (height / 2), width, height, STATIC);
-                    abilityCollider->ctype = ColliderType::ABILITY_ZONE;
+                    int width, height;
+                    GetAbilityDimensionsFromConfig(abilityName, width, height);
 
-                    Engine::GetInstance().physics->listToDelete.push_back(abilityCollider);
+                    if (objectNode.attribute("width"))
+                        width = objectNode.attribute("width").as_int();
+                    if (objectNode.attribute("height"))
+                        height = objectNode.attribute("height").as_int();
 
-                    LOG("Creating collider at x: %d, y: %d, width: %d, height: %d", x + (width / 2), y + (height / 2), width, height);
+                    pugi::xml_document tempDoc;
+                    pugi::xml_node abilityNode = tempDoc.append_child("abilities");
+
+                    abilityNode.append_attribute("type") = abilityName.c_str();
+                    abilityNode.append_attribute("x") = x;
+                    abilityNode.append_attribute("y") = y;
+                    abilityNode.append_attribute("w") = width;
+                    abilityNode.append_attribute("h") = height;
+
+                    AbilityZone* abilityZone = nullptr;
+
+                    if (abilityName == "Jump")
+                        abilityZone = (AbilityZone*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ABILITY_ZONE);
+                    if (abilityZone != nullptr)
+                    {
+                        printf("[Map] AbilityZone final size: type=%s, x=%d, y=%d, w=%d, h=%d\n",
+                            abilityName.c_str(), x, y, width, height);
+
+                        abilityZone->SetParameters(abilityNode);
+
+                        LOG("Created enemy '%s' at x: %d, y: %d", abilityName.c_str(), x, y);
+                    }
                 }
             }
             else if (objectGroupName == "Particles") // Load Particles partículas
@@ -383,36 +406,6 @@ bool Map::Load(std::string path, std::string fileName)
                     {
                         enemy->SetParameters(enemyNode);
                         LOG("Created enemy '%s' at x: %d, y: %d", enemyName.c_str(), x, y);
-                    }
-                }
-            }
-        }
-        for (const auto& mapLayer : mapData.layers) {
-            if (mapLayer->name == "CaveDrop") {
-                for (int i = 0; i < mapData.width; i++) {
-                    for (int j = 0; j < mapData.height; j++) {
-                        int gid = mapLayer->Get(i, j);
-                        if (gid != 0)
-                        {
-                            Vector2D mapCoord = MapToWorld(i, j);
-
-                            CaveDrop* caveDrop = (CaveDrop*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CAVE_DROP);
-                            caveDrop->position = Vector2D(mapCoord.x, mapCoord.y);
-                        }
-                    }
-                }
-            }
-            if (mapLayer->name == "AbilityZone") {
-                for (int i = 0; i < mapData.width; i++) {
-                    for (int j = 0; j < mapData.height; j++) {
-                        int gid = mapLayer->Get(i, j);
-                        if (gid != 0)
-                        {
-                            Vector2D mapCoord = MapToWorld(i, j);
-
-                            AbilityZone* abilityZone = (AbilityZone*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ABILITY_ZONE);
-                            abilityZone->position = Vector2D(mapCoord.x, mapCoord.y);
-                        }
                     }
                 }
             }
@@ -529,4 +522,22 @@ void Map::GetEnemyDimensionsFromConfig(const std::string& enemyName, int& width,
         enemyNode = enemyNode.next_sibling("enemy");
     }
 }
+void Map::GetAbilityDimensionsFromConfig(const std::string& abilityName, int& width, int& height)
+{
+    pugi::xml_document configDoc;
+    configDoc.load_file("config.xml");
 
+    pugi::xml_node abilityNode = configDoc.child("config").child("scene").child("animations").child("abilities").child("ability");
+    while (abilityNode) {
+        if (abilityNode.attribute("type").as_string() == abilityName) {
+            width = abilityNode.attribute("w").as_int();
+            height = abilityNode.attribute("h").as_int();
+            return;
+        }
+        abilityNode = abilityNode.next_sibling("ability");
+    }
+
+    // Valores por defecto si no se encuentra
+    width = 50;
+    height = 50;
+}

@@ -12,6 +12,8 @@
 #include "Module.h"
 #include "AbilityZone.h"
 #include "Player.h"
+#include "PlayerMechanics.h"
+#include "Scene.h"
 
 AbilityZone::AbilityZone() : Entity(EntityType::CAVE_DROP), state(AbilityZoneStates::WAITING)
 {
@@ -26,7 +28,7 @@ bool AbilityZone::Awake() {
 
 bool AbilityZone::Start() {
 	//Add a physics to an item - initialize the physics body
-	pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, bodyType::KINEMATIC);
+	pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::STATIC);
 
 	//Assign collider type
 	pbody->ctype = ColliderType::ABILITY_ZONE;
@@ -43,33 +45,61 @@ bool AbilityZone::Update(float dt)
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
+
+	Player* player = Engine::GetInstance().scene->GetPlayer();
+	PlayerMechanics* mechanics = player->GetMechanics();
+
 	if (playerInside)
 	{
-		// Buscar al jugador sin necesidad de GetPlayer()
-		Entity* player = nullptr;
-		for (Entity* e : Engine::GetInstance().entityManager->entities)
+		float centerX = position.getX() + texW / 2;
+		Vector2D currentPos = player->GetPosition();
+		float playerCenterX = currentPos.getX() + player->GetTextureWidth() / 2;
+
+		float distance = abs(playerCenterX - centerX);
+		float maxDistance = texW / 2.0f;
+		float t = 1.0f - std::min(distance / maxDistance, 1.0f); // 0 lejos, 1 en el centro
+
+		// Zoom entre 1.0 y 1.3
+		float zoom = 1.0f + t * 0.3f;
+		Engine::GetInstance().render.get()->SetCameraZoom(zoom);
+
+		// Frenado progresivo
+		b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
+		velocity.x *= (1.0f - t);  // 1 lejos = velocidad normal, 0 cerca = velocidad cero
+		player->pbody->body->SetLinearVelocity(velocity);
+
+		// Cuando esté muy cerca, bloquear completamente
+		if (distance < 20.0f)
 		{
-			if (e->type == EntityType::PLAYER)
-			{
-				player = e;
-				break;
-			}
+			velocity.x = 0.0f;
+			player->pbody->body->SetLinearVelocity(velocity);
+			mechanics->cantMove = true;
 		}
+	}
 
-		if (player != nullptr)
-		{
-			float zoneCenterX = GetPosition().getX();  // centro del collider
-			float playerX = player->position.getX();
 
-			float dx = fabs(playerX - zoneCenterX); // distancia en eje X
-			float maxDistance = texW / 2.0f; // radio horizontal
-			float t = std::min(dx / maxDistance, 1.0f); // normalizado
-
-			float minZoom = 1.0f;
-			float maxZoom = 1.4f;
-			float zoomValue = maxZoom - (maxZoom - minZoom) * t;
-
-			Engine::GetInstance().render->SetCameraZoom(zoomValue);
+	if (playerInsideJump)
+	{
+		if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
+			Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+			mechanics->cantMove = false;
+			mechanics->EnableJump(true);
+		}
+	}
+	else if (playerInsideDoubleJump)
+	{
+		if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
+			Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+			mechanics->cantMove = false;
+			mechanics->EnableDoubleJump(true);
+		}
+	}
+	else if (playerInsideDash)
+	{
+		if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
+			Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+			mechanics->cantMove = false;
+			mechanics->EnableDash(true);
 		}
 	}
 
@@ -97,24 +127,39 @@ Vector2D AbilityZone::GetPosition() {
 	return pos;
 }
 
-void AbilityZone::OnCollision(PhysBody* physA, PhysBody* physB) {
+void AbilityZone::OnCollision(PhysBody* physA, PhysBody* physB){
+	Player* player = Engine::GetInstance().scene->GetPlayer();
+	PlayerMechanics* mechanics = player->GetMechanics();
 	switch (physB->ctype) {
-	case ColliderType::PLAYER:	
-		printf("ENTRAAAA");
+	case ColliderType::PLAYER:
 		playerInside = true;
+		mechanics->canAttack = false;
+		if (type == "Jump") {
+			playerInsideJump = true;
+		}
+		else if (type == "DoubleJump") {
+			playerInsideDoubleJump = true;
+		}
+		else if (type == "Dash") {
+			playerInsideDash = true;
+		}
 		break;
 	default:
 		break;
 	}
 }
 
-void AbilityZone::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
-{
+void AbilityZone::OnCollisionEnd(PhysBody* physA, PhysBody* physB){
+	Player* player = Engine::GetInstance().scene->GetPlayer();
+	PlayerMechanics* mechanics = player->GetMechanics();
 	switch (physB->ctype) {
 	case ColliderType::PLAYER:
-		printf("SALEEE");
 		playerInside = false;
-		Engine::GetInstance().render->SetCameraZoom(1.0f);
+		mechanics->canAttack = true;
+		playerInsideJump = false;
+		playerInsideDoubleJump = false;
+		playerInsideDash = false;
+		Engine::GetInstance().render.get()->SetCameraZoom(1.0f);
 		break;
 	default:
 		break;

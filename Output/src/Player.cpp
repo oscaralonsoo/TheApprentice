@@ -11,6 +11,7 @@
 #include "box2D/box2d.h"
 #include "Map.h"
 #include "Menus.h"
+#include "AbilityZone.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -105,6 +106,15 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 	mechanics.OnCollisionEnd(physA, physB);
+	switch (physB->ctype) {
+	case ColliderType::ABILITY_ZONE:
+		Engine::GetInstance().render.get()->SetCameraZoom(1.0f);
+		printf("SALEEEEEEEE");
+		break;
+	default:
+		mechanics.OnCollision(physA, physB);
+		break;
+	}
 }
 
 void Player::SetPosition(Vector2D pos) {
@@ -120,4 +130,8 @@ Vector2D Player::GetPosition() const {
 
 int Player::GetMovementDirection() const {
 	return mechanics.GetMovementDirection();
+}
+
+int Player::GetTextureWidth() const {
+	return texW;  // Asegúrate de tener texW bien definido (el ancho del sprite)
 }

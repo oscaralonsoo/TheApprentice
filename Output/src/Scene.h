@@ -50,6 +50,8 @@ public:
 
 	void Vignette(int size, float strength);
 
+	Player* GetPlayer() const { return player; }
+
 public:
 
 	Vector2D newPosition;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="200" height="150" tilewidth="64" tileheight="64" infinite="0" nextlayerid="47" nextobjectid="201">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="200" height="150" tilewidth="64" tileheight="64" infinite="0" nextlayerid="47" nextobjectid="202">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -15,7 +15,7 @@
   <object id="87" x="344.121" y="989.88" width="810" height="64"/>
   <object id="93" x="2072.12" y="349.879" width="64" height="704"/>
   <object id="94" x="1496.12" y="285.879" width="576" height="64"/>
-  <object id="195" x="1120" y="1054" width="832" height="64"/>
+  <object id="195" x="1120" y="1054" width="1016" height="64"/>
  </objectgroup>
  <layer id="42" name="AbilityZone" width="200" height="150">
   <data>
@@ -60029,7 +60029,7 @@
   </data>
  </layer>
  <objectgroup id="41" name="Doors">
-  <object id="185" x="1210" y="654" width="32" height="198">
+  <object id="185" x="1104" y="790" width="32" height="198">
    <properties>
     <property name="PlayerPosX" type="int" value="0"/>
     <property name="PlayerPosY" type="int" value="500"/>
@@ -60044,6 +60044,6 @@
   <object id="190" name="CaveDrop" gid="103" x="896" y="385.333" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="46" name="abilities">
-  <object id="200" x="1306.67" y="825.333" width="646.667" height="646.667"/>
+  <object id="201" x="1344" y="832" width="576" height="64"/>
  </objectgroup>
 </map>

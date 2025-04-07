@@ -104,6 +104,11 @@
 					</splash>
 				</cave_drop>
 			</props>
+			<abilities>
+				<ability type="Jump" w="124" h="124" texture="Assets/Textures/Abilities/jump.png" />
+				<ability type="DoubleJump" w="124" h="124" texture="Assets/Textures/Abilities/jump.png" />
+				<ability type="Dash" w="124" h="124" texture="Assets/Textures/Abilities/jump.png" />
+			</abilities>
 		</animations>
 		<save_data isSaved="1">
 			<player x="564" y="564" w="44" h="54" />

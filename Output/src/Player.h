@@ -39,6 +39,10 @@ public:
 
 	int GetMovementDirection() const;
 
+	PlayerMechanics* GetMechanics() { return &mechanics; }
+
+	int GetTextureWidth() const;
+
 	int targetScene = 0;
 	PhysBody* pbody;
 

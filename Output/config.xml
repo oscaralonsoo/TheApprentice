@@ -23,6 +23,12 @@
 			<player w="100" h="100" texture="Assets/Slime/slime.png">
 				<idle loop="true" speed="0.08">
 					<frame x="0" y="0" w="100" h="100" />
+					<frame x="100" y="0" w="100" h="100" />
+					<frame x="200" y="0" w="100" h="100" />
+					<frame x="300" y="0" w="100" h="100" />
+					<frame x="400" y="0" w="100" h="100" />
+					<frame x="500" y="0" w="100" h="100" />
+					<frame x="600" y="0" w="100" h="100" />
 				</idle>
 				<run_right loop="true" speed="0.2">
 					<frame x="0" y="0" w="100" h="100" />

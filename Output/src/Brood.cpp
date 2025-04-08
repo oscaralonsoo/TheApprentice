@@ -39,7 +39,17 @@ bool Brood::Start() {
         }
     }
 
-    return Enemy::Start();
+    pbody = Engine::GetInstance().physics.get()->CreateCircleSensor((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, bodyType::DYNAMIC);
+
+    pbody->ctype = ColliderType::ENEMY;
+
+    pbody->listener = this;
+
+    if (!gravity) pbody->body->SetGravityScale(0);
+
+    pathfinding = new Pathfinding();
+    ResetPath();
+    return true;
 }
 
 bool Brood::Update(float dt) {
@@ -98,7 +108,7 @@ void Brood::Chase(float dt) {
     }
 
     //Smooth redirection
-    float steeringSmoothness = 0.045f;
+    float steeringSmoothness = 0.041f;
     direction.x = (1.0f - steeringSmoothness) * direction.x + steeringSmoothness * desiredDirection.x;
     direction.y = (1.0f - steeringSmoothness) * direction.y + steeringSmoothness * desiredDirection.y;
 
@@ -115,7 +125,7 @@ void Brood::Chase(float dt) {
 
     // Ondulation
     float waveAmplitude = 4.5f;
-    float waveFrequency = 0.005f;
+    float waveFrequency = 0.004f;
 
     Vector2D perp = { -direction.y, direction.x };
     float wave = sin(timePassed * waveFrequency + waveOffset) * waveAmplitude;

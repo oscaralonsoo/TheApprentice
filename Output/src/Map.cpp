@@ -322,7 +322,7 @@ bool Map::Load(std::string path, std::string fileName)
                     int height = objectNode.attribute("height").as_int();
 
                     // Create Door type Collider
-                    PhysBody* doorCollider = Engine::GetInstance().physics->CreateRectangle(x + (width / 2), y + (height / 2), width, height, STATIC);
+                    PhysBody* doorCollider = Engine::GetInstance().physics->CreateRectangleSensor(x + (width / 2), y + (height / 2), width, height, STATIC);
                     doorCollider->ctype = ColliderType::DOOR;
 
                     // Access Properties by Name
@@ -361,7 +361,7 @@ bool Map::Load(std::string path, std::string fileName)
                     int width = objectNode.attribute("width").as_int();
                     int height = objectNode.attribute("height").as_int();
 
-                    PhysBody* saveGameCollider = Engine::GetInstance().physics->CreateRectangle(x + (width / 2), y + (height / 2), width, height, STATIC);
+                    PhysBody* saveGameCollider = Engine::GetInstance().physics->CreateRectangleSensor(x + (width / 2), y + (height / 2), width, height, STATIC);
                     saveGameCollider->ctype = ColliderType::SAVEGAME;
 
                     Engine::GetInstance().physics->listToDelete.push_back(saveGameCollider);

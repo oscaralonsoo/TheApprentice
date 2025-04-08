@@ -5,7 +5,9 @@
 
 enum class NoctilumeState {
     IDLE,
+    FLYING,
     DIVE,
+    DIVE_COOLDOWN,
     DEAD
 };
 
@@ -20,6 +22,7 @@ public:
     bool Update(float dt) override;
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
     bool CleanUp() override;
+    void IdleFlight(float dt);
     void Flying(float dt);
     void Dive(float dt);
 
@@ -29,11 +32,11 @@ private:
 
     bool playerInRange = false;
     NoctilumeState currentState = NoctilumeState::IDLE;
+  
     PhysBody* physBody = nullptr;
     Animation idleAnim;
     Animation flyingAnim;
     Animation divingDownAnim;
     Animation divingUpAnim;
-
 
 };

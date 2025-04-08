@@ -263,7 +263,7 @@ void Pathfinding::PropagateDijkstra() {
 
 void Pathfinding::PropagateAStar(ASTAR_HEURISTICS heuristic) {
     // Code you want to profile
-    
+
     // L13: TODO 2: Adapt Dijkstra algorithm for AStar. Consider the different heuristics
 
     Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
@@ -284,34 +284,30 @@ void Pathfinding::PropagateAStar(ASTAR_HEURISTICS heuristic) {
     //If frontier queue contains elements pop the first element and find the neighbors
     if (frontierAStar.size() > 0 && !foundDestination) {
 
-        //Get the value of the firt element in the queue
         Vector2D frontierTile = frontierAStar.top().second;
-        //remove the first element from the queue
         frontierAStar.pop();
 
         std::list<Vector2D> neighbors;
-        if (IsWalkable(frontierTile.getX() + 1, frontierTile.getY())) {
-            neighbors.push_back(Vector2D((int)frontierTile.getX() + 1, (int)frontierTile.getY()));
-        }
-        if (IsWalkable(frontierTile.getX(), frontierTile.getY() + 1)) {
-            neighbors.push_back(Vector2D((int)frontierTile.getX(), (int)frontierTile.getY() + 1));
-        }
-        if (IsWalkable(frontierTile.getX() - 1, frontierTile.getY())) {
-            neighbors.push_back(Vector2D((int)frontierTile.getX() - 1, (int)frontierTile.getY()));
-        }
-        if (IsWalkable(frontierTile.getX(), frontierTile.getY() - 1)) {
-            neighbors.push_back(Vector2D((int)frontierTile.getX(), (int)frontierTile.getY() - 1));
+
+        int fx = frontierTile.getX();
+        int fy = frontierTile.getY();
+
+        int dx[4] = { 1, 0, -1, 0 };
+        int dy[4] = { 0, 1, 0, -1 };
+
+        for (int i = 0; i < 4; ++i) {
+            int nx = fx + dx[i];
+            int ny = fy + dy[i];
+
+            if (IsInsideMap(fx, fy) && IsInsideMap(nx, ny) && IsWalkable(nx, ny)) {
+                neighbors.push_back(Vector2D(nx, ny));
+            }
         }
 
-        //For each neighbor, if not visited, add it to the frontier queue and visited list
         for (const auto& neighbor : neighbors) {
-
-            // the movement cost from the start point A to the current tile.
             int g = costSoFar[(int)frontierTile.getX()][(int)frontierTile.getY()] + MovementCost((int)neighbor.getX(), (int)neighbor.getY());
-            
-            // the estimated movement cost from the current square to the destination point.
-            int h = 0;
 
+            int h = 0;
             switch (heuristic)
             {
             case ASTAR_HEURISTICS::MANHATTAN:
@@ -325,7 +321,6 @@ void Pathfinding::PropagateAStar(ASTAR_HEURISTICS heuristic) {
                 break;
             }
 
-            // A* Priority function
             int f = g + h;
 
             if (std::find(visited.begin(), visited.end(), neighbor) == visited.end() || g < costSoFar[neighbor.getX()][neighbor.getY()]) {
@@ -400,4 +395,8 @@ int Pathfinding::Find(std::vector<Vector2D> vector,Vector2D elem)
     if(found) return index;
 	else return -1;
 
+}
+
+bool Pathfinding::IsInsideMap(int x, int y) {
+    return x >= 0 && y >= 0 && x < map->GetWidth() && y < map->GetHeight();
 }

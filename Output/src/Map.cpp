@@ -116,8 +116,8 @@ void Map::DrawMapLayers(bool forwardOnly)
                             SDL_Rect tileRect = tileSet->GetRect(clean_gid);
                             Vector2D mapCoord = MapToWorld(i, j);
 
-                            uint32_t renderX = (uint32_t)(mapCoord.getX() - (Engine::GetInstance().render->camera.x * mapLayer->parallaxX));
-                            uint32_t renderY = (uint32_t)(mapCoord.getY() - (Engine::GetInstance().render->camera.y * mapLayer->parallaxY));
+                            int renderX = (int)(mapCoord.getX() - (Engine::GetInstance().render->camera.x * mapLayer->parallaxX));
+                            int renderY = (int)(mapCoord.getY() - (Engine::GetInstance().render->camera.y * mapLayer->parallaxY));
 
                             uint32_t pivot = tileRect.w / 2;
                             Engine::GetInstance().render->DrawTexture(tileSet->texture, renderX, renderY, &tileRect, 1.0f, angle, pivot, pivot, flip);

@@ -382,7 +382,6 @@ bool Map::Load(std::string path, std::string fileName)
 
                         LOG("Created CaveDrop at x: %d, y: %d", x, y);
                     }
-                    // Mas Particulas
                 }
             }
             else if (objectGroupName == "Enemies") //Enemies from object layer "Enemies"
@@ -432,20 +431,6 @@ bool Map::Load(std::string path, std::string fileName)
             }
         }
         for (const auto& mapLayer : mapData.layers) {
-            if (mapLayer->name == "CaveDrop") {
-                for (int i = 0; i < mapData.width; i++) {
-                    for (int j = 0; j < mapData.height; j++) {
-                        int gid = mapLayer->Get(i, j);
-                        if (gid != 0)
-                        {
-                            Vector2D mapCoord = MapToWorld(i, j);
-
-                            CaveDrop* caveDrop = (CaveDrop*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CAVE_DROP);
-                            caveDrop->position = Vector2D(mapCoord.x, mapCoord.y);
-                        }
-                    }
-                }
-            }
             if (mapLayer->name == "AbilityZone") {
                 for (int i = 0; i < mapData.width; i++) {
                     for (int j = 0; j < mapData.height; j++) {

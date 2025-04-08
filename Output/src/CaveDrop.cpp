@@ -37,7 +37,7 @@ bool CaveDrop::Start() {
     texH = caveDropNode.attribute("h").as_int();
 
     // Crear cuerpo físico
-    pbody = Engine::GetInstance().physics->CreateRectangleSensor((int)position.getX(), (int)position.getY(), texW, texH, bodyType::DYNAMIC);
+    pbody = Engine::GetInstance().physics->CreateRectangle((int)position.getX(), (int)position.getY(), 1, 1, bodyType::DYNAMIC);
     pbody->ctype = ColliderType::CAVE_DROP;
     pbody->listener = this;
     pbody->body->SetGravityScale(0);
@@ -57,6 +57,9 @@ bool CaveDrop::Update(float dt) {
     switch (state) {
     case CaveDropStates::DISABLED:
         currentAnimation = nullptr;
+
+        pbody->body->SetLinearVelocity(b2Vec2_zero);
+        pbody->body->SetAngularVelocity(0);
 
         if (dropTimer.ReadMSec() >= randomTime || dropTimer.ReadMSec() == 0) {
             state = CaveDropStates::START;
@@ -78,7 +81,7 @@ bool CaveDrop::Update(float dt) {
             currentAnimation->Reset();
         }
         if (velocity.y == 0) pbody->body->ApplyForceToCenter(b2Vec2(0, 0.1f), true);
-        pbody->body->SetGravityScale(3.0f);
+        pbody->body->SetGravityScale(2.0f);
         break;
 
     case CaveDropStates::SPLASH:
@@ -89,6 +92,7 @@ bool CaveDrop::Update(float dt) {
 
         pbody->body->SetGravityScale(0);
         pbody->body->SetLinearVelocity(b2Vec2_zero);
+        pbody->body->SetAngularVelocity(0);
 
         if (currentAnimation->HasFinished()) {
             state = CaveDropStates::DISABLED;

@@ -45,12 +45,16 @@
 				<duck loop="false" speed="0">
 					<frame x="0" y="0" w="100" h="100" />
 				</duck>
-				<wall_slide loop="true" speed="0.1">
-					<frame x="0" y="100" w="100" h="117" />
-					<frame x="100" y="100" w="100" h="117" />
-					<frame x="200" y="100" w="100" h="117" />
-					<frame x="300" y="100" w="100" h="117" />
-					<frame x="400" y="100" w="100" h="117" />
+				<wall_slide loop="true" speed="0.17">
+					<frame x="0" y="100" w="100" h="120" />
+					<frame x="100" y="100" w="100" h="120" />
+					<frame x="200" y="100" w="100" h="120" />
+					<frame x="300" y="100" w="100" h="120" />
+					<frame x="400" y="100" w="100" h="120" />
+					<frame x="500" y="100" w="100" h="120" />
+					<frame x="600" y="100" w="100" h="120" />
+					<frame x="700" y="100" w="100" h="120" />
+					<frame x="800" y="100" w="100" h="120" />
 				</wall_slide>
 				<die loop="false" speed="0">
 					<frame x="0" y="0" w="128" h="128" />
@@ -68,22 +72,33 @@
 						<frame x="0" y="0" w="200" h="200" />
 					</slide>
 				</enemy>
-				<enemy type="Thumpod" w="200" h="200" texture="Assets/Enemies/dead.png">
-					<idle loop="true" speed="0.2">
-						<frame x="0" y="0" w="529" h="295" />
-						<frame x="529" y="0" w="529" h="295" />
-						<frame x="1058" y="0" w="529" h="295" />
-						<frame x="1587" y="0" w="529" h="295" />
-						<frame x="2116" y="0" w="529" h="295" />
-						<frame x="2645" y="0" w="529" h="295" />
-						<frame x="3174" y="0" w="529" h="295" />
-						<frame x="3703" y="0" w="529" h="295" />
-						<frame x="4232" y="0" w="529" h="295" />
-						<frame x="4761" y="0" w="529" h="295" />
-						<frame x="5290" y="0" w="529" h="295" />
+				<enemy type="Thumpod" w="256" h="256" texture="Assets/Enemies/thumpod.png">
+					<idle loop="true" speed="0.1">
+						<frame x="0" y="0" w="256" h="256" />
+						<frame x="256" y="0" w="256" h="256" />
+						<frame x="512" y="0" w="256" h="256" />
+						<frame x="768" y="0" w="256" h="256" />
 					</idle>
-					<dead loop="true" speed="0.1">
-						<frame x="0" y="0" w="200" h="200" />
+					<jump loop="true" speed="0.1">
+						<frame x="0" y="256" w="256" h="256" />
+						<frame x="256" y="256" w="256" h="256" />
+						<frame x="512" y="256" w="256" h="256" />
+						<frame x="768" y="256" w="256" h="256" />
+						<frame x="1024" y="256" w="256" h="256" />
+						<frame x="1280" y="256" w="256" h="256" />
+					</jump>
+					<dead loop="true" speed="0.15">
+						<frame x="0" y="512" w="256" h="256" />
+						<frame x="256" y="512" w="256" h="256" />
+						<frame x="512" y="512" w="256" h="256" />
+						<frame x="768" y="512" w="256" h="256" />
+						<frame x="1024" y="512" w="256" h="256" />
+						<frame x="1280" y="512" w="256" h="256" />
+						<frame x="1536" y="512" w="256" h="256" />
+						<frame x="1792" y="512" w="256" h="256" />
+						<frame x="2048" y="512" w="256" h="256" />
+						<frame x="2304" y="512" w="256" h="256" />
+						<frame x="2560" y="512" w="256" h="256" />
 					</dead>
 				</enemy>
 				<enemy type="Hypnoviper" w="512" h="256" texture="Assets/Enemies/hypnoviper.png">

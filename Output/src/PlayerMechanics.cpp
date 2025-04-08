@@ -13,6 +13,46 @@ void PlayerMechanics::Init(Player* player) {
 }
 
 void PlayerMechanics::Update(float dt) {
+    if (shouldRespawn) {
+        shouldRespawn = false;
+        player->SetPosition(respawnPosition);
+
+        // Reset de velocidad por si acaso
+        player->pbody->body->SetLinearVelocity(b2Vec2_zero);
+
+        // También puedes resetear estados si hace falta
+        isJumping = false;
+        hasDoubleJumped = false;
+        isDashing = false;
+        isWallSliding = false;
+
+        player->SetState("idle");
+
+        Engine::GetInstance().render->StartCameraShake(0.5, 2);
+
+        StartInvulnerability(); 
+
+        isStunned = true;
+        stunTimer.Start();
+        return; // Opcional, si quieres que no haga más cosas ese frame
+    }
+
+    // Invulnerabilidad temporal
+    if (isInvulnerable) {
+        if (invulnerabilityTimer.ReadSec() >= invulnerabilityDuration) {
+            isInvulnerable = false;
+            visible = true; // se queda visible al final
+        }
+        else {
+            if (blinkTimer.ReadMSec() >= blinkInterval) {
+                visible = !visible; // toggle de visibilidad
+                printf("VISIBLE: %s\n", visible ? "sí" : "no");
+                blinkTimer.Start();
+                blinkInterval += 150.0f;
+            }
+        }
+    }
+    
     if( Engine::GetInstance().scene->saving == true)
         return;
     if (cantMove)
@@ -77,6 +117,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         hasDoubleJumped = false;
         if (jumpUnlocked) EnableJump(true);
         isOnGround = true;
+        lastPlatformCollider = physB;
         break;
     case ColliderType::WALL_SLIDE:
         if (isDashing) CancelDash();
@@ -96,10 +137,26 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
             wasInDownCameraZone = true;
         }
         break;
+    case ColliderType::SPIKE:
+        if (lastPlatformCollider) {
+            UpdateLastSafePosition(lastPlatformCollider);
+            respawnPosition = lastPosition;
+        }
+        else {
+            // Si no hay plataforma previa, reaparece donde estaba (por seguridad)
+            respawnPosition = player->GetPosition();
+        }
+
+        shouldRespawn = true;
+        break;
     case ColliderType::SAVEGAME:
         Engine::GetInstance().scene->saveGameZone = true;
         break;
     case ColliderType::ENEMY:
+        if (!isInvulnerable)    
+        {
+
+        }
         break;
     default:
         break;
@@ -108,7 +165,12 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
-    case ColliderType::PLATFORM: isOnGround = false; break;
+    case ColliderType::PLATFORM:
+        isOnGround = false;
+        if (lastPlatformCollider) {
+            UpdateLastSafePosition(lastPlatformCollider); 
+        }
+        break;
     case ColliderType::WALL_SLIDE: 
         isWallSliding = false;
         player->pbody->body->SetGravityScale(1.0f);
@@ -272,4 +334,48 @@ void PlayerMechanics::DestroyAttackSensor() {
         attackSensor = nullptr;
         isAttacking = false;
     }
+}
+
+void PlayerMechanics::UpdateLastSafePosition(PhysBody* platformBody) {
+    if (!platformBody || !platformBody->body) return;
+
+    float width = platformBody->width;
+    float height = platformBody->height;
+
+    b2Vec2 posMeters = platformBody->body->GetPosition();
+
+    float centerX = METERS_TO_PIXELS(posMeters.x);
+    float topY = METERS_TO_PIXELS(posMeters.y) - (height / 2.0f);
+
+    float verticalOffset = 110.0f;
+
+    // Offset base hacia el borde
+    float edgeOffset = (width / 2.0f) - 10.0f;
+
+    // Offset extra para que se pegue más en la dirección del respawn
+    float directionalOffset = 15.0f;
+
+    float respawnX = centerX;
+    if (width >= 20.0f) {
+        if (movementDirection > 0) {
+            respawnX = centerX + edgeOffset - directionalOffset;
+        }
+        else {
+            respawnX = centerX - edgeOffset + directionalOffset;
+        }
+    }
+
+    float respawnY = topY - verticalOffset;
+
+    lastPosition = Vector2D(respawnX, respawnY);
+
+    printf("POSICIÓN SEGURA ACTUALIZADA: X = %.2f, Y = %.2f (Dir: %d, Plataforma ancho: %.2f)\n", lastPosition.getX(), lastPosition.getY(), movementDirection, width);
+}
+
+void PlayerMechanics::StartInvulnerability() {
+    isInvulnerable = true;
+    invulnerabilityTimer.Start();
+    blinkTimer.Start(); // esto es clave
+    visible = true;
+    blinkInterval = 150.0f;
 }

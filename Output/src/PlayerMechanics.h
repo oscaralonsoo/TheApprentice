@@ -20,6 +20,7 @@ public:
     void EnableDoubleJump(bool enable) { doubleJumpUnlocked = enable; }
     void EnableDash(bool enable) { dashUnlocked = enable; }
     int GetMovementDirection() const { return movementDirection; }
+    bool IsVisible() const { return visible; }
 
     bool canAttack = true;
     bool cantMove = false;
@@ -34,6 +35,8 @@ private:
     void CancelDash();
     void CreateAttackSensor();
     void DestroyAttackSensor();
+    void UpdateLastSafePosition(PhysBody* platformBody);
+    void StartInvulnerability();
 
 private:
     Player* player = nullptr;
@@ -87,4 +90,18 @@ private:
     int playerAttackX;
     int playerAttackY;
     bool isAttacking = false;
+
+    //Last checkPoint
+    Vector2D lastPosition;
+    bool shouldRespawn = false;
+    Vector2D respawnPosition;
+
+    // Invulnerabilidad
+    bool isInvulnerable = false;
+    Timer invulnerabilityTimer;
+    float invulnerabilityDuration = 3.0f;
+    bool visible = true; 
+    Timer blinkTimer;
+    float blinkInterval;
+    PhysBody* lastPlatformCollider = nullptr;
 };

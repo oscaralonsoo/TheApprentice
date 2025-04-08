@@ -74,32 +74,30 @@ bool AbilityZone::Update(float dt)
 			velocity.x = 0.0f;
 			player->pbody->body->SetLinearVelocity(velocity);
 			mechanics->cantMove = true;
-		}
-	}
-
-
-	if (playerInsideJump)
-	{
-		if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
-			Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
-			mechanics->cantMove = false;
-			mechanics->EnableJump(true);
-		}
-	}
-	else if (playerInsideDoubleJump)
-	{
-		if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
-			Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
-			mechanics->cantMove = false;
-			mechanics->EnableDoubleJump(true);
-		}
-	}
-	else if (playerInsideDash)
-	{
-		if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
-			Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
-			mechanics->cantMove = false;
-			mechanics->EnableDash(true);
+			if (playerInsideJump)
+			{
+				if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
+					Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+					mechanics->cantMove = false;
+					mechanics->EnableJump(true);
+				}
+			}
+			else if (playerInsideDoubleJump)
+			{
+				if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
+					Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+					mechanics->cantMove = false;
+					mechanics->EnableDoubleJump(true);
+				}
+			}
+			else if (playerInsideDash)
+			{
+				if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
+					Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+					mechanics->cantMove = false;
+					mechanics->EnableDash(true);
+				}
+			}
 		}
 	}
 

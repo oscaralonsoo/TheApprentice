@@ -50,7 +50,7 @@ bool Player::Start() {
 }
 
 bool Player::Update(float dt) {
-	animation.Update(dt, state, position.getX(), position.getY());
+	animation.Update(dt, state, position.getX(), position.getY(), mechanics.IsVisible());
 
 	mechanics.Update(dt);
 
@@ -118,11 +118,24 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 }
 
 void Player::SetPosition(Vector2D pos) {
+	if (!pbody) {
+		printf("ERROR: pbody es nullptr\n");
+		return;
+	}
+
+	if (!pbody->body) {
+		printf("ERROR: pbody->body es nullptr\n");
+		return;
+	}
+
+	printf("SetPosition a: X = %.2f, Y = %.2f\n", pos.getX(), pos.getY());
+
 	pos.setX(pos.getX() + texW / 2);
 	pos.setY(pos.getY() + texH / 2);
 	b2Vec2 bodyPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
 	pbody->body->SetTransform(bodyPos, 0);
 }
+
 
 Vector2D Player::GetPosition() const {
 	return Vector2D(position.getX() + texW / 2, position.getY() + texH / 2);

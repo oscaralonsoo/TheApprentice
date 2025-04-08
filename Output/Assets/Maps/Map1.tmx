@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="12" nextobjectid="7">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="13" nextobjectid="12">
  <tileset firstgid="1" name="cave" tilewidth="32" tileheight="32" tilecount="1980" columns="60">
   <image source="../Environment/cave.png" width="1920" height="1080"/>
  </tileset>
- <objectgroup id="8" name="SaveGame"/>
+ <objectgroup id="8" name="SaveGame">
+  <object id="11" x="672" y="800" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup id="12" name="Spikes">
+  <object id="7" x="1254" y="896" width="236" height="64"/>
+ </objectgroup>
  <layer id="6" name="Collisions" width="60" height="30">
   <properties>
    <property name="Navigation" type="bool" value="true"/>
@@ -1423,6 +1428,13 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1431,6 +1443,14 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1474,6 +1494,16 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1524,6 +1554,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="3"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1532,6 +1563,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="3"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1583,41 +1615,14 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1824,7 +1829,10 @@
   </object>
  </objectgroup>
  <objectgroup id="4" name="Collisions">
-  <object id="2" x="0" y="864" width="2032" height="32"/>
+  <object id="2" x="102" y="864" width="1146" height="32"/>
+  <object id="8" x="1487" y="862" width="1146" height="32"/>
+  <object id="9" x="1024" y="736" width="192" height="64"/>
+  <object id="10" x="1504" y="736" width="160" height="64"/>
  </objectgroup>
  <layer id="9" name="CaveDrop" width="60" height="30">
   <data>
@@ -5435,7 +5443,5 @@
   </data>
  </layer>
  <objectgroup id="8" name="Wall"/>
- <objectgroup id="11" name="abilities">
-  <object id="6" name="Jump" x="544" y="800" width="784" height="65.3333"/>
- </objectgroup>
+ <objectgroup id="11" name="abilities"/>
 </map>

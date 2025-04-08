@@ -13,12 +13,16 @@ void PlayerAnimation::LoadAnimations(const pugi::xml_node& parameters, SDL_Textu
     currentAnimation = &animations["idle"];
 }
 
-void PlayerAnimation::Update(float dt, const std::string& state, int x, int y) {
+void PlayerAnimation::Update(float dt, const std::string& state, int x, int y, bool visible) {
     if (animations.find(state) != animations.end()) {
         currentAnimation = &animations[state];
         printf("Animación actual: %s\n", state.c_str());
     }
-    Engine::GetInstance().render.get()->DrawTexture(texture, (int)x, (int)y, &GetCurrentFrame());
+
+    if (visible) {
+        Engine::GetInstance().render.get()->DrawTexture(texture, (int)x, (int)y, &GetCurrentFrame());
+    }
+
     currentAnimation->Update();
 }
 

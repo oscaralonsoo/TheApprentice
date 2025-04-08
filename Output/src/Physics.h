@@ -26,6 +26,7 @@ enum bodyType {
 enum class ColliderType {
 	PLAYER, 
 	ITEM,
+	SPIKE,
 	WALL_SLIDE,
 	WALL,
 	DOWN_CAMERA,

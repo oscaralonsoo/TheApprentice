@@ -25,7 +25,7 @@ bool Thumpod::Start() {
         if (std::string(enemyNode.attribute("type").as_string()) == type)
         {
             texture = Engine::GetInstance().textures.get()->Load(enemyNode.attribute("texture").as_string());
-            idleAnim.LoadAnimations(enemyNode.child("idle"));
+            idleAnim.LoadAnimations(enemyNode.child("dead"));
         }
     }
 

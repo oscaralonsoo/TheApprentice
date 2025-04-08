@@ -21,6 +21,9 @@ public:
     void EnableDash(bool enable) { dashUnlocked = enable; }
     int GetMovementDirection() const { return movementDirection; }
 
+    bool canAttack = true;
+    bool cantMove = false;
+
 private:
     void HandleInput();
     void HandleJump();
@@ -47,7 +50,7 @@ private:
     bool isJumping = false;
     float jumpTime = 0.0f;
     float maxJumpTime = 0.3f;
-    bool jumpUnlocked = true;
+    bool jumpUnlocked = false;
 
     // DoubleJump
     bool doubleJumpUnlocked = true;

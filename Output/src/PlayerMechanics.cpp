@@ -15,7 +15,10 @@ void PlayerMechanics::Init(Player* player) {
 void PlayerMechanics::Update(float dt) {
     if( Engine::GetInstance().scene->saving == true)
         return;
-
+    if (cantMove)
+    {
+        return;
+    }
     if (isStunned) {
         player->pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
         if (stunTimer.ReadSec() >= stunDuration) {
@@ -249,6 +252,7 @@ void PlayerMechanics::HandleWallSlide() {
 }
 
 void PlayerMechanics::CreateAttackSensor() {
+    if (!canAttack) return; 
     int offsetX = (movementDirection > 0) ? 60 : -15;
 
     playerAttackX = METERS_TO_PIXELS(player->pbody->body->GetPosition().x) + offsetX;

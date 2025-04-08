@@ -28,11 +28,15 @@ public:
 	bool CleanUp();
 
 	void SetParameters(pugi::xml_node parameters) {
+		
 		this->parameters = parameters;
 
 		position.x = parameters.attribute("x").as_int();
 		position.y = parameters.attribute("y").as_int();
 		type = parameters.attribute("type").as_string();
+
+		texW = parameters.attribute("w").as_int();
+		texH = parameters.attribute("h").as_int();
 	}
 
 	void SetPosition(Vector2D pos);
@@ -43,12 +47,17 @@ public:
 
 	virtual void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
+	bool playerInside = false;
+	bool playerInsideJump = false;
+	bool playerInsideDoubleJump = false;
+	bool playerInsideDash = false;
+
 private:
 	PhysBody* pbody;
 	SDL_Texture* texture;
 	std::string type;
-	int texW = 50;
-	int texH = 50;
+	int texW;
+	int texH;
 	pugi::xml_node parameters;
 	AbilityZoneStates state = AbilityZoneStates::WAITING;
 };

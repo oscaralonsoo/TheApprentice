@@ -49,6 +49,10 @@ public:
 	void SetVSync(bool enable);
 
 	SDL_Texture* LoadTexture(const char* path);
+
+	void SetCameraZoom(float zoom, bool immediate = false);
+	float GetCameraZoom() const;
+
 public:
 
 	//Camera Dash
@@ -90,6 +94,11 @@ public:
 	int defaultYOffset = -200;
 	bool isYOffsetLocked = false;
 
+	//Camera Zoom
+// Camera Zoom
+	float cameraZoom = 1.0f;
+	float targetCameraZoom = 1.0f;
+	float cameraZoomSmoothing = 0.01f;
 
 public:
 

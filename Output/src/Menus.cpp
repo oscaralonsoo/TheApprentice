@@ -87,6 +87,7 @@ void Menus::HandlePause() {
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN && !inTransition && !inConfig) {
         if (currentState == MenusState::GAME) {
             StartTransition(true, MenusState::PAUSE);
+            Engine::GetInstance().render.get()->SetCameraZoom(1.0f, true);
         }
     }
 }

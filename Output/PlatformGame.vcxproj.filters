@@ -82,10 +82,13 @@
       <Filter>Source Files\Entities\Enemies\Broodheart</Filter>
     </ClCompile>
     <ClCompile Include="src\Brood.cpp">
-      <Filter>Source Files\Entities\Enemies\Broodheart\Brood</Filter>
+      <Filter>Source Files\Entities\Enemies\Brood</Filter>
     </ClCompile>
     <ClCompile Include="src\Hypnoviper.cpp">
       <Filter>Source Files\Entities\Enemies\Hypnoviper</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Noctilume.cpp">
+      <Filter>Source Files\Entities\Enemies\Noctilume</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -181,10 +184,13 @@
       <Filter>Source Files\Entities\Enemies\Broodheart</Filter>
     </ClInclude>
     <ClInclude Include="src\Brood.h">
-      <Filter>Source Files\Entities\Enemies\Broodheart\Brood</Filter>
+      <Filter>Source Files\Entities\Enemies\Brood</Filter>
     </ClInclude>
     <ClInclude Include="src\Hypnoviper.h">
       <Filter>Source Files\Entities\Enemies\Hypnoviper</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Noctilume.h">
+      <Filter>Source Files\Entities\Enemies\Noctilume</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -255,11 +261,14 @@
     <Filter Include="Source Files\Entities\Enemies\Broodheart">
       <UniqueIdentifier>{56d10a6d-9cc1-4fa3-8c26-f9a7088d5834}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Entities\Enemies\Broodheart\Brood">
-      <UniqueIdentifier>{0148d086-43f5-4449-861f-67cdeb9b632c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Entities\Enemies\Hypnoviper">
       <UniqueIdentifier>{c37d4129-e611-4c49-bd92-e6280e2c9c9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Enemies\Noctilume">
+      <UniqueIdentifier>{e82252e3-cb5b-4d1b-a14e-752eba3d220d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Enemies\Brood">
+      <UniqueIdentifier>{0148d086-43f5-4449-861f-67cdeb9b632c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

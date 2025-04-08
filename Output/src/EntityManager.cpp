@@ -11,6 +11,7 @@
 #include "AbilityZone.h"
 #include "Brood.h"
 #include "Broodheart.h"
+#include "Noctilume.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -99,6 +100,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::ABILITY_ZONE:
 		entity = new AbilityZone();
 		break;
+	case EntityType::NOCTILUME:
+		entity = new Noctilume();
+		break;
 	default:
 		break;
 	}
@@ -115,9 +119,9 @@ void EntityManager::DestroyEntity(Entity* entity)
 	{
 		if (*it == entity) {
 			(*it)->CleanUp();
-			delete* it; // Free the allocated memory
-			entities.erase(it); // Remove the entity from the list
-			break; // Exit the loop after removing the entity
+			delete* it; 
+			entities.erase(it); 
+			break; 
 		}
 	}
 }

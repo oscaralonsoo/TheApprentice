@@ -22,19 +22,19 @@
 		<animations>
 			<player w="89" h="100" texture="Assets/Slime/slime.png">
 				<idle loop="true" speed="0.08">
-					<frame x="0" y="0" w="128" h="128" />
+					<frame x="0" y="0" w="128" h="100" />
 				</idle>
 				<run_right loop="true" speed="0.2">
-					<frame x="0" y="0" w="128" h="128" />
+					<frame x="0" y="0" w="128" h="100" />
 				</run_right>
 				<jump loop="false" speed="0.15">
-					<frame x="0" y="0" w="128" h="128" />
+					<frame x="0" y="0" w="128" h="100" />
 				</jump>
 				<fall loop="false" speed="0.15">
-					<frame x="0" y="0" w="128" h="128" />
+					<frame x="0" y="0" w="128" h="100" />
 				</fall>
 				<run_left loop="true" speed="0.2">
-					<frame x="0" y="0" w="128" h="128" />
+					<frame x="0" y="0" w="128" h="100" />
 				</run_left>
 				<duck loop="false" speed="0">
 					<frame x="0" y="0" w="128" h="128" />
@@ -104,21 +104,32 @@
 						<frame x="320" y="0" w="32" h="32" />
 					</walking>
 				</enemy>
-				<enemy type="Broodheart" w="64" h="64" texture="Assets/Textures/enemy/broodheart.png">
+				<enemy type="Broodheart" w="64" h="64" texture="Assets/Enemies/broodheart.png">
 					<idle loop="true" speed="0.1">
 						<frame x="0" y="0" w="64" h="64" />
 					</idle>
-					<walking loop="false" speed="0.1">
+					<spawn loop="false" speed="0.1">
 						<frame x="0" y="0" w="64" h="64" />
+					</spawn>
+					<die loop="false" speed="0.1">
+						<frame x="0" y="0" w="64" h="64" />
+					</die>
+				</enemy>
+				<enemy type="Brood" w="32" h="32" texture="Assets/Enemies/brood.png">
+					<idle loop="true" speed="0.1">
+						<frame x="0" y="0" w="32" h="32" />
+					</idle>
+					<walking loop="false" speed="0.1">
+						<frame x="0" y="0" w="32" h="32" />
 					</walking>
 				</enemy>
-				<enemy type="Brood" w="32" h="32" texture="Assets/Textures/enemy/brood.png">
+				<enemy type="Noctilume" w="100" h="100" texture="Assets/Enemies/Noctilume.png">
 					<idle loop="true" speed="0.1">
-						<frame x="0" y="0" w="32" h="32" />
+						<frame x="0" y="0" w="132" h="132" />
 					</idle>
-					<walking loop="false" speed="0.1">
-						<frame x="0" y="0" w="32" h="32" />
-					</walking>
+					<flying loop="false" speed="0.1">
+						<frame x="0" y="0" w="64" h="64" />
+					</flying>
 				</enemy>
 			</enemies>
 			<props>

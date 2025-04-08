@@ -89,7 +89,7 @@ void Brood::Chase(float dt) {
         ? Vector2D{ static_cast<float>(METERS_TO_PIXELS(pbody->body->GetPosition().x)), static_cast<float>(METERS_TO_PIXELS(pbody->body->GetPosition().y)) }
     : position;
 
-    // Calcular dirección deseada
+    // Calculate pos
     Vector2D desiredDirection = playerPos - broodPos;
     float length = sqrt(desiredDirection.x * desiredDirection.x + desiredDirection.y * desiredDirection.y);
     if (length != 0) {
@@ -97,8 +97,8 @@ void Brood::Chase(float dt) {
         desiredDirection.y /= length;
     }
 
-    // Suavizar dirección
-    float steeringSmoothness = 0.041f;
+    //Smooth redirection
+    float steeringSmoothness = 0.045f;
     direction.x = (1.0f - steeringSmoothness) * direction.x + steeringSmoothness * desiredDirection.x;
     direction.y = (1.0f - steeringSmoothness) * direction.y + steeringSmoothness * desiredDirection.y;
 
@@ -108,13 +108,13 @@ void Brood::Chase(float dt) {
         direction.y /= dirLen;
     }
 
-    // Movimiento base
+    // Base Movement
     float speed = 0.4f;
     broodPos.x += direction.x * speed * dt;
     broodPos.y += direction.y * speed * dt;
 
-    // Ondulación estilo espíritu
-    float waveAmplitude = 4.0f;
+    // Ondulation
+    float waveAmplitude = 4.5f;
     float waveFrequency = 0.005f;
 
     Vector2D perp = { -direction.y, direction.x };
@@ -122,7 +122,6 @@ void Brood::Chase(float dt) {
     broodPos.x += perp.x * wave;
     broodPos.y += perp.y * wave;
 
-    // Actualizar posición
     position = broodPos;
     if (pbody != nullptr) {
         pbody->body->SetTransform(

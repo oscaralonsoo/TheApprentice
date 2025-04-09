@@ -47,6 +47,7 @@ private:
     // Física
     bool isOnGround = false;
     int movementDirection = 1;
+    int vidas = 3;
 
     // Jump
     float jumpForce = 10.5f;

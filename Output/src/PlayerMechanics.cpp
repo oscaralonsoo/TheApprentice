@@ -117,7 +117,6 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         hasDoubleJumped = false;
         if (jumpUnlocked) EnableJump(true);
         isOnGround = true;
-        lastPlatformCollider = physB;
         break;
     case ColliderType::WALL_SLIDE:
         if (isDashing) CancelDash();
@@ -139,7 +138,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::SPIKE:
         if (lastPlatformCollider) {
-            UpdateLastSafePosition(lastPlatformCollider);
+            UpdateLastSafePosition();
             respawnPosition = lastPosition;
         }
         else {
@@ -167,9 +166,8 @@ void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
         isOnGround = false;
-        if (lastPlatformCollider) {
-            UpdateLastSafePosition(lastPlatformCollider); 
-        }
+        lasMovementDirection = movementDirection;
+        lastPlatformCollider = physB;
         break;
     case ColliderType::WALL_SLIDE: 
         isWallSliding = false;
@@ -336,32 +334,33 @@ void PlayerMechanics::DestroyAttackSensor() {
     }
 }
 
-void PlayerMechanics::UpdateLastSafePosition(PhysBody* platformBody) {
-    if (!platformBody || !platformBody->body) return;
+void PlayerMechanics::UpdateLastSafePosition() {
+    if (!lastPlatformCollider || !lastPlatformCollider->body) return;
 
-    float width = platformBody->width;
-    float height = platformBody->height;
+    float width = lastPlatformCollider->width;
+    float height = lastPlatformCollider->height;
 
-    b2Vec2 posMeters = platformBody->body->GetPosition();
+    b2Vec2 posMeters = lastPlatformCollider->body->GetPosition();
 
     float topY = METERS_TO_PIXELS(posMeters.y) - (height / 2.0f);
 
     float verticalOffset = 100.0f;
 
-    float horizontalOffset = METERS_TO_PIXELS(posMeters.x) + METERS_TO_PIXELS(posMeters.x) / 2;
-
-
     float respawnY = topY - verticalOffset;
 
-    if (movementDirection > 0) {
-        float respawnX = horizontalOffset + horizontalOffset;
-        lastPosition = Vector2D(respawnX, respawnY);
-    }
-    else {
-        float respawnX = horizontalOffset - horizontalOffset;
-        lastPosition = Vector2D(respawnX, respawnY);
-    }
+        if (lasMovementDirection > 0)
+        {
 
+            float respawnX = METERS_TO_PIXELS(posMeters.x) - 75 + METERS_TO_PIXELS(posMeters.x) / 2;
+            lastPosition = Vector2D(respawnX, respawnY);
+        }
+        else
+        {
+            float respawnX = METERS_TO_PIXELS(posMeters.x) - 75 - METERS_TO_PIXELS(posMeters.x) / 2;
+            lastPosition = Vector2D(respawnX, respawnY);
+
+
+        }
     printf("POSICIÓN SEGURA ACTUALIZADA: X = %.2f, Y = %.2f (Dir: %d, Plataforma ancho: %.2f)\n", lastPosition.getX(), lastPosition.getY(), movementDirection, width);
 }
 

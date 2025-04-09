@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="13" nextobjectid="15">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="13" nextobjectid="18">
  <tileset firstgid="1" name="cave" tilewidth="32" tileheight="32" tilecount="1980" columns="60">
   <image source="../Environment/cave.png" width="1920" height="1080"/>
  </tileset>
  <objectgroup id="8" name="SaveGame"/>
  <objectgroup id="12" name="Spikes" parallaxx="0" parallaxy="0">
-  <object id="7" x="1254" y="896" width="236" height="64"/>
+  <object id="7" x="1252.67" y="900" width="236" height="64"/>
  </objectgroup>
  <layer id="6" name="Collisions" width="60" height="30">
   <properties>
@@ -1829,8 +1829,8 @@
  <objectgroup id="4" name="Collisions" parallaxx="0" parallaxy="0">
   <object id="2" x="102" y="864" width="1146" height="32"/>
   <object id="8" x="1487" y="862" width="1146" height="32"/>
-  <object id="9" x="868" y="736" width="348" height="64"/>
-  <object id="10" x="1504" y="736" width="160" height="64"/>
+  <object id="16" x="96" y="768" width="1152" height="32"/>
+  <object id="17" x="388" y="970"/>
  </objectgroup>
  <layer id="9" name="CaveDrop" width="60" height="30">
   <data>

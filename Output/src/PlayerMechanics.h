@@ -35,7 +35,7 @@ private:
     void CancelDash();
     void CreateAttackSensor();
     void DestroyAttackSensor();
-    void UpdateLastSafePosition(PhysBody* platformBody);
+    void UpdateLastSafePosition();
     void StartInvulnerability();
 
 private:
@@ -95,6 +95,8 @@ private:
     Vector2D lastPosition;
     bool shouldRespawn = false;
     Vector2D respawnPosition;
+    int lasMovementDirection;
+    PhysBody* lastPlatformCollider;
 
     // Invulnerabilidad
     bool isInvulnerable = false;
@@ -103,5 +105,4 @@ private:
     bool visible = true; 
     Timer blinkTimer;
     float blinkInterval;
-    PhysBody* lastPlatformCollider = nullptr;
 };

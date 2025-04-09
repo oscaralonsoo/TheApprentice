@@ -344,30 +344,23 @@ void PlayerMechanics::UpdateLastSafePosition(PhysBody* platformBody) {
 
     b2Vec2 posMeters = platformBody->body->GetPosition();
 
-    float centerX = METERS_TO_PIXELS(posMeters.x);
     float topY = METERS_TO_PIXELS(posMeters.y) - (height / 2.0f);
 
-    float verticalOffset = 110.0f;
+    float verticalOffset = 100.0f;
 
-    // Offset base hacia el borde
-    float edgeOffset = (width / 2.0f) - 10.0f;
+    float horizontalOffset = METERS_TO_PIXELS(posMeters.x) + METERS_TO_PIXELS(posMeters.x) / 2;
 
-    // Offset extra para que se pegue más en la dirección del respawn
-    float directionalOffset = 15.0f;
-
-    float respawnX = centerX;
-    if (width >= 20.0f) {
-        if (movementDirection > 0) {
-            respawnX = centerX + edgeOffset - directionalOffset;
-        }
-        else {
-            respawnX = centerX - edgeOffset + directionalOffset;
-        }
-    }
 
     float respawnY = topY - verticalOffset;
 
-    lastPosition = Vector2D(respawnX, respawnY);
+    if (movementDirection > 0) {
+        float respawnX = horizontalOffset + horizontalOffset;
+        lastPosition = Vector2D(respawnX, respawnY);
+    }
+    else {
+        float respawnX = horizontalOffset - horizontalOffset;
+        lastPosition = Vector2D(respawnX, respawnY);
+    }
 
     printf("POSICIÓN SEGURA ACTUALIZADA: X = %.2f, Y = %.2f (Dir: %d, Plataforma ancho: %.2f)\n", lastPosition.getX(), lastPosition.getY(), movementDirection, width);
 }

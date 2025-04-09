@@ -350,8 +350,8 @@ bool Map::Load(std::string path, std::string fileName)
                     pugi::xml_node abilityNode = tempDoc.append_child("abilities");
 
                     abilityNode.append_attribute("type") = abilityName.c_str();
-                    abilityNode.append_attribute("x") = x;
-                    abilityNode.append_attribute("y") = y;
+                    abilityNode.append_attribute("x") = x + width / 2;
+                    abilityNode.append_attribute("y") = y + height / 2;
                     abilityNode.append_attribute("w") = width;
                     abilityNode.append_attribute("h") = height;
 

@@ -8,6 +8,7 @@ enum class EntityType
 	PLAYER,
 	BLOODRUSHER,
 	MIREBORN,
+	HYPNOVIPER,
 	BROODHEART,
 	BROOD,
 	CAVE_DROP,
@@ -34,6 +35,11 @@ public:
 	}
 
 	virtual bool Update(float dt)
+	{
+		return true;
+	}
+
+	virtual bool PostUpdate()
 	{
 		return true;
 	}

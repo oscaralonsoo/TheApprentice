@@ -22,11 +22,11 @@ bool Mireborn::Start() {
 
     for (pugi::xml_node enemyNode = loadFile.child("config").child("scene").child("animations").child("enemies").child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy"))
     {
-        if (std::string(enemyNode.attribute("type").as_string()) == type)
+        if (std::string(enemyNode.attribute("type").as_string()) == type && std::string(enemyNode.attribute("tier").as_string()) == tier)
         {
             texture = Engine::GetInstance().textures.get()->Load(enemyNode.attribute("texture").as_string());
             idleAnim.LoadAnimations(enemyNode.child("idle"));
-            walkAnim.LoadAnimations(enemyNode.child("walk"));
+            walkAnim.LoadAnimations(enemyNode.child("walking"));
         }
     }
 
@@ -54,11 +54,17 @@ bool Mireborn::Update(float dt) {
     return Enemy::Update(dt);
 }
 
+bool Mireborn::PostUpdate() {
+    if (isDivided && tier != "Gamma") {
+        Divide();
+        isDivided = false;
+    }
+    return true;
+}
 
 bool Mireborn::CleanUp() {
     return Enemy::CleanUp();
 }
-
 
 void Mireborn::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
@@ -69,10 +75,9 @@ void Mireborn::OnCollision(PhysBody* physA, PhysBody* physB) {
         // Damage the player
         break;
     case ColliderType::ATTACK:
-        Divide();
+        if (!isDivided) isDivided = true;
         break;
     }
-
 }
 
 void Mireborn::Idle(float dt) {
@@ -104,7 +109,8 @@ void Mireborn::Walk(float dt)
         float direction = (nextTileWorld.getX() > position.getX()) ? 1.0f :
             (nextTileWorld.getX() < position.getX() ? -1.0f : 0.0f);
 
-        pbody->body->ApplyLinearImpulseToCenter(b2Vec2(jumpForceX * direction, jumpForceY), true);
+        float mass = pbody->body->GetMass();
+        pbody->body->ApplyLinearImpulseToCenter(b2Vec2(jumpForceX * direction * mass, jumpForceY * mass), true);
     }
     // Verify Grounded
     if (isOnGround) {
@@ -115,10 +121,26 @@ void Mireborn::Walk(float dt)
     }
 }
 void Mireborn::Divide() {
-    Enemy* clone = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::MIREBORN);
-    Vector2D offset(20, 0);
-    clone->SetPosition(this->GetPosition() + offset);
-    clone->Start();
+    for (int i = 0; i < MAX_DIVIDES; ++i) {
+        pugi::xml_document tempDoc;
+        pugi::xml_node enemyNode = tempDoc.append_child("enemy");
 
+        enemyNode.append_attribute("type") = type.c_str();
+        enemyNode.append_attribute("x") = position.x + ((i == 0) ? 50 : -50);
+        enemyNode.append_attribute("y") = position.y;
+        enemyNode.append_attribute("w") = texW / 2;
+        enemyNode.append_attribute("h") = texH / 2;
+        enemyNode.append_attribute("gravity") = true;
+        if (tier == "Alpha")
+        {
+            enemyNode.append_attribute("tier") = "Beta";
+        }
+        else if(tier == "Beta") {
+            enemyNode.append_attribute("tier") = "Gamma";
+        }
 
+        Enemy* clone = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::MIREBORN);
+        clone->SetParameters(enemyNode);
+        clone->Start();
+    }
 }

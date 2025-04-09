@@ -6,6 +6,7 @@
 #include "Log.h"
 #include "CaveDrop.h"
 #include "Bloodrusher.h"
+#include "Hypnoviper.h"
 #include "Mireborn.h"
 #include "AbilityZone.h"
 #include "Brood.h"
@@ -83,6 +84,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::BLOODRUSHER:
 		entity = new Bloodrusher();
 		break;
+	case EntityType::HYPNOVIPER:
+		entity = new Hypnoviper();
+		break;
 	case EntityType::MIREBORN:
 		entity = new Mireborn();
 		break;
@@ -151,6 +155,17 @@ bool EntityManager::Update(float dt)
 	{
 		if (entity->active == false) continue;
 		ret = entity->Update(dt);
+	}
+	return ret;
+}
+
+bool EntityManager::PostUpdate()
+{
+	bool ret = true;
+	for (const auto entity : entities)
+	{
+		if (entity->active == false) continue;
+		ret = entity->PostUpdate();
 	}
 	return ret;
 }

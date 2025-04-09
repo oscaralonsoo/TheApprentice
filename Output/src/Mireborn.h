@@ -19,8 +19,14 @@ public:
     bool Awake() override;
     bool Start() override;
     bool Update(float dt) override;
+    bool PostUpdate() override;
     bool CleanUp() override;
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
+
+    void SetParameters(pugi::xml_node parameters) override {
+        Enemy::SetParameters(parameters);
+        tier = parameters.attribute("tier").as_string();
+    }
 
     void Idle(float dt);
 
@@ -33,16 +39,19 @@ public:
 private:
     float jumpCooldown = 0.0f;
     float jumpInterval = 750.0f;; //Time Between Jumps
-    float jumpForceY = -30.0f;
-    float jumpForceX = 20.0f;
+    float jumpForceY = -7.0f;
+    float jumpForceX = 5.0f;
     bool hasJumped = false;
     bool isOnGround = false;
 
-    bool playerInRange = false;
-    int size = 128;
+    static const int MAX_DIVIDES = 2;
+
+    std::string tier;
 
     MirebornState currentState = MirebornState::IDLE;
     PhysBody* physBody = nullptr;
     Animation idleAnim;
     Animation walkAnim;
+
+    bool isDivided = false;
 };

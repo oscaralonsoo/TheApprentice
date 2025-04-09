@@ -20,7 +20,7 @@
 			<Map_1 path="Assets/Maps/" name="Map1.tmx" />
 		</maps>
 		<animations>
-			<player w="128" h="128" texture="Assets/Textures/slime.png">
+			<player w="89" h="100" texture="Assets/Slime/slime.png">
 				<idle loop="true" speed="0.08">
 					<frame x="0" y="0" w="128" h="128" />
 				</idle>
@@ -39,31 +39,69 @@
 				<duck loop="false" speed="0">
 					<frame x="0" y="0" w="128" h="128" />
 				</duck>
-				<wall_slide loop="false" speed="0">
-					<frame x="50" y="0" w="128" h="128" />
+				<wall_slide loop="true" speed="0.1">
+					<frame x="0" y="0" w="89" h="100" />
+					<frame x="89" y="0" w="89" h="100" />
+					<frame x="178" y="0" w="89" h="100" />
+					<frame x="0" y="0" w="89" h="100" />
+					<frame x="89" y="100" w="89" h="100" />
 				</wall_slide>
 				<die loop="false" speed="0">
 					<frame x="0" y="0" w="128" h="128" />
 				</die>
 			</player>
 			<enemies>
-				<enemy type="Bloodrusher" w="32" h="32" texture="Assets/Textures/enemy/bloodrusher.png">
+				<enemy type="Bloodrusher" w="100" h="100" texture="Assets/Enemies/bloodrusher.png">
 					<idle loop="true" speed="0.1">
-						<frame x="0" y="0" w="80" h="80" />
+						<frame x="0" y="0" w="200" h="200" />
 					</idle>
 					<attack loop="true" speed="0.1">
-						<frame x="0" y="80" w="80" h="80" />
+						<frame x="0" y="0" w="200" h="200" />
 					</attack>
 					<slide loop="true" speed="0.1">
-						<frame x="0" y="160" w="80" h="80" />
+						<frame x="0" y="0" w="200" h="200" />
 					</slide>
 				</enemy>
-				<enemy type="Mireborn" w="128" h="128" texture="Assets/Textures/enemy/mireborn.png">
+				<enemy type="Hypnoviper" w="512" h="256" texture="Assets/Enemies/hypnoviper.png">
+					<sleep loop="true" speed="0.15">
+						<frame x="0" y="0" w="512" h="256" />
+						<frame x="512" y="0" w="512" h="256" />
+						<frame x="1024" y="0" w="512" h="256" />
+						<frame x="0" y="256" w="512" h="256" />
+						<frame x="512" y="256" w="512" h="256" />
+						<frame x="1024" y="256" w="512" h="256" />
+						<frame x="0" y="512" w="512" h="256" />
+						<frame x="512" y="512" w="512" h="256" />
+						<frame x="1024" y="512" w="512" h="256" />
+						<frame x="0" y="768" w="512" h="256" />
+						<frame x="512" y="768" w="512" h="256" />
+					</sleep>
+					<dead loop="true" speed="0.1">
+						<frame x="0" y="0" w="512" h="256" />
+					</dead>
+				</enemy>
+				<enemy type="Mireborn" tier="Alpha" w="128" h="128" texture="Assets/Enemies/mireborn.png">
 					<idle loop="true" speed="0.1">
 						<frame x="0" y="0" w="128" h="128" />
 					</idle>
 					<walking loop="false" speed="0.1">
 						<frame x="0" y="0" w="128" h="128" />
+					</walking>
+				</enemy>
+				<enemy type="Mireborn" tier="Beta" w="64" h="64" texture="Assets/Enemies/mireborn.png">
+					<idle loop="true" speed="0.1">
+						<frame x="320" y="64" w="64" h="64" />
+					</idle>
+					<walking loop="false" speed="0.1">
+						<frame x="320" y="64" w="64" h="64" />
+					</walking>
+				</enemy>
+				<enemy type="Mireborn" tier="Gamma" w="128" h="128" texture="Assets/Enemies/mireborn.png">
+					<idle loop="true" speed="0.1">
+						<frame x="320" y="0" w="32" h="32" />
+					</idle>
+					<walking loop="false" speed="0.1">
+						<frame x="320" y="0" w="32" h="32" />
 					</walking>
 				</enemy>
 				<enemy type="Broodheart" w="64" h="64" texture="Assets/Textures/enemy/broodheart.png">
@@ -114,11 +152,9 @@
 			</abilities>
 		</animations>
 		<save_data isSaved="1">
-			<player x="564" y="564" w="44" h="54" />
-			<scene actualScene="0" />
-			<enemies>
-				<enemy type="Mireborn" x="576" y="640" w="128" h="128" gravity="true" />
-			</enemies>
+			<player x="472" y="768" w="44" h="54" />
+			<scene actualScene="1" />
+			<enemies />
 		</save_data>
 	</scene>
 </config>

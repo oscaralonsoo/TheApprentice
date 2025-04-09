@@ -146,7 +146,8 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::ENEMY:
         if (!isInvulnerable)    
         {
-
+            vidas -= 1;
+            printf("%d", vidas);
         }
         break;
     default:

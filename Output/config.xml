@@ -31,7 +31,7 @@
 					<frame x="600" y="0" w="100" h="100" />
 					<frame x="700" y="0" w="100" h="100" />
 				</idle>
-				<run_right loop="true" speed="0.1">
+				<run_right loop="true" speed="0.15">
 					<frame x="0" y="100" w="100" h="100" />
 					<frame x="100" y="100" w="100" h="100" />
 					<frame x="200" y="100" w="100" h="100" />
@@ -54,14 +54,11 @@
 				<duck loop="false" speed="0">
 					<frame x="0" y="0" w="100" h="100" />
 				</duck>
-				<wall_slide loop="true" speed="0.17">
+				<wall_slide loop="true" speed="0.1">
 					<frame x="0" y="400" w="100" h="100" />
 					<frame x="100" y="400" w="100" h="100" />
 					<frame x="200" y="400" w="100" h="100" />
 					<frame x="300" y="400" w="100" h="100" />
-					<frame x="400" y="400" w="100" h="100" />
-					<frame x="500" y="400" w="100" h="100" />
-					<frame x="600" y="400" w="100" h="100" /> 
 				</wall_slide>
 				<landing loop="false" speed="0.17">
 					<frame x="0" y="300" w="100" h="100" />

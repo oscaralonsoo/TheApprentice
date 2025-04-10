@@ -193,6 +193,9 @@ void PlayerMechanics::HandleInput() {
                 player->SetState("run_left");
             }
         }
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_1) == KEY_REPEAT) {
+            player->SetState("idle");
+        }
         else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
             movementDirection = 1;
             if (!isFalling && !isJumping && !isWallSliding) {

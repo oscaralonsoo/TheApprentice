@@ -37,8 +37,6 @@ public:
 
     bool HasFoundPlayer() const;
 
-    bool IsInsideMap(int x, int y);
-
 private:
     int Find(std::vector<Vector2D> vector, Vector2D elem);
 

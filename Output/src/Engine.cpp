@@ -36,9 +36,9 @@ Engine::Engine() {
     audio = std::make_shared<Audio>();
     // L08: TODO 2: Add Physics module
     physics = std::make_shared<Physics>();
+    scene = std::make_shared<Scene>();
     map = std::make_shared<Map>();
     entityManager = std::make_shared<EntityManager>();
-    scene = std::make_shared<Scene>();
     menus = std::make_shared<Menus>();
     guiManager = std::make_shared<GuiManager>();
 

@@ -20,64 +20,32 @@
 			<Map_1 path="Assets/Maps/" name="Map1.tmx" />
 		</maps>
 		<animations>
-			<player w="100" h="100" texture="Assets/Slime/slime.png">
-				<idle loop="true" speed="0.15">
-					<frame x="0" y="0" w="100" h="100" />
-					<frame x="100" y="0" w="100" h="100" />
-					<frame x="200" y="0" w="100" h="100" />
-					<frame x="300" y="0" w="100" h="100" />
-					<frame x="400" y="0" w="100" h="100" />
-					<frame x="500" y="0" w="100" h="100" />
-					<frame x="600" y="0" w="100" h="100" />
-					<frame x="700" y="0" w="100" h="100" />
+			<player w="89" h="100" texture="Assets/Slime/slime.png">
+				<idle loop="true" speed="0.08">
+					<frame x="0" y="0" w="128" h="128" />
 				</idle>
-				<run_right loop="true" speed="0.1">
-					<frame x="0" y="100" w="100" h="100" />
-					<frame x="100" y="100" w="100" h="100" />
-					<frame x="200" y="100" w="100" h="100" />
-					<frame x="300" y="100" w="100" h="100" />
-					<frame x="400" y="100" w="100" h="100" />
-					<frame x="500" y="100" w="100" h="100" />
+				<run_right loop="true" speed="0.2">
+					<frame x="0" y="0" w="128" h="128" />
 				</run_right>
-				<jump loop="true" speed="0.15">
-					<frame x="0" y="100" w="100" h="100" />
+				<jump loop="false" speed="0.15">
+					<frame x="0" y="0" w="128" h="128" />
 				</jump>
-				<fall loop="true" speed="0.15">
-					<frame x="100" y="200" w="100" h="100" />
-					<frame x="200" y="200" w="100" h="100" />
-					<frame x="300" y="200" w="100" h="100" />
-					<frame x="400" y="200" w="100" h="100" />
+				<fall loop="false" speed="0.15">
+					<frame x="0" y="0" w="128" h="128" />
 				</fall>
 				<run_left loop="true" speed="0.2">
-					<frame x="0" y="0" w="100" h="100" />
+					<frame x="0" y="0" w="128" h="128" />
 				</run_left>
 				<duck loop="false" speed="0">
-					<frame x="0" y="0" w="100" h="100" />
+					<frame x="0" y="0" w="128" h="128" />
 				</duck>
-				<wall_slide loop="true" speed="0.17">
-					<frame x="0" y="400" w="110" h="110" />
-					<frame x="110" y="400" w="110" h="110" />
-					<frame x="220" y="400" w="110" h="110" />
-					<frame x="330" y="400" w="110" h="110" />
-					<frame x="440" y="400" w="110" h="110" />
-					<frame x="550" y="400" w="110" h="110" />
-					<frame x="660" y="400" w="110" h="110" />
+				<wall_slide loop="true" speed="0.1">
+					<frame x="0" y="0" w="89" h="100" />
+					<frame x="89" y="0" w="89" h="100" />
+					<frame x="178" y="0" w="89" h="100" />
+					<frame x="0" y="0" w="89" h="100" />
+					<frame x="89" y="100" w="89" h="100" />
 				</wall_slide>
-				<landing loop="false" speed="0.17">
-					<frame x="0" y="300" w="100" h="100" />
-					<frame x="100" y="300" w="100" h="100" />
-					<frame x="200" y="300" w="100" h="100" />
-					<frame x="300" y="300" w="100" h="100" />
-					<frame x="400" y="300" w="100" h="100" />
-					<frame x="500" y="300" w="100" h="100" />
-					<frame x="600" y="300" w="100" h="100" />
-					<frame x="700" y="300" w="100" h="100" />
-					<frame x="800" y="300" w="100" h="100" />
-					<frame x="900" y="300" w="100" h="100" />
-					<frame x="1000" y="300" w="100" h="100" />
-					<frame x="1100" y="300" w="100" h="100" />
-					<frame x="1200" y="300" w="100" h="100" />
-				</landing>
 				<die loop="false" speed="0">
 					<frame x="0" y="0" w="128" h="128" />
 				</die>
@@ -94,62 +62,22 @@
 						<frame x="0" y="0" w="200" h="200" />
 					</slide>
 				</enemy>
-				<enemy type="Thumpod" w="256" h="256" texture="Assets/Enemies/thumpod.png">
-					<idle loop="true" speed="0.1">
-						<frame x="0" y="0" w="256" h="256" />
-						<frame x="256" y="0" w="256" h="256" />
-						<frame x="512" y="0" w="256" h="256" />
-						<frame x="768" y="0" w="256" h="256" />
-					</idle>
-					<jump loop="true" speed="0.1">
-						<frame x="0" y="256" w="256" h="256" />
-						<frame x="256" y="256" w="256" h="256" />
-						<frame x="512" y="256" w="256" h="256" />
-						<frame x="768" y="256" w="256" h="256" />
-						<frame x="1024" y="256" w="256" h="256" />
-						<frame x="1280" y="256" w="256" h="256" />
-					</jump>
-					<dead loop="true" speed="0.15">
-						<frame x="0" y="512" w="256" h="256" />
-						<frame x="256" y="512" w="256" h="256" />
-						<frame x="512" y="512" w="256" h="256" />
-						<frame x="768" y="512" w="256" h="256" />
-						<frame x="1024" y="512" w="256" h="256" />
-						<frame x="1280" y="512" w="256" h="256" />
-						<frame x="1536" y="512" w="256" h="256" />
-						<frame x="1792" y="512" w="256" h="256" />
-						<frame x="2048" y="512" w="256" h="256" />
-						<frame x="2304" y="512" w="256" h="256" />
-						<frame x="2560" y="512" w="256" h="256" />
-					</dead>
-				</enemy>
 				<enemy type="Hypnoviper" w="512" h="256" texture="Assets/Enemies/hypnoviper.png">
 					<sleep loop="true" speed="0.15">
 						<frame x="0" y="0" w="512" h="256" />
 						<frame x="512" y="0" w="512" h="256" />
 						<frame x="1024" y="0" w="512" h="256" />
-						<frame x="1536" y="0" w="512" h="256" />
-						<frame x="2048" y="0" w="512" h="256" />
-						<frame x="2560" y="0" w="512" h="256" />
 						<frame x="0" y="256" w="512" h="256" />
 						<frame x="512" y="256" w="512" h="256" />
 						<frame x="1024" y="256" w="512" h="256" />
-						<frame x="1536" y="256" w="512" h="256" />
-						<frame x="2048" y="256" w="512" h="256" />
-					</sleep>
-					<hit loop="false" speed="0">
 						<frame x="0" y="512" w="512" h="256" />
-					</hit>
-					<dead loop="false" speed="0.2">
+						<frame x="512" y="512" w="512" h="256" />
+						<frame x="1024" y="512" w="512" h="256" />
 						<frame x="0" y="768" w="512" h="256" />
 						<frame x="512" y="768" w="512" h="256" />
-						<frame x="1024" y="768" w="512" h="256" />
-						<frame x="1536" y="768" w="512" h="256" />
-						<frame x="2048" y="768" w="512" h="256" />
-						<frame x="2560" y="768" w="512" h="256" />
-						<frame x="0" y="1024" w="512" h="256" />
-						<frame x="512" y="1024" w="512" h="256" />
-						<frame x="1024" y="1024" w="512" h="256" />
+					</sleep>
+					<dead loop="true" speed="0.1">
+						<frame x="0" y="0" w="512" h="256" />
 					</dead>
 				</enemy>
 				<enemy type="Mireborn" tier="Alpha" w="128" h="128" texture="Assets/Enemies/mireborn.png">
@@ -194,26 +122,26 @@
 				</enemy>
 			</enemies>
 			<props>
-				<cave_drop w="18" h="18" texture="Assets/Props/caveDrop.png">
+				<cave_drop w="16" h="16" texture="Assets/Props/caveDrop.png">
 					<start loop="false" speed="0.13">
-						<frame x="0" y="0" w="18" h="18" />
-						<frame x="18" y="0" w="18" h="18" />
-						<frame x="36" y="0" w="18" h="18" />
-						<frame x="0" y="18" w="18" h="18" />
-						<frame x="18" y="18" w="18" h="18" />
-						<frame x="36" y="18" w="18" h="18" />
-						<frame x="0" y="36" w="18" h="18" />
-						<frame x="18" y="36" w="18" h="18" />
+						<frame x="0" y="0" w="16" h="16" />
+						<frame x="16" y="0" w="16" h="16" />
+						<frame x="32" y="0" w="16" h="16" />
+						<frame x="0" y="16" w="16" h="16" />
+						<frame x="16" y="16" w="16" h="16" />
+						<frame x="32" y="16" w="16" h="16" />
+						<frame x="0" y="32" w="16" h="16" />
+						<frame x="16" y="32" w="16" h="16" />
 					</start>
 					<fall loop="true" speed="0">
-						<frame x="36" y="36" w="16" h="16" />
+						<frame x="32" y="32" w="16" h="16" />
 					</fall>
 					<splash loop="false" speed="0.4">
-						<frame x="0" y="54" w="18" h="18" />
-						<frame x="18" y="54" w="18" h="18" />
-						<frame x="36" y="54" w="18" h="18" />
-						<frame x="0" y="72" w="18" h="18" />
-						<frame x="18" y="72" w="18" h="18" />
+						<frame x="0" y="48" w="16" h="16" />
+						<frame x="16" y="48" w="16" h="16" />
+						<frame x="32" y="48" w="16" h="16" />
+						<frame x="0" y="64" w="16" h="16" />
+						<frame x="16" y="64" w="16" h="16" />
 					</splash>
 				</cave_drop>
 			</props>
@@ -224,8 +152,8 @@
 			</abilities>
 		</animations>
 		<save_data isSaved="1">
-			<player x="3861" y="1001" w="44" h="54" />
-			<scene actualScene="0" />
+			<player x="472" y="768" w="44" h="54" />
+			<scene actualScene="1" />
 			<enemies />
 		</save_data>
 	</scene>

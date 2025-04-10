@@ -41,13 +41,15 @@ private:
 private:
     Player* player = nullptr;
 
-    // Parámetros del jugador
+    // Parï¿½metros del jugador
     float speed = 8.0f;
+    int vidas = 3;
 
-    // Física
+    // Fï¿½sica
     bool isOnGround = false;
     int movementDirection = 1;
     int vidas = 3;
+    bool isFalling = false;
 
     // Jump
     float jumpForce = 10.5f;

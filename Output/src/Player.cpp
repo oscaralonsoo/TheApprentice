@@ -21,7 +21,7 @@ Player::Player() : Entity(EntityType::PLAYER)
 Player::~Player() {}
 
 bool Player::Awake() {
-	position = Vector2D(1900, 500);
+	position = Vector2D(1900, 600);
 	return true;
 }
 
@@ -38,7 +38,7 @@ bool Player::Start() {
 	animation.LoadAnimations(parameters, texture);
 
     // Create the body at the same position, and ensure it's centered
-    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX(), (int)position.getY(), 43, 43, bodyType::DYNAMIC, 22, 9);
+    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX(), (int)position.getY(), 55, 43, bodyType::DYNAMIC);
     pbody->listener = this;
     pbody->ctype = ColliderType::PLAYER;
 

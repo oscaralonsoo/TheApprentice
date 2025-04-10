@@ -42,6 +42,7 @@ private:
     // Física
     bool isOnGround = false;
     int movementDirection = 1;
+    bool isFalling = false;
 
     // Jump
     float jumpForce = 10.5f;

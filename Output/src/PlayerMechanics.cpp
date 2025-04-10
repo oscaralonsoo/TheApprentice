@@ -27,7 +27,7 @@ void PlayerMechanics::Update(float dt) {
         player->pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
         if (stunTimer.ReadSec() >= stunDuration) {
             isStunned = false;
-            player->SetState("idle");
+            player->SetState("landing");
 
             fallStartY = player->GetPosition().getY();
             fallEndY = fallStartY;
@@ -81,6 +81,13 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         hasDoubleJumped = false;
         if (jumpUnlocked) EnableJump(true);
         isOnGround = true;
+        if (isFalling) {
+            isFalling = false;
+            CheckFallImpact();
+            // Frena completamente al tocar el suelo tras una caída
+            player->pbody->body->SetLinearVelocity(b2Vec2_zero);
+        }
+
         break;
     case ColliderType::WALL_SLIDE:
         if (isDashing) CancelDash();
@@ -128,18 +135,22 @@ void PlayerMechanics::HandleInput() {
     if (!isAttacking) {
         if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
             movementDirection = -1;
-            player->SetState("run_left");
+            if (!isFalling && !isJumping && !isWallSliding) {
+                player->SetState("run_left");
+            }
         }
         else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
             movementDirection = 1;
-            player->SetState("run_right");
+            if (!isFalling && !isJumping && !isWallSliding) {
+                player->SetState("run_right");
+            }
         }
     }
+
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
         player->SetState("attack");
     }
 }
-
 
 void PlayerMechanics::HandleJump() {
     if (!jumpUnlocked) return;
@@ -216,10 +227,18 @@ void PlayerMechanics::CancelDash() {
 void PlayerMechanics::HandleFall() {
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
 
-    if (velocity.y > 0.5f && !isJumping && !isWallSliding) {
-        isJumping = true;
-        fallStartY = player->GetPosition().getY();
-        player->SetState("fall");
+    if (velocity.y > 0.5f && !isWallSliding) {
+        if (!isFalling) {
+            isFalling = true;
+            fallStartY = player->GetPosition().getY();
+            player->SetState("fall");
+        }
+    }
+    else if (isOnGround || isWallSliding) {
+        if (isFalling) {
+            isFalling = false;
+            CheckFallImpact();
+        }
     }
 }
 
@@ -229,7 +248,7 @@ void PlayerMechanics::CheckFallImpact() {
 
     if (fallDistance >= fallDistanceThreshold) {
         isStunned = true;
-        player->SetState("stunned");
+        player->SetState("landing"); // Activamos la animación de aterrizaje forzoso
         stunTimer.Start();
         Engine::GetInstance().render->StartCameraShake(1, 1);
     }

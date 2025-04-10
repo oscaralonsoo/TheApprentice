@@ -26,6 +26,8 @@ bool Hypnoviper::Start() {
         {
             texture = Engine::GetInstance().textures.get()->Load(enemyNode.attribute("texture").as_string());
             sleepAnim.LoadAnimations(enemyNode.child("sleep"));
+            hitAnim.LoadAnimations(enemyNode.child("hit"));
+            deadAnim.LoadAnimations(enemyNode.child("dead"));
         }
     }
 
@@ -39,30 +41,47 @@ bool Hypnoviper::Update(float dt) {
     switch (currentState)
     {
     case HypnoviperState::SLEEPING:
-        Sleep();
+        if (currentAnimation != &sleepAnim) currentAnimation = &sleepAnim;
+
+        break;
+    case HypnoviperState::HITTED:
+        if (currentAnimation != &hitAnim) currentAnimation = &hitAnim;
+        if (hitTimer.ReadMSec() == 0) hitTimer.Start();
+
+        if (hitTimer.ReadMSec() > 2000)
+        {
+            currentState = HypnoviperState::DEAD;
+        }
+
         break;
     case HypnoviperState::DEAD:
+        if (currentAnimation != &deadAnim) currentAnimation = &deadAnim;
+
+        if (currentAnimation->HasFinished())
+            Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+
         break;
     }
 
     return Enemy::Update(dt);
 }
 
+bool Hypnoviper::PostUpdate() {
+    
+    return true;
+}
 
 bool Hypnoviper::CleanUp() {
     return Enemy::CleanUp();
 }
 
-void Hypnoviper::Sleep() {
-    //currentAnimation = &sleepAnim;
-}
 
 void Hypnoviper::OnCollision(PhysBody* physA, PhysBody* physB)
 {
     switch (physB->ctype)
     {
     case ColliderType::ATTACK:
-        currentState = HypnoviperState::DEAD;
+        currentState = HypnoviperState::HITTED;
         break;
     }
 }

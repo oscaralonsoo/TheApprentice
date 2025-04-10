@@ -58,6 +58,8 @@ private:
 	std::string type;
 	int texW;
 	int texH;
+	Animation idleAnim;
+	Animation* currentAnimation = nullptr;
 	pugi::xml_node parameters;
 	AbilityZoneStates state = AbilityZoneStates::WAITING;
 };

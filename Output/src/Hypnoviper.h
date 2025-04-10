@@ -5,6 +5,7 @@
 
 enum class HypnoviperState {
     SLEEPING,
+    HITTED,
     DEAD
 };
 
@@ -18,16 +19,18 @@ public:
     bool Awake() override;
     bool Start() override;
     bool Update(float dt) override;
+    bool PostUpdate() override;
     bool CleanUp() override;
-    void Sleep();
-    void OnCollision(PhysBody* physA, PhysBody* physB) override;
+    void OnCollision(PhysBody* physA, PhysBody* physB);
 
 
 private:
     HypnoviperState currentState = HypnoviperState::SLEEPING;
 
     Animation sleepAnim;
+    Animation hitAnim;
+    Animation deadAnim;
 
-    float previousDirection;
-    Timer timer;
+    bool isDead = false;
+    Timer hitTimer;
 };

@@ -22,8 +22,10 @@ public:
     int GetMovementDirection() const { return movementDirection; }
     bool IsVisible() const { return visible; }
 
-    bool canAttack = true;
+
     bool cantMove = false;
+    bool canAttack = true;
+
 
 private:
     void HandleInput();
@@ -35,17 +37,17 @@ private:
     void CancelDash();
     void CreateAttackSensor();
     void DestroyAttackSensor();
-    void UpdateLastSafePosition();
     void StartInvulnerability();
+    void UpdateLastSafePosition();
 
 private:
     Player* player = nullptr;
 
-    // Parï¿½metros del jugador
+    // Parámetros del jugador
     float speed = 8.0f;
     int vidas = 3;
 
-    // Fï¿½sica
+    // Física
     bool isOnGround = false;
     int movementDirection = 1;
     bool isFalling = false;
@@ -55,7 +57,7 @@ private:
     bool isJumping = false;
     float jumpTime = 0.0f;
     float maxJumpTime = 0.3f;
-    bool jumpUnlocked = false;
+    bool jumpUnlocked = true;
 
     // DoubleJump
     bool doubleJumpUnlocked = true;
@@ -84,6 +86,9 @@ private:
     bool wasInDownCameraZone = false;
     bool isWallSliding = false;
     bool wallJumpUnlocked = true;
+    Timer wallSlideCooldownTimer;
+    float wallSlideCooldownTime = 0.15f; // en segundos, ajustable
+    bool wallSlideCooldownActive = false;
 
     // Attack
     PhysBody* attackSensor = nullptr;
@@ -93,18 +98,17 @@ private:
     int playerAttackY;
     bool isAttacking = false;
 
-    //Last checkPoint
-    Vector2D lastPosition;
-    bool shouldRespawn = false;
-    Vector2D respawnPosition;
-    int lasMovementDirection;
-    PhysBody* lastPlatformCollider;
-
-    // Invulnerabilidad
     bool isInvulnerable = false;
     Timer invulnerabilityTimer;
     float invulnerabilityDuration = 3.0f;
-    bool visible = true; 
+    bool visible = true;
     Timer blinkTimer;
-    float blinkInterval;
+    float blinkInterval = 150.0f;
+
+    Vector2D lastPosition;
+    bool shouldRespawn = false;
+    PhysBody* lastPlatformCollider = nullptr;
+    Vector2D respawnPosition;
+    int lasMovementDirection = 1;
+
 };

@@ -13,52 +13,45 @@ void PlayerMechanics::Init(Player* player) {
 }
 
 void PlayerMechanics::Update(float dt) {
+    if( Engine::GetInstance().scene->saving == true)
+        return;
+
+    if (wallSlideCooldownActive && wallSlideCooldownTimer.ReadSec() >= wallSlideCooldownTime) {
+        wallSlideCooldownActive = false;
+    }
+
     if (shouldRespawn) {
         shouldRespawn = false;
-        player->SetPosition(lastPosition);   
-
-        // Reset de velocidad por si acaso
+        player->SetPosition(lastPosition);
         player->pbody->body->SetLinearVelocity(b2Vec2_zero);
-
-        // Tambiï¿½n puedes resetear estados si hace falta
-        isJumping = false;
-        hasDoubleJumped = false;
-        isDashing = false;
-        isWallSliding = false;
 
         player->SetState("idle");
 
         Engine::GetInstance().render->StartCameraShake(0.5, 2);
 
-        StartInvulnerability(); 
+        StartInvulnerability();
 
         isStunned = true;
         stunTimer.Start();
         return;
     }
 
+
     // Invulnerabilidad temporal
     if (isInvulnerable) {
         if (invulnerabilityTimer.ReadSec() >= invulnerabilityDuration) {
             isInvulnerable = false;
-            visible = true; // se queda visible al final
+            visible = true;
         }
         else {
             if (blinkTimer.ReadMSec() >= blinkInterval) {
                 visible = !visible; // toggle de visibilidad
-                printf("VISIBLE: %s\n", visible ? "sï¿½" : "no");
                 blinkTimer.Start();
-                blinkInterval += 150.0f;
+                blinkInterval += 150.0f; // para que parpadee más lento con el tiempo
             }
         }
     }
-    
-    if( Engine::GetInstance().scene->saving == true)
-        return;
-    if (cantMove)
-    {
-        return;
-    }
+
 
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && Engine::GetInstance().scene->saveGameZone) {
         // TODO JAVI ---- Si guardas mientras te mueves en el eje x, te guardas moviendote y tendrias que estar quieto
@@ -128,15 +121,17 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (isFalling) {
             isFalling = false;
             CheckFallImpact();
-            // Frena completamente al tocar el suelo tras una caï¿½da
+            // Frena completamente al tocar el suelo tras una caída
             player->pbody->body->SetLinearVelocity(b2Vec2_zero);
         }
 
         break;
     case ColliderType::WALL_SLIDE:
-        if (isDashing) CancelDash();
-        isWallSliding = true;
-        isJumping = false;
+        if (!wallSlideCooldownActive) {
+            printf(">> COLISIËN WALL SLIDE\n");
+            isWallSliding = true;
+            isJumping = false;
+        }
         break;
     case ColliderType::WALL:
         if (isDashing) CancelDash();
@@ -151,19 +146,14 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
             wasInDownCameraZone = true;
         }
         break;
-    case ColliderType::SPIKE:
-        UpdateLastSafePosition();
-        shouldRespawn = true;
-        break;
     case ColliderType::SAVEGAME:
         Engine::GetInstance().scene->saveGameZone = true;
         break;
     case ColliderType::ENEMY:
-        if (!isInvulnerable)    
-        {
-            vidas -= 1;
-            printf("%d", vidas);
-        }
+        break;
+    case ColliderType::SPIKE:
+        UpdateLastSafePosition();
+        shouldRespawn = true;
         break;
     default:
         break;
@@ -177,8 +167,11 @@ void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         lasMovementDirection = movementDirection;
         lastPlatformCollider = physB;
         break;
-    case ColliderType::WALL_SLIDE: 
+    case ColliderType::WALL_SLIDE:
+        printf(">>> SALIDA WALL SLIDE\n");
         isWallSliding = false;
+        wallSlideCooldownTimer.Start();
+        wallSlideCooldownActive = true;
         player->pbody->body->SetGravityScale(1.0f);
         break;
     case ColliderType::WALL: break;
@@ -211,6 +204,9 @@ void PlayerMechanics::HandleInput() {
 
 void PlayerMechanics::HandleJump() {
     if (!jumpUnlocked) return;
+
+    // Protección absoluta contra triple salto
+    if (hasDoubleJumped && !isOnGround) return;
 
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
 
@@ -305,7 +301,7 @@ void PlayerMechanics::CheckFallImpact() {
 
     if (fallDistance >= fallDistanceThreshold) {
         isStunned = true;
-        player->SetState("landing"); // Activamos la animaciï¿½n de aterrizaje forzoso
+        player->SetState("landing"); // Activamos la animación de aterrizaje forzoso
         stunTimer.Start();
         Engine::GetInstance().render->StartCameraShake(1, 1);
     }
@@ -313,6 +309,7 @@ void PlayerMechanics::CheckFallImpact() {
 
 void PlayerMechanics::HandleWallSlide() {
     if (isWallSliding) {
+        printf(">>> Wall slide activo\n");
         player->pbody->body->SetGravityScale(5.0f);
         player->pbody->body->SetLinearVelocity(b2Vec2_zero);
         player->SetState("wall_slide");
@@ -320,7 +317,6 @@ void PlayerMechanics::HandleWallSlide() {
 }
 
 void PlayerMechanics::CreateAttackSensor() {
-    if (!canAttack) return; 
     int offsetX = (movementDirection > 0) ? 60 : -15;
 
     playerAttackX = METERS_TO_PIXELS(player->pbody->body->GetPosition().x) + offsetX;
@@ -342,45 +338,36 @@ void PlayerMechanics::DestroyAttackSensor() {
     }
 }
 
-void PlayerMechanics::UpdateLastSafePosition() {  
-    if (!lastPlatformCollider || !lastPlatformCollider->body) return;
-
-    float width = lastPlatformCollider->width;
-    
-    float height = lastPlatformCollider->height;
-
-    b2Vec2 posMeters = lastPlatformCollider->body->GetPosition();
-
-    float topY = METERS_TO_PIXELS(posMeters.y) - (height / 2.0f);
-
-    float verticalOffset = 100.0f;
-
-    float respawnY = topY - verticalOffset;
-
-    float platformCenterX = METERS_TO_PIXELS(posMeters.x);
-    
-    float platformHalfWidth = lastPlatformCollider->width / 2.0f;
-
-    float respawnX = 0.0f;
-
-    if (lasMovementDirection > 0)
-    {
-        respawnX = platformCenterX + platformHalfWidth - 20; 
-        lastPosition = Vector2D(respawnX, respawnY);
-    }
-    else
-    {
-        respawnX = platformCenterX - platformHalfWidth - 103;
-        lastPosition = Vector2D(respawnX, respawnY);
-    }
-
-    printf("POSICIï¿½N SEGURA ACTUALIZADA: X = %.2f, Y = %.2f (Dir: %d, Plataforma ancho: %.2f)\n", lastPosition.getX(), lastPosition.getY(), movementDirection, width);
-}
-
 void PlayerMechanics::StartInvulnerability() {
     isInvulnerable = true;
     invulnerabilityTimer.Start();
-    blinkTimer.Start(); // esto es clave
+    blinkTimer.Start();
     visible = true;
     blinkInterval = 150.0f;
+}
+
+void PlayerMechanics::UpdateLastSafePosition() {
+    if (!lastPlatformCollider || !lastPlatformCollider->body) return;
+
+    float width = lastPlatformCollider->width;
+    float height = lastPlatformCollider->height;
+    b2Vec2 posMeters = lastPlatformCollider->body->GetPosition();
+
+    float topY = METERS_TO_PIXELS(posMeters.y) - (height / 2.0f);
+    float verticalOffset = 100.0f;
+    float respawnY = topY - verticalOffset;
+
+    float platformCenterX = METERS_TO_PIXELS(posMeters.x);
+    float platformHalfWidth = width / 2.0f;
+
+    float respawnX = 0.0f;
+
+    if (lasMovementDirection > 0) {
+        respawnX = platformCenterX + platformHalfWidth - 20;
+    }
+    else {
+        respawnX = platformCenterX - platformHalfWidth - 103;
+    }
+
+    lastPosition = Vector2D(respawnX, respawnY);
 }

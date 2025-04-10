@@ -48,7 +48,6 @@ private:
     // F�sica
     bool isOnGround = false;
     int movementDirection = 1;
-    int vidas = 3;
     bool isFalling = false;
 
     // Jump

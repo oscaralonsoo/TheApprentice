@@ -37,6 +37,7 @@ private:
 
     // Parámetros del jugador
     float speed = 8.0f;
+    int vidas = 3;
 
     // Física
     bool isOnGround = false;

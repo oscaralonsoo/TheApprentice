@@ -16,11 +16,9 @@ Map::Map() : Module(), mapLoaded(false)
 {
     name = "map";
 }
-
 // Destructor
 Map::~Map()
 {}
-
 // Called before render is available
 bool Map::Awake()
 {
@@ -361,7 +359,7 @@ bool Map::Load(std::string path, std::string fileName)
                     int width = objectNode.attribute("width").as_int();
                     int height = objectNode.attribute("height").as_int();
 
-                    PhysBody* saveGameCollider = Engine::GetInstance().physics->CreateRectangle(x + (width / 2), y + (height / 2), width, height, STATIC);
+                    PhysBody* saveGameCollider = Engine::GetInstance().physics->CreateRectangleSensor(x + (width / 2), y + (height / 2), width, height, STATIC);
                     saveGameCollider->ctype = ColliderType::SAVEGAME;
 
                     Engine::GetInstance().physics->listToDelete.push_back(saveGameCollider);
@@ -483,7 +481,6 @@ bool Map::Load(std::string path, std::string fileName)
     mapLoaded = ret;
     return ret;
 }
-
 // L07: TODO 8: Create a method that translates x,y coordinates from map positions to world positions
 Vector2D Map::MapToWorld(int x, int y) const
 {
@@ -530,7 +527,6 @@ MapLayer* Map::GetNavigationLayer() {
 
     return nullptr;
 }
-
 // L09: TODO 7: Implement a method to get the value of a custom property
 Properties::Property* Properties::GetProperty(const char* name)
 {
@@ -558,4 +554,3 @@ void Map::GetEnemyDimensionsFromConfig(const std::string& enemyName, int& width,
         enemyNode = enemyNode.next_sibling("enemy");
     }
 }
-

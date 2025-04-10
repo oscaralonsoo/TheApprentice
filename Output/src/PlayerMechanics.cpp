@@ -16,6 +16,13 @@ void PlayerMechanics::Update(float dt) {
     if( Engine::GetInstance().scene->saving == true)
         return;
 
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && Engine::GetInstance().scene->saveGameZone) {
+        // TODO JAVI ---- Si guardas mientras te mueves en el eje x, te guardas moviendote y tendrias que estar quieto
+        player->pbody->body->SetLinearVelocity(b2Vec2_zero);
+        Engine::GetInstance().scene->SaveGameXML();
+        return;
+    }
+
     if (isStunned) {
         player->pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
         if (stunTimer.ReadSec() >= stunDuration) {
@@ -127,21 +134,9 @@ void PlayerMechanics::HandleInput() {
             movementDirection = 1;
             player->SetState("run_right");
         }
-        else {
-            player->SetState("idle");
-        }
     }
-
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
         player->SetState("attack");
-    }
-
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && Engine::GetInstance().scene->saveGameZone) {
-        // TODO JAVI ---- Si guardas mientras te mueves en el eje x, te guardas moviendote y tendrias que estar quieto
-        b2Vec2 currentVelocity = player->pbody->body->GetLinearVelocity();
-        currentVelocity.x = 0; 
-        player->pbody->body->SetLinearVelocity(currentVelocity);
-        Engine::GetInstance().scene->SaveGameXML();
     }
 }
 

@@ -150,6 +150,10 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         Engine::GetInstance().scene->saveGameZone = true;
         break;
     case ColliderType::ENEMY:
+        if (!isInvulnerable)
+        {
+
+        }
         break;
     case ColliderType::SPIKE:
         UpdateLastSafePosition();
@@ -204,9 +208,6 @@ void PlayerMechanics::HandleInput() {
 
 void PlayerMechanics::HandleJump() {
     if (!jumpUnlocked) return;
-
-    // Protección absoluta contra triple salto
-    if (hasDoubleJumped && !isOnGround) return;
 
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
 

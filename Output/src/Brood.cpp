@@ -61,7 +61,7 @@ bool Brood::Update(float dt) {
     switch (currentState)
     {
     case BroodState::IDLE:
-        Idle(dt);
+
         break;
     case BroodState::CHASING:
         Chase(dt);
@@ -88,9 +88,6 @@ void Brood::OnCollision(PhysBody* physA, PhysBody* physB) {
     }
 }
 
-void Brood::Idle(float dt) {
-
-}
 void Brood::Chase(float dt) {
     timePassed += dt;
 
@@ -124,8 +121,8 @@ void Brood::Chase(float dt) {
     broodPos.y += direction.y * speed * dt;
 
     // Ondulation
-    float waveAmplitude = 4.5f;
-    float waveFrequency = 0.004f;
+    float waveAmplitude = 5.0;
+    float waveFrequency = 0.003f;
 
     Vector2D perp = { -direction.y, direction.x };
     float wave = sin(timePassed * waveFrequency + waveOffset) * waveAmplitude;

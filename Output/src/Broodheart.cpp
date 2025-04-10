@@ -9,7 +9,7 @@
 #include "Log.h"
 
 constexpr int MAX_BROODS = 6;
-constexpr int BROODS_PER_SPAWN = 2;
+constexpr int BROODS_PER_SPAWN = 1;
 constexpr int MAX_SPAWN_ATTEMPTS = 10;
 constexpr float MIN_SPAWN_DISTANCE = 60.0f;
 constexpr float MIN_DISTANCE_BETWEEN_BROODS_SQ = 2500.0f;

@@ -23,7 +23,6 @@ public:
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
 
     // Brood Methods
-    void Idle(float dt);
     void Chase(float dt);
 
     // Setters

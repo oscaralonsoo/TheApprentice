@@ -87,7 +87,7 @@ private:
     bool isWallSliding = false;
     bool wallJumpUnlocked = true;
     Timer wallSlideCooldownTimer;
-    float wallSlideCooldownTime = 0.15f; // en segundos, ajustable
+    float wallSlideCooldownTime = 0.15f;
     bool wallSlideCooldownActive = false;
 
     // Attack
@@ -98,6 +98,7 @@ private:
     int playerAttackY;
     bool isAttacking = false;
 
+    //Invulnerable
     bool isInvulnerable = false;
     Timer invulnerabilityTimer;
     float invulnerabilityDuration = 3.0f;
@@ -105,6 +106,7 @@ private:
     Timer blinkTimer;
     float blinkInterval = 150.0f;
 
+    //Respawn spikes
     Vector2D lastPosition;
     bool shouldRespawn = false;
     PhysBody* lastPlatformCollider = nullptr;

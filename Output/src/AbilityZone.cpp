@@ -39,6 +39,18 @@ bool AbilityZone::Start() {
 		}
 	}
 
+	pugi::xml_node abilitiesNode = loadFile.child("config").child("scene").child("animations").child("abilities");
+
+	for (pugi::xml_node abilityNode = abilitiesNode.child("ability"); abilityNode; abilityNode = abilityNode.next_sibling("ability")) {
+		if (std::string(abilityNode.attribute("type").as_string()) == type) {
+			std::string texPath = abilityNode.attribute("texture").as_string();
+			abilitySprite = Engine::GetInstance().textures->Load(texPath.c_str());
+			abilitySpriteW = abilityNode.attribute("w").as_int();
+			abilitySpriteH = abilityNode.attribute("h").as_int();
+			break;
+		}
+	}
+
 	currentAnimation = &idleAnim;
 
 	//Add a physics to an item - initialize the physics body
@@ -79,12 +91,15 @@ bool AbilityZone::Update(float dt)
 
 		// Frenado progresivo
 		b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
-		velocity.x *= (1.0f - t);  // 1 lejos = velocidad normal, 0 cerca = velocidad cero
+		float slowdownFactor = std::max(0.1f, 1.0f - t);
+		velocity.x *= slowdownFactor;
 		player->pbody->body->SetLinearVelocity(velocity);
 
-		// Cuando esté muy cerca, bloquear completamente
-		if (distance < 20.0f)
-		{
+		float rightLimit = position.getX() + texW;
+		float playerRight = player->GetPosition().getX() + player->GetTextureWidth();
+
+		if (playerRight >= rightLimit + - 40.0f) {
+			b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
 			velocity.x = 0.0f;
 			player->pbody->body->SetLinearVelocity(velocity);
 			mechanics->cantMove = true;
@@ -116,6 +131,12 @@ bool AbilityZone::Update(float dt)
 	}
 
 	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY());
+
+	if (abilitySprite) {
+		int drawX = position.getX() + texW - abilitySpriteW - 5;
+		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2;
+		Engine::GetInstance().render->DrawTexture(abilitySprite, drawX, drawY);
+	}
 
 	return true;
 }

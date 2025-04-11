@@ -230,13 +230,13 @@
 				</cave_drop>
 			</props>
 			<abilities>
-				<ability type="Jump" w="124" h="124" texture="Assets/Textures/Abilities/jump.png" />
+				<ability type="Jump" w="144" h="144" texture="Assets/Props/huevosrana.png" />
 				<ability type="DoubleJump" w="124" h="124" texture="Assets/Textures/Abilities/jump.png" />
 				<ability type="Dash" w="124" h="124" texture="Assets/Textures/Abilities/jump.png" />
 			</abilities>
 		</animations>
 		<save_data isSaved="1">
-			<player x="3861" y="1001" w="44" h="54" />
+			<player x="3879" y="1003" w="44" h="54" />
 			<scene actualScene="0" />
 			<enemies />
 		</save_data>

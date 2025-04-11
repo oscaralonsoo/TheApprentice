@@ -53,6 +53,12 @@ public:
 	void SetCameraZoom(float zoom, bool immediate = false);
 	float GetCameraZoom() const;
 
+	void EnableDownCameraView();
+	void DisableDownCameraView();
+
+	void SetDownCameraActive(bool active);
+
+
 public:
 
 	//Camera Dash
@@ -64,9 +70,9 @@ public:
 	int targetX;
 	int mapWidthPx;
 	int mapHeightPx;
-	int followMargin = 200;
+	int followMargin = 250;
 	int cameraCenterY = -camera.y + camera.h / 2;
-	int cameraVerticalViewOffset = 150;
+	int cameraVerticalViewOffset = 350;
 	int cameraLookAheadTarget = 0;
 	float cameraLookAheadOffset = 0.0f;
 	float lookAheadSmoothing = 0.1f;
@@ -88,11 +94,14 @@ public:
 	bool cameraLocked = false;
 
 	//Bajar camera al lado de bajada
-	float cameraYOffset = 0.0f;
-	float targetCameraYOffset = 0.0f;
-	float yOffsetSmoothing = 0.05f;
 	int defaultYOffset = -200;
 	bool isYOffsetLocked = false;
+	float previousCameraYOffset = 0.0f;
+	bool downCameraActive = false;              // ¿Está el jugador en una zona DownCamera?
+	float downCameraOffset = 200.0f;            // Cuánto baja la cámara cuando está activa
+	float cameraYOffset = 0.0f;                 // Offset actual interpolado
+	float targetCameraYOffset = 0.0f;           // Offset objetivo (interpolación)
+	float yOffsetSmoothing = 0.05f;             // Suavizado
 
 	//Camera Zoom
 // Camera Zoom

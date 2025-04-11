@@ -79,7 +79,7 @@ void PlayerMechanics::Update(float dt) {
     HandleDash();
     HandleFall();
 
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN && attackSensor == nullptr) {
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN && attackSensor == nullptr && canAttack) {
         CreateAttackSensor();
     }
 
@@ -141,10 +141,8 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         Engine::GetInstance().physics->DeletePhysBody(physB);
         break;
     case ColliderType::DOWN_CAMERA:
-        if (!wasInDownCameraZone) {
-            Engine::GetInstance().render->ToggleVerticalOffsetLock();
-            wasInDownCameraZone = true;
-        }
+        Engine::GetInstance().render->SetDownCameraActive(true);
+        break;
         break;
     case ColliderType::SAVEGAME:
         Engine::GetInstance().scene->saveGameZone = true;
@@ -179,7 +177,9 @@ void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         player->pbody->body->SetGravityScale(2.0f);
         break;
     case ColliderType::WALL: break;
-    case ColliderType::DOWN_CAMERA: wasInDownCameraZone = false; break;
+    case ColliderType::DOWN_CAMERA:
+        Engine::GetInstance().render->SetDownCameraActive(false);
+        break;
     case ColliderType::SAVEGAME: Engine::GetInstance().scene->saveGameZone = false; break;
     default: break;
     }
@@ -323,7 +323,7 @@ void PlayerMechanics::CheckFallImpact() {
 void PlayerMechanics::HandleWallSlide() {
     if (isWallSliding) {
         printf(">>> Wall slide activo\n");
-        player->pbody->body->SetGravityScale(5.0f);
+        player->pbody->body->SetGravityScale(8.0f);
         player->pbody->body->SetLinearVelocity(b2Vec2_zero);
         player->SetState("wall_slide");
     }

@@ -382,6 +382,21 @@ bool Map::Load(std::string path, std::string fileName)
                     Engine::GetInstance().physics->listToDelete.push_back(saveGameCollider);
                 }
             }
+            else if (objectGroupName == "DownCamera") // Objects from layer SaveGame
+            {
+                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
+                {
+                    int x = objectNode.attribute("x").as_int();
+                    int y = objectNode.attribute("y").as_int();
+                    int width = objectNode.attribute("width").as_int();
+                    int height = objectNode.attribute("height").as_int();
+
+                    PhysBody* downCameraCollider = Engine::GetInstance().physics->CreateRectangleSensor(x + (width / 2), y + (height / 2), width, height, STATIC);
+                    downCameraCollider->ctype = ColliderType::DOWN_CAMERA;
+
+                    Engine::GetInstance().physics->listToDelete.push_back(downCameraCollider);
+                }
+                }
             else if (objectGroupName == "abilities") //Enemies from object layer "Enemies"
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))

@@ -62,4 +62,7 @@ private:
 	Animation* currentAnimation = nullptr;
 	pugi::xml_node parameters;
 	AbilityZoneStates state = AbilityZoneStates::WAITING;
+	SDL_Texture* abilitySprite = nullptr;
+	int abilitySpriteW = 0;
+	int abilitySpriteH = 0;
 };

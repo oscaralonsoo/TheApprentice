@@ -38,7 +38,7 @@ bool Player::Start() {
 	animation.LoadAnimations(parameters, texture);
 
     // Create the body at the same position, and ensure it's centered
-    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX(), (int)position.getY(), 55, 43, bodyType::DYNAMIC);
+    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX(), (int)position.getY(), 45, 40, bodyType::DYNAMIC);
     pbody->listener = this;
     pbody->ctype = ColliderType::PLAYER;
 
@@ -46,11 +46,15 @@ bool Player::Start() {
 
 	initialized = true;
 
+	pbody->body->SetGravityScale(2.0f);
+
 	return true;
 }
 
 bool Player::Update(float dt) {
-	animation.Update(dt, state, position.getX(), position.getY(), mechanics.IsVisible());
+	int direction = mechanics.GetMovementDirection();
+	bool flip = direction < 0;
+	animation.Update(dt, state, position.getX(), position.getY(), mechanics.IsVisible(), flip);
 
 	mechanics.Update(dt);
 

@@ -53,7 +53,7 @@ private:
     bool isFalling = false;
 
     // Jump
-    float jumpForce = 10.5f;
+    float jumpForce = 14.0f;
     bool isJumping = false;
     float jumpTime = 0.0f;
     float maxJumpTime = 0.3f;
@@ -110,7 +110,6 @@ private:
     Vector2D lastPosition;
     bool shouldRespawn = false;
     PhysBody* lastPlatformCollider = nullptr;
-    Vector2D respawnPosition;
     int lasMovementDirection = 1;
 
 };

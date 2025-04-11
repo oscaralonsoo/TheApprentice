@@ -12,7 +12,7 @@ class PlayerAnimation {
 public:
     PlayerAnimation();
     void LoadAnimations(const pugi::xml_node& parameters, SDL_Texture* texture);
-    void Update(float dt, const std::string& state, int x, int y, bool visible = true);
+    void Update(float dt, const std::string& state, int x, int y, bool visible = true, bool flip = false);
     const SDL_Rect& GetCurrentFrame() const;
 
 private:

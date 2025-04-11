@@ -259,7 +259,7 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 	if (cameraZoom != targetCameraZoom)
 		cameraZoom += (targetCameraZoom - cameraZoom) * cameraZoomSmoothing;
 
-	// Ajuste real del tamaño de la cámara (viewport)
+	// Ajuste real del tamaï¿½o de la cï¿½mara (viewport)
 	int baseW = Engine::GetInstance().window->width;
 	int baseH = Engine::GetInstance().window->height;
 

@@ -41,6 +41,7 @@ public:
 
 	PlayerMechanics* GetMechanics() { return &mechanics; }
 
+
 	int GetTextureWidth() const;
 
 	int targetScene = 0;

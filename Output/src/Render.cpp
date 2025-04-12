@@ -57,10 +57,6 @@ bool Render::Awake()
 	//Initialize the TTF library
 	TTF_Init();
 	//Load a font into memory
-
-	targetCameraYOffset = 0.0f;
-	cameraYOffset = 0.0f;
-	isYOffsetLocked = false;
 	
 	return ret;
 }
@@ -263,25 +259,19 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 	if (cameraZoom != targetCameraZoom)
 		cameraZoom += (targetCameraZoom - cameraZoom) * cameraZoomSmoothing;
 
-	// Ajuste real del tama�o de la c�mara (viewport)
 	int baseW = Engine::GetInstance().window->width;
 	int baseH = Engine::GetInstance().window->height;
 
 	camera.w = static_cast<int>(baseW / cameraZoom);
 	camera.h = static_cast<int>(baseH / cameraZoom);
 
-	cameraYOffset += (targetCameraYOffset - cameraYOffset) * yOffsetSmoothing;
-	
-	int offsetX = -110 * movementDirection;
-
 	mapWidthPx = Engine::GetInstance().map->GetMapWidth();
 	mapHeightPx = Engine::GetInstance().map->GetMapHeight();
-	
+
 	targetX = static_cast<int>(targetPosition.x);
 	targetY = static_cast<int>(targetPosition.y);
 
-	// ----------- Cámara look-ahead horizontal con retardo -----------
-
+	// Cámara look-ahead horizontal
 	if (movementDirection != 0) {
 		if (movementDirection == lastMoveDir) {
 			lookAheadCounter++;
@@ -301,22 +291,18 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 		lastMoveDir = 0;
 	}
 
-	// Suavizado del desplazamiento hacia el objetivo
 	cameraLookAheadOffset = EaseInOut(cameraLookAheadOffset, cameraLookAheadTarget, lookAheadSmoothing);
-	
+
 	int targetCamX = -targetX + camera.w / 2 - static_cast<int>(cameraLookAheadOffset) + cameraImpulseX;
 	camera.x += static_cast<int>((targetCamX - camera.x) * smoothing);
 
 	cameraImpulseX = static_cast<int>(cameraImpulseX * (1.0f - cameraImpulseSmoothing));
-	// Actualiza el offset suavemente según el estado de downCameraActive
-	float desiredYOffset = downCameraActive ? downCameraOffset : 0.0f;
-	cameraYOffset += (desiredYOffset - cameraYOffset) * yOffsetSmoothing;
 
-	// Calcula la nueva posición de la cámara
-	int targetCamY = -targetY + camera.h / 2 + static_cast<int>(cameraYOffset);
+	int cameraOffsetY = 500; // valor negativo para que el personaje se vea más abajo
+	int targetCamY = -targetY + camera.h / 2 + cameraOffsetY;
 	camera.y += static_cast<int>((targetCamY - camera.y) * smoothing);
 
-	// Aplicar shake
+	// Shake
 	if (isShaking) {
 		if (shakeTimer.ReadSec() >= shakeDurationSec) {
 			isShaking = false;
@@ -336,11 +322,12 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 	camera.x += shakeOffsetX;
 	camera.y += shakeOffsetY;
 
-	if (camera.x > 0) camera.x = 0;  
-	if (camera.y > 0) camera.y = 0;  
+	if (camera.x > 0) camera.x = 0;
+	if (camera.y > 0) camera.y = 0;
 	if (camera.x < -(mapWidthPx - camera.w)) camera.x = -(mapWidthPx - camera.w);
 	if (camera.y < -(mapHeightPx - camera.h)) camera.y = -(mapHeightPx - camera.h);
 }
+
 bool Render::DrawText(const char* text, int posx, int posy, SDL_Color color, int fontSize) const {
 	TTF_Font* customFont = TTF_OpenFont("Assets/Fonts/ChangesModern.ttf", fontSize);
 	if (!customFont) {
@@ -410,21 +397,6 @@ void Render::ToggleCameraLock()
 		camera.y = -(mapHeightPx / 2 - camera.h / 2);
 	}
 }
-
-void Render::ToggleVerticalOffsetLock()
-{
-	isYOffsetLocked = !isYOffsetLocked;
-
-	if (isYOffsetLocked)
-	{
-		targetCameraYOffset = static_cast<float>(defaultYOffset);
-	}
-	else
-	{
-		targetCameraYOffset = 0.0f;
-	}
-}
-
 float Render::EaseInOut(float current, float target, float t)
 {
 	float delta = target - current;
@@ -452,21 +424,4 @@ void Render::SetCameraZoom(float zoom, bool immediate)
 float Render::GetCameraZoom() const
 {
 	return cameraZoom;
-}
-
-void Render::EnableDownCameraView()
-{
-	isYOffsetLocked = true;
-	targetCameraYOffset = 200.0f; // o el valor que tú quieras (positivo baja la cámara)
-}
-
-void Render::DisableDownCameraView()
-{
-	isYOffsetLocked = false;
-	targetCameraYOffset = 0.0f;
-}
-
-void Render::SetDownCameraActive(bool active)
-{
-	downCameraActive = active;
 }

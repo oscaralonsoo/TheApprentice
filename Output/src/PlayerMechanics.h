@@ -25,7 +25,7 @@ public:
 
     bool cantMove = false;
     bool canAttack = true;
-
+    int vidas = 3;
 
 private:
     void HandleInput();
@@ -45,7 +45,6 @@ private:
 
     // Parámetros del jugador
     float speed = 8.0f;
-    int vidas = 3;
 
     // Física
     bool isOnGround = false;

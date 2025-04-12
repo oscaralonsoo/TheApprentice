@@ -79,7 +79,6 @@ bool Player::Update(float dt) {
 		Engine::GetInstance().render->ToggleCameraLock();
 	}
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_6) == KEY_DOWN) {
-		Engine::GetInstance().render->ToggleVerticalOffsetLock();
 	}
 
 	return true;

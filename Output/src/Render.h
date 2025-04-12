@@ -5,59 +5,47 @@
 #include "SDL2/SDL.h"
 #include "Timer.h"
 #include "SDL2/SDL_ttf.h"
+
 class Render : public Module
 {
 public:
 
 	Render();
-
-	// Destructor
 	virtual ~Render();
 
-	// Called before render is available
 	bool Awake();
-
-	// Called before the first frame
 	bool Start();
 
-	// Called each loop iteration
 	bool PreUpdate();
 	bool Update(float dt);
 	bool PostUpdate();
 
-	// Called before quitting
 	bool CleanUp();
 
 	void SetViewPort(const SDL_Rect& rect);
 	void ResetViewPort();
 
-	// Drawing
 	bool DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SDL_Rect* section = NULL, float speed = 1.0f, double angle = 0, uint32_t pivotX = INT_MAX, uint32_t pivotY = INT_MAX, SDL_RendererFlip flip = SDL_FLIP_NONE) const;
 	bool DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool filled = true, bool useCamera = true) const;
 	bool DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool useCamera = true) const;
 	bool DrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool useCamera = true) const;
 
-	// Set background color
 	void SetBackgroundColor(SDL_Color color);
 
 	void UpdateCamera(const Vector2D& targetPosition, int movementDirection, float smoothing);
 	bool DrawText(const char* text, int posx, int posy, SDL_Color color, int fontSize) const;
-	// To render Text
 
 	float EaseInOut(float current, float target, float t);
 
 	void SetVSync(bool enable);
-
 	SDL_Texture* LoadTexture(const char* path);
 
 	void SetCameraZoom(float zoom, bool immediate = false);
 	float GetCameraZoom() const;
 
-	void EnableDownCameraView();
-	void DisableDownCameraView();
-
-	void SetDownCameraActive(bool active);
-
+	void DashCameraImpulse(int direction, int intensity);
+	void StartCameraShake(int durationSec, int intensity);
+	void ToggleCameraLock();
 
 public:
 
@@ -70,9 +58,6 @@ public:
 	int targetX;
 	int mapWidthPx;
 	int mapHeightPx;
-	int followMargin = 250;
-	int cameraCenterY = -camera.y + camera.h / 2;
-	int cameraVerticalViewOffset = 350;
 	int cameraLookAheadTarget = 0;
 	float cameraLookAheadOffset = 0.0f;
 	float lookAheadSmoothing = 0.1f;
@@ -80,7 +65,6 @@ public:
 	int lookAheadCounter = 0;
 	int lastMoveDir = 0;
 	int lookAheadDistance = 55;
-
 
 	//Camera Shake
 	Timer shakeTimer;
@@ -90,37 +74,17 @@ public:
 	int shakeOffsetX = 0;
 	int shakeOffsetY = 0;
 
-	//Camera Lock in the center
 	bool cameraLocked = false;
 
-	//Bajar camera al lado de bajada
-	int defaultYOffset = -200;
-	bool isYOffsetLocked = false;
-	float previousCameraYOffset = 0.0f;
-	bool downCameraActive = false;              // ¿Está el jugador en una zona DownCamera?
-	float downCameraOffset = 200.0f;            // Cuánto baja la cámara cuando está activa
-	float cameraYOffset = 0.0f;                 // Offset actual interpolado
-	float targetCameraYOffset = 0.0f;           // Offset objetivo (interpolación)
-	float yOffsetSmoothing = 0.05f;             // Suavizado
-
 	//Camera Zoom
-// Camera Zoom
 	float cameraZoom = 1.0f;
 	float targetCameraZoom = 1.0f;
 	float cameraZoomSmoothing = 0.01f;
 
-public:
-
-	void DashCameraImpulse(int direction, int intensity);
-	void StartCameraShake(int durationSec, int intensity);
-	void ToggleCameraLock();
-	void ToggleVerticalOffsetLock();
-	
 	SDL_Renderer* renderer;
 	SDL_Rect camera;
 	SDL_Rect viewport;
 	SDL_Color background;
 
-	// Text
 	TTF_Font* font;
 };

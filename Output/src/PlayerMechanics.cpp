@@ -141,7 +141,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         Engine::GetInstance().physics->DeletePhysBody(physB);
         break;
     case ColliderType::DOWN_CAMERA:
-        Engine::GetInstance().render->SetDownCameraActive(true);
+        //Engine::GetInstance().render->SetDownCameraActive(true);
         break;
         break;
     case ColliderType::SAVEGAME:
@@ -178,7 +178,7 @@ void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::WALL: break;
     case ColliderType::DOWN_CAMERA:
-        Engine::GetInstance().render->SetDownCameraActive(false);
+        //Engine::GetInstance().render->SetDownCameraActive(false);
         break;
     case ColliderType::SAVEGAME: Engine::GetInstance().scene->saveGameZone = false; break;
     default: break;

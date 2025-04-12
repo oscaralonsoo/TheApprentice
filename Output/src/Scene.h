@@ -52,6 +52,8 @@ public:
 
 	Player* GetPlayer() const { return player; }
 
+	void DrawPlayerLives();
+
 public:
 
 	Vector2D newPosition;
@@ -83,5 +85,9 @@ private:
 
 	//Renderer
 	SDL_Renderer* renderer;
+
+	SDL_Texture* lifeTexture = nullptr;
+	int lifeW = 32;
+	int lifeH = 32;
 
 };

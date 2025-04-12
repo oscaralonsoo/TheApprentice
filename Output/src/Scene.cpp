@@ -45,6 +45,8 @@ bool Scene::Start()
 	//L06 TODO 3: Call the function to load the map. 
 	Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx");
 
+	lifeTexture = Engine::GetInstance().textures->Load("Assets/Slime/vida_slime.png");
+
 	return true;
 }
 
@@ -92,6 +94,8 @@ bool Scene::PostUpdate()
 		SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, 0, 0, 0, static_cast<Uint8>(transitionAlpha * 255));
 		SDL_RenderFillRect(Engine::GetInstance().render->renderer, nullptr);
 	}
+
+	DrawPlayerLives();
 
 	Vignette(300, 0.8);
 
@@ -246,5 +250,32 @@ void Scene::Vignette(int size, float strength)
 		SDL_RenderFillRect(renderer, &bottom);
 		SDL_RenderFillRect(renderer, &left);
 		SDL_RenderFillRect(renderer, &right);
+	}
+}
+
+void Scene::DrawPlayerLives()
+{
+	if (!lifeTexture) return;
+
+	int vidas = player->GetMechanics()->vidas;
+
+	// Márgenes y separación entre vidas
+	const int marginLeft = 100;     // más separado del borde izquierdo
+	const int marginTop = 60;      // más abajo del borde superior
+	const int spacing = 20;        // espacio entre vidas
+
+	for (int i = 0; i < vidas; ++i) {
+		int x = marginLeft + i * (lifeW + spacing);
+		int y = marginTop;
+		SDL_Rect section = { 0, 0, lifeW, lifeH };
+		Engine::GetInstance().render->DrawTexture(
+			lifeTexture,
+			x, y,
+			&section,
+			0.0f,  // speed = 0.0f para que no le afecte la cámara
+			0.0,
+			INT_MAX, INT_MAX,
+			SDL_FLIP_NONE
+		);
 	}
 }

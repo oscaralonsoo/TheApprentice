@@ -28,7 +28,11 @@
 				</checkbox>
 			</menu>
 			<game>
-				
+				<lifes w="32" h="32" texture="Assets/Slime/vida_slime.png">
+					<idle loop="true" speed="0.1">
+						<frame x="0" y="0" w="32" h="32" />
+					</idle>
+				</lifes>
 			</game>
 		</UI>
 		<entities>

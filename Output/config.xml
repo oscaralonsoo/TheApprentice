@@ -95,9 +95,15 @@
 				</die>
 			</player>
 			<enemies>
-				<enemy type="Bloodrusher" w="100" h="100" texture="Assets/Enemies/bloodrusher.png">
-					<idle loop="true" speed="0.1">
-						<frame x="0" y="0" w="200" h="200" />
+				<enemy type="Bloodrusher" w="134" h="134" texture="Assets/Enemies/noctilume.png">
+					<idle loop="true" speed="0.35">
+						<frame x="0" y="0" w="134" h="134" />
+						<frame x="134" y="0" w="134" h="134" />
+						<frame x="268" y="0" w="134" h="134" />
+						<frame x="402" y="0" w="134" h="134" />
+						<frame x="536" y="0" w="134" h="134" />
+						<frame x="670" y="0" w="134" h="134" />
+						<frame x="804" y="0" w="134" h="134" />
 					</idle>
 					<attack loop="true" speed="0.1">
 						<frame x="0" y="0" w="200" h="200" />
@@ -164,9 +170,15 @@
 						<frame x="1024" y="1024" w="512" h="256" />
 					</dead>
 				</enemy>
-				<enemy type="Mireborn" tier="Alpha" w="128" h="128" texture="Assets/Enemies/mireborn.png">
+				<enemy type="Mireborn" tier="Alpha" w="134" h="134" texture="Assets/Enemies/noctilume.png">
 					<idle loop="true" speed="0.1">
-						<frame x="0" y="0" w="128" h="128" />
+						<frame x="0" y="0" w="134" h="134" />
+						<frame x="134" y="0" w="134" h="134" />
+						<frame x="268" y="0" w="134" h="134" />
+						<frame x="402" y="0" w="134" h="134" />
+						<frame x="536" y="0" w="134" h="134" />
+						<frame x="670" y="0" w="134" h="134" />
+						<frame x="804" y="0" w="134" h="134" />
 					</idle>
 					<walking loop="false" speed="0.1">
 						<frame x="0" y="0" w="128" h="128" />

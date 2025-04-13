@@ -66,66 +66,51 @@ bool AbilityZone::Start() {
 
 bool AbilityZone::Update(float dt)
 {
-	// L08 TODO 4: Add a physics to an item - update the position of the object from the physics.  
 	b2Transform pbodyPos = pbody->body->GetTransform();
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
-
 
 	Player* player = Engine::GetInstance().scene->GetPlayer();
 	PlayerMechanics* mechanics = player->GetMechanics();
 
 	if (playerInside)
 	{
-		float centerX = position.getX() + texW / 2;
-		Vector2D currentPos = player->GetPosition();
-		float playerCenterX = currentPos.getX() + player->GetTextureWidth() / 2;
-
-		float distance = abs(playerCenterX - centerX);
-		float maxDistance = texW / 2.0f;
-		float t = 1.0f - std::min(distance / maxDistance, 1.0f); // 0 lejos, 1 en el centro
-
-		// Zoom entre 1.0 y 1.3
-		float zoom = 1.0f + t * 0.3f;
-		Engine::GetInstance().render.get()->SetCameraZoom(zoom);
-
-		// Frenado progresivo
-		b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
-		float slowdownFactor = std::max(0.1f, 1.0f - t);
-		velocity.x *= slowdownFactor;
-		player->pbody->body->SetLinearVelocity(velocity);
-
 		float rightLimit = position.getX() + texW;
+		float targetStopX = rightLimit - 120.0f; // antes era -60, ahora un poco más adelante
 		float playerRight = player->GetPosition().getX() + player->GetTextureWidth();
+		float distance = abs(playerRight - targetStopX);
 
-		if (playerRight >= rightLimit + - 40.0f) {
-			b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
-			velocity.x = 0.0f;
-			player->pbody->body->SetLinearVelocity(velocity);
+		if (distance <= 2.0f) {
+			b2Vec2 stopVelocity = player->pbody->body->GetLinearVelocity();
+			stopVelocity.x = 0.0f;
+			player->pbody->body->SetLinearVelocity(stopVelocity);
 			mechanics->cantMove = true;
-			if (playerInsideJump)
-			{
-				if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
-					Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
-					mechanics->cantMove = false;
-					mechanics->EnableJump(true);
-				}
+		}
+		else {
+			float maxDistance = 250.0f; // empieza a frenar desde más lejos
+			float t = 1.0f - std::min(distance / maxDistance, 1.0f);
+			b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
+			float slowdownFactor = std::max(0.01f, 1.0f - t); // antes era 0.05f
+			velocity.x *= slowdownFactor;
+			player->pbody->body->SetLinearVelocity(velocity);
+		}
+
+		// Obtención de la habilidad
+		if (playerRight >= rightLimit - 144.0f) {
+			if (playerInsideJump && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
+				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+				mechanics->cantMove = false;
+				mechanics->EnableJump(true);
 			}
-			else if (playerInsideDoubleJump)
-			{
-				if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
-					Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
-					mechanics->cantMove = false;
-					mechanics->EnableDoubleJump(true);
-				}
+			else if (playerInsideDoubleJump && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
+				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+				mechanics->cantMove = false;
+				mechanics->EnableDoubleJump(true);
 			}
-			else if (playerInsideDash)
-			{
-				if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
-					Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
-					mechanics->cantMove = false;
-					mechanics->EnableDash(true);
-				}
+			else if (playerInsideDash && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
+				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+				mechanics->cantMove = false;
+				mechanics->EnableDash(true);
 			}
 		}
 	}
@@ -133,8 +118,8 @@ bool AbilityZone::Update(float dt)
 	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY());
 
 	if (abilitySprite) {
-		int drawX = position.getX() + texW - abilitySpriteW - 5;
-		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2;
+		int drawX = position.getX() + texW - abilitySpriteW - 100;
+		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 + 20;
 		Engine::GetInstance().render->DrawTexture(abilitySprite, drawX, drawY);
 	}
 
@@ -192,7 +177,6 @@ void AbilityZone::OnCollisionEnd(PhysBody* physA, PhysBody* physB){
 		playerInsideJump = false;
 		playerInsideDoubleJump = false;
 		playerInsideDash = false;
-		Engine::GetInstance().render.get()->SetCameraZoom(1.0f);
 		break;
 	default:
 		break;

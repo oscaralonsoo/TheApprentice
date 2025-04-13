@@ -413,13 +413,6 @@ void Render::SetVSync(bool enable)
 	config.save_file("config.xml");
 }
 
-void Render::SetCameraZoom(float zoom, bool immediate)
-{
-	targetCameraZoom = zoom;
-	if (immediate)
-		cameraZoom = zoom;
-}
-
 float Render::GetCameraZoom() const
 {
 	return cameraZoom;

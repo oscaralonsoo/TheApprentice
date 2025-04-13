@@ -39,8 +39,6 @@ public:
 
 	void SetVSync(bool enable);
 	SDL_Texture* LoadTexture(const char* path);
-
-	void SetCameraZoom(float zoom, bool immediate = false);
 	float GetCameraZoom() const;
 
 	void DashCameraImpulse(int direction, int intensity);

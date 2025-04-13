@@ -111,7 +111,6 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 	mechanics.OnCollisionEnd(physA, physB);
 	switch (physB->ctype) {
 	case ColliderType::ABILITY_ZONE:
-		Engine::GetInstance().render.get()->SetCameraZoom(1.0f);
 		printf("SALEEEEEEEE");
 		break;
 	default:

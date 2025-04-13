@@ -260,11 +260,10 @@ void Scene::ReloadCurrentSceneAtCheckpoint()
 	Engine::GetInstance().map->CleanUp();
 	Engine::GetInstance().entityManager->DestroyAllEntities();
 
-	// Reinstanciar el jugador (puedes evitarlo si ya está creado y solo reubicarlo)
 	player = (Player*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PLAYER);
 	player->SetParameters(configParameters.child("animations").child("player"));
 
-	// Recargar el mismo mapa
+	// Recargar el mapa actual
 	std::string mapKey = "Map_" + std::to_string(nextScene);
 	pugi::xml_node mapNode = configParameters.child("maps").child(mapKey.c_str());
 
@@ -275,11 +274,14 @@ void Scene::ReloadCurrentSceneAtCheckpoint()
 		if (!path.empty() && !name.empty()) {
 			Engine::GetInstance().map->Load(path, name);
 
+			// Resetear posición y vidas
 			player->pbody->body->SetLinearVelocity(b2Vec2_zero);
-			player->pbody->body->SetTransform(b2Vec2(player->mechanics->lastPosition.x / PIXELS_PER_METER,
-				player->mechanics->lastPosition.y / PIXELS_PER_METER), 0);
+			Vector2D checkpointPos = player->GetMechanics()->lastPosition;
+			player->pbody->body->SetTransform(b2Vec2(checkpointPos.x / PIXELS_PER_METER,
+				checkpointPos.y / PIXELS_PER_METER), 0);
 
-			player->mechanics->vidas = 3; // Reset de vidas
+			player->GetMechanics()->vidas = 3;
+
 			Engine::GetInstance().entityManager->Start();
 		}
 	}

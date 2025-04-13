@@ -26,6 +26,7 @@ public:
     bool cantMove = false;
     bool canAttack = true;
     int vidas = 3;
+    Vector2D lastPosition;
 
 private:
     void HandleInput();
@@ -108,8 +109,7 @@ private:
     Timer blinkTimer;
     float blinkInterval = 150.0f;
 
-    //Respawn spikes
-    Vector2D lastPosition;
+    //Respawn 
     bool shouldRespawn = false;
     PhysBody* lastPlatformCollider = nullptr;
     int lasMovementDirection = 1;

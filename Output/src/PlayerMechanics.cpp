@@ -15,7 +15,7 @@ void PlayerMechanics::Init(Player* player) {
 void PlayerMechanics::Update(float dt) {
 
     if (vidas <= 0) {
-        Engine::GetInstance().scene->ReloadCurrentSceneAtCheckpoint();
+        Engine::GetInstance().scene->LoadGameXML(); // Carga desde archivo
         return;
     }
 
@@ -28,7 +28,7 @@ void PlayerMechanics::Update(float dt) {
 
     if (shouldRespawn) {
         shouldRespawn = false;
-        player->SetPosition(lastPosition);
+        player->SetPosition(lastPosition);  
         player->pbody->body->SetLinearVelocity(b2Vec2_zero);
 
         player->SetState("idle");

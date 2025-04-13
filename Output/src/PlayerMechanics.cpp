@@ -26,6 +26,10 @@ void PlayerMechanics::Update(float dt) {
         wallSlideCooldownActive = false;
     }
 
+    if (wallCooldownActive && wallCooldownTimer.ReadSec() >= wallCooldownTime) {
+        wallCooldownActive = false;
+    }
+
     if (shouldRespawn) {
         shouldRespawn = false;
         player->SetPosition(lastPosition);  
@@ -58,7 +62,6 @@ void PlayerMechanics::Update(float dt) {
     }
 
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && Engine::GetInstance().scene->saveGameZone) {
-        // TODO JAVI ---- Si guardas mientras te mueves en el eje x, te guardas moviendote y tendrias que estar quieto
         player->pbody->body->SetLinearVelocity(b2Vec2_zero);
         Engine::GetInstance().scene->SaveGameXML();
         return;
@@ -140,8 +143,10 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         break;
     case ColliderType::WALL:
-        if (isDashing) CancelDash();
-        isJumping = false;
+        if (!wallCooldownActive) {
+            isTouchingWall = true;
+            isJumping = false;
+        }
         break;
     case ColliderType::ITEM:
         Engine::GetInstance().physics->DeletePhysBody(physB);
@@ -187,7 +192,11 @@ void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         wallSlideCooldownActive = true;
         player->pbody->body->SetGravityScale(2.0f);
         break;
-    case ColliderType::WALL: break;
+    case ColliderType::WALL: 
+        isTouchingWall = false;
+        wallCooldownTimer.Start();
+        wallCooldownActive = true;
+        break;
     case ColliderType::DOWN_CAMERA:
         if (inDownCameraZone && downCameraCooldown.ReadSec() >= downCameraCooldownTime) {
             inDownCameraZone = false;
@@ -285,7 +294,7 @@ void PlayerMechanics::HandleDash() {
         // Dirección fija del dash
         dashDirection = movementDirection;
 
-        if (isWallSliding) {
+        if (isWallSliding||isTouchingWall) {
             dashDirection *= -1;
         }
 

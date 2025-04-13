@@ -93,6 +93,12 @@ private:
     float wallSlideCooldownTime = 0.15f;
     bool wallSlideCooldownActive = false;
 
+    //Wall
+    Timer wallCooldownTimer;
+    float wallCooldownTime = 0.15f;
+    bool wallCooldownActive = false;
+    bool isTouchingWall = false;
+
     // Attack
     PhysBody* attackSensor = nullptr;
     Timer attackTimer;

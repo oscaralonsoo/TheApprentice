@@ -101,7 +101,7 @@ void PlayerMechanics::Update(float dt) {
     }
 
     if (attackSensor != nullptr) {
-        int offsetX = (movementDirection > 0) ? 60 : -15;
+        int offsetX = (movementDirection > 0) ? 40 : -40;
         int playerX = METERS_TO_PIXELS(player->pbody->body->GetPosition().x) + offsetX;
         int playerY = METERS_TO_PIXELS(player->pbody->body->GetPosition().y);
 
@@ -151,7 +151,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
             inDownCameraZone = true;
             downCameraCooldown.Start(); // reiniciamos el cooldown
             originalCameraOffsetY = Engine::GetInstance().render->cameraOffsetY;
-            Engine::GetInstance().render->cameraOffsetY = 250;
+            Engine::GetInstance().render->cameraOffsetY = 400;
         }
         break;
     case ColliderType::SAVEGAME:
@@ -351,7 +351,7 @@ void PlayerMechanics::HandleWallSlide() {
 }
 
 void PlayerMechanics::CreateAttackSensor() {
-    int offsetX = (movementDirection > 0) ? 60 : -15;
+    int offsetX = (movementDirection > 0) ? 40 : -40;
 
     playerAttackX = METERS_TO_PIXELS(player->pbody->body->GetPosition().x) + offsetX;
     playerAttackY = METERS_TO_PIXELS(player->pbody->body->GetPosition().y);

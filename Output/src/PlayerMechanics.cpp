@@ -147,6 +147,11 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
             isTouchingWall = true;
             isJumping = false;
         }
+        // Cancelar dash al chocar con una pared
+        if (isDashing) {
+            CancelDash();
+        }
+        break;
         break;
     case ColliderType::ITEM:
         Engine::GetInstance().physics->DeletePhysBody(physB);

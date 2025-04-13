@@ -52,8 +52,8 @@ private:
     int movementDirection = 1;
     bool isFalling = false;
 
-    // Jump
-    float jumpForce = 14.0f;
+    // Jump 
+    float jumpForce = 15.0f;
     bool isJumping = false;
     float jumpTime = 0.0f;
     float maxJumpTime = 0.3f;
@@ -92,7 +92,7 @@ private:
     Timer wallSlideCooldownTimer;
     float wallSlideCooldownTime = 0.15f;
     bool wallSlideCooldownActive = false;
-
+    
     //Wall
     Timer wallCooldownTimer;
     float wallCooldownTime = 0.15f;

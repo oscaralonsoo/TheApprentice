@@ -137,7 +137,6 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::WALL_SLIDE:
         if (!wallSlideCooldownActive) {
-            printf(">> COLISIËN WALL SLIDE\n");
             isWallSliding = true;
             isJumping = false;
         }
@@ -147,11 +146,6 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
             isTouchingWall = true;
             isJumping = false;
         }
-        // Cancelar dash al chocar con una pared
-        if (isDashing) {
-            CancelDash();
-        }
-        break;
         break;
     case ColliderType::ITEM:
         Engine::GetInstance().physics->DeletePhysBody(physB);
@@ -159,7 +153,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::DOWN_CAMERA:
         if (!inDownCameraZone && downCameraCooldown.ReadSec() >= downCameraCooldownTime) {
             inDownCameraZone = true;
-            downCameraCooldown.Start(); // reiniciamos el cooldown
+            downCameraCooldown.Start();
             originalCameraOffsetY = Engine::GetInstance().render->cameraOffsetY;
             Engine::GetInstance().render->cameraOffsetY = 400;
         }
@@ -205,7 +199,7 @@ void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     case ColliderType::DOWN_CAMERA:
         if (inDownCameraZone && downCameraCooldown.ReadSec() >= downCameraCooldownTime) {
             inDownCameraZone = false;
-            downCameraCooldown.Start(); // reiniciamos para evitar reentrada inmediata
+            downCameraCooldown.Start();
             Engine::GetInstance().render->cameraOffsetY = originalCameraOffsetY;
         }
         break;

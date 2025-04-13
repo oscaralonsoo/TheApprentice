@@ -73,6 +73,7 @@ private:
     Timer dashCooldown;
     float dashMaxCoolDown = 1.0f;
     bool dashUnlocked = true;
+    int dashDirection = 1;
 
     // Fall
     bool isStunned = false;

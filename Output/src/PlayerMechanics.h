@@ -61,6 +61,8 @@ private:
     // DoubleJump
     bool doubleJumpUnlocked = true;
     bool hasDoubleJumped = false;
+    int jumpCount = 0;
+    int maxJumpCount = 1;
 
     // Dash
     bool isDashing = false;
@@ -111,4 +113,9 @@ private:
     PhysBody* lastPlatformCollider = nullptr;
     int lasMovementDirection = 1;
 
+    //Down Camera
+    int originalCameraOffsetY;
+    bool inDownCameraZone = false;
+    Timer downCameraCooldown;
+    float downCameraCooldownTime = 0.2f;
 };

@@ -87,4 +87,6 @@ public:
 	SDL_Color background;
 
 	TTF_Font* font;
+
+	int cameraOffsetY = 500;
 };

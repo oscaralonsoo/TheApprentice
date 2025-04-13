@@ -298,7 +298,6 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 
 	cameraImpulseX = static_cast<int>(cameraImpulseX * (1.0f - cameraImpulseSmoothing));
 
-	int cameraOffsetY = 500; // valor negativo para que el personaje se vea más abajo
 	int targetCamY = -targetY + camera.h / 2 + cameraOffsetY;
 	camera.y += static_cast<int>((targetCamY - camera.y) * smoothing);
 

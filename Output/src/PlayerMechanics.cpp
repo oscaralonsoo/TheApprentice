@@ -115,6 +115,8 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLATFORM:
         CheckFallImpact();
         isJumping = false;
+        jumpCount = 0;
+        isOnGround = true;
         hasDoubleJumped = false;
         if (jumpUnlocked) EnableJump(true);
         isOnGround = true;
@@ -141,8 +143,12 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         Engine::GetInstance().physics->DeletePhysBody(physB);
         break;
     case ColliderType::DOWN_CAMERA:
-        //Engine::GetInstance().render->SetDownCameraActive(true);
-        break;
+        if (!inDownCameraZone && downCameraCooldown.ReadSec() >= downCameraCooldownTime) {
+            inDownCameraZone = true;
+            downCameraCooldown.Start(); // reiniciamos el cooldown
+            originalCameraOffsetY = Engine::GetInstance().render->cameraOffsetY;
+            Engine::GetInstance().render->cameraOffsetY = 250;
+        }
         break;
     case ColliderType::SAVEGAME:
         Engine::GetInstance().scene->saveGameZone = true;
@@ -150,7 +156,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::ENEMY:
         if (!isInvulnerable)
         {
-
+            vidas -= 1;
         }
         break;
     case ColliderType::SPIKE:
@@ -170,7 +176,6 @@ void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         lastPlatformCollider = physB;
         break;
     case ColliderType::WALL_SLIDE:
-        printf(">>> SALIDA WALL SLIDE\n");
         isWallSliding = false;
         wallSlideCooldownTimer.Start();
         wallSlideCooldownActive = true;
@@ -178,7 +183,11 @@ void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::WALL: break;
     case ColliderType::DOWN_CAMERA:
-        //Engine::GetInstance().render->SetDownCameraActive(false);
+        if (inDownCameraZone && downCameraCooldown.ReadSec() >= downCameraCooldownTime) {
+            inDownCameraZone = false;
+            downCameraCooldown.Start(); // reiniciamos para evitar reentrada inmediata
+            Engine::GetInstance().render->cameraOffsetY = originalCameraOffsetY;
+        }
         break;
     case ColliderType::SAVEGAME: Engine::GetInstance().scene->saveGameZone = false; break;
     default: break;
@@ -223,14 +232,11 @@ void PlayerMechanics::HandleJump() {
 
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
 
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !isJumping && !isWallSliding) {
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && jumpCount < maxJumpCount) {
         velocity.y = -jumpForce;
+        jumpCount++;
         isJumping = true;
         player->SetState("jump");
-    }
-    else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isJumping && !hasDoubleJumped && doubleJumpUnlocked && !isWallSliding) {
-        velocity.y = -jumpForce;
-        hasDoubleJumped = true;
     }
 
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && isJumping && !isWallSliding) {

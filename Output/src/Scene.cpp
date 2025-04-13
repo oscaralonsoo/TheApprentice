@@ -14,6 +14,7 @@
 #include "Physics.h"
 #include "Enemy.h"
 #include "Menus.h"
+#include "PlayerMechanics.h"
 
 
 Scene::Scene() : Module()
@@ -246,5 +247,40 @@ void Scene::Vignette(int size, float strength)
 		SDL_RenderFillRect(renderer, &bottom);
 		SDL_RenderFillRect(renderer, &left);
 		SDL_RenderFillRect(renderer, &right);
+	}
+}
+
+void Scene::ReloadCurrentSceneAtCheckpoint()
+{
+	transitioning = false;
+	fadingIn = false;
+	transitionAlpha = 0.0f;
+	isLoad = false;
+
+	Engine::GetInstance().map->CleanUp();
+	Engine::GetInstance().entityManager->DestroyAllEntities();
+
+	// Reinstanciar el jugador (puedes evitarlo si ya está creado y solo reubicarlo)
+	player = (Player*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PLAYER);
+	player->SetParameters(configParameters.child("animations").child("player"));
+
+	// Recargar el mismo mapa
+	std::string mapKey = "Map_" + std::to_string(nextScene);
+	pugi::xml_node mapNode = configParameters.child("maps").child(mapKey.c_str());
+
+	if (mapNode) {
+		std::string path = mapNode.attribute("path").as_string();
+		std::string name = mapNode.attribute("name").as_string();
+
+		if (!path.empty() && !name.empty()) {
+			Engine::GetInstance().map->Load(path, name);
+
+			player->pbody->body->SetLinearVelocity(b2Vec2_zero);
+			player->pbody->body->SetTransform(b2Vec2(player->mechanics->lastPosition.x / PIXELS_PER_METER,
+				player->mechanics->lastPosition.y / PIXELS_PER_METER), 0);
+
+			player->mechanics->vidas = 3; // Reset de vidas
+			Engine::GetInstance().entityManager->Start();
+		}
 	}
 }

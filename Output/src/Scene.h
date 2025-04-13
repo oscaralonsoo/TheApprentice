@@ -52,6 +52,8 @@ public:
 
 	Player* GetPlayer() const { return player; }
 
+	void ReloadCurrentSceneAtCheckpoint();
+
 public:
 
 	Vector2D newPosition;

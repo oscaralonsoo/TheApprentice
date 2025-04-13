@@ -13,6 +13,12 @@ void PlayerMechanics::Init(Player* player) {
 }
 
 void PlayerMechanics::Update(float dt) {
+
+    if (vidas <= 0) {
+        Engine::GetInstance().scene->ReloadCurrentSceneAtCheckpoint();
+        return;
+    }
+
     if( Engine::GetInstance().scene->saving == true)
         return;
 
@@ -36,7 +42,6 @@ void PlayerMechanics::Update(float dt) {
         return;
     }
 
-
     // Invulnerabilidad temporal
     if (isInvulnerable) {
         if (invulnerabilityTimer.ReadSec() >= invulnerabilityDuration) {
@@ -51,7 +56,6 @@ void PlayerMechanics::Update(float dt) {
             }
         }
     }
-
 
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && Engine::GetInstance().scene->saveGameZone) {
         // TODO JAVI ---- Si guardas mientras te mueves en el eje x, te guardas moviendote y tendrias que estar quieto
@@ -157,6 +161,8 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (!isInvulnerable)
         {
             vidas -= 1;
+            StartInvulnerability();
+            Engine::GetInstance().render->StartCameraShake(0.5, 1);
         }
         break;
     case ColliderType::SPIKE:
@@ -260,7 +266,8 @@ void PlayerMechanics::HandleJump() {
 }
 
 void PlayerMechanics::HandleDash() {
-    if (!dashUnlocked || isWallSliding) return;
+
+    if (!dashUnlocked) return;
 
     if (!canDash && dashCooldown.ReadSec() >= dashMaxCoolDown) {
         canDash = true;
@@ -274,13 +281,21 @@ void PlayerMechanics::HandleDash() {
         dashStartPosition = player->GetPosition();
 
         player->pbody->body->SetGravityScale(0.0f);
-        Engine::GetInstance().render->DashCameraImpulse(movementDirection, 100);
+
+        // Dirección fija del dash
+        dashDirection = movementDirection;
+
+        if (isWallSliding) {
+            dashDirection *= -1;
+        }
+
+        Engine::GetInstance().render->DashCameraImpulse(dashDirection, 100);
 
         if (attackSensor != nullptr) DestroyAttackSensor();
     }
 
     if (isDashing) {
-        b2Vec2 vel(dashSpeed * movementDirection, 0.0f);
+        b2Vec2 vel(dashSpeed * dashDirection, 0.0f);
         player->pbody->body->SetLinearVelocity(vel);
 
         float distance = abs(player->GetPosition().getX() - dashStartPosition.getX());

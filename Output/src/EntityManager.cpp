@@ -12,6 +12,7 @@
 #include "Thumpod.h"
 #include "Brood.h"
 #include "Broodheart.h"
+#include "DestructibleWall.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -102,6 +103,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::ABILITY_ZONE:
 		entity = new AbilityZone();
+		break;
+	case EntityType::DESTRUCTIBLE_WALL:
+		entity = new DestructibleWall();
 		break;
 	default:
 		break;

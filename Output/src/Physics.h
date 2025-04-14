@@ -37,6 +37,7 @@ enum class ColliderType {
 	SAVEGAME,
 	DOOR,
 	ABILITY_ZONE,
+	DESTRUCTIBLE_WALL,
 	UNKNOWN
 };
 

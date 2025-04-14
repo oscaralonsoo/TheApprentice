@@ -90,12 +90,12 @@ private:
     bool isWallSliding = false;
     bool wallJumpUnlocked = true;
     Timer wallSlideCooldownTimer;
-    float wallSlideCooldownTime = 0.15f;
+    float wallSlideCooldownTime = 100.0f;
     bool wallSlideCooldownActive = false;
     
     //Wall
     Timer wallCooldownTimer;
-    float wallCooldownTime = 0.15f;
+    float wallCooldownTime = 100.0f;
     bool wallCooldownActive = false;
     bool isTouchingWall = false;
 

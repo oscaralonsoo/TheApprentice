@@ -87,6 +87,10 @@
     <ClCompile Include="src\Hypnoviper.cpp">
       <Filter>Source Files\Entities\Enemies\Hypnoviper</Filter>
     </ClCompile>
+    <ClCompile Include="src\Thumpod.cpp" />
+    <ClCompile Include="src\DestructibleWall.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Bloodrusher.h">
@@ -185,6 +189,10 @@
     </ClInclude>
     <ClInclude Include="src\Hypnoviper.h">
       <Filter>Source Files\Entities\Enemies\Hypnoviper</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Thumpod.h" />
+    <ClInclude Include="src\DestructibleWall.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

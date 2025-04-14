@@ -15,18 +15,18 @@ void PlayerMechanics::Init(Player* player) {
 void PlayerMechanics::Update(float dt) {
 
     if (vidas <= 0) {
-        Engine::GetInstance().scene->LoadGameXML(); // Carga desde archivo
-        return;
+        //Engine::GetInstance().scene->LoadGameXML();
+        //return;
     }
 
     if( Engine::GetInstance().scene->saving == true)
         return;
 
-    if (wallSlideCooldownActive && wallSlideCooldownTimer.ReadSec() >= wallSlideCooldownTime) {
+    if (wallSlideCooldownActive && wallSlideCooldownTimer.ReadMSec() >= wallSlideCooldownTime) {
         wallSlideCooldownActive = false;
     }
 
-    if (wallCooldownActive && wallCooldownTimer.ReadSec() >= wallCooldownTime) {
+    if (wallCooldownActive && wallCooldownTimer.ReadMSec() >= wallCooldownTime) {
         wallCooldownActive = false;
     }
 
@@ -71,7 +71,7 @@ void PlayerMechanics::Update(float dt) {
         player->pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
         if (stunTimer.ReadSec() >= stunDuration) {
             isStunned = false;
-            player->SetState("landing_stun");
+            player->SetState("idle");
 
             fallStartY = player->GetPosition().getY();
             fallEndY = fallStartY;
@@ -86,7 +86,7 @@ void PlayerMechanics::Update(float dt) {
     HandleDash();
     HandleFall();
 
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN && attackSensor == nullptr && canAttack) {
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN && attackSensor == nullptr && canAttack && !isDashing) {
         CreateAttackSensor();
     }
 
@@ -130,10 +130,8 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (isFalling) {
             isFalling = false;
             CheckFallImpact();
-            // Frena completamente al tocar el suelo tras una caída
             player->pbody->body->SetLinearVelocity(b2Vec2_zero);
         }
-
         break;
     case ColliderType::WALL_SLIDE:
         if (!wallSlideCooldownActive) {
@@ -142,9 +140,13 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         break;
     case ColliderType::WALL:
+    case ColliderType::DESTRUCTIBLE_WALL:
         if (!wallCooldownActive) {
             isTouchingWall = true;
             isJumping = false;
+            if (isDashing) {
+                CancelDash(); 
+            }
         }
         break;
     case ColliderType::ITEM:
@@ -170,6 +172,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         break;
     case ColliderType::SPIKE:
+        player->SetState("dead");
         UpdateLastSafePosition();
         shouldRespawn = true;
         break;
@@ -191,7 +194,8 @@ void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         wallSlideCooldownActive = true;
         player->pbody->body->SetGravityScale(2.0f);
         break;
-    case ColliderType::WALL: 
+    case ColliderType::WALL:
+    case ColliderType::DESTRUCTIBLE_WALL:
         isTouchingWall = false;
         wallCooldownTimer.Start();
         wallCooldownActive = true;
@@ -277,6 +281,8 @@ void PlayerMechanics::HandleDash() {
 
     if (!dashUnlocked) return;
 
+    if (isTouchingWall) return;
+
     if (!canDash && dashCooldown.ReadSec() >= dashMaxCoolDown) {
         canDash = true;
     }
@@ -293,7 +299,7 @@ void PlayerMechanics::HandleDash() {
         // Dirección fija del dash
         dashDirection = movementDirection;
 
-        if (isWallSliding||isTouchingWall) {
+        if (isWallSliding) {
             dashDirection *= -1;
         }
 
@@ -377,6 +383,7 @@ void PlayerMechanics::DestroyAttackSensor() {
         Engine::GetInstance().physics->DeletePhysBody(attackSensor);
         attackSensor = nullptr;
         isAttacking = false;
+        player->SetState("idle");
     }
 }
 

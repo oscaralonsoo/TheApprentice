@@ -53,11 +53,12 @@ private:
     bool isFalling = false;
 
     // Jump 
-    float jumpForce = 15.0f;
+    float jumpForce = 10.0f;
     bool isJumping = false;
-    float jumpTime = 0.0f;
     float maxJumpTime = 0.3f;
+    Timer jumpTimer;
     bool jumpUnlocked = true;
+    bool isDoingProgressiveJump = false;
 
     // DoubleJump
     bool doubleJumpUnlocked = true;

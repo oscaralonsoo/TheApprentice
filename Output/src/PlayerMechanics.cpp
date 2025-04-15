@@ -254,13 +254,15 @@ void PlayerMechanics::HandleJump() {
         velocity.y = -jumpForce;
         jumpCount++;
         isJumping = true;
+        jumpTimer.Start(); 
         player->SetState("jump");
     }
 
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && isJumping && !isWallSliding) {
-        if (jumpTime < maxJumpTime) {
-            velocity.y -= 0.3f;
-            jumpTime += 0.016f;
+        float timeLimit = (jumpCount == 1) ? maxJumpTime + 0.1f : maxJumpTime;
+        if (jumpTimer.ReadSec() < timeLimit) {
+            float extraImpulse = (jumpCount == 1) ? 0.5f : 0.3f;
+            velocity.y -= extraImpulse;
         }
     }
 
@@ -276,6 +278,7 @@ void PlayerMechanics::HandleJump() {
 
     player->pbody->body->SetLinearVelocity(velocity);
 }
+
 
 void PlayerMechanics::HandleDash() {
 

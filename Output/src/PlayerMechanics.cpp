@@ -98,9 +98,6 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (isDashing) CancelDash();
         isJumping = false;
         break;
-    case ColliderType::ITEM:
-        Engine::GetInstance().physics->DeletePhysBody(physB);
-        break;
     case ColliderType::DOWN_CAMERA:
         if (!wasInDownCameraZone) {
             Engine::GetInstance().render->ToggleVerticalOffsetLock();

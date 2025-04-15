@@ -11,6 +11,7 @@
 #include "Engine.h"
 #include "EntityManager.h"
 #include "AbilityZone.h"
+#include "HiddenZone.h"
 
 Map::Map() : Module(), mapLoaded(false)
 {
@@ -379,6 +380,27 @@ bool Map::Load(std::string path, std::string fileName)
                         caveDrop->position = Vector2D(x, y); 
 
                         LOG("Created CaveDrop at x: %d, y: %d", x, y);
+                    }
+                }
+            }
+            else if (objectGroupName == "Zones") // Load Zones
+            {
+                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
+                {
+                    std::string objectName = objectNode.attribute("name").as_string();
+                    if (objectName == "HiddenZone")
+                    {
+                        int x = objectNode.attribute("x").as_int();
+                        int y = objectNode.attribute("y").as_int();
+                        int w = objectNode.attribute("width").as_int();
+                        int h = objectNode.attribute("height").as_int();
+
+                        HiddenZone* hiddenZone = (HiddenZone*)Engine::GetInstance().entityManager->CreateEntity(EntityType::HIDDEN_ZONE);
+                        hiddenZone->position = Vector2D(x, y);
+                        hiddenZone->SetWidth(w);
+                        hiddenZone->SetHeight(h);
+                        
+                        LOG("Created Hidden Zone at x: %d, y: %d", x, y);
                     }
                 }
             }

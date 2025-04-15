@@ -20,20 +20,25 @@ public:
 
 	bool CleanUp();
 
-	void SetParameters(pugi::xml_node parameters) {
-		this->parameters = parameters;
-
-		position.x = parameters.attribute("x").as_int();
-		position.y = parameters.attribute("y").as_int();
-	}
-
 	virtual void OnCollision(PhysBody* physA, PhysBody* physB);
 
 	virtual void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
+
+	int GetWidth() {return width;}
+
+	int GetHeight() {return height;}
+
+	void SetWidth(int width);
+
+	void SetHeight(int height);
 
 private:
 	PhysBody* pbody;
 	int width;
 	int height;
-	pugi::xml_node parameters;
+
+	int alpha = 255;
+	bool fadingIn = false;
+	bool fadingOut = false;
+	float fadeSpeed = 1.0f;
 };

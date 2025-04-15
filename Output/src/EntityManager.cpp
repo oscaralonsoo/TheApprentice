@@ -9,6 +9,7 @@
 #include "Hypnoviper.h"
 #include "Mireborn.h"
 #include "AbilityZone.h"
+#include "HiddenZone.h"
 #include "Thumpod.h"
 #include "Brood.h"
 #include "Broodheart.h"
@@ -102,6 +103,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::ABILITY_ZONE:
 		entity = new AbilityZone();
+		break;
+	case EntityType::HIDDEN_ZONE:
+		entity = new HiddenZone();
 		break;
 	default:
 		break;

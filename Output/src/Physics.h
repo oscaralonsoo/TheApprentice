@@ -25,7 +25,6 @@ enum bodyType {
 
 enum class ColliderType {
 	PLAYER, 
-	ITEM,
 	WALL_SLIDE,
 	WALL,
 	DOWN_CAMERA,
@@ -36,6 +35,7 @@ enum class ColliderType {
 	SAVEGAME,
 	DOOR,
 	ABILITY_ZONE,
+	HIDDEN_ZONE,
 	UNKNOWN
 };
 

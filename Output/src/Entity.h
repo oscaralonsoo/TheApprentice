@@ -14,6 +14,7 @@ enum class EntityType
 	BROOD,
 	CAVE_DROP,
 	ABILITY_ZONE,
+	HIDDEN_ZONE,
 	UNKNOWN
 };
 

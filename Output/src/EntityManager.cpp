@@ -115,13 +115,16 @@ Entity* EntityManager::CreateEntity(EntityType type)
 // Function to destroy a specific Entity
 void EntityManager::DestroyEntity(Entity* entity)
 {
-	for (auto it = entities.begin(); it != entities.end(); ++it)
+	for (auto it = entities.begin(); it != entities.end();)
 	{
 		if (*it == entity) {
 			(*it)->CleanUp();
-			delete* it; // Free the allocated memory
-			entities.erase(it); // Remove the entity from the list
-			break; // Exit the loop after removing the entity
+			delete* it;
+			it = entities.erase(it); // devuelve el siguiente iterador
+			break;
+		}
+		else {
+			++it;
 		}
 	}
 }
@@ -155,21 +158,40 @@ bool EntityManager::Update(float dt)
 		return true;
 
 	bool ret = true;
-	for(const auto entity : entities)
+
+	std::vector<Entity*> activeEntities;
+	for (auto entity : entities)
 	{
-		if (entity->active == false) continue;
+		if (entity->active)
+			activeEntities.push_back(entity);
+	}
+
+
+	for (auto entity : activeEntities)
+	{
 		ret = entity->Update(dt);
 	}
+
 	return ret;
 }
 
 bool EntityManager::PostUpdate()
 {
 	bool ret = true;
-	for (const auto entity : entities)
+
+	// Copia segura de las entidades activas
+	std::vector<Entity*> activeEntities;
+	for (auto entity : entities)
 	{
-		if (entity->active == false) continue;
+		if (entity->active)
+			activeEntities.push_back(entity);
+	}
+
+	// Ahora iteramos sobre la copia, aunque la original se modifique
+	for (auto entity : activeEntities)
+	{
 		ret = entity->PostUpdate();
 	}
+
 	return ret;
 }

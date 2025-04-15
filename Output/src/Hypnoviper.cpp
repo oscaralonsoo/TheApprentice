@@ -17,6 +17,18 @@ bool Hypnoviper::Awake() {
 }
 
 bool Hypnoviper::Start() {
+    //Add a physics to an item - initialize the physics body
+    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX(), (int)position.getY(), texW / 1.3, texH / 1.2, bodyType::DYNAMIC, 130, 20);
+
+    //Assign collider type
+    pbody->ctype = ColliderType::ENEMY;
+
+    pbody->listener = this;
+
+    // Initialize pathfinding
+    pathfinding = new Pathfinding();
+    ResetPath();
+
     pugi::xml_document loadFile;
     pugi::xml_parse_result result = loadFile.load_file("config.xml");
 
@@ -33,7 +45,7 @@ bool Hypnoviper::Start() {
 
     currentAnimation = &sleepAnim;
 
-    return Enemy::Start();
+    return true;
 }
 
 bool Hypnoviper::Update(float dt) {
@@ -48,7 +60,7 @@ bool Hypnoviper::Update(float dt) {
         if (currentAnimation != &hitAnim) currentAnimation = &hitAnim;
         if (hitTimer.ReadMSec() == 0) hitTimer.Start();
 
-        if (hitTimer.ReadMSec() > 2000)
+        if (hitTimer.ReadMSec() > 2500)
         {
             currentState = HypnoviperState::DEAD;
         }
@@ -56,18 +68,24 @@ bool Hypnoviper::Update(float dt) {
         break;
     case HypnoviperState::DEAD:
         if (currentAnimation != &deadAnim) currentAnimation = &deadAnim;
-
-        if (currentAnimation->HasFinished())
-            Engine::GetInstance().entityManager.get()->DestroyEntity(this);
-
+        
+        pbody->body->GetFixtureList()->SetSensor(true);
+        pbody->body->SetGravityScale(0);
         break;
     }
+
+    pbody->body->SetLinearVelocity(b2Vec2_zero);
+    pbody->body->SetAngularVelocity(0);
 
     return Enemy::Update(dt);
 }
 
 bool Hypnoviper::PostUpdate() {
     
+    if (currentState == HypnoviperState::DEAD && currentAnimation->HasFinished()) {
+        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+    }
+
     return true;
 }
 

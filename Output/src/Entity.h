@@ -15,6 +15,7 @@ enum class EntityType
 	CAVE_DROP,
 	ABILITY_ZONE,
 	DESTRUCTIBLE_WALL,
+	PUSHABLE_BOX,
 	UNKNOWN
 };
 

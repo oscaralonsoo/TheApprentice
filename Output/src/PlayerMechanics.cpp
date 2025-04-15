@@ -349,7 +349,7 @@ void PlayerMechanics::CheckFallImpact() {
 
     if (fallDistance >= fallDistanceThreshold) {
         isStunned = true;
-        player->SetState("landing_stun"); // Activamos la animación de aterrizaje forzoso
+        player->SetState("landing_stun");
         stunTimer.Start();
         Engine::GetInstance().render->StartCameraShake(1, 1);
     }

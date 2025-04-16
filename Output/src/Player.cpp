@@ -11,6 +11,7 @@
 #include "box2D/box2d.h"
 #include "Map.h"
 #include "Menus.h"
+#include "AbilityZone.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -37,7 +38,7 @@ bool Player::Start() {
 	animation.LoadAnimations(parameters, texture);
 
     // Create the body at the same position, and ensure it's centered
-    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX(), (int)position.getY(), 55, 43, bodyType::DYNAMIC);
+    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX(), (int)position.getY(), 45, 40, bodyType::DYNAMIC);
     pbody->listener = this;
     pbody->ctype = ColliderType::PLAYER;
 
@@ -45,11 +46,15 @@ bool Player::Start() {
 
 	initialized = true;
 
+	pbody->body->SetGravityScale(2.0f);
+
 	return true;
 }
 
 bool Player::Update(float dt) {
-	animation.Update(dt, state, position.getX(), position.getY());
+	int direction = mechanics.GetMovementDirection();
+	bool flip = direction < 0;
+	animation.Update(dt, state, position.getX(), position.getY(), mechanics.IsVisible(), flip);
 
 	mechanics.Update(dt);
 
@@ -74,7 +79,6 @@ bool Player::Update(float dt) {
 		Engine::GetInstance().render->ToggleCameraLock();
 	}
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_6) == KEY_DOWN) {
-		Engine::GetInstance().render->ToggleVerticalOffsetLock();
 	}
 
 	return true;
@@ -105,14 +109,35 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 	mechanics.OnCollisionEnd(physA, physB);
+	switch (physB->ctype) {
+	case ColliderType::ABILITY_ZONE:
+		printf("SALEEEEEEEE");
+		break;
+	default:
+		mechanics.OnCollision(physA, physB);
+		break;
+	}
 }
 
 void Player::SetPosition(Vector2D pos) {
+	if (!pbody) {
+		printf("ERROR: pbody es nullptr\n");
+		return;
+	}
+
+	if (!pbody->body) {
+		printf("ERROR: pbody->body es nullptr\n");
+		return;
+	}
+
+	printf("SetPosition a: X = %.2f, Y = %.2f\n", pos.getX(), pos.getY());
+
 	pos.setX(pos.getX() + texW / 2);
 	pos.setY(pos.getY() + texH / 2);
 	b2Vec2 bodyPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
 	pbody->body->SetTransform(bodyPos, 0);
 }
+
 
 Vector2D Player::GetPosition() const {
 	return Vector2D(position.getX() + texW / 2, position.getY() + texH / 2);
@@ -120,4 +145,8 @@ Vector2D Player::GetPosition() const {
 
 int Player::GetMovementDirection() const {
 	return mechanics.GetMovementDirection();
+}
+
+int Player::GetTextureWidth() const {
+	return texW;  // Asegúrate de tener texW bien definido (el ancho del sprite)
 }

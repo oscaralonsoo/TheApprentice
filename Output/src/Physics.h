@@ -25,6 +25,7 @@ enum bodyType {
 
 enum class ColliderType {
 	PLAYER, 
+	SPIKE,
 	WALL_SLIDE,
 	WALL,
 	DOWN_CAMERA,
@@ -36,6 +37,7 @@ enum class ColliderType {
 	DOOR,
 	ABILITY_ZONE,
 	HIDDEN_ZONE,
+	DESTRUCTIBLE_WALL,
 	UNKNOWN
 };
 

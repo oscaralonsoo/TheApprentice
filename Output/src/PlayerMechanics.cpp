@@ -13,11 +13,55 @@ void PlayerMechanics::Init(Player* player) {
 }
 
 void PlayerMechanics::Update(float dt) {
+
+    if (vidas <= 0) {
+        //Engine::GetInstance().scene->LoadGameXML();
+        //return;
+    }
+
     if( Engine::GetInstance().scene->saving == true)
         return;
 
+    if (wallSlideCooldownActive && wallSlideCooldownTimer.ReadMSec() >= wallSlideCooldownTime) {
+        wallSlideCooldownActive = false;
+    }
+
+    if (wallCooldownActive && wallCooldownTimer.ReadMSec() >= wallCooldownTime) {
+        wallCooldownActive = false;
+    }
+
+    if (shouldRespawn) {
+        shouldRespawn = false;
+        player->SetPosition(lastPosition);  
+        player->pbody->body->SetLinearVelocity(b2Vec2_zero);
+
+        player->SetState("idle");
+
+        Engine::GetInstance().render->StartCameraShake(0.5, 2);
+
+        StartInvulnerability();
+
+        isStunned = true;
+        stunTimer.Start();
+        return;
+    }
+
+    // Invulnerabilidad temporal
+    if (isInvulnerable) {
+        if (invulnerabilityTimer.ReadSec() >= invulnerabilityDuration) {
+            isInvulnerable = false;
+            visible = true;
+        }
+        else {
+            if (blinkTimer.ReadMSec() >= blinkInterval) {
+                visible = !visible; // toggle de visibilidad
+                blinkTimer.Start();
+                blinkInterval += 150.0f; // para que parpadee más lento con el tiempo
+            }
+        }
+    }
+
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && Engine::GetInstance().scene->saveGameZone) {
-        // TODO JAVI ---- Si guardas mientras te mueves en el eje x, te guardas moviendote y tendrias que estar quieto
         player->pbody->body->SetLinearVelocity(b2Vec2_zero);
         Engine::GetInstance().scene->SaveGameXML();
         return;
@@ -27,7 +71,7 @@ void PlayerMechanics::Update(float dt) {
         player->pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
         if (stunTimer.ReadSec() >= stunDuration) {
             isStunned = false;
-            player->SetState("landing");
+            player->SetState("idle");
 
             fallStartY = player->GetPosition().getY();
             fallEndY = fallStartY;
@@ -42,7 +86,7 @@ void PlayerMechanics::Update(float dt) {
     HandleDash();
     HandleFall();
 
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN && attackSensor == nullptr) {
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN && attackSensor == nullptr && canAttack && !isDashing) {
         CreateAttackSensor();
     }
 
@@ -60,7 +104,7 @@ void PlayerMechanics::Update(float dt) {
     }
 
     if (attackSensor != nullptr) {
-        int offsetX = (movementDirection > 0) ? 60 : -15;
+        int offsetX = (movementDirection > 0) ? 40 : -40;
         int playerX = METERS_TO_PIXELS(player->pbody->body->GetPosition().x) + offsetX;
         int playerY = METERS_TO_PIXELS(player->pbody->body->GetPosition().y);
 
@@ -78,36 +122,56 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLATFORM:
         CheckFallImpact();
         isJumping = false;
+        jumpCount = 0;
+        isOnGround = true;
         hasDoubleJumped = false;
         if (jumpUnlocked) EnableJump(true);
         isOnGround = true;
         if (isFalling) {
             isFalling = false;
             CheckFallImpact();
-            // Frena completamente al tocar el suelo tras una caída
             player->pbody->body->SetLinearVelocity(b2Vec2_zero);
         }
-
         break;
     case ColliderType::WALL_SLIDE:
-        if (isDashing) CancelDash();
-        isWallSliding = true;
-        isJumping = false;
+        if (!wallSlideCooldownActive) {
+            isWallSliding = true;
+            isJumping = false;
+        }
         break;
     case ColliderType::WALL:
-        if (isDashing) CancelDash();
-        isJumping = false;
+    case ColliderType::DESTRUCTIBLE_WALL:
+        if (!wallCooldownActive) {
+            isTouchingWall = true;
+            isJumping = false;
+            if (isDashing) {
+                CancelDash(); 
+            }
+        }
         break;
     case ColliderType::DOWN_CAMERA:
-        if (!wasInDownCameraZone) {
-            Engine::GetInstance().render->ToggleVerticalOffsetLock();
-            wasInDownCameraZone = true;
+        if (!inDownCameraZone && downCameraCooldown.ReadSec() >= downCameraCooldownTime) {
+            inDownCameraZone = true;
+            downCameraCooldown.Start();
+            originalCameraOffsetY = Engine::GetInstance().render->cameraOffsetY;
+            Engine::GetInstance().render->cameraOffsetY = 400;
         }
         break;
     case ColliderType::SAVEGAME:
         Engine::GetInstance().scene->saveGameZone = true;
         break;
     case ColliderType::ENEMY:
+        if (!isInvulnerable)
+        {
+            vidas -= 1;
+            StartInvulnerability();
+            Engine::GetInstance().render->StartCameraShake(0.5, 1);
+        }
+        break;
+    case ColliderType::SPIKE:
+        player->SetState("dead");
+        UpdateLastSafePosition();
+        shouldRespawn = true;
         break;
     default:
         break;
@@ -116,25 +180,54 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
-    case ColliderType::PLATFORM: isOnGround = false; break;
-    case ColliderType::WALL_SLIDE: 
-        isWallSliding = false;
-        player->pbody->body->SetGravityScale(1.0f);
+    case ColliderType::PLATFORM:
+        isOnGround = false;
+        lasMovementDirection = movementDirection;
+        lastPlatformCollider = physB;
         break;
-    case ColliderType::WALL: break;
-    case ColliderType::DOWN_CAMERA: wasInDownCameraZone = false; break;
+    case ColliderType::WALL_SLIDE:
+        isWallSliding = false;
+        wallSlideCooldownTimer.Start();
+        wallSlideCooldownActive = true;
+        player->pbody->body->SetGravityScale(2.0f);
+        break;
+    case ColliderType::WALL:
+    case ColliderType::DESTRUCTIBLE_WALL:
+        isTouchingWall = false;
+        wallCooldownTimer.Start();
+        wallCooldownActive = true;
+        break;
+    case ColliderType::DOWN_CAMERA:
+        if (inDownCameraZone && downCameraCooldown.ReadSec() >= downCameraCooldownTime) {
+            inDownCameraZone = false;
+            downCameraCooldown.Start();
+            Engine::GetInstance().render->cameraOffsetY = originalCameraOffsetY;
+        }
+        break;
     case ColliderType::SAVEGAME: Engine::GetInstance().scene->saveGameZone = false; break;
     default: break;
     }
 }
 
 void PlayerMechanics::HandleInput() {
+
+    // Si no se está pulsando izquierda ni derecha, y no está saltando, cayendo, atacando o en wallslide...
+    bool noMovimiento = Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) != KEY_REPEAT &&
+        Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) != KEY_REPEAT;
+
+    if (noMovimiento && !isJumping && !isFalling && !isAttacking && !isWallSliding && !isDashing && !isStunned) {
+        player->SetState("idle");
+    }
+
     if (!isAttacking) {
         if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
             movementDirection = -1;
             if (!isFalling && !isJumping && !isWallSliding) {
-                player->SetState("run_left");
+                player->SetState("run_right");
             }
+        }
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_1) == KEY_REPEAT) {
+            player->SetState("idle");
         }
         else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
             movementDirection = 1;
@@ -154,20 +247,19 @@ void PlayerMechanics::HandleJump() {
 
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
 
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !isJumping && !isWallSliding) {
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && jumpCount < maxJumpCount) {
         velocity.y = -jumpForce;
+        jumpCount++;
         isJumping = true;
+        jumpTimer.Start(); 
         player->SetState("jump");
-    }
-    else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isJumping && !hasDoubleJumped && doubleJumpUnlocked && !isWallSliding) {
-        velocity.y = -jumpForce;
-        hasDoubleJumped = true;
     }
 
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && isJumping && !isWallSliding) {
-        if (jumpTime < maxJumpTime) {
-            velocity.y -= 0.3f;
-            jumpTime += 0.016f;
+        float timeLimit = (jumpCount == 1) ? maxJumpTime + 0.1f : maxJumpTime;
+        if (jumpTimer.ReadSec() < timeLimit) {
+            float extraImpulse = (jumpCount == 1) ? 0.5f : 0.3f;
+            velocity.y -= extraImpulse;
         }
     }
 
@@ -184,8 +276,12 @@ void PlayerMechanics::HandleJump() {
     player->pbody->body->SetLinearVelocity(velocity);
 }
 
+
 void PlayerMechanics::HandleDash() {
-    if (!dashUnlocked || isWallSliding) return;
+
+    if (!dashUnlocked) return;
+
+    if (isTouchingWall) return;
 
     if (!canDash && dashCooldown.ReadSec() >= dashMaxCoolDown) {
         canDash = true;
@@ -199,13 +295,21 @@ void PlayerMechanics::HandleDash() {
         dashStartPosition = player->GetPosition();
 
         player->pbody->body->SetGravityScale(0.0f);
-        Engine::GetInstance().render->DashCameraImpulse(movementDirection, 100);
+
+        // Dirección fija del dash
+        dashDirection = movementDirection;
+
+        if (isWallSliding) {
+            dashDirection *= -1;
+        }
+
+        Engine::GetInstance().render->DashCameraImpulse(dashDirection, 100);
 
         if (attackSensor != nullptr) DestroyAttackSensor();
     }
 
     if (isDashing) {
-        b2Vec2 vel(dashSpeed * movementDirection, 0.0f);
+        b2Vec2 vel(dashSpeed * dashDirection, 0.0f);
         player->pbody->body->SetLinearVelocity(vel);
 
         float distance = abs(player->GetPosition().getX() - dashStartPosition.getX());
@@ -215,7 +319,7 @@ void PlayerMechanics::HandleDash() {
 
 void PlayerMechanics::CancelDash() {
     isDashing = false;
-    player->pbody->body->SetGravityScale(1.0f);
+    player->pbody->body->SetGravityScale(2.0f);
     b2Vec2 stop = player->pbody->body->GetLinearVelocity();
     stop.x = 0.0f;
     player->pbody->body->SetLinearVelocity(stop);
@@ -245,7 +349,7 @@ void PlayerMechanics::CheckFallImpact() {
 
     if (fallDistance >= fallDistanceThreshold) {
         isStunned = true;
-        player->SetState("landing"); // Activamos la animación de aterrizaje forzoso
+        player->SetState("landing_stun");
         stunTimer.Start();
         Engine::GetInstance().render->StartCameraShake(1, 1);
     }
@@ -253,14 +357,15 @@ void PlayerMechanics::CheckFallImpact() {
 
 void PlayerMechanics::HandleWallSlide() {
     if (isWallSliding) {
-        player->pbody->body->SetGravityScale(5.0f);
+        printf(">>> Wall slide activo\n");
+        player->pbody->body->SetGravityScale(8.0f);
         player->pbody->body->SetLinearVelocity(b2Vec2_zero);
         player->SetState("wall_slide");
     }
 }
 
 void PlayerMechanics::CreateAttackSensor() {
-    int offsetX = (movementDirection > 0) ? 60 : -15;
+    int offsetX = (movementDirection > 0) ? 40 : -40;
 
     playerAttackX = METERS_TO_PIXELS(player->pbody->body->GetPosition().x) + offsetX;
     playerAttackY = METERS_TO_PIXELS(player->pbody->body->GetPosition().y);
@@ -278,5 +383,40 @@ void PlayerMechanics::DestroyAttackSensor() {
         Engine::GetInstance().physics->DeletePhysBody(attackSensor);
         attackSensor = nullptr;
         isAttacking = false;
+        player->SetState("idle");
     }
+}
+
+void PlayerMechanics::StartInvulnerability() {
+    isInvulnerable = true;
+    invulnerabilityTimer.Start();
+    blinkTimer.Start();
+    visible = true;
+    blinkInterval = 150.0f;
+}
+
+void PlayerMechanics::UpdateLastSafePosition() {
+    if (!lastPlatformCollider || !lastPlatformCollider->body) return;
+
+    float width = lastPlatformCollider->width;
+    float height = lastPlatformCollider->height;
+    b2Vec2 posMeters = lastPlatformCollider->body->GetPosition();
+
+    float topY = METERS_TO_PIXELS(posMeters.y) - (height / 2.0f);
+    float verticalOffset = 100.0f;
+    float respawnY = topY - verticalOffset;
+
+    float platformCenterX = METERS_TO_PIXELS(posMeters.x);
+    float platformHalfWidth = width / 2.0f;
+
+    float respawnX = 0.0f;
+
+    if (lasMovementDirection > 0) {
+        respawnX = platformCenterX + platformHalfWidth - 20;
+    }
+    else {
+        respawnX = platformCenterX - platformHalfWidth - 103;
+    }
+
+    lastPosition = Vector2D(respawnX, respawnY);
 }

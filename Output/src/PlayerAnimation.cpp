@@ -13,12 +13,32 @@ void PlayerAnimation::LoadAnimations(const pugi::xml_node& parameters, SDL_Textu
     currentAnimation = &animations["idle"];
 }
 
-void PlayerAnimation::Update(float dt, const std::string& state, int x, int y) {
+void PlayerAnimation::Update(float dt, const std::string& state, int x, int y, bool visible, bool flip)
+{
     if (animations.find(state) != animations.end()) {
         currentAnimation = &animations[state];
-        //printf("Animación actual: %s\n", state.c_str());
+        //printf("Animaciï¿½n actual: %s\n", state.c_str());
     }
-    Engine::GetInstance().render.get()->DrawTexture(texture, (int)x, (int)y, &GetCurrentFrame());
+
+    bool adjustedFlip = flip;
+
+    // Si es la animaciï¿½n de wall_slide, invertimos el flip
+    if (state == "wall_slide") {
+        adjustedFlip = !flip;
+    }
+
+    Engine::GetInstance().render->DrawTexture(
+        texture,
+        x,
+        y,
+        &GetCurrentFrame(),
+        1.0f,
+        0.0,
+        INT_MAX,
+        INT_MAX,
+        adjustedFlip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE
+    );
+
     currentAnimation->Update();
 }
 

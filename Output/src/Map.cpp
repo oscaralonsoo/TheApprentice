@@ -12,6 +12,8 @@
 #include "EntityManager.h"
 #include "AbilityZone.h"
 #include "HiddenZone.h"
+#include "DestructibleWall.h"
+#include "PushableBox.h"
 
 Map::Map() : Module(), mapLoaded(false)
 {
@@ -44,7 +46,7 @@ bool Map::Update(float dt)
 bool Map::PostUpdate()
 {
     if (mapLoaded) {
-        DrawMapLayers(true); // solo capas que SÍ son Forward
+        DrawMapLayers(true); // solo capas que Sï¿½ son Forward
     }
     return true;
 }
@@ -55,7 +57,7 @@ void Map::DrawMapLayers(bool forwardOnly)
         bool isForwardLayer = (mapLayer->properties.GetProperty("Forward") != NULL &&
             mapLayer->properties.GetProperty("Forward")->value == true);
 
-        // Filtrar según parámetro
+        // Filtrar segï¿½n parï¿½metro
         if (isForwardLayer != forwardOnly) continue;
 
         if (mapLayer->properties.GetProperty("Draw") != NULL &&
@@ -294,6 +296,23 @@ bool Map::Load(std::string path, std::string fileName)
                     LOG("Creating collider at x: %d, y: %d, width: %d, height: %d", x + (width / 2), y + (height / 2), width, height);
                 }
             }
+            else if (objectGroupName == "Spikes") // Objects from layer Collisions
+            {
+                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
+                {
+                    int x = objectNode.attribute("x").as_int();
+                    int y = objectNode.attribute("y").as_int();
+                    int width = objectNode.attribute("width").as_int();
+                    int height = objectNode.attribute("height").as_int();
+
+                    PhysBody* spikeCollider = Engine::GetInstance().physics->CreateRectangle(x + (width / 2), y + (height / 2), width, height, STATIC);
+                    spikeCollider->ctype = ColliderType::SPIKE;
+
+                    Engine::GetInstance().physics->listToDelete.push_back(spikeCollider);
+
+                    LOG("Creating collider at x: %d, y: %d, width: %d, height: %d", x + (width / 2), y + (height / 2), width, height);
+                }
+            }
             else if (objectGroupName == "Wall") // Objects from layer Collisions
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
@@ -366,7 +385,106 @@ bool Map::Load(std::string path, std::string fileName)
                     Engine::GetInstance().physics->listToDelete.push_back(saveGameCollider);
                 }
             }
-            else if (objectGroupName == "Particles") // Load Particles partículas
+            else if (objectGroupName == "DownCamera") // Objects from layer SaveGame
+            {
+                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
+                {
+                    int x = objectNode.attribute("x").as_int();
+                    int y = objectNode.attribute("y").as_int();
+                    int width = objectNode.attribute("width").as_int();
+                    int height = objectNode.attribute("height").as_int();
+
+                    PhysBody* downCameraCollider = Engine::GetInstance().physics->CreateRectangleSensor(x + (width / 2), y + (height / 2), width, height, STATIC);
+                    downCameraCollider->ctype = ColliderType::DOWN_CAMERA;
+
+                    Engine::GetInstance().physics->listToDelete.push_back(downCameraCollider);
+                }
+                }
+            else if (objectGroupName == "abilities") //Enemies from object layer "Enemies"
+            {
+                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
+                {
+                    std::string abilityName = objectNode.attribute("name").as_string();
+                    int x = objectNode.attribute("x").as_int();
+                    int y = objectNode.attribute("y").as_int();
+
+                    int width, height;
+                    GetAbilityDimensionsFromConfig(abilityName, width, height);
+
+                    if (objectNode.attribute("width"))
+                        width = objectNode.attribute("width").as_int();
+                    if (objectNode.attribute("height"))
+                        height = objectNode.attribute("height").as_int();
+
+                    pugi::xml_document tempDoc;
+                    pugi::xml_node abilityNode = tempDoc.append_child("abilities");
+
+                    abilityNode.append_attribute("type") = abilityName.c_str();
+                    abilityNode.append_attribute("x") = x + width / 2;
+                    abilityNode.append_attribute("y") = y ;
+                    abilityNode.append_attribute("w") = width;
+                    abilityNode.append_attribute("h") = height;
+
+                    AbilityZone* abilityZone = nullptr;
+
+                    if (abilityName == "Jump")
+                        abilityZone = (AbilityZone*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ABILITY_ZONE);
+                    if (abilityZone != nullptr)
+                    {
+                        printf("[Map] AbilityZone final size: type=%s, x=%d, y=%d, w=%d, h=%d\n",
+                            abilityName.c_str(), x, y, width, height);
+
+                        abilityZone->SetParameters(abilityNode);
+
+                        LOG("Created enemy '%s' at x: %d, y: %d", abilityName.c_str(), x, y);
+                    }
+                }
+            }
+            else if (objectGroupName == "DestructibleWalls")
+            {
+                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
+                {
+                    int x = objectNode.attribute("x").as_int();
+                    int y = objectNode.attribute("y").as_int();
+                    int width = objectNode.attribute("width").as_int();
+                    int height = objectNode.attribute("height").as_int();
+                    std::string texturePath = objectNode.attribute("texture").as_string();
+
+                    pugi::xml_document tempDoc;
+                    pugi::xml_node node = tempDoc.append_child("wall");
+                    node.append_attribute("x") = x;
+                    node.append_attribute("y") = y;
+                    node.append_attribute("w") = width;
+                    node.append_attribute("h") = height;
+                    node.append_attribute("texture") = texturePath.c_str();
+
+                    DestructibleWall* wall = (DestructibleWall*)Engine::GetInstance().entityManager->CreateEntity(EntityType::DESTRUCTIBLE_WALL);
+                    wall->SetParameters(node);
+                }
+            }
+            else if (objectGroupName == "PushableBoxes")
+            {
+                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
+                {
+                    int x = objectNode.attribute("x").as_int();
+                    int y = objectNode.attribute("y").as_int();
+                    int width = objectNode.attribute("width").as_int();
+                    int height = objectNode.attribute("height").as_int();
+                    std::string texturePath = objectNode.attribute("texture").as_string();
+
+                    pugi::xml_document tempDoc;
+                    pugi::xml_node node = tempDoc.append_child("box");
+                    node.append_attribute("x") = x;
+                    node.append_attribute("y") = y;
+                    node.append_attribute("w") = width;
+                    node.append_attribute("h") = height;
+                    node.append_attribute("texture") = texturePath.c_str();
+
+                    PushableBox* box = (PushableBox*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PUSHABLE_BOX);
+                    box->SetParameters(node);
+                }
+            }
+            else if (objectGroupName == "Particles") // Load Particles partï¿½culas
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
                 {
@@ -450,23 +568,6 @@ bool Map::Load(std::string path, std::string fileName)
                 }
             }
         }
-        for (const auto& mapLayer : mapData.layers) {
-            if (mapLayer->name == "AbilityZone") {
-                for (int i = 0; i < mapData.width; i++) {
-                    for (int j = 0; j < mapData.height; j++) {
-                        int gid = mapLayer->Get(i, j);
-                        if (gid != 0)
-                        {
-                            Vector2D mapCoord = MapToWorld(i, j);
-
-                            AbilityZone* abilityZone = (AbilityZone*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ABILITY_ZONE);
-                            abilityZone->position = Vector2D(mapCoord.x, mapCoord.y);
-                        }
-                    }
-                }
-            }
-        }
-        
         ret = true;
 
         // L06: TODO 5: LOG all the data loaded iterate all tilesetsand LOG everything
@@ -575,4 +676,23 @@ void Map::GetEnemyDimensionsFromConfig(const std::string& enemyName, int& width,
         }
         enemyNode = enemyNode.next_sibling("enemy");
     }
+}
+void Map::GetAbilityDimensionsFromConfig(const std::string& abilityName, int& width, int& height)
+{
+    pugi::xml_document configDoc;
+    configDoc.load_file("config.xml");
+
+    pugi::xml_node abilityNode = configDoc.child("config").child("scene").child("animations").child("abilities").child("ability");
+    while (abilityNode) {
+        if (abilityNode.attribute("type").as_string() == abilityName) {
+            width = abilityNode.attribute("w").as_int();
+            height = abilityNode.attribute("h").as_int();
+            return;
+        }
+        abilityNode = abilityNode.next_sibling("ability");
+    }
+
+    // Valores por defecto si no se encuentra
+    width = 50;
+    height = 50;
 }

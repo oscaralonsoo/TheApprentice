@@ -25,6 +25,8 @@ public:
     void Attack(float dt);
     void Slide(float dt);
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
+    BloodrusherState GetCurrentState() const { return currentState; }
+    void SetState(BloodrusherState state) { currentState = state; }
 
 
 private:

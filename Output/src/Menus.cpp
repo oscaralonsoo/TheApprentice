@@ -8,6 +8,7 @@
 #include "pugixml.hpp"
 #include "Log.h"
 #include <SDL2/SDL_mixer.h>
+#include "Textures.h"
 
 
 
@@ -43,6 +44,7 @@ void Menus::LoadTextures() {
     LoadBackgroundTextures(doc);
     LoadButtonTextures(doc);
     LoadCheckboxTextures(doc);
+    lifeTexture = Engine::GetInstance().textures->Load("Assets/Slime/vida_slime.png");
 }
 
 void Menus::LoadBackgroundTextures(pugi::xml_document& doc) {
@@ -95,6 +97,9 @@ bool Menus::PostUpdate() {
     SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
     DrawBackground();
     DrawButtons();
+    if (currentState == MenusState::GAME) {
+        DrawPlayerLives();
+    }
     if (inTransition) ApplyTransitionEffect();
     return !isExit;
 }
@@ -430,4 +435,27 @@ void Menus::DrawSlider(int minX, int y, int& sliderX, bool isSelected, const std
     );
 
     Engine::GetInstance().render->DrawText(label.c_str(), 710, y - 20, WHITE, 45);
+}
+
+void Menus::DrawPlayerLives() {
+    if (currentState != MenusState::GAME) return;
+    if (!lifeTexture) return;
+
+    Player* player = Engine::GetInstance().scene->GetPlayer();
+    if (!player) return;
+
+    int vidas = player->GetMechanics()->vidas;
+
+    const int marginLeft = 100;
+    const int marginTop = 60;
+    const int spacing = 20;
+    const int lifeW = 32;
+    const int lifeH = 32;
+
+    for (int i = 0; i < vidas; ++i) {
+        int x = marginLeft + i * (lifeW + spacing);
+        int y = marginTop;
+        SDL_Rect section = { 0, 0, lifeW, lifeH };
+        Engine::GetInstance().render->DrawTexture(lifeTexture, x, y, &section, 0.0f);
+    }
 }

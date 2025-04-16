@@ -5,7 +5,7 @@
 		<maxFrameDuration value="16" />
 	</engine>
 	<render>
-		<vsync value="true" />
+		<vsync value="false" />
 	</render>
 	<window>
 		<resolution width="1280" height="720" scale="1" />
@@ -31,7 +31,7 @@
 					<frame x="600" y="0" w="100" h="100" />
 					<frame x="700" y="0" w="100" h="100" />
 				</idle>
-				<run_right loop="true" speed="0.1">
+				<run_right loop="true" speed="0.15">
 					<frame x="0" y="100" w="100" h="100" />
 					<frame x="100" y="100" w="100" h="100" />
 					<frame x="200" y="100" w="100" h="100" />
@@ -54,15 +54,27 @@
 				<duck loop="false" speed="0">
 					<frame x="0" y="0" w="100" h="100" />
 				</duck>
-				<wall_slide loop="true" speed="0.17">
-					<frame x="0" y="400" w="110" h="110" />
-					<frame x="110" y="400" w="110" h="110" />
-					<frame x="220" y="400" w="110" h="110" />
-					<frame x="330" y="400" w="110" h="110" />
-					<frame x="440" y="400" w="110" h="110" />
-					<frame x="550" y="400" w="110" h="110" />
-					<frame x="660" y="400" w="110" h="110" />
+				<wall_slide loop="true" speed="0.1">
+					<frame x="0" y="400" w="100" h="100" />
+					<frame x="100" y="400" w="100" h="100" />
+					<frame x="200" y="400" w="100" h="100" />
+					<frame x="300" y="400" w="100" h="100" />
 				</wall_slide>
+				<landing_stun loop="false" speed="0.17">
+					<frame x="0" y="300" w="100" h="100" />
+					<frame x="100" y="300" w="100" h="100" />
+					<frame x="200" y="300" w="100" h="100" />
+					<frame x="300" y="300" w="100" h="100" />
+					<frame x="400" y="300" w="100" h="100" />
+					<frame x="500" y="300" w="100" h="100" />
+					<frame x="600" y="300" w="100" h="100" />
+					<frame x="700" y="300" w="100" h="100" />
+					<frame x="800" y="300" w="100" h="100" />
+					<frame x="900" y="300" w="100" h="100" />
+					<frame x="1000" y="300" w="100" h="100" />
+					<frame x="1100" y="300" w="100" h="100" />
+					<frame x="1200" y="300" w="100" h="100" />
+				</landing_stun>
 				<landing loop="false" speed="0.17">
 					<frame x="0" y="300" w="100" h="100" />
 					<frame x="100" y="300" w="100" h="100" />
@@ -83,9 +95,15 @@
 				</die>
 			</player>
 			<enemies>
-				<enemy type="Bloodrusher" w="100" h="100" texture="Assets/Enemies/bloodrusher.png">
-					<idle loop="true" speed="0.1">
-						<frame x="0" y="0" w="200" h="200" />
+				<enemy type="Bloodrusher" w="134" h="134" texture="Assets/Enemies/noctilume.png">
+					<idle loop="true" speed="0.35">
+						<frame x="0" y="0" w="134" h="134" />
+						<frame x="134" y="0" w="134" h="134" />
+						<frame x="268" y="0" w="134" h="134" />
+						<frame x="402" y="0" w="134" h="134" />
+						<frame x="536" y="0" w="134" h="134" />
+						<frame x="670" y="0" w="134" h="134" />
+						<frame x="804" y="0" w="134" h="134" />
 					</idle>
 					<attack loop="true" speed="0.1">
 						<frame x="0" y="0" w="200" h="200" />
@@ -152,9 +170,15 @@
 						<frame x="1024" y="1024" w="512" h="256" />
 					</dead>
 				</enemy>
-				<enemy type="Mireborn" tier="Alpha" w="128" h="128" texture="Assets/Enemies/mireborn.png">
+				<enemy type="Mireborn" tier="Alpha" w="134" h="134" texture="Assets/Enemies/noctilume.png">
 					<idle loop="true" speed="0.1">
-						<frame x="0" y="0" w="128" h="128" />
+						<frame x="0" y="0" w="134" h="134" />
+						<frame x="134" y="0" w="134" h="134" />
+						<frame x="268" y="0" w="134" h="134" />
+						<frame x="402" y="0" w="134" h="134" />
+						<frame x="536" y="0" w="134" h="134" />
+						<frame x="670" y="0" w="134" h="134" />
+						<frame x="804" y="0" w="134" h="134" />
 					</idle>
 					<walking loop="false" speed="0.1">
 						<frame x="0" y="0" w="128" h="128" />
@@ -217,9 +241,14 @@
 					</splash>
 				</cave_drop>
 			</props>
+			<abilities>
+				<ability type="Jump" w="144" h="144" texture="Assets/Props/huevosrana.png" />
+				<ability type="DoubleJump" w="124" h="124" texture="Assets/Textures/Abilities/jump.png" />
+				<ability type="Dash" w="124" h="124" texture="Assets/Textures/Abilities/jump.png" />
+			</abilities>
 		</animations>
 		<save_data isSaved="1">
-			<player x="3861" y="1001" w="44" h="54" />
+			<player x="3879" y="1003" w="44" h="54" />
 			<scene actualScene="0" />
 			<enemies />
 		</save_data>

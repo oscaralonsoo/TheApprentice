@@ -13,6 +13,8 @@
 #include "Thumpod.h"
 #include "Brood.h"
 #include "Broodheart.h"
+#include "DestructibleWall.h"
+#include "PushableBox.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -106,6 +108,11 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::HIDDEN_ZONE:
 		entity = new HiddenZone();
+	case EntityType::DESTRUCTIBLE_WALL:
+		entity = new DestructibleWall();
+		break;
+	case EntityType::PUSHABLE_BOX:
+		entity = new PushableBox();
 		break;
 	default:
 		break;

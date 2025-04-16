@@ -139,4 +139,10 @@ private:
 
     SDL_Color WHITE = { 255, 255, 255, 255 };
     SDL_Color GRAY = { 200, 200, 200, 255 };
+
+    void DrawPlayerLives();
+
+    SDL_Texture* lifeTexture = nullptr;
+    int lifeW = 32;
+    int lifeH = 32;
 };

@@ -11,6 +11,9 @@
 #include "Physics.h"
 #include "Module.h"
 #include "AbilityZone.h"
+#include "Player.h"
+#include "PlayerMechanics.h"
+#include "Scene.h"
 
 AbilityZone::AbilityZone() : Entity(EntityType::CAVE_DROP), state(AbilityZoneStates::WAITING)
 {
@@ -36,10 +39,22 @@ bool AbilityZone::Start() {
 		}
 	}
 
+	pugi::xml_node abilitiesNode = loadFile.child("config").child("scene").child("animations").child("abilities");
+
+	for (pugi::xml_node abilityNode = abilitiesNode.child("ability"); abilityNode; abilityNode = abilityNode.next_sibling("ability")) {
+		if (std::string(abilityNode.attribute("type").as_string()) == type) {
+			std::string texPath = abilityNode.attribute("texture").as_string();
+			abilitySprite = Engine::GetInstance().textures->Load(texPath.c_str());
+			abilitySpriteW = abilityNode.attribute("w").as_int();
+			abilitySpriteH = abilityNode.attribute("h").as_int();
+			break;
+		}
+	}
+
 	currentAnimation = &idleAnim;
 
 	//Add a physics to an item - initialize the physics body
-	pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, bodyType::KINEMATIC);
+	pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::STATIC);
 
 	//Assign collider type
 	pbody->ctype = ColliderType::ABILITY_ZONE;
@@ -51,12 +66,62 @@ bool AbilityZone::Start() {
 
 bool AbilityZone::Update(float dt)
 {
-	// L08 TODO 4: Add a physics to an item - update the position of the object from the physics.  
 	b2Transform pbodyPos = pbody->body->GetTransform();
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
+	Player* player = Engine::GetInstance().scene->GetPlayer();
+	PlayerMechanics* mechanics = player->GetMechanics();
+
+	if (playerInside)
+	{
+		float rightLimit = position.getX() + texW;
+		float targetStopX = rightLimit - 120.0f; // antes era -60, ahora un poco más adelante
+		float playerRight = player->GetPosition().getX() + player->GetTextureWidth();
+		float distance = abs(playerRight - targetStopX);
+
+		if (distance <= 2.0f) {
+			b2Vec2 stopVelocity = player->pbody->body->GetLinearVelocity();
+			stopVelocity.x = 0.0f;
+			player->pbody->body->SetLinearVelocity(stopVelocity);
+			mechanics->cantMove = true;
+		}
+		else {
+			float maxDistance = 250.0f; // empieza a frenar desde más lejos
+			float t = 1.0f - std::min(distance / maxDistance, 1.0f);
+			b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
+			float slowdownFactor = std::max(0.01f, 1.0f - t); // antes era 0.05f
+			velocity.x *= slowdownFactor;
+			player->pbody->body->SetLinearVelocity(velocity);
+		}
+
+		// Obtención de la habilidad
+		if (playerRight >= rightLimit - 144.0f) {
+			if (playerInsideJump && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
+				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+				mechanics->cantMove = false;
+				mechanics->EnableJump(true);
+			}
+			else if (playerInsideDoubleJump && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
+				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+				mechanics->cantMove = false;
+				mechanics->EnableDoubleJump(true);
+			}
+			else if (playerInsideDash && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
+				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+				mechanics->cantMove = false;
+				mechanics->EnableDash(true);
+			}
+		}
+	}
+
 	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY());
+
+	if (abilitySprite) {
+		int drawX = position.getX() + texW - abilitySpriteW - 100;
+		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 + 20;
+		Engine::GetInstance().render->DrawTexture(abilitySprite, drawX, drawY);
+	}
 
 	return true;
 }
@@ -80,11 +145,40 @@ Vector2D AbilityZone::GetPosition() {
 	return pos;
 }
 
-void AbilityZone::OnCollision(PhysBody* physA, PhysBody* physB) {
-
+void AbilityZone::OnCollision(PhysBody* physA, PhysBody* physB){
+	Player* player = Engine::GetInstance().scene->GetPlayer();
+	PlayerMechanics* mechanics = player->GetMechanics();
+	switch (physB->ctype) {
+	case ColliderType::PLAYER:
+		playerInside = true;
+		mechanics->canAttack = false;
+		if (type == "Jump") {
+			playerInsideJump = true;
+		}
+		else if (type == "DoubleJump") {
+			playerInsideDoubleJump = true;
+		}
+		else if (type == "Dash") {
+			playerInsideDash = true;
+		}
+		break;
+	default:
+		break;
+	}
 }
 
-void AbilityZone::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
-{
-
+void AbilityZone::OnCollisionEnd(PhysBody* physA, PhysBody* physB){
+	Player* player = Engine::GetInstance().scene->GetPlayer();
+	PlayerMechanics* mechanics = player->GetMechanics();
+	switch (physB->ctype) {
+	case ColliderType::PLAYER:
+		playerInside = false;
+		mechanics->canAttack = true;
+		playerInsideJump = false;
+		playerInsideDoubleJump = false;
+		playerInsideDash = false;
+		break;
+	default:
+		break;
+	}
 }

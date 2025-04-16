@@ -50,6 +50,10 @@ public:
 
 	void Vignette(int size, float strength);
 
+	Player* GetPlayer() const { return player; }
+
+	void ReloadCurrentSceneAtCheckpoint();
+
 public:
 
 	Vector2D newPosition;
@@ -81,5 +85,4 @@ private:
 
 	//Renderer
 	SDL_Renderer* renderer;
-
 };

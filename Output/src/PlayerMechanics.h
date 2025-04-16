@@ -20,6 +20,13 @@ public:
     void EnableDoubleJump(bool enable) { doubleJumpUnlocked = enable; }
     void EnableDash(bool enable) { dashUnlocked = enable; }
     int GetMovementDirection() const { return movementDirection; }
+    bool IsVisible() const { return visible; }
+
+
+    bool cantMove = false;
+    bool canAttack = true;
+    int vidas = 3;
+    Vector2D lastPosition;
 
 private:
     void HandleInput();
@@ -31,29 +38,33 @@ private:
     void CancelDash();
     void CreateAttackSensor();
     void DestroyAttackSensor();
+    void StartInvulnerability();
+    void UpdateLastSafePosition();
 
 private:
     Player* player = nullptr;
 
     // Parámetros del jugador
     float speed = 8.0f;
-    int vidas = 3;
 
     // Física
     bool isOnGround = false;
     int movementDirection = 1;
     bool isFalling = false;
 
-    // Jump
-    float jumpForce = 10.5f;
+    // Jump 
+    float jumpForce = 10.0f;
     bool isJumping = false;
-    float jumpTime = 0.0f;
     float maxJumpTime = 0.3f;
+    Timer jumpTimer;
     bool jumpUnlocked = true;
+    bool isDoingProgressiveJump = false;
 
     // DoubleJump
     bool doubleJumpUnlocked = true;
     bool hasDoubleJumped = false;
+    int jumpCount = 0;
+    int maxJumpCount = 1;
 
     // Dash
     bool isDashing = false;
@@ -64,6 +75,7 @@ private:
     Timer dashCooldown;
     float dashMaxCoolDown = 1.0f;
     bool dashUnlocked = true;
+    int dashDirection = 1;
 
     // Fall
     bool isStunned = false;
@@ -78,6 +90,15 @@ private:
     bool wasInDownCameraZone = false;
     bool isWallSliding = false;
     bool wallJumpUnlocked = true;
+    Timer wallSlideCooldownTimer;
+    float wallSlideCooldownTime = 100.0f;
+    bool wallSlideCooldownActive = false;
+    
+    //Wall
+    Timer wallCooldownTimer;
+    float wallCooldownTime = 100.0f;
+    bool wallCooldownActive = false;
+    bool isTouchingWall = false;
 
     // Attack
     PhysBody* attackSensor = nullptr;
@@ -86,4 +107,23 @@ private:
     int playerAttackX;
     int playerAttackY;
     bool isAttacking = false;
+
+    //Invulnerable
+    bool isInvulnerable = false;
+    Timer invulnerabilityTimer;
+    float invulnerabilityDuration = 3.0f;
+    bool visible = true;
+    Timer blinkTimer;
+    float blinkInterval = 150.0f;
+
+    //Respawn 
+    bool shouldRespawn = false;
+    PhysBody* lastPlatformCollider = nullptr;
+    int lasMovementDirection = 1;
+
+    //Down Camera
+    int originalCameraOffsetY;
+    bool inDownCameraZone = false;
+    Timer downCameraCooldown;
+    float downCameraCooldownTime = 0.2f;
 };

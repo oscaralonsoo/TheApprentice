@@ -10,6 +10,7 @@
 #include "Mireborn.h"
 #include "AbilityZone.h"
 #include "HiddenZone.h"
+#include "Creebler.h"
 #include "Thumpod.h"
 #include "Brood.h"
 #include "Broodheart.h"
@@ -93,6 +94,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::THUMPOD:
 		entity = new Thumpod();
+		break;
+	case EntityType::CREEBLER:
+		entity = new Creebler();
 		break;
 	case EntityType::MIREBORN:
 		entity = new Mireborn();

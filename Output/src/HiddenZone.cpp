@@ -67,8 +67,6 @@ bool HiddenZone::Update(float dt)
 }
 
 
-
-
 bool HiddenZone::CleanUp()
 {
 	Engine::GetInstance().physics.get()->DeletePhysBody(pbody);

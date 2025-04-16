@@ -108,6 +108,7 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::HIDDEN_ZONE:
 		entity = new HiddenZone();
+		break;
 	case EntityType::DESTRUCTIBLE_WALL:
 		entity = new DestructibleWall();
 		break;

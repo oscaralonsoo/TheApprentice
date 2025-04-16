@@ -12,6 +12,7 @@
 #include "EntityManager.h"
 #include "AbilityZone.h"
 #include "DestructibleWall.h"
+#include "PushableBox.h"
 
 Map::Map() : Module(), mapLoaded(false)
 {
@@ -458,6 +459,28 @@ bool Map::Load(std::string path, std::string fileName)
 
                     DestructibleWall* wall = (DestructibleWall*)Engine::GetInstance().entityManager->CreateEntity(EntityType::DESTRUCTIBLE_WALL);
                     wall->SetParameters(node);
+                }
+            }
+            else if (objectGroupName == "PushableBoxes")
+            {
+                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
+                {
+                    int x = objectNode.attribute("x").as_int();
+                    int y = objectNode.attribute("y").as_int();
+                    int width = objectNode.attribute("width").as_int();
+                    int height = objectNode.attribute("height").as_int();
+                    std::string texturePath = objectNode.attribute("texture").as_string();
+
+                    pugi::xml_document tempDoc;
+                    pugi::xml_node node = tempDoc.append_child("box");
+                    node.append_attribute("x") = x;
+                    node.append_attribute("y") = y;
+                    node.append_attribute("w") = width;
+                    node.append_attribute("h") = height;
+                    node.append_attribute("texture") = texturePath.c_str();
+
+                    PushableBox* box = (PushableBox*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PUSHABLE_BOX);
+                    box->SetParameters(node);
                 }
             }
             else if (objectGroupName == "Particles") // Load Particles part�culas

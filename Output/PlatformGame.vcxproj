@@ -170,6 +170,7 @@
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\PlayerAnimation.cpp" />
     <ClCompile Include="src\PlayerMechanics.cpp" />
+    <ClCompile Include="src\PushableBox.cpp" />
     <ClCompile Include="src\Render.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\Textures.cpp" />
@@ -207,6 +208,7 @@
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\PlayerAnimation.h" />
     <ClInclude Include="src\PlayerMechanics.h" />
+    <ClInclude Include="src\PushableBox.h" />
     <ClInclude Include="src\Render.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\Textures.h" />

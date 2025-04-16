@@ -551,6 +551,8 @@ bool Map::Load(std::string path, std::string fileName)
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::HYPNOVIPER);
                     else if (enemyName == "Creebler")
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CREEBLER);
+                    else if (enemyName == "Scurver")
+                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::SCURVER);
                     else if (enemyName == "Thumpod")
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::THUMPOD);
                     else if (enemyName == "Mireborn") {

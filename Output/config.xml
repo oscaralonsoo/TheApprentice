@@ -190,6 +190,20 @@
 						<frame x="768" y="0" w="128" h="128" />
 					</dead>
 				</enemy>
+				<enemy type="Scurver" w="64" h="64" texture="Assets/Enemies/scurver.png">
+					<idle loop="true" speed="0.2">
+						<frame x="0" y="0" w="64" h="64" />
+					</idle>
+					<attack loop="true" speed="0.2">
+						<frame x="0" y="64" w="64" h="64" />
+					</attack>
+					<slide loop="true" speed="0.2">
+						<frame x="0" y="128" w="64" h="64" />
+					</slide>
+					<dead loop="false" speed="0.2">
+						<frame x="0" y="192" w="64" h="64" />
+					</dead>
+				</enemy>
 				<enemy type="Mireborn" tier="Alpha" w="134" h="134" texture="Assets/Enemies/noctilume.png">
 					<idle loop="true" speed="0.1">
 						<frame x="0" y="0" w="134" h="134" />

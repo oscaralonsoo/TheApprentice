@@ -11,6 +11,7 @@
 #include "AbilityZone.h"
 #include "HiddenZone.h"
 #include "Creebler.h"
+#include "Scurver.h"
 #include "Thumpod.h"
 #include "Brood.h"
 #include "Broodheart.h"
@@ -97,6 +98,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::CREEBLER:
 		entity = new Creebler();
+		break;
+	case EntityType::SCURVER:
+		entity = new Scurver();
 		break;
 	case EntityType::MIREBORN:
 		entity = new Mireborn();

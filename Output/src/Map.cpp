@@ -400,7 +400,7 @@ bool Map::Load(std::string path, std::string fileName)
                     Engine::GetInstance().physics->listToDelete.push_back(downCameraCollider);
                 }
                 }
-            else if (objectGroupName == "abilities") //Enemies from object layer "Enemies"
+            else if (objectGroupName == "Abilities") //Enemies from object layer "Enemies"
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
                 {

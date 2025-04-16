@@ -38,56 +38,34 @@ bool HiddenZone::Start() {
 
 bool HiddenZone::Update(float dt)
 {
-	if (fadingIn)
-	{
-		alpha += (int)(fadeSpeed * dt);
-		if (alpha >= 255)
-		{
-			alpha = 255;
-			fadingIn = false;
-		}
-	}
-	else if (fadingOut)
+	if (fadingOut)
 	{
 		alpha -= (int)(fadeSpeed * dt);
 		if (alpha <= 0)
 		{
 			alpha = 0;
 			fadingOut = false;
+			alreadyRevealed = true;
 		}
 	}
 
-	SDL_Rect mainRect = { (int)position.getX(), (int)position.getY(), width, height };
+	int x = (int)position.getX();
+	int y = (int)position.getY();
+	int gradientThickness = 80;
 
-	// Dibuja el rectángulo principal
-	Engine::GetInstance().render->DrawRectangle(mainRect, 0, 0, 0, alpha, true, true);
-
-	// Dibujar borde degradado si alpha > 0
-	if (alpha > 0)
+	for (int i = 0; i < gradientThickness; ++i)
 	{
-		const int borderSize = 64;
-		const int steps = 64;
-		const int stepSize = borderSize / steps;
-
-		for (int i = 1; i <= steps; ++i)
-		{
-			// Proporcional al alpha actual (se desvanece junto al rectángulo)
-			float factor = 1.0f - (float)i / (steps + 1);
-			int edgeAlpha = static_cast<int>(alpha * factor);
-
-			SDL_Rect edgeRect = {
-				mainRect.x - i * stepSize,
-				mainRect.y - i * stepSize,
-				mainRect.w + 2 * i * stepSize,
-				mainRect.h + 2 * i * stepSize
-			};
-
-			Engine::GetInstance().render->DrawRectangle(edgeRect, 0, 0, 0, edgeAlpha, true, true);
-		}
+		Uint8 gradientAlpha = (Uint8)(((float)(i) / (gradientThickness - 1)) * alpha);
+		SDL_Rect borderRect = { x + i, y + i, width - 2 * i, height - 2 * i };
+		Engine::GetInstance().render->DrawRectangle(borderRect, 0, 0, 0, gradientAlpha, false, true);
 	}
+
+	SDL_Rect mainRect = { x + gradientThickness, y + gradientThickness, width - 2 * gradientThickness, height - 2 * gradientThickness };
+	Engine::GetInstance().render->DrawRectangle(mainRect, 0, 0, 0, alpha, true, true);
 
 	return true;
 }
+
 
 
 
@@ -98,22 +76,15 @@ bool HiddenZone::CleanUp()
 }
 
 void HiddenZone::OnCollision(PhysBody* physA, PhysBody* physB) {
-	switch (physB->ctype) {
-	case ColliderType::PLAYER:
-		fadingIn = false;
+	if (physB->ctype == ColliderType::PLAYER && !alreadyRevealed)
+	{
 		fadingOut = true;
-		break;
 	}
 }
 
+
 void HiddenZone::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
 {
-	switch (physB->ctype) {
-	case ColliderType::PLAYER:
-		fadingOut = false;
-		fadingIn = true;
-		break;
-	}
 }
 
 void HiddenZone::SetWidth(int width)

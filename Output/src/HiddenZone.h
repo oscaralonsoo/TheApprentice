@@ -24,9 +24,9 @@ public:
 
 	virtual void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
-	int GetWidth() {return width;}
+	int GetWidth() const { return width; }
 
-	int GetHeight() {return height;}
+	int GetHeight() const { return height; }
 
 	void SetWidth(int width);
 
@@ -41,4 +41,6 @@ private:
 	bool fadingIn = false;
 	bool fadingOut = false;
 	float fadeSpeed = 1.0f;
+
+	bool alreadyRevealed = false;
 };

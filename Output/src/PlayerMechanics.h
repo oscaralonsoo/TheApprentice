@@ -53,18 +53,22 @@ private:
     bool isFalling = false;
 
     // Jump 
-    float jumpForce = 10.0f;
+    float jumpForce = 11.0f;
     bool isJumping = false;
-    float maxJumpTime = 0.3f;
-    Timer jumpTimer;
     bool jumpUnlocked = true;
-    bool isDoingProgressiveJump = false;
+    Timer jumpCooldownTimer;
+    float jumpCooldownTime = 150.0f;
+    bool jumpCooldownActive = false;
 
-    // DoubleJump
-    bool doubleJumpUnlocked = true;
-    bool hasDoubleJumped = false;
+    // Jump progresivo
+    Timer jumpHoldTimer;
+    float maxJumpHoldTime = 400.0f; // en segundos
+    bool isHoldingJump = false;
+
+    //Double Jump
+    bool doubleJumpUnlocked = false;
     int jumpCount = 0;
-    int maxJumpCount = 1;
+    const int maxJumpCount = 2; // salto normal + doble salto
 
     // Dash
     bool isDashing = false;

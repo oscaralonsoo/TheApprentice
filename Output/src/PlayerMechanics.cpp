@@ -30,6 +30,10 @@ void PlayerMechanics::Update(float dt) {
         wallCooldownActive = false;
     }
 
+    if (jumpCooldownActive && jumpCooldownTimer.ReadMSec() >= jumpCooldownTime) {
+        jumpCooldownActive = false;
+    }
+
     if (shouldRespawn) {
         shouldRespawn = false;
         player->SetPosition(lastPosition);  
@@ -120,17 +124,19 @@ void PlayerMechanics::Update(float dt) {
 void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
-        CheckFallImpact();
-        isJumping = false;
-        jumpCount = 0;
-        isOnGround = true;
-        hasDoubleJumped = false;
-        if (jumpUnlocked) EnableJump(true);
-        isOnGround = true;
-        if (isFalling) {
-            isFalling = false;
+        if (!jumpCooldownActive)    
+        {
+            printf("Entra a la plataforma");
             CheckFallImpact();
-            player->pbody->body->SetLinearVelocity(b2Vec2_zero);
+            isJumping = false;  
+            isOnGround = true;
+            if (jumpUnlocked) EnableJump(true);
+            jumpCount = 0;
+            if (isFalling) {
+                isFalling = false;
+                CheckFallImpact();
+                player->pbody->body->SetLinearVelocity(b2Vec2_zero);
+            }
         }
         break;
     case ColliderType::WALL_SLIDE:
@@ -176,6 +182,20 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         UpdateLastSafePosition();
         shouldRespawn = true;
         break;
+    case ColliderType::PUSHABLE_PLATFORM:
+        // Se comporta como una plataforma: permite saltar y aterrizar
+        if (!jumpCooldownActive) {
+            isJumping = false;
+            isOnGround = true;
+            if (jumpUnlocked) EnableJump(true);
+            jumpCount = 0;
+
+            // También se comporta como una pared: cancela el dash si está activo
+            if (isDashing) {
+                CancelDash();
+            }
+        }
+        break;
     default:
         break;
     }
@@ -184,9 +204,12 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
 void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
+        printf("Sale a la plataforma");
         isOnGround = false;
         lasMovementDirection = movementDirection;
         lastPlatformCollider = physB;
+        jumpCooldownTimer.Start();
+        jumpCooldownActive = true;
         break;
     case ColliderType::WALL_SLIDE:
         isWallSliding = false;
@@ -206,6 +229,13 @@ void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
             downCameraCooldown.Start();
             Engine::GetInstance().render->cameraOffsetY = originalCameraOffsetY;
         }
+        break;
+    case ColliderType::PUSHABLE_PLATFORM:
+        isOnGround = false;
+        lasMovementDirection = movementDirection;
+        lastPlatformCollider = physB;
+        jumpCooldownTimer.Start();
+        jumpCooldownActive = true;
         break;
     case ColliderType::SAVEGAME: Engine::GetInstance().scene->saveGameZone = false; break;
     default: break;
@@ -250,35 +280,38 @@ void PlayerMechanics::HandleJump() {
 
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
 
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && jumpCount < maxJumpCount) {
-        velocity.y = -jumpForce;
-        jumpCount++;
-        isJumping = true;
-        jumpTimer.Start(); 
-        player->SetState("jump");
-    }
+    // Inicio del salto o doble salto
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+        if (isOnGround || (doubleJumpUnlocked && jumpCount < maxJumpCount)) {
+            velocity.y = -jumpForce;
+            isJumping = true;
+            isHoldingJump = true;
+            jumpHoldTimer.Start();
+            player->SetState("jump");
 
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && isJumping && !isWallSliding) {
-        float timeLimit = (jumpCount == 1) ? maxJumpTime + 0.1f : maxJumpTime;
-        if (jumpTimer.ReadSec() < timeLimit) {
-            float extraImpulse = (jumpCount == 1) ? 0.5f : 0.3f;
-            velocity.y -= extraImpulse;
+            // Contador de saltos
+            jumpCount++;
+            isOnGround = false;
         }
     }
 
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP && isJumping) {
-        if (velocity.y < 0) {
-            velocity.y = 0;
+    // Mantener salto mientras se mantiene pulsado SPACE y no ha pasado el tiempo máximo
+    if (isHoldingJump && Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) {
+        if (jumpHoldTimer.ReadMSec() < maxJumpHoldTime) {
+            velocity.y = -jumpForce * 0.7f;
+        }
+        else {
+            isHoldingJump = false;
         }
     }
 
-    if (velocity.y > 0 && !isDashing && !isWallSliding) {
-        velocity.y += std::min(velocity.y * 0.1f, 0.5f);
+    // Cancelar impulso si se suelta la tecla
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP) {
+        isHoldingJump = false;
     }
 
     player->pbody->body->SetLinearVelocity(velocity);
 }
-
 
 void PlayerMechanics::HandleDash() {
 

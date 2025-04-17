@@ -38,6 +38,7 @@ enum class ColliderType {
 	DOOR,
 	ABILITY_ZONE,
 	DESTRUCTIBLE_WALL,
+	PUSHABLE_PLATFORM,
 	UNKNOWN
 };
 

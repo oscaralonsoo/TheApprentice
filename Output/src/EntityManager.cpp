@@ -14,6 +14,7 @@
 #include "Broodheart.h"
 #include "DestructibleWall.h"
 #include "PushableBox.h"
+#include "AbilityZone.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -50,6 +51,20 @@ bool EntityManager::Start() {
 	{
 		if (entity->active == false) continue;
 		ret = entity->Start();
+	}
+
+	return ret;
+}
+
+bool EntityManager::PreUpdate(float dt) {
+
+	bool ret = true;
+
+	//Iterates over the entities and calls Start
+	for (const auto entity : entities)
+	{
+		if (entity->active == false) continue;
+		ret = entity->PreUpdate(dt);
 	}
 
 	return ret;
@@ -174,6 +189,7 @@ bool EntityManager::Update(float dt)
 bool EntityManager::PostUpdate()
 {
 	bool ret = true;
+
 	for (const auto entity : entities)
 	{
 		if (entity->active == false) continue;

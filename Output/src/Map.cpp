@@ -116,8 +116,8 @@ void Map::DrawMapLayers(bool forwardOnly)
                             SDL_Rect tileRect = tileSet->GetRect(clean_gid);
                             Vector2D mapCoord = MapToWorld(i, j);
 
-                            int renderX = (int)(mapCoord.getX() - (Engine::GetInstance().render->camera.x * mapLayer->parallaxX));
-                            int renderY = (int)(mapCoord.getY() - (Engine::GetInstance().render->camera.y * mapLayer->parallaxY));
+                            int renderX = (int)mapCoord.getX();
+                            int renderY = (int)mapCoord.getY();
 
                             uint32_t pivot = tileRect.w / 2;
                             Engine::GetInstance().render->DrawTexture(tileSet->texture, renderX, renderY, &tileRect, 1.0f, angle, pivot, pivot, flip);
@@ -235,17 +235,6 @@ bool Map::Load(std::string path, std::string fileName)
             for (pugi::xml_node tileNode = layerNode.child("data").child("tile"); tileNode != NULL; tileNode = tileNode.next_sibling("tile")) {
                 mapLayer->tiles.push_back(tileNode.attribute("gid").as_uint());
             }
-
-            // Dentro del bucle que itera sobre cada capa en Load()
-            if (layerNode.attribute("parallaxx"))
-                mapLayer->parallaxX = layerNode.attribute("parallaxx").as_float();
-            else
-                mapLayer->parallaxX = 1.0f; // Valor por defecto
-
-            if (layerNode.attribute("parallaxy"))
-                mapLayer->parallaxY = layerNode.attribute("parallaxy").as_float();
-            else
-                mapLayer->parallaxY = 1.0f; // Valor por defecto
 
             //add the layer to the map
             mapData.layers.push_back(mapLayer);
@@ -399,7 +388,7 @@ bool Map::Load(std::string path, std::string fileName)
                     Engine::GetInstance().physics->listToDelete.push_back(downCameraCollider);
                 }
                 }
-            else if (objectGroupName == "abilities") //Enemies from object layer "Enemies"
+            else if (objectGroupName == "Abilities") //Enemies from object layer "Enemies"
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
                 {

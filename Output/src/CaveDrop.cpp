@@ -37,13 +37,13 @@ bool CaveDrop::Start() {
     texH = caveDropNode.attribute("h").as_int();
 
     // Crear cuerpo físico
-    pbody = Engine::GetInstance().physics->CreateRectangle((int)position.getX(), (int)position.getY(), 1, 1, bodyType::DYNAMIC);
+    pbody = Engine::GetInstance().physics->CreateRectangle((int)position.getX() + texW/2, (int)position.getY()+texH/2, 1, 1, bodyType::DYNAMIC);
     pbody->ctype = ColliderType::CAVE_DROP;
     pbody->listener = this;
     pbody->body->SetGravityScale(0);
 
     currentAnimation = &startAnim;
-    initPos = position;
+    initPos = {position.getX() + texW/2, position.getY() + texH/2 };
 
     randomTime = (std::rand() % MAX_RANDOM_TIME * 1000) + MIN_RANDOM_TIME * 1000;
     dropTimer.Start();

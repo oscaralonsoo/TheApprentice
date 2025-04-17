@@ -91,6 +91,11 @@
     <ClCompile Include="src\DestructibleWall.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\HiddenZone.cpp" />
+    <ClCompile Include="src\PushableBox.cpp" />
+    <ClCompile Include="src\Creebler.cpp">
+      <Filter>Source Files\Entities\Enemies\Creebler</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Bloodrusher.h">
@@ -194,6 +199,11 @@
     <ClInclude Include="src\DestructibleWall.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\HiddenZone.h" />
+    <ClInclude Include="src\PushableBox.h" />
+    <ClInclude Include="src\Creebler.h">
+      <Filter>Source Files\Entities\Enemies\Creebler</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="config.xml">
@@ -268,6 +278,9 @@
     </Filter>
     <Filter Include="Source Files\Entities\Enemies\Hypnoviper">
       <UniqueIdentifier>{c37d4129-e611-4c49-bd92-e6280e2c9c9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Enemies\Creebler">
+      <UniqueIdentifier>{c5ca5807-e2d7-4e2f-ac52-2574c3d75967}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

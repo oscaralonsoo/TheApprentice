@@ -25,7 +25,6 @@ enum bodyType {
 
 enum class ColliderType {
 	PLAYER, 
-	ITEM,
 	SPIKE,
 	WALL_SLIDE,
 	WALL,
@@ -37,6 +36,7 @@ enum class ColliderType {
 	SAVEGAME,
 	DOOR,
 	ABILITY_ZONE,
+	HIDDEN_ZONE,
 	DESTRUCTIBLE_WALL,
 	PUSHABLE_PLATFORM,
 	UNKNOWN

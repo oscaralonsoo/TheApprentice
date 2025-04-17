@@ -9,6 +9,9 @@
 #include "Hypnoviper.h"
 #include "Mireborn.h"
 #include "AbilityZone.h"
+#include "HiddenZone.h"
+#include "Creebler.h"
+#include "Scurver.h"
 #include "Thumpod.h"
 #include "Brood.h"
 #include "Broodheart.h"
@@ -108,6 +111,12 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::THUMPOD:
 		entity = new Thumpod();
 		break;
+	case EntityType::CREEBLER:
+		entity = new Creebler();
+		break;
+	case EntityType::SCURVER:
+		entity = new Scurver();
+		break;
 	case EntityType::MIREBORN:
 		entity = new Mireborn();
 		break;
@@ -119,6 +128,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::ABILITY_ZONE:
 		entity = new AbilityZone();
+		break;
+	case EntityType::HIDDEN_ZONE:
+		entity = new HiddenZone();
 		break;
 	case EntityType::DESTRUCTIBLE_WALL:
 		entity = new DestructibleWall();
@@ -138,13 +150,16 @@ Entity* EntityManager::CreateEntity(EntityType type)
 // Function to destroy a specific Entity
 void EntityManager::DestroyEntity(Entity* entity)
 {
-	for (auto it = entities.begin(); it != entities.end(); ++it)
+	for (auto it = entities.begin(); it != entities.end();)
 	{
 		if (*it == entity) {
 			(*it)->CleanUp();
-			delete* it; // Free the allocated memory
-			entities.erase(it); // Remove the entity from the list
-			break; // Exit the loop after removing the entity
+			delete* it;
+			it = entities.erase(it); // devuelve el siguiente iterador
+			break;
+		}
+		else {
+			++it;
 		}
 	}
 }
@@ -178,11 +193,20 @@ bool EntityManager::Update(float dt)
 		return true;
 
 	bool ret = true;
-	for(const auto entity : entities)
+
+	std::vector<Entity*> activeEntities;
+	for (auto entity : entities)
 	{
-		if (entity->active == false) continue;
+		if (entity->active)
+			activeEntities.push_back(entity);
+	}
+
+
+	for (auto entity : activeEntities)
+	{
 		ret = entity->Update(dt);
 	}
+
 	return ret;
 }
 
@@ -190,10 +214,19 @@ bool EntityManager::PostUpdate()
 {
 	bool ret = true;
 
-	for (const auto entity : entities)
+	// Copia segura de las entidades activas
+	std::vector<Entity*> activeEntities;
+	for (auto entity : entities)
 	{
-		if (entity->active == false) continue;
+		if (entity->active)
+			activeEntities.push_back(entity);
+	}
+
+	// Ahora iteramos sobre la copia, aunque la original se modifique
+	for (auto entity : activeEntities)
+	{
 		ret = entity->PostUpdate();
 	}
+
 	return ret;
 }

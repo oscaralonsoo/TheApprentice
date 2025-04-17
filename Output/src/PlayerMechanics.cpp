@@ -155,9 +155,6 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
             }
         }
         break;
-    case ColliderType::ITEM:
-        Engine::GetInstance().physics->DeletePhysBody(physB);
-        break;
     case ColliderType::DOWN_CAMERA:
         if (!inDownCameraZone && downCameraCooldown.ReadSec() >= downCameraCooldownTime) {
             inDownCameraZone = true;

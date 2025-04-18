@@ -53,17 +53,21 @@ private:
     bool isFalling = false;
 
     // Jump 
-    float jumpForce = 11.0f;
+    float jumpForce = 13.0f;
     bool isJumping = false;
     bool jumpUnlocked = true;
     Timer jumpCooldownTimer;
     float jumpCooldownTime = 150.0f;
     bool jumpCooldownActive = false;
+    float fallAccelerationFactor = 0.6f; // controla qué tan rápido acelera al caer tras soltar salto
 
-    // Jump progresivo
-    Timer jumpHoldTimer;
-    float maxJumpHoldTime = 400.0f; // en segundos
+    // Salto progresivo por altura
+    float jumpStartY = 0.0f;
+    float maxJumpHeight = 240.0f;     // altura máxima del salto prolongado (en píxeles)
+    float minHoldJumpHeight = 20.0f; // altura mínima para que empiece el hold jump
+    float jumpHoldForceFactor = 0.85f; // fuerza inicial del hold jump
     bool isHoldingJump = false;
+    float jumpDecayRate = 4.0f; // más alto = menos duración de salto prolongado
 
     //Double Jump
     bool doubleJumpUnlocked = false;

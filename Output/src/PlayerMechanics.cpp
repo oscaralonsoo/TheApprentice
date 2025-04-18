@@ -140,7 +140,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         break;
     case ColliderType::WALL_SLIDE:
-        if (!wallSlideCooldownActive) {
+        if (!wallSlideCooldownActive && !isOnGround) {
             isWallSliding = true;
             isJumping = false;
         }
@@ -271,7 +271,6 @@ void PlayerMechanics::HandleInput() {
         player->SetState("attack");
     }
 }
-
 void PlayerMechanics::HandleJump() {
     if (!jumpUnlocked) return;
 
@@ -280,24 +279,27 @@ void PlayerMechanics::HandleJump() {
     // Inicio del salto o doble salto
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
         if (isOnGround || (doubleJumpUnlocked && jumpCount < maxJumpCount)) {
-            velocity.y = -jumpForce;
+            velocity.y = -jumpForce; // sin el 0.8f, para dar un impulso inicial más fuerte
             isJumping = true;
             isHoldingJump = true;
-            jumpHoldTimer.Start();
-            player->SetState("jump");
-
-            // Contador de saltos
+            jumpStartY = player->GetPosition().getY(); // guardamos altura de inicio
             jumpCount++;
             isOnGround = false;
+            player->SetState("jump");
         }
     }
 
-    // Mantener salto mientras se mantiene pulsado SPACE y no ha pasado el tiempo máximo
     if (isHoldingJump && Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) {
-        if (jumpHoldTimer.ReadMSec() < maxJumpHoldTime) {
-            velocity.y = -jumpForce * 0.7f;
+        float currentY = player->GetPosition().getY();
+        float heightJumped = jumpStartY - currentY;
+
+        if (heightJumped >= minHoldJumpHeight && heightJumped < maxJumpHeight) {
+            float t = (heightJumped - minHoldJumpHeight) / (maxJumpHeight - minHoldJumpHeight);
+            float forceFactor = jumpHoldForceFactor * exp(-jumpDecayRate * t); // estilo Hollow Knight
+
+            velocity.y += -jumpForce * forceFactor * 0.05f;
         }
-        else {
+        else if (heightJumped >= maxJumpHeight) {
             isHoldingJump = false;
         }
     }
@@ -305,6 +307,11 @@ void PlayerMechanics::HandleJump() {
     // Cancelar impulso si se suelta la tecla
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP) {
         isHoldingJump = false;
+    }
+
+    // Caída rápida automática al soltar salto (estilo Hollow Knight)
+    if (isJumping && !isHoldingJump && !isWallSliding) {
+        velocity.y += fallAccelerationFactor; // acelera el descenso
     }
 
     player->pbody->body->SetLinearVelocity(velocity);

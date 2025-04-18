@@ -21,7 +21,8 @@ public:
     void EnableDash(bool enable) { dashUnlocked = enable; }
     int GetMovementDirection() const { return movementDirection; }
     bool IsVisible() const { return visible; }
-
+    void ToggleGodMode() { godMode = !godMode; }
+    bool IsGodMode() const { return godMode; }
 
     bool cantMove = false;
     bool canAttack = true;
@@ -82,7 +83,7 @@ private:
     float maxDashDistance = 100.0f;
     Timer dashCooldown;
     float dashMaxCoolDown = 1.0f;
-    bool dashUnlocked = true;
+    bool dashUnlocked = false;
     int dashDirection = 1;
 
     // Fall
@@ -134,4 +135,7 @@ private:
     bool inDownCameraZone = false;
     Timer downCameraCooldown;
     float downCameraCooldownTime = 0.2f;
+
+    //God mode
+    bool godMode = false;
 };

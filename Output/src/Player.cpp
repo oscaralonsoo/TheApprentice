@@ -54,7 +54,7 @@ bool Player::Start() {
 bool Player::Update(float dt) {
 	int direction = mechanics.GetMovementDirection();
 	bool flip = direction < 0;
-	animation.Update(dt, state, position.getX(), position.getY(), mechanics.IsVisible(), flip);
+	animation.Update(dt, state, position.getX(), position.getY() - 5, mechanics.IsVisible(), flip);
 
 	mechanics.Update(dt);
 
@@ -71,13 +71,14 @@ bool Player::Update(float dt) {
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_3) == KEY_DOWN) {
 		mechanics.EnableDash(true);
 	}
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_4) == KEY_DOWN) {
-		Engine::GetInstance().render->StartCameraShake(5, 100);
-	}
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_5) == KEY_DOWN) {
-		Engine::GetInstance().render->ToggleCameraLock();
-	}
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_6) == KEY_DOWN) {
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
+		mechanics.ToggleGodMode();
+		if (mechanics.IsGodMode()) {
+			pbody->body->SetGravityScale(0.0f);
+		}
+		else {
+			pbody->body->SetGravityScale(2.0f);
+		}
 	}
 
 	return true;

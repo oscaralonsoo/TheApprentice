@@ -21,6 +21,28 @@ void PlayerMechanics::Update(float dt) {
 
     if( Engine::GetInstance().scene->saving == true)
         return;
+    if (godMode) {
+        b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
+        velocity.x = 0.0f;
+        velocity.y = 0.0f;
+
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) {
+            velocity.y = -8.0f;
+        }
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
+            velocity.y = 8.0f;
+        }
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+            velocity.x = -8.0f;
+        }
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+            velocity.x = 8.0f;
+        }
+
+        player->pbody->body->SetLinearVelocity(velocity);
+        player->SetState("idle");  // O puedes poner una animación de vuelo si la tienes
+        return;
+    }
 
     if (wallSlideCooldownActive && wallSlideCooldownTimer.ReadMSec() >= wallSlideCooldownTime) {
         wallSlideCooldownActive = false;
@@ -34,7 +56,7 @@ void PlayerMechanics::Update(float dt) {
         jumpCooldownActive = false;
     }
 
-    if (shouldRespawn) {
+    if (shouldRespawn && !godMode) {
         shouldRespawn = false;
         player->SetPosition(lastPosition);  
         player->pbody->body->SetLinearVelocity(b2Vec2_zero);
@@ -108,9 +130,9 @@ void PlayerMechanics::Update(float dt) {
     }
 
     if (attackSensor != nullptr) {
-        int offsetX = (movementDirection > 0) ? 40 : -40;
+        int offsetX = (movementDirection > 0) ? 38 : -38;
         int playerX = METERS_TO_PIXELS(player->pbody->body->GetPosition().x) + offsetX;
-        int playerY = METERS_TO_PIXELS(player->pbody->body->GetPosition().y);
+        int playerY = METERS_TO_PIXELS(player->pbody->body->GetPosition().y) - 10;
 
         b2Vec2 newPos(PIXEL_TO_METERS(playerX), PIXEL_TO_METERS(playerY));
         attackSensor->body->SetTransform(newPos, 0);
@@ -160,14 +182,14 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
             inDownCameraZone = true;
             downCameraCooldown.Start();
             originalCameraOffsetY = Engine::GetInstance().render->cameraOffsetY;
-            Engine::GetInstance().render->cameraOffsetY = 400;
+            Engine::GetInstance().render->cameraOffsetY = 300;
         }
         break;
     case ColliderType::SAVEGAME:
         Engine::GetInstance().scene->saveGameZone = true;
         break;
     case ColliderType::ENEMY:
-        if (!isInvulnerable)
+        if (!isInvulnerable && !godMode)
         {
             vidas -= 1;
             StartInvulnerability();
@@ -175,9 +197,11 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         break;
     case ColliderType::SPIKE:
-        player->SetState("dead");
-        UpdateLastSafePosition();
-        shouldRespawn = true;
+        if (!godMode) {
+            player->SetState("dead");
+            UpdateLastSafePosition();
+            shouldRespawn = true;
+        }
         break;
     case ColliderType::PUSHABLE_PLATFORM:
         // Se comporta como una plataforma: permite saltar y aterrizar
@@ -405,12 +429,12 @@ void PlayerMechanics::HandleWallSlide() {
 }
 
 void PlayerMechanics::CreateAttackSensor() {
-    int offsetX = (movementDirection > 0) ? 40 : -40;
+    int offsetX = (movementDirection > 0) ? 38 : -38;
 
     playerAttackX = METERS_TO_PIXELS(player->pbody->body->GetPosition().x) + offsetX;
     playerAttackY = METERS_TO_PIXELS(player->pbody->body->GetPosition().y);
 
-    attackSensor = Engine::GetInstance().physics->CreateRectangleSensor(playerAttackX, playerAttackY, 32, 64, KINEMATIC);
+    attackSensor = Engine::GetInstance().physics->CreateRectangleSensor(playerAttackX, playerAttackY - 10, 32, 64, KINEMATIC);
     attackSensor->ctype = ColliderType::ATTACK;
     attackSensor->listener = player;
 

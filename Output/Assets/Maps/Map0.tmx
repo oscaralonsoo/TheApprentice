@@ -49634,7 +49634,7 @@
    <tile/>
   </data>
  </layer>
- <objectgroup id="57" name="WallSlide">
+ <objectgroup id="57" name="WallSlide" visible="0">
   <object id="691" x="5184" y="2368" height="64"/>
   <object id="710" x="7744" y="2816" height="64"/>
   <object id="711" x="7808" y="2688" height="128"/>
@@ -49684,7 +49684,7 @@
   </properties>
   <object id="881" x="8768" y="448" height="256"/>
  </objectgroup>
- <objectgroup id="26" name="Collisions">
+ <objectgroup id="26" name="Collisions" visible="0">
   <object id="647" x="4224" y="896" width="768"/>
   <object id="681" x="3072" y="2624" width="1022"/>
   <object id="694" x="4032" y="2880" width="2624"/>
@@ -49754,7 +49754,7 @@
   <object id="1230" x="6592" y="1344" width="256"/>
   <object id="1231" x="6464" y="1408" width="128"/>
  </objectgroup>
- <objectgroup id="58" name="Wall">
+ <objectgroup id="58" name="Wall" visible="0">
   <object id="700" x="6208" y="2752" height="64"/>
   <object id="701" x="6208" y="2816" width="128"/>
   <object id="702" x="6336" y="2752" height="64"/>
@@ -49980,12 +49980,12 @@
   <object id="913" name="CaveDrop" x="8088" y="2561" width="64" height="64"/>
   <object id="914" name="CaveDrop" x="8175" y="2559" width="64" height="64"/>
  </objectgroup>
- <objectgroup id="60" name="Enemies">
+ <objectgroup id="60" name="Enemies" visible="0">
   <object id="1191" name="Hypnoviper" x="5120" y="2752" width="64" height="64"/>
   <object id="1228" x="4800" y="2560" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="62" name="PushableBoxes" visible="0"/>
- <objectgroup id="63" name="Zones">
+ <objectgroup id="63" name="Zones" visible="0">
   <object id="905" name="HiddenZone" x="4231" y="153.174" width="697" height="928.653"/>
   <object id="908" name="HiddenZone" x="3778.1" y="2626.17" width="2555.37" height="450.333"/>
   <object id="909" name="HiddenZone" x="6524.5" y="2496.38" width="1967" height="689.06"/>

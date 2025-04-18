@@ -140,7 +140,7 @@ void EntityManager::DestroyEntity(Entity* entity)
 		if (*it == entity) {
 			(*it)->CleanUp();
 			delete* it;
-			it = entities.erase(it); // devuelve el siguiente iterador
+			it = entities.erase(it);
 			break;
 		}
 		else {

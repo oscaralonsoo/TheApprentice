@@ -114,14 +114,14 @@ void Render::ResetViewPort()
 }
 
 // Blit to screen
-bool  Render::DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SDL_Rect* section, float speed, double angle, uint32_t pivotX, uint32_t pivotY, SDL_RendererFlip flip) const
+bool  Render::DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SDL_Rect* section, float speed, double angle, uint32_t pivotX, uint32_t pivotY, SDL_RendererFlip flip, float scale) const
 {
 	bool ret = true;
-	float scale = Engine::GetInstance().window->GetScale() * cameraZoom;
+	float windowScale = Engine::GetInstance().window->GetScale() * cameraZoom;
 
 	SDL_Rect rect;
-	rect.x = static_cast<int>(camera.x * speed + x * scale);
-	rect.y = static_cast<int>(camera.y * speed + y * scale);
+	rect.x = static_cast<int>(camera.x * speed + x * windowScale);
+	rect.y = static_cast<int>(camera.y * speed + y * windowScale);
 
 
 	if(section != NULL)
@@ -134,8 +134,8 @@ bool  Render::DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SD
 		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
 	}
 
-	rect.w = static_cast<int>(rect.w * scale);
-	rect.h = static_cast<int>(rect.h * scale);
+	rect.w = static_cast<int>(rect.w * windowScale * scale);
+	rect.h = static_cast<int>(rect.h * windowScale * scale);
 
 
 	SDL_Point* p = NULL;

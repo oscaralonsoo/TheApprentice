@@ -10,6 +10,7 @@
 #include "Audio.h"
 #include "Scene.h"
 #include "EntityManager.h"
+#include "ParticleManager.h"
 #include "Map.h"
 #include "Physics.h"
 #include "GuiManager.h"
@@ -38,6 +39,7 @@ Engine::Engine() {
     physics = std::make_shared<Physics>();
     map = std::make_shared<Map>();
     entityManager = std::make_shared<EntityManager>();
+    particleManager = std::make_shared<ParticleManager>();
     scene = std::make_shared<Scene>();
     menus = std::make_shared<Menus>();
     guiManager = std::make_shared<GuiManager>();
@@ -53,6 +55,7 @@ Engine::Engine() {
     AddModule(std::static_pointer_cast<Module>(map));
     AddModule(std::static_pointer_cast<Module>(scene));
     AddModule(std::static_pointer_cast<Module>(entityManager));
+    AddModule(std::static_pointer_cast<Module>(particleManager));
     AddModule(std::static_pointer_cast<Module>(menus));
     AddModule(std::static_pointer_cast<Module>(guiManager));
     // Render last 

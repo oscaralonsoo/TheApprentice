@@ -58,7 +58,7 @@ private:
     bool isJumping = false;
     bool jumpUnlocked = true;
     Timer jumpCooldownTimer;
-    float jumpCooldownTime = 150.0f;
+    float jumpCooldownTime = 100.0f;
     bool jumpCooldownActive = false;
     float fallAccelerationFactor = 0.6f; // controla qué tan rápido acelera al caer tras soltar salto
 

@@ -273,6 +273,30 @@
 					</splash>
 				</cave_drop>
 			</props>
+			<particles>
+				<dust w="20" h="20" texture="Assets/Particles/dust.png">
+					<spawn loop="false" speed="0.13">
+						<frame x="0" y="0" w="20" h="20" />
+						<frame x="20" y="0" w="20" h="20" />
+						<frame x="40" y="0" w="20" h="20" />
+						<frame x="60" y="0" w="20" h="20" />
+					</spawn>
+					<float loop="true" speed="0.13">
+						<frame x="0" y="20" w="20" h="20" />
+					</float>
+					<fade loop="false" speed="0.13">
+						<frame x="0" y="40" w="20" h="20" />
+						<frame x="20" y="40" w="20" h="20" />
+						<frame x="40" y="40" w="20" h="20" />
+						<frame x="60" y="40" w="20" h="20" />
+						<frame x="80" y="40" w="20" h="20" />
+						<frame x="100" y="40" w="20" h="20" />
+						<frame x="120" y="40" w="20" h="20" />
+						<frame x="140" y="40" w="20" h="20" />
+						<frame x="160" y="40" w="20" h="20" />
+					</fade>
+				</dust>
+			</particles>
 			<abilities>
 				<ability type="Jump" w="144" h="144" texture="Assets/Props/huevosrana.png" />
 				<ability type="DoubleJump" w="124" h="124" texture="Assets/Textures/Abilities/jump.png" />
@@ -280,7 +304,7 @@
 			</abilities>
 		</animations>
 		<save_data isSaved="1">
-			<player x="3879" y="1003" w="44" h="54" />
+			<player x="1950" y="650" w="44" h="54" />
 			<scene actualScene="0" />
 			<enemies />
 		</save_data>

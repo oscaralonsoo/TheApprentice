@@ -153,6 +153,7 @@
     <ClCompile Include="src\CaveDrop.cpp" />
     <ClCompile Include="src\Creebler.cpp" />
     <ClCompile Include="src\DestructibleWall.cpp" />
+    <ClCompile Include="src\DustParticle.cpp" />
     <ClCompile Include="src\Enemy.cpp" />
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\EntityManager.cpp" />
@@ -165,6 +166,7 @@
     <ClCompile Include="src\Map.cpp" />
     <ClCompile Include="src\Menus.cpp" />
     <ClCompile Include="src\Mireborn.cpp" />
+    <ClCompile Include="src\ParticleManager.cpp" />
     <ClCompile Include="src\Pathfinding.cpp" />
     <ClCompile Include="src\PerfTimer.cpp" />
     <ClCompile Include="src\Physics.cpp" />
@@ -192,6 +194,7 @@
     <ClInclude Include="src\CaveDrop.h" />
     <ClInclude Include="src\Creebler.h" />
     <ClInclude Include="src\DestructibleWall.h" />
+    <ClInclude Include="src\DustParticle.h" />
     <ClInclude Include="src\Enemy.h" />
     <ClInclude Include="src\Engine.h" />
     <ClInclude Include="src\Entity.h" />
@@ -207,6 +210,7 @@
     <ClInclude Include="src\Menus.h" />
     <ClInclude Include="src\Mireborn.h" />
     <ClInclude Include="src\Module.h" />
+    <ClInclude Include="src\ParticleManager.h" />
     <ClInclude Include="src\Pathfinding.h" />
     <ClInclude Include="src\PerfTimer.h" />
     <ClInclude Include="src\Physics.h" />

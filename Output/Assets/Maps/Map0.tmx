@@ -56022,9 +56022,9 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="3217"/>
-   <tile gid="3218"/>
-   <tile gid="3219"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -58257,8 +58257,8 @@
   <object id="913" name="CaveDrop" x="8088" y="2561" width="64" height="64"/>
   <object id="914" name="CaveDrop" x="8175" y="2559" width="64" height="64"/>
  </objectgroup>
- <objectgroup id="60" name="Enemies" visible="0">
-  <object id="1191" x="5120" y="2752" width="64" height="64"/>
+ <objectgroup id="60" name="Enemies">
+  <object id="1191" name="Hypnoviper" x="5120" y="2752" width="64" height="64"/>
   <object id="1228" x="4800" y="2560" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="62" name="PushableBoxes" visible="0"/>

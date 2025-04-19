@@ -189,8 +189,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         Engine::GetInstance().scene->saveGameZone = true;
         break;
     case ColliderType::ENEMY:
-        if (!isInvulnerable && !godMode)
-        {
+        if (!isInvulnerable && !godMode && physA == player->pbody) {
             vidas -= 1;
             StartInvulnerability();
             Engine::GetInstance().render->StartCameraShake(0.5, 1);

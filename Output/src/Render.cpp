@@ -298,8 +298,22 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 
 	cameraImpulseX = static_cast<int>(cameraImpulseX * (1.0f - cameraImpulseSmoothing));
 
+	// Coordenadas de la cámara en el mundo
+	int cameraTop = -camera.y;
+	int cameraBottom = -camera.y + camera.h;
+
+	// Margen de anticipación (antes de que el player se salga)
+	int anticipationMargin = 75;
+
+	float dynamicSmoothing = smoothing;
+
+	// Si el player está cerca del borde inferior (a punto de salirse)
+	if (targetY > cameraBottom - anticipationMargin) {
+		dynamicSmoothing = smoothing * 2.0f; // acelerar seguimiento vertical
+	}
+
 	int targetCamY = -targetY + camera.h / 2 + cameraOffsetY;
-	camera.y += static_cast<int>((targetCamY - camera.y) * smoothing);
+	camera.y += static_cast<int>((targetCamY - camera.y) * dynamicSmoothing);
 
 	// Shake
 	if (isShaking) {

@@ -50,6 +50,10 @@ bool Window::Awake()
 			LOG("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 			ret = false;
 		}
+		else
+		{
+			SDL_ShowCursor(SDL_DISABLE); // <<--- Esto oculta el cursor
+		}
 	}
 	return ret;
 }

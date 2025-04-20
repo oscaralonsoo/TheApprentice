@@ -39,6 +39,7 @@ enum class ColliderType {
 	ABILITY_ZONE,
 	HIDDEN_ZONE,
 	DESTRUCTIBLE_WALL,
+	PUSHABLE_PLATFORM,
 	UNKNOWN
 };
 
@@ -104,7 +105,7 @@ public:
 private:
 
 	// Debug mode
-	bool debug;
+	bool debug = false;
 
 	// Box2D World
 	b2World* world;

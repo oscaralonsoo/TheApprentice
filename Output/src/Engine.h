@@ -39,6 +39,8 @@ public:
 	// Called before the first frame
 	bool Start();
 
+	bool PreUpdate();
+
 	// Called each loop iteration
 	bool Update();
 
@@ -66,9 +68,6 @@ private:
 
 	// Call modules before each loop iteration
 	void FinishUpdate();
-
-	// Call modules before each loop iteration
-	bool PreUpdate();
 
 	// Call modules on each loop iteration
 	bool DoUpdate();

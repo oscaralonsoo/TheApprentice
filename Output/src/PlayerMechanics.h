@@ -56,7 +56,7 @@ private:
     // Jump 
     float jumpForce = 13.0f;
     bool isJumping = false;
-    bool jumpUnlocked = true;
+    bool jumpUnlocked = false;
     Timer jumpCooldownTimer;
     float jumpCooldownTime = 100.0f;
     bool jumpCooldownActive = false;

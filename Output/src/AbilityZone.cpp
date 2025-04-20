@@ -79,6 +79,7 @@ bool AbilityZone::PreUpdate() {
 
 bool AbilityZone::Update(float dt)
 {
+	if (!pbody) return true;
 	b2Transform pbodyPos = pbody->body->GetTransform();
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
@@ -108,22 +109,27 @@ bool AbilityZone::Update(float dt)
 			player->pbody->body->SetLinearVelocity(velocity);
 		}
 
-		// Obtención de la habilidad
 		if (playerRight >= rightLimit - 144.0f) {
 			if (playerInsideJump && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
 				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
 				mechanics->cantMove = false;
 				mechanics->EnableJump(true);
+				mechanics->canAttack = true;
+				markedForDeletion = true; 
 			}
 			else if (playerInsideDoubleJump && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
 				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
 				mechanics->cantMove = false;
 				mechanics->EnableDoubleJump(true);
+				mechanics->canAttack = true;
+				markedForDeletion = true; 
 			}
 			else if (playerInsideDash && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
 				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
 				mechanics->cantMove = false;
 				mechanics->EnableDash(true);
+				mechanics->canAttack = true;
+				markedForDeletion = true; 
 			}
 		}
 	}
@@ -132,6 +138,14 @@ bool AbilityZone::Update(float dt)
 		int drawX = position.getX() + texW - abilitySpriteW - 100;
 		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 + 40;
 		Engine::GetInstance().render->DrawTexture(abilitySprite, drawX, drawY);
+	}
+
+	return true;
+}
+
+bool AbilityZone::PostUpdate() {
+	if (markedForDeletion) {
+		Engine::GetInstance().entityManager.get()->DestroyEntity(this);
 	}
 
 	return true;

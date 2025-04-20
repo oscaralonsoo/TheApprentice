@@ -1796,7 +1796,7 @@
    <tile gid="1603"/>
    <tile gid="1603"/>
    <tile gid="1603"/>
-   <tile/>
+   <tile gid="1724"/>
    <tile/>
    <tile gid="1603"/>
    <tile gid="1603"/>
@@ -4877,7 +4877,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="1696"/>
    <tile gid="1603"/>
    <tile gid="1603"/>
    <tile gid="1603"/>
@@ -12302,8 +12302,8 @@
    <tile/>
    <tile/>
    <tile gid="1115"/>
-   <tile gid="1116"/>
-   <tile gid="1117"/>
+   <tile/>
+   <tile/>
    <tile gid="1118"/>
    <tile/>
    <tile/>
@@ -12442,8 +12442,8 @@
    <tile/>
    <tile/>
    <tile gid="1145"/>
-   <tile gid="1146"/>
-   <tile gid="1147"/>
+   <tile/>
+   <tile/>
    <tile gid="1148"/>
    <tile/>
    <tile/>
@@ -12862,9 +12862,9 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="1093"/>
-   <tile gid="1094"/>
-   <tile gid="1095"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="1096"/>
    <tile gid="1097"/>
    <tile/>
@@ -13003,9 +13003,9 @@
    <tile/>
    <tile/>
    <tile gid="1123"/>
-   <tile gid="1124"/>
-   <tile gid="1125"/>
-   <tile gid="1126"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="1127"/>
    <tile/>
    <tile/>
@@ -28977,7 +28977,7 @@
    <tile gid="457"/>
    <tile gid="458"/>
    <tile gid="459"/>
-   <tile gid="460"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -29396,8 +29396,8 @@
    <tile/>
    <tile gid="283"/>
    <tile gid="284"/>
-   <tile gid="285"/>
-   <tile gid="286"/>
+   <tile/>
+   <tile/>
    <tile gid="287"/>
    <tile/>
    <tile/>
@@ -29537,8 +29537,8 @@
    <tile gid="313"/>
    <tile gid="314"/>
    <tile gid="315"/>
-   <tile gid="316"/>
-   <tile gid="317"/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -58257,7 +58257,7 @@
   <object id="913" name="CaveDrop" x="8088" y="2561" width="64" height="64"/>
   <object id="914" name="CaveDrop" x="8175" y="2559" width="64" height="64"/>
  </objectgroup>
- <objectgroup id="60" name="Enemies">
+ <objectgroup id="60" name="Enemies" visible="0">
   <object id="1191" name="Hypnoviper" x="5120" y="2752" width="64" height="64"/>
   <object id="1228" x="4800" y="2560" width="64" height="64"/>
  </objectgroup>

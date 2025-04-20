@@ -1,4 +1,3 @@
-// PlayerMechanics.h
 #pragma once
 
 #include "Vector2D.h"
@@ -41,6 +40,7 @@ private:
     void DestroyAttackSensor();
     void StartInvulnerability();
     void UpdateLastSafePosition();
+    void HandleSound();
 
 private:
     Player* player = nullptr;
@@ -58,7 +58,7 @@ private:
     bool isJumping = false;
     bool jumpUnlocked = true;
     Timer jumpCooldownTimer;
-    float jumpCooldownTime = 150.0f;
+    float jumpCooldownTime = 100.0f;
     bool jumpCooldownActive = false;
     float fallAccelerationFactor = 0.6f; // controla qué tan rápido acelera al caer tras soltar salto
 
@@ -138,4 +138,11 @@ private:
 
     //God mode
     bool godMode = false;
+
+    //Sounds
+    int slimeFxId = -1;
+    int slimeChannel = -1;
+    int jumpFxId = -1;
+    bool isSlimeSoundPlaying = false;
+    bool playJumpSound = false;
 };

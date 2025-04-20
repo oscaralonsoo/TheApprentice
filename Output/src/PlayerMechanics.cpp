@@ -7,9 +7,13 @@
 #include "Scene.h"
 #include "Physics.h"
 #include "Log.h"
+#include "Audio.h"
 
 void PlayerMechanics::Init(Player* player) {
     this->player = player;
+    slimeFxId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/slime_move.ogg", 0.1f);
+    jumpFxId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/slime_jump.ogg", 1.0f);
+
 }
 
 void PlayerMechanics::Update(float dt) {
@@ -141,6 +145,8 @@ void PlayerMechanics::Update(float dt) {
             DestroyAttackSensor();
         }
     }
+
+    HandleSound();
 }
 
 void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
@@ -228,8 +234,6 @@ void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         isOnGround = false;
         lasMovementDirection = movementDirection;
         lastPlatformCollider = physB;
-        jumpCooldownTimer.Start();
-        jumpCooldownActive = true;
         break;
     case ColliderType::WALL_SLIDE:
         isWallSliding = false;
@@ -309,6 +313,11 @@ void PlayerMechanics::HandleJump() {
             jumpCount++;
             isOnGround = false;
             player->SetState("jump");
+
+            jumpCooldownTimer.Start();
+            jumpCooldownActive = true;
+
+            playJumpSound = true;
         }
     }
 
@@ -391,11 +400,13 @@ void PlayerMechanics::CancelDash() {
 void PlayerMechanics::HandleFall() {
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
 
-    if (velocity.y > 0.5f && !isWallSliding) {
+    if (velocity.y > 0.1f && !isWallSliding) {
         if (!isFalling) {
             isFalling = true;
             fallStartY = player->GetPosition().getY();
             player->SetState("fall");
+            isJumping = true;
+            isOnGround = false;
         }
     }
     else if (isOnGround || isWallSliding) {
@@ -482,4 +493,40 @@ void PlayerMechanics::UpdateLastSafePosition() {
     }
 
     lastPosition = Vector2D(respawnX, respawnY);
+}
+
+void PlayerMechanics::HandleSound()
+{
+    bool isGroundedAndMoving =
+        isOnGround &&
+        !isJumping &&
+        !isFalling &&
+        !isDashing &&
+        !isStunned &&
+        (
+            Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT ||
+            Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT
+            );
+
+    if (isGroundedAndMoving) {
+        if (!isSlimeSoundPlaying && slimeFxId > 0) {
+            slimeChannel = Engine::GetInstance().audio->PlayFxReturnChannel(slimeFxId, 0.3f, -1);
+            if (slimeChannel != -1) {
+                isSlimeSoundPlaying = true;
+            }
+        }
+    }
+    else {
+        if (isSlimeSoundPlaying && slimeChannel != -1) {
+            Mix_HaltChannel(slimeChannel);
+            isSlimeSoundPlaying = false;
+            slimeChannel = -1;
+        }
+    }
+
+    // Sonido de salto (solo una vez cuando salta)
+    if (playJumpSound && jumpFxId > 0) {
+        Engine::GetInstance().audio->PlayFx(jumpFxId, 0.3f, 0);
+        playJumpSound = false;
+    }
 }

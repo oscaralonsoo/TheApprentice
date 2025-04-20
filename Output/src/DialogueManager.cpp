@@ -24,7 +24,23 @@ bool DialogueManager::Start() {
 
 bool DialogueManager::Update(float dt)
 {
-    RenderDialogue(1);
+    if (dialogueAvailable && !dialogueStarted) {
+        ShowInteractionPrompt();
+
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
+            dialogueStarted = true;
+            currentLineIndex = 0;
+        }
+    }
+
+    if (dialogueStarted && activeDialogueId != -1) {
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+            currentLineIndex++;
+        }
+
+        RenderDialogue(activeDialogueId);
+    }
+
     return true;
 }
 
@@ -61,11 +77,32 @@ void DialogueManager::LoadDialogues() {
 
 void DialogueManager::RenderDialogue(int dialogueId) {
     auto it = dialogueMap.find(dialogueId);
-    if (it != dialogueMap.end()) {
-        const DialogueEvent& event = it->second;
+    if (it == dialogueMap.end()) return;
 
-        for (const auto& line : event.lines) {
-            Engine::GetInstance().render->DrawText(line.c_str(), 0, 0, { 255, 255, 255, 255 }, 45);
-        }
+    const DialogueEvent& event = it->second;
+
+    if (currentLineIndex >= event.lines.size()) {
+        dialogueStarted = false;
+        currentLineIndex = 0;
+        return;
     }
+
+    SDL_Rect dialogueBox = { 500, 500, 1200, 150 };
+    Engine::GetInstance().render->DrawRectangle(dialogueBox, 0, 0, 0, 180, true, true);
+
+    int y = 100;
+    Engine::GetInstance().render->DrawText(event.speaker.c_str(), 50, y, { 255, 255, 100, 255 }, 48);
+    y += 50;
+
+    Engine::GetInstance().render->DrawText(event.lines[currentLineIndex].c_str(), 50, y, { 255, 255, 255, 255 }, 40);
+}
+
+void DialogueManager::SetDialogueAvailable(int dialogueId, bool active) {
+    dialogueAvailable = active;
+    dialogueStarted = false;
+    activeDialogueId = active ? dialogueId : -1;
+}
+
+void DialogueManager::ShowInteractionPrompt() {
+    Engine::GetInstance().render->DrawText("Presiona E para hablar", 600, 400, { 255, 255, 255, 255 }, 40);
 }

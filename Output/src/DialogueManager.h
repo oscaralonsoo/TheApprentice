@@ -34,9 +34,17 @@ public:
 
 	void RenderDialogue(int id);
 	void LoadDialogues();
+	void SetDialogueAvailable(int dialogueId, bool active);
+	void ShowInteractionPrompt();
 
 private:
 	std::string dialoguesPath = "dialogues.xml";
 
 	std::unordered_map<int, DialogueEvent> dialogueMap;
+
+	bool dialogueStarted = false;
+	bool dialogueAvailable = false;
+	int activeDialogueId = -1;
+
+	int currentLineIndex = 0;
 };

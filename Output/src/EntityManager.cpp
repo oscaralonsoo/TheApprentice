@@ -6,6 +6,7 @@
 #include "Log.h"
 #include "CaveDrop.h"
 #include "Bloodrusher.h"
+#include "NPC.h"
 #include "Hypnoviper.h"
 #include "Mireborn.h"
 #include "AbilityZone.h"
@@ -122,6 +123,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::PUSHABLE_BOX:
 		entity = new PushableBox();
+		break;
+	case EntityType::CASTOR:
+		entity = new NPC(EntityType::CASTOR);
 		break;
 	default:
 		break;

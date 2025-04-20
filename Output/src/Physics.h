@@ -31,6 +31,7 @@ enum class ColliderType {
 	DOWN_CAMERA,
 	ATTACK,
 	CAVE_DROP,
+	NPC,
 	ENEMY,
 	PLATFORM, 
 	SAVEGAME,

@@ -299,6 +299,20 @@
 					</fade>
 				</dust>
 			</particles>
+			<npcs>
+				<castor w="18" h="18" texture="Assets/Props/caveDrop.png">
+					<idle loop="true" speed="0.13">
+						<frame x="0" y="0" w="18" h="18" />
+						<frame x="18" y="0" w="18" h="18" />
+						<frame x="36" y="0" w="18" h="18" />
+						<frame x="0" y="18" w="18" h="18" />
+						<frame x="18" y="18" w="18" h="18" />
+						<frame x="36" y="18" w="18" h="18" />
+						<frame x="0" y="36" w="18" h="18" />
+						<frame x="18" y="36" w="18" h="18" />
+					</idle>
+				</castor>
+			</npcs>
 			<abilities>
 				<ability type="Jump" w="144" h="144" texture="Assets/Props/huevosrana.png" />
 				<ability type="DoubleJump" w="124" h="124" texture="Assets/Textures/Abilities/jump.png" />

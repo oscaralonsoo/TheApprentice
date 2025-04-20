@@ -234,8 +234,6 @@ void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         isOnGround = false;
         lasMovementDirection = movementDirection;
         lastPlatformCollider = physB;
-        jumpCooldownTimer.Start();
-        jumpCooldownActive = true;
         break;
     case ColliderType::WALL_SLIDE:
         isWallSliding = false;
@@ -315,6 +313,9 @@ void PlayerMechanics::HandleJump() {
             jumpCount++;
             isOnGround = false;
             player->SetState("jump");
+
+            jumpCooldownTimer.Start();
+            jumpCooldownActive = true;
 
             playJumpSound = true;
         }
@@ -399,11 +400,13 @@ void PlayerMechanics::CancelDash() {
 void PlayerMechanics::HandleFall() {
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
 
-    if (velocity.y > 0.5f && !isWallSliding) {
+    if (velocity.y > 0.1f && !isWallSliding) {
         if (!isFalling) {
             isFalling = true;
             fallStartY = player->GetPosition().getY();
             player->SetState("fall");
+            isJumping = true;
+            isOnGround = false;
         }
     }
     else if (isOnGround || isWallSliding) {

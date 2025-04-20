@@ -342,7 +342,7 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 }
 
 bool Render::DrawText(const char* text, int posx, int posy, SDL_Color color, int fontSize) const {
-	TTF_Font* customFont = TTF_OpenFont("Assets/Fonts/MarkaziText-VariableFont_wght.ttf", fontSize);
+	TTF_Font* customFont = TTF_OpenFont("Assets/Fonts/The-Apprentice-F1.ttf", fontSize);
 	if (!customFont) {
 		LOG("Failed to load font: %s", TTF_GetError());
 		return false;

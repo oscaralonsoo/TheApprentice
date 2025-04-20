@@ -46,7 +46,7 @@ public:
 
 	int targetScene = 0;
 	PhysBody* pbody;
-
+	PhysBody* enemySensor = nullptr;
 
 private:
 

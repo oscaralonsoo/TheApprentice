@@ -38,9 +38,28 @@ bool Player::Start() {
 	animation.LoadAnimations(parameters, texture);
 
     // Create the body at the same position, and ensure it's centered
-    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX(), (int)position.getY(), 45, 40, bodyType::DYNAMIC);
-    pbody->listener = this;
-    pbody->ctype = ColliderType::PLAYER;
+	pbody = Engine::GetInstance().physics.get()->CreateRectangle(
+		(int)position.getX(),
+		(int)position.getY(),
+		45, 40,
+		bodyType::DYNAMIC,
+		0, 0,
+		CATEGORY_PLAYER,
+		CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_SPIKE | CATEGORY_ENEMY | CATEGORY_SAVEGAME | CATEGORY_DOWN_CAMERA | CATEGORY_ABILITY_ZONE | CATEGORY_HIDDEN_ZONE
+	);
+	pbody->listener = this;
+	pbody->ctype = ColliderType::PLAYER;
+
+	enemySensor = Engine::GetInstance().physics->CreateRectangleSensor(
+		(int)position.getX(),
+		(int)position.getY(),
+		30, 35,
+		bodyType::DYNAMIC,
+		CATEGORY_PLAYER_DAMAGE,
+		CATEGORY_ENEMY                  
+	);
+	enemySensor->ctype = ColliderType::PLAYER_DAMAGE;
+	enemySensor->listener = this;
 
 	mechanics.Init(this);
 
@@ -79,6 +98,11 @@ bool Player::Update(float dt) {
 		else {
 			pbody->body->SetGravityScale(2.0f);
 		}
+	}
+
+	if (enemySensor && enemySensor->body) {
+		b2Vec2 mainPos = pbody->body->GetPosition();
+		enemySensor->body->SetTransform(mainPos, 0);
 	}
 
 	return true;

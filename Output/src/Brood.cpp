@@ -36,6 +36,15 @@ bool Brood::Start() {
         }
     }
 
+    // En Brood::Start(), después de crear el pbody
+    b2Fixture* fixture = pbody->body->GetFixtureList();
+    if (fixture) {
+        b2Filter filter;
+        filter.categoryBits = CATEGORY_ENEMY;
+        filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_PLAYER_DAMAGE | CATEGORY_ATTACK;
+        fixture->SetFilterData(filter);
+    }
+
     return Enemy::Start();
 }
 

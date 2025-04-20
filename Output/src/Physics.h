@@ -16,6 +16,20 @@
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
 
+#define CATEGORY_PLAYER           0x0001 
+#define CATEGORY_ENEMY            0x0002  
+#define CATEGORY_PLAYER_DAMAGE    0x0004  
+#define CATEGORY_PLATFORM         0x0008  
+#define CATEGORY_WALL             0x0010  
+#define CATEGORY_SPIKE            0x0020  
+#define CATEGORY_ABILITY_ZONE     0x0040  
+#define CATEGORY_HIDDEN_ZONE      0x0080
+#define CATEGORY_DUST_PARTICLE    0x0100
+#define CATEGORY_SAVEGAME         0x0200
+#define CATEGORY_DOWN_CAMERA      0x0400
+#define CATEGORY_ATTACK           0x0800
+#define CATEGORY_CAVE_DROP        0x1000
+
 // types of bodies
 enum bodyType {
 	DYNAMIC,
@@ -25,6 +39,7 @@ enum bodyType {
 
 enum class ColliderType {
 	PLAYER, 
+	PLAYER_DAMAGE,
 	SPIKE,
 	WALL_SLIDE,
 	WALL,
@@ -84,9 +99,9 @@ public:
 	bool CleanUp();
 
 	// Create basic physics objects
-	PhysBody* CreateRectangle(int x, int y, int width, int height, bodyType type, float offsetX = 0, float offsetY = 0);
+	PhysBody* CreateRectangle(int x, int y, int width, int height, bodyType type, float offsetX = 0, float offsetY = 0, uint16 categoryBits = 0xFFFF, uint16 maskBits = 0xFFFF);
 	PhysBody* CreateCircle(int x, int y, int radious, bodyType type);
-	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, bodyType type);
+	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, bodyType type, uint16 categoryBits, uint16 maskBits);
 	PhysBody* CreateChain(int x, int y, int* points, int size, bodyType type);
 	
 	// b2ContactListener ---

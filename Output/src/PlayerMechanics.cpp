@@ -195,7 +195,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         Engine::GetInstance().scene->saveGameZone = true;
         break;
     case ColliderType::ENEMY:
-        if (!isInvulnerable && !godMode && physA == player->pbody) {
+        if (!isInvulnerable && !godMode && physA->ctype == ColliderType::PLAYER_DAMAGE) {
             vidas -= 1;
             StartInvulnerability();
             Engine::GetInstance().render->StartCameraShake(0.5, 1);
@@ -444,7 +444,13 @@ void PlayerMechanics::CreateAttackSensor() {
     playerAttackX = METERS_TO_PIXELS(player->pbody->body->GetPosition().x) + offsetX;
     playerAttackY = METERS_TO_PIXELS(player->pbody->body->GetPosition().y);
 
-    attackSensor = Engine::GetInstance().physics->CreateRectangleSensor(playerAttackX, playerAttackY - 10, 32, 64, KINEMATIC);
+    attackSensor = Engine::GetInstance().physics->CreateRectangleSensor(
+        playerAttackX, playerAttackY - 10,
+        32, 64,
+        KINEMATIC,
+        CATEGORY_ATTACK,     
+        CATEGORY_ENEMY       
+    );
     attackSensor->ctype = ColliderType::ATTACK;
     attackSensor->listener = player;
 

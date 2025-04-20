@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="140" height="59" tilewidth="64" tileheight="64" infinite="0" nextlayerid="70" nextobjectid="1283">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="140" height="59" tilewidth="64" tileheight="64" infinite="0" nextlayerid="70" nextobjectid="1284">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -58271,5 +58271,7 @@
   <object id="1136" x="2752" y="256" width="960" height="960"/>
   <object id="1282" x="3776" y="2176" width="704" height="576"/>
  </objectgroup>
- <objectgroup id="66" name="Abilities" visible="0"/>
+ <objectgroup id="66" name="Abilities">
+  <object id="1283" name="Jump" x="3584" y="896" width="512" height="128"/>
+ </objectgroup>
 </map>

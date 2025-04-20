@@ -48,6 +48,14 @@ bool CaveDrop::Start() {
     randomTime = (std::rand() % MAX_RANDOM_TIME * 1000) + MIN_RANDOM_TIME * 1000;
     dropTimer.Start();
 
+    b2Fixture* fixture = pbody->body->GetFixtureList();
+    if (fixture) {
+        b2Filter filter;
+        filter.categoryBits = CATEGORY_CAVE_DROP;
+        filter.maskBits = CATEGORY_PLATFORM | CATEGORY_PLAYER;
+        fixture->SetFilterData(filter);
+    }
+
     return true;
 }
 

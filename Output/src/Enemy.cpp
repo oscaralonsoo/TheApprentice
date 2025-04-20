@@ -41,6 +41,14 @@ bool Enemy::Start() {
 	pathfinding = new Pathfinding();
 	ResetPath();
 
+	b2Fixture* fixture = pbody->body->GetFixtureList();
+	if (fixture) {
+		b2Filter filter;
+		filter.categoryBits = CATEGORY_ENEMY;
+		filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_ATTACK | CATEGORY_PLAYER_DAMAGE;
+		fixture->SetFilterData(filter);
+	}
+
 	return true;
 }
 

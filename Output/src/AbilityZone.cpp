@@ -54,7 +54,14 @@ bool AbilityZone::Start() {
 	currentAnimation = &idleAnim;
 
 	//Add a physics to an item - initialize the physics body
-	pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::STATIC);
+	pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor(
+		(int)position.getX() + texH / 2,
+		(int)position.getY() + texH / 2,
+		texW, texH,
+		bodyType::STATIC,
+		CATEGORY_ABILITY_ZONE,   // Este sensor es de tipo "AbilityZone"
+		CATEGORY_PLAYER          // Solo interactúa con el player
+	);
 
 	//Assign collider type
 	pbody->ctype = ColliderType::ABILITY_ZONE;

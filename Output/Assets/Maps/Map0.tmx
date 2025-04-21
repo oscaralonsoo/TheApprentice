@@ -49633,7 +49633,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="54" name="Forward_Layer" width="140" height="59" parallaxx="0" parallaxy="0">
+ <layer id="54" name="Forward_Layer" width="140" height="59" visible="0" parallaxx="0" parallaxy="0">
   <properties>
    <property name="Draw" type="bool" value="true"/>
    <property name="Forward" type="bool" value="true"/>
@@ -58265,8 +58265,8 @@
   <object id="1286" name="Creebler" x="5952" y="576" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="62" name="PushableBoxes" visible="0"/>
- <objectgroup id="63" name="Zones" visible="0">
-  <object id="905" name="HiddenZone" x="4199" y="153.174" width="729" height="928.653"/>
+ <objectgroup id="63" name="Zones">
+  <object id="905" name="HiddenZone" x="4237" y="177.378" width="691" height="880.246"/>
   <object id="908" name="HiddenZone" x="3538.1" y="2646.17" width="2223.37" height="430.333"/>
   <object id="909" name="HiddenZone" x="6524.5" y="2496.38" width="1967" height="689.06"/>
  </objectgroup>

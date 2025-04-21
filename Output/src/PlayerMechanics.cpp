@@ -546,7 +546,7 @@ void PlayerMechanics::HandleLifes()
     if (vidas <= 0) 
     {
         printf("ENTRAAAAAAA");
-        Engine::GetInstance().scene.get()->ReloadCurrentSceneAtCheckpoint();
+        player->SetPosition(Vector2D(1950, 650));
         vidas = 3;
     }
 }

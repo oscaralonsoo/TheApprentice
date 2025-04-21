@@ -6,6 +6,7 @@
 #include "Log.h"
 #include "CaveDrop.h"
 #include "Bloodrusher.h"
+#include "NPC.h"
 #include "Hypnoviper.h"
 #include "Mireborn.h"
 #include "AbilityZone.h"
@@ -17,6 +18,7 @@
 #include "Broodheart.h"
 #include "DestructibleWall.h"
 #include "PushableBox.h"
+#include "AbilityZone.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -53,6 +55,20 @@ bool EntityManager::Start() {
 	{
 		if (entity->active == false) continue;
 		ret = entity->Start();
+	}
+
+	return ret;
+}
+
+bool EntityManager::PreUpdate(float dt) {
+
+	bool ret = true;
+
+	//Iterates over the entities and calls Start
+	for (const auto entity : entities)
+	{
+		if (entity->active == false) continue;
+		ret = entity->PreUpdate(dt);
 	}
 
 	return ret;
@@ -122,6 +138,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::PUSHABLE_BOX:
 		entity = new PushableBox();
+		break;
+	case EntityType::CASTOR:
+		entity = new NPC(EntityType::CASTOR);
 		break;
 	default:
 		break;

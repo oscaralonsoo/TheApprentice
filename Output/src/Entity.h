@@ -9,6 +9,7 @@ enum class EntityType
 	BLOODRUSHER,
 	CREEBLER,
 	MIREBORN,
+	CASTOR,
 	HYPNOVIPER,
 	BROODHEART,
 	THUMPOD,
@@ -37,6 +38,11 @@ public:
 	}
 
 	virtual bool Start()
+	{
+		return true;
+	}
+
+	virtual bool PreUpdate(float dt)
 	{
 		return true;
 	}

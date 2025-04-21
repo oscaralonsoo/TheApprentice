@@ -64,6 +64,12 @@ bool AbilityZone::Start() {
 	return true;
 }
 
+bool AbilityZone::PreUpdate() {
+
+	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY());
+	return true;
+}
+
 bool AbilityZone::Update(float dt)
 {
 	b2Transform pbodyPos = pbody->body->GetTransform();
@@ -115,11 +121,9 @@ bool AbilityZone::Update(float dt)
 		}
 	}
 
-	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY());
-
 	if (abilitySprite) {
 		int drawX = position.getX() + texW - abilitySpriteW - 100;
-		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 + 20;
+		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 + 40;
 		Engine::GetInstance().render->DrawTexture(abilitySprite, drawX, drawY);
 	}
 

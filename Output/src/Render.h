@@ -86,5 +86,5 @@ public:
 
 	TTF_Font* font;
 
-	int cameraOffsetY = 500;
+	int cameraOffsetY = 400;
 };

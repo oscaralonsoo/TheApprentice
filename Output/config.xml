@@ -95,15 +95,13 @@
 				</die>
 			</player>
 			<enemies>
-				<enemy type="Bloodrusher" w="134" h="134" texture="Assets/Enemies/noctilume.png">
+				<enemy type="Bloodrusher" w="134" h="134" texture="Assets/Enemies/bloodrusher.png">
 					<idle loop="true" speed="0.35">
-						<frame x="0" y="0" w="134" h="134" />
-						<frame x="134" y="0" w="134" h="134" />
-						<frame x="268" y="0" w="134" h="134" />
-						<frame x="402" y="0" w="134" h="134" />
-						<frame x="536" y="0" w="134" h="134" />
-						<frame x="670" y="0" w="134" h="134" />
-						<frame x="804" y="0" w="134" h="134" />
+						<frame x="0" y="134" w="134" h="134" />
+						<frame x="134" y="134" w="134" h="134" />
+						<frame x="268" y="134" w="134" h="134" />
+						<frame x="402" y="134" w="134" h="134" />
+						<frame x="536" y="134" w="134" h="134" />
 					</idle>
 					<attack loop="true" speed="0.1">
 						<frame x="0" y="0" w="200" h="200" />
@@ -299,6 +297,20 @@
 					</fade>
 				</dust>
 			</particles>
+			<npcs>
+				<castor w="18" h="18" texture="Assets/Props/caveDrop.png">
+					<idle loop="true" speed="0.13">
+						<frame x="0" y="0" w="18" h="18" />
+						<frame x="18" y="0" w="18" h="18" />
+						<frame x="36" y="0" w="18" h="18" />
+						<frame x="0" y="18" w="18" h="18" />
+						<frame x="18" y="18" w="18" h="18" />
+						<frame x="36" y="18" w="18" h="18" />
+						<frame x="0" y="36" w="18" h="18" />
+						<frame x="18" y="36" w="18" h="18" />
+					</idle>
+				</castor>
+			</npcs>
 			<abilities>
 				<ability type="Jump" w="144" h="144" texture="Assets/Props/huevosrana.png" />
 				<ability type="DoubleJump" w="124" h="124" texture="Assets/Textures/Abilities/jump.png" />

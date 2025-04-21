@@ -117,8 +117,8 @@ void Map::DrawMapLayers(bool forwardOnly)
                             SDL_Rect tileRect = tileSet->GetRect(clean_gid);
                             Vector2D mapCoord = MapToWorld(i, j);
 
-                            int renderX = (int)(mapCoord.getX() - (Engine::GetInstance().render->camera.x * mapLayer->parallaxX));
-                            int renderY = (int)(mapCoord.getY() - (Engine::GetInstance().render->camera.y * mapLayer->parallaxY));
+                            int renderX = (int)mapCoord.getX();
+                            int renderY = (int)mapCoord.getY();
 
                             uint32_t pivot = tileRect.w / 2;
                             Engine::GetInstance().render->DrawTexture(tileSet->texture, renderX, renderY, &tileRect, 1.0f, angle, pivot, pivot, flip);
@@ -236,17 +236,6 @@ bool Map::Load(std::string path, std::string fileName)
             for (pugi::xml_node tileNode = layerNode.child("data").child("tile"); tileNode != NULL; tileNode = tileNode.next_sibling("tile")) {
                 mapLayer->tiles.push_back(tileNode.attribute("gid").as_uint());
             }
-
-            // Dentro del bucle que itera sobre cada capa en Load()
-            if (layerNode.attribute("parallaxx"))
-                mapLayer->parallaxX = layerNode.attribute("parallaxx").as_float();
-            else
-                mapLayer->parallaxX = 1.0f; // Valor por defecto
-
-            if (layerNode.attribute("parallaxy"))
-                mapLayer->parallaxY = layerNode.attribute("parallaxy").as_float();
-            else
-                mapLayer->parallaxY = 1.0f; // Valor por defecto
 
             //add the layer to the map
             mapData.layers.push_back(mapLayer);
@@ -385,7 +374,7 @@ bool Map::Load(std::string path, std::string fileName)
                     Engine::GetInstance().physics->listToDelete.push_back(saveGameCollider);
                 }
             }
-            else if (objectGroupName == "DownCamera") // Objects from layer SaveGame
+            else if (objectGroupName == "DownCamera") // Objects from layer DownCamera
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
                 {
@@ -400,7 +389,7 @@ bool Map::Load(std::string path, std::string fileName)
                     Engine::GetInstance().physics->listToDelete.push_back(downCameraCollider);
                 }
                 }
-            else if (objectGroupName == "Abilities") //Enemies from object layer "Enemies"
+            else if (objectGroupName == "Abilities") //Abilities from object layer "Abilities"
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
                 {
@@ -484,12 +473,12 @@ bool Map::Load(std::string path, std::string fileName)
                     box->SetParameters(node);
                 }
             }
-            else if (objectGroupName == "Particles") // Load Particles part�culas
+            else if (objectGroupName == "Particles")
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
                 {
                     std::string objectName = objectNode.attribute("name").as_string();
-                    if (objectName == "CaveDrop") // Load Cavedrop
+                    if (objectName == "CaveDrop")
                     {
                         int x = objectNode.attribute("x").as_int();
                         int y = objectNode.attribute("y").as_int();
@@ -501,7 +490,7 @@ bool Map::Load(std::string path, std::string fileName)
                     }
                 }
             }
-            else if (objectGroupName == "Zones") // Load Zones
+            else if (objectGroupName == "Zones")
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
                 {
@@ -522,7 +511,7 @@ bool Map::Load(std::string path, std::string fileName)
                     }
                 }
             }
-            else if (objectGroupName == "Enemies") //Enemies from object layer "Enemies"
+            else if (objectGroupName == "Enemies")
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
                 {
@@ -531,8 +520,7 @@ bool Map::Load(std::string path, std::string fileName)
                     int y = objectNode.attribute("y").as_int();
 
                     int width, height;
-                    GetEnemyDimensionsFromConfig(enemyName, width, height); // Obtain dimensions from config.xml
-
+                    GetEnemyDimensionsFromConfig(enemyName, width, height);
                     pugi::xml_document tempDoc;
                     pugi::xml_node enemyNode = tempDoc.append_child("enemy");
 
@@ -571,10 +559,44 @@ bool Map::Load(std::string path, std::string fileName)
                     }
                 }
             }
+            else if (objectGroupName == "NPC")
+            {
+                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
+                {
+                    std::string npcName = objectNode.attribute("name").as_string();
+                    int x = objectNode.attribute("x").as_int();
+                    int y = objectNode.attribute("y").as_int();
+                    int w = objectNode.attribute("width").as_int();
+                    int h = objectNode.attribute("height").as_int();
+
+                    pugi::xml_document tempDoc;
+                    pugi::xml_node npcNode = tempDoc.append_child("enemy");
+
+                    npcNode.append_attribute("type") = npcName.c_str();
+                    npcNode.append_attribute("x") = x;
+                    npcNode.append_attribute("y") = y;
+                    npcNode.append_attribute("w") = w;
+                    npcNode.append_attribute("h") = h;
+                    npcNode.append_attribute("gravity") = true;
+
+                    Enemy* npc = nullptr;
+
+                    if (npcName == "Castor")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CASTOR);
+                    else if (npcName == "JavierGomez")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CASTOR);
+
+                    if (npc != nullptr)
+                    {
+                        npc->SetParameters(npcNode);
+                        LOG("Created NPC '%s' at x: %d, y: %d", npcName.c_str(), x, y);
+                    }
+                }
+                }
         }
         ret = true;
 
-        // L06: TODO 5: LOG all the data loaded iterate all tilesetsand LOG everything
+
         if (ret == true)
         {
             LOG("Successfully parsed map XML file :%s", fileName.c_str());
@@ -583,7 +605,6 @@ bool Map::Load(std::string path, std::string fileName)
 
             LOG("Tilesets----");
 
-            //iterate the tilesets
             for (const auto& tileset : mapData.tilesets) {
                 LOG("name : %s firstgid : %d", tileset->name.c_str(), tileset->firstGid);
                 LOG("tile width : %d tile height : %d", tileset->tileWidth, tileset->tileHeight);
@@ -608,7 +629,7 @@ bool Map::Load(std::string path, std::string fileName)
     mapLoaded = ret;
     return ret;
 }
-// L07: TODO 8: Create a method that translates x,y coordinates from map positions to world positions
+
 Vector2D Map::MapToWorld(int x, int y) const
 {
     Vector2D ret;
@@ -618,6 +639,7 @@ Vector2D Map::MapToWorld(int x, int y) const
 
     return ret;
 }
+
 Vector2D Map::WorldToMap(int x, int y) {
 
     Vector2D ret(0, 0);
@@ -627,7 +649,7 @@ Vector2D Map::WorldToMap(int x, int y) {
 
     return ret;
 }
-// L09: TODO 6: Load a group of properties from a node and fill a list with it
+
 bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
 {
     bool ret = false;
@@ -644,6 +666,7 @@ bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
 
     return ret;
 }
+
 MapLayer* Map::GetNavigationLayer() {
     for (const auto& layer : mapData.layers) {
         if (layer->properties.GetProperty("Navigation") != NULL &&
@@ -654,7 +677,7 @@ MapLayer* Map::GetNavigationLayer() {
 
     return nullptr;
 }
-// L09: TODO 7: Implement a method to get the value of a custom property
+
 Properties::Property* Properties::GetProperty(const char* name)
 {
     for (const auto& property : propertyList) {
@@ -665,12 +688,12 @@ Properties::Property* Properties::GetProperty(const char* name)
 
     return nullptr;
 }
+
 void Map::GetEnemyDimensionsFromConfig(const std::string& enemyName, int& width, int& height)
 {
     pugi::xml_document configDoc;
     configDoc.load_file("config.xml");
 
-    // Look at xml by "type"
     pugi::xml_node enemyNode = configDoc.child("config").child("scene").child("animations").child("enemies").child("enemy");
     while (enemyNode) {
         if (enemyNode.attribute("type").as_string() == enemyName) {
@@ -681,6 +704,7 @@ void Map::GetEnemyDimensionsFromConfig(const std::string& enemyName, int& width,
         enemyNode = enemyNode.next_sibling("enemy");
     }
 }
+
 void Map::GetAbilityDimensionsFromConfig(const std::string& abilityName, int& width, int& height)
 {
     pugi::xml_document configDoc;
@@ -696,7 +720,6 @@ void Map::GetAbilityDimensionsFromConfig(const std::string& abilityName, int& wi
         abilityNode = abilityNode.next_sibling("ability");
     }
 
-    // Valores por defecto si no se encuentra
     width = 50;
     height = 50;
 }

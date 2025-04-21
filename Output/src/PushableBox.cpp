@@ -18,17 +18,18 @@ bool PushableBox::Start()
     pbody->ctype = ColliderType::WALL; // O uno nuevo, como PUSHABLE, si lo defines
     pbody->listener = this;
 
-    pbody->body->SetGravityScale(0.0f);
+    pbody->body->SetGravityScale(5.0f);
     pbody->body->GetFixtureList()->SetFriction(2.0f); // Alta fricción
     pbody->body->GetFixtureList()->SetDensity(5.0f);  // Más masa
     pbody->body->ResetMassData();
+
+    pbody->ctype = ColliderType::PUSHABLE_PLATFORM;
 
     return true;
 }
 
 bool PushableBox::Update(float dt)
 {
-    b2Vec2 velocity = pbody->body->GetLinearVelocity();
     
     // Actualizar posición lógica desde física
     if (pbody && pbody->body)
@@ -40,12 +41,10 @@ bool PushableBox::Update(float dt)
 
     if (!touchingPlayer)
     {
-        velocity.x = 0; 
-        pbody->body->SetLinearVelocity(velocity);
+        b2Vec2 currentVelocity = pbody->body->GetLinearVelocity();
+        pbody->body->SetLinearVelocity(b2Vec2(0, currentVelocity.y));
     }
 
-    // Dibujar textura
-    Engine::GetInstance().render->DrawTexture(texture, position.getX(), position.getY());
     return true;
 }
 

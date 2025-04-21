@@ -74,7 +74,6 @@
     <ClCompile Include="src\Scene.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="src\AbilityZone.cpp" />
     <ClCompile Include="src\Mireborn.cpp">
       <Filter>Source Files\Entities\Enemies\Mireborn</Filter>
     </ClCompile>
@@ -87,14 +86,32 @@
     <ClCompile Include="src\Hypnoviper.cpp">
       <Filter>Source Files\Entities\Enemies\Hypnoviper</Filter>
     </ClCompile>
-    <ClCompile Include="src\Thumpod.cpp" />
-    <ClCompile Include="src\DestructibleWall.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\HiddenZone.cpp" />
-    <ClCompile Include="src\PushableBox.cpp" />
     <ClCompile Include="src\Creebler.cpp">
       <Filter>Source Files\Entities\Enemies\Creebler</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DustParticle.cpp">
+      <Filter>Source Files\Entities\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ParticleManager.cpp">
+      <Filter>Source Files\Entities\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scurver.cpp">
+      <Filter>Source Files\Entities\Enemies\Scurver</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Thumpod.cpp">
+      <Filter>Source Files\Entities\Enemies\Thumpod</Filter>
+    </ClCompile>
+    <ClCompile Include="src\HiddenZone.cpp">
+      <Filter>Source Files\Entities\Interactions with player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PushableBox.cpp">
+      <Filter>Source Files\Entities\Interactions with player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DestructibleWall.cpp">
+      <Filter>Source Files\Entities\Interactions with player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AbilityZone.cpp">
+      <Filter>Source Files\Entities\Interactions with player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -182,7 +199,6 @@
     <ClInclude Include="src\Scene.h">
       <Filter>Source Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="src\AbilityZone.h" />
     <ClInclude Include="src\Mireborn.h">
       <Filter>Source Files\Entities\Enemies\Mireborn</Filter>
     </ClInclude>
@@ -195,14 +211,32 @@
     <ClInclude Include="src\Hypnoviper.h">
       <Filter>Source Files\Entities\Enemies\Hypnoviper</Filter>
     </ClInclude>
-    <ClInclude Include="src\Thumpod.h" />
-    <ClInclude Include="src\DestructibleWall.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\HiddenZone.h" />
-    <ClInclude Include="src\PushableBox.h" />
     <ClInclude Include="src\Creebler.h">
       <Filter>Source Files\Entities\Enemies\Creebler</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DustParticle.h">
+      <Filter>Source Files\Entities\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ParticleManager.h">
+      <Filter>Source Files\Entities\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scurver.h">
+      <Filter>Source Files\Entities\Enemies\Scurver</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Thumpod.h">
+      <Filter>Source Files\Entities\Enemies\Thumpod</Filter>
+    </ClInclude>
+    <ClInclude Include="src\HiddenZone.h">
+      <Filter>Source Files\Entities\Interactions with player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PushableBox.h">
+      <Filter>Source Files\Entities\Interactions with player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DestructibleWall.h">
+      <Filter>Source Files\Entities\Interactions with player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AbilityZone.h">
+      <Filter>Source Files\Entities\Interactions with player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -281,6 +315,15 @@
     </Filter>
     <Filter Include="Source Files\Entities\Enemies\Creebler">
       <UniqueIdentifier>{c5ca5807-e2d7-4e2f-ac52-2574c3d75967}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Enemies\Scurver">
+      <UniqueIdentifier>{e1b597c1-564f-411f-aa97-b2e9f7c0c273}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Enemies\Thumpod">
+      <UniqueIdentifier>{8c923f56-8d88-4a8b-8956-b0ec0b4ecd1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Interactions with player">
+      <UniqueIdentifier>{eecedcd9-b351-41f8-be66-c898d07146b7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

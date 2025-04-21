@@ -1,4 +1,3 @@
-// PlayerMechanics.h
 #pragma once
 
 #include "Vector2D.h"
@@ -21,7 +20,8 @@ public:
     void EnableDash(bool enable) { dashUnlocked = enable; }
     int GetMovementDirection() const { return movementDirection; }
     bool IsVisible() const { return visible; }
-
+    void ToggleGodMode() { godMode = !godMode; }
+    bool IsGodMode() const { return godMode; }
 
     bool cantMove = false;
     bool canAttack = true;
@@ -40,6 +40,7 @@ private:
     void DestroyAttackSensor();
     void StartInvulnerability();
     void UpdateLastSafePosition();
+    void HandleSound();
 
 private:
     Player* player = nullptr;
@@ -53,18 +54,26 @@ private:
     bool isFalling = false;
 
     // Jump 
-    float jumpForce = 10.0f;
+    float jumpForce = 13.0f;
     bool isJumping = false;
-    float maxJumpTime = 0.3f;
-    Timer jumpTimer;
     bool jumpUnlocked = true;
-    bool isDoingProgressiveJump = false;
+    Timer jumpCooldownTimer;
+    float jumpCooldownTime = 100.0f;
+    bool jumpCooldownActive = false;
+    float fallAccelerationFactor = 0.6f; // controla qué tan rápido acelera al caer tras soltar salto
 
-    // DoubleJump
-    bool doubleJumpUnlocked = true;
-    bool hasDoubleJumped = false;
+    // Salto progresivo por altura
+    float jumpStartY = 0.0f;
+    float maxJumpHeight = 240.0f;     // altura máxima del salto prolongado (en píxeles)
+    float minHoldJumpHeight = 20.0f; // altura mínima para que empiece el hold jump
+    float jumpHoldForceFactor = 0.85f; // fuerza inicial del hold jump
+    bool isHoldingJump = false;
+    float jumpDecayRate = 4.0f; // más alto = menos duración de salto prolongado
+
+    //Double Jump
+    bool doubleJumpUnlocked = false;
     int jumpCount = 0;
-    int maxJumpCount = 1;
+    const int maxJumpCount = 2; // salto normal + doble salto
 
     // Dash
     bool isDashing = false;
@@ -74,7 +83,7 @@ private:
     float maxDashDistance = 100.0f;
     Timer dashCooldown;
     float dashMaxCoolDown = 1.0f;
-    bool dashUnlocked = true;
+    bool dashUnlocked = false;
     int dashDirection = 1;
 
     // Fall
@@ -126,4 +135,14 @@ private:
     bool inDownCameraZone = false;
     Timer downCameraCooldown;
     float downCameraCooldownTime = 0.2f;
+
+    //God mode
+    bool godMode = false;
+
+    //Sounds
+    int slimeFxId = -1;
+    int slimeChannel = -1;
+    int jumpFxId = -1;
+    bool isSlimeSoundPlaying = false;
+    bool playJumpSound = false;
 };

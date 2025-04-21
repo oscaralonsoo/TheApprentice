@@ -17,6 +17,8 @@ public:
 	// Called before render is available
 	bool Awake();
 
+	bool PreUpdate(float dt);
+
 	// Called after Awake
 	bool Start();
 

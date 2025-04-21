@@ -17,6 +17,7 @@ class Audio;
 class Scene;
 class EntityManager;
 class ParticleManager;
+class DialogueManager;
 class Map;
 class Menus;
 //L08 TODO 2: Add Physics module
@@ -37,6 +38,8 @@ public:
 
 	// Called before the first frame
 	bool Start();
+
+	bool PreUpdate();
 
 	// Called each loop iteration
 	bool Update();
@@ -65,9 +68,6 @@ private:
 
 	// Call modules before each loop iteration
 	void FinishUpdate();
-
-	// Call modules before each loop iteration
-	bool PreUpdate();
 
 	// Call modules on each loop iteration
 	bool DoUpdate();
@@ -105,6 +105,7 @@ public:
 	std::shared_ptr<EntityManager> entityManager;
 	std::shared_ptr<ParticleManager> particleManager;
 	std::shared_ptr<Map> map;
+	std::shared_ptr<DialogueManager> dialogueManager;
 	std::shared_ptr<Menus> menus;
 	std::shared_ptr<Physics> physics;
 	std::shared_ptr<GuiManager> guiManager;

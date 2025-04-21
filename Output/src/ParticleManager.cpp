@@ -169,9 +169,9 @@ void ParticleManager::SpawnRandomParticles()
 
 	MapLayer* layer = Engine::GetInstance().map.get()->GetNavigationLayer();
 
-	if (!layer->Get(posMap.x, posMap.y)) {
-		DustParticle* particle = (DustParticle*)CreateParticle(EntityType::DUST_PARTICLE);
-		particle->Start();
-		particle->SetPosition({ (float)randX - camera.x, (float)randY - camera.y });
-	}
+	//if (!layer->Get(posMap.x, posMap.y)) {
+	//	DustParticle* particle = (DustParticle*)CreateParticle(EntityType::DUST_PARTICLE);
+	//	particle->Start();
+	//	particle->SetPosition({ (float)randX - camera.x, (float)randY - camera.y });
+	//}
 }

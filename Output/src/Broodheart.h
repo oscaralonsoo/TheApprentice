@@ -2,12 +2,9 @@
 
 #include "Enemy.h"
 #include "SDL2/SDL.h"
+#include <list>
 
-enum class BroodheartState {
-    IDLE,
-    SPAWN,
-    DEAD
-};
+class Brood;
 
 class Broodheart : public Enemy
 {
@@ -19,24 +16,26 @@ public:
     bool Awake() override;
     bool Start() override;
     bool Update(float dt) override;
+    bool PostUpdate() override;
     bool CleanUp() override;
+
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
 
-    void Idle(float dt);
+    void Spawn();
 
-    void Spawn(float dt);
-
-
-public:
+    void OnBroodDeath(Brood* brood);
 
 private:
-    float SpawnCooldown = 0.0f;
-    float SpawnTimer = 0.0f;
-
     bool playerInRange = false;
-
-    BroodheartState currentState = BroodheartState::IDLE;
+    float lastDeltaTime = 0.0f;
     PhysBody* physBody = nullptr;
+
     Animation idleAnim;
+
+    // Brood Spawn
+    float spawnCooldown = 0.0f;
+    float spawnInterval = 0.0f;
+    bool shouldSpawn = false;
+    const float spawnRadius = 100.0f;
+    std::list<Brood*> broodsAlive;
 };
-#pragma once

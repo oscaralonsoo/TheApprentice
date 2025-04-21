@@ -329,7 +329,7 @@ bool Map::Load(std::string path, std::string fileName)
                     int height = objectNode.attribute("height").as_int();
 
                     // Create Door type Collider
-                    PhysBody* doorCollider = Engine::GetInstance().physics->CreateRectangle(x + (width / 2), y + (height / 2), width, height, STATIC);
+                    PhysBody* doorCollider = Engine::GetInstance().physics->CreateRectangleSensor(x + (width / 2), y + (height / 2), width, height, STATIC);
                     doorCollider->ctype = ColliderType::DOOR;
 
                     // Access Properties by Name
@@ -521,6 +521,7 @@ bool Map::Load(std::string path, std::string fileName)
 
                     int width, height;
                     GetEnemyDimensionsFromConfig(enemyName, width, height);
+
                     pugi::xml_document tempDoc;
                     pugi::xml_node enemyNode = tempDoc.append_child("enemy");
 
@@ -529,7 +530,7 @@ bool Map::Load(std::string path, std::string fileName)
                     enemyNode.append_attribute("y") = y;
                     enemyNode.append_attribute("w") = width;
                     enemyNode.append_attribute("h") = height;
-                    enemyNode.append_attribute("gravity") = true;
+
 
                     Enemy* enemy = nullptr;
 
@@ -547,10 +548,16 @@ bool Map::Load(std::string path, std::string fileName)
                         enemyNode.append_attribute("tier") = "Alpha";
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::MIREBORN);
                     }
-                    else if (enemyName == "Broodheart")
-                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BROODHEART);
+                    else if (enemyName == "Broodheart"){
+                        enemyNode.append_attribute("gravity") = false;
+                    enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BROODHEART);
+                    }
                     else if (enemyName == "Brood")
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BROOD);
+                    else if (enemyName == "Noctilume") {
+                        enemyNode.append_attribute("gravity") = false;
+                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::NOCTILUME);
+                    }
 
                     if (enemy != nullptr)
                     {

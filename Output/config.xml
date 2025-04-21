@@ -95,20 +95,43 @@
 				</die>
 			</player>
 			<enemies>
-				<enemy type="Bloodrusher" w="134" h="134" texture="Assets/Enemies/bloodrusher.png">
+				<enemy type="Bloodrusher" w="220" h="220" texture="Assets/Enemies/bloodrusher.png">
 					<idle loop="true" speed="0.35">
-						<frame x="0" y="134" w="134" h="134" />
-						<frame x="134" y="134" w="134" h="134" />
-						<frame x="268" y="134" w="134" h="134" />
-						<frame x="402" y="134" w="134" h="134" />
-						<frame x="536" y="134" w="134" h="134" />
+						<frame x="0" y="0" w="220" h="220" />
+						<frame x="220" y="0" w="220" h="220" />
+						<frame x="440" y="0" w="220" h="220" />
+						<frame x="660" y="0" w="220" h="220" />
+						<frame x="880" y="0" w="220" h="220" />
+						<frame x="1100" y="0" w="220" h="220" />
+						<frame x="1320" y="0" w="220" h="220" />
+						<frame x="1540" y="0" w="220" h="220" />
+						<frame x="1760" y="0" w="220" h="220" />
 					</idle>
-					<attack loop="true" speed="0.1">
-						<frame x="0" y="0" w="200" h="200" />
+					<attack loop="true" speed="0.2">
+						<frame x="0" y="220" w="238" h="238" />
+						<frame x="238" y="220" w="238" h="238" />
+						<frame x="476" y="220" w="238" h="238" />
+						<frame x="714" y="220" w="238" h="238" />
+						<frame x="952" y="220" w="238" h="238" />
+						<frame x="1190" y="220" w="238" h="238" />
 					</attack>
-					<slide loop="true" speed="0.1">
-						<frame x="0" y="0" w="200" h="200" />
+					<slide loop="true" speed="0.2">
+						<frame x="0" y="458" w="220" h="220" />
+						<frame x="220" y="458" w="220" h="220" />
+						<frame x="440" y="458" w="220" h="220" />
+						<frame x="660" y="458" w="220" h="220" />
+						<frame x="880" y="458" w="220" h="220" />
 					</slide>
+					<dead loop="false" speed="0.15">
+						<frame x="0" y="678" w="244" h="244" />
+						<frame x="244" y="678" w="244" h="244" />
+						<frame x="488" y="678" w="244" h="244" />
+						<frame x="732" y="678" w="244" h="244" />
+						<frame x="976" y="678" w="244" h="244" />
+						<frame x="1220" y="678" w="244" h="244" />
+						<frame x="1464" y="678" w="244" h="244" />
+						<frame x="1708" y="678" w="244" h="244" />
+					</dead>
 				</enemy>
 				<enemy type="Thumpod" w="256" h="256" texture="Assets/Enemies/thumpod.png">
 					<idle loop="true" speed="0.1">

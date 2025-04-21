@@ -70,4 +70,5 @@ protected:
 	bool showPath = false;
 	const char* texturePath;
 
+	int direction = -1;
 };

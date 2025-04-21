@@ -17,6 +17,17 @@ bool Bloodrusher::Awake() {
 }
 
 bool Bloodrusher::Start() {
+    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texW / 2, (int)position.getY() + texH / 2, texW / 1.5, texH / 2, bodyType::DYNAMIC, 0, 27);
+
+    pbody->ctype = ColliderType::ENEMY;
+
+    pbody->listener = this;
+
+    if (!gravity) pbody->body->SetGravityScale(0);
+
+    pathfinding = new Pathfinding();
+    ResetPath();
+
     pugi::xml_document loadFile;
     pugi::xml_parse_result result = loadFile.load_file("config.xml");
 
@@ -28,12 +39,13 @@ bool Bloodrusher::Start() {
             idleAnim.LoadAnimations(enemyNode.child("idle"));
             attackAnim.LoadAnimations(enemyNode.child("attack"));
             slideAnim.LoadAnimations(enemyNode.child("slide"));
+            deadAnim.LoadAnimations(enemyNode.child("dead"));
         }
     }
 
     currentAnimation = &idleAnim;
 
-    return Enemy::Start();
+    return true;
 }
 
 bool Bloodrusher::Update(float dt) {
@@ -55,10 +67,20 @@ bool Bloodrusher::Update(float dt) {
         Slide(dt);
         break;
     case BloodrusherState::DEAD:
+        Dead();
         break;
     }
 
     return Enemy::Update(dt);
+}
+
+bool Bloodrusher::PostUpdate() {
+
+    if (currentState == BloodrusherState::DEAD && currentAnimation->HasFinished()) {
+        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+    }
+
+    return true;
 }
 
 
@@ -67,23 +89,19 @@ bool Bloodrusher::CleanUp() {
 }
 
 void Bloodrusher::Idle() {
-    currentAnimation = &idleAnim;
+    if (currentAnimation != &idleAnim) currentAnimation = &idleAnim;
 }
 
 void Bloodrusher::Attack(float dt)
 {
-    currentAnimation = &attackAnim;
+    if (currentAnimation != &attackAnim) currentAnimation = &attackAnim;
 
     b2Vec2 currentVelocity = pbody->body->GetLinearVelocity();
-
-    static float exponentialFactor = 1.007f;
-    static float velocityBase = 0.15f;
-    static float maxSpeed = 15.0f;
 
     Vector2D nextTile = pathfinding->pathTiles.front();
     Vector2D nextTileWorld = Engine::GetInstance().map.get()->MapToWorld(nextTile.getX(), nextTile.getY());
 
-    float direction = (nextTileWorld.getX() > position.getX()) ? 1.0f :
+    direction = (nextTileWorld.getX() > position.getX()) ? 1.0f :
         (nextTileWorld.getX() < position.getX() ? -1.0f : 0.0f);
 
     if (direction != previousDirection)
@@ -105,7 +123,7 @@ void Bloodrusher::Attack(float dt)
 }
 
 void Bloodrusher::Slide(float dt) {
-    currentAnimation = &slideAnim;
+    if (currentAnimation != &slideAnim) currentAnimation = &slideAnim;
 
     b2Vec2 currentVelocity = pbody->body->GetLinearVelocity();
 
@@ -124,7 +142,12 @@ void Bloodrusher::Slide(float dt) {
 }
 
 
+void Bloodrusher::Dead() {
+    if (currentAnimation != &deadAnim) currentAnimation = &deadAnim;
 
+    pbody->body->SetLinearVelocity(b2Vec2_zero);
+    pbody->body->SetAngularVelocity(0);
+}
 
 void Bloodrusher::OnCollision(PhysBody* physA, PhysBody* physB)
 {
@@ -134,11 +157,7 @@ void Bloodrusher::OnCollision(PhysBody* physA, PhysBody* physB)
         if (currentState == BloodrusherState::ATTACKING)
         {
             currentState = BloodrusherState::DEAD;
-            Engine::GetInstance().entityManager->DestroyEntity(this);
         }
-        break;
-    case ColliderType::ATTACK:
-        currentState = BloodrusherState::DEAD;
         break;
     }
 }

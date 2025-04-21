@@ -7,13 +7,20 @@ enum class EntityType
 {
 	PLAYER,
 	BLOODRUSHER,
+	CREEBLER,
 	MIREBORN,
+	CASTOR,
 	HYPNOVIPER,
 	BROODHEART,
 	THUMPOD,
+	SCURVER,
 	BROOD,
 	CAVE_DROP,
 	ABILITY_ZONE,
+	HIDDEN_ZONE,
+	DESTRUCTIBLE_WALL,
+	PUSHABLE_BOX,
+	DUST_PARTICLE,
 	UNKNOWN
 };
 
@@ -31,6 +38,11 @@ public:
 	}
 
 	virtual bool Start()
+	{
+		return true;
+	}
+
+	virtual bool PreUpdate(float dt)
 	{
 		return true;
 	}

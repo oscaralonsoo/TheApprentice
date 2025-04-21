@@ -15,7 +15,6 @@ Physics::Physics() : Module()
 {
 	// Initialise all the internal class variables, at least to NULL pointer
 	world = NULL;
-	debug = true;
 }
 
 // Destructor
@@ -338,7 +337,10 @@ bool Physics::PostUpdate()
 
 	// Process bodies to delete after the world step
 	for (PhysBody* physBody : bodiesToDelete) {
-		world->DestroyBody(physBody->body);
+		if (physBody && physBody->body) {
+			world->DestroyBody(physBody->body);
+			physBody->body = nullptr;
+		}
 	}
 	bodiesToDelete.clear();
 
@@ -412,7 +414,9 @@ bool Physics::IsPendingToDelete(PhysBody* physBody) {
 }
 
 void Physics::DeletePhysBody(PhysBody* physBody) {
-	bodiesToDelete.push_back(physBody);
+	if (!IsPendingToDelete(physBody)) {
+		bodiesToDelete.push_back(physBody);
+	}
 }
 
 //--------------- PhysBody

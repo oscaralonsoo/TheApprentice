@@ -31,6 +31,5 @@ private:
     Animation hitAnim;
     Animation deadAnim;
 
-    bool isDead = false;
     Timer hitTimer;
 };

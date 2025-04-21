@@ -45,6 +45,8 @@ public:
 
 	virtual void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
+	std::string GetEnemyType() const { return type; }
+
 
 public:
 	//Pathfinding

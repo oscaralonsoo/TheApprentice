@@ -114,14 +114,14 @@ void Render::ResetViewPort()
 }
 
 // Blit to screen
-bool  Render::DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SDL_Rect* section, float speed, double angle, uint32_t pivotX, uint32_t pivotY, SDL_RendererFlip flip) const
+bool  Render::DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SDL_Rect* section, float speed, double angle, uint32_t pivotX, uint32_t pivotY, SDL_RendererFlip flip, float scale) const
 {
 	bool ret = true;
-	float scale = Engine::GetInstance().window->GetScale() * cameraZoom;
+	float windowScale = Engine::GetInstance().window->GetScale() * cameraZoom;
 
 	SDL_Rect rect;
-	rect.x = static_cast<int>(camera.x * speed + x * scale);
-	rect.y = static_cast<int>(camera.y * speed + y * scale);
+	rect.x = static_cast<int>(camera.x * speed + x * windowScale);
+	rect.y = static_cast<int>(camera.y * speed + y * windowScale);
 
 
 	if(section != NULL)
@@ -134,8 +134,8 @@ bool  Render::DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SD
 		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
 	}
 
-	rect.w = static_cast<int>(rect.w * scale);
-	rect.h = static_cast<int>(rect.h * scale);
+	rect.w = static_cast<int>(rect.w * windowScale * scale);
+	rect.h = static_cast<int>(rect.h * windowScale * scale);
 
 
 	SDL_Point* p = NULL;
@@ -298,8 +298,22 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 
 	cameraImpulseX = static_cast<int>(cameraImpulseX * (1.0f - cameraImpulseSmoothing));
 
+	// Coordenadas de la cámara en el mundo
+	int cameraTop = -camera.y;
+	int cameraBottom = -camera.y + camera.h;
+
+	// Margen de anticipación (antes de que el player se salga)
+	int anticipationMargin = 100;
+
+	float dynamicSmoothing = smoothing;
+
+	// Si el player está cerca del borde inferior (a punto de salirse)
+	if (targetY > cameraBottom - anticipationMargin) {
+		dynamicSmoothing = smoothing * 2.0f; // acelerar seguimiento vertical
+	}
+
 	int targetCamY = -targetY + camera.h / 2 + cameraOffsetY;
-	camera.y += static_cast<int>((targetCamY - camera.y) * smoothing);
+	camera.y += static_cast<int>((targetCamY - camera.y) * dynamicSmoothing);
 
 	// Shake
 	if (isShaking) {
@@ -328,7 +342,7 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 }
 
 bool Render::DrawText(const char* text, int posx, int posy, SDL_Color color, int fontSize) const {
-	TTF_Font* customFont = TTF_OpenFont("Assets/Fonts/ChangesModern.ttf", fontSize);
+	TTF_Font* customFont = TTF_OpenFont("Assets/Fonts/MarkaziText-Medium.ttf", fontSize);
 	if (!customFont) {
 		LOG("Failed to load font: %s", TTF_GetError());
 		return false;

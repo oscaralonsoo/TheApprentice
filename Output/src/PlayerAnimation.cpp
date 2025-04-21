@@ -17,11 +17,12 @@ void PlayerAnimation::Update(float dt, const std::string& state, int x, int y, b
 {
     if (animations.find(state) != animations.end()) {
         currentAnimation = &animations[state];
+        //printf("Animaciï¿½n actual: %s\n", state.c_str());
     }
 
     bool adjustedFlip = flip;
 
-    // Si es la animación de wall_slide, invertimos el flip
+    // Si es la animaciï¿½n de wall_slide, invertimos el flip
     if (state == "wall_slide") {
         adjustedFlip = !flip;
     }

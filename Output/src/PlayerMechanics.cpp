@@ -18,11 +18,6 @@ void PlayerMechanics::Init(Player* player) {
 
 void PlayerMechanics::Update(float dt) {
 
-    if (vidas <= 0) {
-        //Engine::GetInstance().scene->LoadGameXML();
-        //return;
-    }
-
     if( Engine::GetInstance().scene->saving == true)
         return;
     if (godMode) {
@@ -58,6 +53,10 @@ void PlayerMechanics::Update(float dt) {
 
     if (jumpCooldownActive && jumpCooldownTimer.ReadMSec() >= jumpCooldownTime) {
         jumpCooldownActive = false;
+    }
+
+    if (!inDownCameraZone && downCameraCooldown.ReadMSec() >= downCameraCooldownTime) {
+        inDownCameraZone = false;
     }
 
     if (shouldRespawn && !godMode) {
@@ -149,6 +148,11 @@ void PlayerMechanics::Update(float dt) {
     HandleSound();
 }
 
+void PlayerMechanics::PostUpdate()
+{
+    HandleLifes();
+}
+
 void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
@@ -184,7 +188,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         break;
     case ColliderType::DOWN_CAMERA:
-        if (!inDownCameraZone && downCameraCooldown.ReadSec() >= downCameraCooldownTime) {
+        if (!inDownCameraZone) {
             inDownCameraZone = true;
             downCameraCooldown.Start();
             originalCameraOffsetY = Engine::GetInstance().render->cameraOffsetY;
@@ -534,5 +538,15 @@ void PlayerMechanics::HandleSound()
     if (playJumpSound && jumpFxId > 0) {
         Engine::GetInstance().audio->PlayFx(jumpFxId, 0.3f, 0);
         playJumpSound = false;
+    }
+}
+
+void PlayerMechanics::HandleLifes()
+{
+    if (vidas <= 0) 
+    {
+        printf("ENTRAAAAAAA");
+        Engine::GetInstance().scene.get()->ReloadCurrentSceneAtCheckpoint();
+        vidas = 3;
     }
 }

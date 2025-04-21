@@ -17,7 +17,7 @@ bool DestructibleWall::Start()
 {
     // Inicializar cuerpo físico como estático
     pbody = Engine::GetInstance().physics->CreateRectangle(position.getX() + texW / 2, position.getY() + texH / 2, texW, texH, STATIC);
-    pbody->ctype = ColliderType::WALL;
+    pbody->ctype = ColliderType::DESTRUCTIBLE_WALL;
     pbody->listener = this;
 
     return true;

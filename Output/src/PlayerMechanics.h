@@ -11,6 +11,7 @@ class PlayerMechanics {
 public:
     void Init(Player* player);
     void Update(float dt);
+    void PostUpdate();
 
     void OnCollision(PhysBody* physA, PhysBody* physB);
     void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
@@ -41,6 +42,7 @@ private:
     void StartInvulnerability();
     void UpdateLastSafePosition();
     void HandleSound();
+    void HandleLifes();
 
 private:
     Player* player = nullptr;
@@ -134,7 +136,7 @@ private:
     int originalCameraOffsetY;
     bool inDownCameraZone = false;
     Timer downCameraCooldown;
-    float downCameraCooldownTime = 0.2f;
+    float downCameraCooldownTime = 100.0f;
 
     //God mode
     bool godMode = false;

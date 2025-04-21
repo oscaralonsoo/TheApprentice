@@ -21,6 +21,7 @@ public:
 	bool Awake();
 	bool Start();
 	bool Update(float dt);
+	bool PostUpdate();
 	bool CleanUp();
 
 	// Manejo de colisiones

@@ -41,7 +41,7 @@ bool Player::Start() {
 	pbody = Engine::GetInstance().physics.get()->CreateRectangle(
 		(int)position.getX(),
 		(int)position.getY(),
-		45, 40,
+		60, 40,
 		bodyType::DYNAMIC,
 		0, 0,
 		CATEGORY_PLAYER,
@@ -53,7 +53,7 @@ bool Player::Start() {
 	enemySensor = Engine::GetInstance().physics->CreateRectangleSensor(
 		(int)position.getX(),
 		(int)position.getY(),
-		30, 35,
+		45, 40,
 		bodyType::DYNAMIC,
 		CATEGORY_PLAYER_DAMAGE,
 		CATEGORY_ENEMY                  
@@ -71,6 +71,18 @@ bool Player::Start() {
 }
 
 bool Player::Update(float dt) {
+	if (pbody == nullptr || pbody->body == nullptr) {
+		LOG("ERROR: pbody o body es nullptr");
+		return false;  // o gestión específica
+	}
+
+	if (enemySensor && enemySensor->body) {
+		b2Vec2 mainPos = pbody->body->GetPosition();
+		enemySensor->body->SetTransform(mainPos, 0);
+	}
+	else {
+		LOG("ADVERTENCIA: enemySensor o su body son nullptr");
+	}
 	int direction = mechanics.GetMovementDirection();
 	bool flip = direction < 0;
 	animation.Update(dt, state, position.getX(), position.getY() - 5, mechanics.IsVisible(), flip);
@@ -105,6 +117,11 @@ bool Player::Update(float dt) {
 		enemySensor->body->SetTransform(mainPos, 0);
 	}
 
+	return true;
+}
+
+bool Player::PostUpdate() {
+	mechanics.PostUpdate();
 	return true;
 }
 

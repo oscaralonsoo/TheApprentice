@@ -43457,7 +43457,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="26"/>
+   <tile gid="16"/>
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
@@ -43596,8 +43596,8 @@
    <tile gid="2"/>
    <tile gid="2"/>
    <tile gid="2"/>
+   <tile gid="25"/>
    <tile gid="26"/>
-   <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
@@ -49633,7 +49633,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="54" name="Forward_Layer" width="140" height="59" visible="0" parallaxx="0" parallaxy="0">
+ <layer id="54" name="Forward_Layer" width="140" height="59" parallaxx="0" parallaxy="0">
   <properties>
    <property name="Draw" type="bool" value="true"/>
    <property name="Forward" type="bool" value="true"/>
@@ -51725,7 +51725,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="16"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -51864,8 +51864,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="25"/>
-   <tile gid="26"/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -57944,11 +57944,17 @@
   <object id="1109" x="5120" y="1088" height="128"/>
   <object id="1118" x="7488" y="960" height="256"/>
  </objectgroup>
- <objectgroup id="25" name="Doors" visible="0">
+ <objectgroup id="25" name="Doors">
   <properties>
    <property name="Doors" type="bool" value="true"/>
   </properties>
-  <object id="1256" x="8941.83" y="384.667" width="4.16667" height="191.333"/>
+  <object id="1256" x="1554" y="384.667" width="128" height="767.333">
+   <properties>
+    <property name="PlayerPosX" type="int" value="64"/>
+    <property name="PlayerPosY" type="int" value="64"/>
+    <property name="TargetScene" type="int" value="1"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="26" name="Collisions" visible="0">
   <object id="647" x="4224" y="896" width="768"/>

@@ -93,8 +93,7 @@ bool Scene::PostUpdate()
 		SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, 0, 0, 0, static_cast<Uint8>(transitionAlpha * 255));
 		SDL_RenderFillRect(Engine::GetInstance().render->renderer, nullptr);
 	}
-
-	Vignette(300, 0.8);
+	Vignette(player->GetMechanics()->vignetteSize, 0.8f); 
 
 	return ret;
 }
@@ -228,12 +227,11 @@ void Scene::Vignette(int size, float strength)
 	SDL_GetRendererOutputSize(renderer, &width, &height);
 
 	vignetteSize = size;
-	vignetteStrength = strength;
 
 	for (int i = 0; i < vignetteSize; i++)
 	{
 		distFactor = (float)i / vignetteSize;
-		opacity = powf(1.0f - distFactor, 2) * vignetteStrength;
+		opacity = powf(1.0f - distFactor, 2) * strength;
 		alpha = static_cast<Uint8>(opacity * 255);
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, alpha);

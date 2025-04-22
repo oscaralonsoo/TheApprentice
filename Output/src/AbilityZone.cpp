@@ -15,6 +15,13 @@
 #include "PlayerMechanics.h"
 #include "Scene.h"
 
+template<typename T>
+T clamp(const T& value, const T& min, const T& max) {
+	if (value < min) return min;
+	if (value > max) return max;
+	return value;
+}
+
 AbilityZone::AbilityZone() : Entity(EntityType::CAVE_DROP), state(AbilityZoneStates::WAITING)
 {
 }
@@ -81,6 +88,8 @@ bool AbilityZone::Update(float dt)
 
 	if (playerInside)
 	{
+		VignetteChange(dt);
+
 		float rightLimit = position.getX() + texW;
 		float targetStopX = rightLimit - 120.0f; // antes era -60, ahora un poco más adelante
 		float playerRight = player->GetPosition().getX() + player->GetTextureWidth();
@@ -136,6 +145,35 @@ bool AbilityZone::CleanUp()
 	return true;
 }
 
+void AbilityZone::VignetteChange(float dt)
+{
+	Player* player = Engine::GetInstance().scene->GetPlayer();
+
+	// Progresión de la viñeta mientras avanza
+	float zoneStartX = position.getX();
+	float zoneEndX = zoneStartX + texW;
+	float playerX = player->GetPosition().getX();
+
+	float progress = (playerX - zoneStartX) / (zoneEndX - zoneStartX);
+	progress = clamp(progress, 0.0f, 1.0f);
+
+	progress = 1.0f - powf(1.0f - progress, 4.0f);
+	int minVignetteSize = 300;  // tamaño mínimo
+	int maxVignetteSize = 900; // tamaño máximo
+
+	int newVignetteSize = minVignetteSize + static_cast<int>((maxVignetteSize - minVignetteSize) * progress);
+
+	// Añadir efecto de vibración
+	if (progress > 0.90f) {
+		float vibrateAmplitude = 100.0f;
+		float vibrateSpeed = 30.0f;
+		float offset = sinf(dt * vibrateSpeed) * vibrateAmplitude;
+		newVignetteSize += static_cast<int>(offset);
+	}
+	// Aplicar tamaño
+	player->GetMechanics()->vignetteSize = newVignetteSize;
+}
+
 void AbilityZone::SetPosition(Vector2D pos) {
 	pos.setX(pos.getX() + texW / 2);
 	pos.setY(pos.getY() + texH / 2);
@@ -181,6 +219,7 @@ void AbilityZone::OnCollisionEnd(PhysBody* physA, PhysBody* physB){
 		playerInsideJump = false;
 		playerInsideDoubleJump = false;
 		playerInsideDash = false;
+		mechanics->vignetteSize = 300; 
 		break;
 	default:
 		break;

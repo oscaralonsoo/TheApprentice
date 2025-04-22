@@ -199,6 +199,12 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
             vidas -= 1;
             StartInvulnerability();
             Engine::GetInstance().render->StartCameraShake(0.5, 1);
+
+            vignetteSize += 200; 
+            if (vignetteSize > 900) { 
+                vignetteSize = 900;
+            }
+
         }
         break;
     case ColliderType::SPIKE:

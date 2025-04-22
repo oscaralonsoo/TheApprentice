@@ -23,6 +23,7 @@ public:
     void ToggleGodMode() { godMode = !godMode; }
     bool IsGodMode() const { return godMode; }
 
+    float vignetteSize = 300.0f;
     bool cantMove = false;
     bool canAttack = true;
     int vidas = 3;
@@ -44,6 +45,8 @@ private:
 
 private:
     Player* player = nullptr;
+
+
 
     // Parámetros del jugador
     float speed = 8.0f;

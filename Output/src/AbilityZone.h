@@ -40,6 +40,7 @@ public:
 		texW = parameters.attribute("w").as_int();
 		texH = parameters.attribute("h").as_int();
 	}
+	void VignetteChange(float dt);
 
 	void SetPosition(Vector2D pos);
 

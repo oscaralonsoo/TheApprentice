@@ -373,6 +373,16 @@ bool Render::DrawText(const char* text, int posx, int posy, SDL_Color color, int
 	TTF_CloseFont(customFont);
 	return true;
 }
+
+int Render::GetTextWidth(const std::string& text, int fontSize) {
+	int w = 0;
+	TTF_Font* font = TTF_OpenFont("Assets/Fonts/The-Apprentice-F1.ttf", fontSize);
+	if (font) {
+		TTF_SizeText(font, text.c_str(), &w, nullptr);
+		TTF_CloseFont(font);
+	}
+	return w;
+}
 SDL_Texture* Render::LoadTexture(const char* path)
 {
 	SDL_Texture* texture = IMG_LoadTexture(renderer, path);

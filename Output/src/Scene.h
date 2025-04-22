@@ -66,6 +66,8 @@ public:
 	int vignetteSize = 300;
 	float vignetteStrength = 0.8f;
 
+	bool isDead = false;
+
 private:
 	SDL_Texture* img;
 	//L03: TODO 3b: Declare a Player attribute

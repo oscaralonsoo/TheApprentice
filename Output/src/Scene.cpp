@@ -68,17 +68,27 @@ bool Scene::Update(float dt)
 	//L03 TODO 3: Make the camera movement independent of framerate
 	float camSpeed = 1;
 
-	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		Engine::GetInstance().render.get()->camera.y -= ceil(camSpeed * dt);
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
+		ChangeScene(nextScene + 1);
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
+		if (nextScene == 0)
+		{
+			ChangeScene(nextScene);
+			player->SetPosition(Vector2D(1950, 650));
+		}
+		else {
+			ChangeScene(nextScene - 1);
+		}
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
+		SaveGameXML();
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
+		LoadGameXML();
 
-	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		Engine::GetInstance().render.get()->camera.y += ceil(camSpeed * dt);
-
-	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		Engine::GetInstance().render.get()->camera.x -= ceil(camSpeed * dt);
-
-	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		Engine::GetInstance().render.get()->camera.x += ceil(camSpeed * dt);
+	if (isDead == true)
+	{
+		isDead == false;
+		LoadGameXML();
+	}
 
 	return true;
 }
@@ -208,7 +218,7 @@ void Scene::LoadGameXML()
 		if (playerNode) {
 			float playerX = playerNode.attribute("x").as_float();
 			float playerY = playerNode.attribute("y").as_float();
-			player->SetPosition(Vector2D(playerX, playerY)); 
+			player->SetPosition(Vector2D(playerX, playerY - 100)); 
 		}
 
 		pugi::xml_node sceneNode = saveData.child("scene");

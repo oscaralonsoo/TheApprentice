@@ -73,7 +73,7 @@ bool Enemy::Update(float dt)
 	currentAnimation->Update();
 
 	//Show|Hide Path
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
 		showPath = !showPath;
 	}
 	if (showPath) {

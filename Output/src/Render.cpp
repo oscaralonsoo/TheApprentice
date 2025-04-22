@@ -303,7 +303,7 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 	int cameraBottom = -camera.y + camera.h;
 
 	// Margen de anticipación (antes de que el player se salga)
-	int anticipationMargin = 75;
+	int anticipationMargin = 100;
 
 	float dynamicSmoothing = smoothing;
 

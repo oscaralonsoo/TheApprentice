@@ -56,12 +56,16 @@ bool Enemy::Update(float dt)
 		steps++;
 	}
 
-	// L08 TODO 4: Add a physics to an item - update the position of the object from the physics.  
 	b2Transform pbodyPos = pbody->body->GetTransform();
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
-	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
+	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() - 15, &currentAnimation->GetCurrentFrame(),
+		1.0f,
+		0.0,
+		INT_MAX,
+		INT_MAX,
+		(direction < 0) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
 	currentAnimation->Update();
 
 	//Show|Hide Path
@@ -77,6 +81,7 @@ bool Enemy::Update(float dt)
 
 bool Enemy::PostUpdate()
 {
+
 	return true;
 }
 
@@ -111,6 +116,7 @@ void Enemy::OnCollision(PhysBody* physA, PhysBody* physB) {
 	case ColliderType::ATTACK:
 		LOG("Collided with player - DESTROY");
 		Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+
 		break;
 	}
 }

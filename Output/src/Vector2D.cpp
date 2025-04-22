@@ -79,3 +79,6 @@ float Vector2D::distanceEuclidean(const Vector2D& other) const {
 float Vector2D::distanceSquared(const Vector2D& other) const {
     return std::pow(x - other.x, 2) + std::pow(y - other.y, 2);
 }
+Vector2D Vector2D::Lerp(const Vector2D& target, float t) const {
+    return Vector2D(x + (target.x - x) * t, y + (target.y - y) * t);
+}

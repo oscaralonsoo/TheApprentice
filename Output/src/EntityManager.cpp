@@ -19,6 +19,7 @@
 #include "DestructibleWall.h"
 #include "PushableBox.h"
 #include "AbilityZone.h"
+#include "Noctilume.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -141,6 +142,8 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::CASTOR:
 		entity = new NPC(EntityType::CASTOR);
+	case EntityType::NOCTILUME:
+		entity = new Noctilume();
 		break;
 	default:
 		break;
@@ -164,6 +167,9 @@ void EntityManager::DestroyEntity(Entity* entity)
 		}
 		else {
 			++it;
+			delete* it; 
+			entities.erase(it); 
+			break; 
 		}
 	}
 }
@@ -233,4 +239,14 @@ bool EntityManager::PostUpdate()
 	}
 
 	return ret;
+}
+void EntityManager::QueueEntityForDestruction(Entity* entity) {
+	pendingDestroy.push_back(entity);
+}
+
+void EntityManager::ProcessPendingDestructions() {
+	for (Entity* e : pendingDestroy) {
+		DestroyEntity(e); 
+	}
+	pendingDestroy.clear();
 }

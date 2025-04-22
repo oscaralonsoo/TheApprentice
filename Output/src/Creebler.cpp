@@ -63,19 +63,7 @@ bool Creebler::Update(float dt) {
         break;
     }
 
-    b2Transform pbodyPos = pbody->body->GetTransform();
-    position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
-    position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
-
-    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY()-15, &currentAnimation->GetCurrentFrame(),
-        1.0f,
-        0.0,
-        INT_MAX,
-        INT_MAX,
-        (direction < 0) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
-    currentAnimation->Update();
-
-    return true;
+    return Enemy::Update(dt);
 }
 
 

@@ -84,12 +84,6 @@ bool Scene::Update(float dt)
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 		LoadGameXML();
 
-	if (isDead == true)
-	{
-		isDead == false;
-		LoadGameXML();
-	}
-
 	return true;
 }
 
@@ -105,6 +99,12 @@ bool Scene::PostUpdate()
 	}
 
 	Vignette(300, 0.8);
+
+	if (isDead == true)
+	{
+		isDead == false;
+		LoadGameXML();
+	}
 
 	return ret;
 }

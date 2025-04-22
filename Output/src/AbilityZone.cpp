@@ -187,13 +187,14 @@ Vector2D AbilityZone::GetPosition() {
 	return pos;
 }
 
-void AbilityZone::OnCollision(PhysBody* physA, PhysBody* physB){
+void AbilityZone::OnCollision(PhysBody* physA, PhysBody* physB) {
 	Player* player = Engine::GetInstance().scene->GetPlayer();
 	PlayerMechanics* mechanics = player->GetMechanics();
 	switch (physB->ctype) {
 	case ColliderType::PLAYER:
 		playerInside = true;
 		mechanics->canAttack = false;
+		Engine::GetInstance().scene->previousVignetteSize = mechanics->vignetteSize;
 		if (type == "Jump") {
 			playerInsideJump = true;
 		}
@@ -209,7 +210,7 @@ void AbilityZone::OnCollision(PhysBody* physA, PhysBody* physB){
 	}
 }
 
-void AbilityZone::OnCollisionEnd(PhysBody* physA, PhysBody* physB){
+void AbilityZone::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 	Player* player = Engine::GetInstance().scene->GetPlayer();
 	PlayerMechanics* mechanics = player->GetMechanics();
 	switch (physB->ctype) {
@@ -219,7 +220,7 @@ void AbilityZone::OnCollisionEnd(PhysBody* physA, PhysBody* physB){
 		playerInsideJump = false;
 		playerInsideDoubleJump = false;
 		playerInsideDash = false;
-		mechanics->vignetteSize = 300; 
+		mechanics->vignetteSize = Engine::GetInstance().scene->previousVignetteSize;
 		break;
 	default:
 		break;

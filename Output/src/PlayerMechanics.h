@@ -42,7 +42,8 @@ private:
     void StartInvulnerability();
     void UpdateLastSafePosition();
     void HandleSound();
-
+    void HandleGodMode();
+    void ReduceVignetteSize();
 private:
     Player* player = nullptr;
 

@@ -55,7 +55,7 @@ public:
 	void ReloadCurrentSceneAtCheckpoint();
 
 public:
-
+	int previousVignetteSize;
 	Vector2D newPosition;
 	bool transitioning = false;
 	bool saveGameZone = false;

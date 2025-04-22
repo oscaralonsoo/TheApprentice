@@ -25,29 +25,8 @@ void PlayerMechanics::Update(float dt) {
 
     if( Engine::GetInstance().scene->saving == true)
         return;
-    if (godMode) {
-        b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
-        velocity.x = 0.0f;
-        velocity.y = 0.0f;
 
-        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) {
-            velocity.y = -8.0f;
-        }
-        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
-            velocity.y = 8.0f;
-        }
-        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-            velocity.x = -8.0f;
-        }
-        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-            velocity.x = 8.0f;
-        }
-
-        player->pbody->body->SetLinearVelocity(velocity);
-        player->SetState("idle");  // O puedes poner una animación de vuelo si la tienes
-        return;
-    }
-
+    HandleGodMode();
     if (wallSlideCooldownActive && wallSlideCooldownTimer.ReadMSec() >= wallSlideCooldownTime) {
         wallSlideCooldownActive = false;
     }
@@ -192,6 +171,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::SAVEGAME:
         Engine::GetInstance().scene->saveGameZone = true;
+        ReduceVignetteSize();
         break;
     case ColliderType::ENEMY:
         if (!isInvulnerable && !godMode && physA == player->pbody) {
@@ -199,11 +179,10 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
             StartInvulnerability();
             Engine::GetInstance().render->StartCameraShake(0.5, 1);
 
-            vignetteSize += 200; 
-            if (vignetteSize > 900) { 
+            vignetteSize += 200;
+            if (vignetteSize > 900) {
                 vignetteSize = 900;
             }
-
         }
         break;
     case ColliderType::SPIKE:
@@ -535,3 +514,41 @@ void PlayerMechanics::HandleSound()
         playJumpSound = false;
     }
 }
+
+void PlayerMechanics::HandleGodMode()
+{
+    if (godMode) {
+        b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
+        velocity.x = 0.0f;
+        velocity.y = 0.0f;
+
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
+            velocity.y = -8.0f;
+        }
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
+            velocity.y = 8.0f;
+        }
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+            velocity.x = -8.0f;
+        }
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+            velocity.x = 8.0f;
+        }
+
+        player->pbody->body->SetLinearVelocity(velocity);
+        player->SetState("idle");  // O puedes poner una animación de vuelo si la tienes
+        return;
+    }
+}
+void PlayerMechanics::ReduceVignetteSize() {
+    if (vidas < 3) {
+        vignetteSize -= 100;
+        if (vignetteSize < 300) {
+            vignetteSize = 300;
+        }
+    }
+    else {
+        vignetteSize = 300;
+    }
+}
+

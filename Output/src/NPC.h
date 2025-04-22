@@ -31,7 +31,7 @@ public:
 		width = parameters.attribute("w").as_int();
 		height = parameters.attribute("h").as_int();
 		type = parameters.attribute("type").as_string();
-		//dialogueId = parameters.attribute("id").as_int();
+		dialogueId = parameters.attribute("dialogueId").as_int();
 	}
 
 	void SetPosition(Vector2D pos);
@@ -56,5 +56,5 @@ private:
 	Animation* currentAnimation = nullptr;
 	Animation idleAnim;
 
-	int dialogueId = 1;
+	int dialogueId;
 };

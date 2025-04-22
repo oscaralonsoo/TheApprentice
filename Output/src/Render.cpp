@@ -342,7 +342,7 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 }
 
 bool Render::DrawText(const char* text, int posx, int posy, SDL_Color color, int fontSize) const {
-	TTF_Font* customFont = TTF_OpenFont("Assets/Fonts/MarkaziText-Medium.ttf", fontSize);
+	TTF_Font* customFont = TTF_OpenFont("Assets/Fonts/The-Apprentice-F1.ttf", fontSize);
 	if (!customFont) {
 		LOG("Failed to load font: %s", TTF_GetError());
 		return false;
@@ -372,6 +372,16 @@ bool Render::DrawText(const char* text, int posx, int posy, SDL_Color color, int
 	SDL_FreeSurface(surface);
 	TTF_CloseFont(customFont);
 	return true;
+}
+
+int Render::GetTextWidth(const std::string& text, int fontSize) {
+	int w = 0;
+	TTF_Font* font = TTF_OpenFont("Assets/Fonts/The-Apprentice-F1.ttf", fontSize);
+	if (font) {
+		TTF_SizeText(font, text.c_str(), &w, nullptr);
+		TTF_CloseFont(font);
+	}
+	return w;
 }
 SDL_Texture* Render::LoadTexture(const char* path)
 {

@@ -575,6 +575,7 @@ bool Map::Load(std::string path, std::string fileName)
                     int y = objectNode.attribute("y").as_int();
                     int w = objectNode.attribute("width").as_int();
                     int h = objectNode.attribute("height").as_int();
+                    int dialogueId = objectNode.child("properties").child("property").attribute("value").as_int();
 
                     pugi::xml_document tempDoc;
                     pugi::xml_node npcNode = tempDoc.append_child("enemy");
@@ -584,6 +585,7 @@ bool Map::Load(std::string path, std::string fileName)
                     npcNode.append_attribute("y") = y;
                     npcNode.append_attribute("w") = w;
                     npcNode.append_attribute("h") = h;
+                    npcNode.append_attribute("dialogueId") = dialogueId;
                     npcNode.append_attribute("gravity") = true;
 
                     Enemy* npc = nullptr;
@@ -599,7 +601,7 @@ bool Map::Load(std::string path, std::string fileName)
                         LOG("Created NPC '%s' at x: %d, y: %d", npcName.c_str(), x, y);
                     }
                 }
-                }
+            }
         }
         ret = true;
 

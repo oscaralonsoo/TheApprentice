@@ -142,6 +142,7 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::CASTOR:
 		entity = new NPC(EntityType::CASTOR);
+		break;
 	case EntityType::NOCTILUME:
 		entity = new Noctilume();
 		break;

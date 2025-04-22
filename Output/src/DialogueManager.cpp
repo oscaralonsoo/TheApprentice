@@ -86,51 +86,81 @@ void DialogueManager::LoadDialogues() {
 }
 
 void DialogueManager::RenderDialogue(int dialogueId) {
-	int windowWidth, windowHeight;
-	SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &windowWidth, &windowHeight);
+    int windowWidth, windowHeight;
+    SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &windowWidth, &windowHeight);
 
-	auto it = dialogueMap.find(dialogueId);
-	if (it == dialogueMap.end()) return;
+    auto it = dialogueMap.find(dialogueId);
+    if (it == dialogueMap.end()) return;
 
-	const DialogueEvent& event = it->second;
+    const DialogueEvent& event = it->second;
 
-	if (event.wrappedLines.empty() || currentLineIndex >= event.wrappedLines.size()) {
-		dialogueStarted = false;
-		currentLineIndex = 0;
-		return;
-	}
+    if (event.wrappedLines.empty() || currentLineIndex >= event.wrappedLines.size()) {
+        dialogueStarted = false;
+        currentLineIndex = 0;
+        return;
+    }
 
-	SDL_Rect camera = Engine::GetInstance().render->camera;
+    SDL_Rect camera = Engine::GetInstance().render->camera;
 
-	int boxWidth = windowWidth * 0.8f;
-	int boxHeight = windowHeight * 0.2f;
-	int boxX = (windowWidth - boxWidth) / 2;
-	int boxY = windowHeight - boxHeight - (windowHeight * 0.05f);
+    int boxWidth = windowWidth * 0.8f;
+    int boxHeight = windowHeight * 0.2f;
+    int boxX = (windowWidth - boxWidth) / 2;
+    int boxY = windowHeight - boxHeight - (windowHeight * 0.05f);
 
-	SDL_Rect dialogueBox = { -camera.x + boxX, -camera.y + boxY, boxWidth, boxHeight };
-	Engine::GetInstance().render->DrawRectangle(dialogueBox, 0, 0, 0, 180, true, true);
+    SDL_Rect dialogueBox = { -camera.x + boxX, -camera.y + boxY, boxWidth, boxHeight };
+    Engine::GetInstance().render->DrawRectangle(dialogueBox, 0, 0, 0, 180, true, true);
 
-	int marginX = boxWidth * 0.05f;
-	int marginTop = boxHeight * 0.15f;
-	int lineSpacing = boxHeight * 0.2f;
+    int marginX = boxWidth * 0.05f;
+    int marginTop = boxHeight * 0.15f;
+    int lineSpacing = boxHeight * 0.2f;
 
-	int speakerFontSize = boxHeight * 0.25f;
-	int dialogueFontSize = boxHeight * 0.15f;
+    int speakerFontSize = boxHeight * 0.25f;
+    int dialogueFontSize = boxHeight * 0.15f;
 
-	int speakerX = boxX + marginX;
-	int speakerY = boxY + marginTop;
+    int speakerX = boxX + marginX;
+    int speakerY = boxY + marginTop;
 
-	int dialogueX = boxX + marginX;
-	int dialogueY = speakerY + lineSpacing;
+    int dialogueX = boxX + marginX;
+    int dialogueY = speakerY + lineSpacing;
 
-	Engine::GetInstance().render->DrawText(event.speaker.c_str(), speakerX, speakerY, { 255, 255, 100, 255 }, speakerFontSize);
+    Engine::GetInstance().render->DrawText(event.speaker.c_str(), speakerX, speakerY, { 255, 255, 100, 255 }, speakerFontSize);
 
-	// Render pre-wrapped lines
-	const std::vector<std::string>& lines = event.wrappedLines[currentLineIndex];
-	for (const std::string& l : lines) {
-		Engine::GetInstance().render->DrawText(l.c_str(), dialogueX, dialogueY, { 255, 255, 255, 255 }, dialogueFontSize);
-		dialogueY += lineSpacing;
-	}
+    // Inicia el temporizador para el efecto de typing si aún no ha comenzado
+    static Timer typingTimer;
+    static int currentCharIndex = 0;
+    const std::vector<std::string>& lines = event.wrappedLines[currentLineIndex];
+
+    // Mostrar texto de manera progresiva
+    float elapsedTime = typingTimer.ReadMSec();
+    float typingSpeed = 100.0f; // milisegundos por carácter
+
+    int totalChars = 0;
+    for (const std::string& l : lines) {
+        totalChars += l.length();
+    }
+
+    int charsToDisplay = (int)(elapsedTime / typingSpeed);
+
+    // Mostrar hasta el número de caracteres determinados por el tiempo transcurrido
+    int displayedChars = 0;
+    for (const std::string& l : lines) {
+        int charsInLine = std::min((int)l.length(), charsToDisplay - displayedChars);
+        std::string textToDisplay = l.substr(0, charsInLine);
+        Engine::GetInstance().render->DrawText(textToDisplay.c_str(), dialogueX, dialogueY, { 255, 255, 255, 255 }, dialogueFontSize);
+        dialogueY += lineSpacing;
+        displayedChars += charsInLine;
+
+        if (displayedChars >= charsToDisplay) {
+            break;
+        }
+    }
+
+    // Si ya se mostraron todos los caracteres, permite avanzar al siguiente
+    if (displayedChars >= totalChars) {
+        typingTimer.Start();  // Reiniciar temporizador para la siguiente línea
+        currentCharIndex = 0;
+        currentLineIndex++;
+    }
 }
 
 void DialogueManager::WrapLines(int dialogueId, int boxWidth, int dialogueFontSize) {

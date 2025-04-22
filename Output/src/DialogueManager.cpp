@@ -41,14 +41,20 @@ bool DialogueManager::Update(float dt) {
 		if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
 			dialogueStarted = true;
 			currentLineIndex = 0;
+			ResetTyping();
 		}
 	}
 
 	if (dialogueStarted && activeDialogueId != -1) {
 		if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
-			currentLineIndex++;
+			if (!typingFinished) {
+				forceTypingFinish = true;
+			}
+			else {
+				currentLineIndex++;
+				ResetTyping();
+			}
 		}
-
 		RenderDialogue(activeDialogueId);
 	}
 
@@ -125,42 +131,32 @@ void DialogueManager::RenderDialogue(int dialogueId) {
 
     Engine::GetInstance().render->DrawText(event.speaker.c_str(), speakerX, speakerY, { 255, 255, 100, 255 }, speakerFontSize);
 
-    // Inicia el temporizador para el efecto de typing si aún no ha comenzado
-    static Timer typingTimer;
-    static int currentCharIndex = 0;
-    const std::vector<std::string>& lines = event.wrappedLines[currentLineIndex];
+	const std::vector<std::string>& lines = event.wrappedLines[currentLineIndex];
 
-    // Mostrar texto de manera progresiva
-    float elapsedTime = typingTimer.ReadMSec();
-    float typingSpeed = 100.0f; // milisegundos por carácter
+	float elapsedTime = typingTimer.ReadMSec();
+	float typingSpeed = 15.0f;
 
-    int totalChars = 0;
-    for (const std::string& l : lines) {
-        totalChars += l.length();
-    }
+	int totalChars = 0;
+	for (const std::string& l : lines) {
+		totalChars += l.length();
+	}
 
-    int charsToDisplay = (int)(elapsedTime / typingSpeed);
+	int charsToDisplay = forceTypingFinish ? totalChars : (int)(elapsedTime / typingSpeed);
 
-    // Mostrar hasta el número de caracteres determinados por el tiempo transcurrido
-    int displayedChars = 0;
-    for (const std::string& l : lines) {
-        int charsInLine = std::min((int)l.length(), charsToDisplay - displayedChars);
-        std::string textToDisplay = l.substr(0, charsInLine);
-        Engine::GetInstance().render->DrawText(textToDisplay.c_str(), dialogueX, dialogueY, { 255, 255, 255, 255 }, dialogueFontSize);
-        dialogueY += lineSpacing;
-        displayedChars += charsInLine;
+	int displayedChars = 0;
+	for (const std::string& l : lines) {
+		int charsInLine = std::min((int)l.length(), charsToDisplay - displayedChars);
+		std::string textToDisplay = l.substr(0, charsInLine);
+		Engine::GetInstance().render->DrawText(textToDisplay.c_str(), dialogueX, dialogueY, { 255, 255, 255, 255 }, dialogueFontSize);
+		dialogueY += lineSpacing;
+		displayedChars += charsInLine;
 
-        if (displayedChars >= charsToDisplay) {
-            break;
-        }
-    }
+		if (displayedChars >= charsToDisplay) break;
+	}
 
-    // Si ya se mostraron todos los caracteres, permite avanzar al siguiente
-    if (displayedChars >= totalChars) {
-        typingTimer.Start();  // Reiniciar temporizador para la siguiente línea
-        currentCharIndex = 0;
-        currentLineIndex++;
-    }
+	if (displayedChars >= totalChars) {
+		typingFinished = true;
+	}
 }
 
 void DialogueManager::WrapLines(int dialogueId, int boxWidth, int dialogueFontSize) {
@@ -200,8 +196,20 @@ void DialogueManager::SetDialogueAvailable(int dialogueId, bool active) {
 	dialogueAvailable = active;
 	dialogueStarted = false;
 	activeDialogueId = active ? dialogueId : -1;
+
+	if (active) {
+		currentLineIndex = 0;
+		ResetTyping();
+	}
 }
 
 void DialogueManager::ShowInteractionPrompt() {
 	Engine::GetInstance().render->DrawText("Press E to talk", 600, 400, { 255, 255, 255, 255 }, 40);
+}
+
+void DialogueManager::ResetTyping() {
+	typingTimer.Start();
+	currentCharIndex = 0;
+	typingFinished = false;
+	forceTypingFinish = false;
 }

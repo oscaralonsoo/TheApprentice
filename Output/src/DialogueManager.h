@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Module.h"
+#include "Timer.h"
 #include <unordered_map>
 
 struct DialogueEvent {
@@ -27,6 +28,7 @@ public:
 	void SetDialogueAvailable(int dialogueId, bool active);
 	void ShowInteractionPrompt();
 	void WrapLines(int dialogueId, int boxWidth, int dialogueFontSize);
+	void ResetTyping();
 
 private:
 	std::string dialoguesPath = "dialogues.xml";
@@ -38,4 +40,8 @@ private:
 	int activeDialogueId = -1;
 
 	int currentLineIndex = 0;
+	int currentCharIndex = 0;
+	Timer typingTimer;
+	bool typingFinished = false;
+	bool forceTypingFinish = false;
 };

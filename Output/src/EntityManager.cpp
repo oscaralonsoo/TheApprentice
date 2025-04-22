@@ -61,20 +61,6 @@ bool EntityManager::Start() {
 	return ret;
 }
 
-bool EntityManager::PreUpdate(float dt) {
-
-	bool ret = true;
-
-	//Iterates over the entities and calls Start
-	for (const auto entity : entities)
-	{
-		if (entity->active == false) continue;
-		ret = entity->PreUpdate(dt);
-	}
-
-	return ret;
-}
-
 // Called before quitting
 bool EntityManager::CleanUp()
 {

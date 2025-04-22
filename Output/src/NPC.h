@@ -53,6 +53,7 @@ private:
 	int width, height;
 
 	SDL_Texture* texture;
+	int texW, texH;
 	Animation* currentAnimation = nullptr;
 	Animation idleAnim;
 

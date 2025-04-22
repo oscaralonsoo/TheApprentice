@@ -4,6 +4,9 @@
 #include "NPC.h"
 #include "Textures.h"
 #include "DialogueManager.h"
+#include "Animation.h"
+#include "SDL2/SDL.h"
+#include "pugixml.hpp"
 
 NPC::NPC(EntityType type) : Entity(type){
 }
@@ -25,14 +28,14 @@ bool NPC::Start() {
 	if (!gravity) pbody->body->SetGravityScale(0);
 
 	pugi::xml_document loadFile;
-	pugi::xml_node npcNode = loadFile.child("config").child("scene").child("animations").child("npcs").child(type.c_str());
+	pugi::xml_parse_result result = loadFile.load_file("config.xml");
+	pugi::xml_node npcNode = loadFile.child("config").child("scene").child("animations").child("npcs").child("castor");
 
-	if (std::string(npcNode.attribute("type").as_string()) == type)
-	{
-		texture = Engine::GetInstance().textures.get()->Load(npcNode.attribute("texture").as_string());
-		idleAnim.LoadAnimations(npcNode.child("idle"));
-	}
-	
+	// Cargar textura y animaciones
+	texture = Engine::GetInstance().textures->Load(npcNode.attribute("texture").as_string());
+	texH = npcNode.attribute("h").as_int();
+	texW = npcNode.attribute("w").as_int();
+	idleAnim.LoadAnimations(npcNode.child("idle"));
 
 	currentAnimation = &idleAnim;
 
@@ -45,7 +48,7 @@ bool NPC::Update(float dt)
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - width / 2);
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - height / 2);
 
-	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
+	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + width/2 - texW/2, (int)position.getY() + height - texH, &currentAnimation->GetCurrentFrame());
 	currentAnimation->Update();
 
 	return true;

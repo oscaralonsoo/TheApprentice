@@ -27,6 +27,8 @@ public:
 
 	bool Update(float dt);
 
+	bool PostUpdate() override;
+
 	bool CleanUp();
 
 	void SetParameters(pugi::xml_node parameters) {
@@ -68,4 +70,5 @@ private:
 	SDL_Texture* abilitySprite = nullptr;
 	int abilitySpriteW = 0;
 	int abilitySpriteH = 0;
+	bool markedForDeletion = false;
 };

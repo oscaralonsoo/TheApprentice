@@ -18,15 +18,22 @@ void PlayerMechanics::Init(Player* player) {
 
 void PlayerMechanics::Update(float dt) {
 
-    if (vidas <= 0) {
-        //Engine::GetInstance().scene->LoadGameXML();
-        //return;
-    }
-
     if( Engine::GetInstance().scene->saving == true)
         return;
 
     HandleGodMode();
+    if (isStunned) {
+        if (stunTimer.ReadMSec() >= stunDuration) {
+            isStunned = false;
+        }
+        else {
+            // Durante el stun, cancelamos todo movimiento del jugador
+            player->pbody->body->SetLinearVelocity(b2Vec2_zero);
+            Engine::GetInstance().render->StartCameraShake(0.2f, 2);
+            return;
+        }
+    }
+
     if (wallSlideCooldownActive && wallSlideCooldownTimer.ReadMSec() >= wallSlideCooldownTime) {
         wallSlideCooldownActive = false;
     }
@@ -39,6 +46,14 @@ void PlayerMechanics::Update(float dt) {
         jumpCooldownActive = false;
     }
 
+    if (!inDownCameraZone && downCameraCooldown.ReadMSec() >= downCameraCooldownTime) {
+        inDownCameraZone = false;
+    }
+
+    if (knockbackActive && knockbackTimer.ReadMSec() >= knockbackDuration) {
+        knockbackActive = false;
+    }
+
     if (shouldRespawn && !godMode) {
         shouldRespawn = false;
         player->SetPosition(lastPosition);  
@@ -49,9 +64,6 @@ void PlayerMechanics::Update(float dt) {
         Engine::GetInstance().render->StartCameraShake(0.5, 2);
 
         StartInvulnerability();
-
-        isStunned = true;
-        stunTimer.Start();
         return;
     }
 
@@ -65,7 +77,7 @@ void PlayerMechanics::Update(float dt) {
             if (blinkTimer.ReadMSec() >= blinkInterval) {
                 visible = !visible; // toggle de visibilidad
                 blinkTimer.Start();
-                blinkInterval += 150.0f; // para que parpadee más lento con el tiempo
+                blinkInterval += 150.0f; // para que parpadee mï¿½s lento con el tiempo
             }
         }
     }
@@ -73,19 +85,6 @@ void PlayerMechanics::Update(float dt) {
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && Engine::GetInstance().scene->saveGameZone) {
         player->pbody->body->SetLinearVelocity(b2Vec2_zero);
         Engine::GetInstance().scene->SaveGameXML();
-        return;
-    }
-
-    if (isStunned) {
-        player->pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
-        if (stunTimer.ReadSec() >= stunDuration) {
-            isStunned = false;
-            player->SetState("idle");
-
-            fallStartY = player->GetPosition().getY();
-            fallEndY = fallStartY;
-            fallDistance = 0.0f;
-        }
         return;
     }
 
@@ -102,11 +101,13 @@ void PlayerMechanics::Update(float dt) {
     if (!isDashing) {
         b2Vec2 velocity(0, player->pbody->body->GetLinearVelocity().y);
 
-        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-            velocity.x = -speed;
-        }
-        else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-            velocity.x = speed;
+        if (!knockbackActive) { // solo permitimos movimiento si no hay empujï¿½n activo
+            if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+                velocity.x = -speed;
+            }
+            else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+                velocity.x = speed;
+            }
         }
 
         player->pbody->body->SetLinearVelocity(velocity);
@@ -128,27 +129,34 @@ void PlayerMechanics::Update(float dt) {
     HandleSound();
 }
 
+void PlayerMechanics::PostUpdate()
+{
+    HandleLifes();
+}
+
 void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
         if (!jumpCooldownActive)    
         {
-            CheckFallImpact();
             isJumping = false;  
             isOnGround = true;
             if (jumpUnlocked) EnableJump(true);
             jumpCount = 0;
             if (isFalling) {
                 isFalling = false;
-                CheckFallImpact();
                 player->pbody->body->SetLinearVelocity(b2Vec2_zero);
             }
         }
         break;
     case ColliderType::WALL_SLIDE:
-        if (!wallSlideCooldownActive && !isOnGround) {
+        if (!wallSlideCooldownActive) {
             isWallSliding = true;
             isJumping = false;
+            if (isOnGround) 
+            {
+                player->SetState("idle");
+            }
         }
         break;
     case ColliderType::WALL:
@@ -162,12 +170,15 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         break;
     case ColliderType::DOWN_CAMERA:
-        if (!inDownCameraZone && downCameraCooldown.ReadSec() >= downCameraCooldownTime) {
+        if (!inDownCameraZone && downCameraCooldown.ReadMSec() >= downCameraCooldownTime) {
             inDownCameraZone = true;
+            cameraModifiedByZone = true;
             downCameraCooldown.Start();
             originalCameraOffsetY = Engine::GetInstance().render->cameraOffsetY;
             Engine::GetInstance().render->cameraOffsetY = 300;
         }
+        break;
+
         break;
     case ColliderType::SAVEGAME:
         Engine::GetInstance().scene->saveGameZone = true;
@@ -182,6 +193,25 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
             vignetteSize += 200;
             if (vignetteSize > 900) {
                 vignetteSize = 900;
+        if (physA->ctype == ColliderType::PLAYER_DAMAGE) {
+
+            // EMPUJï¿½N en direcciï¿½n contraria al enemigo (siempre)
+            b2Vec2 playerPos = player->pbody->body->GetPosition();
+            b2Vec2 enemyPos = physB->body->GetPosition();
+            float pushDirection = (playerPos.x < enemyPos.x) ? -1.0f : 1.0f;
+
+            knockbackInitialVelocity = b2Vec2(pushDirection * 12.0f, -5.0f); // ajuste fino
+            player->pbody->body->SetLinearVelocity(knockbackInitialVelocity);
+
+            knockbackActive = true;
+            knockbackTimer.Start();
+            knockbackProgress = 0.0f;
+
+            // Solo quitar vida si no es invulnerable
+            if (!isInvulnerable && !godMode) {
+                vidas -= 1;
+                StartInvulnerability();
+                Engine::GetInstance().render->StartCameraShake(0.5, 1);
             }
         }
         break;
@@ -200,10 +230,11 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
             if (jumpUnlocked) EnableJump(true);
             jumpCount = 0;
 
-            // También se comporta como una pared: cancela el dash si está activo
+            // Tambiï¿½n se comporta como una pared: cancela el dash si estï¿½ activo
             if (isDashing) {
                 CancelDash();
             }
+            knockbackActive = false;
         }
         break;
     default:
@@ -232,10 +263,13 @@ void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         wallCooldownActive = true;
         break;
     case ColliderType::DOWN_CAMERA:
-        if (inDownCameraZone && downCameraCooldown.ReadSec() >= downCameraCooldownTime) {
+        if (inDownCameraZone) {
             inDownCameraZone = false;
-            downCameraCooldown.Start();
-            Engine::GetInstance().render->cameraOffsetY = originalCameraOffsetY;
+            if (cameraModifiedByZone) {
+                Engine::GetInstance().render->cameraOffsetY = originalCameraOffsetY;
+                cameraModifiedByZone = false;
+            }
+            downCameraCooldown.Start();  // evitar reentrada inmediata
         }
         break;
     case ColliderType::PUSHABLE_PLATFORM:
@@ -252,11 +286,11 @@ void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 
 void PlayerMechanics::HandleInput() {
 
-    // Si no se está pulsando izquierda ni derecha, y no está saltando, cayendo, atacando o en wallslide...
+    // Si no se estï¿½ pulsando izquierda ni derecha, y no estï¿½ saltando, cayendo, atacando o en wallslide...
     bool noMovimiento = Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) != KEY_REPEAT &&
         Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) != KEY_REPEAT;
 
-    if (noMovimiento && !isJumping && !isFalling && !isAttacking && !isWallSliding && !isDashing && !isStunned) {
+    if (noMovimiento && !isJumping && !isFalling && !isAttacking && !isWallSliding && !isDashing) {
         player->SetState("idle");
     }
 
@@ -290,7 +324,7 @@ void PlayerMechanics::HandleJump() {
     // Inicio del salto o doble salto
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
         if (isOnGround || (doubleJumpUnlocked && jumpCount < maxJumpCount)) {
-            velocity.y = -jumpForce; // sin el 0.8f, para dar un impulso inicial más fuerte
+            velocity.y = -jumpForce; // sin el 0.8f, para dar un impulso inicial mï¿½s fuerte
             isJumping = true;
             isHoldingJump = true;
             jumpStartY = player->GetPosition().getY(); // guardamos altura de inicio
@@ -325,7 +359,7 @@ void PlayerMechanics::HandleJump() {
         isHoldingJump = false;
     }
 
-    // Caída rápida automática al soltar salto (estilo Hollow Knight)
+    // Caï¿½da rï¿½pida automï¿½tica al soltar salto (estilo Hollow Knight)
     if (isJumping && !isHoldingJump && !isWallSliding) {
         velocity.y += fallAccelerationFactor; // acelera el descenso
     }
@@ -352,7 +386,7 @@ void PlayerMechanics::HandleDash() {
 
         player->pbody->body->SetGravityScale(0.0f);
 
-        // Dirección fija del dash
+        // Direcciï¿½n fija del dash
         dashDirection = movementDirection;
 
         if (isWallSliding) {
@@ -387,29 +421,15 @@ void PlayerMechanics::HandleFall() {
     if (velocity.y > 0.1f && !isWallSliding) {
         if (!isFalling) {
             isFalling = true;
-            fallStartY = player->GetPosition().getY();
             player->SetState("fall");
             isJumping = true;
             isOnGround = false;
         }
     }
-    else if (isOnGround || isWallSliding) {
+    else if (isOnGround) {
         if (isFalling) {
             isFalling = false;
-            CheckFallImpact();
         }
-    }
-}
-
-void PlayerMechanics::CheckFallImpact() {
-    fallEndY = player->GetPosition().getY();
-    fallDistance = fallEndY - fallStartY;
-
-    if (fallDistance >= fallDistanceThreshold) {
-        isStunned = true;
-        player->SetState("landing_stun");
-        stunTimer.Start();
-        Engine::GetInstance().render->StartCameraShake(1, 1);
     }
 }
 
@@ -428,7 +448,13 @@ void PlayerMechanics::CreateAttackSensor() {
     playerAttackX = METERS_TO_PIXELS(player->pbody->body->GetPosition().x) + offsetX;
     playerAttackY = METERS_TO_PIXELS(player->pbody->body->GetPosition().y);
 
-    attackSensor = Engine::GetInstance().physics->CreateRectangleSensor(playerAttackX, playerAttackY - 10, 32, 64, KINEMATIC);
+    attackSensor = Engine::GetInstance().physics->CreateRectangleSensor(
+        playerAttackX, playerAttackY - 10,
+        32, 64,
+        KINEMATIC,
+        CATEGORY_ATTACK,     
+        CATEGORY_ENEMY       
+    );
     attackSensor->ctype = ColliderType::ATTACK;
     attackSensor->listener = player;
 
@@ -485,8 +511,6 @@ void PlayerMechanics::HandleSound()
         isOnGround &&
         !isJumping &&
         !isFalling &&
-        !isDashing &&
-        !isStunned &&
         (
             Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT ||
             Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT
@@ -536,7 +560,7 @@ void PlayerMechanics::HandleGodMode()
         }
 
         player->pbody->body->SetLinearVelocity(velocity);
-        player->SetState("idle");  // O puedes poner una animación de vuelo si la tienes
+        player->SetState("idle"); 
         return;
     }
 }
@@ -552,3 +576,12 @@ void PlayerMechanics::ReduceVignetteSize() {
     }
 }
 
+void PlayerMechanics::HandleLifes()
+{
+    if (vidas <= 0) 
+    {
+        printf("ENTRAAAAAAA");
+        Engine::GetInstance().scene.get()->isDead = true;
+        vidas = 3;
+    }
+}

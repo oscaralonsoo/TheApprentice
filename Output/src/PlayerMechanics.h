@@ -11,6 +11,7 @@ class PlayerMechanics {
 public:
     void Init(Player* player);
     void Update(float dt);
+    void PostUpdate();
 
     void OnCollision(PhysBody* physA, PhysBody* physB);
     void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
@@ -34,7 +35,6 @@ private:
     void HandleJump();
     void HandleDash();
     void HandleFall();
-    void CheckFallImpact();
     void HandleWallSlide();
     void CancelDash();
     void CreateAttackSensor();
@@ -44,15 +44,17 @@ private:
     void HandleSound();
     void HandleGodMode();
     void ReduceVignetteSize();
+    void HandleLifes();
+
 private:
     Player* player = nullptr;
 
 
 
-    // Parámetros del jugador
+    // Parï¿½metros del jugador
     float speed = 8.0f;
 
-    // Física
+    // Fï¿½sica
     bool isOnGround = false;
     int movementDirection = 1;
     bool isFalling = false;
@@ -60,19 +62,19 @@ private:
     // Jump 
     float jumpForce = 13.0f;
     bool isJumping = false;
-    bool jumpUnlocked = true;
+    bool jumpUnlocked = false;
     Timer jumpCooldownTimer;
     float jumpCooldownTime = 100.0f;
     bool jumpCooldownActive = false;
-    float fallAccelerationFactor = 0.6f; // controla qué tan rápido acelera al caer tras soltar salto
+    float fallAccelerationFactor = 0.6f; // controla quï¿½ tan rï¿½pido acelera al caer tras soltar salto
 
     // Salto progresivo por altura
     float jumpStartY = 0.0f;
-    float maxJumpHeight = 240.0f;     // altura máxima del salto prolongado (en píxeles)
-    float minHoldJumpHeight = 20.0f; // altura mínima para que empiece el hold jump
+    float maxJumpHeight = 240.0f;     // altura mï¿½xima del salto prolongado (en pï¿½xeles)
+    float minHoldJumpHeight = 20.0f; // altura mï¿½nima para que empiece el hold jump
     float jumpHoldForceFactor = 0.85f; // fuerza inicial del hold jump
     bool isHoldingJump = false;
-    float jumpDecayRate = 4.0f; // más alto = menos duración de salto prolongado
+    float jumpDecayRate = 4.0f; // mï¿½s alto = menos duraciï¿½n de salto prolongado
 
     //Double Jump
     bool doubleJumpUnlocked = false;
@@ -92,12 +94,9 @@ private:
 
     // Fall
     bool isStunned = false;
-    float stunDuration = 1.0f;
     Timer stunTimer;
-    float fallStartY = 0.0f;
-    float fallDistanceThreshold = 500.0f;
-    float fallEndY;
-    float fallDistance;
+    float stunDuration = 500.0f; // en milisegundos
+    float fallStunThreshold = -15.0f; // velocidad Y mï¿½nima para provocar stun
 
     // WallSlide 
     bool wasInDownCameraZone = false;
@@ -138,7 +137,8 @@ private:
     int originalCameraOffsetY;
     bool inDownCameraZone = false;
     Timer downCameraCooldown;
-    float downCameraCooldownTime = 0.2f;
+    float downCameraCooldownTime = 100.0f;
+    bool cameraModifiedByZone = false;
 
     //God mode
     bool godMode = false;
@@ -149,4 +149,13 @@ private:
     int jumpFxId = -1;
     bool isSlimeSoundPlaying = false;
     bool playJumpSound = false;
+
+    //Enemies
+    bool knockbackActive = false;
+    Timer knockbackTimer;
+    float knockbackDuration = 300.0f;
+    b2Vec2 knockbackInitialVelocity = { 0, 0 };
+    float knockbackProgress = 0.0f;
+    float knockbackTotalTime = 300.0f; // en milisegundos
+
 };

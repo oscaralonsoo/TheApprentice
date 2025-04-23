@@ -21,6 +21,7 @@ public:
 	bool Awake();
 	bool Start();
 	bool Update(float dt);
+	bool PostUpdate();
 	bool CleanUp();
 
 	// Manejo de colisiones
@@ -46,7 +47,7 @@ public:
 
 	int targetScene = 0;
 	PhysBody* pbody;
-
+	PhysBody* enemySensor = nullptr;
 
 private:
 

@@ -329,7 +329,7 @@ bool Map::Load(std::string path, std::string fileName)
                     int height = objectNode.attribute("height").as_int();
 
                     // Create Door type Collider
-                    PhysBody* doorCollider = Engine::GetInstance().physics->CreateRectangleSensor(x + (width / 2), y + (height / 2), width, height, STATIC);
+                    PhysBody* doorCollider = Engine::GetInstance().physics->CreateRectangleSensor(x + (width / 2), y + (height / 2), width, height, STATIC, CATEGORY_DOOR, CATEGORY_PLAYER);
                     doorCollider->ctype = ColliderType::DOOR;
 
                     // Access Properties by Name
@@ -368,7 +368,14 @@ bool Map::Load(std::string path, std::string fileName)
                     int width = objectNode.attribute("width").as_int();
                     int height = objectNode.attribute("height").as_int();
 
-                    PhysBody* saveGameCollider = Engine::GetInstance().physics->CreateRectangleSensor(x + (width / 2), y + (height / 2), width, height, STATIC);
+                    PhysBody* saveGameCollider = Engine::GetInstance().physics->CreateRectangleSensor(
+                        x + (width / 2),
+                        y + (height / 2),
+                        width, height,
+                        STATIC,
+                        CATEGORY_SAVEGAME,      // Solo SaveGame
+                        CATEGORY_PLAYER          // Solo interactúa con el jugador
+                    );
                     saveGameCollider->ctype = ColliderType::SAVEGAME;
 
                     Engine::GetInstance().physics->listToDelete.push_back(saveGameCollider);
@@ -383,7 +390,14 @@ bool Map::Load(std::string path, std::string fileName)
                     int width = objectNode.attribute("width").as_int();
                     int height = objectNode.attribute("height").as_int();
 
-                    PhysBody* downCameraCollider = Engine::GetInstance().physics->CreateRectangleSensor(x + (width / 2), y + (height / 2), width, height, STATIC);
+                    PhysBody* downCameraCollider = Engine::GetInstance().physics->CreateRectangleSensor(
+                        x + (width / 2),
+                        y + (height / 2),
+                        width, height,
+                        STATIC,
+                        CATEGORY_DOWN_CAMERA,   // su categoría
+                        CATEGORY_PLAYER         // solo colisiona con el jugador
+                    );
                     downCameraCollider->ctype = ColliderType::DOWN_CAMERA;
 
                     Engine::GetInstance().physics->listToDelete.push_back(downCameraCollider);

@@ -39,6 +39,15 @@ bool Brood::Start() {
         }
     }
 
+    // En Brood::Start(), despu�s de crear el pbody
+    b2Fixture* fixture = pbody->body->GetFixtureList();
+    if (fixture) {
+        b2Filter filter;
+        filter.categoryBits = CATEGORY_ENEMY;
+        filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_PLAYER_DAMAGE | CATEGORY_ATTACK;
+        fixture->SetFilterData(filter);
+    }
+    
     pbody = Engine::GetInstance().physics.get()->CreateCircleSensor((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, bodyType::DYNAMIC);
 
     pbody->ctype = ColliderType::ENEMY;

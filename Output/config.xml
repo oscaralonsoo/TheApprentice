@@ -321,16 +321,9 @@
 				</dust>
 			</particles>
 			<npcs>
-				<castor w="18" h="18" texture="Assets/Props/caveDrop.png">
+				<castor w="234" h="198" texture="Assets/NPC/castor.png">
 					<idle loop="true" speed="0.13">
-						<frame x="0" y="0" w="18" h="18" />
-						<frame x="18" y="0" w="18" h="18" />
-						<frame x="36" y="0" w="18" h="18" />
-						<frame x="0" y="18" w="18" h="18" />
-						<frame x="18" y="18" w="18" h="18" />
-						<frame x="36" y="18" w="18" h="18" />
-						<frame x="0" y="36" w="18" h="18" />
-						<frame x="18" y="36" w="18" h="18" />
+						<frame x="0" y="0" w="234" h="198" />
 					</idle>
 				</castor>
 			</npcs>
@@ -341,7 +334,7 @@
 			</abilities>
 		</animations>
 		<save_data isSaved="1">
-			<player x="1950" y="650" w="44" h="54" />
+			<player x="3589" y="2603" w="44" h="54" />
 			<scene actualScene="0" />
 			<enemies />
 		</save_data>

@@ -38,9 +38,28 @@ bool Player::Start() {
 	animation.LoadAnimations(parameters, texture);
 
     // Create the body at the same position, and ensure it's centered
-    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX(), (int)position.getY(), 45, 40, bodyType::DYNAMIC);
-    pbody->listener = this;
-    pbody->ctype = ColliderType::PLAYER;
+	pbody = Engine::GetInstance().physics.get()->CreateRectangle(
+		(int)position.getX(),
+		(int)position.getY(),
+		60, 40,
+		bodyType::DYNAMIC,
+		0, 0,
+		CATEGORY_PLAYER,
+		CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_SPIKE | CATEGORY_ENEMY | CATEGORY_SAVEGAME | CATEGORY_DOWN_CAMERA | CATEGORY_ABILITY_ZONE | CATEGORY_HIDDEN_ZONE
+	);
+	pbody->listener = this;
+	pbody->ctype = ColliderType::PLAYER;
+
+	enemySensor = Engine::GetInstance().physics->CreateRectangleSensor(
+		(int)position.getX(),
+		(int)position.getY(),
+		45, 40,
+		bodyType::DYNAMIC,
+		CATEGORY_PLAYER_DAMAGE,
+		CATEGORY_ENEMY                  
+	);
+	enemySensor->ctype = ColliderType::PLAYER_DAMAGE;
+	enemySensor->listener = this;
 
 	mechanics.Init(this);
 
@@ -52,6 +71,18 @@ bool Player::Start() {
 }
 
 bool Player::Update(float dt) {
+	if (pbody == nullptr || pbody->body == nullptr) {
+		LOG("ERROR: pbody o body es nullptr");
+		return false;  // o gestión específica
+	}
+
+	if (enemySensor && enemySensor->body) {
+		b2Vec2 mainPos = pbody->body->GetPosition();
+		enemySensor->body->SetTransform(mainPos, 0);
+	}
+	else {
+		LOG("ADVERTENCIA: enemySensor o su body son nullptr");
+	}
 	int direction = mechanics.GetMovementDirection();
 	bool flip = direction < 0;
 	animation.Update(dt, state, position.getX(), position.getY() - 5, mechanics.IsVisible(), flip);
@@ -63,15 +94,15 @@ bool Player::Update(float dt) {
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
 	// Teclas de debug / efectos visuales
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN) {
 		mechanics.EnableJump(true);
 	}
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) {
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) {
 	}
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_3) == KEY_DOWN) {
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) {
 		mechanics.EnableDash(true);
 	}
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) {
 		mechanics.ToggleGodMode();
 		if (mechanics.IsGodMode()) {
 			pbody->body->SetGravityScale(0.0f);
@@ -81,6 +112,16 @@ bool Player::Update(float dt) {
 		}
 	}
 
+	if (enemySensor && enemySensor->body) {
+		b2Vec2 mainPos = pbody->body->GetPosition();
+		enemySensor->body->SetTransform(mainPos, 0);
+	}
+
+	return true;
+}
+
+bool Player::PostUpdate() {
+	mechanics.PostUpdate();
 	return true;
 }
 

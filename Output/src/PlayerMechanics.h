@@ -90,8 +90,9 @@ private:
     // Fall
     bool isStunned = false;
     Timer stunTimer;
-    float stunDuration = 500.0f; // en milisegundos
-    float fallStunThreshold = -15.0f; // velocidad Y mínima para provocar stun
+    float stunDuration = 910.0f; // en milisegundos
+    float fallStunThreshold = 20.0f; // velocidad Y mínima para provocar stun
+    bool willStun = false;
 
     // WallSlide 
     bool wasInDownCameraZone = false;

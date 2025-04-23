@@ -52,8 +52,6 @@ public:
 
 	Player* GetPlayer() const { return player; }
 
-	void ReloadCurrentSceneAtCheckpoint();
-
 public:
 
 	Vector2D newPosition;
@@ -84,6 +82,8 @@ private:
 	int width, height;
 	Uint8 alpha;
 	SDL_Rect top, bottom, left, right;
+
+	bool pendingLoadAfterDeath = false;
 
 	//Renderer
 	SDL_Renderer* renderer;

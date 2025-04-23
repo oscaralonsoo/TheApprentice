@@ -9,11 +9,14 @@ enum class EntityType
 	BLOODRUSHER,
 	CREEBLER,
 	MIREBORN,
+	CASTOR,
 	HYPNOVIPER,
 	BROODHEART,
 	THUMPOD,
 	SCURVER,
 	BROOD,
+	NULLWARDEN,
+	NOCTILUME,
 	CAVE_DROP,
 	ABILITY_ZONE,
 	HIDDEN_ZONE,
@@ -28,7 +31,6 @@ class PhysBody;
 class Entity
 {
 public:
-
 	Entity(EntityType type) : type(type), active(true) {}
 
 	virtual bool Awake()
@@ -37,11 +39,6 @@ public:
 	}
 
 	virtual bool Start()
-	{
-		return true;
-	}
-
-	virtual bool PreUpdate(float dt)
 	{
 		return true;
 	}
@@ -79,23 +76,19 @@ public:
 		}
 	}
 
-	virtual void OnCollision(PhysBody* physA, PhysBody* physB) {
+	virtual void OnCollision(PhysBody* physA, PhysBody* physB) {}
 
-	};
+	virtual void OnCollisionEnd(PhysBody* physA, PhysBody* physB) {}
 
-	virtual void OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
-
-	};
+	// Nuevo método para obtener el tipo de entidad
+	EntityType GetType() const { return type; }
 
 
 public:
-
 	std::string name;
 	EntityType type;
 	bool active = true;
 
-	// Possible properties, it depends on how generic we
-	// want our Entity class, maybe it's not renderable...
-	Vector2D position;       
+	Vector2D position;
 	bool renderable = true;
 };

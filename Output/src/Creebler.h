@@ -31,7 +31,6 @@ private:
     Animation walkAnim;
     Animation deadAnim;
 
-    int direction = -1;
     float speed = 2.0f;
 
     Timer deathTimer;

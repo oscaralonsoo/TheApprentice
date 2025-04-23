@@ -6,6 +6,7 @@
 #include "Log.h"
 #include "CaveDrop.h"
 #include "Bloodrusher.h"
+#include "NPC.h"
 #include "Hypnoviper.h"
 #include "Mireborn.h"
 #include "AbilityZone.h"
@@ -18,6 +19,7 @@
 #include "DestructibleWall.h"
 #include "PushableBox.h"
 #include "AbilityZone.h"
+#include "Noctilume.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -54,20 +56,6 @@ bool EntityManager::Start() {
 	{
 		if (entity->active == false) continue;
 		ret = entity->Start();
-	}
-
-	return ret;
-}
-
-bool EntityManager::PreUpdate(float dt) {
-
-	bool ret = true;
-
-	//Iterates over the entities and calls Start
-	for (const auto entity : entities)
-	{
-		if (entity->active == false) continue;
-		ret = entity->PreUpdate(dt);
 	}
 
 	return ret;
@@ -138,6 +126,12 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::PUSHABLE_BOX:
 		entity = new PushableBox();
 		break;
+	case EntityType::CASTOR:
+		entity = new NPC(EntityType::CASTOR);
+		break;
+	case EntityType::NOCTILUME:
+		entity = new Noctilume();
+		break;
 	default:
 		break;
 	}
@@ -160,6 +154,9 @@ void EntityManager::DestroyEntity(Entity* entity)
 		}
 		else {
 			++it;
+			delete* it; 
+			entities.erase(it); 
+			break; 
 		}
 	}
 }
@@ -229,4 +226,14 @@ bool EntityManager::PostUpdate()
 	}
 
 	return ret;
+}
+void EntityManager::QueueEntityForDestruction(Entity* entity) {
+	pendingDestroy.push_back(entity);
+}
+
+void EntityManager::ProcessPendingDestructions() {
+	for (Entity* e : pendingDestroy) {
+		DestroyEntity(e); 
+	}
+	pendingDestroy.clear();
 }

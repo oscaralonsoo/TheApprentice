@@ -158,7 +158,6 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLATFORM:
         if (!jumpCooldownActive)    
         {
-            printf("Entra a la plataforma");
             CheckFallImpact();
             isJumping = false;  
             isOnGround = true;

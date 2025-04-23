@@ -46,6 +46,7 @@ enum class ColliderType {
 	DOWN_CAMERA,
 	ATTACK,
 	CAVE_DROP,
+	NPC,
 	ENEMY,
 	PLATFORM, 
 	SAVEGAME,
@@ -102,6 +103,7 @@ public:
 	PhysBody* CreateRectangle(int x, int y, int width, int height, bodyType type, float offsetX = 0, float offsetY = 0, uint16 categoryBits = 0xFFFF, uint16 maskBits = 0xFFFF);
 	PhysBody* CreateCircle(int x, int y, int radious, bodyType type);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, bodyType type, uint16 categoryBits, uint16 maskBits);
+	PhysBody* CreateCircleSensor(int x, int y, int radius, bodyType type);
 	PhysBody* CreateChain(int x, int y, int* points, int size, bodyType type);
 	
 	// b2ContactListener ---

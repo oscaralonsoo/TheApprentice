@@ -1,18 +1,18 @@
 #pragma once
 
+#include "Broodheart.h"
 #include "Enemy.h"
 #include "SDL2/SDL.h"
 
 enum class BroodState {
     IDLE,
-    ATTACK,
+    CHASING,
     DEAD
 };
 
 class Brood : public Enemy
 {
 public:
-
     Brood();
     ~Brood() override;
 
@@ -22,22 +22,27 @@ public:
     bool CleanUp() override;
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
 
-    void Idle(float dt);
+    // Brood Methods
+    void Chase(float dt);
 
-    void Attack(float dt);
-
-
-public:
+    // Setters
+    void SetParent(Broodheart* p) { parent = p; }
 
 private:
-    float SpawnCooldown = 0.0f;
-    float SpawnTimer = 0.0f;
+    Broodheart* parent = nullptr;
 
+    float timePassed = 0.0f;
+    float dirX = 0.0f;
+    float dirY = 0.0f;
+    float launchSpeed = 0.05f;
+    bool launched = false;
+    float waveOffset = 0.0f;
+
+    Vector2D direction = { 0, 0 };
     bool playerInRange = false;
 
     BroodState currentState = BroodState::IDLE;
+
     PhysBody* physBody = nullptr;
     Animation idleAnim;
 };
-#pragma once
-#pragma once

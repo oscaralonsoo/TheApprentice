@@ -3,16 +3,15 @@
 #include "Entity.h"
 #include "SDL2/SDL.h"
 #include "Animation.h"
-#include "Pathfinding.h"
 
 struct SDL_Texture;
 
-class Enemy : public Entity
+class NPC : public Entity
 {
 public:
 
-	Enemy(EntityType type);
-	virtual ~Enemy();
+	NPC(EntityType type);
+	virtual ~NPC();
 
 	bool Awake();
 
@@ -29,46 +28,34 @@ public:
 
 		position.x = parameters.attribute("x").as_int();
 		position.y = parameters.attribute("y").as_int();
-		texW = parameters.attribute("w").as_int();
-		texH = parameters.attribute("h").as_int();
+		width = parameters.attribute("w").as_int();
+		height = parameters.attribute("h").as_int();
 		type = parameters.attribute("type").as_string();
-		gravity = parameters.attribute("gravity").as_bool();
+		dialogueId = parameters.attribute("dialogueId").as_int();
 	}
 
 	void SetPosition(Vector2D pos);
 
 	Vector2D GetPosition();
 
-	void ResetPath();
-
 	virtual void OnCollision(PhysBody* physA, PhysBody* physB);
 
 	virtual void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
-	std::string GetEnemyType() const { return type; }
+	std::string GetNPCType() const { return type; }
 
-
-public:
-	//Pathfinding
-	int steps = 0;
-	int maxSteps = 100;
+private:
 	PhysBody* pbody;
 
-
-protected:
-	Pathfinding* pathfinding;
-
-	SDL_Texture* texture;
-
+	pugi::xml_node parameters;
 	bool gravity;
 	std::string type;
+	int width, height;
+
+	SDL_Texture* texture;
 	int texW, texH;
-	pugi::xml_node parameters;
 	Animation* currentAnimation = nullptr;
+	Animation idleAnim;
 
-	//Pathfinding
-	bool showPath = false;
-	const char* texturePath;
-
-	int direction = -1;
+	int dialogueId;
 };

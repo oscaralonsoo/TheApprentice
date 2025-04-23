@@ -12,7 +12,7 @@
 
 
 
-Menus::Menus() : currentState(MenusState::INTRO), transitionAlpha(0.0f), inTransition(false), fadingIn(false), nextState(MenusState::NONE),
+Menus::Menus() : currentState(MenusState::GAME), transitionAlpha(0.0f), inTransition(false), fadingIn(false), nextState(MenusState::NONE),
 fastTransition(false), menuBackground(nullptr), pauseBackground(nullptr) {}
 
 Menus::~Menus() {}
@@ -105,7 +105,6 @@ bool Menus::PostUpdate() {
 }
 
 void Menus::DrawBackground() {
-    SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
     SDL_Rect cameraRect = { 0, 0, width, height };
 
     std::string bgKey = GetBackgroundKey();

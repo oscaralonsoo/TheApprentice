@@ -329,7 +329,7 @@ bool Map::Load(std::string path, std::string fileName)
                     int height = objectNode.attribute("height").as_int();
 
                     // Create Door type Collider
-                    PhysBody* doorCollider = Engine::GetInstance().physics->CreateRectangle(x + (width / 2), y + (height / 2), width, height, STATIC);
+                    PhysBody* doorCollider = Engine::GetInstance().physics->CreateRectangleSensor(x + (width / 2), y + (height / 2), width, height, STATIC);
                     doorCollider->ctype = ColliderType::DOOR;
 
                     // Access Properties by Name
@@ -381,7 +381,7 @@ bool Map::Load(std::string path, std::string fileName)
                     Engine::GetInstance().physics->listToDelete.push_back(saveGameCollider);
                 }
             }
-            else if (objectGroupName == "DownCamera") // Objects from layer SaveGame
+            else if (objectGroupName == "DownCamera") // Objects from layer DownCamera
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
                 {
@@ -403,7 +403,7 @@ bool Map::Load(std::string path, std::string fileName)
                     Engine::GetInstance().physics->listToDelete.push_back(downCameraCollider);
                 }
                 }
-            else if (objectGroupName == "Abilities") //Enemies from object layer "Enemies"
+            else if (objectGroupName == "Abilities") //Abilities from object layer "Abilities"
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
                 {
@@ -487,12 +487,12 @@ bool Map::Load(std::string path, std::string fileName)
                     box->SetParameters(node);
                 }
             }
-            else if (objectGroupName == "Particles") // Load Particles part�culas
+            else if (objectGroupName == "Particles")
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
                 {
                     std::string objectName = objectNode.attribute("name").as_string();
-                    if (objectName == "CaveDrop") // Load Cavedrop
+                    if (objectName == "CaveDrop")
                     {
                         int x = objectNode.attribute("x").as_int();
                         int y = objectNode.attribute("y").as_int();
@@ -504,7 +504,7 @@ bool Map::Load(std::string path, std::string fileName)
                     }
                 }
             }
-            else if (objectGroupName == "Zones") // Load Zones
+            else if (objectGroupName == "Zones")
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
                 {
@@ -525,7 +525,7 @@ bool Map::Load(std::string path, std::string fileName)
                     }
                 }
             }
-            else if (objectGroupName == "Enemies") //Enemies from object layer "Enemies"
+            else if (objectGroupName == "Enemies")
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
                 {
@@ -534,7 +534,7 @@ bool Map::Load(std::string path, std::string fileName)
                     int y = objectNode.attribute("y").as_int();
 
                     int width, height;
-                    GetEnemyDimensionsFromConfig(enemyName, width, height); // Obtain dimensions from config.xml
+                    GetEnemyDimensionsFromConfig(enemyName, width, height);
 
                     pugi::xml_document tempDoc;
                     pugi::xml_node enemyNode = tempDoc.append_child("enemy");
@@ -544,7 +544,7 @@ bool Map::Load(std::string path, std::string fileName)
                     enemyNode.append_attribute("y") = y;
                     enemyNode.append_attribute("w") = width;
                     enemyNode.append_attribute("h") = height;
-                    enemyNode.append_attribute("gravity") = true;
+
 
                     Enemy* enemy = nullptr;
 
@@ -562,10 +562,16 @@ bool Map::Load(std::string path, std::string fileName)
                         enemyNode.append_attribute("tier") = "Alpha";
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::MIREBORN);
                     }
-                    else if (enemyName == "Broodheart")
-                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BROODHEART);
+                    else if (enemyName == "Broodheart"){
+                        enemyNode.append_attribute("gravity") = false;
+                    enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BROODHEART);
+                    }
                     else if (enemyName == "Brood")
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BROOD);
+                    else if (enemyName == "Noctilume") {
+                        enemyNode.append_attribute("gravity") = false;
+                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::NOCTILUME);
+                    }
 
                     if (enemy != nullptr)
                     {
@@ -574,10 +580,46 @@ bool Map::Load(std::string path, std::string fileName)
                     }
                 }
             }
+            else if (objectGroupName == "NPC")
+            {
+                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
+                {
+                    std::string npcName = objectNode.attribute("name").as_string();
+                    int x = objectNode.attribute("x").as_int();
+                    int y = objectNode.attribute("y").as_int();
+                    int w = objectNode.attribute("width").as_int();
+                    int h = objectNode.attribute("height").as_int();
+                    int dialogueId = objectNode.child("properties").child("property").attribute("value").as_int();
+
+                    pugi::xml_document tempDoc;
+                    pugi::xml_node npcNode = tempDoc.append_child("enemy");
+
+                    npcNode.append_attribute("type") = npcName.c_str();
+                    npcNode.append_attribute("x") = x;
+                    npcNode.append_attribute("y") = y;
+                    npcNode.append_attribute("w") = w;
+                    npcNode.append_attribute("h") = h;
+                    npcNode.append_attribute("dialogueId") = dialogueId;
+                    npcNode.append_attribute("gravity") = true;
+
+                    Enemy* npc = nullptr;
+
+                    if (npcName == "Castor")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CASTOR);
+                    else if (npcName == "JavierGomez")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CASTOR);
+
+                    if (npc != nullptr)
+                    {
+                        npc->SetParameters(npcNode);
+                        LOG("Created NPC '%s' at x: %d, y: %d", npcName.c_str(), x, y);
+                    }
+                }
+            }
         }
         ret = true;
 
-        // L06: TODO 5: LOG all the data loaded iterate all tilesetsand LOG everything
+
         if (ret == true)
         {
             LOG("Successfully parsed map XML file :%s", fileName.c_str());
@@ -586,7 +628,6 @@ bool Map::Load(std::string path, std::string fileName)
 
             LOG("Tilesets----");
 
-            //iterate the tilesets
             for (const auto& tileset : mapData.tilesets) {
                 LOG("name : %s firstgid : %d", tileset->name.c_str(), tileset->firstGid);
                 LOG("tile width : %d tile height : %d", tileset->tileWidth, tileset->tileHeight);
@@ -611,7 +652,7 @@ bool Map::Load(std::string path, std::string fileName)
     mapLoaded = ret;
     return ret;
 }
-// L07: TODO 8: Create a method that translates x,y coordinates from map positions to world positions
+
 Vector2D Map::MapToWorld(int x, int y) const
 {
     Vector2D ret;
@@ -621,6 +662,7 @@ Vector2D Map::MapToWorld(int x, int y) const
 
     return ret;
 }
+
 Vector2D Map::WorldToMap(int x, int y) {
 
     Vector2D ret(0, 0);
@@ -630,7 +672,7 @@ Vector2D Map::WorldToMap(int x, int y) {
 
     return ret;
 }
-// L09: TODO 6: Load a group of properties from a node and fill a list with it
+
 bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
 {
     bool ret = false;
@@ -647,6 +689,7 @@ bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
 
     return ret;
 }
+
 MapLayer* Map::GetNavigationLayer() {
     for (const auto& layer : mapData.layers) {
         if (layer->properties.GetProperty("Navigation") != NULL &&
@@ -657,7 +700,7 @@ MapLayer* Map::GetNavigationLayer() {
 
     return nullptr;
 }
-// L09: TODO 7: Implement a method to get the value of a custom property
+
 Properties::Property* Properties::GetProperty(const char* name)
 {
     for (const auto& property : propertyList) {
@@ -668,12 +711,12 @@ Properties::Property* Properties::GetProperty(const char* name)
 
     return nullptr;
 }
+
 void Map::GetEnemyDimensionsFromConfig(const std::string& enemyName, int& width, int& height)
 {
     pugi::xml_document configDoc;
     configDoc.load_file("config.xml");
 
-    // Look at xml by "type"
     pugi::xml_node enemyNode = configDoc.child("config").child("scene").child("animations").child("enemies").child("enemy");
     while (enemyNode) {
         if (enemyNode.attribute("type").as_string() == enemyName) {
@@ -684,6 +727,7 @@ void Map::GetEnemyDimensionsFromConfig(const std::string& enemyName, int& width,
         enemyNode = enemyNode.next_sibling("enemy");
     }
 }
+
 void Map::GetAbilityDimensionsFromConfig(const std::string& abilityName, int& width, int& height)
 {
     pugi::xml_document configDoc;
@@ -699,7 +743,6 @@ void Map::GetAbilityDimensionsFromConfig(const std::string& abilityName, int& wi
         abilityNode = abilityNode.next_sibling("ability");
     }
 
-    // Valores por defecto si no se encuentra
     width = 50;
     height = 50;
 }

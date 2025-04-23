@@ -120,8 +120,8 @@ void Scurver::Attack(float dt) {
     b2Vec2 currentVelocity = pbody->body->GetLinearVelocity();
 
     static float exponentialFactor = 1.007f;
-    static float velocityBase = 0.15f;
-    static float maxSpeed = 15.0f;
+    static float velocityBase = 0.13f;
+    static float maxSpeed = 10.0f;
 
     Vector2D nextTile = pathfinding->pathTiles.front();
     Vector2D nextTileWorld = Engine::GetInstance().map.get()->MapToWorld(nextTile.getX(), nextTile.getY());

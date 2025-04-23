@@ -31,6 +31,7 @@
 #define CATEGORY_CAVE_DROP        0x1000
 #define CATEGORY_NPC              0x2000
 #define CATEGORY_DOOR             0x4000
+#define CATEGORY_LIFE_PLANT       0x8000
 
 // types of bodies
 enum bodyType {
@@ -42,6 +43,7 @@ enum bodyType {
 enum class ColliderType {
 	PLAYER, 
 	PLAYER_DAMAGE,
+	LIFE_PLANT,
 	SPIKE,
 	WALL_SLIDE,
 	WALL,

@@ -310,6 +310,14 @@
 						<frame x="18" y="72" w="18" h="18" />
 					</splash>
 				</cave_drop>
+				<life_plant w="298" h="218" texture="Assets/Props/lifePlant.png">
+					<available loop="false" speed="0">
+						<frame x="298" y="0" w="298" h="218" />
+					</available>
+					<consumed loop="false" speed="0">
+						<frame x="0" y="0" w="298" h="218" />
+					</consumed>
+				</life_plant>
 			</props>
 			<particles>
 				<dust w="20" h="20" texture="Assets/Particles/dust.png">

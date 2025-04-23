@@ -8,6 +8,7 @@
 #include <math.h>
 #include "Enemy.h"
 #include "CaveDrop.h"
+#include "LifePlant.h"
 #include "Engine.h"
 #include "EntityManager.h"
 #include "AbilityZone.h"
@@ -487,7 +488,7 @@ bool Map::Load(std::string path, std::string fileName)
                     box->SetParameters(node);
                 }
             }
-            else if (objectGroupName == "Particles")
+            else if (objectGroupName == "Props")
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
                 {
@@ -501,6 +502,15 @@ bool Map::Load(std::string path, std::string fileName)
                         caveDrop->position = Vector2D(x, y); 
 
                         LOG("Created CaveDrop at x: %d, y: %d", x, y);
+                    }
+                    else if (objectName == "LifePlant") {
+                        int x = objectNode.attribute("x").as_int();
+                        int y = objectNode.attribute("y").as_int();
+
+                        LifePlant* lifePlant = (LifePlant*)Engine::GetInstance().entityManager->CreateEntity(EntityType::LIFE_PLANT);
+                        lifePlant->position = Vector2D(x, y);
+
+                        LOG("Created LifePlant at x: %d, y: %d", x, y);
                     }
                 }
             }

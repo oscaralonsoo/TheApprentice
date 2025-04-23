@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="140" height="59" tilewidth="64" tileheight="64" infinite="0" nextlayerid="70" nextobjectid="1290">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="140" height="59" tilewidth="64" tileheight="64" infinite="0" nextlayerid="70" nextobjectid="1301">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -57901,8 +57901,8 @@
    <tile/>
   </data>
  </layer>
- <objectgroup id="57" name="WallSlide" visible="0">
-  <object id="691" x="5184" y="2368" height="64"/>
+ <objectgroup id="57" name="WallSlide">
+  <object id="691" x="5184" y="2368" height="52"/>
   <object id="710" x="7744" y="2816" height="64"/>
   <object id="711" x="7808" y="2688" height="128"/>
   <object id="712" x="7872" y="2560" height="128"/>
@@ -57910,39 +57910,29 @@
   <object id="714" x="8384" y="2624" height="128"/>
   <object id="715" x="8448" y="2752" height="192"/>
   <object id="718" x="6592" y="2560" height="192"/>
-  <object id="847" x="7552" y="384" height="320"/>
-  <object id="848" x="7552" y="704" height="64"/>
-  <object id="849" x="6528" y="384" height="64"/>
-  <object id="850" x="6144" y="384" height="64"/>
-  <object id="851" x="5056" y="576" height="64"/>
-  <object id="852" x="5120" y="448" height="128"/>
-  <object id="853" x="5184" y="384" height="64"/>
-  <object id="867" x="7872" y="704" height="64"/>
-  <object id="868" x="7936" y="640" height="64"/>
-  <object id="869" x="8000" y="576" height="64"/>
-  <object id="870" x="8192" y="512" height="64"/>
-  <object id="871" x="8448" y="448" height="64"/>
+  <object id="847" x="7552" y="394.667" height="298.889"/>
+  <object id="848" x="7552" y="693.556" height="59.7778"/>
   <object id="935" x="4608" y="704" height="64"/>
   <object id="936" x="4608" y="704" width="192"/>
   <object id="937" x="4800" y="640" height="64"/>
   <object id="943" x="1216" y="448" height="576"/>
-  <object id="951" x="4224" y="896" height="128"/>
-  <object id="956" x="3328" y="1280" height="384"/>
-  <object id="957" x="3456" y="1152" height="192"/>
+  <object id="951" x="4224" y="905.333" height="118.667"/>
+  <object id="956" x="3328" y="1287.33" height="376.667"/>
+  <object id="957" x="3456" y="1161.33" height="182.667"/>
   <object id="962" x="3712" y="1536" height="320"/>
   <object id="963" x="3776" y="1856" height="320"/>
   <object id="964" x="3200" y="1728" height="320"/>
-  <object id="978" x="3520" y="1024" height="128"/>
-  <object id="1037" x="6016" y="2624" height="128"/>
-  <object id="1040" x="5376" y="2176" height="320"/>
-  <object id="1047" x="5312" y="1920" height="128"/>
+  <object id="978" x="3520" y="1033.33" height="118.667"/>
+  <object id="1037" x="6016" y="2632.67" height="119.333"/>
+  <object id="1040" x="5376" y="2186" height="310"/>
+  <object id="1047" x="5312" y="1931" height="117"/>
   <object id="1051" x="5184" y="1728" height="128"/>
   <object id="1084" x="6784" y="1984" height="128"/>
-  <object id="1086" x="6656" y="1728" height="192"/>
-  <object id="1092" x="6784" y="1536" height="192"/>
-  <object id="1100" x="6272" y="2368" height="128"/>
-  <object id="1109" x="5120" y="1088" height="128"/>
-  <object id="1118" x="7488" y="960" height="256"/>
+  <object id="1086" x="6656" y="1742.67" height="165.333"/>
+  <object id="1092" x="6784" y="1549.33" height="166.667"/>
+  <object id="1100" x="6272" y="2377.33" height="105.333"/>
+  <object id="1109" x="5120" y="1088" height="114.667"/>
+  <object id="1118" x="7488" y="972" height="238.667"/>
  </objectgroup>
  <objectgroup id="25" name="Doors">
   <properties>
@@ -58247,6 +58237,16 @@
   <object id="1276" x="3840" y="2752" height="64"/>
   <object id="1279" x="3968" y="2688" height="64"/>
   <object id="1280" x="3840" y="2752" width="128"/>
+  <object id="1290" x="7872" y="704" height="64"/>
+  <object id="1291" x="7936" y="640" height="64"/>
+  <object id="1292" x="8000" y="576" height="64"/>
+  <object id="1293" x="8192" y="512" height="64"/>
+  <object id="1294" x="8448" y="448" width="448"/>
+  <object id="1295" x="6528" y="384" height="64"/>
+  <object id="1296" x="6144" y="384" height="64"/>
+  <object id="1298" x="5184" y="384" height="64"/>
+  <object id="1299" x="5120" y="448" height="128"/>
+  <object id="1300" x="5056" y="576" height="64"/>
  </objectgroup>
  <objectgroup id="61" name="DestructibleWalls" visible="0"/>
  <objectgroup id="64" name="Particles" visible="0">

@@ -106,7 +106,7 @@ void PlayerMechanics::Update(float dt) {
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && Engine::GetInstance().scene->saveGameZone) {
         player->pbody->body->SetLinearVelocity(b2Vec2_zero);
         Engine::GetInstance().scene->SaveGameXML();
-        vidas = 3;
+        lives = 3;
         return;
     }
 

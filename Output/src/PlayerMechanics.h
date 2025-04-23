@@ -26,7 +26,7 @@ public:
 
     bool cantMove = false;
     bool canAttack = true;
-    int vidas = 3;
+    int lives = 3;
     Vector2D lastPosition;
 
 private:
@@ -41,7 +41,8 @@ private:
     void StartInvulnerability();
     void UpdateLastSafePosition();
     void HandleSound();
-    void HandleLifes();
+    void HandleLives();
+
 
 private:
     Player* player = nullptr;

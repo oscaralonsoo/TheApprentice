@@ -5,6 +5,7 @@
 #include "Animation.h"
 #include "Physics.h"
 #include "Timer.h"
+#include "PlayerMechanics.h"
 
 struct SDL_Texture;
 
@@ -39,5 +40,4 @@ private:
 	Animation consumedAnim;
 
 	LifePlantStates state = LifePlantStates::AVAILABLE;
-
 };

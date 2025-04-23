@@ -153,6 +153,10 @@ private:
     float knockbackDuration = 300.0f;
     b2Vec2 knockbackInitialVelocity = { 0, 0 };
     float knockbackProgress = 0.0f;
-    float knockbackTotalTime = 300.0f; // en milisegundos
+    float knockbackTotalTime = 300.0f; // en milisegundosç
 
+    //Spikes
+    Timer spikesCouldown;
+    float maxTimeSpikesCouldown = 100.0f;
+    bool spikesDamage = false;
 };

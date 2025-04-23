@@ -75,6 +75,10 @@ void PlayerMechanics::Update(float dt) {
         knockbackActive = false;
     }
 
+    if (spikesDamage && spikesCouldown.ReadMSec() >= maxTimeSpikesCouldown) {
+        spikesDamage = false;
+    }
+
     if (shouldRespawn && !godMode) {
         shouldRespawn = false;
         player->SetPosition(lastPosition);  
@@ -255,10 +259,14 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         break;
     case ColliderType::SPIKE:
-        if (!godMode) {
-            player->SetState("dead");
-            UpdateLastSafePosition();
-            shouldRespawn = true;
+        if (!spikesDamage)
+        {
+            if (!godMode) {
+                player->SetState("dead");
+                UpdateLastSafePosition();
+                shouldRespawn = true;
+                lives -= 1;
+            }
         }
         break;
     case ColliderType::PUSHABLE_PLATFORM:
@@ -318,6 +326,10 @@ void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         jumpCooldownActive = true;
         break;
     case ColliderType::SAVEGAME: Engine::GetInstance().scene->saveGameZone = false; break;
+    case ColliderType::SPIKE:
+        spikesCouldown.Start();
+        spikesDamage = true;
+        break;
     default: break;
     }
 }

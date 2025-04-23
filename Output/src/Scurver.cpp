@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "EntityManager.h"
 #include "Textures.h"
+#include "Audio.h"
 
 
 Scurver::Scurver() : Enemy(EntityType::SCURVER) {
@@ -50,6 +51,8 @@ bool Scurver::Start() {
     }
 
     currentAnimation = &attackAnim;
+
+    walkFxId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/scurver_walk.ogg", 0.3f);
 
     return true;
 }
@@ -141,6 +144,11 @@ void Scurver::Attack(float dt) {
     currentVelocity.x = fmin(fmax(currentVelocity.x, -maxSpeed), maxSpeed);
     pbody->body->SetLinearVelocity(currentVelocity);
 
+    if (!isWalkSoundPlaying && walkFxId > 0) {
+        scurverChannel = Engine::GetInstance().audio->PlayFxReturnChannel(walkFxId, 0.3f, -1);
+        if (scurverChannel != -1) isWalkSoundPlaying = true;
+    }
+
     previousDirection = direction;
 }
 
@@ -156,6 +164,11 @@ void Scurver::Slide(float dt) {
     else {
         currentVelocity.x = 0.0f;
         currentState = ScurverState::IDLE;
+        if (currentVelocity.x == 0.0f && isWalkSoundPlaying && scurverChannel != -1) {
+            Mix_HaltChannel(scurverChannel);
+            isWalkSoundPlaying = false;
+            scurverChannel = -1;
+        }
     }
 
     pbody->body->SetLinearVelocity(currentVelocity);
@@ -167,6 +180,11 @@ void Scurver::OnCollision(PhysBody* physA, PhysBody* physB)
     {
     case ColliderType::ATTACK:
         currentState = ScurverState::DEAD;
+        if (isWalkSoundPlaying && scurverChannel != -1) {
+            Mix_HaltChannel(scurverChannel);
+            isWalkSoundPlaying = false;
+            scurverChannel = -1;
+        }
         break;
     }
 }

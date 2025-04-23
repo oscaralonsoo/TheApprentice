@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "EntityManager.h"
 #include "Textures.h"
+#include "Audio.h"
 
 
 Creebler::Creebler() : Enemy(EntityType::CREEBLER) {
@@ -51,6 +52,8 @@ bool Creebler::Start() {
     }
 
     currentAnimation = &walkAnim;
+    walkFxId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/creebler_walk.ogg", 0.3f);
+
 
     return true;
 }
@@ -102,6 +105,11 @@ void Creebler::Walk() {
 
     if (layer->Get(frontX, posMap.y) || !layer->Get(frontX, frontY))
         direction *= -1;
+
+    if (!isWalkSoundPlaying && walkFxId > 0) {
+        creeblerChannel = Engine::GetInstance().audio->PlayFxReturnChannel(walkFxId, 0.3f, -1);
+        if (creeblerChannel != -1) isWalkSoundPlaying = true;
+    }
 }
 
 void Creebler::OnCollision(PhysBody* physA, PhysBody* physB)
@@ -110,6 +118,11 @@ void Creebler::OnCollision(PhysBody* physA, PhysBody* physB)
     {
     case ColliderType::ATTACK:
         currentState = CreeblerState::DEAD;
+        if (isWalkSoundPlaying && creeblerChannel != -1) {
+            Mix_HaltChannel(creeblerChannel);
+            isWalkSoundPlaying = false;
+            creeblerChannel = -1;
+        }
         break;
     }
 }

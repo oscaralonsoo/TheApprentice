@@ -13,6 +13,8 @@ void PlayerMechanics::Init(Player* player) {
     this->player = player;
     slimeFxId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/slime_move.ogg", 0.1f);
     jumpFxId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/slime_jump.ogg", 1.0f);
+    dashFxId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/slime_dash.ogg", 0.3f);
+    attackFxId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/slime_attack.ogg", 0.3f);
 
 }
 
@@ -433,6 +435,10 @@ void PlayerMechanics::HandleDash() {
 
         Engine::GetInstance().render->DashCameraImpulse(dashDirection, 100);
 
+        if (dashFxId > 0) {
+            Engine::GetInstance().audio->PlayFx(dashFxId, 0.3f, 0);
+        }
+
         if (attackSensor != nullptr) DestroyAttackSensor();
     }
 
@@ -499,6 +505,10 @@ void PlayerMechanics::CreateAttackSensor() {
 
     isAttacking = true;
     attackTimer.Start();
+
+    if (attackFxId > 0) {
+        Engine::GetInstance().audio->PlayFx(attackFxId, 0.3f, 0);
+    }
 }
 
 void PlayerMechanics::DestroyAttackSensor() {

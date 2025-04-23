@@ -171,6 +171,19 @@ void Scene::ChangeScene(int nextScene)
 		if (!path.empty() && !name.empty()) {
 			Engine::GetInstance().map->Load(path, name); // Load New Map
 
+			static std::string currentMusic = "";
+			std::string musicPath;
+
+			switch (nextScene) {
+			case 0: musicPath = "Assets/Audio/Music/cave_theme.ogg"; break;
+
+			}
+
+			if (!musicPath.empty() && musicPath != currentMusic) {
+				Engine::GetInstance().audio->PlayMusic(musicPath.c_str(), 2.0f, 1.0f);
+				currentMusic = musicPath;
+			}
+
 			if (!isLoad)
 			{
 				player->pbody->body->SetLinearVelocity(b2Vec2(0, 0)); // Stop All Movement

@@ -34,4 +34,8 @@ private:
     float speed = 2.0f;
 
     Timer deathTimer;
+
+    int walkFxId = -1;
+    int creeblerChannel = -1;
+    bool isWalkSoundPlaying = false;
 };

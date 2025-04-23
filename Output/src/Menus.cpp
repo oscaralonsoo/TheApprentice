@@ -9,8 +9,9 @@
 #include "Log.h"
 #include <SDL2/SDL_mixer.h>
 #include "Textures.h"
+#include "Audio.h"
 
-
+static bool musicStarted = false;
 
 Menus::Menus() : currentState(MenusState::INTRO), transitionAlpha(0.0f), inTransition(false), fadingIn(false), nextState(MenusState::NONE),
 fastTransition(false), menuBackground(nullptr), pauseBackground(nullptr) {}
@@ -172,6 +173,11 @@ void Menus::MainMenu(float dt) {
         case 4: currentState = MenusState::EXIT; break;
         }
     }
+    static bool musicStarted = false;
+    if (!musicStarted) {
+        Engine::GetInstance().audio->PlayMusic("Assets/Audio/Music/menu_theme.ogg", 1.0f, 1.0f);
+        musicStarted = true;
+    }
 }
 
 void Menus::NewGame() {
@@ -199,6 +205,17 @@ void Menus::NewGame() {
     Engine::GetInstance().scene.get()->SaveGameXML();
  
     StartTransition(false, MenusState::GAME);
+
+    static std::string currentMusic = "";
+    std::string musicPath;
+
+  
+    musicPath = "Assets/Audio/Music/cave_theme.ogg";
+
+    if (!musicPath.empty() && musicPath != currentMusic) {
+        Engine::GetInstance().audio->PlayMusic(musicPath.c_str(), 2.0f, 1.0f);
+        currentMusic = musicPath;
+    }
 }
 
 void Menus::Pause(float dt) {
@@ -294,6 +311,10 @@ void Menus::StartTransition(bool fast, MenusState newState) {
     fadingIn = false;
     inTransition = true;
     nextState = newState;
+
+    if (newState == MenusState::GAME) {
+        musicStarted = false;
+    }
 
     previousSelectedButton[currentState] = selectedButton;
 }

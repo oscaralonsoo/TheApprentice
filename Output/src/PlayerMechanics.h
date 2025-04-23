@@ -144,6 +144,8 @@ private:
     int slimeFxId = -1;
     int slimeChannel = -1;
     int jumpFxId = -1;
+    int dashFxId = -1;
+    int attackFxId = -1;
     bool isSlimeSoundPlaying = false;
     bool playJumpSound = false;
 

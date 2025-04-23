@@ -36,4 +36,7 @@ private:
 
     float previousDirection;
     Timer timer;
+    int walkFxId = -1;
+    int scurverChannel = -1;
+    bool isWalkSoundPlaying = false;
 };

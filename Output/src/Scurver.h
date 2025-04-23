@@ -31,9 +31,7 @@ public:
 private:
     ScurverState currentState = ScurverState::IDLE;
 
-    Animation idleAnim;
     Animation attackAnim;
-    Animation slideAnim;
     Animation deadAnim;
 
     float previousDirection;

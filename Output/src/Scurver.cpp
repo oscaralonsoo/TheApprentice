@@ -17,6 +17,25 @@ bool Scurver::Awake() {
 }
 
 bool Scurver::Start() {
+    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 3, texH / 3, bodyType::DYNAMIC);
+
+    //Assign collider type
+    pbody->ctype = ColliderType::ENEMY;
+
+    pbody->listener = this;
+
+    // Initialize pathfinding
+    pathfinding = new Pathfinding();
+    ResetPath();
+
+    b2Fixture* fixture = pbody->body->GetFixtureList();
+    if (fixture) {
+        b2Filter filter;
+        filter.categoryBits = CATEGORY_ENEMY;
+        filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_ATTACK | CATEGORY_PLAYER_DAMAGE;
+        fixture->SetFilterData(filter);
+    }
+
     pugi::xml_document loadFile;
     pugi::xml_parse_result result = loadFile.load_file("config.xml");
 
@@ -25,16 +44,14 @@ bool Scurver::Start() {
         if (std::string(enemyNode.attribute("type").as_string()) == type)
         {
             texture = Engine::GetInstance().textures.get()->Load(enemyNode.attribute("texture").as_string());
-            idleAnim.LoadAnimations(enemyNode.child("idle"));
-            attackAnim.LoadAnimations(enemyNode.child("attack"));
-            slideAnim.LoadAnimations(enemyNode.child("slide"));
+            attackAnim.LoadAnimations(enemyNode.child("idle"));
             deadAnim.LoadAnimations(enemyNode.child("dead"));
         }
     }
 
-    currentAnimation = &idleAnim;
+    currentAnimation = &attackAnim;
 
-    return Enemy::Start();
+    return true;
 }
 
 bool Scurver::Update(float dt) {
@@ -43,22 +60,36 @@ bool Scurver::Update(float dt) {
             currentState = ScurverState::ATTACK;
         }
     }
+    else {
+        if (currentState == ScurverState::ATTACK || currentState == ScurverState::SLIDE) {
+            currentState = ScurverState::IDLE;
+        }
+    }
 
     switch (currentState)
     {
     case ScurverState::IDLE:
-        if (currentAnimation != &idleAnim) currentAnimation = &idleAnim;
+        if (currentAnimation != &attackAnim) currentAnimation = &attackAnim;
+        pbody->body->SetLinearVelocity(b2Vec2_zero);
+        pbody->body->SetAngularVelocity(0);
+
+        currentAnimation->SetPaused(true);
         break;
     case ScurverState::ATTACK:
         if (currentAnimation != &attackAnim) currentAnimation = &attackAnim;
+        currentAnimation->SetPaused(false);
+
         Attack(dt);
         break;
     case ScurverState::SLIDE:
-        if (currentAnimation != &slideAnim) currentAnimation = &slideAnim;
+        if (currentAnimation != &attackAnim) currentAnimation = &attackAnim;
         Slide(dt);
         break;
     case ScurverState::DEAD:
         if (currentAnimation != &deadAnim) currentAnimation = &deadAnim;
+
+        pbody->body->SetLinearVelocity(b2Vec2_zero);
+        pbody->body->SetAngularVelocity(0);
         break;
     }
 
@@ -80,6 +111,12 @@ bool Scurver::CleanUp() {
 }
 
 void Scurver::Attack(float dt) {
+    if (pathfinding->pathTiles.empty()) {
+        // No hay camino, así que no hace nada o entra en un estado diferente
+        pbody->body->SetLinearVelocity(b2Vec2(0, 0)); // detenerse o comportamiento alternativo
+        return;
+    }
+
     b2Vec2 currentVelocity = pbody->body->GetLinearVelocity();
 
     static float exponentialFactor = 1.007f;
@@ -89,26 +126,24 @@ void Scurver::Attack(float dt) {
     Vector2D nextTile = pathfinding->pathTiles.front();
     Vector2D nextTileWorld = Engine::GetInstance().map.get()->MapToWorld(nextTile.getX(), nextTile.getY());
 
-    float direction = (nextTileWorld.getX() > position.getX()) ? 1.0f :
+    direction = (nextTileWorld.getX() > position.getX()) ? 1.0f :
         (nextTileWorld.getX() < position.getX() ? -1.0f : 0.0f);
 
     if (direction != previousDirection)
     {
         currentState = ScurverState::SLIDE;
         timer.Start();
-
     }
 
     float exponentialVelocityIncrease = velocityBase * (pow(exponentialFactor, dt));
-
     currentVelocity.x += direction * exponentialVelocityIncrease;
 
     currentVelocity.x = fmin(fmax(currentVelocity.x, -maxSpeed), maxSpeed);
-
     pbody->body->SetLinearVelocity(currentVelocity);
 
     previousDirection = direction;
 }
+
 
 void Scurver::Slide(float dt) {
     b2Vec2 currentVelocity = pbody->body->GetLinearVelocity();

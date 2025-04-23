@@ -29,6 +29,8 @@
 #define CATEGORY_DOWN_CAMERA      0x0400
 #define CATEGORY_ATTACK           0x0800
 #define CATEGORY_CAVE_DROP        0x1000
+#define CATEGORY_NPC              0x2000
+#define CATEGORY_DOOR             0x4000
 
 // types of bodies
 enum bodyType {

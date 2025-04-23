@@ -329,7 +329,7 @@ bool Map::Load(std::string path, std::string fileName)
                     int height = objectNode.attribute("height").as_int();
 
                     // Create Door type Collider
-                    PhysBody* doorCollider = Engine::GetInstance().physics->CreateRectangleSensor(x + (width / 2), y + (height / 2), width, height, STATIC);
+                    PhysBody* doorCollider = Engine::GetInstance().physics->CreateRectangleSensor(x + (width / 2), y + (height / 2), width, height, STATIC, CATEGORY_DOOR, CATEGORY_PLAYER);
                     doorCollider->ctype = ColliderType::DOOR;
 
                     // Access Properties by Name

@@ -154,9 +154,6 @@ void EntityManager::DestroyEntity(Entity* entity)
 		}
 		else {
 			++it;
-			delete* it; 
-			entities.erase(it); 
-			break; 
 		}
 	}
 }

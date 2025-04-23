@@ -15,9 +15,10 @@ void PlayerAnimation::LoadAnimations(const pugi::xml_node& parameters, SDL_Textu
 
 void PlayerAnimation::Update(float dt, const std::string& state, int x, int y, bool visible, bool flip)
 {
-    if (animations.find(state) != animations.end()) {
+    if (state != currentState && animations.find(state) != animations.end()) {
         currentAnimation = &animations[state];
-        //printf("Animaci�n actual: %s\n", state.c_str());
+        currentAnimation->Reset(); // empieza la animación desde el principio
+        currentState = state;
     }
 
     bool adjustedFlip = flip;

@@ -46,11 +46,11 @@ void PlayerMechanics::Update(float dt) {
     if (isStunned) {
         if (stunTimer.ReadMSec() >= stunDuration) {
             isStunned = false;
+            player->SetState("idle");
         }
         else {
-            // Durante el stun, cancelamos todo movimiento del jugador
             player->pbody->body->SetLinearVelocity(b2Vec2_zero);
-            Engine::GetInstance().render->StartCameraShake(0.2f, 2);
+            player->SetState("landing");
             return;
         }
     }
@@ -106,6 +106,14 @@ void PlayerMechanics::Update(float dt) {
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && Engine::GetInstance().scene->saveGameZone) {
         player->pbody->body->SetLinearVelocity(b2Vec2_zero);
         Engine::GetInstance().scene->SaveGameXML();
+        vidas = 3;
+        return;
+    }
+
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
+        isStunned = true;
+        stunTimer.Start();
+        Engine::GetInstance().render->StartCameraShake(1, 2);
         return;
     }
 
@@ -148,6 +156,15 @@ void PlayerMechanics::Update(float dt) {
     }
 
     HandleSound();
+
+    b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
+
+    printf("Velocidad vertical: %.2f\n", velocity.y);
+
+    float verticalVelocity = player->pbody->body->GetLinearVelocity().y;
+    if (verticalVelocity > fallStunThreshold) {
+        willStun = true;
+    }
 }
 
 void PlayerMechanics::PostUpdate()
@@ -167,6 +184,16 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
             if (isFalling) {
                 isFalling = false;
                 player->pbody->body->SetLinearVelocity(b2Vec2_zero);
+                player->SetState("idle");
+
+            }
+            if (willStun) {
+                isStunned = true;
+                willStun = false;
+                stunTimer.Start();
+                player->SetState("landing_stun");
+                Engine::GetInstance().render->StartCameraShake(0.2f, 2);
+                return;
             }
         }
         break;

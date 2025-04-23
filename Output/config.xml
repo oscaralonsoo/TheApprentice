@@ -60,7 +60,7 @@
 					<frame x="200" y="400" w="100" h="100" />
 					<frame x="300" y="400" w="100" h="100" />
 				</wall_slide>
-				<landing_stun loop="false" speed="0.17">
+				<landing_stun loop="true" speed="0.14">
 					<frame x="0" y="300" w="100" h="100" />
 					<frame x="100" y="300" w="100" h="100" />
 					<frame x="200" y="300" w="100" h="100" />
@@ -75,7 +75,7 @@
 					<frame x="1100" y="300" w="100" h="100" />
 					<frame x="1200" y="300" w="100" h="100" />
 				</landing_stun>
-				<landing loop="false" speed="0.17">
+				<landing loop="true" speed="0.17">
 					<frame x="0" y="300" w="100" h="100" />
 					<frame x="100" y="300" w="100" h="100" />
 					<frame x="200" y="300" w="100" h="100" />

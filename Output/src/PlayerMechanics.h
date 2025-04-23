@@ -88,6 +88,10 @@ private:
     int dashDirection = 1;
 
     // Fall
+    bool isStunned = false;
+    Timer stunTimer;
+    float stunDuration = 500.0f; // en milisegundos
+    float fallStunThreshold = -15.0f; // velocidad Y mínima para provocar stun
 
     // WallSlide 
     bool wasInDownCameraZone = false;
@@ -145,4 +149,8 @@ private:
     bool knockbackActive = false;
     Timer knockbackTimer;
     float knockbackDuration = 300.0f;
+    b2Vec2 knockbackInitialVelocity = { 0, 0 };
+    float knockbackProgress = 0.0f;
+    float knockbackTotalTime = 300.0f; // en milisegundos
+
 };

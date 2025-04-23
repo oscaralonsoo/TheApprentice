@@ -61,6 +61,11 @@ bool Scene::Update(float dt)
 	if (Engine::GetInstance().menus->currentState != MenusState::GAME)
 		return true;
 
+	if (pendingLoadAfterDeath) {
+		pendingLoadAfterDeath = false;
+		LoadGameXML();
+	}
+
 	UpdateTransition(dt);
 
 	Engine::GetInstance().render.get()->UpdateCamera(player->GetPosition(), player->GetMovementDirection(), 0.05);
@@ -100,10 +105,9 @@ bool Scene::PostUpdate()
 
 	Vignette(300, 0.8);
 
-	if (isDead == true)
-	{
-		isDead == false;
-		LoadGameXML();
+	if (isDead == true) {
+		isDead = false;
+		pendingLoadAfterDeath = true;
 	}
 
 	return ret;

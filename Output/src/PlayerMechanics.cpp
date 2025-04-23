@@ -43,6 +43,18 @@ void PlayerMechanics::Update(float dt) {
         return;
     }
 
+    if (isStunned) {
+        if (stunTimer.ReadMSec() >= stunDuration) {
+            isStunned = false;
+        }
+        else {
+            // Durante el stun, cancelamos todo movimiento del jugador
+            player->pbody->body->SetLinearVelocity(b2Vec2_zero);
+            Engine::GetInstance().render->StartCameraShake(0.2f, 2);
+            return;
+        }
+    }
+
     if (wallSlideCooldownActive && wallSlideCooldownTimer.ReadMSec() >= wallSlideCooldownTime) {
         wallSlideCooldownActive = false;
     }
@@ -162,6 +174,10 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (!wallSlideCooldownActive) {
             isWallSliding = true;
             isJumping = false;
+            if (isOnGround) 
+            {
+                player->SetState("idle");
+            }
         }
         break;
     case ColliderType::WALL:
@@ -196,11 +212,12 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
             b2Vec2 enemyPos = physB->body->GetPosition();
             float pushDirection = (playerPos.x < enemyPos.x) ? -1.0f : 1.0f;
 
-            b2Vec2 knockbackVelocity(pushDirection * 30.0f, -5.0f); // empuje hacia atrás y arriba
-            player->pbody->body->SetLinearVelocity(knockbackVelocity);
+            knockbackInitialVelocity = b2Vec2(pushDirection * 12.0f, -5.0f); // ajuste fino
+            player->pbody->body->SetLinearVelocity(knockbackInitialVelocity);
 
             knockbackActive = true;
             knockbackTimer.Start();
+            knockbackProgress = 0.0f;
 
             // Solo quitar vida si no es invulnerable
             if (!isInvulnerable && !godMode) {

@@ -103,8 +103,7 @@ bool Scene::PostUpdate()
 	if (isDead == true)
 	{
 		isDead == false;
-		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-			LoadGameXML();
+		LoadGameXML();
 	}
 
 	return ret;

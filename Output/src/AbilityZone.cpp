@@ -121,21 +121,24 @@ bool AbilityZone::Update(float dt)
 				mechanics->cantMove = false;
 				mechanics->EnableJump(true);
 				mechanics->canAttack = true;
-				markedForDeletion = true; 
+				mechanics->vignetteSize = Engine::GetInstance().scene->previousVignetteSize; 
+				markedForDeletion = true;
 			}
 			else if (playerInsideDoubleJump && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
 				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
 				mechanics->cantMove = false;
 				mechanics->EnableDoubleJump(true);
 				mechanics->canAttack = true;
-				markedForDeletion = true; 
+				mechanics->vignetteSize = Engine::GetInstance().scene->previousVignetteSize; 
+				markedForDeletion = true;
 			}
 			else if (playerInsideDash && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
 				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
 				mechanics->cantMove = false;
 				mechanics->EnableDash(true);
 				mechanics->canAttack = true;
-				markedForDeletion = true; 
+				mechanics->vignetteSize = Engine::GetInstance().scene->previousVignetteSize; 
+				markedForDeletion = true;
 			}
 		}
 	}

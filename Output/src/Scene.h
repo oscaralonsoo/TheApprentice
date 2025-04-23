@@ -3,7 +3,7 @@
 #include "Module.h"
 #include "Player.h"
 #include "Enemy.h"
-
+#include "PlayerMechanics.h"
 struct SDL_Texture;
 
 class Scene : public Module
@@ -51,8 +51,8 @@ public:
 	void Vignette(int size, float strength);
 
 	Player* GetPlayer() const { return player; }
-
 public:
+
 	int previousVignetteSize;
 	Vector2D newPosition;
 	bool transitioning = false;
@@ -75,7 +75,7 @@ private:
 	//transition 
 	bool fadingIn = false;
 	float transitionAlpha = 0.0f;
-
+	PlayerMechanics mechanics;
 	//Vignette
 	float distFactor = 0.0f;
 	float opacity = 0.0f;

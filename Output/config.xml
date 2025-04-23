@@ -12,7 +12,7 @@
 		<fullscreen value="false" />
 		<borderless value="false" />
 		<resizable value="false" />
-		<fullscreen_window value="false" />
+		<fullscreen_window value="true" />
 	</window>
 	<scene>
 		<maps>
@@ -334,7 +334,7 @@
 			</abilities>
 		</animations>
 		<save_data isSaved="1">
-			<player x="3589" y="2603" w="44" h="54" />
+			<player x="1950" y="650" w="44" h="54" lives="3" />
 			<scene actualScene="0" />
 			<enemies />
 		</save_data>

@@ -228,7 +228,7 @@ void Menus::Settings() {
 
 void Menus::HandleSettingsSelection() {
     switch (selectedButton) {
-    case 0: ToggleFullScreen(); break;
+    case 0: /*ToggleFullScreen();*/break;
     case 1: ToggleVSync(); break;
     }
 }

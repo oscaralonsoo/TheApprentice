@@ -137,9 +137,9 @@ void PlayerMechanics::PostUpdate()
 void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
-        if (!jumpCooldownActive)    
+        if (!jumpCooldownActive)
         {
-            isJumping = false;  
+            isJumping = false;
             isOnGround = true;
             if (jumpUnlocked) EnableJump(true);
             jumpCount = 0;
@@ -153,7 +153,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (!wallSlideCooldownActive) {
             isWallSliding = true;
             isJumping = false;
-            if (isOnGround) 
+            if (isOnGround)
             {
                 player->SetState("idle");
             }
@@ -165,7 +165,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
             isTouchingWall = true;
             isJumping = false;
             if (isDashing) {
-                CancelDash(); 
+                CancelDash();
             }
         }
         break;
@@ -193,28 +193,28 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
             vignetteSize += 200;
             if (vignetteSize > 900) {
                 vignetteSize = 900;
-        if (physA->ctype == ColliderType::PLAYER_DAMAGE) {
+                if (physA->ctype == ColliderType::PLAYER_DAMAGE) {
 
-            // EMPUJ�N en direcci�n contraria al enemigo (siempre)
-            b2Vec2 playerPos = player->pbody->body->GetPosition();
-            b2Vec2 enemyPos = physB->body->GetPosition();
-            float pushDirection = (playerPos.x < enemyPos.x) ? -1.0f : 1.0f;
+                    // EMPUJ�N en direcci�n contraria al enemigo (siempre)
+                    b2Vec2 playerPos = player->pbody->body->GetPosition();
+                    b2Vec2 enemyPos = physB->body->GetPosition();
+                    float pushDirection = (playerPos.x < enemyPos.x) ? -1.0f : 1.0f;
 
-            knockbackInitialVelocity = b2Vec2(pushDirection * 12.0f, -5.0f); // ajuste fino
-            player->pbody->body->SetLinearVelocity(knockbackInitialVelocity);
+                    knockbackInitialVelocity = b2Vec2(pushDirection * 12.0f, -5.0f); // ajuste fino
+                    player->pbody->body->SetLinearVelocity(knockbackInitialVelocity);
 
-            knockbackActive = true;
-            knockbackTimer.Start();
-            knockbackProgress = 0.0f;
+                    knockbackActive = true;
+                    knockbackTimer.Start();
+                    knockbackProgress = 0.0f;
 
-            // Solo quitar vida si no es invulnerable
-            if (!isInvulnerable && !godMode) {
-                vidas -= 1;
-                StartInvulnerability();
-                Engine::GetInstance().render->StartCameraShake(0.5, 1);
-            }
-        }
-        break;
+                    // Solo quitar vida si no es invulnerable
+                    if (!isInvulnerable && !godMode) {
+                        vidas -= 1;
+                        StartInvulnerability();
+                        Engine::GetInstance().render->StartCameraShake(0.5, 1);
+                    }
+                }
+                break;
     case ColliderType::SPIKE:
         if (!godMode) {
             player->SetState("dead");
@@ -239,6 +239,8 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     default:
         break;
+            }
+        }
     }
 }
 

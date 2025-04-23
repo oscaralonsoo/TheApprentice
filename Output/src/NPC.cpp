@@ -19,7 +19,7 @@ bool NPC::Awake() {
 }
 
 bool NPC::Start() {
-	pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + width/2, (int)position.getY()+height/2, width, height, bodyType::STATIC, CATEGORY_NPC, CATEGORY_PLAYER);
+	pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + width/2, (int)position.getY()+height/2, width, height, bodyType::STATIC);
 
 	pbody->ctype = ColliderType::NPC;
 

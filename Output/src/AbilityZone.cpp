@@ -101,7 +101,7 @@ bool AbilityZone::Update(float dt)
 			float maxDistance = pbody->width * 1.5f; // empieza a frenar antes si el collider es más ancho
 			float t = 1.0f - std::min(distance / maxDistance, 1.0f);
 			b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
-			float slowdownFactor = std::max(0.01f, static_cast<float>(pow(1.0f - t, 1.2))); // curva suave
+			float slowdownFactor = std::max(0.3f, pow(1.0f - t, 1.0f));
 			velocity.x *= slowdownFactor;
 			player->pbody->body->SetLinearVelocity(velocity);
 		}

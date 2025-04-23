@@ -68,9 +68,8 @@ bool Hypnoviper::Update(float dt) {
         break;
     case HypnoviperState::HITTED:
         if (currentAnimation != &hitAnim) currentAnimation = &hitAnim;
-        if (hitTimer.ReadMSec() == 0) hitTimer.Start();
 
-        if (hitTimer.ReadMSec() > 2500)
+        if (hitTimer.ReadMSec() > 500)
         {
             currentState = HypnoviperState::DEAD;
         }
@@ -109,7 +108,10 @@ void Hypnoviper::OnCollision(PhysBody* physA, PhysBody* physB)
     switch (physB->ctype)
     {
     case ColliderType::ATTACK:
-        currentState = HypnoviperState::HITTED;
+        if (currentState == HypnoviperState::SLEEPING) {
+            currentState = HypnoviperState::HITTED;
+            hitTimer.Start();
+        }
         break;
     }
 }

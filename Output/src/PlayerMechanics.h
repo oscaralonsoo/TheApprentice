@@ -34,7 +34,6 @@ private:
     void HandleJump();
     void HandleDash();
     void HandleFall();
-    void CheckFallImpact();
     void HandleWallSlide();
     void CancelDash();
     void CreateAttackSensor();
@@ -89,13 +88,6 @@ private:
     int dashDirection = 1;
 
     // Fall
-    bool isStunned = false;
-    float stunDuration = 1.0f;
-    Timer stunTimer;
-    float fallStartY = 0.0f;
-    float fallDistanceThreshold = 500.0f;
-    float fallEndY;
-    float fallDistance;
 
     // WallSlide 
     bool wasInDownCameraZone = false;
@@ -137,6 +129,7 @@ private:
     bool inDownCameraZone = false;
     Timer downCameraCooldown;
     float downCameraCooldownTime = 100.0f;
+    bool cameraModifiedByZone = false;
 
     //God mode
     bool godMode = false;
@@ -147,4 +140,9 @@ private:
     int jumpFxId = -1;
     bool isSlimeSoundPlaying = false;
     bool playJumpSound = false;
+
+    //Enemies
+    bool knockbackActive = false;
+    Timer knockbackTimer;
+    float knockbackDuration = 300.0f;
 };

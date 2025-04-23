@@ -83,7 +83,7 @@ private:
     float maxDashDistance = 100.0f;
     Timer dashCooldown;
     float dashMaxCoolDown = 1.0f;
-    bool dashUnlocked = false;
+    bool dashUnlocked = true;
     int dashDirection = 1;
 
     // Fall

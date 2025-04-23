@@ -361,7 +361,7 @@ void PlayerMechanics::HandleDash() {
 
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_K) == KEY_DOWN && canDash) {
         isDashing = true;
-        canDash = false;
+        canDash = true;
         dashCooldown.Start();
 
         dashStartPosition = player->GetPosition();

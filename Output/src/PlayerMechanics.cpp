@@ -106,7 +106,7 @@ void PlayerMechanics::Update(float dt) {
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && Engine::GetInstance().scene->saveGameZone) {
         player->pbody->body->SetLinearVelocity(b2Vec2_zero);
         Engine::GetInstance().scene->SaveGameXML();
-        vidas = 3;
+        lives = 3;
         return;
     }
 
@@ -169,7 +169,7 @@ void PlayerMechanics::Update(float dt) {
 
 void PlayerMechanics::PostUpdate()
 {
-    HandleLifes();
+    HandleLives();
 }
 
 void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
@@ -248,7 +248,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
 
             // Solo quitar vida si no es invulnerable
             if (!isInvulnerable && !godMode) {
-                vidas -= 1;
+                lives -= 1;
                 StartInvulnerability();
                 Engine::GetInstance().render->StartCameraShake(0.5, 1);
             }
@@ -284,7 +284,6 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
 void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
-        printf("Sale a la plataforma");
         isOnGround = false;
         lasMovementDirection = movementDirection;
         lastPlatformCollider = physB;
@@ -493,7 +492,7 @@ void PlayerMechanics::CreateAttackSensor() {
         32, 64,
         KINEMATIC,
         CATEGORY_ATTACK,     
-        CATEGORY_ENEMY       
+        CATEGORY_ENEMY | CATEGORY_LIFE_PLANT
     );
     attackSensor->ctype = ColliderType::ATTACK;
     attackSensor->listener = player;
@@ -579,12 +578,11 @@ void PlayerMechanics::HandleSound()
     }
 }
 
-void PlayerMechanics::HandleLifes()
+void PlayerMechanics::HandleLives()
 {
-    if (vidas <= 0) 
+    if (lives <= 0) 
     {
-        printf("ENTRAAAAAAA");
         Engine::GetInstance().scene.get()->isDead = true;
-        vidas = 3;
+        lives = 3;
     }
 }

@@ -97,9 +97,7 @@ bool Menus::PostUpdate() {
     SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
     DrawBackground();
     DrawButtons();
-    if (currentState == MenusState::GAME) {
-        DrawPlayerLives();
-    }
+    if (currentState == MenusState::GAME) DrawPlayerLives();
     if (inTransition) ApplyTransitionEffect();
     return !isExit;
 }
@@ -443,7 +441,7 @@ void Menus::DrawPlayerLives() {
     Player* player = Engine::GetInstance().scene->GetPlayer();
     if (!player) return;
 
-    int vidas = player->GetMechanics()->vidas;
+    int lives = player->GetMechanics()->lives;
 
     const int marginLeft = 100;
     const int marginTop = 60;
@@ -451,7 +449,7 @@ void Menus::DrawPlayerLives() {
     const int lifeW = 32;
     const int lifeH = 32;
 
-    for (int i = 0; i < vidas; ++i) {
+    for (int i = 0; i < lives; ++i) {
         int x = marginLeft + i * (lifeW + spacing);
         int y = marginTop;
         SDL_Rect section = { 0, 0, lifeW, lifeH };

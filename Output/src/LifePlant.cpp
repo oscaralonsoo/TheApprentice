@@ -34,13 +34,15 @@ bool LifePlant::Start() {
     texH = lifePlantNode.attribute("h").as_int();
 
     // Crear cuerpo físico
-    pbody = Engine::GetInstance().physics->CreateRectangleSensor(
+    pbody = Engine::GetInstance().physics->CreateRectangle(
         (int)position.getX() + texW / 2,
         (int)position.getY() + texH / 2,
-        texW, texH,
-        bodyType::STATIC,
+        50, 70,
+        bodyType::DYNAMIC,
+        60,
+        20,
         CATEGORY_LIFE_PLANT,
-        0x0000                   
+        CATEGORY_ATTACK
     );
     pbody->ctype = ColliderType::LIFE_PLANT;
     pbody->listener = this;
@@ -48,24 +50,17 @@ bool LifePlant::Start() {
 
     currentAnimation = &availableAnim;
 
-    b2Fixture* fixture = pbody->body->GetFixtureList();
-    if (fixture) {
-        b2Filter filter;
-        filter.categoryBits = CATEGORY_CAVE_DROP;
-        filter.maskBits = CATEGORY_PLATFORM | CATEGORY_PLAYER;
-        fixture->SetFilterData(filter);
-    }
-
     return true;
 }
 
 bool LifePlant::Update(float dt) {
     switch (state) {
     case LifePlantStates::AVAILABLE:
+        if (currentAnimation != &availableAnim) currentAnimation = &availableAnim;
 
         break;
     case LifePlantStates::CONSUMED:
-
+        if (currentAnimation != &consumedAnim) currentAnimation = &consumedAnim;
         break;
     }
 
@@ -89,7 +84,16 @@ bool LifePlant::CleanUp() {
 }
 
 void LifePlant::OnCollision(PhysBody* physA, PhysBody* physB) {
-    if (state == LifePlantStates::AVAILABLE) state = LifePlantStates::CONSUMED;
+    switch (physB->ctype)
+    {
+    case ColliderType::ATTACK:
+        if (state == LifePlantStates::AVAILABLE)
+        {
+            state = LifePlantStates::CONSUMED;
+            Engine::GetInstance().scene->GetPlayer()->GetMechanics()->lives++;
+        }
+        break;
+    }
 }
 
 void LifePlant::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {

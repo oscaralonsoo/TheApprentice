@@ -457,7 +457,8 @@ void PlayerMechanics::CancelDash() {
 void PlayerMechanics::HandleFall() {
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
 
-    if (velocity.y > 0.1f && !isWallSliding) {
+    if (velocity.y > 0.1f)
+    {
         if (!isFalling) {
             isFalling = true;
             player->SetState("fall");

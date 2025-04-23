@@ -19,7 +19,7 @@ private:
     SDL_Texture* texture = NULL;
     std::unordered_map<std::string, Animation> animations;
     Animation* currentAnimation;
-    std::string currentState = "idle";;
+    std::string currentState = "idle";
 };
 
 #endif // PLAYER_ANIMATION_H

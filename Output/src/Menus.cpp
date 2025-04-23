@@ -105,7 +105,6 @@ bool Menus::PostUpdate() {
 }
 
 void Menus::DrawBackground() {
-    SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
     SDL_Rect cameraRect = { 0, 0, width, height };
 
     std::string bgKey = GetBackgroundKey();

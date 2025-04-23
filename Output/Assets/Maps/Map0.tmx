@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="140" height="59" tilewidth="64" tileheight="64" infinite="0" nextlayerid="70" nextobjectid="1286">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="140" height="59" tilewidth="64" tileheight="64" infinite="0" nextlayerid="70" nextobjectid="1290">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -43457,7 +43457,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="26"/>
+   <tile gid="16"/>
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
@@ -43596,8 +43596,8 @@
    <tile gid="2"/>
    <tile gid="2"/>
    <tile gid="2"/>
+   <tile gid="25"/>
    <tile gid="26"/>
-   <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
@@ -49635,7 +49635,7 @@
  </layer>
  <layer id="54" name="Forward_Layer" width="140" height="59" parallaxx="0" parallaxy="0">
   <properties>
-   <property name="Draw" type="bool" value="false"/>
+   <property name="Draw" type="bool" value="true"/>
    <property name="Forward" type="bool" value="true"/>
   </properties>
   <data>
@@ -51725,7 +51725,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="16"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -51864,8 +51864,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="25"/>
-   <tile gid="26"/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -57944,11 +57944,10 @@
   <object id="1109" x="5120" y="1088" height="128"/>
   <object id="1118" x="7488" y="960" height="256"/>
  </objectgroup>
- <objectgroup id="25" name="Doors" visible="0">
+ <objectgroup id="25" name="Doors">
   <properties>
    <property name="Doors" type="bool" value="true"/>
   </properties>
-  <object id="1256" x="8941.83" y="384.667" width="4.16667" height="191.333"/>
  </objectgroup>
  <objectgroup id="26" name="Collisions" visible="0">
   <object id="647" x="4224" y="896" width="768"/>
@@ -58026,7 +58025,7 @@
   <object id="1275" x="3840" y="2816" width="128"/>
   <object id="1278" x="3840" y="2688" width="128"/>
  </objectgroup>
- <objectgroup id="58" name="Wall">
+ <objectgroup id="58" name="Wall" visible="0">
   <object id="700" x="6208" y="2752" height="64"/>
   <object id="701" x="6208" y="2816" width="128"/>
   <object id="702" x="6336" y="2752" height="64"/>
@@ -58259,18 +58258,17 @@
  </objectgroup>
  <objectgroup id="60" name="Enemies">
   <object id="1191" name="Hypnoviper" x="5120" y="2752" width="64" height="64"/>
-  <object id="1228" x="4800" y="2560" width="64" height="64"/>
-  <object id="1283" name="Bloodrusher" x="1984" y="640" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="62" name="PushableBoxes" visible="0"/>
- <objectgroup id="63" name="Zones" visible="0">
-  <object id="905" name="HiddenZone" x="4199" y="153.174" width="729" height="928.653"/>
-  <object id="908" name="HiddenZone" x="3538.1" y="2646.17" width="2223.37" height="430.333"/>
+ <objectgroup id="63" name="Zones">
+  <object id="905" name="HiddenZone" x="4237" y="177.378" width="691" height="880.246"/>
   <object id="909" name="HiddenZone" x="6524.5" y="2496.38" width="1967" height="689.06"/>
  </objectgroup>
  <objectgroup id="65" name="DownCamera" visible="0">
   <object id="1136" x="2752" y="256" width="960" height="960"/>
   <object id="1282" x="3776" y="2176" width="704" height="576"/>
  </objectgroup>
- <objectgroup id="66" name="Abilities" visible="0"/>
+ <objectgroup id="66" name="Abilities">
+  <object id="1283" name="Jump" x="7552" y="2816" width="512" height="128"/>
+ </objectgroup>
 </map>

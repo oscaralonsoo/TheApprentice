@@ -32,4 +32,6 @@ private:
     Animation deadAnim;
 
     float speed = 2.0f;
+
+    Timer deathTimer;
 };

@@ -11,6 +11,7 @@ class PlayerMechanics {
 public:
     void Init(Player* player);
     void Update(float dt);
+    void PostUpdate();
 
     void OnCollision(PhysBody* physA, PhysBody* physB);
     void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
@@ -33,7 +34,6 @@ private:
     void HandleJump();
     void HandleDash();
     void HandleFall();
-    void CheckFallImpact();
     void HandleWallSlide();
     void CancelDash();
     void CreateAttackSensor();
@@ -41,6 +41,7 @@ private:
     void StartInvulnerability();
     void UpdateLastSafePosition();
     void HandleSound();
+    void HandleLifes();
 
 private:
     Player* player = nullptr;
@@ -56,7 +57,7 @@ private:
     // Jump 
     float jumpForce = 13.0f;
     bool isJumping = false;
-    bool jumpUnlocked = true;
+    bool jumpUnlocked = false;
     Timer jumpCooldownTimer;
     float jumpCooldownTime = 100.0f;
     bool jumpCooldownActive = false;
@@ -88,12 +89,9 @@ private:
 
     // Fall
     bool isStunned = false;
-    float stunDuration = 1.0f;
     Timer stunTimer;
-    float fallStartY = 0.0f;
-    float fallDistanceThreshold = 500.0f;
-    float fallEndY;
-    float fallDistance;
+    float stunDuration = 500.0f; // en milisegundos
+    float fallStunThreshold = -15.0f; // velocidad Y mínima para provocar stun
 
     // WallSlide 
     bool wasInDownCameraZone = false;
@@ -134,7 +132,8 @@ private:
     int originalCameraOffsetY;
     bool inDownCameraZone = false;
     Timer downCameraCooldown;
-    float downCameraCooldownTime = 0.2f;
+    float downCameraCooldownTime = 100.0f;
+    bool cameraModifiedByZone = false;
 
     //God mode
     bool godMode = false;
@@ -145,4 +144,13 @@ private:
     int jumpFxId = -1;
     bool isSlimeSoundPlaying = false;
     bool playJumpSound = false;
+
+    //Enemies
+    bool knockbackActive = false;
+    Timer knockbackTimer;
+    float knockbackDuration = 300.0f;
+    b2Vec2 knockbackInitialVelocity = { 0, 0 };
+    float knockbackProgress = 0.0f;
+    float knockbackTotalTime = 300.0f; // en milisegundos
+
 };

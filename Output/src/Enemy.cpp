@@ -29,6 +29,7 @@ bool Enemy::Awake() {
 bool Enemy::Start() {
 	//Add a physics to an item - initialize the physics body
 	pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, bodyType::DYNAMIC);
+
 	//Assign collider type
 	pbody->ctype = ColliderType::ENEMY;
 
@@ -40,6 +41,14 @@ bool Enemy::Start() {
 	// Initialize pathfinding
 	pathfinding = new Pathfinding();
 	ResetPath();
+
+	b2Fixture* fixture = pbody->body->GetFixtureList();
+	if (fixture) {
+		b2Filter filter;
+		filter.categoryBits = CATEGORY_ENEMY;
+		filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_ATTACK | CATEGORY_PLAYER_DAMAGE;
+		fixture->SetFilterData(filter);
+	}
 
 	return true;
 }
@@ -69,7 +78,7 @@ bool Enemy::Update(float dt)
 	currentAnimation->Update();
 
 	//Show|Hide Path
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
 		showPath = !showPath;
 	}
 	if (showPath) {
@@ -116,6 +125,7 @@ void Enemy::OnCollision(PhysBody* physA, PhysBody* physB) {
 	case ColliderType::ATTACK:
 		LOG("Collided with player - DESTROY");
 		Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+
 		break;
 	}
 }

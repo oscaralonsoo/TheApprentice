@@ -54,7 +54,14 @@ bool AbilityZone::Start() {
 	currentAnimation = &idleAnim;
 
 	//Add a physics to an item - initialize the physics body
-	pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::STATIC);
+	pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor(
+		(int)position.getX() + texH / 2,
+		(int)position.getY() + texH / 2,
+		texW, texH,
+		bodyType::STATIC,
+		CATEGORY_ABILITY_ZONE,   // Este sensor es de tipo "AbilityZone"
+		CATEGORY_PLAYER          // Solo interactúa con el player
+	);
 
 	//Assign collider type
 	pbody->ctype = ColliderType::ABILITY_ZONE;
@@ -72,9 +79,7 @@ bool AbilityZone::PreUpdate() {
 
 bool AbilityZone::Update(float dt)
 {
-	b2Transform pbodyPos = pbody->body->GetTransform();
-	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
-	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
+	if (!pbody) return true;
 
 	Player* player = Engine::GetInstance().scene->GetPlayer();
 	PlayerMechanics* mechanics = player->GetMechanics();
@@ -93,30 +98,35 @@ bool AbilityZone::Update(float dt)
 			mechanics->cantMove = true;
 		}
 		else {
-			float maxDistance = 250.0f; // empieza a frenar desde más lejos
+			float maxDistance = pbody->width * 1.5f; // empieza a frenar antes si el collider es más ancho
 			float t = 1.0f - std::min(distance / maxDistance, 1.0f);
 			b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
-			float slowdownFactor = std::max(0.01f, 1.0f - t); // antes era 0.05f
+			float slowdownFactor = std::max(0.01f, static_cast<float>(pow(1.0f - t, 1.2))); // curva suave
 			velocity.x *= slowdownFactor;
 			player->pbody->body->SetLinearVelocity(velocity);
 		}
 
-		// Obtención de la habilidad
 		if (playerRight >= rightLimit - 144.0f) {
 			if (playerInsideJump && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
 				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
 				mechanics->cantMove = false;
 				mechanics->EnableJump(true);
+				mechanics->canAttack = true;
+				markedForDeletion = true; 
 			}
 			else if (playerInsideDoubleJump && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
 				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
 				mechanics->cantMove = false;
 				mechanics->EnableDoubleJump(true);
+				mechanics->canAttack = true;
+				markedForDeletion = true; 
 			}
 			else if (playerInsideDash && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
 				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
 				mechanics->cantMove = false;
 				mechanics->EnableDash(true);
+				mechanics->canAttack = true;
+				markedForDeletion = true; 
 			}
 		}
 	}
@@ -125,6 +135,14 @@ bool AbilityZone::Update(float dt)
 		int drawX = position.getX() + texW - abilitySpriteW - 100;
 		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 + 40;
 		Engine::GetInstance().render->DrawTexture(abilitySprite, drawX, drawY);
+	}
+
+	return true;
+}
+
+bool AbilityZone::PostUpdate() {
+	if (markedForDeletion) {
+		Engine::GetInstance().entityManager.get()->DestroyEntity(this);
 	}
 
 	return true;

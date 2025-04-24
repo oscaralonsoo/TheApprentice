@@ -296,8 +296,6 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
     default:
         break;
             }
-        }
-    }
 }
 
     void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {

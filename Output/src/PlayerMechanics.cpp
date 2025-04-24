@@ -337,7 +337,7 @@ void PlayerMechanics::HandleInput() {
         Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) != KEY_REPEAT;
 
     if (noMovimiento && !isJumping && !isFalling && !isAttacking && !isWallSliding && !isDashing) {
-        player->SetState("landing");
+        player->SetState("idle");
     }
 
     if (!isAttacking) {

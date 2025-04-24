@@ -71,4 +71,6 @@ private:
 	int abilitySpriteW = 0;
 	int abilitySpriteH = 0;
 	bool markedForDeletion = false;
+
+	SDL_Color normalVignetteColor = { 0, 0, 0, 255 };
 };

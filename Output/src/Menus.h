@@ -11,7 +11,7 @@
 #include <unordered_map> 
 
 enum class MenusState {
-    NONE, INTRO, MAINMENU, GAME, PAUSE, SETTINGS, CREDITS, DEAD, GAMEOVER, EXIT
+    NONE, INTRO, MAINMENU, GAME, PAUSE, SETTINGS, CREDITS, DEAD, GAMEOVER, EXIT, ABILITIES
 };
 
 struct ButtonInfo {
@@ -46,6 +46,7 @@ public:
     bool CleanUp() override;
 
     void LoadTextures();
+    void LoadAbilityTextures(pugi::xml_document& doc);
     void LoadBackgroundTextures(pugi::xml_document& doc);
     void CheckCurrentState(float dt);
     void HandlePause();
@@ -71,7 +72,7 @@ public:
     void CreateButton(const std::string& name, int startX, int startY, int buttonWidth, int buttonHeight, int index);
     void DrawButtons();
     void DrawCheckBox(const ButtonInfo& button, bool isSelected);
-
+    void DrawAbilities();
     void DrawSliders();
 
     void DrawSlider(int minX, int y, int& sliderX, bool isSelected, const std::string& label);
@@ -88,12 +89,12 @@ public:
     bool fadingIn = false;
     bool inConfig = false;
     bool inCredits = false;
-
+    bool drawingAbilityBackground = false;
     int isSaved = 0;
     int selectedButton = 0;
     std::vector<ButtonInfo> buttons;
     std::vector<std::string> buttonNames;
-
+    std::string abilityName;
 private:
     const std::string CONFIG_FILE = "config.xml";
     const std::string ART_FILE = "art.xml";
@@ -114,6 +115,7 @@ private:
 
     std::unordered_map<std::string, SDL_Texture*> backgroundTextures;
     std::unordered_map<std::string, SDL_Texture*> buttonTextures;
+    std::unordered_map<std::string, SDL_Texture*> loadedAbilityTextures;
     SDL_Texture* checkboxTexture = nullptr;
     SDL_Texture* fillTexture = nullptr;
 

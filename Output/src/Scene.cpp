@@ -21,6 +21,7 @@ Scene::Scene() : Module()
 {
 	name = "scene";
 	img = nullptr;
+	vignetteColor = { 0, 0, 0, 255 };
 }
 
 // Destructor
@@ -99,12 +100,25 @@ bool Scene::PostUpdate()
 
 	if (transitioning) {
 		SDL_SetRenderDrawBlendMode(Engine::GetInstance().render->renderer, SDL_BLENDMODE_BLEND);
-		SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, 0, 0, 0, static_cast<Uint8>(transitionAlpha * 255));
+		Uint8 alpha = 255;
+
+		if (!fadingIn && transitionAlpha < 1.0f) {
+			alpha = static_cast<Uint8>(transitionAlpha * 255);
+		}
+		else if (waitingBlackScreen) {
+			alpha = 255; // Pantalla negra completa
+		}
+		else if (fadingIn) {
+			alpha = static_cast<Uint8>(transitionAlpha * 255);
+		}
+
+		SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, 0, 0, 0, alpha);
 		SDL_RenderFillRect(Engine::GetInstance().render->renderer, nullptr);
 	}
-	Vignette(player->GetMechanics()->vignetteSize, 0.8f); 
 
-	if (isDead == true) {
+	Vignette(player->GetMechanics()->vignetteSize, 0.8f, vignetteColor);
+
+	if (isDead) {
 		isDead = false;
 		pendingLoadAfterDeath = true;
 	}
@@ -135,23 +149,36 @@ void Scene::UpdateTransition(float dt)
 {
 	if (!transitioning) return;
 
-	if (!fadingIn) { // Fade Out
+	if (!fadingIn) { // FADE OUT
 		transitionAlpha += dt * 0.0025f;
 		if (transitionAlpha >= 1.0f) {
 			transitionAlpha = 1.0f;
-			fadingIn = true;
 
-			ChangeScene(nextScene);
+			if (!waitingBlackScreen) {
+				ChangeScene(nextScene);          
+				waitingBlackScreen = true;       
+				blackScreenTimer = 0.0f;  
+			}
+			else {
+				blackScreenTimer += dt;
+
+				if (blackScreenTimer >= blackScreenDelay) {
+					fadingIn = true;
+					waitingBlackScreen = false;
+				}
+			}
 		}
 	}
-	else { // Fade In
+	else { // FADE IN
 		transitionAlpha -= dt * 0.0020f;
 		if (transitionAlpha <= 0.0f) {
 			transitionAlpha = 0.0f;
 			transitioning = false;
+			pendingLoadWithTransition = false;
 		}
 	}
 }
+
 
 // Called before changing the scene
 void Scene::ChangeScene(int nextScene)
@@ -188,7 +215,6 @@ Vector2D Scene::GetPlayerPosition()
 
 void Scene::SaveGameXML()
 {
-
 	saving = true;
 	Engine::GetInstance().menus->isSaved = 1;
 	//Load xml
@@ -211,31 +237,37 @@ void Scene::SaveGameXML()
 }
 void Scene::LoadGameXML()
 {
-	isLoad = true;
-	pugi::xml_document config;
-	pugi::xml_parse_result result = config.load_file("config.xml");
+	if (isLoad || transitioning) return; // Evitar que se llame si ya está en proceso o en transición
 
-	pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
+    isLoad = true;
 
-	if (saveData) {
-		pugi::xml_node playerNode = saveData.child("player");
-		if (playerNode) {
-			float playerX = playerNode.attribute("x").as_float();
-			float playerY = playerNode.attribute("y").as_float();
-			mechanics.vidas = playerNode.attribute("lives").as_int();
-			player->SetPosition(Vector2D(playerX, playerY - 100)); 
-		}
+    pugi::xml_document config;
+    pugi::xml_parse_result result = config.load_file("config.xml");
 
-		pugi::xml_node sceneNode = saveData.child("scene");
+    pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
+
+    if (saveData) {
+        pugi::xml_node playerNode = saveData.child("player");
+        if (playerNode) {
+            float playerX = playerNode.attribute("x").as_float();
+            float playerY = playerNode.attribute("y").as_float();
+            mechanics.vidas = playerNode.attribute("lives").as_int();
+            newPosition = Vector2D(playerX, playerY - 100); 
+        }
+
+        pugi::xml_node sceneNode = saveData.child("scene");
 		if (sceneNode) {
 			int savedScene = sceneNode.attribute("actualScene").as_int();
 			nextScene = savedScene;
-			ChangeScene(savedScene);
+			if (!pendingLoadWithTransition) { 
+				pendingLoadWithTransition = true;
+				StartTransition(savedScene);
+			}
 		}
-	}
-	isLoad = false;
+    }
+    isLoad = false;
 }
-void Scene::Vignette(int size, float strength)
+void Scene::Vignette(int size, float strength, SDL_Color color)
 {
 	renderer = Engine::GetInstance().render->renderer;
 
@@ -250,7 +282,7 @@ void Scene::Vignette(int size, float strength)
 		opacity = powf(1.0f - distFactor, 2) * strength;
 		alpha = static_cast<Uint8>(opacity * 255);
 
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, alpha);
+		SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, alpha);
 
 		top = { 0, i, width, 1 };
 		bottom = { 0, height - i - 1, width, 1 };

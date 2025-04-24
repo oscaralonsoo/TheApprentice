@@ -80,9 +80,6 @@ bool Player::Update(float dt) {
 		b2Vec2 mainPos = pbody->body->GetPosition();
 		enemySensor->body->SetTransform(mainPos, 0);
 	}
-	else {
-		LOG("ADVERTENCIA: enemySensor o su body son nullptr");
-	}
 	int direction = mechanics.GetMovementDirection();
 	bool flip = direction < 0;
 	animation.Update(dt, state, position.getX(), position.getY() - 5, mechanics.IsVisible(), flip);

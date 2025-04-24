@@ -96,7 +96,7 @@ bool AbilityZone::Update(float dt)
 		VignetteChange(dt);
 
 		float rightLimit = position.getX() + texW;
-		float targetStopX = rightLimit - 120.0f; // antes era -60, ahora un poco más adelante
+		float targetStopX = rightLimit - 120.0f;
 		float playerRight = player->GetPosition().getX() + player->GetTextureWidth();
 		float distance = abs(playerRight - targetStopX);
 
@@ -123,6 +123,8 @@ bool AbilityZone::Update(float dt)
 				mechanics->canAttack = true;
 				mechanics->vignetteSize = Engine::GetInstance().scene->previousVignetteSize; 
 				markedForDeletion = true;
+				Engine::GetInstance().menus->abilityName = "jump";
+				Engine::GetInstance().menus->StartTransition(false, MenusState::ABILITIES);
 			}
 			else if (playerInsideDoubleJump && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
 				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
@@ -131,6 +133,8 @@ bool AbilityZone::Update(float dt)
 				mechanics->canAttack = true;
 				mechanics->vignetteSize = Engine::GetInstance().scene->previousVignetteSize; 
 				markedForDeletion = true;
+				Engine::GetInstance().menus->abilityName = "doublejump";
+				Engine::GetInstance().menus->StartTransition(false, MenusState::ABILITIES);
 			}
 			else if (playerInsideDash && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
 				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
@@ -139,6 +143,8 @@ bool AbilityZone::Update(float dt)
 				mechanics->canAttack = true;
 				mechanics->vignetteSize = Engine::GetInstance().scene->previousVignetteSize; 
 				markedForDeletion = true;
+				Engine::GetInstance().menus->StartTransition(false, MenusState::ABILITIES);
+				Engine::GetInstance().menus->abilityName = "dash";
 			}
 		}
 	}
@@ -170,23 +176,20 @@ void AbilityZone::VignetteChange(float dt)
 {
 	Player* player = Engine::GetInstance().scene->GetPlayer();
 
-	// Progresión de la viñeta mientras avanza
 	float zoneStartX = position.getX();
 	float zoneEndX = zoneStartX + texW;
 	float playerX = player->GetPosition().getX();
 
 	float progress = (playerX - zoneStartX) / (zoneEndX - zoneStartX);
 	progress = clamp(progress, 0.0f, 1.0f);
-
 	progress = 1.0f - powf(1.0f - progress, 4.0f);
-	int minVignetteSize = 300;  // tamaño mínimo
-	int maxVignetteSize = 900; // tamaño máximo
 
+	int minVignetteSize = 300;  int maxVignetteSize = 900;
 	int newVignetteSize = minVignetteSize + static_cast<int>((maxVignetteSize - minVignetteSize) * progress);
 
 	// Añadir efecto de vibración
-	if (progress > 0.90f) {
-		float vibrateAmplitude = 100.0f;
+	if (progress > 0.95f) {
+		float vibrateAmplitude = 200.0f;
 		float vibrateSpeed = 30.0f;
 		float offset = sinf(dt * vibrateSpeed) * vibrateAmplitude;
 		newVignetteSize += static_cast<int>(offset);

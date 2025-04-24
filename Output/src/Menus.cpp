@@ -34,19 +34,23 @@ void Menus::LoadConfig() {
         isSaved = config.child("config").child("scene").child("save_data").attribute("isSaved").as_int();
     }
 }
-
 void Menus::LoadTextures() {
     pugi::xml_document doc;
-    if (!doc.load_file(ART_FILE.c_str())) {
-        LOG("Error cargando art.xml: %s", doc.load_file(ART_FILE.c_str()).description());
-        return;
+    if (doc.load_file(ART_FILE.c_str())) {
+        LoadBackgroundTextures(doc);
+        LoadButtonTextures(doc);
+        LoadCheckboxTextures(doc);
+        LoadAbilityTextures(doc);
     }
-    LoadBackgroundTextures(doc);
-    LoadButtonTextures(doc);
-    LoadCheckboxTextures(doc);
     lifeTexture = Engine::GetInstance().textures->Load("Assets/Slime/vida_slime.png");
 }
-
+void Menus::LoadAbilityTextures(pugi::xml_document& doc) {
+    for (pugi::xml_node ability = doc.child("art").child("textures").child("UI").child("menu").child("backgrounds").child("jump"); ability; ability = ability.next_sibling()) {
+        std::string name = ability.name();
+        std::string path = std::string(ability.attribute("path").value()) + ability.attribute("name").value();
+        loadedAbilityTextures[name] = Engine::GetInstance().render->LoadTexture(path.c_str());
+    }
+}
 void Menus::LoadBackgroundTextures(pugi::xml_document& doc) {
     for (pugi::xml_node bg = doc.child("art").child("textures").child("UI").child("menu").child("backgrounds").first_child(); bg; bg = bg.next_sibling()) {
         std::string name = bg.name();
@@ -97,6 +101,10 @@ bool Menus::PostUpdate() {
     SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
     DrawBackground();
     DrawButtons();
+    if (currentState == MenusState::ABILITIES)
+    {
+        DrawAbilities();
+    }
     if (currentState == MenusState::GAME) {
         DrawPlayerLives();
     }
@@ -113,7 +121,6 @@ void Menus::DrawBackground() {
         Engine::GetInstance().render->DrawTexture(it->second, cameraRect.x - Engine::GetInstance().render->camera.x, cameraRect.y - Engine::GetInstance().render->camera.y, &cameraRect);
     }
 }
-
 std::string Menus::GetBackgroundKey() const {
     switch (currentState) {
     case MenusState::INTRO: return "intro";
@@ -121,23 +128,18 @@ std::string Menus::GetBackgroundKey() const {
     case MenusState::PAUSE: return "pause";
     case MenusState::SETTINGS: return "settings";
     case MenusState::CREDITS: return "credits";
+    case MenusState::ABILITIES: return "abilities";
     default: return "";
     }
 }
-
 void Menus::ApplyTransitionEffect() {
     SDL_SetRenderDrawBlendMode(Engine::GetInstance().render->renderer, SDL_BLENDMODE_BLEND);
     SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, 0, 0, 0, static_cast<Uint8>(transitionAlpha * 255));
     SDL_RenderFillRect(Engine::GetInstance().render->renderer, nullptr);
 }
-
 bool Menus::CleanUp() {
-    for (auto& pair : backgroundTextures) {
-        SDL_DestroyTexture(pair.second);
-    }
-    for (auto& pair : buttonTextures) {
-        SDL_DestroyTexture(pair.second);
-    }
+    for (auto& pair : backgroundTextures) { SDL_DestroyTexture(pair.second); }
+    for (auto& pair : buttonTextures) { SDL_DestroyTexture(pair.second); }
     return true;
 }
 
@@ -168,14 +170,13 @@ void Menus::MainMenu(float dt) {
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
         switch (selectedButton) {
         case 0: NewGame(); break;
-        case 1: if (isSaved > 0) { Engine::GetInstance().scene.get()->LoadGameXML(); StartTransition(false, MenusState::GAME); } break;
-        case 2: inConfig = true; StartTransition(true, MenusState::SETTINGS);  break;
+        case 1: if (isSaved > 0 && !inTransition) {StartTransition(true, MenusState::GAME); Engine::GetInstance().scene.get()->LoadGameXML(); } break;
+        case 2: inConfig = true; StartTransition(true, MenusState::SETTINGS); break;
         case 3: inCredits = true; StartTransition(true, MenusState::CREDITS); break;
         case 4: currentState = MenusState::EXIT; break;
         }
     }
 }
-
 void Menus::NewGame() {
     isSaved = 0;
     pugi::xml_document config;
@@ -188,18 +189,17 @@ void Menus::NewGame() {
     saveData.attribute("isSaved") = isSaved;
 
     config.save_file(CONFIG_FILE.c_str());
-    pugi::xml_node sceneNode = saveData.child("scene"); 	
+    pugi::xml_node sceneNode = saveData.child("scene");
     if (sceneNode) {
-        sceneNode.attribute("actualScene") = 0; //Reset Actual Scene
+        sceneNode.attribute("actualScene") = 0;
     }
-    if (saveData)
-    {
+    if (saveData) {
         saveData.attribute("isSaved") = Engine::GetInstance().menus->isSaved;
     }
-    config.save_file("config.xml");	//Save Changes
+    config.save_file("config.xml");
 
     Engine::GetInstance().scene.get()->SaveGameXML();
- 
+
     StartTransition(false, MenusState::GAME);
 }
 
@@ -228,7 +228,7 @@ void Menus::Settings() {
 
 void Menus::HandleSettingsSelection() {
     switch (selectedButton) {
-    case 0: /*ToggleFullScreen();*/break;
+    case 0: /*ToggleFullScreen(); */break;
     case 1: ToggleVSync(); break;
     }
 }
@@ -374,7 +374,24 @@ void Menus::CreateButton(const std::string& name, int startX, int startY, int bu
         buttons.back().hoveredTexture = buttonTextures[hovered];
     }
 }
+void Menus::DrawAbilities() {
+    if (drawingAbilityBackground == true) return;
+    SDL_Texture* abilityTexture = nullptr;
+    SDL_Rect cameraRect = { 0, 0, width, height };
+    auto it = loadedAbilityTextures.find(abilityName);
+    if (it != loadedAbilityTextures.end()) {
+        abilityTexture = it->second;
+    }
 
+    if (abilityTexture) {
+        Engine::GetInstance().render->DrawTexture(abilityTexture, cameraRect.x - Engine::GetInstance().render->camera.x, cameraRect.y - Engine::GetInstance().render->camera.y, &cameraRect);
+    }
+
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+        StartTransition(false, MenusState::GAME);
+        drawingAbilityBackground = false;
+    }
+}
 void Menus::DrawButtons() {
     for (size_t i = 0; i < buttons.size(); ++i) {
         ButtonInfo& button = buttons[i];
@@ -389,7 +406,6 @@ void Menus::DrawButtons() {
         }
     }
 }
-
 void Menus::DrawCheckBox(const ButtonInfo& button, bool isSelected) {
     int baseSize = 60;
     float scale = isSelected ? 1.4f : 1.1f;
@@ -428,14 +444,10 @@ void Menus::DrawSlider(int minX, int y, int& sliderX, bool isSelected, const std
     int height = isSelected ? 45 : 35;
     int color = isSelected ? 255 : 150;
 
-    Engine::GetInstance().render->DrawRectangle(
-        { sliderX - (width - 20) / 2, y - (height - 35/2) / 2, width, height },
-        color, color, color, 255, true, false
-    );
-
+    Engine::GetInstance().render->DrawRectangle( { sliderX - (width - 20) / 2, y - (height - 35/2) / 2, width, height },
+        color, color, color, 255, true, false );
     Engine::GetInstance().render->DrawText(label.c_str(), 710, y - 20, WHITE, 45);
 }
-
 void Menus::DrawPlayerLives() {
     if (currentState != MenusState::GAME) return;
     if (!lifeTexture) return;

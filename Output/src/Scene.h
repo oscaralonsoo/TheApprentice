@@ -48,7 +48,7 @@ public:
 	// Called When Loading Game
 	void LoadGameXML();
 
-	void Vignette(int size, float strength);
+	void Vignette(int size, float strength, SDL_Color color);
 
 	Player* GetPlayer() const { return player; }
 public:
@@ -65,7 +65,7 @@ public:
 	float vignetteStrength = 0.8f;
 
 	bool isDead = false;
-
+	SDL_Color vignetteColor;
 private:
 	SDL_Texture* img;
 	//L03: TODO 3b: Declare a Player attribute
@@ -75,7 +75,9 @@ private:
 	//transition 
 	bool fadingIn = false;
 	float transitionAlpha = 0.0f;
-	PlayerMechanics mechanics;
+	bool pendingLoadWithTransition = false;
+
+
 	//Vignette
 	float distFactor = 0.0f;
 	float opacity = 0.0f;
@@ -84,7 +86,12 @@ private:
 	SDL_Rect top, bottom, left, right;
 
 	bool pendingLoadAfterDeath = false;
+	float blackScreenTimer = 0.0f;
+	const float blackScreenDelay = 1000.0f; 
+	bool waitingBlackScreen = false;
 
+	PlayerMechanics mechanics;
 	//Renderer
 	SDL_Renderer* renderer;
+
 };

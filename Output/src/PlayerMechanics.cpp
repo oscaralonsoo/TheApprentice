@@ -21,6 +21,29 @@ void PlayerMechanics::Update(float dt) {
     if( Engine::GetInstance().scene->saving == true)
         return;
 
+    if (godMode) {
+        b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
+        velocity.x = 0.0f;
+        velocity.y = 0.0f;
+
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
+            velocity.y = -8.0f;
+        }
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
+            velocity.y = 8.0f;
+        }
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+            velocity.x = -8.0f;
+        }
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+            velocity.x = 8.0f;
+        }
+
+        player->pbody->body->SetLinearVelocity(velocity);
+        player->SetState("idle");  // O puedes poner una animaci�n de vuelo si la tienes
+        return;
+    }
+
     HandleGodMode();
     if (isStunned) {
         if (stunTimer.ReadMSec() >= stunDuration) {
@@ -29,7 +52,7 @@ void PlayerMechanics::Update(float dt) {
         }
         else {
             player->pbody->body->SetLinearVelocity(b2Vec2_zero);
-            player->SetState("landing");
+            player->SetState("landing_stun");
             return;
         }
     }
@@ -57,6 +80,11 @@ void PlayerMechanics::Update(float dt) {
     if (spikesDamage && spikesCouldown.ReadMSec() >= maxTimeSpikesCouldown) {
         spikesDamage = false;
     }
+    if (waitingToIdle && landingToIdleTimer.ReadMSec() >= landingToIdleDelay) {
+        player->SetState("idle");
+        waitingToIdle = false;
+    }
+
 
     if (shouldRespawn && !godMode) {
         shouldRespawn = false;
@@ -93,21 +121,20 @@ void PlayerMechanics::Update(float dt) {
         return;
     }
 
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
-        isStunned = true;
-        stunTimer.Start();
-        Engine::GetInstance().render->StartCameraShake(1, 2);
-        return;
-    }
-
     HandleInput();
     HandleWallSlide();
     HandleJump();
     HandleDash();
     HandleFall();
 
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN && attackSensor == nullptr && canAttack && !isDashing) {
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN && attackSensor == nullptr && canAttack && !isDashing && !attackPending) {
+        attackPending = true;
+        attackDelayTimer.Start();
+        player->SetState("attack"); 
+    }
+    if (attackPending && attackDelayTimer.ReadMSec() >= 300) {
         CreateAttackSensor();
+        attackPending = false;
     }
 
     if (!isDashing) {
@@ -132,6 +159,8 @@ void PlayerMechanics::Update(float dt) {
 
         b2Vec2 newPos(PIXEL_TO_METERS(playerX), PIXEL_TO_METERS(playerY));
         attackSensor->body->SetTransform(newPos, 0);
+
+        player->SetState("attack");
 
         if (attackTimer.ReadMSec() >= attackDuration) {
             DestroyAttackSensor();
@@ -243,6 +272,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
                 lives -= 1;
                 StartInvulnerability();
                 Engine::GetInstance().render->StartCameraShake(0.5, 1);
+                player->SetState("hit");
             }
         }
         break;
@@ -341,9 +371,6 @@ void PlayerMechanics::HandleInput() {
                 player->SetState("run_right");
             }
         }
-        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_1) == KEY_REPEAT) {
-            player->SetState("idle");
-        }
         else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
             movementDirection = 1;
             if (!isFalling && !isJumping && !isWallSliding) {
@@ -441,6 +468,7 @@ void PlayerMechanics::HandleDash() {
     if (isDashing) {
         b2Vec2 vel(dashSpeed * dashDirection, 0.0f);
         player->pbody->body->SetLinearVelocity(vel);
+        player->SetState("dash");
 
         float distance = abs(player->GetPosition().getX() - dashStartPosition.getX());
         if (distance >= maxDashDistance) CancelDash();
@@ -470,6 +498,9 @@ void PlayerMechanics::HandleFall() {
     else if (isOnGround) {
         if (isFalling) {
             isFalling = false;
+            player->SetState("landing");
+            landingToIdleTimer.Start();
+            waitingToIdle = true;
         }
     }
 }

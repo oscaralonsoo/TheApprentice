@@ -67,7 +67,7 @@ bool AbilityZone::Start() {
 		texW, texH,
 		bodyType::STATIC,
 		CATEGORY_ABILITY_ZONE,   // Este sensor es de tipo "AbilityZone"
-		CATEGORY_PLAYER          // Solo interactúa con el player
+		CATEGORY_PLAYER          // Solo interactï¿½a con el player
 	);
 
 	//Assign collider type
@@ -107,7 +107,7 @@ bool AbilityZone::Update(float dt)
 			mechanics->cantMove = true;
 		}
 		else {
-			float maxDistance = pbody->width * 1.5f; // empieza a frenar antes si el collider es más ancho
+			float maxDistance = pbody->width * 1.5f; // empieza a frenar antes si el collider es mï¿½s ancho
 			float t = 1.0f - std::min(distance / maxDistance, 1.0f);
 			b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
 			float slowdownFactor = std::max(0.3f, pow(1.0f - t, 1.0f));
@@ -117,7 +117,11 @@ bool AbilityZone::Update(float dt)
 
 		if (playerRight >= rightLimit - 144.0f) {
 			if (playerInsideJump && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
-				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+				if (pbody) {
+					Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+					pbody = nullptr;
+				}
+
 				mechanics->cantMove = false;
 				mechanics->EnableJump(true);
 				mechanics->canAttack = true;
@@ -187,14 +191,14 @@ void AbilityZone::VignetteChange(float dt)
 	int minVignetteSize = 300;  int maxVignetteSize = 900;
 	int newVignetteSize = minVignetteSize + static_cast<int>((maxVignetteSize - minVignetteSize) * progress);
 
-	// Añadir efecto de vibración
+	// Aï¿½adir efecto de vibraciï¿½n
 	if (progress > 0.95f) {
 		float vibrateAmplitude = 200.0f;
 		float vibrateSpeed = 30.0f;
 		float offset = sinf(dt * vibrateSpeed) * vibrateAmplitude;
 		newVignetteSize += static_cast<int>(offset);
 	}
-	// Aplicar tamaño
+	// Aplicar tamaï¿½o
 	player->GetMechanics()->vignetteSize = newVignetteSize;
 }
 

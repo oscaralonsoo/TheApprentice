@@ -245,34 +245,25 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         ReduceVignetteSize();
         break;
     case ColliderType::ENEMY:
-        if (!isInvulnerable && !godMode && physA == player->pbody) {
-            lives -= 1;
-            StartInvulnerability();
-            Engine::GetInstance().render->StartCameraShake(0.5, 1);
-            vignetteSize += 200;
-            if (vignetteSize > 900) {
-                vignetteSize = 900;
-            }
-            if (physA->ctype == ColliderType::PLAYER_DAMAGE) {
+        if (physA->ctype == ColliderType::PLAYER_DAMAGE) {
 
-                // EMPUJÓN en dirección contraria al enemigo (siempre)
-                b2Vec2 playerPos = player->pbody->body->GetPosition();
-                b2Vec2 enemyPos = physB->body->GetPosition();
-                float pushDirection = (playerPos.x < enemyPos.x) ? -1.0f : 1.0f;
+            // EMPUJÓN en dirección contraria al enemigo (siempre)
+            b2Vec2 playerPos = player->pbody->body->GetPosition();
+            b2Vec2 enemyPos = physB->body->GetPosition();
+            float pushDirection = (playerPos.x < enemyPos.x) ? -1.0f : 1.0f;
 
-                knockbackInitialVelocity = b2Vec2(pushDirection * 12.0f, -5.0f); // ajuste fino
-                player->pbody->body->SetLinearVelocity(knockbackInitialVelocity);
+            knockbackInitialVelocity = b2Vec2(pushDirection * 12.0f, -5.0f); // ajuste fino
+            player->pbody->body->SetLinearVelocity(knockbackInitialVelocity);
 
-                    knockbackActive = true;
-                    knockbackTimer.Start();
-                    knockbackProgress = 0.0f;
-                    
+            knockbackActive = true;
+            knockbackTimer.Start();
+            knockbackProgress = 0.0f;
+
             // Solo quitar vida si no es invulnerable
             if (!isInvulnerable && !godMode) {
                 lives -= 1;
                 StartInvulnerability();
                 Engine::GetInstance().render->StartCameraShake(0.5, 1);
-                player->SetState("hit");
             }
         }
         break;
@@ -307,48 +298,48 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
     }
 }
 
-void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
-    switch (physB->ctype) {
-    case ColliderType::PLATFORM:
-        isOnGround = false;
-        lasMovementDirection = movementDirection;
-        lastPlatformCollider = physB;
-        break;
-    case ColliderType::WALL_SLIDE:
-        isWallSliding = false;
-        wallSlideCooldownTimer.Start();
-        wallSlideCooldownActive = true;
-        player->pbody->body->SetGravityScale(2.0f);
-        break;
-    case ColliderType::WALL:
-    case ColliderType::DESTRUCTIBLE_WALL:
-        isTouchingWall = false;
-        wallCooldownTimer.Start();
-        wallCooldownActive = true;
-        break;
-    case ColliderType::DOWN_CAMERA:
-        if (inDownCameraZone) {
-            inDownCameraZone = false;
-            if (cameraModifiedByZone) {
-                Engine::GetInstance().render->cameraOffsetY = originalCameraOffsetY;
-                cameraModifiedByZone = false;
+    void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
+        switch (physB->ctype) {
+        case ColliderType::PLATFORM:
+            isOnGround = false;
+            lasMovementDirection = movementDirection;
+            lastPlatformCollider = physB;
+            break;
+        case ColliderType::WALL_SLIDE:
+            isWallSliding = false;
+            wallSlideCooldownTimer.Start();
+            wallSlideCooldownActive = true;
+            player->pbody->body->SetGravityScale(2.0f);
+            break;
+        case ColliderType::WALL:
+        case ColliderType::DESTRUCTIBLE_WALL:
+            isTouchingWall = false;
+            wallCooldownTimer.Start();
+            wallCooldownActive = true;
+            break;
+        case ColliderType::DOWN_CAMERA:
+            if (inDownCameraZone) {
+                inDownCameraZone = false;
+                if (cameraModifiedByZone) {
+                    Engine::GetInstance().render->cameraOffsetY = originalCameraOffsetY;
+                    cameraModifiedByZone = false;
+                }
+                downCameraCooldown.Start();  // evitar reentrada inmediata
             }
-            downCameraCooldown.Start();  // evitar reentrada inmediata
-        }
-        break;
-    case ColliderType::PUSHABLE_PLATFORM:
-        isOnGround = false;
-        lasMovementDirection = movementDirection;
-        lastPlatformCollider = physB;
-        jumpCooldownTimer.Start();
-        jumpCooldownActive = true;
-        break;
-    case ColliderType::SAVEGAME: Engine::GetInstance().scene->saveGameZone = false; break;
-    case ColliderType::SPIKE:
-        spikesCouldown.Start();
-        spikesDamage = true;
-        break;
-    default: break;
+            break;
+        case ColliderType::PUSHABLE_PLATFORM:
+            isOnGround = false;
+            lasMovementDirection = movementDirection;
+            lastPlatformCollider = physB;
+            jumpCooldownTimer.Start();
+            jumpCooldownActive = true;
+            break;
+        case ColliderType::SAVEGAME: Engine::GetInstance().scene->saveGameZone = false; break;
+        case ColliderType::SPIKE:
+            spikesCouldown.Start();
+            spikesDamage = true;
+            break;
+        default: break;
     }
 }
 

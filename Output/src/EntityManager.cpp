@@ -6,6 +6,7 @@
 #include "Log.h"
 #include "CaveDrop.h"
 #include "Bloodrusher.h"
+#include "LifePlant.h"
 #include "NPC.h"
 #include "Hypnoviper.h"
 #include "Mireborn.h"
@@ -131,6 +132,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::NOCTILUME:
 		entity = new Noctilume();
+		break;
+	case EntityType::LIFE_PLANT:
+		entity = new LifePlant();
 		break;
 	default:
 		break;

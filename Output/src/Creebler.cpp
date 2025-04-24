@@ -25,9 +25,6 @@ bool Creebler::Start() {
 
     pbody->listener = this;
 
-    // Set the gravity of the body
-    if (!gravity) pbody->body->SetGravityScale(0);
-
     pugi::xml_document loadFile;
     pugi::xml_parse_result result = loadFile.load_file("config.xml");
 
@@ -41,12 +38,15 @@ bool Creebler::Start() {
         }
     }
 
-    // En Creebler::Start(), después de crear el pbody
+    // Initialize pathfinding
+    pathfinding = new Pathfinding();
+    ResetPath();
+
     b2Fixture* fixture = pbody->body->GetFixtureList();
     if (fixture) {
         b2Filter filter;
         filter.categoryBits = CATEGORY_ENEMY;
-        filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_PLAYER_DAMAGE | CATEGORY_ATTACK;
+        filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_ATTACK | CATEGORY_PLAYER_DAMAGE;
         fixture->SetFilterData(filter);
     }
 

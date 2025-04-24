@@ -27,7 +27,7 @@ public:
     float vignetteSize = 300.0f;
     bool cantMove = false;
     bool canAttack = true;
-    int vidas = 3;
+    int lives = 3;
     Vector2D lastPosition;
 
 private:
@@ -44,7 +44,8 @@ private:
     void HandleSound();
     void HandleGodMode();
     void ReduceVignetteSize();
-    void HandleLifes();
+    void HandleLives();
+
 
 private:
     Player* player = nullptr;
@@ -95,8 +96,9 @@ private:
     // Fall
     bool isStunned = false;
     Timer stunTimer;
-    float stunDuration = 500.0f; // en milisegundos
-    float fallStunThreshold = -15.0f; // velocidad Y m�nima para provocar stun
+    float stunDuration = 910.0f; // en milisegundos
+    float fallStunThreshold = 35.0f; // velocidad Y m�nima para provocar stun
+    bool willStun = false;
 
     // WallSlide 
     bool wasInDownCameraZone = false;
@@ -156,6 +158,10 @@ private:
     float knockbackDuration = 300.0f;
     b2Vec2 knockbackInitialVelocity = { 0, 0 };
     float knockbackProgress = 0.0f;
-    float knockbackTotalTime = 300.0f; // en milisegundos
+    float knockbackTotalTime = 300.0f; // en milisegundos�
 
+    //Spikes
+    Timer spikesCouldown;
+    float maxTimeSpikesCouldown = 100.0f;
+    bool spikesDamage = false;
 };

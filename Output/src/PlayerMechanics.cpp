@@ -25,11 +25,11 @@ void PlayerMechanics::Update(float dt) {
     if (isStunned) {
         if (stunTimer.ReadMSec() >= stunDuration) {
             isStunned = false;
+            player->SetState("idle");
         }
         else {
-            // Durante el stun, cancelamos todo movimiento del jugador
             player->pbody->body->SetLinearVelocity(b2Vec2_zero);
-            Engine::GetInstance().render->StartCameraShake(0.2f, 2);
+            player->SetState("landing");
             return;
         }
     }
@@ -52,6 +52,10 @@ void PlayerMechanics::Update(float dt) {
 
     if (knockbackActive && knockbackTimer.ReadMSec() >= knockbackDuration) {
         knockbackActive = false;
+    }
+
+    if (spikesDamage && spikesCouldown.ReadMSec() >= maxTimeSpikesCouldown) {
+        spikesDamage = false;
     }
 
     if (shouldRespawn && !godMode) {
@@ -85,6 +89,14 @@ void PlayerMechanics::Update(float dt) {
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && Engine::GetInstance().scene->saveGameZone) {
         player->pbody->body->SetLinearVelocity(b2Vec2_zero);
         Engine::GetInstance().scene->SaveGameXML();
+        lives = 3;
+        return;
+    }
+
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
+        isStunned = true;
+        stunTimer.Start();
+        Engine::GetInstance().render->StartCameraShake(1, 2);
         return;
     }
 
@@ -127,11 +139,20 @@ void PlayerMechanics::Update(float dt) {
     }
 
     HandleSound();
+
+    b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
+
+    printf("Velocidad vertical: %.2f\n", velocity.y);
+
+    float verticalVelocity = player->pbody->body->GetLinearVelocity().y;
+    if (verticalVelocity > fallStunThreshold) {
+        willStun = true;
+    }
 }
 
 void PlayerMechanics::PostUpdate()
 {
-    HandleLifes();
+    HandleLives();
 }
 
 void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
@@ -146,6 +167,16 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
             if (isFalling) {
                 isFalling = false;
                 player->pbody->body->SetLinearVelocity(b2Vec2_zero);
+                player->SetState("idle");
+
+            }
+            if (willStun) {
+                isStunned = true;
+                willStun = false;
+                stunTimer.Start();
+                player->SetState("landing_stun");
+                Engine::GetInstance().render->StartCameraShake(0.2f, 2);
+                return;
             }
         }
         break;
@@ -206,20 +237,24 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
                     knockbackActive = true;
                     knockbackTimer.Start();
                     knockbackProgress = 0.0f;
-
-                    // Solo quitar vida si no es invulnerable
-                    if (!isInvulnerable && !godMode) {
-                        vidas -= 1;
-                        StartInvulnerability();
-                        Engine::GetInstance().render->StartCameraShake(0.5, 1);
-                    }
-                }
-                break;
+                    
+            // Solo quitar vida si no es invulnerable
+            if (!isInvulnerable && !godMode) {
+                lives -= 1;
+                StartInvulnerability();
+                Engine::GetInstance().render->StartCameraShake(0.5, 1);
+            }
+        }
+        break;
     case ColliderType::SPIKE:
-        if (!godMode) {
-            player->SetState("dead");
-            UpdateLastSafePosition();
-            shouldRespawn = true;
+        if (!spikesDamage)
+        {
+            if (!godMode) {
+                player->SetState("dead");
+                UpdateLastSafePosition();
+                shouldRespawn = true;
+                lives -= 1;
+            }
         }
         break;
     case ColliderType::PUSHABLE_PLATFORM:
@@ -247,7 +282,6 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
 void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
-        printf("Sale a la plataforma");
         isOnGround = false;
         lasMovementDirection = movementDirection;
         lastPlatformCollider = physB;
@@ -282,6 +316,10 @@ void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         jumpCooldownActive = true;
         break;
     case ColliderType::SAVEGAME: Engine::GetInstance().scene->saveGameZone = false; break;
+    case ColliderType::SPIKE:
+        spikesCouldown.Start();
+        spikesDamage = true;
+        break;
     default: break;
     }
 }
@@ -420,7 +458,8 @@ void PlayerMechanics::CancelDash() {
 void PlayerMechanics::HandleFall() {
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
 
-    if (velocity.y > 0.1f && !isWallSliding) {
+    if (velocity.y > 0.1f)
+    {
         if (!isFalling) {
             isFalling = true;
             player->SetState("fall");
@@ -455,7 +494,7 @@ void PlayerMechanics::CreateAttackSensor() {
         32, 64,
         KINEMATIC,
         CATEGORY_ATTACK,     
-        CATEGORY_ENEMY       
+        CATEGORY_ENEMY | CATEGORY_LIFE_PLANT
     );
     attackSensor->ctype = ColliderType::ATTACK;
     attackSensor->listener = player;
@@ -577,13 +616,11 @@ void PlayerMechanics::ReduceVignetteSize() {
         vignetteSize = 300;
     }
 }
-
-void PlayerMechanics::HandleLifes()
+void PlayerMechanics::HandleLives()
 {
-    if (vidas <= 0) 
+    if (lives <= 0) 
     {
-        printf("ENTRAAAAAAA");
         Engine::GetInstance().scene.get()->isDead = true;
-        vidas = 3;
+        lives = 3;
     }
 }

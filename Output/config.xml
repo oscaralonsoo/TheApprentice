@@ -60,7 +60,7 @@
 					<frame x="200" y="400" w="100" h="100" />
 					<frame x="300" y="400" w="100" h="100" />
 				</wall_slide>
-				<landing_stun loop="false" speed="0.17">
+				<landing_stun loop="true" speed="0.14">
 					<frame x="0" y="300" w="100" h="100" />
 					<frame x="100" y="300" w="100" h="100" />
 					<frame x="200" y="300" w="100" h="100" />
@@ -75,7 +75,7 @@
 					<frame x="1100" y="300" w="100" h="100" />
 					<frame x="1200" y="300" w="100" h="100" />
 				</landing_stun>
-				<landing loop="false" speed="0.17">
+				<landing loop="true" speed="0.17">
 					<frame x="0" y="300" w="100" h="100" />
 					<frame x="100" y="300" w="100" h="100" />
 					<frame x="200" y="300" w="100" h="100" />
@@ -211,18 +211,33 @@
 						<frame x="768" y="0" w="128" h="128" />
 					</dead>
 				</enemy>
-				<enemy type="Scurver" w="64" h="64" texture="Assets/Enemies/scurver.png">
+				<enemy type="Scurver" w="100" h="100" texture="Assets/Enemies/scurver.png">
 					<idle loop="true" speed="0.2">
-						<frame x="0" y="0" w="64" h="64" />
+						<frame x="0" y="0" w="100" h="100" />
+						<frame x="100" y="0" w="100" h="100" />
+						<frame x="200" y="0" w="100" h="100" />
+						<frame x="300" y="0" w="100" h="100" />
+						<frame x="400" y="0" w="100" h="100" />
+						<frame x="500" y="0" w="100" h="100" />
+						<frame x="0" y="100" w="100" h="100" />
+						<frame x="100" y="100" w="100" h="100" />
+						<frame x="200" y="100" w="100" h="100" />
+						<frame x="300" y="100" w="100" h="100" />
+						<frame x="400" y="100" w="100" h="100" />
+						<frame x="500" y="100" w="100" h="100" />
+						<frame x="0" y="200" w="100" h="100" />
+						<frame x="100" y="200" w="100" h="100" />
+						<frame x="200" y="200" w="100" h="100" />
+						<frame x="300" y="200" w="100" h="100" />
+						<frame x="400" y="200" w="100" h="100" />
 					</idle>
-					<attack loop="true" speed="0.2">
-						<frame x="0" y="64" w="64" h="64" />
-					</attack>
-					<slide loop="true" speed="0.2">
-						<frame x="0" y="128" w="64" h="64" />
-					</slide>
 					<dead loop="false" speed="0.2">
-						<frame x="0" y="192" w="64" h="64" />
+						<frame x="0" y="300" w="100" h="100" />
+						<frame x="100" y="300" w="100" h="100" />
+						<frame x="200" y="300" w="100" h="100" />
+						<frame x="300" y="300" w="100" h="100" />
+						<frame x="400" y="300" w="100" h="100" />
+						<frame x="500" y="300" w="100" h="100" />
 					</dead>
 				</enemy>
 				<enemy type="Mireborn" tier="Alpha" w="134" h="134" texture="Assets/Enemies/noctilume.png">
@@ -295,6 +310,14 @@
 						<frame x="18" y="72" w="18" h="18" />
 					</splash>
 				</cave_drop>
+				<life_plant w="240" h="192" texture="Assets/Props/lifePlant.png">
+					<available loop="false" speed="0">
+						<frame x="240" y="0" w="240" h="192" />
+					</available>
+					<consumed loop="false" speed="0">
+						<frame x="0" y="0" w="240" h="192" />
+					</consumed>
+				</life_plant>
 			</props>
 			<particles>
 				<dust w="20" h="20" texture="Assets/Particles/dust.png">
@@ -334,7 +357,7 @@
 			</abilities>
 		</animations>
 		<save_data isSaved="1">
-			<player x="1950" y="650" w="44" h="54" lives="3" />
+			<player x="1950" y="650" w="44" h="54" />
 			<scene actualScene="0" />
 			<enemies />
 		</save_data>

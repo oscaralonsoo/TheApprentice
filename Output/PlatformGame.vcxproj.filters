@@ -1,338 +1,347 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-		<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-			<ItemGroup>
-				<ClCompile Include="src\PlatformGame.cpp" />
-				<ClCompile Include="src\Bloodrusher.cpp">
-					<Filter>Source Files\Entities\Enemies\Bloodrusher</Filter>
-				</ClCompile>
-				<ClCompile Include="src\Audio.cpp">
-					<Filter>Source Files\Audio</Filter>
-				</ClCompile>
-				<ClCompile Include="src\Engine.cpp">
-					<Filter>Source Files\Core</Filter>
-				</ClCompile>
-				<ClCompile Include="src\Log.cpp">
-					<Filter>Source Files\Core</Filter>
-				</ClCompile>
-				<ClCompile Include="src\PerfTimer.cpp">
-					<Filter>Source Files\Core</Filter>
-				</ClCompile>
-				<ClCompile Include="src\Timer.cpp">
-					<Filter>Source Files\Core</Filter>
-				</ClCompile>
-				<ClCompile Include="src\Vector2D.cpp">
-					<Filter>Source Files\Core</Filter>
-				</ClCompile>
-				<ClCompile Include="src\EntityManager.cpp">
-					<Filter>Source Files\Entities</Filter>
-				</ClCompile>
-				<ClCompile Include="src\Enemy.cpp">
-					<Filter>Source Files\Entities\Enemies</Filter>
-				</ClCompile>
-				<ClCompile Include="src\Pathfinding.cpp">
-					<Filter>Source Files\Entities\Enemies</Filter>
-				</ClCompile>
-				<ClCompile Include="src\PlayerAnimation.cpp">
-					<Filter>Source Files\Entities\Player</Filter>
-				</ClCompile>
-				<ClCompile Include="src\Player.cpp">
-					<Filter>Source Files\Entities\Player</Filter>
-				</ClCompile>
-				<ClCompile Include="src\PlayerMechanics.cpp">
-					<Filter>Source Files\Entities\Player</Filter>
-				</ClCompile>
-				<ClCompile Include="src\CaveDrop.cpp">
-					<Filter>Source Files\Entities\Particles</Filter>
-				</ClCompile>
-				<ClCompile Include="src\Window.cpp">
-					<Filter>Source Files\Graphics</Filter>
-				</ClCompile>
-				<ClCompile Include="src\Textures.cpp">
-					<Filter>Source Files\Graphics</Filter>
-				</ClCompile>
-				<ClCompile Include="src\Render.cpp">
-					<Filter>Source Files\Graphics</Filter>
-				</ClCompile>
-				<ClCompile Include="src\Input.cpp">
-					<Filter>Source Files\Input</Filter>
-				</ClCompile>
-				<ClCompile Include="src\GuiControlButton.cpp">
-					<Filter>Source Files\Input</Filter>
-				</ClCompile>
-				<ClCompile Include="src\GuiManager.cpp">
-					<Filter>Source Files\Input</Filter>
-				</ClCompile>
-				<ClCompile Include="src\Menus.cpp">
-					<Filter>Source Files\Scenes</Filter>
-				</ClCompile>
-				<ClCompile Include="src\Map.cpp">
-					<Filter>Source Files\Map</Filter>
-				</ClCompile>
-				<ClCompile Include="src\Physics.cpp">
-					<Filter>Source Files\Physics</Filter>
-				</ClCompile>
-				<ClCompile Include="src\Scene.cpp">
-					<Filter>Source Files\Scenes</Filter>
-				</ClCompile>
-				<ClCompile Include="src\Mireborn.cpp">
-					<Filter>Source Files\Entities\Enemies\Mireborn</Filter>
-				</ClCompile>
-				<ClCompile Include="src\Broodheart.cpp">
-					<Filter>Source Files\Entities\Enemies\Broodheart</Filter>
-				</ClCompile>
-				<ClCompile Include="src\Brood.cpp">
-					<Filter>Source Files\Entities\Enemies\Brood</Filter>
-				</ClCompile>
-				<ClCompile Include="src\Hypnoviper.cpp">
-					<Filter>Source Files\Entities\Enemies\Hypnoviper</Filter>
-				</ClCompile>
-				<ClCompile Include="src\Cree bler.cpp">
-					<Filter>Source Files\Entities\Enemies\Creebler</Filter>
-				</ClCompile>
-				<ClCompile Include="src\DustParticle.cpp">
-					<Filter>Source Files\Entities\Particles</Filter>
-				</ClCompile>
-				<ClCompile Include="src\ParticleManager.cpp">
-					<Filter>Source Files\Entities\Particles</Filter>
-				</ClCompile>
-				<ClCompile Include="src\Scurver.cpp">
-					<Filter>Source Files\Entities\Enemies\Scurver</Filter>
-				</ClCompile>
-				<ClCompile Include="src\Thumpod.cpp">
-					<Filter>Source Files\Entities\Enemies\Thumpod</Filter>
-				</ClCompile>
-				<ClCompile Include="src\HiddenZone.cpp">
-					<Filter>Source Files\Entities\Interactions with player</Filter>
-				</ClCompile>
-				<ClCompile Include="src\PushableBox.cpp">
-					<Filter>Source Files\Entities\Interactions with player</Filter>
-				</ClCompile>
-				<ClCompile Include="src\DestructibleWall.cpp">
-					<Filter>Source Files\Entities\Interactions with player</Filter>
-				</ClCompile>
-				<ClCompile Include="src\AbilityZone.cpp">
-					<Filter>Source Files\Entities\Interactions with player</Filter>
-				</ClCompile>
-				<ClCompile Include="src\Noctilume.cpp">
-					<Filter>Source Files\Entities\Enemies\Noctilume</Filter>
-				</ClCompile>
-			</ItemGroup>
-			<ItemGroup>
-				<ClInclude Include="src\Bloodrusher.h">
-					<Filter>Source Files\Entities\Enemies\Bloodrusher</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Audio.h">
-					<Filter>Source Files\Audio</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Engine.h">
-					<Filter>Source Files\Core</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Log.h">
-					<Filter>Source Files\Core</Filter>
-				</ClInclude>
-				<ClInclude Include="src\PerfTimer.h">
-					<Filter>Source Files\Core</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Timer.h">
-					<Filter>Source Files\Core</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Vector2D.h">
-					<Filter>Source Files\Core</Filter>
-				</ClInclude>
-				<ClInclude Include="src\EntityManager.h">
-					<Filter>Source Files\Entities</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Entity.h">
-					<Filter>Source Files\Entities</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Enemy.h">
-					<Filter>Source Files\Entities\Enemies</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Pathfinding.h">
-					<Filter>Source Files\Entities\Enemies</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Player.h">
-					<Filter>Source Files\Entities\Player</Filter>
-				</ClInclude>
-				<ClInclude Include="src\PlayerAnimation.h">
-					<Filter>Source Files\Entities\Player</Filter>
-				</ClInclude>
-				<ClInclude Include="src\PlayerMechanics.h">
-					<Filter>Source Files\Entities\Player</Filter>
-				</ClInclude>
-				<ClInclude Include="src\CaveDrop.h">
-					<Filter>Source Files\Entities\Particles</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Window.h">
-					<Filter>Source Files\Graphics</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Textures.h">
-					<Filter>Source Files\Graphics</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Render.h">
-					<Filter>Source Files\Graphics</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Input.h">
-					<Filter>Source Files\Input</Filter>
-				</ClInclude>
-				<ClInclude Include="src\GuiControlButton.h">
-					<Filter>Source Files\Input</Filter>
-				</ClInclude>
-				<ClInclude Include="src\GuiControl.h">
-					<Filter>Source Files\Input</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Animation.h">
-					<Filter>Source Files\Entities</Filter>
-				</ClInclude>
-				<ClInclude Include="src\GuiManager.h">
-					<Filter>Source Files\Input</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Menus.h">
-					<Filter>Source Files\Scenes</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Map.h">
-					<Filter>Source Files\Map</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Physics.h">
-					<Filter>Source Files\Physics</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Module.h">
-					<Filter>Source Files\Core</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Scene.h">
-					<Filter>Source Files\Scenes</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Mireborn.h">
-					<Filter>Source Files\Entities\Enemies\Mireborn</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Broodheart.h">
-					<Filter>Source Files\Entities\Enemies\Broodheart</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Brood.h">
-					<Filter>Source Files\Entities\Enemies\Brood</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Hypnoviper.h">
-					<Filter>Source Files\Entities\Enemies\Hypnoviper</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Creebler.h">
-					<Filter>Source Files\Entities\Enemies\Creebler</Filter>
-				</ClInclude>
-				<ClInclude Include="src\DustParticle.h">
-					<Filter>Source Files\Entities\Particles</Filter>
-				</ClInclude>
-				<ClInclude Include="src\ParticleManager.h">
-					<Filter>Source Files\Entities\Particles</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Scurver.h">
-					<Filter>Source Files\Entities\Enemies\Scurver</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Thumpod.h">
-					<Filter>Source Files\Entities\Enemies\Thumpod</Filter>
-				</ClInclude>
-				<ClInclude Include="src\HiddenZone.h">
-					<Filter>Source Files\Entities\Interactions with player</Filter>
-				</ClInclude>
-				<ClInclude Include="src\PushableBox.h">
-					<Filter>Source Files\Entities\Interactions with player</Filter>
-				</ClInclude>
-				<ClInclude Include="src\DestructibleWall.h">
-					<Filter>Source Files\Entities\Interactions with player</Filter>
-				</ClInclude>
-				<ClInclude Include="src\AbilityZone.h">
-					<Filter>Source Files\Entities\Interactions with player</Filter>
-				</ClInclude>
-				<ClInclude Include="src\Noctilume.h">
-					<Filter>Source Files\Entities\Enemies\Noctilume</Filter>
-				</ClInclude>
-			</ItemGroup>
-			<ItemGroup>
-				<Xml Include="config.xml">
-					<Filter>Configuration Files</Filter>
-				</Xml>
-				<Xml Include="art.xml">
-					<Filter>Configuration Files</Filter>
-				</Xml>
-			</ItemGroup>
-			<ItemGroup>
-				<None Include=".gitignore">
-					<Filter>Configuration Files</Filter>
-				</None>
-				<None Include="vcpkg-configuration.json">
-					<Filter>Configuration Files</Filter>
-				</None>
-				<None Include="vcpkg.json">
-					<Filter>Configuration Files</Filter>
-				</None>
-			</ItemGroup>
-			<ItemGroup>
-				<Filter Include="Source Files">
-					<UniqueIdentifier>{267009cc-a594-43ad-9fa1-462095dd2b73}</UniqueIdentifier>
-				</Filter>
-				<Filter Include="Source Files\Entities">
-					<UniqueIdentifier>{10a68af4-5859-4a5b-8a4d-455cff35e282}</UniqueIdentifier>
-				</Filter>
-				<Filter Include="Source Files\Entities\Player">
-					<UniqueIdentifier>{d8b0924f-c41d-4e92-95b1-1f066812c480}</UniqueIdentifier>
-				</Filter>
-				<Filter Include="Source Files\Entities\Enemies">
-					<UniqueIdentifier>{c3bb03b6-ab62-4e1a-871c-0930b7345daa}</UniqueIdentifier>
-				</Filter>
-				<Filter Include="Source Files\Entities\Enemies\Bloodrusher">
-					<UniqueIdentifier>{2d55fd6d-37f5-4a0e-a537-8f6fb09699a5}</UniqueIdentifier>
-				</Filter>
-				<Filter Include="Source Files\Audio">
-					<UniqueIdentifier>{fe79c30f-da1c-4edf-a533-4525c9046cbc}</UniqueIdentifier>
-				</Filter>
-				<Filter Include="Source Files\Graphics">
-					<UniqueIdentifier>{5fc48ce5-cd16-46d8-a21e-14c22733acbd}</UniqueIdentifier>
-				</Filter>
-				<Filter Include="Source Files\Input">
-				<UniqueIdentifier>{ed36b85f-4244-4fa6-b514-6b996ca475fd}</UniqueIdentifier>
-				</Filter>
-				<Filter Include="Source Files\Map">
-					<UniqueIdentifier>{7f7e25b8-349b-4be9-b230-377a9b77a249}</UniqueIdentifier>
-				</Filter>
-				<Filter Include="Source Files\Physics">
-					<UniqueIdentifier>{0cc9fe8f-61ae-4cea-833d-bd48b8d4605e}</UniqueIdentifier>
-				</Filter>
-				<Filter Include="Source Files\Scenes">
-					<UniqueIdentifier>{72aa825d-e182-482e-b1d9-e988f936b5c6}</UniqueIdentifier>
-				</Filter>
-				<Filter Include="Configuration Files">
-					<UniqueIdentifier>{40c732e1-d93b-4d61-bfa3-b86dc1257ff6}</UniqueIdentifier>
-				</Filter>
-				<Filter Include="Source Files\Entities\Particles">
-					<UniqueIdentifier>{1372199a-3705-470c-a016-0bbd90650662}</UniqueIdentifier>
-				</Filter>
-				<Filter Include="Source Files\Core">
-					<UniqueIdentifier>{b45c039d-bac6-4211-867a-db813234273d}</UniqueIdentifier>
-				</Filter>
-				<Filter Include="Source Files\Entities\Enemies\Mireborn">
-					<UniqueIdentifier>{43f15cd9-1d1a-4260-9f8b-a4bf50ab2836}</UniqueIdentifier>
-				</Filter>
-				<Filter Include="Source Files\Entities\Enemies\Broodheart">
-					<UniqueIdentifier>{56d10a6d-9cc1-4fa3-8c26-f9a7088d5834}</UniqueIdentifier>
-				</Filter>
-				<Filter Include="Source Files\Entities\Enemies\Hypnoviper">
-					<UniqueIdentifier>{c37d4129-e611-4c49-bd92-e6280e2c9c9c}</UniqueIdentifier>
-				</Filter>
-				<Filter Include="Source Files\Entities\Enemies\Creebler">
-					<UniqueIdentifier>{c5ca5807-e2d7-4e2f-ac52-2574c3d75967}</UniqueIdentifier>
-				</Filter>
-				<Filter Include="Source Files\Entities\Enemies\Scurver">
-					<UniqueIdentifier>{e1b597c1-564f-411f-aa97-b2e9f7c0c273}</UniqueIdentifier>
-				</Filter>
-				<Filter Include="Source Files\Entities\Enemies\Thumpod">
-					<UniqueIdentifier>{8c923f56-8d88-4a8b-8956-b0ec0b4ecd1e}</UniqueIdentifier>
-				</Filter>
-				<Filter Include="Source Files\Entities\Interactions with player">
-					<UniqueIdentifier>{eecedcd9-b351-41f8-be66-c898d07146b7}</UniqueIdentifier>
-				</Filter>
-				<Filter Include="Source Files\Entities\Enemies\Noctilume">
-					<UniqueIdentifier>{e82252e3-cb5b-4d1b-a14e-752eba3d220d}</UniqueIdentifier>
-				</Filter>
-				<Filter Include="Source Files\Entities\Enemies\Brood">
-					<UniqueIdentifier>{0148d086-43f5-4449-861f-67cdeb9b632c}</UniqueIdentifier>
-				</Filter>
-			</ItemGroup>
-		</Project>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\PlatformGame.cpp" />
+    <ClCompile Include="src\Bloodrusher.cpp">
+      <Filter>Source Files\Entities\Enemies\Bloodrusher</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Audio.cpp">
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Log.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PerfTimer.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Timer.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vector2D.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EntityManager.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Enemy.cpp">
+      <Filter>Source Files\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pathfinding.cpp">
+      <Filter>Source Files\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PlayerAnimation.cpp">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player.cpp">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PlayerMechanics.cpp">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CaveDrop.cpp">
+      <Filter>Source Files\Entities\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Textures.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Render.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Input.cpp">
+      <Filter>Source Files\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GuiControlButton.cpp">
+      <Filter>Source Files\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GuiManager.cpp">
+      <Filter>Source Files\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Menus.cpp">
+      <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Map.cpp">
+      <Filter>Source Files\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene.cpp">
+      <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mireborn.cpp">
+      <Filter>Source Files\Entities\Enemies\Mireborn</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Broodheart.cpp">
+      <Filter>Source Files\Entities\Enemies\Broodheart</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Brood.cpp">
+      <Filter>Source Files\Entities\Enemies\Brood</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hypnoviper.cpp">
+      <Filter>Source Files\Entities\Enemies\Hypnoviper</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DustParticle.cpp">
+      <Filter>Source Files\Entities\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ParticleManager.cpp">
+      <Filter>Source Files\Entities\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scurver.cpp">
+      <Filter>Source Files\Entities\Enemies\Scurver</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Thumpod.cpp">
+      <Filter>Source Files\Entities\Enemies\Thumpod</Filter>
+    </ClCompile>
+    <ClCompile Include="src\HiddenZone.cpp">
+      <Filter>Source Files\Entities\Interactions with player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PushableBox.cpp">
+      <Filter>Source Files\Entities\Interactions with player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DestructibleWall.cpp">
+      <Filter>Source Files\Entities\Interactions with player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AbilityZone.cpp">
+      <Filter>Source Files\Entities\Interactions with player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Noctilume.cpp">
+      <Filter>Source Files\Entities\Enemies\Noctilume</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Creebler.cpp" />
+    <ClCompile Include="src\DialogueManager.cpp" />
+    <ClCompile Include="src\NPC.cpp" />
+    <ClCompile Include="src\LifePlant.cpp">
+      <Filter>Source Files\Entities\Interactions with player</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Bloodrusher.h">
+      <Filter>Source Files\Entities\Enemies\Bloodrusher</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Audio.h">
+      <Filter>Source Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine.h">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Log.h">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PerfTimer.h">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Timer.h">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vector2D.h">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EntityManager.h">
+      <Filter>Source Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entity.h">
+      <Filter>Source Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Enemy.h">
+      <Filter>Source Files\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pathfinding.h">
+      <Filter>Source Files\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Player.h">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PlayerAnimation.h">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PlayerMechanics.h">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CaveDrop.h">
+      <Filter>Source Files\Entities\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Textures.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Render.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Input.h">
+      <Filter>Source Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GuiControlButton.h">
+      <Filter>Source Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GuiControl.h">
+      <Filter>Source Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Animation.h">
+      <Filter>Source Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GuiManager.h">
+      <Filter>Source Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Menus.h">
+      <Filter>Source Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Map.h">
+      <Filter>Source Files\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics.h">
+      <Filter>Source Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Module.h">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene.h">
+      <Filter>Source Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mireborn.h">
+      <Filter>Source Files\Entities\Enemies\Mireborn</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Broodheart.h">
+      <Filter>Source Files\Entities\Enemies\Broodheart</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Brood.h">
+      <Filter>Source Files\Entities\Enemies\Brood</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hypnoviper.h">
+      <Filter>Source Files\Entities\Enemies\Hypnoviper</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Creebler.h">
+      <Filter>Source Files\Entities\Enemies\Creebler</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DustParticle.h">
+      <Filter>Source Files\Entities\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ParticleManager.h">
+      <Filter>Source Files\Entities\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scurver.h">
+      <Filter>Source Files\Entities\Enemies\Scurver</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Thumpod.h">
+      <Filter>Source Files\Entities\Enemies\Thumpod</Filter>
+    </ClInclude>
+    <ClInclude Include="src\HiddenZone.h">
+      <Filter>Source Files\Entities\Interactions with player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PushableBox.h">
+      <Filter>Source Files\Entities\Interactions with player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DestructibleWall.h">
+      <Filter>Source Files\Entities\Interactions with player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AbilityZone.h">
+      <Filter>Source Files\Entities\Interactions with player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Noctilume.h">
+      <Filter>Source Files\Entities\Enemies\Noctilume</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DialogueManager.h" />
+    <ClInclude Include="src\NPC.h" />
+    <ClInclude Include="src\LifePlant.h">
+      <Filter>Source Files\Entities\Interactions with player</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="config.xml">
+      <Filter>Configuration Files</Filter>
+    </Xml>
+    <Xml Include="art.xml">
+      <Filter>Configuration Files</Filter>
+    </Xml>
+    <Xml Include="dialogues.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore">
+      <Filter>Configuration Files</Filter>
+    </None>
+    <None Include="vcpkg-configuration.json">
+      <Filter>Configuration Files</Filter>
+    </None>
+    <None Include="vcpkg.json">
+      <Filter>Configuration Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{267009cc-a594-43ad-9fa1-462095dd2b73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities">
+      <UniqueIdentifier>{10a68af4-5859-4a5b-8a4d-455cff35e282}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Player">
+      <UniqueIdentifier>{d8b0924f-c41d-4e92-95b1-1f066812c480}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Enemies">
+      <UniqueIdentifier>{c3bb03b6-ab62-4e1a-871c-0930b7345daa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Enemies\Bloodrusher">
+      <UniqueIdentifier>{2d55fd6d-37f5-4a0e-a537-8f6fb09699a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Audio">
+      <UniqueIdentifier>{fe79c30f-da1c-4edf-a533-4525c9046cbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics">
+      <UniqueIdentifier>{5fc48ce5-cd16-46d8-a21e-14c22733acbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Input">
+      <UniqueIdentifier>{ed36b85f-4244-4fa6-b514-6b996ca475fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Map">
+      <UniqueIdentifier>{7f7e25b8-349b-4be9-b230-377a9b77a249}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics">
+      <UniqueIdentifier>{0cc9fe8f-61ae-4cea-833d-bd48b8d4605e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scenes">
+      <UniqueIdentifier>{72aa825d-e182-482e-b1d9-e988f936b5c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Configuration Files">
+      <UniqueIdentifier>{40c732e1-d93b-4d61-bfa3-b86dc1257ff6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Particles">
+      <UniqueIdentifier>{1372199a-3705-470c-a016-0bbd90650662}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{b45c039d-bac6-4211-867a-db813234273d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Enemies\Mireborn">
+      <UniqueIdentifier>{43f15cd9-1d1a-4260-9f8b-a4bf50ab2836}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Enemies\Broodheart">
+      <UniqueIdentifier>{56d10a6d-9cc1-4fa3-8c26-f9a7088d5834}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Enemies\Hypnoviper">
+      <UniqueIdentifier>{c37d4129-e611-4c49-bd92-e6280e2c9c9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Enemies\Creebler">
+      <UniqueIdentifier>{c5ca5807-e2d7-4e2f-ac52-2574c3d75967}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Enemies\Scurver">
+      <UniqueIdentifier>{e1b597c1-564f-411f-aa97-b2e9f7c0c273}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Enemies\Thumpod">
+      <UniqueIdentifier>{8c923f56-8d88-4a8b-8956-b0ec0b4ecd1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Interactions with player">
+      <UniqueIdentifier>{eecedcd9-b351-41f8-be66-c898d07146b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Enemies\Noctilume">
+      <UniqueIdentifier>{e82252e3-cb5b-4d1b-a14e-752eba3d220d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Enemies\Brood">
+      <UniqueIdentifier>{0148d086-43f5-4449-861f-67cdeb9b632c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

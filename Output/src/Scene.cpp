@@ -226,7 +226,7 @@ void Scene::SaveGameXML()
 	pugi::xml_node playerNode = saveData.child("player");
 		playerNode.attribute("x") = playerPos.x;
 		playerNode.attribute("y") = playerPos.y;
-		playerNode.attribute("lives") = mechanics.vidas;
+		playerNode.attribute("lives") = mechanics.lives;
 
 	pugi::xml_node sceneNode = saveData.child("scene"); //Save Actual Scene
 		sceneNode.attribute("actualScene") = nextScene;
@@ -251,7 +251,7 @@ void Scene::LoadGameXML()
         if (playerNode) {
             float playerX = playerNode.attribute("x").as_float();
             float playerY = playerNode.attribute("y").as_float();
-            mechanics.vidas = playerNode.attribute("lives").as_int();
+            mechanics.lives = playerNode.attribute("lives").as_int();
             newPosition = Vector2D(playerX, playerY - 100); 
         }
 

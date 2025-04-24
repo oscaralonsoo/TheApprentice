@@ -220,24 +220,24 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
             lives -= 1;
             StartInvulnerability();
             Engine::GetInstance().render->StartCameraShake(0.5, 1);
+        vignetteSize += 200;
+        if (vignetteSize > 900) {
+            vignetteSize = 900;
+        }
+        if (physA->ctype == ColliderType::PLAYER_DAMAGE) {
 
-            vignetteSize += 200;
-            if (vignetteSize > 900) {
-                vignetteSize = 900;
-                if (physA->ctype == ColliderType::PLAYER_DAMAGE) {
+            // EMPUJÓN en dirección contraria al enemigo (siempre)
+            b2Vec2 playerPos = player->pbody->body->GetPosition();
+            b2Vec2 enemyPos = physB->body->GetPosition();
+            float pushDirection = (playerPos.x < enemyPos.x) ? -1.0f : 1.0f;
 
-                    // EMPUJ�N en direcci�n contraria al enemigo (siempre)
-                    b2Vec2 playerPos = player->pbody->body->GetPosition();
-                    b2Vec2 enemyPos = physB->body->GetPosition();
-                    float pushDirection = (playerPos.x < enemyPos.x) ? -1.0f : 1.0f;
+            knockbackInitialVelocity = b2Vec2(pushDirection * 12.0f, -5.0f); // ajuste fino
+            player->pbody->body->SetLinearVelocity(knockbackInitialVelocity);
 
-                    knockbackInitialVelocity = b2Vec2(pushDirection * 12.0f, -5.0f); // ajuste fino
-                    player->pbody->body->SetLinearVelocity(knockbackInitialVelocity);
+            knockbackActive = true;
+            knockbackTimer.Start();
+            knockbackProgress = 0.0f;
 
-                    knockbackActive = true;
-                    knockbackTimer.Start();
-                    knockbackProgress = 0.0f;
-                    
             // Solo quitar vida si no es invulnerable
             if (!isInvulnerable && !godMode) {
                 lives -= 1;
@@ -274,8 +274,6 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     default:
         break;
-            }
-        }
     }
 }
 

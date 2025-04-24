@@ -225,7 +225,7 @@ void Scene::SaveGameXML()
 	Vector2D playerPos = GetPlayerPosition();	//Save Player Pos
 	pugi::xml_node playerNode = saveData.child("player");
 		playerNode.attribute("x") = playerPos.x;
-		playerNode.attribute("y") = playerPos.y;
+		playerNode.attribute("y") = playerPos.y +64;
 		playerNode.attribute("lives") = mechanics.lives;
 
 	pugi::xml_node sceneNode = saveData.child("scene"); //Save Actual Scene

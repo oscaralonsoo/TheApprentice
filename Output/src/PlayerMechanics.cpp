@@ -118,6 +118,7 @@ void PlayerMechanics::Update(float dt) {
         player->pbody->body->SetLinearVelocity(b2Vec2_zero);
         Engine::GetInstance().scene->SaveGameXML();
         lives = 3;
+        ChangeVignetteSize();
         return;
     }
 
@@ -197,7 +198,6 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
                 isFalling = false;
                 player->pbody->body->SetLinearVelocity(b2Vec2_zero);
                 player->SetState("idle");
-
             }
             if (willStun) {
                 isStunned = true;
@@ -242,7 +242,6 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::SAVEGAME:
         Engine::GetInstance().scene->saveGameZone = true;
-        ReduceVignetteSize();
         break;
     case ColliderType::ENEMY:
         if (physA->ctype == ColliderType::PLAYER_DAMAGE) {
@@ -264,6 +263,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
                 lives -= 1;
                 StartInvulnerability();
                 Engine::GetInstance().render->StartCameraShake(0.5, 1);
+                ChangeVignetteSize();
             }
         }
         break;
@@ -625,22 +625,28 @@ void PlayerMechanics::HandleGodMode()
         return;
     }
 }
-void PlayerMechanics::ReduceVignetteSize() {
-    if (lives < 3) {
-        vignetteSize -= 100;
-        if (vignetteSize < 300) {
-            vignetteSize = 300;
-        }
-    }
-    else {
-        vignetteSize = 300;
-    }
-}
 void PlayerMechanics::HandleLives()
 {
     if (lives <= 0) 
     {
         Engine::GetInstance().scene.get()->isDead = true;
         lives = 3;
+    }
+}
+void PlayerMechanics::ChangeVignetteSize() {
+    if (lives == 1)
+    {
+        vignetteSize = 700;
+    }
+    else if (lives == 2)
+    {
+        vignetteSize = 500;
+    }
+    else if (lives == 3)
+    {
+        vignetteSize = 300;
+    }
+    else {
+        vignetteSize = 300;
     }
 }

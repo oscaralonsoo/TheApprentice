@@ -23,6 +23,7 @@ public:
     bool IsVisible() const { return visible; }
     void ToggleGodMode() { godMode = !godMode; }
     bool IsGodMode() const { return godMode; }
+    void ChangeVignetteSize();
 
     float vignetteSize = 300.0f;
     bool cantMove = false;
@@ -43,14 +44,11 @@ private:
     void UpdateLastSafePosition();
     void HandleSound();
     void HandleGodMode();
-    void ReduceVignetteSize();
     void HandleLives();
 
 
 private:
     Player* player = nullptr;
-
-
 
     // Par�metros del jugador
     float speed = 8.0f;

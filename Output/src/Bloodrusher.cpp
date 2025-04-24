@@ -104,6 +104,12 @@ void Bloodrusher::Attack(float dt)
 {
     if (currentAnimation != &attackAnim) currentAnimation = &attackAnim;
 
+    if (pathfinding->pathTiles.empty()) {
+        // No hay camino, así que no hace nada o entra en un estado diferente
+        pbody->body->SetLinearVelocity(b2Vec2(0, 0)); // detenerse o comportamiento alternativo
+        return;
+    }
+
     b2Vec2 currentVelocity = pbody->body->GetLinearVelocity();
 
     Vector2D nextTile = pathfinding->pathTiles.front();

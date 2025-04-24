@@ -10,18 +10,11 @@
 #include "EntityManager.h"
 #include "Player.h"
 #include "Map.h"
-#include "CaveDrop.h"
-#include "Physics.h"
-#include "Enemy.h"
-#include "Menus.h"
-#include "PlayerMechanics.h"
-
 
 Scene::Scene() : Module()
 {
 	name = "scene";
 	img = nullptr;
-	vignetteColor = { 0, 0, 0, 255 };
 }
 
 // Destructor
@@ -45,7 +38,7 @@ bool Scene::Awake()
 bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
-	Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx");
+	Engine::GetInstance().map->Load("Assets/Maps/", "MapTemplate.tmx");
 
 	return true;
 }
@@ -59,32 +52,34 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
-	if (Engine::GetInstance().menus->currentState != MenusState::GAME)
-		return true;
+	Engine::GetInstance().render.get()->camera.x = -(player->position.getX()-300);
+	Engine::GetInstance().render.get()->camera.y = -(player->position.getY()-500);
 
-	if (pendingLoadAfterDeath) {
-		pendingLoadAfterDeath = false;
-		LoadGameXML();
-	}
-
-	UpdateTransition(dt);
-
-	Engine::GetInstance().render.get()->UpdateCamera(player->GetPosition(), player->GetMovementDirection(), 0.05);
-	
 	//L03 TODO 3: Make the camera movement independent of framerate
 	float camSpeed = 1;
 
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
-		ChangeScene(nextScene + 1);
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
-		if (nextScene == 0)
-		{
-			ChangeScene(nextScene);
-			player->SetPosition(Vector2D(1950, 650));
-		}
-		else {
-			ChangeScene(nextScene - 1);
-		}
+	//if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	//	Engine::GetInstance().render.get()->camera.y -= ceil(camSpeed * dt);
+
+	//if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	//	Engine::GetInstance().render.get()->camera.y += ceil(camSpeed * dt);
+
+	//if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+	//	Engine::GetInstance().render.get()->camera.x -= ceil(camSpeed * dt);
+
+	//if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+	//	Engine::GetInstance().render.get()->camera.x += ceil(camSpeed * dt);
+	//if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
+	//	ChangeScene(nextScene + 1);
+	//if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
+	//	if (nextScene == 0)
+	//	{
+	//		ChangeScene(nextScene);
+	//		player->SetPosition(Vector2D(1950, 650));
+	//	}
+	//	else {
+	//		ChangeScene(nextScene - 1);
+	//	}
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
 		SaveGameXML();
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
@@ -98,30 +93,8 @@ bool Scene::PostUpdate()
 {
 	bool ret = true;
 
-	if (transitioning) {
-		SDL_SetRenderDrawBlendMode(Engine::GetInstance().render->renderer, SDL_BLENDMODE_BLEND);
-		Uint8 alpha = 255;
-
-		if (!fadingIn && transitionAlpha < 1.0f) {
-			alpha = static_cast<Uint8>(transitionAlpha * 255);
-		}
-		else if (waitingBlackScreen) {
-			alpha = 255; // Pantalla negra completa
-		}
-		else if (fadingIn) {
-			alpha = static_cast<Uint8>(transitionAlpha * 255);
-		}
-
-		SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, 0, 0, 0, alpha);
-		SDL_RenderFillRect(Engine::GetInstance().render->renderer, nullptr);
-	}
-
-	Vignette(player->GetMechanics()->vignetteSize, 0.8f, vignetteColor);
-
-	if (isDead) {
-		isDead = false;
-		pendingLoadAfterDeath = true;
-	}
+	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+		ret = false;
 
 	return ret;
 }
@@ -134,164 +107,4 @@ bool Scene::CleanUp()
 	SDL_DestroyTexture(img);
 
 	return true;
-}
-void Scene::StartTransition(int nextScene)
-{
-	if (!transitioning) {
-		transitioning = true;
-		fadingIn = false;
-		transitionAlpha = 0.0f;
-		this->nextScene = nextScene;
-	}
-}
-// Called every iteration
-void Scene::UpdateTransition(float dt)
-{
-	if (!transitioning) return;
-
-	if (!fadingIn) { // FADE OUT
-		transitionAlpha += dt * 0.0025f;
-		if (transitionAlpha >= 1.0f) {
-			transitionAlpha = 1.0f;
-
-			if (!waitingBlackScreen) {
-				ChangeScene(nextScene);          
-				waitingBlackScreen = true;       
-				blackScreenTimer = 0.0f;  
-			}
-			else {
-				blackScreenTimer += dt;
-
-				if (blackScreenTimer >= blackScreenDelay) {
-					fadingIn = true;
-					waitingBlackScreen = false;
-				}
-			}
-		}
-	}
-	else { // FADE IN
-		transitionAlpha -= dt * 0.0020f;
-		if (transitionAlpha <= 0.0f) {
-			transitionAlpha = 0.0f;
-			transitioning = false;
-			pendingLoadWithTransition = false;
-		}
-	}
-}
-
-
-// Called before changing the scene
-void Scene::ChangeScene(int nextScene)
-{
-	Engine::GetInstance().map->CleanUp(); 	// CleanUp of the previous Map
-	Engine::GetInstance().entityManager.get()->DestroyAllEntities(); // Previous Enemies CleanUp
-
-	// Look for the XML node
-	std::string mapKey = "Map_" + std::to_string(nextScene);
-	pugi::xml_node mapNode = configParameters.child("maps").child(mapKey.c_str());
-
-	if (mapNode) {
-		std::string path = mapNode.attribute("path").as_string();
-		std::string name = mapNode.attribute("name").as_string();
-
-		if (!path.empty() && !name.empty()) {
-			Engine::GetInstance().map->Load(path, name); // Load New Map
-
-			if (!isLoad)
-			{
-				player->pbody->body->SetLinearVelocity(b2Vec2(0, 0)); // Stop All Movement
-				player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, newPosition.y / PIXELS_PER_METER), 0); // Set New Player Position
-			}
-
-			Engine::GetInstance().entityManager->Start();
-		}
-	}
-}
-
-Vector2D Scene::GetPlayerPosition()
-{
-	return player->GetPosition();
-}
-
-void Scene::SaveGameXML()
-{
-	saving = true;
-	Engine::GetInstance().menus->isSaved = 1;
-	//Load xml
-	pugi::xml_document config;
-	pugi::xml_parse_result result = config.load_file("config.xml");
-	pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
-
-	Vector2D playerPos = GetPlayerPosition();	//Save Player Pos
-	pugi::xml_node playerNode = saveData.child("player");
-		playerNode.attribute("x") = playerPos.x;
-		playerNode.attribute("y") = playerPos.y;
-		playerNode.attribute("lives") = mechanics.lives;
-
-	pugi::xml_node sceneNode = saveData.child("scene"); //Save Actual Scene
-		sceneNode.attribute("actualScene") = nextScene;
-		saveData.attribute("isSaved") = Engine::GetInstance().menus->isSaved;
-	config.save_file("config.xml");	//Save Changes
-
-	Engine::GetInstance().menus->StartTransition(false, Engine::GetInstance().menus->currentState);	// Final Transition
-}
-void Scene::LoadGameXML()
-{
-	if (isLoad || transitioning) return; // Evitar que se llame si ya está en proceso o en transición
-
-    isLoad = true;
-
-    pugi::xml_document config;
-    pugi::xml_parse_result result = config.load_file("config.xml");
-
-    pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
-
-    if (saveData) {
-        pugi::xml_node playerNode = saveData.child("player");
-        if (playerNode) {
-            float playerX = playerNode.attribute("x").as_float();
-            float playerY = playerNode.attribute("y").as_float();
-            mechanics.lives = playerNode.attribute("lives").as_int();
-            newPosition = Vector2D(playerX, playerY - 100); 
-        }
-
-        pugi::xml_node sceneNode = saveData.child("scene");
-		if (sceneNode) {
-			int savedScene = sceneNode.attribute("actualScene").as_int();
-			nextScene = savedScene;
-			if (!pendingLoadWithTransition) { 
-				pendingLoadWithTransition = true;
-				StartTransition(savedScene);
-			}
-		}
-    }
-    isLoad = false;
-}
-void Scene::Vignette(int size, float strength, SDL_Color color)
-{
-	renderer = Engine::GetInstance().render->renderer;
-
-	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-	SDL_GetRendererOutputSize(renderer, &width, &height);
-
-	vignetteSize = size;
-
-	for (int i = 0; i < vignetteSize; i++)
-	{
-		distFactor = (float)i / vignetteSize;
-		opacity = powf(1.0f - distFactor, 2) * strength;
-		alpha = static_cast<Uint8>(opacity * 255);
-
-		SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, alpha);
-
-		top = { 0, i, width, 1 };
-		bottom = { 0, height - i - 1, width, 1 };
-		left = { i, 0, 1, height };
-		right = { width - i - 1, 0, 1, height };
-
-		SDL_RenderFillRect(renderer, &top);
-		SDL_RenderFillRect(renderer, &bottom);
-		SDL_RenderFillRect(renderer, &left);
-		SDL_RenderFillRect(renderer, &right);
-	}
 }

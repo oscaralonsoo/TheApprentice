@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="140" height="59" tilewidth="64" tileheight="64" infinite="0" nextlayerid="73" nextobjectid="1320">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="140" height="59" tilewidth="64" tileheight="64" infinite="0" nextlayerid="73" nextobjectid="1325">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -42857,11 +42857,11 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
    <tile gid="1"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
+   <tile gid="25"/>
    <tile gid="2"/>
    <tile gid="2"/>
    <tile gid="2"/>
@@ -42997,11 +42997,11 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="1"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="26"/>
+   <tile gid="16"/>
+   <tile gid="12"/>
+   <tile gid="12"/>
+   <tile gid="12"/>
+   <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
@@ -43140,7 +43140,7 @@
    <tile gid="1610612765"/>
    <tile gid="12"/>
    <tile gid="4"/>
-   <tile gid="22"/>
+   <tile gid="5"/>
    <tile gid="22"/>
    <tile gid="22"/>
    <tile gid="22"/>
@@ -44009,8 +44009,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="3461"/>
-   <tile gid="3462"/>
+   <tile/>
+   <tile/>
    <tile gid="11"/>
    <tile gid="12"/>
    <tile gid="12"/>
@@ -44148,10 +44148,10 @@
    <tile gid="2"/>
    <tile gid="2"/>
    <tile gid="2"/>
-   <tile gid="3"/>
-   <tile gid="3463"/>
-   <tile gid="3464"/>
-   <tile gid="16"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
+   <tile gid="26"/>
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
@@ -44288,10 +44288,10 @@
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
-   <tile gid="24"/>
-   <tile gid="25"/>
-   <tile gid="25"/>
-   <tile gid="26"/>
+   <tile gid="12"/>
+   <tile gid="12"/>
+   <tile gid="12"/>
+   <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
@@ -52663,7 +52663,7 @@
    <tile/>
    <tile/>
    <tile gid="3011"/>
-   <tile gid="3012"/>
+   <tile/>
    <tile gid="3013"/>
    <tile/>
    <tile/>
@@ -52802,9 +52802,9 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="3041"/>
-   <tile gid="3042"/>
-   <tile gid="3043"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -52942,9 +52942,9 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="3071"/>
-   <tile gid="3072"/>
-   <tile gid="3073"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -57995,7 +57995,7 @@
   <object id="1114" x="4992" y="960" width="128"/>
   <object id="1115" x="4928" y="1408" width="64"/>
   <object id="1116" x="7488" y="960" width="576"/>
-  <object id="1117" x="6976" y="1216" width="382"/>
+  <object id="1117" x="6976" y="1216" width="511.333"/>
   <object id="1119" x="5248" y="768" width="64"/>
   <object id="1140" x="5504" y="2560" width="64"/>
   <object id="1157" x="5696" y="2432" width="192"/>
@@ -58007,8 +58007,7 @@
   <object id="1203" x="6272" y="1856" width="320"/>
   <object id="1211" x="5248" y="1280" width="128"/>
   <object id="1223" x="6464" y="704" width="64"/>
-  <object id="1224" x="5568" y="640" width="896"/>
-  <object id="1225" x="5312" y="704" width="256"/>
+  <object id="1224" x="5312.67" y="640" width="1151.33"/>
   <object id="1230" x="6592" y="1344" width="256"/>
   <object id="1231" x="6464" y="1408" width="128"/>
   <object id="1234" x="4992" y="1472" width="448"/>
@@ -58186,7 +58185,6 @@
   <object id="1110" x="5248" y="1024" height="64"/>
   <object id="1111" x="5120" y="1088" width="128"/>
   <object id="1112" x="5120" y="960" height="64"/>
-  <object id="1124" x="5312" y="704" height="64"/>
   <object id="1125" x="5248" y="768" height="64"/>
   <object id="1126" x="5248" y="832" width="64"/>
   <object id="1127" x="5312" y="832" height="64"/>
@@ -58225,7 +58223,6 @@
   <object id="1213" x="5248" y="1280" height="64"/>
   <object id="1214" x="5248" y="1344" width="128"/>
   <object id="1215" x="5376" y="1280" height="64"/>
-  <object id="1226" x="5568" y="640" height="64"/>
   <object id="1227" x="6464" y="640" height="64"/>
   <object id="1229" x="5056" y="2688" width="448"/>
   <object id="1232" x="6592" y="1344" height="64"/>
@@ -58258,6 +58255,7 @@
   <object id="1309" x="6912" y="1024" width="128"/>
   <object id="1310" x="7040" y="960" height="64"/>
   <object id="1319" x="8960" y="384" height="192"/>
+  <object id="1324" x="5312" y="640" height="128"/>
  </objectgroup>
  <objectgroup id="61" name="DestructibleWalls" visible="0"/>
  <objectgroup id="64" name="Props">
@@ -58270,11 +58268,14 @@
  </objectgroup>
  <objectgroup id="60" name="Enemies">
   <object id="1191" name="Hypnoviper" x="5120" y="2752" width="64" height="64"/>
+  <object id="1320" name="Scurver" x="5952" y="576" width="64" height="64"/>
+  <object id="1321" name="Creebler" x="4864" y="2560" width="64" height="64"/>
+  <object id="1323" name="Creebler" x="6016" y="2048" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="62" name="PushableBoxes" visible="0"/>
  <objectgroup id="63" name="Zones">
   <object id="905" name="HiddenZone" x="4237" y="177.378" width="691" height="880.246"/>
-  <object id="909" name="HiddenZone" x="6524.5" y="2496.38" width="1967" height="689.06"/>
+  <object id="909" name="HiddenZone" x="6627.53" y="2496.38" width="1863.97" height="689.06"/>
   <object id="1289" name="HiddenZone" x="3712" y="2648" width="2268" height="508"/>
  </objectgroup>
  <objectgroup id="65" name="DownCamera" visible="0">
@@ -58284,7 +58285,5 @@
  <objectgroup id="66" name="Abilities">
   <object id="1283" name="Jump" x="7552" y="2816" width="512" height="128"/>
  </objectgroup>
- <objectgroup id="70" name="Spikes">
-  <object id="1302" x="7360" y="1152" width="128" height="128"/>
- </objectgroup>
+ <objectgroup id="70" name="Spikes"/>
 </map>

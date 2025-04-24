@@ -114,13 +114,6 @@ void PlayerMechanics::Update(float dt) {
         return;
     }
 
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
-        isStunned = true;
-        stunTimer.Start();
-        Engine::GetInstance().render->StartCameraShake(1, 2);
-        return;
-    }
-
     HandleInput();
     HandleWallSlide();
     HandleJump();
@@ -153,6 +146,8 @@ void PlayerMechanics::Update(float dt) {
 
         b2Vec2 newPos(PIXEL_TO_METERS(playerX), PIXEL_TO_METERS(playerY));
         attackSensor->body->SetTransform(newPos, 0);
+
+        player->SetState("attack");
 
         if (attackTimer.ReadMSec() >= attackDuration) {
             DestroyAttackSensor();
@@ -199,6 +194,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
                 Engine::GetInstance().render->StartCameraShake(0.2f, 2);
                 return;
             }
+            player->SetState("landing");
         }
         break;
     case ColliderType::WALL_SLIDE:
@@ -341,7 +337,7 @@ void PlayerMechanics::HandleInput() {
         Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) != KEY_REPEAT;
 
     if (noMovimiento && !isJumping && !isFalling && !isAttacking && !isWallSliding && !isDashing) {
-        player->SetState("idle");
+        player->SetState("landing");
     }
 
     if (!isAttacking) {

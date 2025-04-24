@@ -70,4 +70,6 @@ private:
 	int abilitySpriteW = 0;
 	int abilitySpriteH = 0;
 	bool markedForDeletion = false;
+	Timer eatTimer;
+	bool waitingForEatToFinish = false;
 };

@@ -84,6 +84,10 @@ bool AbilityZone::Update(float dt)
 	Player* player = Engine::GetInstance().scene->GetPlayer();
 	PlayerMechanics* mechanics = player->GetMechanics();
 
+	if (waitingForEatToFinish && eatTimer.ReadMSec() >= 1000) {
+		markedForDeletion = true;
+	}
+
 	if (playerInside)
 	{
 		float rightLimit = position.getX() + texW;
@@ -108,11 +112,18 @@ bool AbilityZone::Update(float dt)
 
 		if (playerRight >= rightLimit - 144.0f) {
 			if (playerInsideJump && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
-				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+				if (pbody) {
+					Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+					pbody = nullptr;
+				}
+
 				mechanics->cantMove = false;
 				mechanics->EnableJump(true);
 				mechanics->canAttack = true;
-				markedForDeletion = true; 
+
+				waitingForEatToFinish = true;
+				eatTimer.Start();
+				player->SetState("eat");
 			}
 			else if (playerInsideDoubleJump && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
 				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
@@ -120,6 +131,7 @@ bool AbilityZone::Update(float dt)
 				mechanics->EnableDoubleJump(true);
 				mechanics->canAttack = true;
 				markedForDeletion = true; 
+				player->SetState("eat");
 			}
 			else if (playerInsideDash && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
 				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
@@ -127,6 +139,7 @@ bool AbilityZone::Update(float dt)
 				mechanics->EnableDash(true);
 				mechanics->canAttack = true;
 				markedForDeletion = true; 
+				player->SetState("eat");
 			}
 		}
 	}

@@ -143,6 +143,13 @@ bool AbilityZone::Update(float dt)
 bool AbilityZone::PostUpdate() {
 	if (markedForDeletion) {
 		Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+		if (tensionActive) {
+			tensionActive = false;
+
+			if (!previousMusic.empty()) {
+				Engine::GetInstance().audio->PlayMusic("Assets/Audio/Music/cave_theme.ogg", 1.0f, 1.0f);
+			}
+		}
 	}
 
 	return true;
@@ -173,6 +180,12 @@ void AbilityZone::OnCollision(PhysBody* physA, PhysBody* physB){
 	switch (physB->ctype) {
 	case ColliderType::PLAYER:
 		playerInside = true;
+		if (!tensionActive) {
+			tensionActive = true;
+
+			previousMusic = "Assets/Audio/Music/cave_theme.ogg"; 
+			Engine::GetInstance().audio->PlayMusic("Assets/Audio/Fx/tension.ogg", 1.0f, 1.0f);
+		}
 		mechanics->canAttack = false;
 		if (type == "Jump") {
 			playerInsideJump = true;

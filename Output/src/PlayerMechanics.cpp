@@ -20,6 +20,7 @@ void PlayerMechanics::Update(float dt) {
 
     if( Engine::GetInstance().scene->saving == true)
         return;
+
     if (godMode) {
         b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
         velocity.x = 0.0f;
@@ -50,7 +51,7 @@ void PlayerMechanics::Update(float dt) {
         }
         else {
             player->pbody->body->SetLinearVelocity(b2Vec2_zero);
-            player->SetState("landing");
+            player->SetState("landing_stun");
             return;
         }
     }
@@ -78,6 +79,11 @@ void PlayerMechanics::Update(float dt) {
     if (spikesDamage && spikesCouldown.ReadMSec() >= maxTimeSpikesCouldown) {
         spikesDamage = false;
     }
+    if (waitingToIdle && landingToIdleTimer.ReadMSec() >= landingToIdleDelay) {
+        player->SetState("idle");
+        waitingToIdle = false;
+    }
+
 
     if (shouldRespawn && !godMode) {
         shouldRespawn = false;
@@ -120,8 +126,14 @@ void PlayerMechanics::Update(float dt) {
     HandleDash();
     HandleFall();
 
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN && attackSensor == nullptr && canAttack && !isDashing) {
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN && attackSensor == nullptr && canAttack && !isDashing && !attackPending) {
+        attackPending = true;
+        attackDelayTimer.Start();
+        player->SetState("attack"); 
+    }
+    if (attackPending && attackDelayTimer.ReadMSec() >= 300) {
         CreateAttackSensor();
+        attackPending = false;
     }
 
     if (!isDashing) {
@@ -194,7 +206,6 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
                 Engine::GetInstance().render->StartCameraShake(0.2f, 2);
                 return;
             }
-            player->SetState("landing");
         }
         break;
     case ColliderType::WALL_SLIDE:
@@ -251,6 +262,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
                 lives -= 1;
                 StartInvulnerability();
                 Engine::GetInstance().render->StartCameraShake(0.5, 1);
+                player->SetState("hit");
             }
         }
         break;
@@ -346,9 +358,6 @@ void PlayerMechanics::HandleInput() {
             if (!isFalling && !isJumping && !isWallSliding) {
                 player->SetState("run_right");
             }
-        }
-        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_1) == KEY_REPEAT) {
-            player->SetState("idle");
         }
         else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
             movementDirection = 1;
@@ -447,6 +456,7 @@ void PlayerMechanics::HandleDash() {
     if (isDashing) {
         b2Vec2 vel(dashSpeed * dashDirection, 0.0f);
         player->pbody->body->SetLinearVelocity(vel);
+        player->SetState("dash");
 
         float distance = abs(player->GetPosition().getX() - dashStartPosition.getX());
         if (distance >= maxDashDistance) CancelDash();
@@ -476,6 +486,9 @@ void PlayerMechanics::HandleFall() {
     else if (isOnGround) {
         if (isFalling) {
             isFalling = false;
+            player->SetState("landing");
+            landingToIdleTimer.Start();
+            waitingToIdle = true;
         }
     }
 }

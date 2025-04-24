@@ -45,7 +45,7 @@
 					<frame x="200" y="200" w="100" h="100" />
 					<frame x="300" y="200" w="100" h="100" />
 				</wall_slide>
-				<attack loop="true" speed="0.15">
+				<attack loop="true" speed="0.12">
 					<frame x="0" y="300" w="112" h="100" />
 					<frame x="112" y="300" w="112" h="100" />
 					<frame x="224" y="300" w="112" h="100" />
@@ -65,71 +65,60 @@
 					<frame x="896" y="400" w="112" h="112" />
 					<frame x="1008" y="400" w="112" h="112" />
 				</eat>
-				<landing loop="true" speed="0.17">
+				<hit loop="true" speed="0.17">
 					<frame x="0" y="516" w="112" h="120" />
 					<frame x="112" y="516" w="112" h="120" />
 					<frame x="224" y="516" w="112" h="120" />
 					<frame x="336" y="516" w="112" h="120" />
-				</landing>
+				</hit>
 				<jump loop="true" speed="0.15">
-					<frame x="0" y="640" w="226" h="128" />
-					<frame x="226" y="640" w="226" h="128" />
-					<frame x="452" y="640" w="226" h="128" />
-					<frame x="678" y="640" w="226" h="128" />
-					<frame x="904" y="640" w="226" h="128" />
-					<frame x="1130" y="640" w="226" h="128" />
+					<frame x="0" y="625" w="110" h="128" />
+					<frame x="110" y="625" w="110" h="128" />
+					<frame x="220" y="625" w="110" h="128" />
+					<frame x="330" y="625" w="110" h="128" />
 				</jump>
 				<fall loop="true" speed="0.15">
-					<frame x="100" y="700" w="100" h="100" />
-					<frame x="200" y="700" w="100" h="100" />
-					<frame x="300" y="700" w="100" h="100" />
-					<frame x="400" y="700" w="100" h="100" />
+					<frame x="100" y="753" w="100" h="100" />
+					<frame x="200" y="753" w="100" h="100" />
+					<frame x="300" y="753" w="100" h="100" />
+					<frame x="400" y="753" w="100" h="100" />
 				</fall>
-				<run_left loop="true" speed="0.2">
-					<frame x="0" y="0" w="100" h="100" />
-				</run_left>
-				<duck loop="false" speed="0">
-					<frame x="0" y="0" w="100" h="100" />
-				</duck>
-				<wall_slide loop="true" speed="0.1">
-					<frame x="0" y="400" w="100" h="100" />
-					<frame x="100" y="400" w="100" h="100" />
-					<frame x="200" y="400" w="100" h="100" />
-					<frame x="300" y="400" w="100" h="100" />
-				</wall_slide>
 				<landing_stun loop="true" speed="0.14">
-					<frame x="0" y="300" w="100" h="100" />
-					<frame x="100" y="300" w="100" h="100" />
-					<frame x="200" y="300" w="100" h="100" />
-					<frame x="300" y="300" w="100" h="100" />
-					<frame x="400" y="300" w="100" h="100" />
-					<frame x="500" y="300" w="100" h="100" />
-					<frame x="600" y="300" w="100" h="100" />
-					<frame x="700" y="300" w="100" h="100" />
-					<frame x="800" y="300" w="100" h="100" />
-					<frame x="900" y="300" w="100" h="100" />
-					<frame x="1000" y="300" w="100" h="100" />
-					<frame x="1100" y="300" w="100" h="100" />
-					<frame x="1200" y="300" w="100" h="100" />
+					<frame x="0" y="853" w="100" h="100" />
+					<frame x="100" y="853" w="100" h="100" />
+					<frame x="200" y="853" w="100" h="100" />
+					<frame x="300" y="853" w="100" h="100" />
+					<frame x="400" y="853" w="100" h="100" />
+					<frame x="500" y="853" w="100" h="100" />
+					<frame x="600" y="853" w="100" h="100" />
+					<frame x="700" y="853" w="100" h="100" />
+					<frame x="800" y="853" w="100" h="100" />
+					<frame x="900" y="853" w="100" h="100" />
+					<frame x="1000" y="853" w="100" h="100" />
+					<frame x="1100" y="853" w="100" h="100" />
+					<frame x="1200" y="853" w="100" h="100" />
 				</landing_stun>
 				<landing loop="true" speed="0.17">
-					<frame x="0" y="300" w="100" h="100" />
-					<frame x="100" y="300" w="100" h="100" />
-					<frame x="200" y="300" w="100" h="100" />
-					<frame x="300" y="300" w="100" h="100" />
-					<frame x="400" y="300" w="100" h="100" />
-					<frame x="500" y="300" w="100" h="100" />
-					<frame x="600" y="300" w="100" h="100" />
-					<frame x="700" y="300" w="100" h="100" />
-					<frame x="800" y="300" w="100" h="100" />
-					<frame x="900" y="300" w="100" h="100" />
-					<frame x="1000" y="300" w="100" h="100" />
-					<frame x="1100" y="300" w="100" h="100" />
-					<frame x="1200" y="300" w="100" h="100" />
+					<frame x="0" y="953" w="100" h="100" />
+					<frame x="100" y="953" w="100" h="100" />
+					<frame x="200" y="953" w="100" h="100" />
 				</landing>
-				<die loop="false" speed="0">
-					<frame x="0" y="0" w="128" h="128" />
+				<die loop="true" speed="0.15">
+					<frame x="0" y="1053" w="100" h="100" />
+					<frame x="100" y="1053" w="100" h="100" />
+					<frame x="200" y="1053" w="100" h="100" />
+					<frame x="300" y="1053" w="100" h="100" />
+					<frame x="400" y="1053" w="100" h="100" />
 				</die>
+				<dash loop="true" speed="0.15">
+					<frame x="0" y="1153" w="130" h="100" />
+					<frame x="130" y="1153" w="130" h="100" />
+					<frame x="260" y="1153" w="130" h="100" />
+					<frame x="390" y="1153" w="130" h="100" />
+					<frame x="520" y="1153" w="130" h="100" />
+					<frame x="650" y="1153" w="130" h="100" />
+					<frame x="780" y="1153" w="130" h="100" />
+				</dash>
 			</player>
 			<enemies>
 				<enemy type="Bloodrusher" w="220" h="220" texture="Assets/Enemies/bloodrusher.png">

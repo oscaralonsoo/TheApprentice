@@ -98,6 +98,7 @@ bool Player::Update(float dt) {
 		mechanics.EnableJump(true);
 	}
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) {
+		mechanics.EnableDoubleJump(true);
 	}
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) {
 		mechanics.EnableDash(true);

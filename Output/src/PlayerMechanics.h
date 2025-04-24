@@ -94,6 +94,9 @@ private:
     float stunDuration = 910.0f; // en milisegundos
     float fallStunThreshold = 35.0f; // velocidad Y mínima para provocar stun
     bool willStun = false;
+    Timer landingToIdleTimer;
+    bool waitingToIdle = false;
+    float landingToIdleDelay = 200.0f;
 
     // WallSlide 
     bool wasInDownCameraZone = false;
@@ -112,10 +115,12 @@ private:
     // Attack
     PhysBody* attackSensor = nullptr;
     Timer attackTimer;
-    float attackDuration = 200.0f;
+    float attackDuration = 500.0f;
     int playerAttackX;
     int playerAttackY;
     bool isAttacking = false;
+    Timer attackDelayTimer;
+    bool attackPending = false;
 
     //Invulnerable
     bool isInvulnerable = false;
@@ -129,6 +134,7 @@ private:
     bool shouldRespawn = false;
     PhysBody* lastPlatformCollider = nullptr;
     int lasMovementDirection = 1;
+    bool isDying = false;
 
     //Down Camera
     int originalCameraOffsetY;

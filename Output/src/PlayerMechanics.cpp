@@ -217,7 +217,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::ENEMY:
         if (!isInvulnerable && !godMode && physA == player->pbody) {
-            vidas -= 1;
+            lives -= 1;
             StartInvulnerability();
             Engine::GetInstance().render->StartCameraShake(0.5, 1);
 
@@ -606,7 +606,7 @@ void PlayerMechanics::HandleGodMode()
     }
 }
 void PlayerMechanics::ReduceVignetteSize() {
-    if (vidas < 3) {
+    if (lives < 3) {
         vignetteSize -= 100;
         if (vignetteSize < 300) {
             vignetteSize = 300;

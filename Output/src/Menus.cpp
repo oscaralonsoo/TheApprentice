@@ -237,35 +237,36 @@ void Menus::ToggleVSync() {
     isVSync = !isVSync;
     Engine::GetInstance().render->SetVSync(isVSync);
 }
-
 void Menus::HandleVolumeSliders() {
+    int minX = (width / 2) + 50;
+    int maxX = minX + 420;
+
     if (selectedButton == 2) {
-        AdjustVolume(musicVolumeSliderX);
+        AdjustVolume(musicVolumeSliderX, minX, maxX);
     }
     else if (selectedButton == 3) {
-        AdjustVolume(fxVolumeSliderX);
+        AdjustVolume(fxVolumeSliderX, minX, maxX);
     }
     else if (selectedButton == 4) {
-        AdjustVolume(masterVolumeSliderX);
+        AdjustVolume(masterVolumeSliderX, minX, maxX);
     }
 }
-
-void Menus::AdjustVolume(int& sliderX) {
+void Menus::AdjustVolume(int& sliderX, int minX, int maxX) {
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
         sliderX -= VOLUME_ADJUSTMENT_STEP;
-        sliderX = std::max(sliderX, SLIDER_MIN);
+        sliderX = std::max(sliderX, minX);
     }
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
         sliderX += VOLUME_ADJUSTMENT_STEP;
-        sliderX = std::min(sliderX, SLIDER_MAX);
+        sliderX = std::min(sliderX, maxX);
     }
-    UpdateVolume(sliderX);
+    UpdateVolume(sliderX, minX, maxX);
 }
-
-void Menus::UpdateVolume(int sliderX) {
-    float volume = (float)(sliderX - SLIDER_MIN) / (SLIDER_MAX - SLIDER_MIN);
+void Menus::UpdateVolume(int sliderX, int minX, int maxX) {
+    float volume = (float)(sliderX - minX) / (maxX - minX);
     volume = (volume < 0.0f) ? 0.0f : (volume > 1.0f) ? 1.0f : volume;
     int sdlVolume = static_cast<int>(volume * MIX_MAX_VOLUME);
+
     if (selectedButton == 2) {
         Mix_VolumeMusic(sdlVolume);
     }
@@ -273,8 +274,8 @@ void Menus::UpdateVolume(int sliderX) {
         Mix_Volume(-1, sdlVolume);
     }
     else if (selectedButton == 4) {
-        Mix_Volume(-1, sdlVolume);       
-        Mix_VolumeMusic(sdlVolume);       
+        Mix_Volume(-1, sdlVolume);
+        Mix_VolumeMusic(sdlVolume);
     }
 }
 
@@ -427,21 +428,32 @@ void Menus::DrawCheckBox(const ButtonInfo& button, bool isSelected) {
 }
 
 void Menus::DrawSliders() {
-    DrawSlider(SLIDER_MIN, 509, musicVolumeSliderX, selectedButton == 2, "Music Volume");
-    DrawSlider(SLIDER_MIN, 629, fxVolumeSliderX, selectedButton == 3, "FX Volume");
-    DrawSlider(SLIDER_MIN, 749, masterVolumeSliderX, selectedButton == 4, "Master Volume");
+    DrawSlider((width/2) + 50, (height/2), musicVolumeSliderX, selectedButton == 2, "Music Volume");
+    DrawSlider((width / 2) + 50, (height / 2)+100, fxVolumeSliderX, selectedButton == 3, "FX Volume");
+    DrawSlider((width / 2) + 50, (height / 2)+200, masterVolumeSliderX, selectedButton == 4, "Master Volume");
 }
 
 void Menus::DrawSlider(int minX, int y, int& sliderX, bool isSelected, const std::string& label) {
-    Engine::GetInstance().render->DrawRectangle({ minX, y, 400 + 20, 19 }, 200, 200, 200, 255, true, false);
+    // Dibuja el fondo del slider
+    Engine::GetInstance().render->DrawRectangle({ minX, y, 420, 19 }, 200, 200, 200, 255, true, false);
 
-    int width = isSelected ? 25 : 20;
-    int height = isSelected ? 45 : 35;
-    int color = isSelected ? 255 : 150;
+    int squareWidth = isSelected ? 25 : 20;
+    int squareHeight = isSelected ? 45 : 35;
+    int squareColor = isSelected ? 255 : 150;
 
-    Engine::GetInstance().render->DrawRectangle( { sliderX - (width - 20) / 2, y - (height - 35/2) / 2, width, height },
-        color, color, color, 255, true, false );
-    Engine::GetInstance().render->DrawText(label.c_str(), 710, y - 20, WHITE, 45);
+    // Limitar el valor de sliderX dentro de los límites del slider
+    sliderX = std::max(minX + squareWidth / 2, std::min(sliderX, minX + 420 - squareWidth / 2));
+
+    // Calcula la posición del cuadrado del slider para centrarlo
+    int squareX = sliderX - (squareWidth / 2); // Centrar el cuadrado en relación a sliderX
+    int squareY = y - (squareHeight - 19) / 2; // Centrar verticalmente en relación al slider
+    Engine::GetInstance().render->DrawRectangle({ squareX, squareY, squareWidth, squareHeight },
+        squareColor, squareColor, squareColor, 255, true, false);
+
+    // Calcular la posición del texto a la izquierda del slider
+    int textWidth = Engine::GetInstance().render->GetTextWidth(label, 45);
+    int textX = minX - textWidth - 50; // Desplazamiento de 10 píxeles a la izquierda del slider
+    Engine::GetInstance().render->DrawText(label.c_str(), textX, y - 20, WHITE, 45);
 }
 void Menus::DrawPlayerLives() {
     if (currentState != MenusState::GAME) return;

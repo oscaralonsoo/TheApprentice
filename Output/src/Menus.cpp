@@ -339,7 +339,7 @@ void Menus::CreateButtons() {
     int spacing = static_cast<int>(BUTTON_SPACING * scale);
     int totalHeight = names.size() * (buttonHeight + spacing) - spacing;
 
-    int startX = (width - buttonWidth) / 2;
+    int startX = (width - buttonWidth) / 2-20;
     int startY = (height - totalHeight) / 2 + static_cast<int>(50 * scale);
 
     for (size_t i = 0; i < names.size(); ++i) {

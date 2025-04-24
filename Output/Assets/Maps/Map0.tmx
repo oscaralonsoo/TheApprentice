@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="140" height="59" tilewidth="64" tileheight="64" infinite="0" nextlayerid="73" nextobjectid="1320">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="140" height="59" tilewidth="64" tileheight="64" infinite="0" nextlayerid="73" nextobjectid="1324">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -44009,8 +44009,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="3461"/>
-   <tile gid="3462"/>
+   <tile/>
+   <tile/>
    <tile gid="11"/>
    <tile gid="12"/>
    <tile gid="12"/>
@@ -44148,10 +44148,10 @@
    <tile gid="2"/>
    <tile gid="2"/>
    <tile gid="2"/>
-   <tile gid="3"/>
-   <tile gid="3463"/>
-   <tile gid="3464"/>
-   <tile gid="16"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
+   <tile gid="26"/>
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
@@ -44288,10 +44288,10 @@
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
-   <tile gid="24"/>
-   <tile gid="25"/>
-   <tile gid="25"/>
-   <tile gid="26"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
@@ -57995,7 +57995,7 @@
   <object id="1114" x="4992" y="960" width="128"/>
   <object id="1115" x="4928" y="1408" width="64"/>
   <object id="1116" x="7488" y="960" width="576"/>
-  <object id="1117" x="6976" y="1216" width="382"/>
+  <object id="1117" x="6976" y="1216" width="507.333"/>
   <object id="1119" x="5248" y="768" width="64"/>
   <object id="1140" x="5504" y="2560" width="64"/>
   <object id="1157" x="5696" y="2432" width="192"/>
@@ -58270,6 +58270,9 @@
  </objectgroup>
  <objectgroup id="60" name="Enemies">
   <object id="1191" name="Hypnoviper" x="5120" y="2752" width="64" height="64"/>
+  <object id="1320" name="Creebler" x="4800" y="2560" width="64" height="64"/>
+  <object id="1321" name="Creebler" x="5952" y="2048" width="64" height="64"/>
+  <object id="1323" name="Scurver" x="5888" y="576" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="62" name="PushableBoxes" visible="0"/>
  <objectgroup id="63" name="Zones">
@@ -58284,7 +58287,5 @@
  <objectgroup id="66" name="Abilities">
   <object id="1283" name="Jump" x="7552" y="2816" width="512" height="128"/>
  </objectgroup>
- <objectgroup id="70" name="Spikes">
-  <object id="1302" x="7360" y="1152" width="128" height="128"/>
- </objectgroup>
+ <objectgroup id="70" name="Spikes"/>
 </map>

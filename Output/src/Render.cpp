@@ -120,8 +120,8 @@ bool  Render::DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SD
 	float windowScale = Engine::GetInstance().window->GetScale() * cameraZoom;
 
 	SDL_Rect rect;
-	rect.x = static_cast<int>((x - camera.x * speed) * windowScale);
-	rect.y = static_cast<int>((y - camera.y * speed) * windowScale);
+	rect.x = static_cast<int>(camera.x * speed + x * windowScale);
+	rect.y = static_cast<int>(camera.y * speed + y * windowScale);
 
 
 	if(section != NULL)

@@ -258,7 +258,6 @@ void Scene::LoadGameXML() {
 		if (abilitiesNode) {
 			if (abilitiesNode.attribute("jump").as_bool() == true) {
 				mechanics->EnableJump(true);
-				printf("%d\n", mechanics->jumpUnlocked);
 			}
 			if (abilitiesNode.attribute("doublejump").as_bool() == true) {
 				mechanics->EnableDoubleJump(true);

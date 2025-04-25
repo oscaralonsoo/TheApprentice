@@ -24,7 +24,6 @@ public:
 
     // Brood Methods
     void Chase(float dt);
-
     // Setters
     void SetParent(Broodheart* p) { parent = p; }
 

@@ -22,6 +22,8 @@ bool Brood::Awake() {
 }
 
 bool Brood::Start() {
+  
+
     pugi::xml_document loadFile;
     pugi::xml_parse_result result = loadFile.load_file("config.xml");
     std::string type = "Brood";
@@ -38,8 +40,17 @@ bool Brood::Start() {
             break;
         }
     }
+    pbody = Engine::GetInstance().physics.get()->CreateCircleSensor((int)position.getX(), (int)position.getY(), texW / 2, bodyType::STATIC);
 
-    // En Brood::Start(), despu�s de crear el pbody
+    //Assign collider type
+    pbody->ctype = ColliderType::ENEMY;
+
+    pbody->listener = this;
+
+    // Initialize pathfinding
+    pathfinding = new Pathfinding();
+    ResetPath();
+
     b2Fixture* fixture = pbody->body->GetFixtureList();
     if (fixture) {
         b2Filter filter;
@@ -47,17 +58,8 @@ bool Brood::Start() {
         filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_PLAYER_DAMAGE | CATEGORY_ATTACK;
         fixture->SetFilterData(filter);
     }
-    
-    pbody = Engine::GetInstance().physics.get()->CreateCircleSensor((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, bodyType::DYNAMIC);
-
-    pbody->ctype = ColliderType::ENEMY;
-
-    pbody->listener = this;
-
-    if (!gravity) pbody->body->SetGravityScale(0);
-
-    pathfinding = new Pathfinding();
-    ResetPath();
+    originalPosition = position;
+ 
     return true;
 }
 
@@ -70,7 +72,6 @@ bool Brood::Update(float dt) {
     switch (currentState)
     {
     case BroodState::IDLE:
-
         break;
     case BroodState::CHASING:
         Chase(dt);
@@ -146,4 +147,5 @@ void Brood::Chase(float dt) {
         );
     }
 }
+
 

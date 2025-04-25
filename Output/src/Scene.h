@@ -66,6 +66,8 @@ public:
 
 	bool isDead = false;
 	SDL_Color vignetteColor;
+
+	PlayerMechanics* mechanics = nullptr;
 private:
 	SDL_Texture* img;
 	//L03: TODO 3b: Declare a Player attribute
@@ -90,7 +92,7 @@ private:
 	const float blackScreenDelay = 1000.0f; 
 	bool waitingBlackScreen = false;
 
-	PlayerMechanics mechanics;
+
 	//Renderer
 	SDL_Renderer* renderer;
 

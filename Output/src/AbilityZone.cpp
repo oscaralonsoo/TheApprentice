@@ -121,7 +121,6 @@ bool AbilityZone::Update(float dt)
 					Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
 					pbody = nullptr;
 				}
-
 				mechanics->cantMove = false;
 				mechanics->EnableJump(true);
 				mechanics->canAttack = true;

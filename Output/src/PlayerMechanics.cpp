@@ -12,11 +12,15 @@ void PlayerMechanics::Init(Player* player) {
     this->player = player;
     slimeFxId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/slime_move.ogg", 0.1f);
     jumpFxId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/slime_jump.ogg", 1.0f);
-
 }
 
 void PlayerMechanics::Update(float dt) {
+    printf("%d\n", jumpUnlocked);
+    if (jumpUnlocked)
+    {
+        jumpUnlocked = true;
 
+    }
     if( Engine::GetInstance().scene->saving == true)
         return;
 
@@ -341,6 +345,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         default: break;
     }
 }
+
 
 void PlayerMechanics::HandleInput() {
 

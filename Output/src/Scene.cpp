@@ -37,7 +37,7 @@ bool Scene::Awake()
 	//L04: TODO 3b: Instantiate the player using the entity manager
 	player = (Player*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PLAYER);
 	player->SetParameters(configParameters.child("animations").child("player"));
-
+	mechanics = player->GetMechanics();
 	return ret;
 }
 
@@ -46,7 +46,6 @@ bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
 	Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx");
-
 	return true;
 }
 
@@ -213,59 +212,72 @@ Vector2D Scene::GetPlayerPosition()
 	return player->GetPosition();
 }
 
-void Scene::SaveGameXML()
-{
+void Scene::SaveGameXML() {
 	saving = true;
 	Engine::GetInstance().menus->isSaved = 1;
-	//Load xml
+
+	// Load xml
 	pugi::xml_document config;
 	pugi::xml_parse_result result = config.load_file("config.xml");
 	pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
 
-	Vector2D playerPos = GetPlayerPosition();	//Save Player Pos
+	Vector2D playerPos = GetPlayerPosition(); // Save Player Pos
 	pugi::xml_node playerNode = saveData.child("player");
-		playerNode.attribute("x") = playerPos.x;
-		playerNode.attribute("y") = playerPos.y +64;
-		playerNode.attribute("lives") = mechanics.lives;
+	playerNode.attribute("x") = playerPos.x;
+	playerNode.attribute("y") = playerPos.y + 64;
+	playerNode.attribute("lives") = mechanics->lives;
 
-	pugi::xml_node sceneNode = saveData.child("scene"); //Save Actual Scene
-		sceneNode.attribute("actualScene") = nextScene;
-		saveData.attribute("isSaved") = Engine::GetInstance().menus->isSaved;
-	config.save_file("config.xml");	//Save Changes
+	pugi::xml_node abilitiesNode = saveData.child("abilities");
+	abilitiesNode.attribute("jump") = mechanics->jumpUnlocked;
+	abilitiesNode.attribute("doublejump") = mechanics->doubleJumpUnlocked;
+	abilitiesNode.attribute("dash") = mechanics->dashUnlocked;
 
-	Engine::GetInstance().menus->StartTransition(false, Engine::GetInstance().menus->currentState);	// Final Transition
+	pugi::xml_node sceneNode = saveData.child("scene"); // Save Actual Scene
+	sceneNode.attribute("actualScene") = nextScene;
+	saveData.attribute("isSaved") = Engine::GetInstance().menus->isSaved;
+	config.save_file("config.xml"); // Save Changes
+
+	Engine::GetInstance().menus->StartTransition(false, Engine::GetInstance().menus->currentState); // Final Transition
 }
-void Scene::LoadGameXML()
-{
-	if (isLoad || transitioning) return; // Evitar que se llame si ya está en proceso o en transición
+void Scene::LoadGameXML() {
+	if (isLoad || transitioning) return;
 
-    isLoad = true;
-
-    pugi::xml_document config;
-    pugi::xml_parse_result result = config.load_file("config.xml");
-
-    pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
-
-    if (saveData) {
-        pugi::xml_node playerNode = saveData.child("player");
-        if (playerNode) {
-            float playerX = playerNode.attribute("x").as_float();
-            float playerY = playerNode.attribute("y").as_float();
-            mechanics.lives = playerNode.attribute("lives").as_int();
-            newPosition = Vector2D(playerX, playerY - 100); 
-        }
-
-        pugi::xml_node sceneNode = saveData.child("scene");
+	isLoad = true;
+	pugi::xml_document config;
+	pugi::xml_parse_result result = config.load_file("config.xml");
+	pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
+	if (saveData) {
+		pugi::xml_node playerNode = saveData.child("player"); // Player Data Load
+		if (playerNode) {
+			float playerX = playerNode.attribute("x").as_float();
+			float playerY = playerNode.attribute("y").as_float();
+			mechanics->lives = playerNode.attribute("lives").as_int();
+			newPosition = Vector2D(playerX, playerY - 100);
+		}
+		pugi::xml_node abilitiesNode = saveData.child("abilities"); // Abilities Load
+		if (abilitiesNode) {
+			if (abilitiesNode.attribute("jump").as_bool() == true) {
+				mechanics->EnableJump(true);
+				printf("%d\n", mechanics->jumpUnlocked);
+			}
+			if (abilitiesNode.attribute("doublejump").as_bool() == true) {
+				mechanics->EnableDoubleJump(true);
+			}
+			if (abilitiesNode.attribute("dash").as_bool() == true) {
+				mechanics->EnableDash(true);
+			}
+		}
+		pugi::xml_node sceneNode = saveData.child("scene"); // Scene Load
 		if (sceneNode) {
 			int savedScene = sceneNode.attribute("actualScene").as_int();
 			nextScene = savedScene;
-			if (!pendingLoadWithTransition) { 
+			if (!pendingLoadWithTransition) {
 				pendingLoadWithTransition = true;
 				StartTransition(savedScene);
 			}
 		}
-    }
-    isLoad = false;
+	}
+	isLoad = false;
 }
 void Scene::Vignette(int size, float strength, SDL_Color color)
 {

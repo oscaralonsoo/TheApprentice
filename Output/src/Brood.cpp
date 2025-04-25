@@ -58,7 +58,6 @@ bool Brood::Start() {
         filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_PLAYER_DAMAGE | CATEGORY_ATTACK;
         fixture->SetFilterData(filter);
     }
-    originalPosition = position;
  
     return true;
 }

@@ -31,6 +31,9 @@ public:
     int lives = 3;
     Vector2D lastPosition;
 
+    bool doubleJumpUnlocked = false;
+    bool jumpUnlocked;
+    bool dashUnlocked = false;
 private:
     void HandleInput();
     void HandleJump();
@@ -46,7 +49,6 @@ private:
     void HandleGodMode();
     void HandleLives();
 
-
 private:
     Player* player = nullptr;
 
@@ -60,8 +62,8 @@ private:
 
     // Jump 
     float jumpForce = 13.0f;
-    bool isJumping = false;
-    bool jumpUnlocked = false;
+    bool isJumping = false;;
+
     Timer jumpCooldownTimer;
     float jumpCooldownTime = 100.0f;
     bool jumpCooldownActive = false;
@@ -76,11 +78,12 @@ private:
     float jumpDecayRate = 4.0f; // m�s alto = menos duraci�n de salto prolongado
 
     //Double Jump
-    bool doubleJumpUnlocked = false;
+    bool hasDoubleJump = false;
     int jumpCount = 0;
     const int maxJumpCount = 2; // salto normal + doble salto
 
     // Dash
+
     bool isDashing = false;
     bool canDash = true;
     float dashSpeed = 15.0f;
@@ -88,7 +91,7 @@ private:
     float maxDashDistance = 100.0f;
     Timer dashCooldown;
     float dashMaxCoolDown = 1.0f;
-    bool dashUnlocked = false;
+
     int dashDirection = 1;
 
     // Fall

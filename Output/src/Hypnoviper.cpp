@@ -21,7 +21,7 @@ bool Hypnoviper::Start() {
     pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX(), (int)position.getY(), texW / 1.3, texH / 1.2, bodyType::DYNAMIC, 130, 20);
 
     //Assign collider type
-    pbody->ctype = ColliderType::ENEMY;
+    pbody->ctype = ColliderType::PLATFORM;
 
     pbody->listener = this;
 
@@ -48,7 +48,7 @@ bool Hypnoviper::Start() {
     if (fixture) {
         b2Filter filter;
         filter.categoryBits = CATEGORY_ENEMY;
-        filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_PLAYER_DAMAGE | CATEGORY_ATTACK;
+        filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_PLAYER | CATEGORY_ATTACK;
         fixture->SetFilterData(filter);
     }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="140" height="59" tilewidth="64" tileheight="64" infinite="0" nextlayerid="73" nextobjectid="1324">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="140" height="59" tilewidth="64" tileheight="64" infinite="0" nextlayerid="73" nextobjectid="1325">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -34081,10 +34081,10 @@
    <tile/>
    <tile/>
    <tile gid="1073741920"/>
-   <tile gid="1073741921"/>
-   <tile gid="1073741922"/>
-   <tile gid="1073741923"/>
-   <tile gid="1073741924"/>
+   <tile gid="67"/>
+   <tile gid="68"/>
+   <tile gid="69"/>
+   <tile gid="70"/>
    <tile/>
    <tile/>
    <tile/>
@@ -34221,10 +34221,10 @@
    <tile/>
    <tile/>
    <tile gid="1073741910"/>
-   <tile gid="1073741911"/>
-   <tile gid="1073741912"/>
-   <tile gid="1073741913"/>
-   <tile gid="1073741914"/>
+   <tile gid="77"/>
+   <tile gid="78"/>
+   <tile gid="79"/>
+   <tile gid="80"/>
    <tile/>
    <tile/>
    <tile/>
@@ -34361,10 +34361,10 @@
    <tile/>
    <tile/>
    <tile gid="1073741900"/>
-   <tile gid="1073741901"/>
-   <tile gid="1073741902"/>
-   <tile gid="1073741903"/>
-   <tile gid="1073741904"/>
+   <tile gid="87"/>
+   <tile gid="88"/>
+   <tile gid="89"/>
+   <tile gid="90"/>
    <tile/>
    <tile/>
    <tile/>
@@ -34501,10 +34501,10 @@
    <tile/>
    <tile/>
    <tile gid="1073741890"/>
-   <tile gid="1073741891"/>
-   <tile gid="1073741892"/>
-   <tile gid="1073741893"/>
-   <tile gid="1073741894"/>
+   <tile gid="97"/>
+   <tile gid="98"/>
+   <tile gid="99"/>
+   <tile gid="100"/>
    <tile/>
    <tile/>
    <tile/>
@@ -34643,7 +34643,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
@@ -42773,7 +42773,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="1"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -42911,9 +42911,9 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
    <tile gid="1"/>
-   <tile gid="26"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
@@ -43051,8 +43051,8 @@
    <tile gid="2"/>
    <tile gid="2"/>
    <tile gid="2"/>
-   <tile gid="2"/>
    <tile gid="26"/>
+   <tile gid="12"/>
    <tile gid="12"/>
    <tile/>
    <tile/>
@@ -57941,7 +57941,7 @@
   <properties>
    <property name="Doors" type="bool" value="true"/>
   </properties>
-  <object id="1306" x="8896" y="384" width="34" height="192.333">
+  <object id="1306" x="8896" y="384" width="34" height="255">
    <properties>
     <property name="PlayerPosX" type="int" value="500"/>
     <property name="PlayerPosY" type="int" value="500"/>
@@ -57962,7 +57962,7 @@
   <object id="806" x="6848" y="1280" width="128"/>
   <object id="878" x="8064" y="832" width="192"/>
   <object id="879" x="8256" y="768" width="192"/>
-  <object id="880" x="8448" y="704" width="384"/>
+  <object id="880" x="8448" y="704" width="320"/>
   <object id="942" x="1216" y="1024" width="1728"/>
   <object id="952" x="3520" y="1024" width="704"/>
   <object id="975" x="3456" y="1152" width="64"/>
@@ -58017,8 +58017,7 @@
   <object id="1237" x="5504" y="1152" width="192"/>
   <object id="1243" x="8448" y="448" width="448"/>
   <object id="1244" x="8896" y="384" width="64"/>
-  <object id="1249" x="8832" y="640" width="64"/>
-  <object id="1250" x="8896" y="576" width="64"/>
+  <object id="1249" x="8768" y="640" width="192"/>
   <object id="1258" x="3072" y="2624" width="768"/>
   <object id="1269" x="3968" y="2880" width="2688"/>
   <object id="1275" x="3840" y="2816" width="128"/>
@@ -58237,8 +58236,7 @@
   <object id="1242" x="5696" y="1152" height="64"/>
   <object id="1245" x="8448" y="448" height="64"/>
   <object id="1246" x="8896" y="384" height="64"/>
-  <object id="1247" x="8832" y="640" height="64"/>
-  <object id="1251" x="8896" y="576" height="64"/>
+  <object id="1247" x="8768" y="640" height="64"/>
   <object id="1270" x="3840" y="2624" height="64"/>
   <object id="1273" x="3968" y="2816" height="64"/>
   <object id="1276" x="3840" y="2752" height="64"/>
@@ -58273,11 +58271,12 @@
   <object id="1320" name="Creebler" x="4800" y="2560" width="64" height="64"/>
   <object id="1321" name="Creebler" x="5952" y="2048" width="64" height="64"/>
   <object id="1323" name="Scurver" x="5888" y="576" width="64" height="64"/>
+  <object id="1324" name="Bloodrusher" x="1856" y="832" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="62" name="PushableBoxes" visible="0"/>
- <objectgroup id="63" name="Zones">
+ <objectgroup id="63" name="Zones" visible="0">
   <object id="905" name="HiddenZone" x="4237" y="177.378" width="691" height="880.246"/>
-  <object id="909" name="HiddenZone" x="6524.5" y="2496.38" width="1967" height="689.06"/>
+  <object id="909" name="HiddenZone" x="6816.5" y="2496.38" width="1675" height="689.06"/>
   <object id="1289" name="HiddenZone" x="3712" y="2648" width="2268" height="508"/>
  </objectgroup>
  <objectgroup id="65" name="DownCamera" visible="0">

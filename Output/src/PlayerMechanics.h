@@ -71,7 +71,7 @@ private:
     float jumpDecayRate = 4.0f; // más alto = menos duración de salto prolongado
 
     //Double Jump
-    bool doubleJumpUnlocked = false;
+    bool doubleJumpUnlocked = true;
     int jumpCount = 0;
     const int maxJumpCount = 2; // salto normal + doble salto
 

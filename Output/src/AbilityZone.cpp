@@ -188,13 +188,10 @@ void AbilityZone::VignetteChange(float dt)
 	progress = clamp(progress, 0.0f, 1.0f);
 	progress = 1.0f - powf(1.0f - progress, 4.0f);
 
-	int minVignetteSize = 300;  int maxVignetteSize = 900;
-	int newVignetteSize = minVignetteSize + static_cast<int>((maxVignetteSize - minVignetteSize) * progress);
+	newVignetteSize = minVignetteSize + static_cast<int>((maxVignetteSize - minVignetteSize) * progress);
 
 	// A�adir efecto de vibraci�n
 	if (progress > 0.95f) {
-		float vibrateAmplitude = 200.0f;
-		float vibrateSpeed = 30.0f;
 		float offset = sinf(dt * vibrateSpeed) * vibrateAmplitude;
 		newVignetteSize += static_cast<int>(offset);
 	}
@@ -223,6 +220,7 @@ void AbilityZone::OnCollision(PhysBody* physA, PhysBody* physB) {
 		playerInside = true;
 		mechanics->canAttack = false;
 		Engine::GetInstance().scene->previousVignetteSize = mechanics->vignetteSize;
+
 		if (type == "Jump") {
 			playerInsideJump = true;
 		}

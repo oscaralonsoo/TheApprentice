@@ -16,7 +16,13 @@
 #include "Menus.h"
 #include "PlayerMechanics.h"
 
-
+template <typename T>
+T Clamp(T value, T min, T max)
+{
+	if (value < min) return min;
+	if (value > max) return max;
+	return value;
+}
 Scene::Scene() : Module()
 {
 	name = "scene";
@@ -88,7 +94,8 @@ bool Scene::Update(float dt)
 		SaveGameXML();
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 		LoadGameXML();
-
+	// Lógica para el efecto de latidos
+	VignetteHeartBeat(dt);
 	return true;
 }
 
@@ -287,6 +294,10 @@ void Scene::Vignette(int size, float strength, SDL_Color color)
 
 	vignetteSize = size;
 
+	if (heartbeatProgress > 0.0f) {
+		vignetteSize += static_cast<int>(heartbeatProgress * 250); 
+	}
+
 	for (int i = 0; i < vignetteSize; i++)
 	{
 		distFactor = (float)i / vignetteSize;
@@ -306,3 +317,23 @@ void Scene::Vignette(int size, float strength, SDL_Color color)
 		SDL_RenderFillRect(renderer, &right);
 	}
 }
+void Scene::VignetteHeartBeat(float dt)
+{
+	if (mechanics->lives != 1)
+	{
+		heartbeatProgress = 0.0f;
+		return;
+	}
+	heartbeatTimer += dt;
+	if (heartbeatTimer >= heartbeatInterval)
+	{
+		heartbeatTimer = 0.0f;
+		heartbeatGrowing = true;
+	}
+	float speed = heartbeatGrowing ? 0.01f : -0.005f;
+	heartbeatProgress = Clamp(heartbeatProgress + dt * speed, 0.0f, 1.0f);
+	if (heartbeatProgress == 1.0f)
+		heartbeatGrowing = false;
+}
+
+

@@ -41,7 +41,7 @@ bool Broodheart::Start() {
             break;
         }
     }
-    pbody = Engine::GetInstance().physics.get()->CreateCircleSensor((int)position.getX(), (int)position.getY(), texW / 2, bodyType::STATIC);
+    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), texW / 2, bodyType::STATIC);
 
     pbody->ctype = ColliderType::ENEMY;
 
@@ -75,6 +75,10 @@ bool Broodheart::PostUpdate() {
         Spawn();
         shouldSpawn = false;
     }
+    if (isBroken)
+    {
+        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+    }
     return Enemy::PostUpdate();
 }
 
@@ -90,11 +94,10 @@ void Broodheart::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLAYER:
     case ColliderType::ATTACK:
-       
+        isBroken = true;
         break;
     }
 }
-
 void Broodheart::Spawn() {
     if (broodsAlive.size() >= MAX_BROODS) return;
 
@@ -142,5 +145,4 @@ void Broodheart::Spawn() {
 
 void Broodheart::OnBroodDeath(Brood* brood) {
     broodsAlive.remove(brood);
-    spawnCooldown = 0.0f;
 }

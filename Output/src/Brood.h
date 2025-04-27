@@ -19,29 +19,29 @@ public:
     bool Awake() override;
     bool Start() override;
     bool Update(float dt) override;
+    bool PostUpdate(float dt);
     bool CleanUp() override;
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
 
     // Brood Methods
     void Chase(float dt);
+    void UpdateChaseState();
     // Setters
     void SetParent(Broodheart* p) { parent = p; }
 
 private:
+    bool isDead = false;
+
     Broodheart* parent = nullptr;
 
+    float detectionRange = 100000.0f;
     float timePassed = 0.0f;
-    float dirX = 0.0f;
-    float dirY = 0.0f;
-    float launchSpeed = 0.05f;
-    bool launched = false;
     float waveOffset = 0.0f;
+    float distanceToPlayer = 0.0f;
 
     Vector2D direction = { 0, 0 };
-    bool playerInRange = false;
 
     BroodState currentState = BroodState::IDLE;
 
-    PhysBody* physBody = nullptr;
     Animation idleAnim;
 };

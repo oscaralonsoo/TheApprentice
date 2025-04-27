@@ -38,4 +38,5 @@ private:
     bool shouldSpawn = false;
     const float spawnRadius = 100.0f;
     std::list<Brood*> broodsAlive;
+    bool isBroken = false;
 };

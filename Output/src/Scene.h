@@ -50,6 +50,8 @@ public:
 
 	void Vignette(int size, float strength, SDL_Color color);
 
+	void VignetteHeartBeat(float dt);
+
 	Player* GetPlayer() const { return player; }
 public:
 
@@ -68,6 +70,11 @@ public:
 	SDL_Color vignetteColor;
 
 	PlayerMechanics* mechanics = nullptr;
+
+	float heartbeatTimer = 0.0f;
+	float heartbeatInterval = 1250.0f;
+	bool heartbeatGrowing = false;
+	float heartbeatProgress = 0.0f; 
 private:
 	SDL_Texture* img;
 	//L03: TODO 3b: Declare a Player attribute

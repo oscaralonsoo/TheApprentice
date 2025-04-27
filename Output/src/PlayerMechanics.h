@@ -24,6 +24,7 @@ public:
     void ToggleGodMode() { godMode = !godMode; }
     bool IsGodMode() const { return godMode; }
 
+    float vignetteSize = 300.0f;
     bool cantMove = false;
     bool canAttack = true;
     int lives = 3;
@@ -41,16 +42,20 @@ private:
     void StartInvulnerability();
     void UpdateLastSafePosition();
     void HandleSound();
+    void HandleGodMode();
+    void ReduceVignetteSize();
     void HandleLives();
 
 
 private:
     Player* player = nullptr;
 
-    // Parámetros del jugador
+
+
+    // Parï¿½metros del jugador
     float speed = 8.0f;
 
-    // Física
+    // Fï¿½sica
     bool isOnGround = false;
     int movementDirection = 1;
     bool isFalling = false;
@@ -62,15 +67,15 @@ private:
     Timer jumpCooldownTimer;
     float jumpCooldownTime = 100.0f;
     bool jumpCooldownActive = false;
-    float fallAccelerationFactor = 0.6f; // controla qué tan rápido acelera al caer tras soltar salto
+    float fallAccelerationFactor = 0.6f; // controla quï¿½ tan rï¿½pido acelera al caer tras soltar salto
 
     // Salto progresivo por altura
     float jumpStartY = 0.0f;
-    float maxJumpHeight = 240.0f;     // altura máxima del salto prolongado (en píxeles)
-    float minHoldJumpHeight = 20.0f; // altura mínima para que empiece el hold jump
+    float maxJumpHeight = 240.0f;     // altura mï¿½xima del salto prolongado (en pï¿½xeles)
+    float minHoldJumpHeight = 20.0f; // altura mï¿½nima para que empiece el hold jump
     float jumpHoldForceFactor = 0.85f; // fuerza inicial del hold jump
     bool isHoldingJump = false;
-    float jumpDecayRate = 4.0f; // más alto = menos duración de salto prolongado
+    float jumpDecayRate = 4.0f; // mï¿½s alto = menos duraciï¿½n de salto prolongado
 
     //Double Jump
     bool doubleJumpUnlocked = false;
@@ -92,7 +97,7 @@ private:
     bool isStunned = false;
     Timer stunTimer;
     float stunDuration = 910.0f; // en milisegundos
-    float fallStunThreshold = 35.0f; // velocidad Y mínima para provocar stun
+    float fallStunThreshold = 35.0f; // velocidad Y mï¿½nima para provocar stun
     bool willStun = false;
 
     // WallSlide 
@@ -153,7 +158,7 @@ private:
     float knockbackDuration = 300.0f;
     b2Vec2 knockbackInitialVelocity = { 0, 0 };
     float knockbackProgress = 0.0f;
-    float knockbackTotalTime = 300.0f; // en milisegundosç
+    float knockbackTotalTime = 300.0f; // en milisegundosï¿½
 
     //Spikes
     Timer spikesCouldown;

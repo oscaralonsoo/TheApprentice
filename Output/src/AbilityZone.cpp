@@ -15,6 +15,13 @@
 #include "PlayerMechanics.h"
 #include "Scene.h"
 
+template<typename T>
+T clamp(const T& value, const T& min, const T& max) {
+	if (value < min) return min;
+	if (value > max) return max;
+	return value;
+}
+
 AbilityZone::AbilityZone() : Entity(EntityType::CAVE_DROP), state(AbilityZoneStates::WAITING)
 {
 }
@@ -84,14 +91,12 @@ bool AbilityZone::Update(float dt)
 	Player* player = Engine::GetInstance().scene->GetPlayer();
 	PlayerMechanics* mechanics = player->GetMechanics();
 
-	if (waitingForEatToFinish && eatTimer.ReadMSec() >= 1000) {
-		markedForDeletion = true;
-	}
-
 	if (playerInside)
 	{
+		VignetteChange(dt);
+
 		float rightLimit = position.getX() + texW;
-		float targetStopX = rightLimit - 120.0f; // antes era -60, ahora un poco más adelante
+		float targetStopX = rightLimit - 120.0f;
 		float playerRight = player->GetPosition().getX() + player->GetTextureWidth();
 		float distance = abs(playerRight - targetStopX);
 
@@ -112,34 +117,34 @@ bool AbilityZone::Update(float dt)
 
 		if (playerRight >= rightLimit - 144.0f) {
 			if (playerInsideJump && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
-				if (pbody) {
-					Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
-					pbody = nullptr;
-				}
-
+				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
 				mechanics->cantMove = false;
 				mechanics->EnableJump(true);
 				mechanics->canAttack = true;
-
-				waitingForEatToFinish = true;
-				eatTimer.Start();
-				player->SetState("eat");
+				mechanics->vignetteSize = Engine::GetInstance().scene->previousVignetteSize; 
+				markedForDeletion = true;
+				Engine::GetInstance().menus->abilityName = "jump";
+				Engine::GetInstance().menus->StartTransition(false, MenusState::ABILITIES);
 			}
 			else if (playerInsideDoubleJump && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
 				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
 				mechanics->cantMove = false;
 				mechanics->EnableDoubleJump(true);
 				mechanics->canAttack = true;
-				markedForDeletion = true; 
-				player->SetState("eat");
+				mechanics->vignetteSize = Engine::GetInstance().scene->previousVignetteSize; 
+				markedForDeletion = true;
+				Engine::GetInstance().menus->abilityName = "doublejump";
+				Engine::GetInstance().menus->StartTransition(false, MenusState::ABILITIES);
 			}
 			else if (playerInsideDash && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
 				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
 				mechanics->cantMove = false;
 				mechanics->EnableDash(true);
 				mechanics->canAttack = true;
-				markedForDeletion = true; 
-				player->SetState("eat");
+				mechanics->vignetteSize = Engine::GetInstance().scene->previousVignetteSize; 
+				markedForDeletion = true;
+				Engine::GetInstance().menus->StartTransition(false, MenusState::ABILITIES);
+				Engine::GetInstance().menus->abilityName = "dash";
 			}
 		}
 	}
@@ -167,6 +172,32 @@ bool AbilityZone::CleanUp()
 	return true;
 }
 
+void AbilityZone::VignetteChange(float dt)
+{
+	Player* player = Engine::GetInstance().scene->GetPlayer();
+
+	float zoneStartX = position.getX();
+	float zoneEndX = zoneStartX + texW;
+	float playerX = player->GetPosition().getX();
+
+	float progress = (playerX - zoneStartX) / (zoneEndX - zoneStartX);
+	progress = clamp(progress, 0.0f, 1.0f);
+	progress = 1.0f - powf(1.0f - progress, 4.0f);
+
+	int minVignetteSize = 300;  int maxVignetteSize = 900;
+	int newVignetteSize = minVignetteSize + static_cast<int>((maxVignetteSize - minVignetteSize) * progress);
+
+	// Añadir efecto de vibración
+	if (progress > 0.95f) {
+		float vibrateAmplitude = 200.0f;
+		float vibrateSpeed = 30.0f;
+		float offset = sinf(dt * vibrateSpeed) * vibrateAmplitude;
+		newVignetteSize += static_cast<int>(offset);
+	}
+	// Aplicar tamaño
+	player->GetMechanics()->vignetteSize = newVignetteSize;
+}
+
 void AbilityZone::SetPosition(Vector2D pos) {
 	pos.setX(pos.getX() + texW / 2);
 	pos.setY(pos.getY() + texH / 2);
@@ -180,13 +211,14 @@ Vector2D AbilityZone::GetPosition() {
 	return pos;
 }
 
-void AbilityZone::OnCollision(PhysBody* physA, PhysBody* physB){
+void AbilityZone::OnCollision(PhysBody* physA, PhysBody* physB) {
 	Player* player = Engine::GetInstance().scene->GetPlayer();
 	PlayerMechanics* mechanics = player->GetMechanics();
 	switch (physB->ctype) {
 	case ColliderType::PLAYER:
 		playerInside = true;
 		mechanics->canAttack = false;
+		Engine::GetInstance().scene->previousVignetteSize = mechanics->vignetteSize;
 		if (type == "Jump") {
 			playerInsideJump = true;
 		}
@@ -202,7 +234,7 @@ void AbilityZone::OnCollision(PhysBody* physA, PhysBody* physB){
 	}
 }
 
-void AbilityZone::OnCollisionEnd(PhysBody* physA, PhysBody* physB){
+void AbilityZone::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 	Player* player = Engine::GetInstance().scene->GetPlayer();
 	PlayerMechanics* mechanics = player->GetMechanics();
 	switch (physB->ctype) {
@@ -212,6 +244,7 @@ void AbilityZone::OnCollisionEnd(PhysBody* physA, PhysBody* physB){
 		playerInsideJump = false;
 		playerInsideDoubleJump = false;
 		playerInsideDash = false;
+		mechanics->vignetteSize = Engine::GetInstance().scene->previousVignetteSize;
 		break;
 	default:
 		break;

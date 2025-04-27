@@ -9,6 +9,9 @@
 					<pause path="Assets/Textures/UI/Backgrounds/" name="pauseMenu.png"/>
 					<settings path="Assets/Textures/UI/Backgrounds/" name="settingsMenu.png"/>
 					<credits path="Assets/Textures/UI/Backgrounds/" name="creditsMenu.png"/>
+					<jump path="Assets/Textures/UI/Abilities/" name="jumpAbility.png"/>
+					<doublejump path="Assets/Textures/UI/Abilities/" name="doubleJumpAbility.png"/>
+					<dash path="Assets/Textures/UI/Abilities/" name="dashAbility.png"/>
 				</backgrounds>
 				<buttons>
 					<button path="Assets/Textures/UI/Buttons/" name="newGame_unhovered.png"/>
@@ -39,6 +42,15 @@
 		
 		</entities>
 	</textures>
+	<animations>
+		<game_intro path=" " >
+			<frame x="0" y="0" w="134" h="134" />
+			<frame x="0" y="0" w="134" h="134" />
+			<frame x="0" y="0" w="134" h="134" />
+			<frame x="0" y="0" w="134" h="134" />
+			<frame x="0" y="0" w="134" h="134" />
+		</game_intro>
+	</animations>
 	<sounds>
 		<music>
 		

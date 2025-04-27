@@ -20,29 +20,8 @@ void PlayerMechanics::Update(float dt) {
 
     if( Engine::GetInstance().scene->saving == true)
         return;
-    if (godMode) {
-        b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
-        velocity.x = 0.0f;
-        velocity.y = 0.0f;
 
-        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) {
-            velocity.y = -8.0f;
-        }
-        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
-            velocity.y = 8.0f;
-        }
-        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-            velocity.x = -8.0f;
-        }
-        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-            velocity.x = 8.0f;
-        }
-
-        player->pbody->body->SetLinearVelocity(velocity);
-        player->SetState("idle");  // O puedes poner una animación de vuelo si la tienes
-        return;
-    }
-
+    HandleGodMode();
     if (isStunned) {
         if (stunTimer.ReadMSec() >= stunDuration) {
             isStunned = false;
@@ -102,7 +81,7 @@ void PlayerMechanics::Update(float dt) {
             if (blinkTimer.ReadMSec() >= blinkInterval) {
                 visible = !visible; // toggle de visibilidad
                 blinkTimer.Start();
-                blinkInterval += 150.0f; // para que parpadee más lento con el tiempo
+                blinkInterval += 150.0f; // para que parpadee mï¿½s lento con el tiempo
             }
         }
     }
@@ -127,7 +106,7 @@ void PlayerMechanics::Update(float dt) {
     if (!isDashing) {
         b2Vec2 velocity(0, player->pbody->body->GetLinearVelocity().y);
 
-        if (!knockbackActive) { // solo permitimos movimiento si no hay empujón activo
+        if (!knockbackActive) { // solo permitimos movimiento si no hay empujï¿½n activo
             if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
                 velocity.x = -speed;
             }
@@ -174,9 +153,9 @@ void PlayerMechanics::PostUpdate()
 void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
-        if (!jumpCooldownActive)    
+        if (!jumpCooldownActive)
         {
-            isJumping = false;  
+            isJumping = false;
             isOnGround = true;
             if (jumpUnlocked) EnableJump(true);
             jumpCount = 0;
@@ -201,7 +180,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (!wallSlideCooldownActive) {
             isWallSliding = true;
             isJumping = false;
-            if (isOnGround) 
+            if (isOnGround)
             {
                 player->SetState("idle");
             }
@@ -213,7 +192,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
             isTouchingWall = true;
             isJumping = false;
             if (isDashing) {
-                CancelDash(); 
+                CancelDash();
             }
         }
         break;
@@ -230,22 +209,31 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::SAVEGAME:
         Engine::GetInstance().scene->saveGameZone = true;
+        ReduceVignetteSize();
         break;
     case ColliderType::ENEMY:
-        if (physA->ctype == ColliderType::PLAYER_DAMAGE) {
+        if (!isInvulnerable && !godMode && physA == player->pbody) {
+            lives -= 1;
+            StartInvulnerability();
+            Engine::GetInstance().render->StartCameraShake(0.5, 1);
 
-            // EMPUJÓN en dirección contraria al enemigo (siempre)
-            b2Vec2 playerPos = player->pbody->body->GetPosition();
-            b2Vec2 enemyPos = physB->body->GetPosition();
-            float pushDirection = (playerPos.x < enemyPos.x) ? -1.0f : 1.0f;
+            vignetteSize += 200;
+            if (vignetteSize > 900) {
+                vignetteSize = 900;
+                if (physA->ctype == ColliderType::PLAYER_DAMAGE) {
 
-            knockbackInitialVelocity = b2Vec2(pushDirection * 12.0f, -5.0f); // ajuste fino
-            player->pbody->body->SetLinearVelocity(knockbackInitialVelocity);
+                    // EMPUJï¿½N en direcciï¿½n contraria al enemigo (siempre)
+                    b2Vec2 playerPos = player->pbody->body->GetPosition();
+                    b2Vec2 enemyPos = physB->body->GetPosition();
+                    float pushDirection = (playerPos.x < enemyPos.x) ? -1.0f : 1.0f;
 
-            knockbackActive = true;
-            knockbackTimer.Start();
-            knockbackProgress = 0.0f;
+                    knockbackInitialVelocity = b2Vec2(pushDirection * 12.0f, -5.0f); // ajuste fino
+                    player->pbody->body->SetLinearVelocity(knockbackInitialVelocity);
 
+                    knockbackActive = true;
+                    knockbackTimer.Start();
+                    knockbackProgress = 0.0f;
+                    
             // Solo quitar vida si no es invulnerable
             if (!isInvulnerable && !godMode) {
                 lives -= 1;
@@ -273,7 +261,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
             if (jumpUnlocked) EnableJump(true);
             jumpCount = 0;
 
-            // También se comporta como una pared: cancela el dash si está activo
+            // Tambiï¿½n se comporta como una pared: cancela el dash si estï¿½ activo
             if (isDashing) {
                 CancelDash();
             }
@@ -282,6 +270,8 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     default:
         break;
+            }
+        }
     }
 }
 
@@ -332,7 +322,7 @@ void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 
 void PlayerMechanics::HandleInput() {
 
-    // Si no se está pulsando izquierda ni derecha, y no está saltando, cayendo, atacando o en wallslide...
+    // Si no se estï¿½ pulsando izquierda ni derecha, y no estï¿½ saltando, cayendo, atacando o en wallslide...
     bool noMovimiento = Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) != KEY_REPEAT &&
         Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) != KEY_REPEAT;
 
@@ -370,7 +360,7 @@ void PlayerMechanics::HandleJump() {
     // Inicio del salto o doble salto
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
         if (isOnGround || (doubleJumpUnlocked && jumpCount < maxJumpCount)) {
-            velocity.y = -jumpForce; // sin el 0.8f, para dar un impulso inicial más fuerte
+            velocity.y = -jumpForce; // sin el 0.8f, para dar un impulso inicial mï¿½s fuerte
             isJumping = true;
             isHoldingJump = true;
             jumpStartY = player->GetPosition().getY(); // guardamos altura de inicio
@@ -405,7 +395,7 @@ void PlayerMechanics::HandleJump() {
         isHoldingJump = false;
     }
 
-    // Caída rápida automática al soltar salto (estilo Hollow Knight)
+    // Caï¿½da rï¿½pida automï¿½tica al soltar salto (estilo Hollow Knight)
     if (isJumping && !isHoldingJump && !isWallSliding) {
         velocity.y += fallAccelerationFactor; // acelera el descenso
     }
@@ -432,7 +422,7 @@ void PlayerMechanics::HandleDash() {
 
         player->pbody->body->SetGravityScale(0.0f);
 
-        // Dirección fija del dash
+        // Direcciï¿½n fija del dash
         dashDirection = movementDirection;
 
         if (isWallSliding) {
@@ -586,6 +576,42 @@ void PlayerMechanics::HandleSound()
     }
 }
 
+void PlayerMechanics::HandleGodMode()
+{
+    if (godMode) {
+        b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
+        velocity.x = 0.0f;
+        velocity.y = 0.0f;
+
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
+            velocity.y = -8.0f;
+        }
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
+            velocity.y = 8.0f;
+        }
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+            velocity.x = -8.0f;
+        }
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+            velocity.x = 8.0f;
+        }
+
+        player->pbody->body->SetLinearVelocity(velocity);
+        player->SetState("idle"); 
+        return;
+    }
+}
+void PlayerMechanics::ReduceVignetteSize() {
+    if (lives < 3) {
+        vignetteSize -= 100;
+        if (vignetteSize < 300) {
+            vignetteSize = 300;
+        }
+    }
+    else {
+        vignetteSize = 300;
+    }
+}
 void PlayerMechanics::HandleLives()
 {
     if (lives <= 0) 

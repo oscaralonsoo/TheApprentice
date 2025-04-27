@@ -5,8 +5,6 @@
 #include "Box2D/Box2D.h"
 #include "PlayerAnimation.h"
 #include "Timer.h"
-
-// Añadido
 #include "PlayerMechanics.h"
 
 struct SDL_Texture;

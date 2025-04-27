@@ -42,6 +42,7 @@ public:
 		texW = parameters.attribute("w").as_int();
 		texH = parameters.attribute("h").as_int();
 	}
+	void VignetteChange(float dt);
 
 	void SetPosition(Vector2D pos);
 
@@ -70,6 +71,6 @@ private:
 	int abilitySpriteW = 0;
 	int abilitySpriteH = 0;
 	bool markedForDeletion = false;
-	Timer eatTimer;
-	bool waitingForEatToFinish = false;
+
+	SDL_Color normalVignetteColor = { 0, 0, 0, 255 };
 };

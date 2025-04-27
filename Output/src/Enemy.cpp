@@ -15,7 +15,6 @@
 
 Enemy::Enemy(EntityType type) : Entity(type)
 {
-
 }
 
 Enemy::~Enemy() {

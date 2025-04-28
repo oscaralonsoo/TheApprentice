@@ -44,7 +44,7 @@ bool Scene::Awake()
 bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
-	Engine::GetInstance().map->Load("Assets/Maps/", "Escenario 4.tmx");
+	Engine::GetInstance().map->Load("Assets/Maps/", "Manglar.tmx");
 
 	return true;
 }

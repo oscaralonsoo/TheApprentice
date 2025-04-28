@@ -102,6 +102,12 @@ void Bloodrusher::Idle() {
 
 void Bloodrusher::Attack(float dt)
 {
+    if (pathfinding->pathTiles.empty()) {
+
+        pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+        return;
+    }
+
     if (currentAnimation != &attackAnim) currentAnimation = &attackAnim;
 
     b2Vec2 currentVelocity = pbody->body->GetLinearVelocity();

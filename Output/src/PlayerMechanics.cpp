@@ -175,8 +175,6 @@ void PlayerMechanics::Update(float dt) {
 
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
 
-    printf("Velocidad vertical: %.2f\n", velocity.y);
-
     float verticalVelocity = player->pbody->body->GetLinearVelocity().y;
     if (verticalVelocity > fallStunThreshold) {
         willStun = true;

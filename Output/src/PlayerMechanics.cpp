@@ -15,7 +15,6 @@ void PlayerMechanics::Init(Player* player) {
 }
 
 void PlayerMechanics::Update(float dt) {
-    printf("%d\n", jumpUnlocked);
     if (jumpUnlocked)
     {
         jumpUnlocked = true;

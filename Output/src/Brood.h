@@ -31,7 +31,6 @@ public:
 
 private:
     bool isDead = false;
-
     Broodheart* parent = nullptr;
 
     float detectionRange = 100000.0f;

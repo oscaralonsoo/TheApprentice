@@ -41,10 +41,10 @@ bool Broodheart::Start() {
             break;
         }
     }
-    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), texW / 2, bodyType::STATIC);
+    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW / 2, bodyType::DYNAMIC);
 
     pbody->ctype = ColliderType::ENEMY;
-
+    if (!gravity) pbody->body->SetGravityScale(0);
     pbody->listener = this;
 
     pathfinding = new Pathfinding();
@@ -54,7 +54,7 @@ bool Broodheart::Start() {
     if (fixture) {
         b2Filter filter;
         filter.categoryBits = CATEGORY_ENEMY;
-        filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_PLAYER_DAMAGE | CATEGORY_ATTACK;
+        filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_ATTACK | CATEGORY_PLAYER_DAMAGE;
         fixture->SetFilterData(filter);
     }
 
@@ -71,13 +71,13 @@ bool Broodheart::Update(float dt) {
 }
 
 bool Broodheart::PostUpdate() {
+    if (isBroken) {
+        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+        return true; // O retornar false si no quieres que se ejecute más lógica
+    }
     if (shouldSpawn) {
         Spawn();
         shouldSpawn = false;
-    }
-    if (isBroken)
-    {
-        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
     }
     return Enemy::PostUpdate();
 }

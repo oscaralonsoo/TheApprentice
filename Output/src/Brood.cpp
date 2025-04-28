@@ -23,6 +23,7 @@ bool Brood::Awake() {
 
 bool Brood::Start() {
   
+    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), texW / 2, bodyType::STATIC);
 
     pugi::xml_document loadFile;
     pugi::xml_parse_result result = loadFile.load_file("config.xml");
@@ -40,13 +41,12 @@ bool Brood::Start() {
             break;
         }
     }
-    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), texW / 2, bodyType::STATIC);
 
     //Assign collider type
     pbody->ctype = ColliderType::ENEMY;
 
     pbody->listener = this;
-
+    if (!gravity) pbody->body->SetGravityScale(0);
     // Initialize pathfinding
     pathfinding = new Pathfinding();
     ResetPath();
@@ -55,7 +55,7 @@ bool Brood::Start() {
     if (fixture) {
         b2Filter filter;
         filter.categoryBits = CATEGORY_ENEMY;
-        filter.maskBits = CATEGORY_PLAYER_DAMAGE | CATEGORY_ATTACK;
+        filter.maskBits = CATEGORY_ATTACK | CATEGORY_PLAYER_DAMAGE;
         fixture->SetFilterData(filter);
     }
  
@@ -74,6 +74,7 @@ bool Brood::Update(float dt) {
         Chase(dt);
         break;
     case BroodState::DEAD:
+        isDead = true;
         break;
     }
     return Enemy::Update(dt);
@@ -83,7 +84,7 @@ bool Brood::PostUpdate(float dt) {
     {
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
     }
-    return Enemy::PostUpdate();
+    return Enemy::PostUpdate(); 
 }
 bool Brood::CleanUp() {
     return Enemy::CleanUp();
@@ -97,7 +98,7 @@ void Brood::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (parent) {
             parent->OnBroodDeath(this);
         }
-        isDead = true;
+        currentState = BroodState::DEAD; 
         break;
     }
 }

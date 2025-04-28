@@ -576,13 +576,14 @@ bool Map::Load(std::string path, std::string fileName)
                         enemyNode.append_attribute("gravity") = false;
                     enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BROODHEART);
                     }
-                    else if (enemyName == "Brood")
+                    else if (enemyName == "Brood") {
+                        enemyNode.append_attribute("gravity") = false;
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BROOD);
+                    }  
                     else if (enemyName == "Noctilume") {
                         enemyNode.append_attribute("gravity") = false;
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::NOCTILUME);
                     }
-
                     if (enemy != nullptr)
                     {
                         enemy->SetParameters(enemyNode);

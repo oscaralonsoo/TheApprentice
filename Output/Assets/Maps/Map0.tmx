@@ -58271,6 +58271,7 @@
   <object id="1320" name="Creebler" x="4800" y="2560" width="64" height="64"/>
   <object id="1321" name="Creebler" x="5952" y="2048" width="64" height="64"/>
   <object id="1323" name="Scurver" x="5888" y="576" width="64" height="64"/>
+  <object id="1324" name="Broodheart" x="1216" y="960" width="64" height="64"/>
   <object id="1324" name="Bloodrusher" x="1856" y="832" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="62" name="PushableBoxes" visible="0"/>
@@ -58279,9 +58280,9 @@
   <object id="909" name="HiddenZone" x="6816.5" y="2496.38" width="1675" height="689.06"/>
   <object id="1289" name="HiddenZone" x="3712" y="2648" width="2268" height="508"/>
  </objectgroup>
- <objectgroup id="65" name="DownCamera" visible="0">
-  <object id="1136" x="2752" y="256" width="960" height="960"/>
-  <object id="1282" x="3776" y="2176" width="704" height="576"/>
+ <objectgroup id="65" name="DownCamera">
+  <object id="1136" x="2752" y="320" width="960" height="960"/>
+  <object id="1282" x="3776" y="2112" width="704" height="576"/>
  </objectgroup>
  <objectgroup id="66" name="Abilities">
   <object id="1283" name="Jump" x="7552" y="2816" width="512" height="128"/>

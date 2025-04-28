@@ -43,7 +43,6 @@ bool Hypnoviper::Start() {
         }
     }
 
-    // En Hypnoviper::Start(), después de crear el pbody
     b2Fixture* fixture = pbody->body->GetFixtureList();
     if (fixture) {
         b2Filter filter;
@@ -51,7 +50,6 @@ bool Hypnoviper::Start() {
         filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_PLAYER | CATEGORY_ATTACK;
         fixture->SetFilterData(filter);
     }
-
 
     currentAnimation = &sleepAnim;
 

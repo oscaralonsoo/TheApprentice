@@ -150,7 +150,6 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 	mechanics.OnCollisionEnd(physA, physB);
 	switch (physB->ctype) {
 	case ColliderType::ABILITY_ZONE:
-		printf("SALEEEEEEEE");
 		break;
 	default:
 		mechanics.OnCollision(physA, physB);

@@ -35,12 +35,8 @@ bool Noctilume::Start()
         }
     }
 
-    pbody = Engine::GetInstance().physics->CreateCircleSensor(
-        static_cast<int>(position.getX() + texH / 2),
-        static_cast<int>(position.getY() + texH / 2),
-        texH / 2,
-        bodyType::DYNAMIC
-    );
+    pbody = Engine::GetInstance().physics->CreateCircleSensor( static_cast<int>(position.getX() + texH / 2),
+        static_cast<int>(position.getY() + texH / 2),texH / 2,bodyType::DYNAMIC);
 
     pbody->ctype = ColliderType::ENEMY;
     pbody->listener = this;
@@ -49,6 +45,14 @@ bool Noctilume::Start()
 
     pathfinding = new Pathfinding();
     ResetPath();
+
+    b2Fixture* fixture = pbody->body->GetFixtureList();
+    if (fixture) {
+        b2Filter filter;
+        filter.categoryBits = CATEGORY_ENEMY;
+        filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_PLAYER_DAMAGE | CATEGORY_ATTACK;
+        fixture->SetFilterData(filter);
+    }
 
     return true;
 }

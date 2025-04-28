@@ -72,5 +72,10 @@ private:
 	int abilitySpriteH = 0;
 	bool markedForDeletion = false;
 
+	int minVignetteSize = 300;
+	int maxVignetteSize = 900;
+	float vibrateAmplitude = 400.0f;
+	float vibrateSpeed = 30.0f;
+	int newVignetteSize = 0;
 	SDL_Color normalVignetteColor = { 0, 0, 0, 255 };
 };

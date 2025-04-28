@@ -91,6 +91,7 @@ void LifePlant::OnCollision(PhysBody* physA, PhysBody* physB) {
         {
             state = LifePlantStates::CONSUMED;
             Engine::GetInstance().scene->GetPlayer()->GetMechanics()->lives++;
+            Engine::GetInstance().scene->GetPlayer()->GetMechanics()->ChangeVignetteSize();
         }
         break;
     }
@@ -98,3 +99,4 @@ void LifePlant::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 void LifePlant::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 }
+

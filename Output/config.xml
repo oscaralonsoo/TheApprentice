@@ -296,7 +296,7 @@
 						<frame x="320" y="0" w="32" h="32" />
 					</walking>
 				</enemy>
-				<enemy type="Broodheart" w="64" h="64" texture="Assets/Textures/enemy/broodheart.png">
+				<enemy type="Broodheart" w="64" h="64" texture="Assets/Enemies/broodheart.png">
 					<idle loop="true" speed="0.1">
 						<frame x="0" y="0" w="64" h="64" />
 					</idle>
@@ -304,7 +304,7 @@
 						<frame x="0" y="0" w="64" h="64" />
 					</walking>
 				</enemy>
-				<enemy type="Brood" w="32" h="32" texture="Assets/Textures/enemy/brood.png">
+				<enemy type="Brood" w="32" h="32" texture="Assets/Enemies/brood.png">
 					<idle loop="true" speed="0.1">
 						<frame x="0" y="0" w="32" h="32" />
 					</idle>
@@ -383,7 +383,8 @@
 			</abilities>
 		</animations>
 		<save_data isSaved="1">
-			<player x="1950" y="650" w="44" h="54" />
+			<player x="1950" y="714" w="44" h="54" lives="3" />
+			<abilities jump="false" doublejump="false" dash="false" />
 			<scene actualScene="0" />
 			<enemies />
 		</save_data>

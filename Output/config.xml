@@ -370,9 +370,9 @@
 				</dust>
 			</particles>
 			<npcs>
-				<castor w="234" h="198" texture="Assets/NPC/castor.png">
-					<idle loop="true" speed="0.13">
-						<frame x="0" y="0" w="234" h="198" />
+				<castor w="336" h="164" texture="Assets/NPC/castor.png">
+					<idle loop="false" speed="0">
+						<frame x="0" y="0" w="336" h="164" />
 					</idle>
 				</castor>
 			</npcs>

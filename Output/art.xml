@@ -2,6 +2,13 @@
 <art>
 	<textures>
 		<UI>
+			<help>
+				<jump path="Assets/Textures/UI/Help" name="jump.png"/>
+				<listen path="Assets/Textures/UI/Help" name="listen.png"/>
+				<attack path="Assets/Textures/UI/Help" name="attack.png"/>
+				<left path="Assets/Textures/UI/Help" name="left.png"/>
+				<right path="Assets/Textures/UI/Help" name="right.png"/>
+			</help>
 			<menu>
 				<backgrounds>
 					<intro path="Assets/Textures/UI/Backgrounds/" name="intro.png"/>
@@ -38,12 +45,9 @@
 				</lifes>
 			</game>
 		</UI>
-		<entities>
-		
-		</entities>
 	</textures>
 	<animations>
-		<game_intro path=" " >
+		<game_intro path=" " loop="false">
 			<frame x="0" y="0" w="134" h="134" />
 			<frame x="0" y="0" w="134" h="134" />
 			<frame x="0" y="0" w="134" h="134" />
@@ -51,12 +55,4 @@
 			<frame x="0" y="0" w="134" h="134" />
 		</game_intro>
 	</animations>
-	<sounds>
-		<music>
-		
-		</music>
-		<fx>
-		
-		</fx>
-	</sounds>
 </art>

@@ -18,6 +18,9 @@ public:
     void HandleJumpInput();
     bool IsJumping() const { return isJumping; }
 
+    bool IsJumpUnlocked() const { return jumpUnlocked; }
+    bool IsDoubleJumpUnlocked() const { return doubleJumpUnlocked; }
+
 private:
     Player* player = nullptr;
 

@@ -13,8 +13,10 @@ public:
     void Enable(bool enable);
     bool IsDashing() const;
 
-    void CancelDash();             // <-- ahora es público para llamarlo desde fuera
-    void OnWallCollision();         // <-- nuevo método para detectar colisión con pared
+    void CancelDash();            
+    void OnWallCollision();  
+
+    bool IsDashUnlocked() const { return dashUnlocked; }
 
 private:
     void StartDash();

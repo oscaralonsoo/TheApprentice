@@ -27,11 +27,11 @@ public:
     void Chase(float dt);
     void UpdateChaseState();
     // Setters
-    void SetParent(Broodheart* p) { parent = p; }
+    void SetParent(Broodheart* p) { broodHeart = p; }
 
 private:
     bool isDead = false;
-    Broodheart* parent = nullptr;
+    Broodheart* broodHeart = nullptr;
 
     float detectionRange = 100000.0f;
     float timePassed = 0.0f;

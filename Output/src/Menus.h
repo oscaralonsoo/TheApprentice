@@ -144,6 +144,8 @@ private:
 
     void DrawPlayerLives();
 
+    bool ContinueLoadingScreen();
+
     SDL_Texture* lifeTexture = nullptr;
     int lifeW = 32;
     int lifeH = 32;

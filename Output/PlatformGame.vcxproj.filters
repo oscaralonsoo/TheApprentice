@@ -62,9 +62,6 @@
     <ClCompile Include="src\GuiManager.cpp">
       <Filter>Source Files\Input</Filter>
     </ClCompile>
-    <ClCompile Include="src\Menus.cpp">
-      <Filter>Source Files\Scenes</Filter>
-    </ClCompile>
     <ClCompile Include="src\Map.cpp">
       <Filter>Source Files\Map</Filter>
     </ClCompile>
@@ -118,6 +115,9 @@
     <ClCompile Include="src\NPC.cpp" />
     <ClCompile Include="src\LifePlant.cpp">
       <Filter>Source Files\Entities\Interactions with player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Menus.cpp">
+      <Filter>Source Files\Menus</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -190,9 +190,6 @@
     <ClInclude Include="src\GuiManager.h">
       <Filter>Source Files\Input</Filter>
     </ClInclude>
-    <ClInclude Include="src\Menus.h">
-      <Filter>Source Files\Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="src\Map.h">
       <Filter>Source Files\Map</Filter>
     </ClInclude>
@@ -251,6 +248,9 @@
     <ClInclude Include="src\NPC.h" />
     <ClInclude Include="src\LifePlant.h">
       <Filter>Source Files\Entities\Interactions with player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Menus.h">
+      <Filter>Source Files\Menus</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -342,6 +342,9 @@
     </Filter>
     <Filter Include="Source Files\Entities\Enemies\Brood">
       <UniqueIdentifier>{0148d086-43f5-4449-861f-67cdeb9b632c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Menus">
+      <UniqueIdentifier>{4ca35a9d-6b06-4d54-953d-8ab8fec3acdc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

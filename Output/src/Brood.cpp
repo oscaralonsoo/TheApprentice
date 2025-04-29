@@ -23,7 +23,7 @@ bool Brood::Awake() {
 
 bool Brood::Start() {
   
-    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), texW / 2, bodyType::STATIC);
+    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), texW / 2, bodyType::DYNAMIC);
 
     pugi::xml_document loadFile;
     pugi::xml_parse_result result = loadFile.load_file("config.xml");
@@ -74,16 +74,12 @@ bool Brood::Update(float dt) {
         Chase(dt);
         break;
     case BroodState::DEAD:
-        isDead = true;
         break;
     }
     return Enemy::Update(dt);
 }
 bool Brood::PostUpdate(float dt) {
-    if (isDead)
-    {
-        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
-    }
+
     return Enemy::PostUpdate(); 
 }
 bool Brood::CleanUp() {
@@ -95,14 +91,13 @@ void Brood::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLAYER:
         break;
     case ColliderType::ATTACK:
-        if (parent) {
-            parent->OnBroodDeath(this);
+        if (broodHeart) {
+            broodHeart->OnBroodDeath(this);
         }
         currentState = BroodState::DEAD; 
         break;
     }
 }
-
 void Brood::Chase(float dt) {
     timePassed += dt;
 

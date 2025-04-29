@@ -203,7 +203,7 @@ void Scene::ChangeScene(int nextScene)
 		if (!path.empty() && !name.empty()) {
 			Engine::GetInstance().map->Load(path, name); // Load New Map
 
-			if (!isLoad)
+			if (!isLoading)
 			{
 				player->pbody->body->SetLinearVelocity(b2Vec2(0, 0)); // Stop All Movement
 				player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, newPosition.y / PIXELS_PER_METER), 0); // Set New Player Position
@@ -247,9 +247,9 @@ void Scene::SaveGameXML() {
 	Engine::GetInstance().menus->StartTransition(false, Engine::GetInstance().menus->currentState); // Final Transition
 }
 void Scene::LoadGameXML() {
-	if (isLoad || transitioning) return;
+	if (isLoading || transitioning) return;
 
-	isLoad = true;
+	isLoading = true;
 	pugi::xml_document config;
 	pugi::xml_parse_result result = config.load_file("config.xml");
 	pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
@@ -283,7 +283,7 @@ void Scene::LoadGameXML() {
 			}
 		}
 	}
-	isLoad = false;
+
 }
 void Scene::Vignette(int size, float strength, SDL_Color color)
 {

@@ -145,4 +145,5 @@ void Broodheart::Spawn() {
 
 void Broodheart::OnBroodDeath(Brood* brood) {
     broodsAlive.remove(brood);
+    Engine::GetInstance().entityManager.get()->DestroyEntity(brood);
 }

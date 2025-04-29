@@ -10,8 +10,6 @@
 #include <SDL2/SDL_mixer.h>
 #include "Textures.h"
 
-
-
 Menus::Menus() : currentState(MenusState::INTRO), transitionAlpha(0.0f), inTransition(false), fadingIn(false), nextState(MenusState::NONE),
 fastTransition(false), menuBackground(nullptr), pauseBackground(nullptr) {}
 
@@ -25,7 +23,6 @@ bool Menus::Start() {
     LoadConfig();
     return true;
 }
-
 void Menus::LoadConfig() {
     pugi::xml_document config;
     if (config.load_file(CONFIG_FILE.c_str())) {
@@ -58,14 +55,12 @@ void Menus::LoadBackgroundTextures(pugi::xml_document& doc) {
         backgroundTextures[name] = Engine::GetInstance().render->LoadTexture(path.c_str()); 
     }
 }
-
 void Menus::LoadButtonTextures(pugi::xml_document& doc) {
     for (pugi::xml_node btn = doc.child("art").child("textures").child("UI").child("menu").child("buttons").first_child(); btn; btn = btn.next_sibling()) {
         std::string path = std::string(btn.attribute("path").value()) + btn.attribute("name").value();
         buttonTextures[btn.attribute("name").value()] = Engine::GetInstance().render->LoadTexture(path.c_str()); 
     }
 }
-
 void Menus::LoadCheckboxTextures(pugi::xml_document& doc) {
     pugi::xml_node checkboxNode = doc.child("art").child("textures").child("UI").child("menu").child("checkbox");
     if (checkboxNode) {
@@ -73,7 +68,6 @@ void Menus::LoadCheckboxTextures(pugi::xml_document& doc) {
         LoadCheckboxTexture(checkboxNode.child("fill"), fillTexture);
     }
 }
-
 void Menus::LoadCheckboxTexture(pugi::xml_node node, SDL_Texture*& texture) {
     if (node) {
         std::string path = std::string(node.attribute("path").value()) + node.attribute("name").value();
@@ -88,7 +82,6 @@ bool Menus::Update(float dt) {
     HandlePause();
     return true;
 }
-
 void Menus::HandlePause() {
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN && !inTransition && !inConfig) {
         if (currentState == MenusState::GAME) {
@@ -96,20 +89,18 @@ void Menus::HandlePause() {
         }
     }
 }
-
 bool Menus::PostUpdate() {
     SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
     DrawBackground();
     DrawButtons();
+    ContinueLoadingScreen();
     if (currentState == MenusState::ABILITIES) DrawAbilities();
     if (currentState == MenusState::GAME) DrawPlayerLives();
     if (inTransition) ApplyTransitionEffect();
     return !isExit;
 }
-
 void Menus::DrawBackground() {
     SDL_Rect cameraRect = { 0, 0, width, height };
-
     std::string bgKey = GetBackgroundKey();
     auto it = backgroundTextures.find(bgKey);
     if (it != backgroundTextures.end() && it->second) {
@@ -137,7 +128,6 @@ bool Menus::CleanUp() {
     for (auto& pair : buttonTextures) { SDL_DestroyTexture(pair.second); }
     return true;
 }
-
 void Menus::CheckCurrentState(float dt) {
     if (inTransition) return;
     Engine::GetInstance().guiManager->controlButton->ButtonNavigation();
@@ -152,7 +142,6 @@ void Menus::CheckCurrentState(float dt) {
     case MenusState::EXIT: isExit = true; break;
     }
 }
-
 void Menus::Intro(float dt) {
     introTimer += dt;
     logoAlpha = std::min(logoAlpha + dt * 0.5f, 1.0f);
@@ -165,7 +154,8 @@ void Menus::MainMenu(float dt) {
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
         switch (selectedButton) {
         case 0: NewGame(); break;
-        case 1: if (isSaved > 0 && !inTransition) {StartTransition(true, MenusState::GAME); Engine::GetInstance().scene.get()->LoadGameXML(); } break;
+        case 1: if (isSaved != 0) { Engine::GetInstance().scene.get()->LoadGameXML(); StartTransition(false, MenusState::GAME); 
+                                    Engine::GetInstance().scene->isLoading = true; } break;
         case 2: inConfig = true; StartTransition(true, MenusState::SETTINGS); break;
         case 3: inCredits = true; StartTransition(true, MenusState::CREDITS); break;
         case 4: currentState = MenusState::EXIT; break;
@@ -197,7 +187,6 @@ void Menus::NewGame() {
 
     StartTransition(false, MenusState::GAME);
 }
-
 void Menus::Pause(float dt) {
     if (inTransition) return;
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
@@ -208,7 +197,6 @@ void Menus::Pause(float dt) {
         }
     }
 }
-
 void Menus::Settings() {
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
         nextState = (previousState == MenusState::PAUSE) ? MenusState::PAUSE : previousState;
@@ -220,19 +208,16 @@ void Menus::Settings() {
     }
     HandleVolumeSliders();
 }
-
 void Menus::HandleSettingsSelection() {
     switch (selectedButton) {
     case 0: /*ToggleFullScreen(); */break;
     case 1: ToggleVSync(); break;
     }
 }
-
 void Menus::ToggleFullScreen() {
     isFullScreen = !isFullScreen;
     Engine::GetInstance().window->SetFullScreen(isFullScreen);
 }
-
 void Menus::ToggleVSync() {
     isVSync = !isVSync;
     Engine::GetInstance().render->SetVSync(isVSync);
@@ -266,7 +251,6 @@ void Menus::UpdateVolume(int sliderX, int minX, int maxX) {
     float volume = (float)(sliderX - minX) / (maxX - minX);
     volume = (volume < 0.0f) ? 0.0f : (volume > 1.0f) ? 1.0f : volume;
     int sdlVolume = static_cast<int>(volume * MIX_MAX_VOLUME);
-
     if (selectedButton == 2) {
         Mix_VolumeMusic(sdlVolume);
     }
@@ -278,7 +262,6 @@ void Menus::UpdateVolume(int sliderX, int minX, int maxX) {
         Mix_VolumeMusic(sdlVolume);
     }
 }
-
 void Menus::Credits() {
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
         nextState = (previousState == MenusState::PAUSE) ? MenusState::PAUSE : previousState;
@@ -292,7 +275,6 @@ void Menus::StartTransition(bool fast, MenusState newState) {
     fadingIn = false;
     inTransition = true;
     nextState = newState;
-
     previousSelectedButton[currentState] = selectedButton;
 }
 void Menus::Transition(float dt) {
@@ -306,8 +288,12 @@ void Menus::Transition(float dt) {
             if (nextState != MenusState::NONE) {
                 currentState = nextState;
                 nextState = MenusState::NONE;
-                CreateButtons();
-
+                if (currentState == MenusState::GAME) {
+                    buttons.clear();
+                }
+                else {
+                    CreateButtons();
+                }
                 if (currentState == MenusState::SETTINGS) {
                     selectedButton = 0; 
                 }
@@ -324,6 +310,7 @@ void Menus::Transition(float dt) {
             inTransition = false;
             fastTransition = false;
             Engine::GetInstance().scene->saving = false;
+            Engine::GetInstance().scene->isLoading = false;
         }
     }
 }
@@ -389,6 +376,7 @@ void Menus::DrawAbilities() {
     }
 }
 void Menus::DrawButtons() {
+    if (currentState == MenusState::GAME) return;
     for (size_t i = 0; i < buttons.size(); ++i) {
         ButtonInfo& button = buttons[i];
         if (button.isCheckBox) {
@@ -445,14 +433,14 @@ void Menus::DrawSlider(int minX, int y, int& sliderX, bool isSelected, const std
     sliderX = std::max(minX + squareWidth / 2, std::min(sliderX, minX + 420 - squareWidth / 2));
 
     // Calcula la posición del cuadrado del slider para centrarlo
-    int squareX = sliderX - (squareWidth / 2); // Centrar el cuadrado en relación a sliderX
-    int squareY = y - (squareHeight - 19) / 2; // Centrar verticalmente en relación al slider
+    int squareX = sliderX - (squareWidth / 2);
+    int squareY = y - (squareHeight - 19) / 2; 
     Engine::GetInstance().render->DrawRectangle({ squareX, squareY, squareWidth, squareHeight },
         squareColor, squareColor, squareColor, 255, true, false);
 
     // Calcular la posición del texto a la izquierda del slider
     int textWidth = Engine::GetInstance().render->GetTextWidth(label, 45);
-    int textX = minX - textWidth - 50; // Desplazamiento de 10 píxeles a la izquierda del slider
+    int textX = minX - textWidth - 50; 
     Engine::GetInstance().render->DrawText(label.c_str(), textX, y - 20, WHITE, 45);
 }
 void Menus::DrawPlayerLives() {
@@ -475,5 +463,21 @@ void Menus::DrawPlayerLives() {
         int y = marginTop;
         SDL_Rect section = { 0, 0, lifeW, lifeH };
         Engine::GetInstance().render->DrawTexture(lifeTexture, x, y, &section, 0.0f);
+    }
+}
+bool Menus::ContinueLoadingScreen()
+{
+    if (Engine::GetInstance().scene->isLoading) {
+        // Aplica fade out progresivo a negro
+        if (transitionAlpha < 1.0f) {
+            transitionAlpha += 0.01f; 
+        }
+        else {
+            transitionAlpha = 1.0f;
+        }
+        SDL_SetRenderDrawBlendMode(Engine::GetInstance().render->renderer, SDL_BLENDMODE_BLEND);
+        SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, 0, 0, 0, static_cast<Uint8>(transitionAlpha * 255));
+        SDL_RenderFillRect(Engine::GetInstance().render->renderer, nullptr);
+        return !isExit;
     }
 }

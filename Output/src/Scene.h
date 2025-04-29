@@ -54,7 +54,7 @@ public:
 
 	Player* GetPlayer() const { return player; }
 public:
-
+	bool isLoading = false;
 	int previousVignetteSize;
 	Vector2D newPosition;
 	bool transitioning = false;
@@ -79,7 +79,7 @@ private:
 	SDL_Texture* img;
 	//L03: TODO 3b: Declare a Player attribute
 	Player* player;
-	bool isLoad = false;
+
 
 	//transition 
 	bool fadingIn = false;

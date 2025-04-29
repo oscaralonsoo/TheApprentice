@@ -66,8 +66,8 @@ public:
     void ToggleFullScreen();
     void ToggleVSync();
     void HandleVolumeSliders();
-    void AdjustVolume(int& sliderX);
-    void UpdateVolume(int sliderX);
+    void AdjustVolume(int& sliderX, int minX, int maxX);
+    void UpdateVolume(int sliderX, int minX, int maxX);
     void Credits();
     void CreateButton(const std::string& name, int startX, int startY, int buttonWidth, int buttonHeight, int index);
     void DrawButtons();

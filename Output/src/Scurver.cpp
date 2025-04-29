@@ -112,8 +112,8 @@ bool Scurver::CleanUp() {
 
 void Scurver::Attack(float dt) {
     if (pathfinding->pathTiles.empty()) {
-        // No hay camino, así que no hace nada o entra en un estado diferente
-        pbody->body->SetLinearVelocity(b2Vec2(0, 0)); // detenerse o comportamiento alternativo
+       
+        pbody->body->SetLinearVelocity(b2Vec2(0, 0));
         return;
     }
 

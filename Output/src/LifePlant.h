@@ -29,6 +29,8 @@ public:
 	void OnCollision(PhysBody* physA, PhysBody* physB);
 	void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
+	void ReduceVignetteSize();
+
 private:
 	PhysBody* pbody;
 
@@ -38,6 +40,6 @@ private:
 	Animation* currentAnimation = nullptr;
 	Animation availableAnim;
 	Animation consumedAnim;
-
+	PlayerMechanics mechanics;
 	LifePlantStates state = LifePlantStates::AVAILABLE;
 };

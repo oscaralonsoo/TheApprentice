@@ -22,6 +22,8 @@ bool Brood::Awake() {
 }
 
 bool Brood::Start() {
+  
+
     pugi::xml_document loadFile;
     pugi::xml_parse_result result = loadFile.load_file("config.xml");
     std::string type = "Brood";
@@ -38,39 +40,35 @@ bool Brood::Start() {
             break;
         }
     }
+    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), texW / 2, bodyType::STATIC);
 
-    // En Brood::Start(), despu�s de crear el pbody
-    b2Fixture* fixture = pbody->body->GetFixtureList();
-    if (fixture) {
-        b2Filter filter;
-        filter.categoryBits = CATEGORY_ENEMY;
-        filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_PLAYER_DAMAGE | CATEGORY_ATTACK;
-        fixture->SetFilterData(filter);
-    }
-    
-    pbody = Engine::GetInstance().physics.get()->CreateCircleSensor((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, bodyType::DYNAMIC);
-
+    //Assign collider type
     pbody->ctype = ColliderType::ENEMY;
 
     pbody->listener = this;
 
-    if (!gravity) pbody->body->SetGravityScale(0);
-
+    // Initialize pathfinding
     pathfinding = new Pathfinding();
     ResetPath();
+
+    b2Fixture* fixture = pbody->body->GetFixtureList();
+    if (fixture) {
+        b2Filter filter;
+        filter.categoryBits = CATEGORY_ENEMY;
+        filter.maskBits = CATEGORY_PLAYER_DAMAGE | CATEGORY_ATTACK;
+        fixture->SetFilterData(filter);
+    }
+ 
     return true;
 }
 
 bool Brood::Update(float dt) {
-    if (pathfinding->HasFoundPlayer()) {
-        if (currentState == BroodState::IDLE) {
-            currentState = BroodState::CHASING;
-        }
-    }
+    
+    UpdateChaseState();
+
     switch (currentState)
     {
     case BroodState::IDLE:
-
         break;
     case BroodState::CHASING:
         Chase(dt);
@@ -79,6 +77,13 @@ bool Brood::Update(float dt) {
         break;
     }
     return Enemy::Update(dt);
+}
+bool Brood::PostUpdate(float dt) {
+    if (isDead)
+    {
+        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+    }
+    return Enemy::PostUpdate();
 }
 bool Brood::CleanUp() {
     return Enemy::CleanUp();
@@ -92,7 +97,7 @@ void Brood::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (parent) {
             parent->OnBroodDeath(this);
         }
-        Engine::GetInstance().entityManager->QueueEntityForDestruction(this);
+        isDead = true;
         break;
     }
 }
@@ -146,4 +151,17 @@ void Brood::Chase(float dt) {
         );
     }
 }
+void Brood::UpdateChaseState()
+{
+    Vector2D playerPos = Engine::GetInstance().scene->GetPlayerPosition();
+    Vector2D broodPos = (pbody != nullptr)
+        ? Vector2D{ static_cast<float>(METERS_TO_PIXELS(pbody->body->GetPosition().x)), static_cast<float>(METERS_TO_PIXELS(pbody->body->GetPosition().y)) }
+    : position;
+    distanceToPlayer = sqrt(pow(playerPos.x - broodPos.x, 2) + pow(playerPos.y - broodPos.y, 2));
+
+    if (distanceToPlayer < detectionRange || pathfinding->HasFoundPlayer()) {
+        currentState = BroodState::CHASING;
+    }
+}
+
 

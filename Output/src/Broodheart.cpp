@@ -23,6 +23,7 @@ bool Broodheart::Awake() {
 }
 
 bool Broodheart::Start() {
+
     spawnInterval = 4500.0f + static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2500.0f;
 
     pugi::xml_document configDoc;
@@ -40,8 +41,15 @@ bool Broodheart::Start() {
             break;
         }
     }
+    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), texW / 2, bodyType::STATIC);
 
-    // En Broodheart::Start(), después de crear el pbody
+    pbody->ctype = ColliderType::ENEMY;
+
+    pbody->listener = this;
+
+    pathfinding = new Pathfinding();
+    ResetPath();
+
     b2Fixture* fixture = pbody->body->GetFixtureList();
     if (fixture) {
         b2Filter filter;
@@ -50,8 +58,7 @@ bool Broodheart::Start() {
         fixture->SetFilterData(filter);
     }
 
-
-    return Enemy::Start();
+    return true;
 }
 
 bool Broodheart::Update(float dt) {
@@ -68,6 +75,10 @@ bool Broodheart::PostUpdate() {
         Spawn();
         shouldSpawn = false;
     }
+    if (isBroken)
+    {
+        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+    }
     return Enemy::PostUpdate();
 }
 
@@ -83,11 +94,10 @@ void Broodheart::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLAYER:
     case ColliderType::ATTACK:
-       
+        isBroken = true;
         break;
     }
 }
-
 void Broodheart::Spawn() {
     if (broodsAlive.size() >= MAX_BROODS) return;
 
@@ -135,5 +145,4 @@ void Broodheart::Spawn() {
 
 void Broodheart::OnBroodDeath(Brood* brood) {
     broodsAlive.remove(brood);
-    spawnCooldown = 0.0f;
 }

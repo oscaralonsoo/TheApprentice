@@ -16,7 +16,13 @@
 #include "Menus.h"
 #include "PlayerMechanics.h"
 
-
+template <typename T>
+T Clamp(T value, T min, T max)
+{
+	if (value < min) return min;
+	if (value > max) return max;
+	return value;
+}
 Scene::Scene() : Module()
 {
 	name = "scene";
@@ -37,7 +43,7 @@ bool Scene::Awake()
 	//L04: TODO 3b: Instantiate the player using the entity manager
 	player = (Player*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PLAYER);
 	player->SetParameters(configParameters.child("animations").child("player"));
-
+	mechanics = player->GetMechanics();
 	return ret;
 }
 
@@ -46,7 +52,6 @@ bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
 	Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx");
-
 	return true;
 }
 
@@ -89,7 +94,8 @@ bool Scene::Update(float dt)
 		SaveGameXML();
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 		LoadGameXML();
-
+	// Lï¿½gica para el efecto de latidos
+	VignetteHeartBeat(dt);
 	return true;
 }
 
@@ -213,31 +219,35 @@ Vector2D Scene::GetPlayerPosition()
 	return player->GetPosition();
 }
 
-void Scene::SaveGameXML()
-{
+void Scene::SaveGameXML() {
 	saving = true;
 	Engine::GetInstance().menus->isSaved = 1;
-	//Load xml
+
+	// Load xml
 	pugi::xml_document config;
 	pugi::xml_parse_result result = config.load_file("config.xml");
 	pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
 
-	Vector2D playerPos = GetPlayerPosition();	//Save Player Pos
+	Vector2D playerPos = GetPlayerPosition(); // Save Player Pos
 	pugi::xml_node playerNode = saveData.child("player");
 		playerNode.attribute("x") = playerPos.x;
 		playerNode.attribute("y") = playerPos.y;
 		playerNode.attribute("lives") = player->GetMechanics()->GetHealthSystem()->GetLives();
 
-	pugi::xml_node sceneNode = saveData.child("scene"); //Save Actual Scene
-		sceneNode.attribute("actualScene") = nextScene;
-		saveData.attribute("isSaved") = Engine::GetInstance().menus->isSaved;
-	config.save_file("config.xml");	//Save Changes
+	pugi::xml_node abilitiesNode = saveData.child("abilities");
+	abilitiesNode.attribute("jump") = mechanics->jumpUnlocked;
+	abilitiesNode.attribute("doublejump") = mechanics->doubleJumpUnlocked;
+	abilitiesNode.attribute("dash") = mechanics->dashUnlocked;
 
-	Engine::GetInstance().menus->StartTransition(false, Engine::GetInstance().menus->currentState);	// Final Transition
+	pugi::xml_node sceneNode = saveData.child("scene"); // Save Actual Scene
+	sceneNode.attribute("actualScene") = nextScene;
+	saveData.attribute("isSaved") = Engine::GetInstance().menus->isSaved;
+	config.save_file("config.xml"); // Save Changes
+
+	Engine::GetInstance().menus->StartTransition(false, Engine::GetInstance().menus->currentState); // Final Transition
 }
-void Scene::LoadGameXML()
-{
-	if (isLoad || transitioning) return; // Evitar que se llame si ya está en proceso o en transición
+void Scene::LoadGameXML() {
+	if (isLoad || transitioning) return;
 
     isLoad = true;
 
@@ -254,18 +264,29 @@ void Scene::LoadGameXML()
 			player->GetMechanics()->GetHealthSystem()->SetLives(playerNode.attribute("lives").as_int());
             newPosition = Vector2D(playerX, playerY - 100); 
         }
-
+		pugi::xml_node abilitiesNode = saveData.child("abilities"); // Abilities Load
+		if (abilitiesNode) {
+			if (abilitiesNode.attribute("jump").as_bool() == true) {
+				mechanics->EnableJump(true);
+			}
+			if (abilitiesNode.attribute("doublejump").as_bool() == true) {
+				mechanics->EnableDoubleJump(true);
+			}
+			if (abilitiesNode.attribute("dash").as_bool() == true) {
+				mechanics->EnableDash(true);
+			}
+		}
         pugi::xml_node sceneNode = saveData.child("scene");
 		if (sceneNode) {
 			int savedScene = sceneNode.attribute("actualScene").as_int();
 			nextScene = savedScene;
-			if (!pendingLoadWithTransition) { 
+			if (!pendingLoadWithTransition) {
 				pendingLoadWithTransition = true;
 				StartTransition(savedScene);
 			}
 		}
-    }
-    isLoad = false;
+	}
+	isLoad = false;
 }
 void Scene::Vignette(int size, float strength, SDL_Color color)
 {
@@ -275,6 +296,10 @@ void Scene::Vignette(int size, float strength, SDL_Color color)
 	SDL_GetRendererOutputSize(renderer, &width, &height);
 
 	vignetteSize = size;
+
+	if (heartbeatProgress > 0.0f) {
+		vignetteSize += static_cast<int>(heartbeatProgress * 250); 
+	}
 
 	for (int i = 0; i < vignetteSize; i++)
 	{
@@ -295,3 +320,23 @@ void Scene::Vignette(int size, float strength, SDL_Color color)
 		SDL_RenderFillRect(renderer, &right);
 	}
 }
+void Scene::VignetteHeartBeat(float dt)
+{
+	if (mechanics->lives != 1)
+	{
+		heartbeatProgress = 0.0f;
+		return;
+	}
+	heartbeatTimer += dt;
+	if (heartbeatTimer >= heartbeatInterval)
+	{
+		heartbeatTimer = 0.0f;
+		heartbeatGrowing = true;
+	}
+	float speed = heartbeatGrowing ? 0.01f : -0.005f;
+	heartbeatProgress = Clamp(heartbeatProgress + dt * speed, 0.0f, 1.0f);
+	if (heartbeatProgress == 1.0f)
+		heartbeatGrowing = false;
+}
+
+

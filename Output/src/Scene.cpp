@@ -116,7 +116,7 @@ bool Scene::PostUpdate()
 		SDL_RenderFillRect(Engine::GetInstance().render->renderer, nullptr);
 	}
 
-	Vignette(player->GetMechanics()->vignetteSize, 0.8f, vignetteColor);
+	Vignette(player->GetMechanics()->GetHealthSystem()->GetVignetteSize(), 0.8f, vignetteColor);
 
 	if (isDead) {
 		isDead = false;
@@ -226,7 +226,7 @@ void Scene::SaveGameXML()
 	pugi::xml_node playerNode = saveData.child("player");
 		playerNode.attribute("x") = playerPos.x;
 		playerNode.attribute("y") = playerPos.y;
-		playerNode.attribute("lives") = mechanics.lives;
+		playerNode.attribute("lives") = player->GetMechanics()->GetHealthSystem()->GetLives();
 
 	pugi::xml_node sceneNode = saveData.child("scene"); //Save Actual Scene
 		sceneNode.attribute("actualScene") = nextScene;
@@ -251,7 +251,7 @@ void Scene::LoadGameXML()
         if (playerNode) {
             float playerX = playerNode.attribute("x").as_float();
             float playerY = playerNode.attribute("y").as_float();
-            mechanics.lives = playerNode.attribute("lives").as_int();
+			player->GetMechanics()->GetHealthSystem()->SetLives(playerNode.attribute("lives").as_int());
             newPosition = Vector2D(playerX, playerY - 100); 
         }
 

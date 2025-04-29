@@ -450,7 +450,7 @@ void Menus::DrawPlayerLives() {
     Player* player = Engine::GetInstance().scene->GetPlayer();
     if (!player) return;
 
-    int lives = player->GetMechanics()->lives;
+    int lives = player->GetMechanics()->GetHealthSystem()->GetLives();
 
     const int marginLeft = 100;
     const int marginTop = 60;

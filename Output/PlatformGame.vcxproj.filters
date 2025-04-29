@@ -119,6 +119,36 @@
     <ClCompile Include="src\LifePlant.cpp">
       <Filter>Source Files\Entities\Interactions with player</Filter>
     </ClCompile>
+    <ClCompile Include="src\MovementHandler.cpp">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JumpMechanic.cpp">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DashMechanic.cpp">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AttackMechanic.cpp">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FallMechanic.cpp">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\WallSlideMechanic.cpp">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\HealthSystem.cpp">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RespawnSystem.cpp">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\InvulnerabilitySystem.cpp">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GodModeSystem.cpp">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Bloodrusher.h">
@@ -251,6 +281,36 @@
     <ClInclude Include="src\NPC.h" />
     <ClInclude Include="src\LifePlant.h">
       <Filter>Source Files\Entities\Interactions with player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MovementHandler.h">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JumpMechanic.h">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DashMechanic.h">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AttackMechanic.h">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FallMechanic.h">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\WallSlideMechanic.h">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\HealthSystem.h">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RespawnSystem.h">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\InvulnerabilitySystem.h">
+      <Filter>Source Files\Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GodModeSystem.h">
+      <Filter>Source Files\Entities\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

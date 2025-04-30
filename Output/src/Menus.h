@@ -76,8 +76,9 @@ public:
     void DrawAbilities();
     void DrawSliders();
     void SetController(SDL_GameController* controller);
-
+    bool ContinueLoadingScreen();
     void DrawSlider(int minX, int y, int& sliderX, bool isSelected, const std::string& label);
+    void DrawPlayerLives();
 
 public:
     MenusState currentState = MenusState::INTRO;
@@ -151,9 +152,6 @@ private:
     SDL_Color WHITE = { 255, 255, 255, 255 };
     SDL_Color GRAY = { 200, 200, 200, 255 };
 
-    void DrawPlayerLives();
-
-    bool ContinueLoadingScreen();
 
     SDL_Texture* lifeTexture = nullptr;
     int lifeW = 32;

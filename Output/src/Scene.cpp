@@ -249,7 +249,7 @@ void Scene::SaveGameXML() {
 void Scene::LoadGameXML() {
 	if (isLoading || transitioning) return;
 
-    isLoad = true;
+    isLoading = true;
 
     pugi::xml_document config;
     pugi::xml_parse_result result = config.load_file("config.xml");

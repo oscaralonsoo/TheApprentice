@@ -478,7 +478,7 @@ bool Menus::ContinueLoadingScreen()
     if (Engine::GetInstance().scene->isLoading) {
         // Aplica fade out progresivo a negro
         if (transitionAlpha < 1.0f) {
-            transitionAlpha += 0.01f; 
+            transitionAlpha += 0.01f;
         }
         else {
             transitionAlpha = 1.0f;
@@ -488,7 +488,9 @@ bool Menus::ContinueLoadingScreen()
         SDL_RenderFillRect(Engine::GetInstance().render->renderer, nullptr);
         return !isExit;
     }
+}
 
 void Menus::SetController(SDL_GameController* controller) {
     this->controller = controller;
 }
+

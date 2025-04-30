@@ -20,8 +20,46 @@ void JumpMechanic::HandleJumpInput() {
 
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
 
-    // Inicio del salto o doble salto
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+    // Estados de entrada general
+    bool jumpDown = false;
+    bool jumpRepeat = false;
+    bool jumpUp = false;
+
+    // ----------- TECLADO -----------
+    std::shared_ptr<Input> input = Engine::GetInstance().input;
+    bool spaceNow = input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT || input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN;
+
+    if (spaceNow && !keyboardHeldPreviously) {
+        jumpDown = true;
+    }
+    if (spaceNow) {
+        jumpRepeat = true;
+    }
+    if (!spaceNow && keyboardHeldPreviously) {
+        jumpUp = true;
+    }
+
+    keyboardHeldPreviously = spaceNow;
+
+    // ----------- MANDO -----------
+    if (controller && SDL_GameControllerGetAttached(controller)) {
+        bool controllerPressed = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A) != 0;
+
+        if (controllerPressed && !controllerHeldPreviously) {
+            jumpDown = true;
+        }
+        if (controllerPressed) {
+            jumpRepeat = true;
+        }
+        if (!controllerPressed && controllerHeldPreviously) {
+            jumpUp = true;
+        }
+
+        controllerHeldPreviously = controllerPressed;
+    }
+
+    // ----------- INICIO DE SALTO -----------
+    if (jumpDown) {
         if (player->GetMechanics()->IsOnGround() || (doubleJumpUnlocked && jumpCount < maxJumpCount)) {
             velocity.y = -jumpForce;
             isJumping = true;
@@ -36,8 +74,8 @@ void JumpMechanic::HandleJumpInput() {
         }
     }
 
-    // Mantener salto pulsado
-    if (isHoldingJump && Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) {
+    // ----------- SALTO PROGRESIVO -----------
+    if (isHoldingJump && jumpRepeat) {
         float currentY = player->GetPosition().getY();
         float heightJumped = jumpStartY - currentY;
 
@@ -51,12 +89,12 @@ void JumpMechanic::HandleJumpInput() {
         }
     }
 
-    // Cancelar impulso si se suelta la tecla
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP) {
+    // ----------- FIN DEL SALTO -----------
+    if (jumpUp) {
         isHoldingJump = false;
     }
 
-    // Caída rápida al soltar salto
+    // ----------- CAÍDA ACELERADA -----------
     if (isJumping && !isHoldingJump && !player->GetMechanics()->IsWallSliding()) {
         velocity.y += fallAccelerationFactor;
     }
@@ -82,4 +120,8 @@ void JumpMechanic::OnLeaveGround() {
     player->GetMechanics()->SetIsOnGround(false);
     jumpCooldownTimer.Start();
     jumpCooldownActive = true;
+}
+
+void JumpMechanic::SetController(SDL_GameController* controller) {
+    this->controller = controller;
 }

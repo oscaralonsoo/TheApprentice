@@ -90,10 +90,18 @@ bool Menus::Update(float dt) {
 }
 
 void Menus::HandlePause() {
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN && !inTransition && !inConfig) {
-        if (currentState == MenusState::GAME) {
-            StartTransition(true, MenusState::PAUSE);
+    bool pausePressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN;
+
+    if (controller && SDL_GameControllerGetAttached(controller)) {
+        bool startNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_START);
+        if (startNow && !startHeld) {
+            pausePressed = true;
         }
+        startHeld = startNow;
+    }
+
+    if (pausePressed && !inTransition && !inConfig && currentState == MenusState::GAME) {
+        StartTransition(true, MenusState::PAUSE);
     }
 }
 
@@ -476,4 +484,8 @@ void Menus::DrawPlayerLives() {
         SDL_Rect section = { 0, 0, lifeW, lifeH };
         Engine::GetInstance().render->DrawTexture(lifeTexture, x, y, &section, 0.0f);
     }
+}
+
+void Menus::SetController(SDL_GameController* controller) {
+    this->controller = controller;
 }

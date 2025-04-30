@@ -10,7 +10,25 @@ void AttackMechanic::Init(Player* player) {
 
 void AttackMechanic::Update(float dt) {
     if (!isAttacking) {
+        bool attackPressed = false;
+
+        // Teclado (J)
         if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
+            attackPressed = true;
+        }
+
+        // Mando (botón X)
+        if (controller && SDL_GameControllerGetAttached(controller)) {
+            bool xPressed = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_X) != 0;
+
+            if (xPressed && !attackHeldPreviously) {
+                attackPressed = true;
+            }
+
+            attackHeldPreviously = xPressed;
+        }
+
+        if (attackPressed) {
             StartAttack();
         }
     }
@@ -72,4 +90,8 @@ void AttackMechanic::DestroyAttackSensor() {
 
 bool AttackMechanic::IsAttacking() const {
     return isAttacking;
+}
+
+void AttackMechanic::SetController(SDL_GameController* controller) {
+    this->controller = controller;
 }

@@ -38,6 +38,12 @@ GuiControl* GuiManager::CreateGuiControl(GuiControlType type, int id, const char
 
 bool GuiManager::Update(float dt)
 {
+    for (GuiControl* control : guiControlsList)
+    {
+        if (control)
+            control->Update(dt);
+    }
+
     return true;
 }
 

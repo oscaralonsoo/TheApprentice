@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Timer.h"
+#include <SDL2/SDL_gamecontroller.h>
 
 class Player;
 
@@ -20,6 +21,8 @@ public:
 
     bool IsJumpUnlocked() const { return jumpUnlocked; }
     bool IsDoubleJumpUnlocked() const { return doubleJumpUnlocked; }
+
+    void SetController(SDL_GameController* controller);
 
 private:
     Player* player = nullptr;
@@ -41,8 +44,14 @@ private:
     float minHoldJumpHeight = 20.0f;
     float jumpHoldForceFactor = 0.85f;
     float jumpDecayRate = 4.0f;
+    bool controllerHeldPreviously = false;
 
     Timer jumpCooldownTimer;
     float jumpCooldownTime = 100.0f;
     bool jumpCooldownActive = false;
+
+    SDL_GameController* controller = nullptr;
+
+    bool keyboardHeldPreviously = false;
+
 };

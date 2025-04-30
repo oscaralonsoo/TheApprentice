@@ -2,6 +2,7 @@
 
 #include "Timer.h"
 #include "Vector2D.h"
+#include <SDL2/SDL_gamecontroller.h>
 
 class Player;
 
@@ -17,6 +18,8 @@ public:
     void OnWallCollision();  
 
     bool IsDashUnlocked() const { return dashUnlocked; }
+
+    void SetController(SDL_GameController* controller); // en public
 
 private:
     void StartDash();
@@ -37,4 +40,7 @@ private:
 
     Timer dashCooldownTimer;
     float dashCooldownTime = 1.0f;
+
+    SDL_GameController* controller = nullptr; // en private
+    bool rtHeldPreviously = false;
 };

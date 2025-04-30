@@ -17,7 +17,26 @@ void DashMechanic::Update(float dt) {
         canDash = true;
     }
 
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_K) == KEY_DOWN && canDash) {
+    bool dashPressed = false;
+
+    // Teclado (K)
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_K) == KEY_DOWN) {
+        dashPressed = true;
+    }
+
+    // Mando (RT)
+    if (controller && SDL_GameControllerGetAttached(controller)) {
+        Sint16 triggerValue = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
+        const Sint16 triggerThreshold = 16000;
+
+        if (triggerValue > triggerThreshold && !rtHeldPreviously) {
+            dashPressed = true;
+        }
+
+        rtHeldPreviously = (triggerValue > triggerThreshold);
+    }
+
+    if (dashPressed && canDash) {
         StartDash();
     }
 
@@ -75,4 +94,8 @@ void DashMechanic::Enable(bool enable) {
 
 bool DashMechanic::IsDashing() const {
     return isDashing;
+}
+
+void DashMechanic::SetController(SDL_GameController* controller) {
+    this->controller = controller;
 }

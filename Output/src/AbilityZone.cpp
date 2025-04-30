@@ -116,35 +116,51 @@ bool AbilityZone::Update(float dt)
 		}
 
 		if (playerRight >= rightLimit - 144.0f) {
-			if (playerInsideJump && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
-				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
-				player->GetMechanics()->GetMovementHandler()->SetCantMove(true);
-				mechanics->EnableJump(true);
-				player->GetMechanics()->GetMovementHandler()->SetCanAttack(true);
-				mechanics->GetHealthSystem()->SetVignetteSize(Engine::GetInstance().scene->previousVignetteSize);
-				markedForDeletion = true;
-				Engine::GetInstance().menus->abilityName = "jump";
-				Engine::GetInstance().menus->StartTransition(false, MenusState::ABILITIES);
+			bool confirmPressed = false;
+
+			// Tecla J
+			if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
+				confirmPressed = true;
 			}
-			else if (playerInsideDoubleJump && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
-				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
-				player->GetMechanics()->GetMovementHandler()->SetCantMove(true);
-				mechanics->EnableDoubleJump(true);
-				player->GetMechanics()->GetMovementHandler()->SetCanAttack(true);
-				mechanics->GetHealthSystem()->SetVignetteSize(Engine::GetInstance().scene->previousVignetteSize);
-				markedForDeletion = true;
-				Engine::GetInstance().menus->abilityName = "doublejump";
-				Engine::GetInstance().menus->StartTransition(false, MenusState::ABILITIES);
+
+			// Botón X del gamepad
+			if (controller && SDL_GameControllerGetAttached(controller)) {
+				bool xNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_X);
+				if (xNow && !xHeld) {
+					confirmPressed = true;
+				}
+				xHeld = xNow;
 			}
-			else if (playerInsideDash && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
+			if (controller && SDL_GameControllerGetAttached(controller)) {
+				bool xNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_X);
+				if (xNow && !xHeld) {
+					confirmPressed = true;
+				}
+				xHeld = xNow;
+			}
+
+			// Desbloquear habilidad correspondiente
+			if (confirmPressed) {
 				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
 				player->GetMechanics()->GetMovementHandler()->SetCantMove(true);
-				mechanics->EnableDash(true);
 				player->GetMechanics()->GetMovementHandler()->SetCanAttack(true);
 				mechanics->GetHealthSystem()->SetVignetteSize(Engine::GetInstance().scene->previousVignetteSize);
 				markedForDeletion = true;
+
+				if (playerInsideJump) {
+					mechanics->EnableJump(true);
+					Engine::GetInstance().menus->abilityName = "jump";
+				}
+				else if (playerInsideDoubleJump) {
+					mechanics->EnableDoubleJump(true);
+					Engine::GetInstance().menus->abilityName = "doublejump";
+				}
+				else if (playerInsideDash) {
+					mechanics->EnableDash(true);
+					Engine::GetInstance().menus->abilityName = "dash";
+				}
+
 				Engine::GetInstance().menus->StartTransition(false, MenusState::ABILITIES);
-				Engine::GetInstance().menus->abilityName = "dash";
 			}
 		}
 	}
@@ -247,4 +263,8 @@ void AbilityZone::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 	default:
 		break;
 	}
+}
+
+void AbilityZone::SetController(SDL_GameController* controller) {
+	this->controller = controller;
 }

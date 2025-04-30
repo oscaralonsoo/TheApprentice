@@ -19,46 +19,69 @@ GuiControlButton::~GuiControlButton()
 {
 }
 
-bool GuiControlButton::Update(float dt)
-{
-	if (state == GuiControlState::DISABLED)
-	{
-		return false; // Sal de la función y evita actualizar lógica innecesaria
-	}
+bool GuiControlButton::Update(float dt) {
+    if (state == GuiControlState::DISABLED)
+        return false;
 
-	else if (state != GuiControlState::FOCUSED)
-	{
-		state = GuiControlState::FOCUSED;
+    state = GuiControlState::FOCUSED;
 
-	}
+    bool confirm = false;
 
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_REPEAT)
-	{
-		state = GuiControlState::PRESSED;
+    // --- Confirmar con teclado (ENTER) ---
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+        confirm = true;
+    }
 
-	}
+    // --- Confirmar con botón A del mando ---
+    Menus* menus = Engine::GetInstance().menus.get();
+    SDL_GameController* controller = menus->controller;
 
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_UP)
-	{
-		NotifyObserver();
-	}
-	else {
+    if (controller && SDL_GameControllerGetAttached(controller)) {
+        bool aNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A);
+        if (aNow && !menus->aHeld) {
+            confirm = true;
+        }
+        menus->aHeld = aNow;
+    }
 
-		}
+    // --- Ejecutar acción si se confirma ---
+    if (confirm) {
+        state = GuiControlState::PRESSED;
+        NotifyObserver();
+    }
+
     return false;
 }
-void GuiControlButton::ButtonNavigation()
-{
-	if (Engine::GetInstance().menus->currentState == MenusState::MAINMENU ||
-		Engine::GetInstance().menus->currentState == MenusState::PAUSE ||
-		Engine::GetInstance().menus->currentState == MenusState::SETTINGS)
-	{
-		if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
-			Engine::GetInstance().menus->selectedButton = (Engine::GetInstance().menus->selectedButton + 1) % Engine::GetInstance().menus->buttons.size();
-		}
-		if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-			Engine::GetInstance().menus->selectedButton = (Engine::GetInstance().menus->selectedButton - 1 + Engine::GetInstance().menus->buttons.size()) % Engine::GetInstance().menus->buttons.size();
-		}
-	}
-}
 
+void GuiControlButton::ButtonNavigation() {
+    Menus* menus = Engine::GetInstance().menus.get();
+
+    if (menus->currentState == MenusState::MAINMENU ||
+        menus->currentState == MenusState::PAUSE ||
+        menus->currentState == MenusState::SETTINGS)
+    {
+        auto input = Engine::GetInstance().input;
+        SDL_GameController* controller = menus->controller;
+
+        bool moveDown = input->GetKey(SDL_SCANCODE_S) == KEY_DOWN || input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN;
+        bool moveUp = input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN;
+
+        if (controller && SDL_GameControllerGetAttached(controller)) {
+            bool dpadDown = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_DOWN);
+            bool dpadUp = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_UP);
+
+            if (dpadDown && !menus->dpadDownHeld) moveDown = true;
+            if (dpadUp && !menus->dpadUpHeld) moveUp = true;
+
+            menus->dpadDownHeld = dpadDown;
+            menus->dpadUpHeld = dpadUp;
+        }
+
+        if (moveDown) {
+            menus->selectedButton = (menus->selectedButton + 1) % menus->buttons.size();
+        }
+        if (moveUp) {
+            menus->selectedButton = (menus->selectedButton - 1 + menus->buttons.size()) % menus->buttons.size();
+        }
+    }
+}

@@ -5,6 +5,7 @@
 #include "AttackMechanic.h"
 #include "FallMechanic.h"
 #include "WallSlideMechanic.h"
+#include <SDL2/SDL_gamecontroller.h>
 
 class Player;
 
@@ -12,6 +13,7 @@ class MovementHandler {
 public:
     void Init(Player* player);
     void Update(float dt);
+    ~MovementHandler();
 
     void EnableJump(bool enable);
     void EnableDoubleJump(bool enable);
@@ -34,6 +36,8 @@ public:
     bool IsJumpUnlocked() const { return jumpMechanic.IsJumpUnlocked(); }
     bool IsDoubleJumpUnlocked() const { return jumpMechanic.IsDoubleJumpUnlocked(); }
     bool IsDashUnlocked() const { return dashMechanic.IsDashUnlocked(); }
+
+    SDL_GameController* GetController() const { return controller; }
 
 private:
     void HandleMovementInput();
@@ -69,4 +73,5 @@ private:
 
     bool isWallSliding = false;
     bool isJumping = false; // para poder desactivar salto cuando haces wall slide
+    SDL_GameController* controller = nullptr;
 };

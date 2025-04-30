@@ -31,24 +31,51 @@ void MovementHandler::HandleMovementInput() {
     if (cantMove)
         return;
 
-    b2Vec2 velocity = player->pbody->body->GetLinearVelocity(); // coger el velocity actual completo
+    b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
 
-    if (!attackMechanic.IsAttacking() && !dashMechanic.IsDashing()) {
-        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-            movementDirection = -1;
-            velocity.x = movementDirection * speed;
-        }
-        else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-            movementDirection = 1;
-            velocity.x = movementDirection * speed;
-        }
-        else {
-            velocity.x = 0.0f;
+    Sint16 axisX = 0;
+    const Sint16 deadZone = 8000; // para evitar movimientos accidentales del stick
+
+    // Leer joystick si hay alguno conectado
+    if (SDL_NumJoysticks() > 0) {
+        SDL_Joystick* joystick = SDL_JoystickOpen(0);
+        if (joystick) {
+            axisX = SDL_JoystickGetAxis(joystick, 0); // eje X del stick izquierdo
         }
     }
 
+    bool usedGamepad = false;
 
-    player->pbody->body->SetLinearVelocity(velocity); // aquí aplicamos SOLO el x
+    if (!attackMechanic.IsAttacking() && !dashMechanic.IsDashing()) {
+        // Input del mando (joystick)
+        if (axisX < -deadZone) {
+            movementDirection = -1;
+            velocity.x = movementDirection * speed;
+            usedGamepad = true;
+        }
+        else if (axisX > deadZone) {
+            movementDirection = 1;
+            velocity.x = movementDirection * speed;
+            usedGamepad = true;
+        }
+
+        // Si no usas mando, usamos teclado
+        if (!usedGamepad) {
+            if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+                movementDirection = -1;
+                velocity.x = movementDirection * speed;
+            }
+            else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+                movementDirection = 1;
+                velocity.x = movementDirection * speed;
+            }
+            else {
+                velocity.x = 0.0f;
+            }
+        }
+    }
+
+    player->pbody->body->SetLinearVelocity(velocity);
 }
 
 void MovementHandler::UpdateAnimation() {

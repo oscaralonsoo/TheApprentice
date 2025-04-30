@@ -31,4 +31,9 @@ private:
     int width;
     int height;
 
+    //Fade In/Out
+    bool fadingIn = false;
+    bool fadingOut = false;
+    float alpha = 0.0f;
+    float fadeSpeed = 0.005f; 
 };

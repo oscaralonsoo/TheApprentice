@@ -54,16 +54,28 @@ bool HelpZone::Start() {
     return true;
 }
 bool HelpZone::Update(float dt) {
-
+        if (fadingIn) {
+            alpha += fadeSpeed * dt;
+            if (alpha >= 1.0f) {
+                alpha = 1.0f;
+                fadingIn = false;
+            }
+        }
+        if (fadingOut) {
+            alpha -= fadeSpeed * dt;
+            if (alpha <= 0.0f) {
+                alpha = 0.0f;
+                fadingOut = false;
+            }
+        }
     return true;
 }
 bool HelpZone::PostUpdate() {
-    if (playerInside && texture) {
-        Vector2D playerPos = Engine::GetInstance().scene->GetPlayerPosition();
-        int drawX = (int)(playerPos.getX() * PIXELS_PER_METER) - width / 2;
-        int drawY = (int)(playerPos.getY() * PIXELS_PER_METER) - height / 2;
+    if (alpha > 0.0f) {
+        int drawX = (int)(position.getX());
+        int drawY = (int)(position.getY() - height/2);
 
-        SDL_Rect destRect = { drawX, drawY, width, height };
+        SDL_Rect destRect = { drawX, drawY, width, height }; 
         Engine::GetInstance().render->DrawTexture(
             texture,
             static_cast<uint32_t>(destRect.x),
@@ -73,12 +85,13 @@ bool HelpZone::PostUpdate() {
             0.0,
             0, 0,
             SDL_FLIP_NONE,
-            1.0f
+            0.65,
+            alpha
         );
-      
     }
     return true;
 }
+
 bool HelpZone::CleanUp() {
     Engine::GetInstance().physics->DeletePhysBody(pbody);
     return true;
@@ -86,13 +99,16 @@ bool HelpZone::CleanUp() {
 void HelpZone::OnCollision(PhysBody* physA, PhysBody* physB) {
     if (physB->ctype == ColliderType::PLAYER) {
         playerInside = true;
+            fadingIn = true;
+            fadingOut = false;
         LOG("Player entered HelpZone: %s", textureName.c_str());
     }
 }
-
 void HelpZone::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     if (physB->ctype == ColliderType::PLAYER) {
         playerInside = false;
+            fadingIn = false;
+            fadingOut = true;
         LOG("Player exited HelpZone: %s", textureName.c_str());
     }
 }

@@ -114,7 +114,7 @@ void Render::ResetViewPort()
 }
 
 // Blit to screen
-bool  Render::DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SDL_Rect* section, float speed, double angle, uint32_t pivotX, uint32_t pivotY, SDL_RendererFlip flip, float scale) const
+bool Render::DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SDL_Rect* section, float speed, double angle, uint32_t pivotX, uint32_t pivotY, SDL_RendererFlip flip, float scale, float alpha) const
 {
 	bool ret = true;
 	float windowScale = Engine::GetInstance().window->GetScale() * cameraZoom;
@@ -123,8 +123,7 @@ bool  Render::DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SD
 	rect.x = static_cast<int>(camera.x * speed + x * windowScale);
 	rect.y = static_cast<int>(camera.y * speed + y * windowScale);
 
-
-	if(section != NULL)
+	if (section != NULL)
 	{
 		rect.w = section->w;
 		rect.h = section->h;
@@ -137,11 +136,16 @@ bool  Render::DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SD
 	rect.w = static_cast<int>(rect.w * windowScale * scale);
 	rect.h = static_cast<int>(rect.h * windowScale * scale);
 
+	// Aplicar opacidad solo si no es completamente opaco
+	if (alpha < 1.0f)
+	{
+		SDL_SetTextureAlphaMod(texture, static_cast<Uint8>(alpha * 255.0f));
+	}
 
 	SDL_Point* p = NULL;
 	SDL_Point pivot;
 
-	if(pivotX != INT_MAX && pivotY != INT_MAX)
+	if (pivotX != INT_MAX && pivotY != INT_MAX)
 	{
 		pivot.x = pivotX;
 		pivot.y = pivotY;
@@ -150,7 +154,6 @@ bool  Render::DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SD
 
 	if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, flip) != 0)
 	{
-		//LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
 		ret = false;
 	}
 

@@ -335,7 +335,7 @@ bool Map::Load(std::string path, std::string fileName)
                     helpZone->position = Vector2D(x, y);
                     helpZone->SetWidth(width);
                     helpZone->SetHeight(height);
-                    helpZone->SetTextureName(objectName); // Añade este setter a HelpZone si no lo tienes
+                    helpZone->SetTextureName(objectName);
 
                     LOG("Created HelpZone entity '%s' at x: %d, y: %d", objectName.c_str(), x, y);
                 }

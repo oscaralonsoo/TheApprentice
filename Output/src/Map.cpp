@@ -15,6 +15,7 @@
 #include "HiddenZone.h"
 #include "DestructibleWall.h"
 #include "PushableBox.h"
+#include "HelpZone.h"
 
 Map::Map() : Module(), mapLoaded(false)
 {
@@ -320,6 +321,26 @@ bool Map::Load(std::string path, std::string fileName)
                     LOG("Creating collider at x: %d, y: %d, width: %d, height: %d", x + (width / 2), y + (height / 2), width, height);
                 }
             }
+            else if (objectGroupName == "HelpZone")
+            {
+                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
+                {
+                    std::string objectName = objectNode.attribute("name").as_string();
+                    int x = objectNode.attribute("x").as_int();
+                    int y = objectNode.attribute("y").as_int();
+                    int width = objectNode.attribute("width").as_int();
+                    int height = objectNode.attribute("height").as_int();
+
+                    HelpZone* helpZone = (HelpZone*)Engine::GetInstance().entityManager->CreateEntity(EntityType::HELP_ZONE);
+                    helpZone->position = Vector2D(x, y);
+                    helpZone->SetWidth(width);
+                    helpZone->SetHeight(height);
+                    helpZone->SetTextureName(objectName); // Añade este setter a HelpZone si no lo tienes
+
+                    LOG("Created HelpZone entity '%s' at x: %d, y: %d", objectName.c_str(), x, y);
+                }
+            }
+
             else if (layerName == "Doors")  // Objects from layer Doors
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode != NULL; objectNode = objectNode.next_sibling("object"))

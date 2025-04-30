@@ -21,6 +21,7 @@
 #include "PushableBox.h"
 #include "AbilityZone.h"
 #include "Noctilume.h"
+#include "HelpZone.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -135,6 +136,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::LIFE_PLANT:
 		entity = new LifePlant();
+		break;
+	case EntityType::HELP_ZONE:
+		entity = new HelpZone();
 		break;
 	default:
 		break;

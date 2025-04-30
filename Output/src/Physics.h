@@ -32,6 +32,7 @@
 #define CATEGORY_NPC              0x2000
 #define CATEGORY_DOOR             0x4000
 #define CATEGORY_LIFE_PLANT       0x8000
+#define CATEGORY_HELPZONE		  0x0080
 
 // types of bodies
 enum bodyType {
@@ -51,6 +52,7 @@ enum class ColliderType {
 	ATTACK,
 	CAVE_DROP,
 	NPC,
+	HELPZONE,
 	ENEMY,
 	PLATFORM, 
 	SAVEGAME,
@@ -84,6 +86,7 @@ public:
 	float playerPosX = 0.0f;
 	float playerPosY = 0.0f;
 	b2Body* body;
+	std::string objectName;
 	Entity* listener;
 	ColliderType ctype;
 };

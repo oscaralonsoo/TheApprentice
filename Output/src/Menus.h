@@ -95,6 +95,7 @@ public:
     std::vector<ButtonInfo> buttons;
     std::vector<std::string> buttonNames;
     std::string abilityName;
+    int baseWidth, baseHeight, width, height;
 private:
     const std::string CONFIG_FILE = "config.xml";
     const std::string ART_FILE = "art.xml";
@@ -120,7 +121,7 @@ private:
     SDL_Texture* fillTexture = nullptr;
 
     std::unordered_map<MenusState, int> previousSelectedButton; 
-    int baseWidth, baseHeight, width, height;
+
     float scaleX = 1.0f;
     float scaleY = 1.0f;
     float transitionAlpha = 0.0f;

@@ -73,4 +73,6 @@ public:
 	void SetPaused(bool value) {
 		paused = value;
 	}
+
+	bool IsLoop() const { return loop; }
 };

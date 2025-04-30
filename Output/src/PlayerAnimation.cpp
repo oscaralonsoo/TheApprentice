@@ -17,7 +17,11 @@ void PlayerAnimation::Update(float dt, const std::string& state, int x, int y, b
 {
     if (state != currentState && animations.find(state) != animations.end()) {
         currentAnimation = &animations[state];
-        currentAnimation->Reset(); // empieza la animación desde el principio
+
+        if (!currentAnimation->IsLoop()) {
+            currentAnimation->Reset();
+        }
+
         currentState = state;
     }
 

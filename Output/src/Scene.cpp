@@ -94,7 +94,7 @@ bool Scene::Update(float dt)
 		SaveGameXML();
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 		LoadGameXML();
-	// Lógica para el efecto de latidos
+	// Lï¿½gica para el efecto de latidos
 	VignetteHeartBeat(dt);
 	return true;
 }
@@ -122,7 +122,7 @@ bool Scene::PostUpdate()
 		SDL_RenderFillRect(Engine::GetInstance().render->renderer, nullptr);
 	}
 
-	Vignette(player->GetMechanics()->vignetteSize, 0.8f, vignetteColor);
+	Vignette(player->GetMechanics()->GetHealthSystem()->GetVignetteSize(), 0.8f, vignetteColor);
 
 	if (isDead) {
 		isDead = false;
@@ -230,14 +230,14 @@ void Scene::SaveGameXML() {
 
 	Vector2D playerPos = GetPlayerPosition(); // Save Player Pos
 	pugi::xml_node playerNode = saveData.child("player");
-	playerNode.attribute("x") = playerPos.x;
-	playerNode.attribute("y") = playerPos.y + 64;
-	playerNode.attribute("lives") = mechanics->lives;
+		playerNode.attribute("x") = playerPos.x;
+		playerNode.attribute("y") = playerPos.y;
+		playerNode.attribute("lives") = player->GetMechanics()->GetHealthSystem()->GetLives();
 
 	pugi::xml_node abilitiesNode = saveData.child("abilities");
-	abilitiesNode.attribute("jump") = mechanics->jumpUnlocked;
-	abilitiesNode.attribute("doublejump") = mechanics->doubleJumpUnlocked;
-	abilitiesNode.attribute("dash") = mechanics->dashUnlocked;
+	abilitiesNode.attribute("jump") = player->GetMechanics()->GetMovementHandler()->IsJumpUnlocked();
+	abilitiesNode.attribute("doublejump") = player->GetMechanics()->GetMovementHandler()->IsDoubleJumpUnlocked();
+	abilitiesNode.attribute("dash") = player->GetMechanics()->GetMovementHandler()->IsDashUnlocked();
 
 	pugi::xml_node sceneNode = saveData.child("scene"); // Save Actual Scene
 	sceneNode.attribute("actualScene") = nextScene;
@@ -249,18 +249,21 @@ void Scene::SaveGameXML() {
 void Scene::LoadGameXML() {
 	if (isLoading || transitioning) return;
 
-	isLoading = true;
-	pugi::xml_document config;
-	pugi::xml_parse_result result = config.load_file("config.xml");
-	pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
-	if (saveData) {
-		pugi::xml_node playerNode = saveData.child("player"); // Player Data Load
-		if (playerNode) {
-			float playerX = playerNode.attribute("x").as_float();
-			float playerY = playerNode.attribute("y").as_float();
-			mechanics->lives = playerNode.attribute("lives").as_int();
-			newPosition = Vector2D(playerX, playerY - 100);
-		}
+    isLoad = true;
+
+    pugi::xml_document config;
+    pugi::xml_parse_result result = config.load_file("config.xml");
+
+    pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
+
+    if (saveData) {
+        pugi::xml_node playerNode = saveData.child("player");
+        if (playerNode) {
+            float playerX = playerNode.attribute("x").as_float();
+            float playerY = playerNode.attribute("y").as_float();
+			player->GetMechanics()->GetHealthSystem()->SetLives(playerNode.attribute("lives").as_int());
+            newPosition = Vector2D(playerX, playerY - 100); 
+        }
 		pugi::xml_node abilitiesNode = saveData.child("abilities"); // Abilities Load
 		if (abilitiesNode) {
 			if (abilitiesNode.attribute("jump").as_bool() == true) {
@@ -273,7 +276,7 @@ void Scene::LoadGameXML() {
 				mechanics->EnableDash(true);
 			}
 		}
-		pugi::xml_node sceneNode = saveData.child("scene"); // Scene Load
+        pugi::xml_node sceneNode = saveData.child("scene");
 		if (sceneNode) {
 			int savedScene = sceneNode.attribute("actualScene").as_int();
 			nextScene = savedScene;
@@ -319,7 +322,7 @@ void Scene::Vignette(int size, float strength, SDL_Color color)
 }
 void Scene::VignetteHeartBeat(float dt)
 {
-	if (mechanics->lives != 1)
+	if (mechanics->GetHealthSystem()->GetLives() != 1)
 	{
 		heartbeatProgress = 0.0f;
 		return;

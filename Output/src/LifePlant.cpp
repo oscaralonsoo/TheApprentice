@@ -90,8 +90,7 @@ void LifePlant::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (state == LifePlantStates::AVAILABLE)
         {
             state = LifePlantStates::CONSUMED;
-            Engine::GetInstance().scene->GetPlayer()->GetMechanics()->lives++;
-            Engine::GetInstance().scene->GetPlayer()->GetMechanics()->ChangeVignetteSize();
+            Engine::GetInstance().scene->GetPlayer()->GetMechanics()->GetHealthSystem()->HealFull();
         }
         break;
     }
@@ -99,4 +98,3 @@ void LifePlant::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 void LifePlant::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 }
-

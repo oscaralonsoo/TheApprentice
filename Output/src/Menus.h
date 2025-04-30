@@ -9,6 +9,7 @@
 #include "GuiControl.h"
 #include "GuiManager.h"
 #include <unordered_map> 
+#include <SDL2/SDL_gamecontroller.h>
 
 enum class MenusState {
     NONE, INTRO, MAINMENU, GAME, PAUSE, SETTINGS, CREDITS, DEAD, GAMEOVER, EXIT, ABILITIES
@@ -74,6 +75,7 @@ public:
     void DrawCheckBox(const ButtonInfo& button, bool isSelected);
     void DrawAbilities();
     void DrawSliders();
+    void SetController(SDL_GameController* controller);
 
     void DrawSlider(int minX, int y, int& sliderX, bool isSelected, const std::string& label);
 
@@ -96,6 +98,12 @@ public:
     std::vector<std::string> buttonNames;
     std::string abilityName;
     int baseWidth, baseHeight, width, height;
+
+    SDL_GameController* controller = nullptr;
+    bool aHeld = false;
+    bool startHeld = false;
+    bool dpadUpHeld = false;
+    bool dpadDownHeld = false;
 private:
     const std::string CONFIG_FILE = "config.xml";
     const std::string ART_FILE = "art.xml";

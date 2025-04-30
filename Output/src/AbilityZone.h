@@ -52,6 +52,8 @@ public:
 
 	virtual void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
+	void SetController(SDL_GameController* controller);
+
 	bool playerInside = false;
 	bool playerInsideJump = false;
 	bool playerInsideDoubleJump = false;
@@ -78,4 +80,6 @@ private:
 	float vibrateSpeed = 30.0f;
 	int newVignetteSize = 0;
 	SDL_Color normalVignetteColor = { 0, 0, 0, 255 };
+	bool xHeld = false;
+	SDL_GameController* controller = nullptr;
 };

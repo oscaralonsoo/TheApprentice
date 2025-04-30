@@ -104,7 +104,7 @@ bool AbilityZone::Update(float dt)
 			b2Vec2 stopVelocity = player->pbody->body->GetLinearVelocity();
 			stopVelocity.x = 0.0f;
 			player->pbody->body->SetLinearVelocity(stopVelocity);
-			mechanics->cantMove = true;
+			player->GetMechanics()->GetMovementHandler()->SetCantMove(true);
 		}
 		else {
 			float maxDistance = pbody->width * 1.5f; // empieza a frenar antes si el collider es m�s ancho
@@ -116,38 +116,51 @@ bool AbilityZone::Update(float dt)
 		}
 
 		if (playerRight >= rightLimit - 144.0f) {
-			if (playerInsideJump && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
-				if (pbody) {
-					Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
-					pbody = nullptr;
+			bool confirmPressed = false;
+
+			// Tecla J
+			if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
+				confirmPressed = true;
+			}
+
+			// Botón X del gamepad
+			if (controller && SDL_GameControllerGetAttached(controller)) {
+				bool xNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_X);
+				if (xNow && !xHeld) {
+					confirmPressed = true;
 				}
-				mechanics->cantMove = false;
-				mechanics->EnableJump(true);
-				mechanics->canAttack = true;
-				mechanics->vignetteSize = Engine::GetInstance().scene->previousVignetteSize; 
-				markedForDeletion = true;
-				Engine::GetInstance().menus->abilityName = "jump";
-				Engine::GetInstance().menus->StartTransition(false, MenusState::ABILITIES);
+				xHeld = xNow;
 			}
-			else if (playerInsideDoubleJump && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
-				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
-				mechanics->cantMove = false;
-				mechanics->EnableDoubleJump(true);
-				mechanics->canAttack = true;
-				mechanics->vignetteSize = Engine::GetInstance().scene->previousVignetteSize; 
-				markedForDeletion = true;
-				Engine::GetInstance().menus->abilityName = "doublejump";
-				Engine::GetInstance().menus->StartTransition(false, MenusState::ABILITIES);
+			if (controller && SDL_GameControllerGetAttached(controller)) {
+				bool xNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_X);
+				if (xNow && !xHeld) {
+					confirmPressed = true;
+				}
+				xHeld = xNow;
 			}
-			else if (playerInsideDash && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
+
+			// Desbloquear habilidad correspondiente
+			if (confirmPressed) {
 				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
-				mechanics->cantMove = false;
-				mechanics->EnableDash(true);
-				mechanics->canAttack = true;
-				mechanics->vignetteSize = Engine::GetInstance().scene->previousVignetteSize; 
+				player->GetMechanics()->GetMovementHandler()->SetCantMove(true);
+				player->GetMechanics()->GetMovementHandler()->SetCanAttack(true);
+				mechanics->GetHealthSystem()->SetVignetteSize(Engine::GetInstance().scene->previousVignetteSize);
 				markedForDeletion = true;
+
+				if (playerInsideJump) {
+					mechanics->EnableJump(true);
+					Engine::GetInstance().menus->abilityName = "jump";
+				}
+				else if (playerInsideDoubleJump) {
+					mechanics->EnableDoubleJump(true);
+					Engine::GetInstance().menus->abilityName = "doublejump";
+				}
+				else if (playerInsideDash) {
+					mechanics->EnableDash(true);
+					Engine::GetInstance().menus->abilityName = "dash";
+				}
+
 				Engine::GetInstance().menus->StartTransition(false, MenusState::ABILITIES);
-				Engine::GetInstance().menus->abilityName = "dash";
 			}
 		}
 	}
@@ -178,6 +191,7 @@ bool AbilityZone::CleanUp()
 void AbilityZone::VignetteChange(float dt)
 {
 	Player* player = Engine::GetInstance().scene->GetPlayer();
+	PlayerMechanics* mechanics = player->GetMechanics();
 
 	float zoneStartX = position.getX();
 	float zoneEndX = zoneStartX + texW;
@@ -195,7 +209,7 @@ void AbilityZone::VignetteChange(float dt)
 		newVignetteSize += static_cast<int>(offset);
 	}
 	// Aplicar tama�o
-	player->GetMechanics()->vignetteSize = newVignetteSize;
+	mechanics->GetHealthSystem()->SetVignetteSize(newVignetteSize);
 }
 
 void AbilityZone::SetPosition(Vector2D pos) {
@@ -217,9 +231,8 @@ void AbilityZone::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype) {
 	case ColliderType::PLAYER:
 		playerInside = true;
-		mechanics->canAttack = false;
-		Engine::GetInstance().scene->previousVignetteSize = mechanics->vignetteSize;
-
+		player->GetMechanics()->GetMovementHandler()->SetCanAttack(false);
+		Engine::GetInstance().scene->previousVignetteSize = mechanics->GetHealthSystem()->GetVignetteSize();
 		if (type == "Jump") {
 			playerInsideJump = true;
 		}
@@ -241,13 +254,17 @@ void AbilityZone::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype) {
 	case ColliderType::PLAYER:
 		playerInside = false;
-		mechanics->canAttack = true;
+		player->GetMechanics()->GetMovementHandler()->SetCanAttack(true);
 		playerInsideJump = false;
 		playerInsideDoubleJump = false;
 		playerInsideDash = false;
-		mechanics->vignetteSize = Engine::GetInstance().scene->previousVignetteSize;
+		mechanics->GetHealthSystem()->SetVignetteSize(Engine::GetInstance().scene->previousVignetteSize);
 		break;
 	default:
 		break;
 	}
+}
+
+void AbilityZone::SetController(SDL_GameController* controller) {
+	this->controller = controller;
 }

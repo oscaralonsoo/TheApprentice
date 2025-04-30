@@ -83,10 +83,18 @@ bool Menus::Update(float dt) {
     return true;
 }
 void Menus::HandlePause() {
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN && !inTransition && !inConfig) {
-        if (currentState == MenusState::GAME) {
-            StartTransition(true, MenusState::PAUSE);
+    bool pausePressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN;
+
+    if (controller && SDL_GameControllerGetAttached(controller)) {
+        bool startNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_START);
+        if (startNow && !startHeld) {
+            pausePressed = true;
         }
+        startHeld = startNow;
+    }
+
+    if (pausePressed && !inTransition && !inConfig && currentState == MenusState::GAME) {
+        StartTransition(true, MenusState::PAUSE);
     }
 }
 bool Menus::PostUpdate() {
@@ -429,16 +437,16 @@ void Menus::DrawSlider(int minX, int y, int& sliderX, bool isSelected, const std
     int squareHeight = isSelected ? 45 : 35;
     int squareColor = isSelected ? 255 : 150;
 
-    // Limitar el valor de sliderX dentro de los límites del slider
+    // Limitar el valor de sliderX dentro de los lï¿½mites del slider
     sliderX = std::max(minX + squareWidth / 2, std::min(sliderX, minX + 420 - squareWidth / 2));
 
-    // Calcula la posición del cuadrado del slider para centrarlo
+    // Calcula la posiciï¿½n del cuadrado del slider para centrarlo
     int squareX = sliderX - (squareWidth / 2);
     int squareY = y - (squareHeight - 19) / 2; 
     Engine::GetInstance().render->DrawRectangle({ squareX, squareY, squareWidth, squareHeight },
         squareColor, squareColor, squareColor, 255, true, false);
 
-    // Calcular la posición del texto a la izquierda del slider
+    // Calcular la posiciï¿½n del texto a la izquierda del slider
     int textWidth = Engine::GetInstance().render->GetTextWidth(label, 45);
     int textX = minX - textWidth - 50; 
     Engine::GetInstance().render->DrawText(label.c_str(), textX, y - 20, WHITE, 45);
@@ -450,7 +458,7 @@ void Menus::DrawPlayerLives() {
     Player* player = Engine::GetInstance().scene->GetPlayer();
     if (!player) return;
 
-    int lives = player->GetMechanics()->lives;
+    int lives = player->GetMechanics()->GetHealthSystem()->GetLives();
 
     const int marginLeft = 100;
     const int marginTop = 60;
@@ -480,4 +488,7 @@ bool Menus::ContinueLoadingScreen()
         SDL_RenderFillRect(Engine::GetInstance().render->renderer, nullptr);
         return !isExit;
     }
+
+void Menus::SetController(SDL_GameController* controller) {
+    this->controller = controller;
 }

@@ -235,9 +235,9 @@ void Scene::SaveGameXML() {
 		playerNode.attribute("lives") = player->GetMechanics()->GetHealthSystem()->GetLives();
 
 	pugi::xml_node abilitiesNode = saveData.child("abilities");
-	abilitiesNode.attribute("jump") = mechanics->jumpUnlocked;
-	abilitiesNode.attribute("doublejump") = mechanics->doubleJumpUnlocked;
-	abilitiesNode.attribute("dash") = mechanics->dashUnlocked;
+	abilitiesNode.attribute("jump") = player->GetMechanics()->GetMovementHandler()->IsJumpUnlocked();
+	abilitiesNode.attribute("doublejump") = player->GetMechanics()->GetMovementHandler()->IsDoubleJumpUnlocked();
+	abilitiesNode.attribute("dash") = player->GetMechanics()->GetMovementHandler()->IsDashUnlocked();
 
 	pugi::xml_node sceneNode = saveData.child("scene"); // Save Actual Scene
 	sceneNode.attribute("actualScene") = nextScene;
@@ -322,7 +322,7 @@ void Scene::Vignette(int size, float strength, SDL_Color color)
 }
 void Scene::VignetteHeartBeat(float dt)
 {
-	if (mechanics->lives != 1)
+	if (mechanics->GetHealthSystem()->GetLives() != 1)
 	{
 		heartbeatProgress = 0.0f;
 		return;

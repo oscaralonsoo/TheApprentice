@@ -31,6 +31,10 @@ public:
     bool IsJumpCooldownActive() const { return jumpCooldownActive; }
     bool IsWallSlideCooldownActive() const { return wallSlideCooldownActive; }
 
+    bool IsJumpUnlocked() const { return jumpMechanic.IsJumpUnlocked(); }
+    bool IsDoubleJumpUnlocked() const { return jumpMechanic.IsDoubleJumpUnlocked(); }
+    bool IsDashUnlocked() const { return dashMechanic.IsDashUnlocked(); }
+
 private:
     void HandleMovementInput();
     void UpdateAnimation();

@@ -24,7 +24,7 @@ private:
 
     Timer stunTimer;
     float stunDuration = 910.0f; // en milisegundos
-    float fallStunThreshold = 35.0f; // velocidad Y para stun
+    float fallStunThreshold = 1.0f; // velocidad Y para stun
 
     bool isStunned = false;
 };

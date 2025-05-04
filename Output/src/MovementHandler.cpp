@@ -3,6 +3,9 @@
 #include "Engine.h"
 #include "Input.h"
 #include "Physics.h"
+#include "AbilityZone.h"
+#include "Log.h"
+#include "EntityManager.h"
 
 void MovementHandler::Init(Player* player) {
     this->player = player;
@@ -18,25 +21,33 @@ void MovementHandler::Init(Player* player) {
         }
     }
 
-    // Ahora que el controller está inicializado, pásalo
+    // Inicializar las mecánicas después de preparar el controller
     jumpMechanic.Init(player);
+    dashMechanic.Init(player);
+    attackMechanic.Init(player);
+    fallMechanic.Init(player);
+    wallSlideMechanic.Init(player);
+
     if (controller) {
         jumpMechanic.SetController(controller);
         dashMechanic.SetController(controller);
         attackMechanic.SetController(controller);
         Engine::GetInstance().menus->SetController(controller);
-    }
 
-    dashMechanic.Init(player);
-    attackMechanic.Init(player);
-    fallMechanic.Init(player);
-    wallSlideMechanic.Init(player);
+        // Reasignar controller a todas las AbilityZones una vez inicializado
+        for (Entity* e : Engine::GetInstance().entityManager->entities) {
+            if (e->type == EntityType::ABILITY_ZONE) {
+                static_cast<AbilityZone*>(e)->SetController(controller);
+                LOG("Controller reasignado a AbilityZone desde MovementHandler");
+            }
+        }
+    }
 }
 
 void MovementHandler::Update(float dt) {
     HandleMovementInput();
     HandleTimers();
-    HandleWallSlide(); // <<< AÑADIR ESTA LLAMADA
+    HandleWallSlide();
 
     jumpMechanic.Update(dt);
     dashMechanic.Update(dt);

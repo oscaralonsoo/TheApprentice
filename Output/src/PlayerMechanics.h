@@ -5,6 +5,7 @@
 #include "InvulnerabilitySystem.h"
 #include "GodModeSystem.h"
 #include "RespawnSystem.h"
+#include "FallMechanic.h"
 
 class Player;
 class PhysBody;
@@ -34,6 +35,7 @@ public:
 
     MovementHandler* GetMovementHandler() { return &movementHandler; }
     HealthSystem* GetHealthSystem() { return &healthSystem; }
+    FallMechanic* GetFallMechanic() { return &fallMechanic; }
 
 private:
     Player* player = nullptr;
@@ -43,6 +45,7 @@ private:
     InvulnerabilitySystem invulnerabilitySystem;
     GodModeSystem godModeSystem;
     RespawnSystem respawnSystem;
+    FallMechanic fallMechanic;
 
     bool isOnGround = false;
     bool isWallSliding = false;

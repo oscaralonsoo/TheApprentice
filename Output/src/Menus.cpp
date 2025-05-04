@@ -10,7 +10,9 @@
 #include <SDL2/SDL_mixer.h>
 #include "Textures.h"
 
-Menus::Menus() : currentState(MenusState::INTRO), transitionAlpha(0.0f), inTransition(false), fadingIn(false), nextState(MenusState::NONE),
+
+
+Menus::Menus() : currentState(MenusState::GAME), transitionAlpha(0.0f), inTransition(false), fadingIn(false), nextState(MenusState::NONE),
 fastTransition(false), menuBackground(nullptr), pauseBackground(nullptr) {}
 
 Menus::~Menus() {}

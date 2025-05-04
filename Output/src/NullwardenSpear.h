@@ -8,12 +8,15 @@
 
 class NullwardenSpear : public Entity {
 public:
-    NullwardenSpear(float x, float y, bool horizontal, float speed, b2Vec2 direction);
+    NullwardenSpear(float x, float y, float speed, b2Vec2 direction);
     ~NullwardenSpear();
 
     bool Update(float dt) override;
     bool CleanUp() override;
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
+
+    void Activate();
+    void Deactivate();
 
 private:
     PhysBody* pbody = nullptr;
@@ -27,5 +30,4 @@ private:
     Vector2D position;
     int width, height;
     b2Vec2 direction;
-    bool isHorizontal;
 };

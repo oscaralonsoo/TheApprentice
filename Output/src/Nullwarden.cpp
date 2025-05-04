@@ -8,7 +8,6 @@
 
 
 Nullwarden::Nullwarden() : Enemy(EntityType::NULLWARDEN) {
-    direction = 1;
 }
 
 Nullwarden::~Nullwarden() {
@@ -20,7 +19,7 @@ bool Nullwarden::Awake() {
 
 bool Nullwarden::Start() {
     //Add a physics to an item - initialize the physics body
-    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texW / 2, (int)position.getY() + texH / 2, texW / 1.3, texH / 1.9, bodyType::DYNAMIC);
+    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texW / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::DYNAMIC);
 
     //Assign collider type
     pbody->ctype = ColliderType::ENEMY;
@@ -30,7 +29,7 @@ bool Nullwarden::Start() {
     pugi::xml_document loadFile;
     pugi::xml_parse_result result = loadFile.load_file("config.xml");
 
-    for (pugi::xml_node enemyNode = loadFile.child("config").child("scene").child("animations").child("bosses").child("boss"); enemyNode; enemyNode = enemyNode.next_sibling("boss"))
+    for (pugi::xml_node enemyNode = loadFile.child("config").child("scene").child("animations").child("enemies").child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy"))
     {
         if (std::string(enemyNode.attribute("type").as_string()) == type)
         {
@@ -67,16 +66,18 @@ bool Nullwarden::Update(float dt) {
     case NullwardenState::ATTACK:
         if (currentAnimation != &attackAnim) {
             currentAnimation = &attackAnim;
+            spearIntervalTimer.Start();
             spearAttackTimer.Start();
+            direction = -direction;
         }
 
         if (spearIntervalTimer.ReadMSec() >= spearIntervalMs) {
-            SpawnSpears(true);
+            SpawnHorizontalSpears();
             spearIntervalTimer.Start();
         }
 
         if (spearAttackTimer.ReadMSec() >= spearAttackMs) {
-            currentState = NullwardenState::CHARGE;
+           currentState = NullwardenState::CHARGE;
         }
         break;
     case NullwardenState::CHARGE:
@@ -97,10 +98,20 @@ bool Nullwarden::Update(float dt) {
         if (impaledTimer.ReadMSec() >= impaledMs) {
             currentState = NullwardenState::ROAR;
         }
+        else if (verticalSpearTimer.ReadMSec() >= verticalSpearIntervalMs && spawnedVerticalSpears < maxVerticalSpears) {
+            SpawnVerticalSpears();
+            verticalSpearTimer.Start();
+        }
         break;
     case NullwardenState::ROAR:
-        if (currentAnimation != &roarAnim) currentAnimation = &roarAnim;
-        PushPlayerBack();
+        if (currentAnimation != &roarAnim) {
+            currentAnimation = &roarAnim;
+            roarTimer.Start();
+        }
+
+        if (roarTimer.ReadMSec() >= roarMs) {
+            currentState = NullwardenState::ATTACK;
+        }
         break;
     case NullwardenState::DEATH:
         if (currentAnimation != &deathAnim) currentAnimation = &deathAnim;
@@ -157,8 +168,8 @@ void Nullwarden::OnCollision(PhysBody* physA, PhysBody* physB)
 
 }
 
-void Nullwarden::SpawnSpears(bool isHorizontal) {
-    const float baseX = position.getX() + (isHorizontal ? 50.0f : 0.0f);
+void Nullwarden::SpawnHorizontalSpears() {
+    const float baseX = position.getX() + 200.0f * direction;
     const float baseY = position.getY() + 20;
     const int totalPositions = 4;
     const float gap = 100.0f;
@@ -166,12 +177,7 @@ void Nullwarden::SpawnSpears(bool isHorizontal) {
     std::vector<float> spearPositions;
 
     for (int i = 0; i < totalPositions; ++i) {
-        if (isHorizontal) {
-            spearPositions.push_back(baseY - (gap * i));
-        }
-        else {
-            spearPositions.push_back(baseX + (gap * i));
-        }
+        spearPositions.push_back(baseY - (gap * i));
     }
 
     int gapIndex = rand() % totalPositions;
@@ -179,35 +185,18 @@ void Nullwarden::SpawnSpears(bool isHorizontal) {
     for (int i = 0; i < totalPositions; ++i) {
         if (i == gapIndex) continue;
 
-        if (isHorizontal) {
-            Engine::GetInstance().entityManager->AddEntity(
-                new NullwardenSpear(baseX, spearPositions[i], true, 7.0f, b2Vec2(direction, 0.0f)));
-        }
-        else {
-            Engine::GetInstance().entityManager->AddEntity(
-                new NullwardenSpear(spearPositions[i], baseY, false, 7.0f, b2Vec2(0.0f, direction)));
-        }
+        Engine::GetInstance().entityManager->AddEntity(new NullwardenSpear(baseX, spearPositions[i], 10.0f, b2Vec2(direction, 0.0f)));
     }
 }
 
-void Nullwarden::PushPlayerBack() {
-    //Entity* player = Engine::GetInstance().scene.get()->GetPlayer();
+void Nullwarden::SpawnVerticalSpears() {
+    float baseY = position.getY() + texH;
+    float spearX = position.getX() + ((direction < 0) ? -50.0f : texW + 50.0f) + (spawnedVerticalSpears * verticalSpearGap * (direction < 0 ? -1 : 1));
 
-    //PhysBody* playerBody = player->;
-    //if (!playerBody) return;
+    Engine::GetInstance().entityManager->AddEntity(
+        new NullwardenSpear(spearX, baseY, 10.0f, b2Vec2(0.0f, -1.0f))
+    );
 
-    //b2Vec2 enemyPos = pbody->body->GetPosition();
-    //b2Vec2 playerPos = playerBody->body->GetPosition();
-
-    //float distance = b2Distance(enemyPos, playerPos);
-    //float pushRadius = 5.0f;
-
-    //if (distance <= pushRadius) {
-    //    b2Vec2 pushDir = playerPos - enemyPos;
-    //    pushDir.Normalize();
-    //    float pushForce = 10.0f;
-
-    //    playerBody->body->ApplyLinearImpulseToCenter(pushDir * pushForce, true);
-    //}
+    spawnedVerticalSpears++;
 }
 

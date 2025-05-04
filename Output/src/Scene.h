@@ -4,7 +4,10 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "PlayerMechanics.h"
+#include "Checkpoint.h"
 struct SDL_Texture;
+
+struct Checkpoint;
 
 class Scene : public Module
 {
@@ -79,7 +82,7 @@ private:
 	SDL_Texture* img;
 	//L03: TODO 3b: Declare a Player attribute
 	Player* player;
-
+	Checkpoint* checkpoint = nullptr;
 
 	//transition 
 	bool fadingIn = false;

@@ -35,11 +35,12 @@ public:
     MovementHandler* GetMovementHandler() { return &movementHandler; }
     HealthSystem* GetHealthSystem() { return &healthSystem; }
 
+    HealthSystem healthSystem;
 private:
     Player* player = nullptr;
 
     MovementHandler movementHandler;
-    HealthSystem healthSystem;
+
     InvulnerabilitySystem invulnerabilitySystem;
     GodModeSystem godModeSystem;
     RespawnSystem respawnSystem;

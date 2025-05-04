@@ -15,6 +15,7 @@
 #include "Enemy.h"
 #include "Menus.h"
 #include "PlayerMechanics.h"
+#include "Checkpoint.h"
 
 template <typename T>
 T Clamp(T value, T min, T max)
@@ -245,6 +246,8 @@ void Scene::SaveGameXML() {
 	config.save_file("config.xml"); // Save Changes
 
 	Engine::GetInstance().menus->StartTransition(false, Engine::GetInstance().menus->currentState); // Final Transition
+
+	mechanics->healthSystem.HealFull();//Heal The Player
 }
 void Scene::LoadGameXML() {
 	if (isLoading || transitioning) return;

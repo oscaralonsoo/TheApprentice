@@ -186,5 +186,5 @@ int Player::GetMovementDirection() const {
 }
 
 int Player::GetTextureWidth() const {
-	return texW;  // Asegúrate de tener texW bien definido (el ancho del sprite)
+	return texW; 
 }

@@ -51,9 +51,6 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
             respawnSystem.ForceRespawn();
         }
         break;
-    case ColliderType::CHECKPOINT:
-        healthSystem.HealFull();
-        break;
     default:
         break;
     }

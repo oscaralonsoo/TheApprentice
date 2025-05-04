@@ -32,7 +32,6 @@ void HealthSystem::HandleSpikeDamage() {
     if (lives > 0) {
         lives--;
     }
-
     if (lives <= 0) {
         Engine::GetInstance().scene->isDead = true;
     }

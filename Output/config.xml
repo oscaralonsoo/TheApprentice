@@ -377,21 +377,24 @@
 						<frame x="0" y="0" w="240" h="192" />
 					</consumed>
 				</life_plant>
-				<checkpoint w="240" h="192" texture="Assets/Props/CheckPoint_Spritesheet_Spawn.png">
+				<checkpoint w="240" h="192" texture="Assets/Props/CheckPointSpritesheet.png">
 					<unsaved loop="false" speed="0">
-						<frame x="240" y="0" w="240" h="192" />
+						<frame x="1" y="104" w="101" h="115" />
 					</unsaved>
-					<saving loop="false" speed ="0">
-						<frame x=" " y=" " w=" " h=" "/>
-						<frame x=" " y=" " w=" " h=" "/>
-						<frame x=" " y=" " w=" " h=" "/>
-						<frame x=" " y=" " w=" " h=" "/>
+					<saving loop="false" speed="0">
+						<frame x="1" y="104" w="101" h="115" />
+						<frame x="118" y="93" w="109" h="123" />
+						<frame x="245" y="77" w="118" h="139" />
+						<frame x=" " y=" " w=" " h=" " />
 					</saving>
 					<saved loop="false" speed="0">
 						<frame x="0" y="0" w="240" h="192" />
+						<frame x="0" y="0" w="240" h="192" />
+						<frame x="0" y="0" w="240" h="192" />
+						<frame x="0" y="0" w="240" h="192" />
+						<frame x="0" y="0" w="240" h="192" />
 					</saved>
-				
-			</checkpoint>
+				</checkpoint>
 			</props>
 			<particles>
 				<dust w="20" h="20" texture="Assets/Particles/dust.png">
@@ -431,7 +434,7 @@
 			</abilities>
 		</animations>
 		<save_data isSaved="1">
-			<player x="1950" y="650" w="44" h="54" lives="3" />
+			<player x="1572" y="1003" w="44" h="54" lives="3" />
 			<abilities jump="false" doublejump="false" dash="false" />
 			<scene actualScene="0" />
 			<enemies />

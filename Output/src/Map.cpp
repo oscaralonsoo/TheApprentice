@@ -340,7 +340,6 @@ bool Map::Load(std::string path, std::string fileName)
                     LOG("Created HelpZone entity '%s' at x: %d, y: %d", objectName.c_str(), x, y);
                 }
             }
-
             else if (layerName == "Doors")  // Objects from layer Doors
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode != NULL; objectNode = objectNode.next_sibling("object"))
@@ -379,17 +378,6 @@ bool Map::Load(std::string path, std::string fileName)
                     Engine::GetInstance().physics->listToDelete.push_back(doorCollider);
 
                     LOG("Creating Door at x: %d, y: %d, width: %d, height: %d", x + (width / 2), y + (height / 2), width, height);
-                }
-            }
-            else if (objectGroupName == "SaveGame") // Objects from layer SaveGame
-            {   
-                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
-                {
-                    int x = objectNode.attribute("x").as_int();
-                    int y = objectNode.attribute("y").as_int();
-                    int width = objectNode.attribute("width").as_int();
-                    int height = objectNode.attribute("height").as_int();
-
                 }
             }
             else if (objectGroupName == "DownCamera") // Objects from layer DownCamera
@@ -522,13 +510,19 @@ bool Map::Load(std::string path, std::string fileName)
 
                         LOG("Created LifePlant at x: %d, y: %d", x, y);
                     }
-                    else if (objectName == "Checkpoint") {
-                        int x = objectNode.attribute("x").as_int();
-                        int y = objectNode.attribute("y").as_int();
+                    else if (objectName == "Checkpoint") // Objects from layer SaveGame
+                    {
+                        for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
+                        {
+                            int x = objectNode.attribute("x").as_int();
+                            int y = objectNode.attribute("y").as_int();
+                            int width = objectNode.attribute("width").as_int();
+                            int height = objectNode.attribute("height").as_int();
 
-                        Checkpoint* checkPoint = (Checkpoint*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CHECKPOINT);
-                        checkPoint->position = Vector2D(x, y);
-
+                            // Crear el checkpoint
+                            Checkpoint* checkPoint = (Checkpoint*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CHECKPOINT);
+                            checkPoint->position = Vector2D(x + (width / 2), y + (height / 2)); // Ajustar la posición al centro del objeto
+                        }
                     }
                 }
             }

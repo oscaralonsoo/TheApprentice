@@ -25,7 +25,7 @@ void MovementHandler::Init(Player* player) {
     jumpMechanic.Init(player);
     dashMechanic.Init(player);
     attackMechanic.Init(player);
-    fallMechanic.Init(player);
+    //fallMechanic.Init(player);
     wallSlideMechanic.Init(player);
 
     if (controller) {

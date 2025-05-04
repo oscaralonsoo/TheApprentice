@@ -59,7 +59,7 @@ bool Physics::PreUpdate()
 			PhysBody* pb1 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData().pointer;
 			PhysBody* pb2 = (PhysBody*)c->GetFixtureB()->GetBody()->GetUserData().pointer;
 			
-			if (pb1 && pb2 && pb1->listener)
+			if (pb1 && pb2 && pb1->listener && !IsPendingToDelete(pb1) && !IsPendingToDelete(pb2))
 				pb1->listener->OnCollision(pb1, pb2);
 		}
 	}
@@ -395,14 +395,14 @@ void Physics::BeginContact(b2Contact* contact)
 	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData().pointer;
 	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData().pointer;
 
-	if (physA && physA->listener != NULL) {
+	if (physA && physA->listener != NULL && !IsPendingToDelete(physA)) {
 		if (physB) // Ensure physB is also valid
 		{
 			physA->listener->OnCollision(physA, physB);
 		}
 	}
 
-	if (physB && physB->listener != NULL) {
+	if (physB && physB->listener != NULL && !IsPendingToDelete(physB)) {
 		if(physA) // Ensure physA is also valid
 		{
 			physB->listener->OnCollision(physB, physA);

@@ -120,6 +120,39 @@
 					<frame x="780" y="1153" w="130" h="100" />
 				</dash>
 			</player>
+			<bosses>
+				<boss type="Nullwarden" w="64" h="64" texture="Assets/Enemies/test.png">
+					<idle loop="true" speed="0.35">
+						<frame x="0" y="0" w="64" h="64" />
+					</idle>
+					<attack loop="true" speed="0.35">
+						<frame x="0" y="64" w="64" h="64" />
+					</attack>
+					<charge loop="true" speed="0.35">
+						<frame x="0" y="128" w="64" h="64" />
+					</charge>
+					<impaled loop="true" speed="0.35">
+						<frame x="0" y="192" w="64" h="64" />
+					</impaled>
+					<roar loop="true" speed="0.35">
+						<frame x="0" y="256" w="64" h="64" />
+					</roar>
+					<death loop="true" speed="0.35">
+						<frame x="0" y="320" w="64" h="64" />
+					</death>
+				</boss>
+				<boss type="NullwardenSpear" w="35" h="180" texture="Assets/Enemies/sword.png">
+					<spawn loop="true" speed="0.3">
+						<frame x="0" y="0" w="35" h="180" />
+					</spawn>
+					<idle loop="true" speed="0.3">
+						<frame x="0" y="0" w="35" h="180" />
+					</idle>
+					<destroyed loop="true" speed="0.3">
+						<frame x="0" y="0" w="35" h="180" />
+					</destroyed>
+				</boss>
+			</bosses>
 			<enemies>
 				<enemy type="Bloodrusher" w="220" h="220" texture="Assets/Enemies/bloodrusher.png">
 					<idle loop="true" speed="0.35">

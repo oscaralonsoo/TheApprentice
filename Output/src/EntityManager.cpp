@@ -6,6 +6,7 @@
 #include "Log.h"
 #include "CaveDrop.h"
 #include "Bloodrusher.h"
+#include "Nullwarden.h"
 #include "LifePlant.h"
 #include "NPC.h"
 #include "Hypnoviper.h"
@@ -118,6 +119,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::ABILITY_ZONE:
 		entity = new AbilityZone();
+		break;
+	case EntityType::NULLWARDEN:
+		entity = new Nullwarden();
 		break;
 	case EntityType::HIDDEN_ZONE:
 		entity = new HiddenZone();

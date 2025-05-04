@@ -14,6 +14,7 @@ enum class EntityType
 	BROODHEART,
 	THUMPOD,
 	SCURVER,
+	SPEAR,
 	LIFE_PLANT,
 	HELP_ZONE,
 	BROOD,

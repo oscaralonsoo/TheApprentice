@@ -587,6 +587,8 @@ bool Map::Load(std::string path, std::string fileName)
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CREEBLER);
                     else if (enemyName == "Scurver")
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::SCURVER);
+                    else if (enemyName == "Nullwarden")
+                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::NULLWARDEN);
                     else if (enemyName == "Thumpod")
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::THUMPOD);
                     else if (enemyName == "Mireborn") {

@@ -377,6 +377,21 @@
 						<frame x="0" y="0" w="240" h="192" />
 					</consumed>
 				</life_plant>
+				<checkpoint w="240" h="192" texture="Assets/Props/CheckPoint_Spritesheet_Spawn.png">
+					<unsaved loop="false" speed="0">
+						<frame x="240" y="0" w="240" h="192" />
+					</unsaved>
+					<saving loop="false" speed ="0">
+						<frame x=" " y=" " w=" " h=" "/>
+						<frame x=" " y=" " w=" " h=" "/>
+						<frame x=" " y=" " w=" " h=" "/>
+						<frame x=" " y=" " w=" " h=" "/>
+					</saving>
+					<saved loop="false" speed="0">
+						<frame x="0" y="0" w="240" h="192" />
+					</saved>
+				
+			</checkpoint>
 			</props>
 			<particles>
 				<dust w="20" h="20" texture="Assets/Particles/dust.png">

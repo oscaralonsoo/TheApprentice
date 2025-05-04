@@ -16,6 +16,7 @@ enum class EntityType
 	SCURVER,
 	SPEAR,
 	LIFE_PLANT,
+	CHECKPOINT,
 	HELP_ZONE,
 	BROOD,
 	NULLWARDEN,

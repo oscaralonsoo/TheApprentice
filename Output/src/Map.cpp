@@ -16,6 +16,7 @@
 #include "DestructibleWall.h"
 #include "PushableBox.h"
 #include "HelpZone.h"
+#include "Checkpoint.h"
 
 Map::Map() : Module(), mapLoaded(false)
 {
@@ -131,7 +132,6 @@ void Map::DrawMapLayers(bool forwardOnly)
         }
     }
 }
-
 
 // L09: TODO 2: Implement function to the Tileset based on a tile id
 TileSet* Map::GetTilesetFromTileId(uint32_t gid) const
@@ -390,17 +390,6 @@ bool Map::Load(std::string path, std::string fileName)
                     int width = objectNode.attribute("width").as_int();
                     int height = objectNode.attribute("height").as_int();
 
-                    PhysBody* saveGameCollider = Engine::GetInstance().physics->CreateRectangleSensor(
-                        x + (width / 2),
-                        y + (height / 2),
-                        width, height,
-                        STATIC,
-                        CATEGORY_SAVEGAME,      // Solo SaveGame
-                        CATEGORY_PLAYER          // Solo interactúa con el jugador
-                    );
-                    saveGameCollider->ctype = ColliderType::SAVEGAME;
-
-                    Engine::GetInstance().physics->listToDelete.push_back(saveGameCollider);
                 }
             }
             else if (objectGroupName == "DownCamera") // Objects from layer DownCamera
@@ -532,6 +521,14 @@ bool Map::Load(std::string path, std::string fileName)
                         lifePlant->position = Vector2D(x, y);
 
                         LOG("Created LifePlant at x: %d, y: %d", x, y);
+                    }
+                    else if (objectName == "Checkpoint") {
+                        int x = objectNode.attribute("x").as_int();
+                        int y = objectNode.attribute("y").as_int();
+
+                        Checkpoint* checkPoint = (Checkpoint*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CHECKPOINT);
+                        checkPoint->position = Vector2D(x, y);
+
                     }
                 }
             }

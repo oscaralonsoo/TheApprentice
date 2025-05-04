@@ -29,8 +29,6 @@ public:
 	void OnCollision(PhysBody* physA, PhysBody* physB);
 	void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
-	void ReduceVignetteSize();
-
 private:
 	PhysBody* pbody;
 

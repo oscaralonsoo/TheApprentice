@@ -23,6 +23,7 @@
 #include "AbilityZone.h"
 #include "Noctilume.h"
 #include "HelpZone.h"
+#include "Checkpoint.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -143,6 +144,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::HELP_ZONE:
 		entity = new HelpZone();
+		break;
+	case EntityType::CHECKPOINT:
+		entity = new Checkpoint();
 		break;
 	default:
 		break;

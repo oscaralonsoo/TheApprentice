@@ -39,7 +39,7 @@ public:
 	int GetMovementDirection() const;
 
 	PlayerMechanics* GetMechanics() { return &mechanics; }
-
+	PlayerAnimation* GetAnimation() { return &animation; }
 
 	int GetTextureWidth() const;
 

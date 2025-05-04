@@ -59,7 +59,7 @@ void JumpMechanic::HandleJumpInput() {
     }
 
     // ----------- INICIO DE SALTO -----------
-    if (jumpDown) {
+    if (jumpDown && !player->GetMechanics()->GetFallMechanic()->IsFalling()) {
         if (player->GetMechanics()->IsOnGround() || (doubleJumpUnlocked && jumpCount < maxJumpCount)) {
             velocity.y = -jumpForce;
             isJumping = true;
@@ -75,7 +75,7 @@ void JumpMechanic::HandleJumpInput() {
     }
 
     // ----------- SALTO PROGRESIVO -----------
-    if (isHoldingJump && jumpRepeat) {
+    if (isHoldingJump && jumpRepeat && !player->GetMechanics()->GetFallMechanic()->IsFalling()) {
         float currentY = player->GetPosition().getY();
         float heightJumped = jumpStartY - currentY;
 

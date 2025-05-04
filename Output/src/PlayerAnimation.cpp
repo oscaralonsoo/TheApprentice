@@ -50,3 +50,15 @@ void PlayerAnimation::Update(float dt, const std::string& state, int x, int y, b
 const SDL_Rect& PlayerAnimation::GetCurrentFrame() const {
     return currentAnimation->GetCurrentFrame();
 }
+
+bool PlayerAnimation::HasFinished() const {
+    return currentAnimation && currentAnimation->HasFinished();
+}
+
+std::string PlayerAnimation::GetCurrentState() const {
+    return currentState;
+}
+
+int PlayerAnimation::GetLoopCount() const {
+    return currentAnimation ? currentAnimation->GetLoopCount() : 0;
+}

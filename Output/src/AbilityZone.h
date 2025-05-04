@@ -82,4 +82,5 @@ private:
 	SDL_Color normalVignetteColor = { 0, 0, 0, 255 };
 	bool xHeld = false;
 	SDL_GameController* controller = nullptr;
+	bool waitingForEatAnimation = false;
 };

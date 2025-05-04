@@ -9,9 +9,7 @@ void FallMechanic::Init(Player* player) {
 }
 
 void FallMechanic::Update(float dt) {
-    if (player->GetMechanics()->IsOnGround())
-        return;
-
+    // Procesar stun aunque ya esté en el suelo
     if (isStunned) {
         if (stunTimer.ReadMSec() >= stunDuration) {
             isStunned = false;
@@ -19,15 +17,19 @@ void FallMechanic::Update(float dt) {
         }
         else {
             player->pbody->body->SetLinearVelocity(b2Vec2_zero);
-            player->SetState("landing");
+            player->SetState("landing_stun");
         }
         return;
     }
 
+    // Si está en el suelo, no seguimos procesando la caída
+    if (player->GetMechanics()->IsOnGround())
+        return;
+
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
     if (velocity.y > 0.1f && !isFalling && !player->GetMechanics()->IsWallSliding()) {
         isFalling = true;
-        player->SetState("fall"); //  aquí seteamos animación de caída
+        player->SetState("fall");
     }
 
     CheckFallStart();

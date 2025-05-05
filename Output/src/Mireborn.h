@@ -6,7 +6,8 @@
 enum class MirebornState {
     IDLE,         
     WALKING,
-    DEAD
+    DIVIDING,
+    DEATH
 };
 
 class Mireborn : public Enemy
@@ -37,21 +38,22 @@ public:
 public:
 
 private:
-    float jumpCooldown = 0.0f;
-    float jumpInterval = 750.0f;; //Time Between Jumps
-    float jumpForceY = -20.0f;
-    float jumpForceX = 5.0f;
-    bool hasJumped = false;
+    float jumpForceY = -4.0f;
+    float jumpForceX = 4.0f;
     bool isOnGround = false;
+    const float jumpCooldown = 1600.0f;
+    Timer jumpCooldownTimer;
 
     static const int MAX_DIVIDES = 2;
 
     std::string tier;
 
-    MirebornState currentState = MirebornState::IDLE;
+    MirebornState currentState = MirebornState::WALKING;
     PhysBody* physBody = nullptr;
     Animation idleAnim;
     Animation walkAnim;
+    Animation divideAnim;
+    Animation deathAnim;
 
     bool isDivided = false;
 };

@@ -47,11 +47,10 @@ public:
 
 	std::string GetEnemyType() const { return type; }
 
-
 public:
 	//Pathfinding
 	int steps = 0;
-	int maxSteps = 10;
+	int maxSteps = 50;
 	PhysBody* pbody;
 
 
@@ -63,6 +62,7 @@ protected:
 	bool gravity;
 	std::string type;
 	int texW, texH;
+	float scale = 1.0f;
 	pugi::xml_node parameters;
 	Animation* currentAnimation = nullptr;
 

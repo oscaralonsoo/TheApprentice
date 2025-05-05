@@ -26,9 +26,6 @@ bool Enemy::Awake() {
 }
 
 bool Enemy::Start() {
-	//Add a physics to an item - initialize the physics body
-	pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, bodyType::DYNAMIC);
-
 	//Assign collider type
 	pbody->ctype = ColliderType::ENEMY;
 
@@ -73,7 +70,9 @@ bool Enemy::Update(float dt)
 		0.0,
 		INT_MAX,
 		INT_MAX,
-		(direction < 0) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
+		(direction < 0) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL,
+		scale
+	);
 	currentAnimation->Update();
 
 	//Show|Hide Path

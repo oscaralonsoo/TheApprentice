@@ -37,7 +37,7 @@ bool LifePlant::Start() {
     pbody = Engine::GetInstance().physics->CreateRectangle(
         (int)position.getX() + texW / 2,
         (int)position.getY() + texH / 2,
-        50, 70,
+        texW, texH,
         bodyType::DYNAMIC,
         60,
         20,

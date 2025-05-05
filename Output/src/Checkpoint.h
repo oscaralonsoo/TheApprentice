@@ -34,6 +34,10 @@ public:
 
     void CheckSave();
 
+public:
+    int texW, texH;
+    int height, width;
+
 private:
     PhysBody* pbody;
     SDL_Texture* texture;
@@ -46,7 +50,7 @@ private:
     Animation* currentAnimation = nullptr;
 
     const char* texturePath;
-    int texW, texH;
+
 
     bool isSaving = false;
     bool insideCheckpoint = false;

@@ -377,22 +377,24 @@
 						<frame x="0" y="0" w="240" h="192" />
 					</consumed>
 				</life_plant>
-				<checkpoint w="240" h="192" texture="Assets/Props/CheckPointSpritesheet.png">
+				<checkpoint w="256" h="320" texture="Assets/Props/CheckPoint_Spritesheet.png">
 					<unsaved loop="false" speed="0">
-						<frame x="1" y="104" w="101" h="115" />
+						<frame x="0" y="0" w="256" h="320" />
 					</unsaved>
-					<saving loop="false" speed="0">
-						<frame x="1" y="104" w="101" h="115" />
-						<frame x="118" y="93" w="109" h="123" />
-						<frame x="245" y="77" w="118" h="139" />
-						<frame x=" " y=" " w=" " h=" " />
+					<saving loop="false" speed="0.175">
+						<frame x="0" y="0" w="256" h="320" />
+						<frame x="256" y="0" w="256" h="320" />
+						<frame x="512" y="0" w="256" h="320" />
+						<frame x=" " y=" " w="256" h="320" />
+						<frame x=" " y=" " w="256" h="320" />
+						<frame x=" " y=" " w="256" h="320" />
 					</saving>
-					<saved loop="false" speed="0">
-						<frame x="0" y="0" w="240" h="192" />
-						<frame x="0" y="0" w="240" h="192" />
-						<frame x="0" y="0" w="240" h="192" />
-						<frame x="0" y="0" w="240" h="192" />
-						<frame x="0" y="0" w="240" h="192" />
+					<saved loop="false" speed="0.175">
+						<frame x=" " y=" " w="256" h="320" />
+						<frame x=" " y=" " w="256" h="320" />
+						<frame x=" " y=" " w="256" h="320" />
+						<frame x=" " y=" " w="256" h="320" />
+						<frame x=" " y=" " w="256" h="320" />
 					</saved>
 				</checkpoint>
 			</props>
@@ -434,7 +436,7 @@
 			</abilities>
 		</animations>
 		<save_data isSaved="1">
-			<player x="1572" y="1003" w="44" h="54" lives="3" />
+			<player x="1564" y="1003" w="44" h="54" lives="3" />
 			<abilities jump="false" doublejump="false" dash="false" />
 			<scene actualScene="0" />
 			<enemies />

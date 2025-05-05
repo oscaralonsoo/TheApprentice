@@ -510,19 +510,19 @@ bool Map::Load(std::string path, std::string fileName)
 
                         LOG("Created LifePlant at x: %d, y: %d", x, y);
                     }
-                    else if (objectName == "Checkpoint") // Objects from layer SaveGame
+                    else if (objectName == "Checkpoint")
                     {
-                        for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
-                        {
-                            int x = objectNode.attribute("x").as_int();
-                            int y = objectNode.attribute("y").as_int();
-                            int width = objectNode.attribute("width").as_int();
-                            int height = objectNode.attribute("height").as_int();
+                        int x = objectNode.attribute("x").as_int();
+                        int y = objectNode.attribute("y").as_int();
+                        int width = objectNode.attribute("w").as_int();
+                        int height = objectNode.attribute("j").as_int();
 
-                            // Crear el checkpoint
-                            Checkpoint* checkPoint = (Checkpoint*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CHECKPOINT);
-                            checkPoint->position = Vector2D(x + (width / 2), y + (height / 2)); // Ajustar la posición al centro del objeto
-                        }
+                        Checkpoint* checkpoint = (Checkpoint*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CHECKPOINT);
+                        checkpoint->position = Vector2D(x, y);
+                        checkpoint->height = height;
+                        checkpoint->width = width;
+
+                        LOG("Created Checkpoint at x: %d, y: %d", x, y);
                     }
                 }
             }

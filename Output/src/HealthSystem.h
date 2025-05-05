@@ -23,6 +23,10 @@ public:
 
     void ApplyKnockback(const Vector2D& sourcePosition);
 
+    bool IsInHitAnim() const { return isInHitAnim; }
+
+    bool IsDying() const { return isDying; }
+
 private:
     void UpdateVignette();
     void CheckDeath();
@@ -37,4 +41,12 @@ private:
     bool knockbackActive = false;
     float knockbackDuration = 300.0f;
     b2Vec2 knockbackInitialVelocity;
+
+    Timer hitTimer;
+    bool isInHitAnim = false;
+    float hitAnimDuration = 350.0f;
+
+    bool isDying = false;
+    Timer deathTimer;
+    float deathAnimDuration = 1000.0f; // Ajusta según tu animación
 };

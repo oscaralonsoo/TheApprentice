@@ -25,7 +25,7 @@ void MovementHandler::Init(Player* player) {
     jumpMechanic.Init(player);
     dashMechanic.Init(player);
     attackMechanic.Init(player);
-    //fallMechanic.Init(player);
+    fallMechanic.Init(player);
     wallSlideMechanic.Init(player);
 
     if (controller) {
@@ -45,6 +45,11 @@ void MovementHandler::Init(Player* player) {
 }
 
 void MovementHandler::Update(float dt) {
+    fallMechanic.Update(dt);
+    if (fallMechanic.IsStunned())
+    {
+        return;
+    }
     HandleMovementInput();
     HandleTimers();
     HandleWallSlide();
@@ -52,7 +57,6 @@ void MovementHandler::Update(float dt) {
     jumpMechanic.Update(dt);
     dashMechanic.Update(dt);
     attackMechanic.Update(dt);
-    //fallMechanic.Update(dt);
 
     UpdateAnimation();
 }
@@ -101,13 +105,18 @@ void MovementHandler::HandleMovementInput() {
 }
 
 void MovementHandler::UpdateAnimation() {
+
+    if (player->GetMechanics()->GetHealthSystem()->IsInHitAnim()) return;
+    if (player->GetState() == "die") return;
+    if (dashMechanic.IsDashing()) return;
+
     if (!attackMechanic.IsAttacking() &&
         !dashMechanic.IsDashing() &&
         !jumpMechanic.IsJumping() &&
-        //!fallMechanic.IsFalling() &&
+        !fallMechanic.IsFalling() &&
+        !fallMechanic.IsStunned() &&
         !isWallSliding)
     {
-        // Ahora sí puedo cambiar a idle o run_right
         if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT ||
             Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
             player->SetState("run_right");
@@ -160,7 +169,7 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PUSHABLE_PLATFORM:
         if (!jumpCooldownActive) {
             jumpMechanic.OnLanding();
-            //fallMechanic.OnLanding();
+            fallMechanic.OnLanding();
         }
         break;
 
@@ -192,6 +201,7 @@ void MovementHandler::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PUSHABLE_PLATFORM:
         jumpCooldownTimer.Start();
         jumpCooldownActive = true;
+        player->GetMechanics()->SetIsOnGround(false);
         break;
 
     case ColliderType::WALL_SLIDE: // <<< Aquí nuevo

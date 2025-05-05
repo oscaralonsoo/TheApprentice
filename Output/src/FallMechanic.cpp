@@ -33,7 +33,6 @@ void FallMechanic::Update(float dt) {
     }
 
     CheckFallStart();
-    ApplyFallStunIfNeeded();
     CheckLanding();
 }
 
@@ -46,23 +45,15 @@ void FallMechanic::CheckFallStart() {
     }
 }
 
-void FallMechanic::ApplyFallStunIfNeeded() {
-    float verticalVelocity = player->pbody->body->GetLinearVelocity().y;
-
-    if (verticalVelocity > fallStunThreshold) {
-        willStun = true;
-    }
-}
-
 void FallMechanic::CheckLanding() {
     if (player->GetMechanics()->IsOnGround() && isFalling) {
         isFalling = false;
 
-        if (willStun) {
-            willStun = false;
+        float verticalVelocity = player->pbody->body->GetLinearVelocity().y;
+
+        if (verticalVelocity > fallStunThreshold) {
             isStunned = true;
             stunTimer.Start();
-
             player->SetState("landing_stun");
             Engine::GetInstance().render->StartCameraShake(0.2f, 2);
         }
@@ -76,8 +67,9 @@ void FallMechanic::OnLanding() {
     if (isFalling) {
         isFalling = false;
 
-        if (willStun) {
-            willStun = false;
+        float verticalVelocity = player->pbody->body->GetLinearVelocity().y;
+
+        if (verticalVelocity > fallStunThreshold) {
             isStunned = true;
             stunTimer.Start();
             player->SetState("landing_stun");

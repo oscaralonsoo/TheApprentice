@@ -19,9 +19,8 @@ enum class NullwardenState {
 class Nullwarden : public Enemy
 {
 public:
-
-	Nullwarden();
-	~Nullwarden() override;
+    Nullwarden();
+    ~Nullwarden() override;
 
     bool Awake() override;
     bool Start() override;
@@ -30,12 +29,12 @@ public:
     bool CleanUp() override;
     void OnCollision(PhysBody* physA, PhysBody* physB);
 
-    void SpawnSpears(bool isHorizontal);
-    void PushPlayerBack();
+    void SpawnHorizontalSpears();
+    void SpawnVerticalSpears();
 
 private:
     NullwardenState currentState = NullwardenState::IDLE;
-    
+
     Animation idleAnim;
     Animation attackAnim;
     Animation chargeAnim;
@@ -43,13 +42,19 @@ private:
     Animation roarAnim;
     Animation deathAnim;
 
-    const float spearIntervalMs = 1600.0f;
+    const float spearIntervalMs = 2000.0f;
     Timer spearIntervalTimer;
-    const float spearAttackMs = 1000.0f;
+    const float spearAttackMs = 100.0f;
     Timer spearAttackTimer;
-    const float impaledMs = 2000.0f;
+    const float impaledMs = 20000.0f;
     Timer impaledTimer;
+    const float roarMs = 2000.0f;
+    Timer roarTimer;
+    Timer verticalSpearTimer;
+    const float verticalSpearIntervalMs = 300.0f;
+    int spawnedVerticalSpears = 0;
+    const int maxVerticalSpears = 15;
+    const float verticalSpearGap = 80.0f;
 
     int lives = 3;
 };
-

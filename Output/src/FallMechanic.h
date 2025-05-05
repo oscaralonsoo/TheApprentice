@@ -10,21 +10,20 @@ public:
     void Update(float dt);
     void OnLanding();
     bool IsFalling() const { return isFalling; }
+    bool IsStunned() const { return isStunned; }
 
 private:
     void CheckFallStart();
     void CheckLanding();
-    void ApplyFallStunIfNeeded();
 
 private:
     Player* player = nullptr;
 
     bool isFalling = false;
-    bool willStun = false;
 
     Timer stunTimer;
     float stunDuration = 910.0f; // en milisegundos
-    float fallStunThreshold = 35.0f; // velocidad Y para stun
+    float fallStunThreshold = 34.0f; // velocidad Y para stun
 
     bool isStunned = false;
 };

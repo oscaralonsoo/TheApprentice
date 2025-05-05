@@ -61,6 +61,8 @@ void DashMechanic::StartDash() {
     }
 
     Engine::GetInstance().render->DashCameraImpulse(dashDirection, 100);
+
+    player->SetState("dash"); //  AÑADIDO aquí
 }
 
 void DashMechanic::ApplyDashMovement() {

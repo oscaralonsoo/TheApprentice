@@ -26,9 +26,6 @@ bool Enemy::Awake() {
 }
 
 bool Enemy::Start() {
-	//Add a physics to an item - initialize the physics body
-	pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, bodyType::DYNAMIC);
-
 	//Assign collider type
 	pbody->ctype = ColliderType::ENEMY;
 
@@ -67,6 +64,16 @@ bool Enemy::Update(float dt)
 	b2Transform pbodyPos = pbody->body->GetTransform();
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
+
+	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() - 15, &currentAnimation->GetCurrentFrame(),
+		1.0f,
+		0.0,
+		INT_MAX,
+		INT_MAX,
+		(direction < 0) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL,
+		scale
+	);
+	currentAnimation->Update();
 
 	//Show|Hide Path
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {

@@ -3,23 +3,26 @@
 #include "EntityManager.h"
 #include "Scene.h"
 
-NullwardenSpear::NullwardenSpear(float x, float y, bool horizontal, float speed, b2Vec2 direction)
-    : Entity(EntityType::SPEAR), isHorizontal(horizontal), direction(direction)
+NullwardenSpear::NullwardenSpear(float x, float y, float speed, b2Vec2 direction)
+    : Entity(EntityType::SPEAR), direction(direction)
 {
-    width = isHorizontal ? 180 : 35;
-    height = isHorizontal ? 35 : 180;
+    bool horizontal = (direction.x != 0.0f);
+
+    width = horizontal ? 180 : 35;
+    height = horizontal ? 35 : 180;
 
     pbody = Engine::GetInstance().physics->CreateRectangle(x, y, width, height, bodyType::DYNAMIC);
     pbody->ctype = ColliderType::ENEMY;
     pbody->listener = this;
 
     pbody->body->SetGravityScale(0.0f);
+
     if (b2Fixture* fixture = pbody->body->GetFixtureList()) {
         fixture->SetSensor(false);
 
         b2Filter filter;
         filter.categoryBits = CATEGORY_ENEMY;
-        filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_ATTACK | CATEGORY_PLAYER_DAMAGE;
+        filter.maskBits = CATEGORY_WALL | CATEGORY_PLAYER_DAMAGE;
         fixture->SetFilterData(filter);
     }
 
@@ -28,7 +31,7 @@ NullwardenSpear::NullwardenSpear(float x, float y, bool horizontal, float speed,
     pugi::xml_document loadFile;
     pugi::xml_parse_result result = loadFile.load_file("config.xml");
 
-    for (pugi::xml_node node = loadFile.child("config").child("scene").child("animations").child("bosses").child("boss"); node; node = node.next_sibling("boss"))
+    for (pugi::xml_node node = loadFile.child("config").child("scene").child("animations").child("enemies").child("enemy"); node; node = node.next_sibling("enemy"))
     {
         if (std::string(node.attribute("type").as_string()) == "NullwardenSpear")
         {
@@ -55,7 +58,9 @@ NullwardenSpear::~NullwardenSpear() {
 bool NullwardenSpear::Update(float dt) {
     b2Transform pbodyPos = pbody->body->GetTransform();
 
-    if (isHorizontal) {
+    bool horizontal = (direction.x != 0.0f);
+
+    if (horizontal) {
         position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - height / 2);
         position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - width / 2);
     }
@@ -64,7 +69,7 @@ bool NullwardenSpear::Update(float dt) {
         position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - height / 2);
     }
 
-    float angle = (isHorizontal) ? 90.0f : 0.0f;
+    float angle = horizontal ? 90.0f : 0.0f;
     SDL_RendererFlip flip = (direction.x < 0) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
     Engine::GetInstance().render.get()->DrawTexture(
@@ -84,7 +89,6 @@ bool NullwardenSpear::Update(float dt) {
     return true;
 }
 
-
 bool NullwardenSpear::CleanUp()
 {
     Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
@@ -95,10 +99,8 @@ void NullwardenSpear::OnCollision(PhysBody* physA, PhysBody* physB)
 {
     switch (physB->ctype)
     {
-    case ColliderType::PLATFORM:
     case ColliderType::WALL:
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
     }
-
 }

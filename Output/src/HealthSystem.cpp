@@ -17,6 +17,18 @@ void HealthSystem::Update(float dt) {
         knockbackActive = false;
         player->GetMechanics()->GetMovementHandler()->SetCantMove(false);
     }
+
+    if (isInHitAnim && hitTimer.ReadMSec() >= hitAnimDuration) {
+        isInHitAnim = false;
+    }
+
+    if (isDying && deathTimer.ReadMSec() >= deathAnimDuration) {
+        isDying = false;
+
+        // Aquí podrías reiniciar vida o mover al respawn
+        lives = 3;
+        // O llamar a algún método como scene->ReloadPlayer();
+    }
 }
 
 void HealthSystem::TakeDamage() {
@@ -25,15 +37,34 @@ void HealthSystem::TakeDamage() {
 
     Engine::GetInstance().render->StartCameraShake(0.5, 1);
 
-    UpdateVignette();
+    if (lives == 0 && !isDying) {
+        isDying = true;
+        player->SetState("die");
+        deathTimer.Start();
+        Engine::GetInstance().scene->isDead = true;
+    }
+    else {
+        player->SetState("hit");
+        hitTimer.Start();
+        isInHitAnim = true;
+    }
 }
 
 void HealthSystem::HandleSpikeDamage() {
     if (lives > 0) {
         lives--;
     }
-    if (lives <= 0) {
+
+    if (lives <= 0 && !isDying) {
+        isDying = true;
+        player->SetState("die");
+        deathTimer.Start();
         Engine::GetInstance().scene->isDead = true;
+    }
+    else {
+        player->SetState("hit");
+        hitTimer.Start();
+        isInHitAnim = true;
     }
 }
 
@@ -49,9 +80,14 @@ void HealthSystem::UpdateVignette() {
 }
 
 void HealthSystem::CheckDeath() {
-    if (lives <= 0) {
+    if (lives <= 0 && !isDying) {
+        isDying = true;
+        player->SetState("die");
+        deathTimer.Start();
+
         Engine::GetInstance().scene->isDead = true;
-        lives = 3; // reiniciamos para próximo respawn
+
+        // lives = 3; ← espera al final de la animación para resetear
     }
 }
 
@@ -80,6 +116,8 @@ void HealthSystem::SetVignetteSize(float size) {
 }
 
 void HealthSystem::ApplyKnockback(const Vector2D& sourcePosition) {
+    if (lives <= 1) return; // Si va a morir, no aplicar knockback
+
     b2Vec2 playerPos = player->pbody->body->GetPosition();
     float direction = (playerPos.x < PIXEL_TO_METERS(sourcePosition.x)) ? -1.0f : 1.0f;
 
@@ -89,7 +127,7 @@ void HealthSystem::ApplyKnockback(const Vector2D& sourcePosition) {
     knockbackInitialVelocity = b2Vec2(direction * horizontalPower, verticalPower);
     player->pbody->body->SetLinearVelocity(knockbackInitialVelocity);
 
-    player->GetMechanics()->GetMovementHandler()->SetCantMove(true); // ← bloquear movimiento
+    player->GetMechanics()->GetMovementHandler()->SetCantMove(true);
 
     knockbackTimer.Start();
     knockbackActive = true;

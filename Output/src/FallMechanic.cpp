@@ -9,9 +9,7 @@ void FallMechanic::Init(Player* player) {
 }
 
 void FallMechanic::Update(float dt) {
-    if (player->GetMechanics()->IsOnGround())
-        return;
-
+    // Procesar stun aunque ya esté en el suelo
     if (isStunned) {
         if (stunTimer.ReadMSec() >= stunDuration) {
             isStunned = false;
@@ -19,19 +17,22 @@ void FallMechanic::Update(float dt) {
         }
         else {
             player->pbody->body->SetLinearVelocity(b2Vec2_zero);
-            player->SetState("landing");
+            player->SetState("landing_stun");
         }
         return;
     }
 
+    // Si está en el suelo, no seguimos procesando la caída
+    if (player->GetMechanics()->IsOnGround())
+        return;
+
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
     if (velocity.y > 0.1f && !isFalling && !player->GetMechanics()->IsWallSliding()) {
         isFalling = true;
-        player->SetState("fall"); //  aquí seteamos animación de caída
+        player->SetState("fall");
     }
 
     CheckFallStart();
-    ApplyFallStunIfNeeded();
     CheckLanding();
 }
 
@@ -44,23 +45,15 @@ void FallMechanic::CheckFallStart() {
     }
 }
 
-void FallMechanic::ApplyFallStunIfNeeded() {
-    float verticalVelocity = player->pbody->body->GetLinearVelocity().y;
-
-    if (verticalVelocity > fallStunThreshold) {
-        willStun = true;
-    }
-}
-
 void FallMechanic::CheckLanding() {
     if (player->GetMechanics()->IsOnGround() && isFalling) {
         isFalling = false;
 
-        if (willStun) {
-            willStun = false;
+        float verticalVelocity = player->pbody->body->GetLinearVelocity().y;
+
+        if (verticalVelocity > fallStunThreshold) {
             isStunned = true;
             stunTimer.Start();
-
             player->SetState("landing_stun");
             Engine::GetInstance().render->StartCameraShake(0.2f, 2);
         }
@@ -74,8 +67,9 @@ void FallMechanic::OnLanding() {
     if (isFalling) {
         isFalling = false;
 
-        if (willStun) {
-            willStun = false;
+        float verticalVelocity = player->pbody->body->GetLinearVelocity().y;
+
+        if (verticalVelocity > fallStunThreshold) {
             isStunned = true;
             stunTimer.Start();
             player->SetState("landing_stun");

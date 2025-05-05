@@ -120,39 +120,6 @@
 					<frame x="780" y="1153" w="130" h="100" />
 				</dash>
 			</player>
-			<bosses>
-				<boss type="Nullwarden" w="64" h="64" texture="Assets/Enemies/test.png">
-					<idle loop="true" speed="0.35">
-						<frame x="0" y="0" w="64" h="64" />
-					</idle>
-					<attack loop="true" speed="0.35">
-						<frame x="0" y="64" w="64" h="64" />
-					</attack>
-					<charge loop="true" speed="0.35">
-						<frame x="0" y="128" w="64" h="64" />
-					</charge>
-					<impaled loop="true" speed="0.35">
-						<frame x="0" y="192" w="64" h="64" />
-					</impaled>
-					<roar loop="true" speed="0.35">
-						<frame x="0" y="256" w="64" h="64" />
-					</roar>
-					<death loop="true" speed="0.35">
-						<frame x="0" y="320" w="64" h="64" />
-					</death>
-				</boss>
-				<boss type="NullwardenSpear" w="35" h="180" texture="Assets/Enemies/sword.png">
-					<spawn loop="true" speed="0.3">
-						<frame x="0" y="0" w="35" h="180" />
-					</spawn>
-					<idle loop="true" speed="0.3">
-						<frame x="0" y="0" w="35" h="180" />
-					</idle>
-					<destroyed loop="true" speed="0.3">
-						<frame x="0" y="0" w="35" h="180" />
-					</destroyed>
-				</boss>
-			</bosses>
 			<enemies>
 				<enemy type="Bloodrusher" w="220" h="220" texture="Assets/Enemies/bloodrusher.png">
 					<idle loop="true" speed="0.35">
@@ -301,35 +268,42 @@
 						<frame x="500" y="300" w="100" h="100" />
 					</dead>
 				</enemy>
-				<enemy type="Mireborn" tier="Alpha" w="134" h="134" texture="Assets/Enemies/noctilume.png">
+				<enemy type="Mireborn" w="120" h="120" texture="Assets/Enemies/mireborn.png">
 					<idle loop="true" speed="0.1">
-						<frame x="0" y="0" w="134" h="134" />
-						<frame x="134" y="0" w="134" h="134" />
-						<frame x="268" y="0" w="134" h="134" />
-						<frame x="402" y="0" w="134" h="134" />
-						<frame x="536" y="0" w="134" h="134" />
-						<frame x="670" y="0" w="134" h="134" />
-						<frame x="804" y="0" w="134" h="134" />
+						<frame x="0" y="0" w="120" h="120" />
+						<frame x="120" y="0" w="120" h="120" />
+						<frame x="240" y="0" w="120" h="120" />
+						<frame x="360" y="0" w="120" h="120" />
 					</idle>
-					<walking loop="false" speed="0.1">
-						<frame x="0" y="0" w="128" h="128" />
+					<walking loop="false" speed="0.13">
+						<frame x="0" y="120" w="120" h="120" />
+						<frame x="120" y="120" w="120" h="120" />
+						<frame x="240" y="120" w="120" h="120" />
+						<frame x="360" y="120" w="120" h="120" />
+						<frame x="480" y="120" w="120" h="120" />
+						<frame x="600" y="120" w="120" h="120" />
+						<frame x="720" y="120" w="120" h="120" />
+						<frame x="840" y="120" w="120" h="120" />
+						<frame x="960" y="120" w="120" h="120" />
+						<frame x="1080" y="120" w="120" h="120" />
+						<frame x="1200" y="120" w="120" h="120" />
 					</walking>
-				</enemy>
-				<enemy type="Mireborn" tier="Beta" w="64" h="64" texture="Assets/Enemies/mireborn.png">
-					<idle loop="true" speed="0.1">
-						<frame x="320" y="64" w="64" h="64" />
-					</idle>
-					<walking loop="false" speed="0.1">
-						<frame x="320" y="64" w="64" h="64" />
-					</walking>
-				</enemy>
-				<enemy type="Mireborn" tier="Gamma" w="128" h="128" texture="Assets/Enemies/mireborn.png">
-					<idle loop="true" speed="0.1">
-						<frame x="320" y="0" w="32" h="32" />
-					</idle>
-					<walking loop="false" speed="0.1">
-						<frame x="320" y="0" w="32" h="32" />
-					</walking>
+					<divide loop="false" speed="0.13">
+						<frame x="0" y="360" w="120" h="120" />
+						<frame x="120" y="360" w="120" h="120" />
+						<frame x="240" y="360" w="120" h="120" />
+						<frame x="360" y="360" w="120" h="120" />
+					</divide>
+					<death loop="false" speed="0.13">
+						<frame x="0" y="240" w="120" h="120" />
+						<frame x="120" y="240" w="120" h="120" />
+						<frame x="240" y="240" w="120" h="120" />
+						<frame x="360" y="240" w="120" h="120" />
+						<frame x="480" y="240" w="120" h="120" />
+						<frame x="600" y="240" w="120" h="120" />
+						<frame x="720" y="240" w="120" h="120" />
+						<frame x="840" y="240" w="120" h="120" />
+					</death>
 				</enemy>
 				<enemy type="Broodheart" w="64" h="64" texture="Assets/Enemies/broodheart.png">
 					<idle loop="true" speed="0.1">
@@ -346,6 +320,37 @@
 					<walking loop="false" speed="0.1">
 						<frame x="0" y="0" w="32" h="32" />
 					</walking>
+				</enemy>
+				<enemy type="Nullwarden" w="64" h="64" texture="Assets/Enemies/test.png">
+					<idle loop="true" speed="0.35">
+						<frame x="0" y="0" w="64" h="64" />
+					</idle>
+					<attack loop="true" speed="0.35">
+						<frame x="0" y="64" w="64" h="64" />
+					</attack>
+					<charge loop="true" speed="0.35">
+						<frame x="0" y="128" w="64" h="64" />
+					</charge>
+					<impaled loop="true" speed="0.35">
+						<frame x="0" y="192" w="64" h="64" />
+					</impaled>
+					<roar loop="true" speed="0.35">
+						<frame x="0" y="256" w="64" h="64" />
+					</roar>
+					<death loop="true" speed="0.35">
+						<frame x="0" y="320" w="64" h="64" />
+					</death>
+				</enemy>
+				<enemy type="NullwardenSpear" w="35" h="180" texture="Assets/Enemies/sword.png">
+					<spawn loop="true" speed="0.3">
+						<frame x="0" y="0" w="35" h="180" />
+					</spawn>
+					<idle loop="true" speed="0.3">
+						<frame x="0" y="0" w="35" h="180" />
+					</idle>
+					<destroyed loop="true" speed="0.3">
+						<frame x="0" y="0" w="35" h="180" />
+					</destroyed>
 				</enemy>
 			</enemies>
 			<props>
@@ -443,8 +448,8 @@
 			</abilities>
 		</animations>
 		<save_data isSaved="1">
-			<player x="1950" y="650" w="44" h="54" lives="3" />
-			<abilities jump="false" doublejump="false" dash="false" />
+			<player x="2317" y="1259" w="44" h="54" lives="3" />
+			<abilities jump="true" doublejump="true" dash="true" />
 			<scene actualScene="0" />
 			<enemies />
 		</save_data>

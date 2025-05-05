@@ -3,6 +3,9 @@
 #include "Engine.h"
 #include "Input.h"
 #include "Physics.h"
+#include "AbilityZone.h"
+#include "Log.h"
+#include "EntityManager.h"
 
 void MovementHandler::Init(Player* player) {
     this->player = player;
@@ -18,30 +21,42 @@ void MovementHandler::Init(Player* player) {
         }
     }
 
-    // Ahora que el controller está inicializado, pásalo
+    // Inicializar las mecánicas después de preparar el controller
     jumpMechanic.Init(player);
+    dashMechanic.Init(player);
+    attackMechanic.Init(player);
+    fallMechanic.Init(player);
+    wallSlideMechanic.Init(player);
+
     if (controller) {
         jumpMechanic.SetController(controller);
         dashMechanic.SetController(controller);
         attackMechanic.SetController(controller);
         Engine::GetInstance().menus->SetController(controller);
-    }
 
-    dashMechanic.Init(player);
-    attackMechanic.Init(player);
-    fallMechanic.Init(player);
-    wallSlideMechanic.Init(player);
+        // Reasignar controller a todas las AbilityZones una vez inicializado
+        for (Entity* e : Engine::GetInstance().entityManager->entities) {
+            if (e->type == EntityType::ABILITY_ZONE) {
+                static_cast<AbilityZone*>(e)->SetController(controller);
+                LOG("Controller reasignado a AbilityZone desde MovementHandler");
+            }
+        }
+    }
 }
 
 void MovementHandler::Update(float dt) {
+    fallMechanic.Update(dt);
+    if (fallMechanic.IsStunned())
+    {
+        return;
+    }
     HandleMovementInput();
     HandleTimers();
-    HandleWallSlide(); // <<< AÑADIR ESTA LLAMADA
+    HandleWallSlide();
 
     jumpMechanic.Update(dt);
     dashMechanic.Update(dt);
     attackMechanic.Update(dt);
-    fallMechanic.Update(dt);
 
     UpdateAnimation();
 }
@@ -90,13 +105,18 @@ void MovementHandler::HandleMovementInput() {
 }
 
 void MovementHandler::UpdateAnimation() {
+
+    if (player->GetMechanics()->GetHealthSystem()->IsInHitAnim()) return;
+    if (player->GetState() == "die") return;
+    if (dashMechanic.IsDashing()) return;
+
     if (!attackMechanic.IsAttacking() &&
         !dashMechanic.IsDashing() &&
         !jumpMechanic.IsJumping() &&
         !fallMechanic.IsFalling() &&
+        !fallMechanic.IsStunned() &&
         !isWallSliding)
     {
-        // Ahora sí puedo cambiar a idle o run_right
         if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT ||
             Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
             player->SetState("run_right");
@@ -181,6 +201,7 @@ void MovementHandler::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PUSHABLE_PLATFORM:
         jumpCooldownTimer.Start();
         jumpCooldownActive = true;
+        player->GetMechanics()->SetIsOnGround(false);
         break;
 
     case ColliderType::WALL_SLIDE: // <<< Aquí nuevo

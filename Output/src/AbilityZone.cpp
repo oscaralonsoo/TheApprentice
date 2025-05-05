@@ -100,6 +100,7 @@ bool AbilityZone::Update(float dt)
 		float targetStopX = rightLimit - 120.0f;
 		float playerRight = player->GetPosition().getX() + player->GetTextureWidth();
 		float distance = abs(playerRight - targetStopX);
+		player->GetMechanics()->GetMovementHandler()->SetCanAttack(true);
 
 		if (distance <= 2.0f) {
 			b2Vec2 stopVelocity = player->pbody->body->GetLinearVelocity();
@@ -119,25 +120,31 @@ bool AbilityZone::Update(float dt)
 		if (playerRight >= rightLimit - 144.0f) {
 			bool confirmPressed = false;
 
+			if (!controller) {
+				LOG("Controller es nullptr");
+			}
+			else if (!SDL_GameControllerGetAttached(controller)) {
+				LOG("Controller no está attached");
+			}
+			else {
+				LOG("Controller está listo y debería detectar botones");
+			}
+
 			// Tecla J
 			if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
 				confirmPressed = true;
+				player->SetState("eat");
 			}
 
 			// Botón X del gamepad
 			if (controller && SDL_GameControllerGetAttached(controller)) {
 				bool xNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_X);
 				if (xNow && !xHeld) {
+					LOG("Botón X detectado en AbilityZone");
 					confirmPressed = true;
 				}
 				xHeld = xNow;
-			}
-			if (controller && SDL_GameControllerGetAttached(controller)) {
-				bool xNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_X);
-				if (xNow && !xHeld) {
-					confirmPressed = true;
-				}
-				xHeld = xNow;
+				player->SetState("eat");
 			}
 
 			// Desbloquear habilidad correspondiente
@@ -151,14 +158,17 @@ bool AbilityZone::Update(float dt)
 				if (playerInsideJump) {
 					mechanics->EnableJump(true);
 					Engine::GetInstance().menus->abilityName = "jump";
+					player->GetMechanics()->GetMovementHandler()->SetCantMove(false);
 				}
 				else if (playerInsideDoubleJump) {
 					mechanics->EnableDoubleJump(true);
 					Engine::GetInstance().menus->abilityName = "doublejump";
+					player->GetMechanics()->GetMovementHandler()->SetCantMove(false);
 				}
 				else if (playerInsideDash) {
 					mechanics->EnableDash(true);
 					Engine::GetInstance().menus->abilityName = "dash";
+					player->GetMechanics()->GetMovementHandler()->SetCantMove(false);
 				}
 
 				Engine::GetInstance().menus->StartTransition(false, MenusState::ABILITIES);
@@ -268,4 +278,5 @@ void AbilityZone::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 
 void AbilityZone::SetController(SDL_GameController* controller) {
 	this->controller = controller;
+	LOG("AbilityZone: controller asignado correctamente: %p", controller);
 }

@@ -27,8 +27,6 @@ Engine::Engine() {
     frameTime = PerfTimer();
     lastSecFrameTime = PerfTimer();
     frames = 0;
-
-    // L4: TODO 1: Add the EntityManager Module to the Engine
     
     // Modules
     window = std::make_shared<Window>();
@@ -36,7 +34,6 @@ Engine::Engine() {
     render = std::make_shared<Render>();
     textures = std::make_shared<Textures>();
     audio = std::make_shared<Audio>();
-    // L08: TODO 2: Add Physics module
     physics = std::make_shared<Physics>();
     map = std::make_shared<Map>();
     entityManager = std::make_shared<EntityManager>();

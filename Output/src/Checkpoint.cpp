@@ -40,9 +40,9 @@ bool Checkpoint::Start()
 
     // Centrar el sensor físico
     pbody = Engine::GetInstance().physics->CreateRectangleSensor(
-        (int)position.getX() + texW / 2,
-        (int)position.getY() + texH / 2,
-        texW, texH,
+        (int)position.getX() + width / 2,
+        (int)position.getY() + height / 2,
+        width, height,
         STATIC,
         CATEGORY_SAVEGAME,
         CATEGORY_PLAYER

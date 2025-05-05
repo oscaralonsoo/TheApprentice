@@ -377,29 +377,29 @@
 						<frame x="0" y="0" w="240" h="192" />
 					</consumed>
 				</life_plant>
-				<checkpoint w="320" h="320" texture="Assets/Props/CheckPoint_Spritesheet.png">
+				<checkpoint w="384" h="320" texture="Assets/Props/CheckPoint_Spritesheet.png">
 					<unsaved loop="false" speed="0">
-						<frame x="0" y="0" w="320" h="320" />
+						<frame x="0" y="0" w="384" h="320" />
 					</unsaved>
 					<saving loop="false" speed="0.125">
-						<frame x="0" y="0" w="320" h="320" />
-						<frame x="320" y="0" w="320" h="320" />
-						<frame x="640" y="0" w="320" h="320" />
-						<frame x="960" y="0" w="320" h="320" />
-						<frame x="1280" y="0" w="320" h="320" />
-						<frame x="1600" y="0" w="320" h="320" />
-						<frame x="1920" y="0" w="320" h="320" />
-						<frame x="2240" y="0" w="320" h="320" />
+						<frame x="0" y="0" w="384" h="320" />
+						<frame x="384" y="0" w="384" h="320" />
+						<frame x="768" y="0" w="384" h="320" />
+						<frame x="1152" y="0" w="384" h="320" />
+						<frame x="1536" y="0" w="384" h="320" />
+						<frame x="1920" y="0" w="384" h="320" />
+						<frame x="2304" y="0" w="384" h="320" />
+						<frame x="2688" y="0" w="384" h="320" />
 					</saving>
 					<saved loop="true" speed="0.125">
-						<frame x="0" y="350" w="320" h="320" />
-						<frame x="320" y="350" w="320" h="320" />
-						<frame x="640" y="350" w="320" h="320" />
-						<frame x="960" y="350" w="320" h="320" />
-						<frame x="1280" y="350" w="320" h="320" />
-						<frame x="1600" y="350" w="320" h="320" />
-						<frame x="1920" y="350" w="320" h="320" />
-						<frame x="2240" y="350" w="320" h="320" />
+						<frame x="0" y="384" w="384" h="320" />
+						<frame x="384" y="384" w="384" h="320" />
+						<frame x="768" y="384" w="384" h="320" />
+						<frame x="1152" y="384" w="384" h="320" />
+						<frame x="1536" y="384" w="384" h="320" />
+						<frame x="1920" y="384" w="384" h="320" />
+						<frame x="2304" y="384" w="384" h="320" />
+						<frame x="2688" y="384" w="384" h="320" />
 					</saved>
 				</checkpoint>
 			</props>
@@ -441,7 +441,7 @@
 			</abilities>
 		</animations>
 		<save_data isSaved="1">
-			<player x="1574" y="1003" w="44" h="54" lives="3" />
+			<player x="1519" y="1003" w="44" h="54" lives="3" />
 			<abilities jump="false" doublejump="false" dash="false" />
 			<scene actualScene="0" />
 			<enemies />

@@ -88,9 +88,6 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	//L04: TODO 3a: Instantiate entity according to the type and add the new entity to the list of Entities
 	switch (type)
 	{
-	case EntityType::PLAYER:
-		entity = new Player();
-		break;
 	case EntityType::CAVE_DROP:
 		entity = new CaveDrop();
 		break;
@@ -147,6 +144,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::CHECKPOINT:
 		entity = new Checkpoint();
+		break;
+	case EntityType::PLAYER:
+		entity = new Player();
 		break;
 	default:
 		break;

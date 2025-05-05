@@ -45,12 +45,15 @@ bool Scene::Awake()
 	player = (Player*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PLAYER);
 	player->SetParameters(configParameters.child("animations").child("player"));
 	mechanics = player->GetMechanics();
+
+	
 	return ret;
 }
 
 // Called before the first frame
 bool Scene::Start()
 {
+	
 	//L06 TODO 3: Call the function to load the map. 
 	Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx");
 	return true;

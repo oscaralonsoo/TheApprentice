@@ -514,8 +514,8 @@ bool Map::Load(std::string path, std::string fileName)
                     {
                         int x = objectNode.attribute("x").as_int();
                         int y = objectNode.attribute("y").as_int();
-                        int width = objectNode.attribute("w").as_int();
-                        int height = objectNode.attribute("j").as_int();
+                        int width = objectNode.attribute("width").as_int();
+                        int height = objectNode.attribute("height").as_int();
 
                         Checkpoint* checkpoint = (Checkpoint*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CHECKPOINT);
                         checkpoint->position = Vector2D(x, y);

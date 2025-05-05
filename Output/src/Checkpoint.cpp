@@ -112,7 +112,6 @@ void Checkpoint::OnCollision(PhysBody* physA, PhysBody* physB) {
     {
     case ColliderType::PLAYER:
         insideCheckpoint = true;
-        
         break;
     }
 }

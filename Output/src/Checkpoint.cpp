@@ -40,9 +40,9 @@ bool Checkpoint::Start()
 
     // Centrar el sensor físico
     pbody = Engine::GetInstance().physics->CreateRectangleSensor(
-        (int)position.getX() + width / 2,
-        (int)position.getY() + height / 2,
-        width, height,
+        (int)position.getX() + texW / 2,
+        (int)position.getY() + texH / 2,
+        texW, texH,
         STATIC,
         CATEGORY_SAVEGAME,
         CATEGORY_PLAYER
@@ -69,6 +69,7 @@ bool Checkpoint::Update(float dt)
         if (currentAnimation != &savingAnim) currentAnimation = &savingAnim;
         if (savingAnim.HasFinished()) {
             state = CheckpointState::SAVED;
+            Engine::GetInstance().scene->SaveGameXML();
         }
         break;
     case CheckpointState::SAVED:
@@ -92,7 +93,7 @@ if (currentAnimation != nullptr) {
 
     // Dibuja desde la base del collider hacia arriba
     int drawX = (int)position.getX();
-    int drawY = (int)position.getY() + texH - frame.h;
+    int drawY = (int)position.getY() + texH - frame.h + 5;
 
     Engine::GetInstance().render->DrawTexture(texture, drawX, drawY, &frame);
     currentAnimation->Update();
@@ -125,12 +126,14 @@ void Checkpoint::OnCollisionEnd(PhysBody* physA, PhysBody* physB){
 }
 void Checkpoint::CheckSave() {
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && insideCheckpoint) {
-        Engine::GetInstance().scene->SaveGameXML();
-        if(state == CheckpointState::UNSAVED)
-        {
+        if (state == CheckpointState::UNSAVED) {
             state = CheckpointState::SAVING;
+        }
+        else if (state == CheckpointState::SAVED) {
+            Engine::GetInstance().scene->SaveGameXML();
         }
 
         // TODO JAVI --- PLAYER STOP MOVING
     }
 }
+

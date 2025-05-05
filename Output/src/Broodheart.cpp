@@ -71,6 +71,8 @@ bool Broodheart::Update(float dt) {
 }
 
 bool Broodheart::PostUpdate() {
+
+    Enemy::PostUpdate();
     if (isBroken) {
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         return true; // O retornar false si no quieres que se ejecute más lógica
@@ -79,7 +81,7 @@ bool Broodheart::PostUpdate() {
         Spawn();
         shouldSpawn = false;
     }
-    return Enemy::PostUpdate();
+    return true;
 }
 
 bool Broodheart::CleanUp() {

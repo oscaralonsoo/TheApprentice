@@ -89,7 +89,10 @@ bool Noctilume::Update(float dt)
 
     return Enemy::Update(dt);
 }
-
+bool Noctilume::PostUpdate() {
+    Enemy::PostUpdate();
+    return true;
+}
 void Noctilume::OnCollision(PhysBody* physA, PhysBody* physB)
 {
     switch (physB->ctype)

@@ -98,7 +98,7 @@ bool Scurver::Update(float dt) {
 
 
 bool Scurver::PostUpdate() {
-    
+    Enemy::PostUpdate();
     if (currentState == ScurverState::DEAD && currentAnimation->HasFinished()) {
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
     }

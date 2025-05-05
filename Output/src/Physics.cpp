@@ -209,6 +209,31 @@ PhysBody* Physics::CreateRectangleSensor(int x, int y, int width, int height, bo
 
 	return pbody;
 }
+PhysBody* Physics::CreatePolygon(int x, int y, const std::vector<b2Vec2>& vertices, bodyType type)
+{
+	b2BodyDef bodyDef;
+	bodyDef.type = (type == DYNAMIC) ? b2_dynamicBody : (type == STATIC) ? b2_staticBody : b2_kinematicBody;
+	bodyDef.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	b2Body* body = world->CreateBody(&bodyDef);
+
+	b2PolygonShape shape;
+	shape.Set(&vertices[0], vertices.size());
+
+	b2FixtureDef fixtureDef;
+	fixtureDef.shape = &shape;
+	fixtureDef.density = 1.0f;
+
+	body->SetFixedRotation(true);
+	body->CreateFixture(&fixtureDef);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = body;
+	body->GetUserData().pointer = (uintptr_t)pbody;
+	pbody->width = 0;
+	pbody->height = 0;
+
+	return pbody;
+}
 
 PhysBody* Physics::CreateChain(int x, int y, int* points, int size, bodyType type)
 {

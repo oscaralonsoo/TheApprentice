@@ -88,7 +88,7 @@ bool Hypnoviper::Update(float dt) {
 }
 
 bool Hypnoviper::PostUpdate() {
-    
+    Enemy::PostUpdate();
     if (currentState == HypnoviperState::DEAD && currentAnimation->HasFinished()) {
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
     }

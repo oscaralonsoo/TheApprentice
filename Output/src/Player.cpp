@@ -80,10 +80,7 @@ bool Player::Update(float dt) {
 		b2Vec2 mainPos = pbody->body->GetPosition();
 		enemySensor->body->SetTransform(mainPos, 0);
 	}
-	int direction = mechanics.GetMovementDirection();
-	bool flip = direction < 0;
-	animation.Update(dt, state, position.getX(), position.getY() - 5, mechanics.IsVisible(), flip);
-
+	
 	mechanics.Update(dt);
 
 	b2Transform pbodyPos = pbody->body->GetTransform();
@@ -119,6 +116,9 @@ bool Player::Update(float dt) {
 }
 
 bool Player::PostUpdate() {
+	int direction = mechanics.GetMovementDirection();
+	bool flip = direction < 0;
+	animation.PostUpdate(state, position.getX(), position.getY() - 5, mechanics.IsVisible(), flip);
 	mechanics.PostUpdate();
 	return true;
 }

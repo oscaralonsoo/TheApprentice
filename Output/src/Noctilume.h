@@ -20,6 +20,7 @@ public:
     bool Awake() override;
     bool Start() override;
     bool Update(float dt) override;
+    bool PostUpdate();
     bool CleanUp() override;
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
 

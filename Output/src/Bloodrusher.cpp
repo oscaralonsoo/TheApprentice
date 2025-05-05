@@ -83,7 +83,7 @@ bool Bloodrusher::Update(float dt) {
 }
 
 bool Bloodrusher::PostUpdate() {
-
+    Enemy::PostUpdate();
     if (currentState == BloodrusherState::DEAD && currentAnimation->HasFinished()) {
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
     }

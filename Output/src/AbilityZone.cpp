@@ -93,6 +93,7 @@ bool AbilityZone::Update(float dt)
 
 	if (playerInside)
 	{
+		// TODO JAVI --- PLAYER CANNOT JUMP IF INSIDE ABILITY ZONE
 		VignetteChange(dt);
 
 		float rightLimit = position.getX() + texW;

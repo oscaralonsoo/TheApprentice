@@ -5,29 +5,51 @@
 
 enum class ThumpodState {
     IDLE,
+    ATTACK,
     DEAD
 };
 
-class Thumpod : public Enemy
-{
+class Thumpod : public Enemy {
 public:
-
-	Thumpod();
-	~Thumpod() override;
+    Thumpod();
+    ~Thumpod() override;
 
     bool Awake() override;
     bool Start() override;
     bool Update(float dt) override;
+    bool PostUpdate() override;
     bool CleanUp() override;
-    void Idle();
+
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
 
-
 private:
+    void Idle();
+    void Attack(float dt);
+    void TryStartJump(float mass);
+    void TryChangeToFallingState(float mass);
+    void TryFinishAttackDown(float dt);
+    void ResetAttackState();
+    void Die();
+
     ThumpodState currentState = ThumpodState::IDLE;
 
     Animation idleAnim;
+    Animation attackUpAnim;
+    Animation attackDownAnim;
+    Animation deadAnim;
 
-    float previousDirection;
-    Timer timer;
+    float jumpCooldown = 0.0f;
+    float attackDownTimer = 0.0f;
+
+    const float jumpInterval = 1500.0f;
+    const float minAttackDownTime = 500.0f;
+    const float jumpForceY = -12.0f;
+
+    bool hasJumped = false;
+    bool isOnGround = false;
+    bool isJumpingUp = false;
+    bool isFallingTowardsPlayer = false;
+    bool canPlayAttackDownAnim = false;
+    bool hasLanded = false;
+    bool isPlayingAttackDown = false;
 };

@@ -2,6 +2,7 @@
 #include "Module.h"
 #include "Entity.h"
 #include "box2d/box2d.h"
+#include <vector>
 #include <list>
 
 #define GRAVITY_X 0.0f
@@ -110,6 +111,7 @@ public:
 	PhysBody* CreateRectangle(int x, int y, int width, int height, bodyType type, float offsetX = 0, float offsetY = 0, uint16 categoryBits = 0xFFFF, uint16 maskBits = 0xFFFF);
 	PhysBody* CreateCircle(int x, int y, int radious, bodyType type);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, bodyType type, uint16 categoryBits, uint16 maskBits);
+	PhysBody* CreatePolygon(int x, int y, const std::vector<b2Vec2>& vertices, bodyType type);
 	PhysBody* CreateCircleSensor(int x, int y, int radius, bodyType type);
 	PhysBody* CreateChain(int x, int y, int* points, int size, bodyType type);
 	
@@ -126,7 +128,7 @@ public:
 
 	std::list<PhysBody*> listToDelete;
 private:
-
+	std::vector<int> forces;
 	// Debug mode
 	bool debug = false;
 

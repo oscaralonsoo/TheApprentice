@@ -82,22 +82,22 @@ bool Checkpoint::Update(float dt)
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - (texW/2)); 
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y)- (texH/2)); 
 
+    if (currentAnimation != nullptr) {
+        const SDL_Rect& frame = currentAnimation->GetCurrentFrame();
+
+        // Dibuja desde la base del collider hacia arriba
+        int drawX = (int)position.getX();
+        int drawY = (int)position.getY() + texH - frame.h + 5;
+
+        Engine::GetInstance().render->DrawTexture(texture, drawX, drawY, &frame);
+        currentAnimation->Update();
+    }
 
     return true;
 }
 
 bool Checkpoint::PostUpdate()
 {
-if (currentAnimation != nullptr) {
-    const SDL_Rect& frame = currentAnimation->GetCurrentFrame();
-
-    // Dibuja desde la base del collider hacia arriba
-    int drawX = (int)position.getX();
-    int drawY = (int)position.getY() + texH - frame.h + 5;
-
-    Engine::GetInstance().render->DrawTexture(texture, drawX, drawY, &frame);
-    currentAnimation->Update();
-}
 	return true;
 }
 

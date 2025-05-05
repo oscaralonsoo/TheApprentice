@@ -77,7 +77,7 @@ bool Creebler::Update(float dt) {
 
 
 bool Creebler::PostUpdate() {
-    
+    Enemy::PostUpdate();
     if (currentState == CreeblerState::DEAD && currentAnimation->HasFinished()) {
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
     }

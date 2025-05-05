@@ -13,7 +13,7 @@ void PlayerAnimation::LoadAnimations(const pugi::xml_node& parameters, SDL_Textu
     currentAnimation = &animations["idle"];
 }
 
-void PlayerAnimation::Update(float dt, const std::string& state, int x, int y, bool visible, bool flip)
+void PlayerAnimation::PostUpdate(const std::string& state, int x, int y, bool visible, bool flip)
 {
     if (state != currentState && animations.find(state) != animations.end()) {
         currentAnimation = &animations[state];

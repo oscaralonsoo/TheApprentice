@@ -199,7 +199,7 @@ void EntityManager::AddEntity(Entity* entity)
 
 bool EntityManager::Update(float dt)
 {
-	if (Engine::GetInstance().menus->currentState != MenusState::GAME|| Engine::GetInstance().menus->isPaused)
+	if (Engine::GetInstance().menus->currentState != MenusState::GAME|| Engine::GetInstance().menus->isPaused /*TODO JAVI-- - SI VIDAS = 0, NO SE DIBUJA NINGUNA ENTIDAD*/)
 		return true;
 
 	bool ret = true;

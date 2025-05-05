@@ -19,23 +19,6 @@ bool Scurver::Awake() {
 bool Scurver::Start() {
     pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 3, texH / 3, bodyType::DYNAMIC);
 
-    //Assign collider type
-    pbody->ctype = ColliderType::ENEMY;
-
-    pbody->listener = this;
-
-    // Initialize pathfinding
-    pathfinding = new Pathfinding();
-    ResetPath();
-
-    b2Fixture* fixture = pbody->body->GetFixtureList();
-    if (fixture) {
-        b2Filter filter;
-        filter.categoryBits = CATEGORY_ENEMY;
-        filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_ATTACK | CATEGORY_PLAYER_DAMAGE;
-        fixture->SetFilterData(filter);
-    }
-
     pugi::xml_document loadFile;
     pugi::xml_parse_result result = loadFile.load_file("config.xml");
 
@@ -51,7 +34,7 @@ bool Scurver::Start() {
 
     currentAnimation = &attackAnim;
 
-    return true;
+    return Enemy::Start();
 }
 
 bool Scurver::Update(float dt) {

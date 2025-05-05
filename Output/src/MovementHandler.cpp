@@ -52,7 +52,7 @@ void MovementHandler::Update(float dt) {
     jumpMechanic.Update(dt);
     dashMechanic.Update(dt);
     attackMechanic.Update(dt);
-    fallMechanic.Update(dt);
+    //fallMechanic.Update(dt);
 
     UpdateAnimation();
 }
@@ -104,7 +104,7 @@ void MovementHandler::UpdateAnimation() {
     if (!attackMechanic.IsAttacking() &&
         !dashMechanic.IsDashing() &&
         !jumpMechanic.IsJumping() &&
-        !fallMechanic.IsFalling() &&
+        //!fallMechanic.IsFalling() &&
         !isWallSliding)
     {
         // Ahora sí puedo cambiar a idle o run_right
@@ -160,7 +160,7 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PUSHABLE_PLATFORM:
         if (!jumpCooldownActive) {
             jumpMechanic.OnLanding();
-            fallMechanic.OnLanding();
+            //fallMechanic.OnLanding();
         }
         break;
 

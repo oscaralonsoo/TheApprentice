@@ -180,7 +180,6 @@ void Thumpod::UpdateDirectionFacingPlayer()
         previousDirection = direction;
         direction = newDirection;
 
-        // Flip el cuerpo
         Engine::GetInstance().physics->FlipPhysBody(pbody, true, false);
     }
 }

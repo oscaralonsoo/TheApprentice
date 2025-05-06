@@ -2,7 +2,8 @@
 
 #include "Enemy.h"
 #include "SDL2/SDL.h"
-
+#include <vector>
+#include <box2d/box2d.h> 
 enum class ThumpodState {
     IDLE,
     ATTACK,
@@ -22,6 +23,8 @@ public:
 
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
 
+    void UpdateDirectionFacingPlayer();
+
 private:
     void Idle();
     void Attack(float dt);
@@ -32,6 +35,9 @@ private:
     void Die();
 
     ThumpodState currentState = ThumpodState::IDLE;
+
+    float previousDirection = 0.0f;
+    std::vector<b2Vec2> shape;
 
     Animation idleAnim;
     Animation attackUpAnim;

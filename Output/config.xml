@@ -160,7 +160,7 @@
 					</dead>
 				</enemy>
 				<enemy type="Thumpod" w="256" h="256" texture="Assets/Enemies/thumpod.png">
-					<idle loop="true" speed="0.125">
+					<idle loop="true" speed="0.075">
 						<frame x="0" y="0" w="256" h="256" />
 						<frame x="256" y="0" w="256" h="256" />
 						<frame x="512" y="0" w="256" h="256" />

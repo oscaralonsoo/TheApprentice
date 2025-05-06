@@ -59,6 +59,7 @@ bool Thumpod::Start() {
 bool Thumpod::Update(float dt) {
     jumpCooldown += dt;
     UpdateDirectionFacingPlayer();
+
     switch (currentState) {
     case ThumpodState::IDLE:
         Idle();
@@ -75,37 +76,31 @@ bool Thumpod::Update(float dt) {
 
     return Enemy::Update(dt);
 }
-
 bool Thumpod::PostUpdate() {
     Enemy::PostUpdate();
-    if (currentState == ThumpodState::DEAD && currentAnimation->HasFinished())
+    if (currentState == ThumpodState::DEAD && currentAnimation && currentAnimation->HasFinished())
         Engine::GetInstance().entityManager->DestroyEntity(this);
     return true;
 }
-
 bool Thumpod::CleanUp() {
+    if (pathfinding) {
+        delete pathfinding;
+        pathfinding = nullptr;
+    }
     return Enemy::CleanUp();
 }
-
 void Thumpod::Idle() {
     currentAnimation = &idleAnim;
     if (pathfinding->HasFoundPlayer() && jumpCooldown >= jumpInterval)
         currentState = ThumpodState::ATTACK;
 }
-
 void Thumpod::Attack(float dt) {
     float mass = pbody->body->GetMass();
-
-    Vector2D target = Engine::GetInstance().map->MapToWorld(
-        pathfinding->pathTiles.front().getX(),
-        pathfinding->pathTiles.front().getY()
-    );
 
     TryStartJump(mass);
     TryChangeToFallingState(mass);
     TryFinishAttackDown(dt);
 }
-
 void Thumpod::TryStartJump(float mass) {
     if (!hasJumped && jumpCooldown >= jumpInterval) {
         currentAnimation = &attackUpAnim;
@@ -117,7 +112,6 @@ void Thumpod::TryStartJump(float mass) {
         pbody->body->ApplyLinearImpulseToCenter({ 0, jumpForceY * mass }, true);
     }
 }
-
 void Thumpod::TryChangeToFallingState(float mass) {
     if (isJumpingUp && pbody->body->GetLinearVelocity().y > 0) {
         isJumpingUp = false;
@@ -125,30 +119,29 @@ void Thumpod::TryChangeToFallingState(float mass) {
         pbody->body->ApplyLinearImpulseToCenter({ 8.0f * direction * mass, 0 }, true);
     }
 }
-
 void Thumpod::TryFinishAttackDown(float dt) {
     if (hasLanded && currentAnimation == &attackDownAnim) {
         attackDownTimer += dt;
-        if (attackDownTimer >= minAttackDownTime && currentAnimation->HasFinished()) {
+        if (attackDownTimer >= minAttackDownTime && currentAnimation && currentAnimation->HasFinished()) {
             pbody->body->SetLinearVelocity({ 0, 0 });
             ResetAttackState();
             currentState = ThumpodState::IDLE;
         }
     }
 }
-
 void Thumpod::ResetAttackState() {
     hasJumped = isOnGround = isJumpingUp = isFallingTowardsPlayer = hasLanded = isPlayingAttackDown = false;
     attackDownTimer = jumpCooldown = 0.0f;
 }
-
 void Thumpod::Die() {
     currentAnimation = &deadAnim;
-    pbody->body->SetLinearVelocity(b2Vec2_zero);
-    pbody->body->SetAngularVelocity(0);
-    pbody->body->GetFixtureList()->SetSensor(true);
+    if (pbody && pbody->body) {
+        pbody->body->SetLinearVelocity(b2Vec2_zero);
+        pbody->body->SetAngularVelocity(0);
+        if (pbody->body->GetFixtureList())
+            pbody->body->GetFixtureList()->SetSensor(true);
+    }
 }
-
 void Thumpod::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
@@ -169,18 +162,15 @@ void Thumpod::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     }
 }
-void Thumpod::UpdateDirectionFacingPlayer()
-{
-    Vector2D playerPos = Engine::GetInstance().scene->GetPlayerPosition();
-    float newDirection = (playerPos.getX() > position.getX()) ? 1.0f :
-        (playerPos.getX() < position.getX()) ? -1.0f : direction;
+void Thumpod::UpdateDirectionFacingPlayer() {
+    float playerX = Engine::GetInstance().scene->GetPlayerPosition().getX();
+    float thumpodX = position.getX();
 
-    if (newDirection != direction)
-    {
+    float desiredDirection = (playerX > thumpodX) ? 1.0f : (playerX < thumpodX) ? -1.0f : direction;
+
+    if (desiredDirection != direction) {
         previousDirection = direction;
-        direction = newDirection;
-
+        direction = desiredDirection;
         Engine::GetInstance().physics->FlipPhysBody(pbody, true, false);
     }
 }
-

@@ -25,6 +25,7 @@ public:
 
     void UpdateDirectionFacingPlayer();
 
+
 private:
     void Idle();
     void Attack(float dt);

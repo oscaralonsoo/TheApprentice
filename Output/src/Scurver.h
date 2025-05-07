@@ -26,6 +26,7 @@ public:
 
     void Attack(float dt);
     void Slide(float dt);
+    bool IsGroundAhead();
 
 
 private:

@@ -29,9 +29,7 @@ private:
     CreeblerState currentState = CreeblerState::WALKING;
 
     Animation walkAnim;
-    Animation deadAnim;
+    Animation deathAnim;
 
     float speed = 2.0f;
-
-    Timer deathTimer;
 };

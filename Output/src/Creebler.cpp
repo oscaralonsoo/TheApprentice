@@ -18,12 +18,7 @@ bool Creebler::Awake() {
 
 bool Creebler::Start() {
     //Add a physics to an item - initialize the physics body
-    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texW / 2, (int)position.getY() + texH / 2, texW / 1.3, texH / 1.9, bodyType::DYNAMIC);
-
-    //Assign collider type
-    pbody->ctype = ColliderType::ENEMY;
-
-    pbody->listener = this;
+    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texW / 2, (int)position.getY() + texH / 2, texW / 1.3, texH / 2.2, bodyType::DYNAMIC, 0, -6);
 
     pugi::xml_document loadFile;
     pugi::xml_parse_result result = loadFile.load_file("config.xml");
@@ -34,25 +29,13 @@ bool Creebler::Start() {
         {
             texture = Engine::GetInstance().textures.get()->Load(enemyNode.attribute("texture").as_string());
             walkAnim.LoadAnimations(enemyNode.child("walk"));
-            deadAnim.LoadAnimations(enemyNode.child("dead"));
+            deathAnim.LoadAnimations(enemyNode.child("death"));
         }
-    }
-
-    // Initialize pathfinding
-    pathfinding = new Pathfinding();
-    ResetPath();
-
-    b2Fixture* fixture = pbody->body->GetFixtureList();
-    if (fixture) {
-        b2Filter filter;
-        filter.categoryBits = CATEGORY_ENEMY;
-        filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_ATTACK | CATEGORY_PLAYER_DAMAGE;
-        fixture->SetFilterData(filter);
     }
 
     currentAnimation = &walkAnim;
 
-    return true;
+    return Enemy::Start();
 }
 
 bool Creebler::Update(float dt) {
@@ -63,7 +46,7 @@ bool Creebler::Update(float dt) {
         Walk();
         break;
     case CreeblerState::DEAD:
-        if (currentAnimation != &deadAnim) currentAnimation = &deadAnim;
+        if (currentAnimation != &deathAnim) currentAnimation = &deathAnim;
 
         pbody->body->SetLinearVelocity(b2Vec2_zero);
         pbody->body->SetAngularVelocity(0);
@@ -94,7 +77,6 @@ void Creebler::Walk() {
 
     Vector2D posMap = Engine::GetInstance().map.get()->WorldToMap(position.getX() + texW / 2, position.getY() + texH / 2);
 
-    // Tile enfrente
     int frontX = posMap.x + direction;
     int frontY = posMap.y + 1;
 

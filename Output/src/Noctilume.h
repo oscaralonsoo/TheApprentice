@@ -36,8 +36,6 @@ private:
     bool playerInRange = false;
     NoctilumeState currentState = NoctilumeState::IDLE;
 
-    PhysBody* pbody = nullptr;
-
     Animation idleAnim;
     Animation flyingAnim;
     Animation divingDownAnim;
@@ -61,6 +59,7 @@ private:
     float proximityTimer = 0.0f;
 
     // Dive
+    Vector2D diveControlPos;
     Vector2D diveStartPos;
     Vector2D diveTargetPos;
     Vector2D diveReferencePlayerPos;

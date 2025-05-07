@@ -51,7 +51,6 @@ private:
 
     const char* texturePath;
 
-
     bool isSaving = false;
     bool insideCheckpoint = false;
 };

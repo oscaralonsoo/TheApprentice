@@ -36,7 +36,7 @@ bool Noctilume::Start()
     }
 
     pbody = Engine::GetInstance().physics->CreateCircleSensor( static_cast<int>(position.getX() + texH / 2),
-        static_cast<int>(position.getY() + texH / 2),texH / 2,bodyType::DYNAMIC);
+        static_cast<int>(position.getY() + texH / 2),texH / 4,bodyType::DYNAMIC);
 
     pbody->ctype = ColliderType::ENEMY;
     pbody->listener = this;
@@ -58,11 +58,8 @@ bool Noctilume::Start()
 }
 bool Noctilume::Update(float dt)
 {
-    if (pathfinding->HasFoundPlayer())
-    {
         HandleStateTransition();
         TryInitiateDiveAttack(dt);
-    }
 
     switch (currentState)
     {
@@ -148,31 +145,30 @@ void Noctilume::Flying(float dt)
     lastSinValue = sinValue;
     position = noctPos;
 }
-
 void Noctilume::Dive(float dt)
 {
     timePassed += dt;
 
     const float horizontalDistance = fabs(diveTargetPos.x - diveStartPos.x);
-    const float diveDuration = std::max(800.0f, 800.0f + horizontalDistance * 0.5f);
+    const float diveDuration = std::max(800.0f, 800.0f + horizontalDistance * 0.4f);
 
     diveElapsedTime += dt;
     float t = diveElapsedTime / diveDuration;
 
-    if (t > 1.0f)
+    if (t >= 1.0f)
     {
+        position = diveTargetPos; // asegúrate de que llega al final
         currentState = NoctilumeState::FLYING;
         diveElapsedTime = 0.0f;
         return;
     }
 
-    const Vector2D p0 = diveStartPos;
-    const Vector2D p2 = diveTargetPos;
-    const Vector2D p1 = { delayedPlayerX, delayedPlayerY + 175 };
-
     float u = 1.0f - t;
-    position = p0 * (u * u) + p1 * (2 * u * t) + p2 * (t * t);
+
+    // Bézier cuadrática: p0*(1-t)^2 + p1*2*(1-t)*t + p2*t^2
+    position = diveStartPos * (u * u) + diveControlPos * (2 * u * t) + diveTargetPos * (t * t);
 }
+
 
 float Noctilume::DistanceToPlayer()
 {
@@ -203,32 +199,33 @@ void Noctilume::TryInitiateDiveAttack(float dt)
     proximityTimer += dt;
     attackTimer += dt;
 
-    if (proximityTimer >= proximityDuration && attackTimer >= attackCooldown && fabs(lastSinValue) > 0.5f)
+    if (proximityTimer >= proximityDuration && attackTimer >= attackCooldown)
     {
         const Vector2D playerPos = Engine::GetInstance().scene->GetPlayerPosition();
-        const float horizontalOffset = 200.0f;
-        const float hoverHeight = 250.0f;
+        const float horizontalOffset = 300.0f;  // más ancho para que sea más visible la parábola
 
-        delayedPlayerX += (playerPos.x - delayedPlayerX) * 0.02f;
+        bool goingRight = lastSinValue > 0.0f;
 
-        if (position.x < playerPos.x)
-        {
-            diveStartPos = { delayedPlayerX - horizontalOffset, playerPos.y - hoverHeight };
-            diveTargetPos = { delayedPlayerX + horizontalOffset, playerPos.y - hoverHeight };
-        }
-        else
-        {
-            diveStartPos = { delayedPlayerX + horizontalOffset, playerPos.y - hoverHeight };
-            diveTargetPos = { delayedPlayerX - horizontalOffset, playerPos.y - hoverHeight };
-        }
+        // Start y target son simétricos respecto al jugador
+        diveStartPos = {
+            playerPos.x + (goingRight ? -horizontalOffset : horizontalOffset),
+            playerPos.y - 150.0f  // un poco más arriba que el jugador
+        };
 
-        position = diveStartPos;
-        divingDown = true;
+        diveTargetPos = {
+            playerPos.x + (goingRight ? horizontalOffset : -horizontalOffset),
+            playerPos.y - 150.0f
+        };
 
-        delayedPlayerX = playerPos.x;
-        delayedPlayerY = playerPos.y;
+        diveControlPos = playerPos; // el vértice de la parábola: el jugador
 
         currentState = NoctilumeState::DIVE;
-        attackTimer = proximityTimer = diveElapsedTime = 0.0f;
+        diveElapsedTime = attackTimer = proximityTimer = 0.0f;
+
+        LOG("Noctilume starts dive towards player!");
     }
 }
+
+
+
+

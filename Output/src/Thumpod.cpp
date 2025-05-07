@@ -83,10 +83,6 @@ bool Thumpod::PostUpdate() {
     return true;
 }
 bool Thumpod::CleanUp() {
-    if (pathfinding) {
-        delete pathfinding;
-        pathfinding = nullptr;
-    }
     return Enemy::CleanUp();
 }
 void Thumpod::Idle() {

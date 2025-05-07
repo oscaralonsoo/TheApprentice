@@ -21,7 +21,7 @@ Player::Player() : Entity(EntityType::PLAYER)
 Player::~Player() {}
 
 bool Player::Awake() {
-	position = Vector2D(7048, 4880);
+	position = Vector2D(10194, 7137);
 	return true;
 }
 

@@ -358,6 +358,27 @@
 				</enemy>
 			</enemies>
 			<props>
+				<geyser w="250" h="250" texture="Assets/Props/geyser.png">
+					<enabled loop="false" speed="0.3">
+						<frame x="0" y="0" w="250" h="250" />
+						<frame x="250" y="0" w="250" h="250" />
+						<frame x="500" y="0" w="250" h="250" />
+						<frame x="750" y="0" w="250" h="250" />
+						<frame x="1000" y="0" w="250" h="250" />
+						<frame x="1250" y="0" w="250" h="250" />
+						<frame x="1500" y="0" w="250" h="250" />
+						<frame x="1750" y="0" w="250" h="250" />
+						<frame x="2000" y="0" w="250" h="250" />
+						<frame x="2250" y="0" w="250" h="250" />
+						<frame x="2500" y="0" w="250" h="250" />
+						<frame x="2750" y="0" w="250" h="250" />
+						<frame x="3000" y="0" w="250" h="250" />
+						<frame x="3250" y="0" w="250" h="250" />
+						<frame x="3500" y="0" w="250" h="250" />
+						<frame x="3750" y="0" w="250" h="250" />
+						<frame x="4000" y="0" w="250" h="250" />
+					</enabled>
+				</geyser>
 				<cave_drop w="18" h="18" texture="Assets/Props/caveDrop.png">
 					<start loop="false" speed="0.13">
 						<frame x="0" y="0" w="18" h="18" />

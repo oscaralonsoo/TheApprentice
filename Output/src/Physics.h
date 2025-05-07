@@ -33,7 +33,8 @@
 #define CATEGORY_NPC              0x2000
 #define CATEGORY_DOOR             0x4000
 #define CATEGORY_LIFE_PLANT       0x8000
-#define CATEGORY_HELPZONE		  0x0080
+#define CATEGORY_GEYSER           0x0080
+#define CATEGORY_HELPZONE         0x0080
 
 // types of bodies
 enum bodyType {
@@ -51,6 +52,7 @@ enum class ColliderType {
 	WALL,
 	DOWN_CAMERA,
 	ATTACK,
+	GEYSER,
 	CAVE_DROP,
 	NPC,
 	HELPZONE,

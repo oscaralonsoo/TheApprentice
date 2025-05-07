@@ -24,6 +24,7 @@
 #include "Noctilume.h"
 #include "HelpZone.h"
 #include "Checkpoint.h"
+#include "Geyser.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -147,6 +148,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::PLAYER:
 		entity = new Player();
+		break;
+	case EntityType::GEYSER:
+		entity = new Geyser();
 		break;
 	default:
 		break;

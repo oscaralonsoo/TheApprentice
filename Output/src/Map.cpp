@@ -17,6 +17,7 @@
 #include "PushableBox.h"
 #include "HelpZone.h"
 #include "Checkpoint.h"
+#include "Geyser.h"
 
 Map::Map() : Module(), mapLoaded(false)
 {
@@ -523,6 +524,20 @@ bool Map::Load(std::string path, std::string fileName)
                         checkpoint->width = width;
 
                         LOG("Created Checkpoint at x: %d, y: %d", x, y);
+                    }
+                    else if (objectName == "Geyser")
+                    {
+                        int x = objectNode.attribute("x").as_int();
+                        int y = objectNode.attribute("y").as_int();
+                        int width = objectNode.attribute("width").as_int();
+                        int height = objectNode.attribute("height").as_int();
+
+                        Geyser* geyser = (Geyser*)Engine::GetInstance().entityManager->CreateEntity(EntityType::GEYSER);
+                        geyser->position = Vector2D(x, y);
+                        geyser->height = height;
+                        geyser->width = width;
+
+                        LOG("Created Geyser at x: %d, y: %d", x, y);
                     }
                 }
             }

@@ -38,6 +38,10 @@ public:
     FallMechanic* GetFallMechanic() { return &fallMechanic; }
 
     HealthSystem healthSystem;
+
+    int GetWallSlideDirection() const { return wallSlideDirection; }
+    void SetWallSlideDirection(int dir) { wallSlideDirection = dir; }
+
 private:
     Player* player = nullptr;
 
@@ -51,4 +55,5 @@ private:
     bool isOnGround = false;
     bool isWallSliding = false;
     bool isTouchingWall = false;
+    int wallSlideDirection = 0;
 };

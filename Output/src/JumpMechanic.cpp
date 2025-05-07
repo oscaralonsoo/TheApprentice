@@ -59,14 +59,30 @@ void JumpMechanic::HandleJumpInput() {
     }
 
     // ----------- INICIO DE SALTO -----------
-    if (jumpDown && !player->GetMechanics()->GetFallMechanic()->IsFalling()) {
-        if (player->GetMechanics()->IsOnGround() || (doubleJumpUnlocked && jumpCount < maxJumpCount)) {
+    if (jumpDown) {
+        bool isGrounded = player->GetMechanics()->IsOnGround();
+
+        // Primer salto desde el suelo
+        if (isGrounded) {
             velocity.y = -jumpForce;
             isJumping = true;
             isHoldingJump = true;
             jumpStartY = player->GetPosition().getY();
-            jumpCount++;
+            jumpCount = 1; // primer salto
             player->GetMechanics()->SetIsOnGround(false);
+            player->SetState("jump");
+
+            jumpCooldownTimer.Start();
+            jumpCooldownActive = true;
+
+            // Segundo salto en el aire
+        }
+        else if (doubleJumpUnlocked && jumpCount == 1) {
+            velocity.y = -jumpForce;
+            isJumping = true;
+            isHoldingJump = true;
+            jumpStartY = player->GetPosition().getY();
+            jumpCount = 2; // segundo salto (doble salto)
             player->SetState("jump");
 
             jumpCooldownTimer.Start();

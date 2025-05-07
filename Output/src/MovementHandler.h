@@ -39,6 +39,8 @@ public:
 
     SDL_GameController* GetController() const { return controller; }
 
+    void StartWallSlideCooldown();
+
 private:
     void HandleMovementInput();
     void UpdateAnimation();

@@ -186,10 +186,14 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::WALL:
     case ColliderType::DESTRUCTIBLE_WALL:
         if (!wallSlideCooldownActive) {
-            wallSlideMechanic.OnTouchWall();
+            float playerX = player->GetPosition().getX();
+            float wallX = physB->body->GetPosition().x * PIXELS_PER_METER; 
+
+            int dir = (playerX < wallX) ? -1 : 1; 
+
+            wallSlideMechanic.OnTouchWall(dir);
         }
         break;
-
     default:
         break;
     }
@@ -251,4 +255,9 @@ MovementHandler::~MovementHandler() {
         SDL_GameControllerClose(controller);
         controller = nullptr;
     }
+}
+
+void MovementHandler::StartWallSlideCooldown() {
+    wallSlideCooldownActive = true;
+    wallSlideCooldownTimer.Start();
 }

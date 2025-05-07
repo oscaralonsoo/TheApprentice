@@ -54,15 +54,16 @@ void DashMechanic::StartDash() {
 
     player->pbody->body->SetGravityScale(0.0f);
 
-    dashDirection = player->GetMechanics()->GetMovementDirection();
-
     if (player->GetMechanics()->IsWallSliding()) {
-        dashDirection *= -1;
+        // Dash en dirección contraria a la pared
+        dashDirection = -player->GetMechanics()->GetWallSlideDirection();
+    }
+    else {
+        dashDirection = player->GetMechanics()->GetMovementDirection();
     }
 
     Engine::GetInstance().render->DashCameraImpulse(dashDirection, 100);
-
-    player->SetState("dash"); //  AÑADIDO aquí
+    player->SetState("dash");
 }
 
 void DashMechanic::ApplyDashMovement() {
@@ -82,6 +83,9 @@ void DashMechanic::CancelDash() {
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
     velocity.x = 0.0f;
     player->pbody->body->SetLinearVelocity(velocity);
+
+    // Evitar reenganche inmediato al wall slide
+    player->GetMechanics()->GetMovementHandler()->StartWallSlideCooldown();
 }
 
 void DashMechanic::OnWallCollision() {

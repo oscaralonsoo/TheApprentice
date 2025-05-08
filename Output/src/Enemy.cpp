@@ -65,15 +65,7 @@ bool Enemy::Update(float dt)
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
-	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() - 15, &currentAnimation->GetCurrentFrame(),
-		1.0f,
-		0.0,
-		INT_MAX,
-		INT_MAX,
-		(direction < 0) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL,
-		scale
-	);
-	currentAnimation->Update();
+
 
 	//Show|Hide Path
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
@@ -93,7 +85,9 @@ bool Enemy::PostUpdate()
 		0.0,
 		INT_MAX,
 		INT_MAX,
-		(direction < 0) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
+		(direction < 0) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL,
+		scale
+	);
 	currentAnimation->Update();
 	return true;
 }

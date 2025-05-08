@@ -5,9 +5,9 @@
 
 enum class NoctilumeState {
     IDLE,
-    FLYING,
-    DIVE,
-    DIVE_COOLDOWN,
+    CHASING,
+    ATTACK,
+    CRASH,
     DEAD
 };
 
@@ -24,52 +24,31 @@ public:
     bool CleanUp() override;
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
 
-    void IdleFlying(float dt);
-    void Flying(float dt);
-    void Dive(float dt);
+    void Idle(float dt);
+    void Chasing(float dt);
+    void Attack();
+    void Crash();
+    void Die();
 
-    float DistanceToPlayer();
-    void HandleStateTransition();
-    void TryInitiateDiveAttack(float dt);
+    void CheckState();
 
 private:
-    bool playerInRange = false;
+    Vector2D originalPosition;
     NoctilumeState currentState = NoctilumeState::IDLE;
 
-    Animation idleAnim;
     Animation flyingAnim;
-    Animation divingDownAnim;
-    Animation divingUpAnim;
+    Animation attackAnim;
+    Animation crashAnim;
+    Animation dieAnim;
 
-    // Movement & Flight
-    float timePassed = 0.0f;
-    float sineOffset = 0.0f;
-    float waveOffset = 0.0f;
-    float flyingTransitionTimer = 0.0f;
-    const float flyingTransitionDuration = 0.5f;
-
-    // Position & Oscilation
-    float lastSinValue = 0.0f;
-    Vector2D direction = { 0.0f, 0.0f };
     float idleTime = 0.0f;
-
-    float attackCooldown = 3000.0f;
-    float attackTimer = 0.0f;
-    float proximityDuration = 2000.0f;
-    float proximityTimer = 0.0f;
-
-    // Dive
-    Vector2D diveControlPos;
-    Vector2D diveStartPos;
-    Vector2D diveTargetPos;
-    Vector2D diveReferencePlayerPos;
-    Vector2D lastDivePosition;
-    float diveElapsedTime = 0.0f;
-    float diveTime = 0.0f;
-    float diveProgress = 0.0f;
-    bool divingDown = true;
-    bool justFinishedDive = false;
+    float chaseSpeed = 0.0015f;
+    float idleAmplitude = 300.0f;
+    float idleFrequency = 0.0015f;
+    float followSmoothing = 5.0f;
 
     float delayedPlayerX = 0.0f;
     float delayedPlayerY = 0.0f;
+    float timePassed = 0.0f;
+    float lastSinValue = 0.0f;
 };

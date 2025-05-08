@@ -64,9 +64,9 @@ bool Thumpod::Update(float dt) {
     return Enemy::Update(dt);
 }
 bool Thumpod::PostUpdate() {
-    if (currentState == ThumpodState::DEAD && currentAnimation->HasFinished()) {
-
+    if (currentState == ThumpodState::DEAD && currentAnimation->HasFinished()) 
         Engine::GetInstance().entityManager->DestroyEntity(this);
+    
     return true;
 }
 bool Thumpod::CleanUp() {

@@ -120,9 +120,6 @@ void Enemy::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
 	{
 	case ColliderType::ATTACK:
-		LOG("Collided with player - DESTROY");
-		Engine::GetInstance().entityManager.get()->DestroyEntity(this);
-
 		break;
 	}
 }
@@ -132,7 +129,6 @@ void Enemy::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
 	switch (physB->ctype)
 	{
 	case ColliderType::ATTACK:
-		LOG("Collided with player - DESTROY");
 
 		break;
 	}

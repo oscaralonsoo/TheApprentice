@@ -9,7 +9,7 @@ public:
     void Init(Player* player);
     void Update(float dt);
 
-    void OnTouchWall();
+    void OnTouchWall(int direction);
     void OnLeaveWall();
 
 private:

@@ -8,14 +8,15 @@
 #include "Log.h"
 #include <cmath>
 
-Noctilume::Noctilume() : Enemy(EntityType::NOCTILUME)
-{
-}
+Noctilume::Noctilume() : Enemy(EntityType::NOCTILUME) {}
+
 Noctilume::~Noctilume() {}
+
 bool Noctilume::Awake()
 {
     return true;
 }
+
 bool Noctilume::Start() {
     pugi::xml_document configDoc;
     if (!configDoc.load_file("config.xml")) return false;
@@ -33,15 +34,16 @@ bool Noctilume::Start() {
         }
     }
 
-    pbody = Engine::GetInstance().physics->CreateCircleSensor( static_cast<int>(position.getX() + texH / 2),
+    pbody = Engine::GetInstance().physics->CreateCircle( static_cast<int>(position.getX() + texH / 2),
         static_cast<int>(position.getY() + texH / 2),texH / 4,bodyType::DYNAMIC);
 
     originalPosition = position;
 
-    maxSteps = 15;
+    maxSteps = 10;
 
     return Enemy::Start();
 }
+
 bool Noctilume::Update(float dt) {
     CheckState();
 
@@ -68,12 +70,14 @@ bool Noctilume::Update(float dt) {
 
     return Enemy::Update(dt);
 }
+
 bool Noctilume::PostUpdate() {
     if (currentState == NoctilumeState::DEAD && currentAnimation && currentAnimation->HasFinished())
         Engine::GetInstance().entityManager->DestroyEntity(this);
 
     return true;
 }
+
 void Noctilume::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
@@ -86,53 +90,46 @@ void Noctilume::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     }
 }
+
 bool Noctilume::CleanUp() {
     return Enemy::CleanUp();
 }
 
 void Noctilume::Idle(float dt) {
-    currentAnimation = &flyingAnim;
+    timePassed += dt;
 
-    idleTime += dt;
+    float pingPong = fmod(timePassed * waveFrequency * 2 * horizontalRange, 2 * horizontalRange);
+    float x = (pingPong < horizontalRange) ? pingPong : (2 * horizontalRange - pingPong);
 
-    float xOffset = std::sin(idleTime * idleFrequency) * idleAmplitude;
-    float newX = originalPosition.getX() + xOffset;
+    position.x = originalPosition.x + x;
+    position.y = originalPosition.y + sin(timePassed * waveFrequency + waveOffset) * waveAmplitude;
 
-    float newY = originalPosition.getY();
-
-    position.setX(newX);
-    position.setY(newY);
 }
 void Noctilume::Chasing(float dt) {
-    currentAnimation = &flyingAnim;
-
     timePassed += dt;
 
     const Vector2D playerPos = Engine::GetInstance().scene->GetPlayerPosition();
+    Vector2D noctPos = (pbody)
+        ? Vector2D{ static_cast<float>(METERS_TO_PIXELS(pbody->body->GetPosition().x)),
+                    static_cast<float>(METERS_TO_PIXELS(pbody->body->GetPosition().y)) }
+    : position;
 
-    delayedPlayerX += (playerPos.getX() - delayedPlayerX);
-    delayedPlayerY += (playerPos.getY() - delayedPlayerY);
+    delayedPlayerX += (playerPos.x - delayedPlayerX);
+    delayedPlayerY += (playerPos.y - delayedPlayerY);
 
-    position.setY(position.getY() + (delayedPlayerY - hoverHeight - position.getY()) * 0.5f);
+    noctPos.y += (delayedPlayerY - hoverHeight - noctPos.y) * 0.5f;
+    
+    float sinValue = sin(oscillationSpeed * timePassed + 2.0f);
+    noctPos.x = delayedPlayerX + oscillationAmplitude * sinValue;
 
-    float sinValue = std::sin(oscillationSpeed * timePassed + 2.0f);
-    position.setX(delayedPlayerX + oscillationAmplitude * sinValue);
-
-    // Detección de cruce por el eje horizontal
-    if ((lastSinValue < 0 && sinValue >= 0) || (lastSinValue > 0 && sinValue <= 0)) {
-        oscillationCrosses++;
-    }
+    // Set in case we go IDLE
+    originalPosition = position;
 
     lastSinValue = sinValue;
-
-    if (oscillationCrosses >= 6) {
-        currentState = NoctilumeState::ATTACK;
-        oscillationCrosses = 0;
-    }
+    position = noctPos;
 }
 void Noctilume::Attack(float dt) {
     currentAnimation = &attackAnim;
-
 
 }
 void Noctilume::Crash(float dt) {

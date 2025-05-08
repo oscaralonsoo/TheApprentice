@@ -42,14 +42,13 @@ private:
     Animation dieAnim;
 
     //Idle 
-    float idleTime = 0.0f;
-    float chaseSpeed = 0.0015f;
-    float idleAmplitude = 300.0f;
-    float idleFrequency = 0.0015f;
-
+    const float horizontalRange = 500.0f;
+    const float waveAmplitude = 5.0f;
+    const float waveFrequency = 0.00035f;
+    float waveOffset = 0.0f; 
     //Chase 
-    const float hoverHeight = 250.0f;
-    const float oscillationAmplitude = 200.0f;
+    const float hoverHeight = 250;
+    const float oscillationAmplitude = 250.0f;
     const float oscillationSpeed = 0.002f;
     float delayedPlayerX = 0.0f;
     float delayedPlayerY = 0.0f;

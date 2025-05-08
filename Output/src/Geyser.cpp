@@ -60,10 +60,22 @@ bool Geyser::Update(float dt)
     switch (state) {
     case GeyserState::DISABLED:
         if (currentAnimation != &disabledAnim) currentAnimation = &disabledAnim;
-        if (geyserTimer.ReadMSec() >= geyserCooldown) state = GeyserState::ENABLED;
+        if (geyserTimer.ReadMSec() >= geyserCooldown) {
+            state = GeyserState::ENABLED;
+            hasPushed = false;
+        }
         break;
+
     case GeyserState::ENABLED:
         if (currentAnimation != &enabledAnim) currentAnimation = &enabledAnim;
+
+        if (playerInside && !hasPushed)
+        {
+            Player* player = Engine::GetInstance().scene.get()->GetPlayer();
+            player->pbody->body->SetLinearVelocity(b2Vec2_zero);
+            player->pbody->body->ApplyLinearImpulse(b2Vec2(0.0f, -23.0f), player->pbody->body->GetWorldCenter(), true);
+            hasPushed = true;
+        }
 
         if (currentAnimation->HasFinished())
         {
@@ -91,23 +103,15 @@ bool Geyser::CleanUp()
 }
 
 void Geyser::OnCollision(PhysBody* physA, PhysBody* physB) {
-    switch (physB->ctype)
-    {
-    case ColliderType::PLAYER:
-        if (state == GeyserState::ENABLED)
-        {
-            Player* player = Engine::GetInstance().scene.get()->GetPlayer();
-            player->pbody->body->SetLinearVelocity(b2Vec2_zero);
-            player->pbody->body->ApplyLinearImpulse(b2Vec2(0.0f, -23.0f), b2Vec2(player->GetPosition().x, player->GetPosition().y), true);
-        }
-        break;
+    if (physB->ctype == ColliderType::PLAYER) {
+        playerInside = true;
     }
 }
-void Geyser::OnCollisionEnd(PhysBody* physA, PhysBody* physB){
-    switch (physB->ctype)
-    {
-    case ColliderType::PLAYER:
-        break;
+
+void Geyser::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
+    if (physB->ctype == ColliderType::PLAYER) {
+        playerInside = false;
+        hasPushed = false;
     }
 }
 
@@ -115,8 +119,8 @@ void Geyser::OnCollisionEnd(PhysBody* physA, PhysBody* physB){
 void Geyser::RenderTexture() {
     b2Transform pbodyPos = pbody->body->GetTransform();
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - (texW / 2));
-    position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - (texH / 2));
+    position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH);
 
-    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + width / 2 - texW / 2, (int)position.getY() + height - texH, &currentAnimation->GetCurrentFrame());
+    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() + height, &currentAnimation->GetCurrentFrame());
     currentAnimation->Update();
 }

@@ -48,4 +48,7 @@ private:
 
     Timer geyserTimer;
     float geyserCooldown = 3000;
+
+    bool playerInside = false;
+    bool hasPushed = false;
 };

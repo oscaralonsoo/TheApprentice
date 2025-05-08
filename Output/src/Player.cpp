@@ -82,6 +82,9 @@ bool Player::Update(float dt) {
 	}
 	
 	mechanics.Update(dt);
+	int direction = mechanics.GetMovementDirection();
+	bool flip = direction < 0;
+	animation.Update(state, position.getX(), position.getY() - 5, mechanics.IsVisible(), flip);
 
 	b2Transform pbodyPos = pbody->body->GetTransform();
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texW / 2);
@@ -116,9 +119,7 @@ bool Player::Update(float dt) {
 }
 
 bool Player::PostUpdate() {
-	int direction = mechanics.GetMovementDirection();
-	bool flip = direction < 0;
-	animation.PostUpdate(state, position.getX(), position.getY() - 5, mechanics.IsVisible(), flip);
+
 	mechanics.PostUpdate();
 	return true;
 }

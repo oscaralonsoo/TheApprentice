@@ -80,15 +80,6 @@ bool Enemy::Update(float dt)
 
 bool Enemy::PostUpdate()
 {
-	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() - 15, &currentAnimation->GetCurrentFrame(),
-		1.0f,
-		0.0,
-		INT_MAX,
-		INT_MAX,
-		(direction < 0) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL,
-		scale
-	);
-	currentAnimation->Update();
 	return true;
 }
 

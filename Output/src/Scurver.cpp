@@ -75,13 +75,10 @@ bool Scurver::Update(float dt) {
         pbody->body->SetAngularVelocity(0);
         break;
     }
-
     return Enemy::Update(dt);
 }
 
-
 bool Scurver::PostUpdate() {
-    Enemy::PostUpdate();
     if (currentState == ScurverState::DEAD && currentAnimation->HasFinished()) {
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
     }
@@ -126,7 +123,6 @@ void Scurver::Attack(float dt) {
 
     previousDirection = direction;
 }
-
 
 void Scurver::Slide(float dt) {
     b2Vec2 currentVelocity = pbody->body->GetLinearVelocity();

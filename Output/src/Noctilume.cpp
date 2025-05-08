@@ -69,8 +69,6 @@ bool Noctilume::Update(float dt) {
     return Enemy::Update(dt);
 }
 bool Noctilume::PostUpdate() {
-    Enemy::PostUpdate();
-
     if (currentState == NoctilumeState::DEAD && currentAnimation && currentAnimation->HasFinished())
         Engine::GetInstance().entityManager->DestroyEntity(this);
 

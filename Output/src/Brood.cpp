@@ -79,8 +79,6 @@ bool Brood::Update(float dt) {
     return Enemy::Update(dt);
 }
 bool Brood::PostUpdate(float dt) {
-    Enemy::PostUpdate();
-
     return true;
 }
 bool Brood::CleanUp() {

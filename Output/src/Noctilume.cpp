@@ -54,10 +54,10 @@ bool Noctilume::Update(float dt) {
         Chasing(dt);
         break;
     case NoctilumeState::ATTACK:
-        Attack();
+        Attack(dt);
         break;
     case NoctilumeState::CRASH:
-        Crash();
+        Crash(dt);
         break;
     case NoctilumeState::DEAD:
         Die();
@@ -80,6 +80,7 @@ void Noctilume::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
         currentState = NoctilumeState::CRASH;
+        crashTimer = 0.0f;
         break;
     case ColliderType::ATTACK:
         if(currentState == NoctilumeState::CRASH)
@@ -111,31 +112,48 @@ void Noctilume::Chasing(float dt) {
 
     const Vector2D playerPos = Engine::GetInstance().scene->GetPlayerPosition();
 
-    // TODO TONI -- Hacer que siga mas smooth
-    delayedPlayerX += (playerPos.getX() - delayedPlayerX) ;
-    delayedPlayerY += (playerPos.getY() - delayedPlayerY) ;
+    delayedPlayerX += (playerPos.getX() - delayedPlayerX);
+    delayedPlayerY += (playerPos.getY() - delayedPlayerY);
 
-    const float hoverHeight = 250.0f;
     position.setY(position.getY() + (delayedPlayerY - hoverHeight - position.getY()) * 0.5f);
-
-    const float oscillationAmplitude = 200.0f;
-    const float oscillationSpeed = 0.002f;
 
     float sinValue = std::sin(oscillationSpeed * timePassed + 2.0f);
     position.setX(delayedPlayerX + oscillationAmplitude * sinValue);
 
-    lastSinValue = sinValue;
-}
+    // Detección de cruce por el eje horizontal
+    if ((lastSinValue < 0 && sinValue >= 0) || (lastSinValue > 0 && sinValue <= 0)) {
+        oscillationCrosses++;
+    }
 
-void Noctilume::Attack( ) {
+    lastSinValue = sinValue;
+
+    if (oscillationCrosses >= 6) {
+        currentState = NoctilumeState::ATTACK;
+        oscillationCrosses = 0;
+    }
+}
+void Noctilume::Attack(float dt) {
     currentAnimation = &attackAnim;
 
+
 }
-void Noctilume::Crash() {
+void Noctilume::Crash(float dt) {
     currentAnimation = &crashAnim;
+
     pbody->body->SetLinearVelocity(b2Vec2_zero);
     pbody->body->SetAngularVelocity(0);
 
+    crashTimer += dt;
+
+    if (crashTimer >= 3000.0f) {
+        if (pathfinding->HasFoundPlayer()) {
+            currentState = NoctilumeState::CHASING;
+        }
+        else {
+            currentState = NoctilumeState::IDLE;
+        }
+        crashTimer = 0.0f; // Por si vuelve a entrar en crash luego
+    }
 }
 void Noctilume::Die() {
     currentAnimation = &dieAnim;

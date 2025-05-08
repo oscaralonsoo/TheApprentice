@@ -26,8 +26,8 @@ public:
 
     void Idle(float dt);
     void Chasing(float dt);
-    void Attack();
-    void Crash();
+    void Attack(float dt);
+    void Crash(float dt);
     void Die();
 
     void CheckState();
@@ -41,14 +41,28 @@ private:
     Animation crashAnim;
     Animation dieAnim;
 
+    //Idle 
     float idleTime = 0.0f;
     float chaseSpeed = 0.0015f;
     float idleAmplitude = 300.0f;
     float idleFrequency = 0.0015f;
-    float followSmoothing = 5.0f;
 
+    //Chase 
+    const float hoverHeight = 250.0f;
+    const float oscillationAmplitude = 200.0f;
+    const float oscillationSpeed = 0.002f;
     float delayedPlayerX = 0.0f;
     float delayedPlayerY = 0.0f;
     float timePassed = 0.0f;
     float lastSinValue = 0.0f;
+
+
+    //Attack 
+    float previousSinValue = 0.0f;
+    int oscillationCrosses = 0;
+    float diveSpeed = 0.0f;
+
+    //Crash
+    float crashTimer = 0.0f;
+
 };

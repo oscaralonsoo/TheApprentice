@@ -34,6 +34,7 @@
 #define CATEGORY_DOOR             0x4000
 #define CATEGORY_LIFE_PLANT       0x8000
 #define CATEGORY_HELPZONE		  0x0080
+#define CATEGORY_HOOK_SENSOR	  0x0080
 
 // types of bodies
 enum bodyType {
@@ -62,6 +63,8 @@ enum class ColliderType {
 	HIDDEN_ZONE,
 	DESTRUCTIBLE_WALL,
 	PUSHABLE_PLATFORM,
+	HOOK_ANCHOR,
+	HOOK_SENSOR,
 	UNKNOWN
 };
 
@@ -112,7 +115,7 @@ public:
 	PhysBody* CreateCircle(int x, int y, int radious, bodyType type);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, bodyType type, uint16 categoryBits, uint16 maskBits);
 	PhysBody* CreatePolygon(int x, int y, const std::vector<b2Vec2>& vertices, bodyType type);
-	PhysBody* CreateCircleSensor(int x, int y, int radius, bodyType type);
+	PhysBody* CreateCircleSensor(int x, int y, int radius, bodyType type, uint16 categoryBits, uint16 maskBits);
 	PhysBody* CreateChain(int x, int y, int* points, int size, bodyType type);
 	
 	// b2ContactListener ---

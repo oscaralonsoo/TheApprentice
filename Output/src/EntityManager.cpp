@@ -24,6 +24,7 @@
 #include "Noctilume.h"
 #include "HelpZone.h"
 #include "Checkpoint.h"
+#include "HookAnchor.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -147,6 +148,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::PLAYER:
 		entity = new Player();
+		break;
+	case EntityType::HOOK_ANCHOR:
+		entity = new HookAnchor();
 		break;
 	default:
 		break;

@@ -6,6 +6,8 @@
 #include "AbilityZone.h"
 #include "Log.h"
 #include "EntityManager.h"
+#include "HookAnchor.h"
+#include "Scene.h"
 
 void MovementHandler::Init(Player* player) {
     this->player = player;
@@ -21,7 +23,7 @@ void MovementHandler::Init(Player* player) {
         }
     }
 
-    // Inicializar las mecánicas después de preparar el controller
+    // Inicializar las mecï¿½nicas despuï¿½s de preparar el controller
     jumpMechanic.Init(player);
     dashMechanic.Init(player);
     attackMechanic.Init(player);
@@ -57,6 +59,12 @@ void MovementHandler::Update(float dt) {
     jumpMechanic.Update(dt);
     dashMechanic.Update(dt);
     attackMechanic.Update(dt);
+
+
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+    {
+        Engine::GetInstance().scene->GetHookManager()->TryUseClosestHook();
+    }
 
     UpdateAnimation();
 }
@@ -167,15 +175,23 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
     case ColliderType::BOX:
+    {
         if (!jumpCooldownActive) {
             jumpMechanic.OnLanding();
             fallMechanic.OnLanding();
+
+            HookAnchor* hook = Engine::GetInstance().scene->GetActiveHook();
+            if (hook) {
+                hook->ResetHook();
+                Engine::GetInstance().scene->GetHookManager()->RegisterHook(hook);
+                LOG("Gancho reactivado tras aterrizar");
+            }
         }
         break;
-
-    case ColliderType::WALL_SLIDE: // <<< Aquí nuevo
+    }
+    case ColliderType::WALL_SLIDE: // <<< Aquï¿½ nuevo
         if (!wallSlideCooldownActive) {
-            isWallSliding = true;      // <<< ACTIVAR AQUÍ
+            isWallSliding = true;      // <<< ACTIVAR AQUï¿½
             isJumping = false;
             if (player->GetMechanics()->IsOnGround()) {
                 player->SetState("idle");
@@ -208,8 +224,8 @@ void MovementHandler::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         player->GetMechanics()->SetIsOnGround(false);
         break;
 
-    case ColliderType::WALL_SLIDE: // <<< Aquí nuevo
-        isWallSliding = false;     // <<< DESACTIVAR AQUÍ
+    case ColliderType::WALL_SLIDE: // <<< Aquï¿½ nuevo
+        isWallSliding = false;     // <<< DESACTIVAR AQUï¿½
         wallSlideCooldownTimer.Start();
         wallSlideCooldownActive = true;
         player->pbody->body->SetGravityScale(2.0f); // Volver a gravedad normal
@@ -242,7 +258,7 @@ void MovementHandler::HandleWallSlide() {
         // Mantener velocidad X actual
         float currentX = velocity.x;
 
-        // Forzar velocidad Y controlada (por ejemplo, deslizar más despacio)
+        // Forzar velocidad Y controlada (por ejemplo, deslizar mï¿½s despacio)
         float controlledY = 2.0f; // velocidad vertical de descenso controlada
 
         player->pbody->body->SetLinearVelocity(b2Vec2(currentX, controlledY));

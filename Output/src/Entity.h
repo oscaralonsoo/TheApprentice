@@ -30,6 +30,8 @@ enum class EntityType
 	PUSHABLE_BOX,
 	GEYSER,
 	DUST_PARTICLE,
+	HOOK_ANCHOR,
+	HOOKABLE_BOX,
 	UNKNOWN
 };
 

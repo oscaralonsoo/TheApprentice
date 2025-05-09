@@ -119,6 +119,15 @@
 					<frame x="650" y="1153" w="130" h="100" />
 					<frame x="780" y="1153" w="130" h="100" />
 				</dash>
+				<hook loop="false" speed="0.15">
+					<frame x="0" y="1153" w="130" h="100" />
+					<frame x="130" y="1153" w="130" h="100" />
+					<frame x="260" y="1153" w="130" h="100" />
+					<frame x="390" y="1153" w="130" h="100" />
+					<frame x="520" y="1153" w="130" h="100" />
+					<frame x="650" y="1153" w="130" h="100" />
+					<frame x="780" y="1153" w="130" h="100" />
+				</hook>
 			</player>
 			<enemies>
 				<enemy type="Bloodrusher" w="220" h="220" texture="Assets/Enemies/bloodrusher.png">

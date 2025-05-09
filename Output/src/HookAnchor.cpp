@@ -41,45 +41,29 @@ bool HookAnchor::Update(float dt)
 {
     if (texture)
         Engine::GetInstance().render->DrawTexture(texture, position.getX(), position.getY());
-    if (playerInRange)
-    {
-        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_L) == KEY_DOWN && !hookUsed && !isHooking)
-        {
-            Player* player = Engine::GetInstance().scene->GetPlayer();
 
-            if (player && player->pbody && player->pbody->body)
-            {
-                hookUsed = true; // ← SOLO si va a impulsarse
-
-                b2Vec2 playerPos = player->pbody->body->GetPosition();
-                b2Vec2 hookPos = pbody->body->GetPosition();
-
-                b2Vec2 direction = hookPos - playerPos;
-                direction.Normalize();
-
-                float impulseStrength = 30.0f;
-                b2Vec2 impulse = impulseStrength * direction;
-
-                player->pbody->body->SetLinearVelocity(impulse);
-                player->GetMechanics()->GetMovementHandler()->SetCantMove(true);
-                player->pbody->body->SetGravityScale(0.0f);
-
-                isHooking = true;
-                hookTimer.Start();
-            }
-        }
-    }
-
-    if (isHooking && hookTimer.ReadMSec() >= hookDuration)
-    {
-        LOG("Gancho cancelado por tiempo");
-        EndHook();
-    }
-
-    if (isHooking && !cancelledByProximity)
+    if (isHooking)
     {
         Player* player = Engine::GetInstance().scene->GetPlayer();
         if (player && player->pbody && player->pbody->body)
+        {
+            b2Vec2 playerPos = player->pbody->body->GetPosition();
+            b2Vec2 hookPos = pbody->body->GetPosition();
+
+            int x1 = METERS_TO_PIXELS(playerPos.x);
+            int y1 = METERS_TO_PIXELS(playerPos.y);
+            int x2 = METERS_TO_PIXELS(hookPos.x);
+            int y2 = METERS_TO_PIXELS(hookPos.y);
+
+            Engine::GetInstance().render->DrawLine(x1, y1, x2, y2, 255, 255, 255, 255);
+        }
+
+        if (hookTimer.ReadMSec() >= hookDuration)
+        {
+            EndHook();
+        }
+
+        if (!cancelledByProximity)
         {
             b2Vec2 playerPos = player->pbody->body->GetPosition();
             b2Vec2 hookPos = pbody->body->GetPosition();
@@ -90,12 +74,12 @@ bool HookAnchor::Update(float dt)
 
             if (distance <= cancelDistanceThreshold)
             {
-                LOG("Gancho cancelado por proximidad");
                 cancelledByProximity = true;
                 EndHook();
             }
         }
     }
+
     return true;
 }
 
@@ -137,18 +121,17 @@ void HookAnchor::OnCollision(PhysBody* physA, PhysBody* physB)
 {
     if (physA->ctype == ColliderType::HOOK_SENSOR && physB->ctype == ColliderType::PLAYER)
     {
-        playerInRange = true;
-        cancelledByProximity = false;
+        hookUsed = false;
+        Engine::GetInstance().scene->GetHookManager()->RegisterHook(this);
     }
 }
-
 
 void HookAnchor::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
 {
     // Por ahora simplemente logueamos
     if (physB->ctype == ColliderType::PLAYER)
     {
-        playerInRange = false;
+        Engine::GetInstance().scene->GetHookManager()->UnregisterHook(this);
     }
 }
 
@@ -159,9 +142,65 @@ void HookAnchor::EndHook()
     {
         player->GetMechanics()->GetMovementHandler()->SetCantMove(false);
         player->pbody->body->SetGravityScale(2.0f);
+        player->pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
     }
 
     isHooking = false;
-    hookUsed = false;
     cancelledByProximity = false;
 }
+
+bool HookAnchor::IsPlayerWithinSensorRadius() const
+{
+    Player* player = Engine::GetInstance().scene->GetPlayer();
+    if (!player || !player->pbody || !player->pbody->body || !sensor || !sensor->body)
+    {
+        LOG("IsPlayerWithinSensorRadius: algo es nulo");
+        return false;
+    }
+
+    b2Vec2 playerPos = player->pbody->body->GetPosition();
+    b2Vec2 sensorPos = sensor->body->GetPosition();
+
+    float dx = sensorPos.x - playerPos.x;
+    float dy = sensorPos.y - playerPos.y;
+    float distance = sqrtf(dx * dx + dy * dy);
+
+    float sensorRadius = PIXEL_TO_METERS(std::max(width, height) * 10.0f); // radio en metros
+
+    LOG("Player-Hook distancia (m): %.2f, radio sensor (m): %.2f", distance, sensorRadius);
+
+    return distance <= sensorRadius;
+}
+
+void HookAnchor::ResetHook()
+{
+    hookUsed = false;
+}
+
+void HookAnchor::Use()
+{
+    Player* player = Engine::GetInstance().scene->GetPlayer();
+    Engine::GetInstance().scene->SetActiveHook(this);
+
+    if (player && player->pbody && player->pbody->body)
+    {
+        hookUsed = true;
+
+        b2Vec2 playerPos = player->pbody->body->GetPosition();
+        b2Vec2 hookPos = pbody->body->GetPosition();
+
+        b2Vec2 direction = hookPos - playerPos;
+        direction.Normalize();
+
+        float impulseStrength = 30.0f;
+        b2Vec2 impulse = impulseStrength * direction;
+
+        player->pbody->body->SetLinearVelocity(impulse);
+        player->GetMechanics()->GetMovementHandler()->SetCantMove(true);
+        player->pbody->body->SetGravityScale(0.0f);
+
+        isHooking = true;
+        hookTimer.Start();
+    }
+}
+

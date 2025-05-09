@@ -6,6 +6,8 @@
 #include "AbilityZone.h"
 #include "Log.h"
 #include "EntityManager.h"
+#include "HookAnchor.h"
+#include "Scene.h"
 
 void MovementHandler::Init(Player* player) {
     this->player = player;
@@ -57,6 +59,12 @@ void MovementHandler::Update(float dt) {
     jumpMechanic.Update(dt);
     dashMechanic.Update(dt);
     attackMechanic.Update(dt);
+
+
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+    {
+        Engine::GetInstance().scene->GetHookManager()->TryUseClosestHook();
+    }
 
     UpdateAnimation();
 }
@@ -167,12 +175,20 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
     case ColliderType::PUSHABLE_PLATFORM:
+    {
         if (!jumpCooldownActive) {
             jumpMechanic.OnLanding();
             fallMechanic.OnLanding();
+
+            HookAnchor* hook = Engine::GetInstance().scene->GetActiveHook();
+            if (hook) {
+                hook->ResetHook();
+                Engine::GetInstance().scene->GetHookManager()->RegisterHook(hook);
+                LOG("Gancho reactivado tras aterrizar");
+            }
         }
         break;
-
+    }
     case ColliderType::WALL_SLIDE: // <<< Aquí nuevo
         if (!wallSlideCooldownActive) {
             isWallSliding = true;      // <<< ACTIVAR AQUÍ

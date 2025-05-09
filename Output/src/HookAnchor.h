@@ -3,8 +3,9 @@
 #include "Entity.h"
 #include "SDL2/SDL.h"
 #include "Timer.h"
+#include "IHookable.h"
 
-class HookAnchor : public Entity
+class HookAnchor : public Entity, public IHookable
 {
 public:
     HookAnchor();
@@ -22,6 +23,11 @@ public:
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
     void OnCollisionEnd(PhysBody* physA, PhysBody* physB) override;
     void EndHook();
+    bool IsPlayerWithinSensorRadius() const;
+    void ResetHook();
+    bool IsHookUsed() const { return hookUsed; }
+    PhysBody* GetPhysBody() const { return pbody; }
+    void Use();
 
 private:
     PhysBody* pbody = nullptr;
@@ -31,11 +37,9 @@ private:
     int width = 0;
     int height = 0;
 
-    bool playerInRange = false;
-
     Timer hookTimer;
     bool isHooking = false;
-    float hookDuration = 300.0f; // milisegundos
+    float hookDuration = 350.0f; // milisegundos
     bool cancelledByProximity = false;
     float cancelDistanceThreshold = 30.0f;
     bool hookUsed = false;

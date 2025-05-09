@@ -18,6 +18,7 @@
 #include "HelpZone.h"
 #include "Checkpoint.h"
 #include "HookAnchor.h"
+#include "HokableBox.h"
 
 Map::Map() : Module(), mapLoaded(false)
 {
@@ -514,6 +515,28 @@ bool Map::Load(std::string path, std::string fileName)
                     node.append_attribute("texture") = texturePath.c_str();
 
                     PushableBox* box = (PushableBox*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PUSHABLE_BOX);
+                    box->SetParameters(node);
+                }
+            }
+            else if (objectGroupName == "HookableBoxes")
+            {
+                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
+                {
+                    int x = objectNode.attribute("x").as_int();
+                    int y = objectNode.attribute("y").as_int();
+                    int width = objectNode.attribute("width").as_int();
+                    int height = objectNode.attribute("height").as_int();
+                    std::string texturePath = objectNode.attribute("texture").as_string();
+
+                    pugi::xml_document tempDoc;
+                    pugi::xml_node node = tempDoc.append_child("hookable_box");
+                    node.append_attribute("x") = x;
+                    node.append_attribute("y") = y;
+                    node.append_attribute("w") = width;
+                    node.append_attribute("h") = height;
+                    node.append_attribute("texture") = texturePath.c_str();
+
+                    HookableBox* box = (HookableBox*)Engine::GetInstance().entityManager->CreateEntity(EntityType::HOOKABLE_BOX);
                     box->SetParameters(node);
                 }
             }

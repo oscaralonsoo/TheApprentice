@@ -20,7 +20,7 @@ public:
     void OnCollisionEnd(PhysBody* physA, PhysBody* physB) override;
     Vector2D GetPosition() const;
 
-private:
+protected:
     PhysBody* pbody = nullptr;
     SDL_Texture* texture = nullptr;
     int texW = 0;

@@ -1,0 +1,60 @@
+#pragma once
+
+#include "Enemy.h"
+#include "NullwardenSpear.h"
+#include "SDL2/SDL.h"
+#include "Timer.h"
+
+class Spear;
+
+enum class NullwardenState {
+    IDLE,
+    ATTACK,
+    CHARGE,
+    IMPALED,
+    ROAR,
+    DEATH
+};
+
+class Nullwarden : public Enemy
+{
+public:
+    Nullwarden();
+    ~Nullwarden() override;
+
+    bool Awake() override;
+    bool Start() override;
+    bool Update(float dt) override;
+    bool PostUpdate() override;
+    bool CleanUp() override;
+    void OnCollision(PhysBody* physA, PhysBody* physB);
+
+    void SpawnHorizontalSpears();
+    void SpawnVerticalSpears();
+
+private:
+    NullwardenState currentState = NullwardenState::IDLE;
+
+    Animation idleAnim;
+    Animation attackAnim;
+    Animation chargeAnim;
+    Animation impaledAnim;
+    Animation roarAnim;
+    Animation deathAnim;
+
+    const float spearIntervalMs = 2000.0f;
+    Timer spearIntervalTimer;
+    const float spearAttackMs = 100.0f;
+    Timer spearAttackTimer;
+    const float impaledMs = 20000.0f;
+    Timer impaledTimer;
+    const float roarMs = 2000.0f;
+    Timer roarTimer;
+    Timer verticalSpearTimer;
+    const float verticalSpearIntervalMs = 300.0f;
+    int spawnedVerticalSpears = 0;
+    const int maxVerticalSpears = 15;
+    const float verticalSpearGap = 80.0f;
+
+    int lives = 3;
+};

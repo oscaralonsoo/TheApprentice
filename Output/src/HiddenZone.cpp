@@ -26,7 +26,15 @@ bool HiddenZone::Awake() {
 bool HiddenZone::Start() {
 
 	//Add a physics to an item - initialize the physics body
-	pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + width/2, (int)position.getY() + height/2, width, height, bodyType::STATIC);
+	pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor(
+		(int)position.getX() + width / 2,
+		(int)position.getY() + height / 2,
+		width, height,
+		bodyType::STATIC,
+		CATEGORY_HIDDEN_ZONE,     // categoría propia
+		CATEGORY_PLAYER           // solo colisiona con el jugador
+	);
+
 
 	//Assign collider type
 	pbody->ctype = ColliderType::HIDDEN_ZONE;

@@ -21,7 +21,7 @@ bool Hypnoviper::Start() {
     pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX(), (int)position.getY(), texW / 1.3, texH / 1.2, bodyType::DYNAMIC, 130, 20);
 
     //Assign collider type
-    pbody->ctype = ColliderType::ENEMY;
+    pbody->ctype = ColliderType::PLATFORM;
 
     pbody->listener = this;
 
@@ -43,6 +43,14 @@ bool Hypnoviper::Start() {
         }
     }
 
+    b2Fixture* fixture = pbody->body->GetFixtureList();
+    if (fixture) {
+        b2Filter filter;
+        filter.categoryBits = CATEGORY_ENEMY;
+        filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_PLAYER | CATEGORY_ATTACK;
+        fixture->SetFilterData(filter);
+    }
+
     currentAnimation = &sleepAnim;
 
     return true;
@@ -58,9 +66,8 @@ bool Hypnoviper::Update(float dt) {
         break;
     case HypnoviperState::HITTED:
         if (currentAnimation != &hitAnim) currentAnimation = &hitAnim;
-        if (hitTimer.ReadMSec() == 0) hitTimer.Start();
 
-        if (hitTimer.ReadMSec() > 2500)
+        if (hitTimer.ReadMSec() > 500)
         {
             currentState = HypnoviperState::DEAD;
         }
@@ -81,7 +88,7 @@ bool Hypnoviper::Update(float dt) {
 }
 
 bool Hypnoviper::PostUpdate() {
-    
+    Enemy::PostUpdate();
     if (currentState == HypnoviperState::DEAD && currentAnimation->HasFinished()) {
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
     }
@@ -99,7 +106,10 @@ void Hypnoviper::OnCollision(PhysBody* physA, PhysBody* physB)
     switch (physB->ctype)
     {
     case ColliderType::ATTACK:
-        currentState = HypnoviperState::HITTED;
+        if (currentState == HypnoviperState::SLEEPING) {
+            currentState = HypnoviperState::HITTED;
+            hitTimer.Start();
+        }
         break;
     }
 }

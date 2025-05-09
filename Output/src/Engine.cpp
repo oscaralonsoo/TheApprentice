@@ -12,6 +12,7 @@
 #include "EntityManager.h"
 #include "DialogueManager.h"
 #include "ParticleManager.h"
+#include "PressureSystemController.h"
 #include "Map.h"
 #include "Physics.h"
 #include "GuiManager.h"
@@ -27,8 +28,6 @@ Engine::Engine() {
     frameTime = PerfTimer();
     lastSecFrameTime = PerfTimer();
     frames = 0;
-
-    // L4: TODO 1: Add the EntityManager Module to the Engine
     
     // Modules
     window = std::make_shared<Window>();
@@ -36,13 +35,13 @@ Engine::Engine() {
     render = std::make_shared<Render>();
     textures = std::make_shared<Textures>();
     audio = std::make_shared<Audio>();
-    // L08: TODO 2: Add Physics module
     physics = std::make_shared<Physics>();
     map = std::make_shared<Map>();
     entityManager = std::make_shared<EntityManager>();
     particleManager = std::make_shared<ParticleManager>();
     scene = std::make_shared<Scene>();
     dialogueManager = std::make_shared<DialogueManager>();
+    pressureSystem = std::make_shared<PressureSystemController>();
     menus = std::make_shared<Menus>();
     guiManager = std::make_shared<GuiManager>();
 
@@ -59,6 +58,7 @@ Engine::Engine() {
     AddModule(std::static_pointer_cast<Module>(entityManager));
     AddModule(std::static_pointer_cast<Module>(particleManager));
     AddModule(std::static_pointer_cast<Module>(dialogueManager));
+    AddModule(std::static_pointer_cast<Module>(pressureSystem));
     AddModule(std::static_pointer_cast<Module>(menus));
     AddModule(std::static_pointer_cast<Module>(guiManager));
     // Render last 

@@ -44,6 +44,8 @@ struct MapLayer
     // L07: TODO 6: Short function to get the gid value of i,j
     uint32_t Get(uint32_t i, uint32_t j) const
     {
+        if (i >= width || j >= height)
+            return 0;
         return tiles[(j * width) + i];
     }
 };

@@ -15,7 +15,6 @@
 
 Enemy::Enemy(EntityType type) : Entity(type)
 {
-
 }
 
 Enemy::~Enemy() {
@@ -27,8 +26,6 @@ bool Enemy::Awake() {
 }
 
 bool Enemy::Start() {
-	//Add a physics to an item - initialize the physics body
-	pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, bodyType::DYNAMIC);
 	//Assign collider type
 	pbody->ctype = ColliderType::ENEMY;
 
@@ -40,6 +37,14 @@ bool Enemy::Start() {
 	// Initialize pathfinding
 	pathfinding = new Pathfinding();
 	ResetPath();
+
+	b2Fixture* fixture = pbody->body->GetFixtureList();
+	if (fixture) {
+		b2Filter filter;
+		filter.categoryBits = CATEGORY_ENEMY;
+		filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_ATTACK | CATEGORY_PLAYER_DAMAGE;
+		fixture->SetFilterData(filter);
+	}
 
 	return true;
 }
@@ -56,16 +61,22 @@ bool Enemy::Update(float dt)
 		steps++;
 	}
 
-	// L08 TODO 4: Add a physics to an item - update the position of the object from the physics.  
 	b2Transform pbodyPos = pbody->body->GetTransform();
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
-	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
+	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() - 15, &currentAnimation->GetCurrentFrame(),
+		1.0f,
+		0.0,
+		INT_MAX,
+		INT_MAX,
+		(direction < 0) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL,
+		scale
+	);
 	currentAnimation->Update();
 
 	//Show|Hide Path
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
 		showPath = !showPath;
 	}
 	if (showPath) {
@@ -77,6 +88,13 @@ bool Enemy::Update(float dt)
 
 bool Enemy::PostUpdate()
 {
+	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() - 15, &currentAnimation->GetCurrentFrame(),
+		1.0f,
+		0.0,
+		INT_MAX,
+		INT_MAX,
+		(direction < 0) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
+	currentAnimation->Update();
 	return true;
 }
 
@@ -111,6 +129,7 @@ void Enemy::OnCollision(PhysBody* physA, PhysBody* physB) {
 	case ColliderType::ATTACK:
 		LOG("Collided with player - DESTROY");
 		Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+
 		break;
 	}
 }

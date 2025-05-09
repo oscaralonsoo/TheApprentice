@@ -25,7 +25,7 @@ public:
 	void SetViewPort(const SDL_Rect& rect);
 	void ResetViewPort();
 
-	bool DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SDL_Rect* section = NULL, float speed = 1.0f, double angle = 0, uint32_t pivotX = INT_MAX, uint32_t pivotY = INT_MAX, SDL_RendererFlip flip = SDL_FLIP_NONE, float scale = 1.0f) const;
+	bool DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SDL_Rect* section = NULL, float speed = 1.0f, double angle = 0, uint32_t pivotX = INT_MAX, uint32_t pivotY = INT_MAX, SDL_RendererFlip flip = SDL_FLIP_NONE, float scale = 1.0f, float alpha = 1.0f) const;
 	bool DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool filled = true, bool useCamera = true) const;
 	bool DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool useCamera = true) const;
 	bool DrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool useCamera = true) const;
@@ -34,6 +34,7 @@ public:
 
 	void UpdateCamera(const Vector2D& targetPosition, int movementDirection, float smoothing);
 	bool DrawText(const char* text, int posx, int posy, SDL_Color color, int fontSize) const;
+	int GetTextWidth(const std::string& text, int fontSize);
 
 	float EaseInOut(float current, float target, float t);
 

@@ -8,6 +8,8 @@
 #include "Bloodrusher.h"
 #include "Nullwarden.h"
 #include "LifePlant.h"
+#include "PressurePlate.h"
+#include "PressureDoor.h"
 #include "NPC.h"
 #include "Hypnoviper.h"
 #include "Mireborn.h"
@@ -26,6 +28,7 @@
 #include "Checkpoint.h"
 #include "HookAnchor.h"
 #include "HokableBox.h"
+#include "Geyser.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -105,6 +108,12 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::CREEBLER:
 		entity = new Creebler();
 		break;
+	case EntityType::PRESSURE_PLATE:
+		entity = new PressurePlate();
+		break;
+	case EntityType::PRESSURE_DOOR:
+		entity = new PressureDoor();
+		break;
 	case EntityType::SCURVER:
 		entity = new Scurver();
 		break;
@@ -154,7 +163,11 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		entity = new HookAnchor();
 		break;
 	case EntityType::HOOKABLE_BOX:
-		return new HookableBox();
+		entity = new HookableBox();
+		break;
+	case EntityType::GEYSER:
+		entity = new Geyser();
+		break;
 	default:
 		break;
 	}

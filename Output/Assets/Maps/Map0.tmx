@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="140" height="59" tilewidth="64" tileheight="64" infinite="0" nextlayerid="76" nextobjectid="1337">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="140" height="59" tilewidth="64" tileheight="64" infinite="0" nextlayerid="74" nextobjectid="1334">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -27,11 +27,6 @@
  <tileset firstgid="3461" name="spike3" tilewidth="64" tileheight="64" tilecount="4" columns="2">
   <image source="../Props/spike3.png" width="128" height="128"/>
  </tileset>
- <group id="70" name="Background" offsetx="-1895.15" offsety="-2323.35">
-  <properties>
-   <property name="Draw" type="bool" value="true"/>
-  </properties>
- </group>
  <layer id="44" name="Background" width="140" height="59" parallaxx="0" parallaxy="0">
   <properties>
    <property name="Draw" type="bool" value="true"/>
@@ -58023,13 +58018,6 @@
   <object id="1275" x="3840" y="2816" width="128"/>
   <object id="1278" x="3840" y="2688" width="128"/>
   <object id="1307" x="6912" y="960" width="128"/>
- </objectgroup>
- <objectgroup id="74" name="HookAnchors">
-  <object id="1334" x="1920" y="448" width="64" height="64"/>
-  <object id="1335" x="1664" y="448" width="64" height="64"/>
- </objectgroup>
- <objectgroup id="75" name="HookableBoxes">
-  <object id="1336" x="1984" y="960" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="58" name="Wall">
   <object id="700" x="6208" y="2752" height="64"/>

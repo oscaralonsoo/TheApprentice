@@ -8,6 +8,8 @@
 #include "Bloodrusher.h"
 #include "Nullwarden.h"
 #include "LifePlant.h"
+#include "PressurePlate.h"
+#include "PressureDoor.h"
 #include "NPC.h"
 #include "Hypnoviper.h"
 #include "Mireborn.h"
@@ -103,6 +105,12 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::CREEBLER:
 		entity = new Creebler();
+		break;
+	case EntityType::PRESSURE_PLATE:
+		entity = new PressurePlate();
+		break;
+	case EntityType::PRESSURE_DOOR:
+		entity = new PressureDoor();
 		break;
 	case EntityType::SCURVER:
 		entity = new Scurver();

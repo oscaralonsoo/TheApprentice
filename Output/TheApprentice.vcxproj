@@ -187,6 +187,9 @@
     <ClCompile Include="src\Pathfinding.cpp" />
     <ClCompile Include="src\PerfTimer.cpp" />
     <ClCompile Include="src\Physics.cpp" />
+    <ClCompile Include="src\PressureDoor.cpp" />
+    <ClCompile Include="src\PressurePlate.cpp" />
+    <ClCompile Include="src\PressureSystemController.cpp" />
     <ClCompile Include="src\TheApprentice.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\PlayerAnimation.cpp" />
@@ -253,6 +256,9 @@
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\PlayerAnimation.h" />
     <ClInclude Include="src\PlayerMechanics.h" />
+    <ClInclude Include="src\PressureDoor.h" />
+    <ClInclude Include="src\PressurePlate.h" />
+    <ClInclude Include="src\PressureSystemController.h" />
     <ClInclude Include="src\PushableBox.h" />
     <ClInclude Include="src\Render.h" />
     <ClInclude Include="src\RespawnSystem.h" />

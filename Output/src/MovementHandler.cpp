@@ -166,7 +166,7 @@ void MovementHandler::SetCanAttack(bool canAttack) {
 void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
-    case ColliderType::PUSHABLE_PLATFORM:
+    case ColliderType::BOX:
         if (!jumpCooldownActive) {
             jumpMechanic.OnLanding();
             fallMechanic.OnLanding();
@@ -202,7 +202,7 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
 void MovementHandler::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
-    case ColliderType::PUSHABLE_PLATFORM:
+    case ColliderType::BOX:
         jumpCooldownTimer.Start();
         jumpCooldownActive = true;
         player->GetMechanics()->SetIsOnGround(false);

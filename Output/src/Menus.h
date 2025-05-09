@@ -9,9 +9,10 @@
 #include "GuiControl.h"
 #include "GuiManager.h"
 #include <unordered_map> 
+#include <SDL2/SDL_gamecontroller.h>
 
 enum class MenusState {
-    NONE, INTRO, MAINMENU, GAME, PAUSE, SETTINGS, CREDITS, DEAD, GAMEOVER, EXIT
+    NONE, INTRO, MAINMENU, GAME, PAUSE, SETTINGS, CREDITS, DEAD, GAMEOVER, EXIT, ABILITIES
 };
 
 struct ButtonInfo {
@@ -46,6 +47,7 @@ public:
     bool CleanUp() override;
 
     void LoadTextures();
+    void LoadAbilityTextures(pugi::xml_document& doc);
     void LoadBackgroundTextures(pugi::xml_document& doc);
     void CheckCurrentState(float dt);
     void HandlePause();
@@ -65,16 +67,18 @@ public:
     void ToggleFullScreen();
     void ToggleVSync();
     void HandleVolumeSliders();
-    void AdjustVolume(int& sliderX);
-    void UpdateVolume(int sliderX);
+    void AdjustVolume(int& sliderX, int minX, int maxX);
+    void UpdateVolume(int sliderX, int minX, int maxX);
     void Credits();
     void CreateButton(const std::string& name, int startX, int startY, int buttonWidth, int buttonHeight, int index);
     void DrawButtons();
     void DrawCheckBox(const ButtonInfo& button, bool isSelected);
-
+    void DrawAbilities();
     void DrawSliders();
-
+    void SetController(SDL_GameController* controller);
+    bool ContinueLoadingScreen();
     void DrawSlider(int minX, int y, int& sliderX, bool isSelected, const std::string& label);
+    void DrawPlayerLives();
 
 public:
     MenusState currentState = MenusState::INTRO;
@@ -88,12 +92,19 @@ public:
     bool fadingIn = false;
     bool inConfig = false;
     bool inCredits = false;
-
+    bool drawingAbilityBackground = false;
     int isSaved = 0;
     int selectedButton = 0;
     std::vector<ButtonInfo> buttons;
     std::vector<std::string> buttonNames;
+    std::string abilityName;
+    int baseWidth, baseHeight, width, height;
 
+    SDL_GameController* controller = nullptr;
+    bool aHeld = false;
+    bool startHeld = false;
+    bool dpadUpHeld = false;
+    bool dpadDownHeld = false;
 private:
     const std::string CONFIG_FILE = "config.xml";
     const std::string ART_FILE = "art.xml";
@@ -114,11 +125,12 @@ private:
 
     std::unordered_map<std::string, SDL_Texture*> backgroundTextures;
     std::unordered_map<std::string, SDL_Texture*> buttonTextures;
+    std::unordered_map<std::string, SDL_Texture*> loadedAbilityTextures;
     SDL_Texture* checkboxTexture = nullptr;
     SDL_Texture* fillTexture = nullptr;
 
     std::unordered_map<MenusState, int> previousSelectedButton; 
-    int baseWidth, baseHeight, width, height;
+
     float scaleX = 1.0f;
     float scaleY = 1.0f;
     float transitionAlpha = 0.0f;
@@ -140,7 +152,6 @@ private:
     SDL_Color WHITE = { 255, 255, 255, 255 };
     SDL_Color GRAY = { 200, 200, 200, 255 };
 
-    void DrawPlayerLives();
 
     SDL_Texture* lifeTexture = nullptr;
     int lifeW = 32;

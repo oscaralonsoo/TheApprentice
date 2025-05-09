@@ -27,6 +27,8 @@ public:
 
 	bool Update(float dt);
 
+	bool PostUpdate() override;
+
 	bool CleanUp();
 
 	void SetParameters(pugi::xml_node parameters) {
@@ -40,6 +42,7 @@ public:
 		texW = parameters.attribute("w").as_int();
 		texH = parameters.attribute("h").as_int();
 	}
+	void VignetteChange(float dt);
 
 	void SetPosition(Vector2D pos);
 
@@ -48,6 +51,8 @@ public:
 	virtual void OnCollision(PhysBody* physA, PhysBody* physB);
 
 	virtual void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
+
+	void SetController(SDL_GameController* controller);
 
 	bool playerInside = false;
 	bool playerInsideJump = false;
@@ -67,4 +72,15 @@ private:
 	SDL_Texture* abilitySprite = nullptr;
 	int abilitySpriteW = 0;
 	int abilitySpriteH = 0;
+	bool markedForDeletion = false;
+
+	int minVignetteSize = 300;
+	int maxVignetteSize = 900;
+	float vibrateAmplitude = 400.0f;
+	float vibrateSpeed = 30.0f;
+	int newVignetteSize = 0;
+	SDL_Color normalVignetteColor = { 0, 0, 0, 255 };
+	bool xHeld = false;
+	SDL_GameController* controller = nullptr;
+	bool waitingForEatAnimation = false;
 };

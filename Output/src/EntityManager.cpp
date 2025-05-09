@@ -6,6 +6,10 @@
 #include "Log.h"
 #include "CaveDrop.h"
 #include "Bloodrusher.h"
+#include "Nullwarden.h"
+#include "LifePlant.h"
+#include "PressurePlate.h"
+#include "PressureDoor.h"
 #include "NPC.h"
 #include "Hypnoviper.h"
 #include "Mireborn.h"
@@ -19,6 +23,10 @@
 #include "DestructibleWall.h"
 #include "PushableBox.h"
 #include "AbilityZone.h"
+#include "Noctilume.h"
+#include "HelpZone.h"
+#include "Checkpoint.h"
+#include "Geyser.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -60,20 +68,6 @@ bool EntityManager::Start() {
 	return ret;
 }
 
-bool EntityManager::PreUpdate(float dt) {
-
-	bool ret = true;
-
-	//Iterates over the entities and calls Start
-	for (const auto entity : entities)
-	{
-		if (entity->active == false) continue;
-		ret = entity->PreUpdate(dt);
-	}
-
-	return ret;
-}
-
 // Called before quitting
 bool EntityManager::CleanUp()
 {
@@ -97,9 +91,6 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	//L04: TODO 3a: Instantiate entity according to the type and add the new entity to the list of Entities
 	switch (type)
 	{
-	case EntityType::PLAYER:
-		entity = new Player();
-		break;
 	case EntityType::CAVE_DROP:
 		entity = new CaveDrop();
 		break;
@@ -114,6 +105,12 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::CREEBLER:
 		entity = new Creebler();
+		break;
+	case EntityType::PRESSURE_PLATE:
+		entity = new PressurePlate();
+		break;
+	case EntityType::PRESSURE_DOOR:
+		entity = new PressureDoor();
 		break;
 	case EntityType::SCURVER:
 		entity = new Scurver();
@@ -130,6 +127,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::ABILITY_ZONE:
 		entity = new AbilityZone();
 		break;
+	case EntityType::NULLWARDEN:
+		entity = new Nullwarden();
+		break;
 	case EntityType::HIDDEN_ZONE:
 		entity = new HiddenZone();
 		break;
@@ -141,6 +141,24 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::CASTOR:
 		entity = new NPC(EntityType::CASTOR);
+		break;
+	case EntityType::NOCTILUME:
+		entity = new Noctilume();
+		break;
+	case EntityType::LIFE_PLANT:
+		entity = new LifePlant();
+		break;
+	case EntityType::HELP_ZONE:
+		entity = new HelpZone();
+		break;
+	case EntityType::CHECKPOINT:
+		entity = new Checkpoint();
+		break;
+	case EntityType::PLAYER:
+		entity = new Player();
+		break;
+	case EntityType::GEYSER:
+		entity = new Geyser();
 		break;
 	default:
 		break;
@@ -193,7 +211,7 @@ void EntityManager::AddEntity(Entity* entity)
 
 bool EntityManager::Update(float dt)
 {
-	if (Engine::GetInstance().menus->currentState != MenusState::GAME|| Engine::GetInstance().menus->isPaused)
+	if (Engine::GetInstance().menus->currentState != MenusState::GAME|| Engine::GetInstance().menus->isPaused /*TODO JAVI-- - SI VIDAS = 0, NO SE DIBUJA NINGUNA ENTIDAD*/)
 		return true;
 
 	bool ret = true;
@@ -233,4 +251,14 @@ bool EntityManager::PostUpdate()
 	}
 
 	return ret;
+}
+void EntityManager::QueueEntityForDestruction(Entity* entity) {
+	pendingDestroy.push_back(entity);
+}
+
+void EntityManager::ProcessPendingDestructions() {
+	for (Entity* e : pendingDestroy) {
+		DestroyEntity(e); 
+	}
+	pendingDestroy.clear();
 }

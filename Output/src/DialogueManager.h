@@ -1,11 +1,16 @@
 #pragma once
 
 #include "Module.h"
+#include "Timer.h"
 #include <unordered_map>
+
+
+struct SDL_Texture;
 
 struct DialogueEvent {
 	std::string speaker;
 	std::vector<std::string> lines;
+	std::vector<std::vector<std::string>> wrappedLines;
 };
 
 class DialogueManager : public Module
@@ -13,31 +18,24 @@ class DialogueManager : public Module
 public:
 
 	DialogueManager();
-
-	// Destructor
 	virtual ~DialogueManager();
 
-	// Called before render is available
 	bool Awake();
-
-	// Called after Awake
 	bool Start();
-
-	// Called every frame
 	bool Update(float dt);
-
-	// Called after Update
 	bool PostUpdate();
-
-	// Called before quitting
 	bool CleanUp();
 
 	void RenderDialogue(int id);
 	void LoadDialogues();
 	void SetDialogueAvailable(int dialogueId, bool active);
 	void ShowInteractionPrompt();
+	void WrapLines(int dialogueId, int boxWidth, int dialogueFontSize);
+	void ResetTyping();
 
 private:
+	SDL_Texture* texture;
+
 	std::string dialoguesPath = "dialogues.xml";
 
 	std::unordered_map<int, DialogueEvent> dialogueMap;
@@ -47,4 +45,8 @@ private:
 	int activeDialogueId = -1;
 
 	int currentLineIndex = 0;
+	int currentCharIndex = 0;
+	Timer typingTimer;
+	bool typingFinished = false;
+	bool forceTypingFinish = false;
 };

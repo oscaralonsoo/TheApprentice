@@ -18,6 +18,7 @@ public:
 	int totalFrames = 0;
 	int pingpongDirection = 1;
 
+	bool paused = false;
 
 public:
 	void PushBack(const SDL_Rect& rect) {
@@ -35,6 +36,8 @@ public:
 	}
 
 	void Update() {
+		if (paused || totalFrames == 0) return;
+
 		currentFrame += speed;
 		if (currentFrame >= totalFrames) {
 			currentFrame = (loop || pingpong) ? 0.0f : totalFrames - 1;
@@ -66,4 +69,12 @@ public:
 		}
 
 	}
+
+	void SetPaused(bool value) {
+		paused = value;
+	}
+
+	bool IsLoop() const { return loop; }
+
+	int GetLoopCount() const { return loopCount; }
 };

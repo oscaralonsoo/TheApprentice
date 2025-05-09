@@ -13,11 +13,16 @@ void PlayerAnimation::LoadAnimations(const pugi::xml_node& parameters, SDL_Textu
     currentAnimation = &animations["idle"];
 }
 
-void PlayerAnimation::Update(float dt, const std::string& state, int x, int y, bool visible, bool flip)
+void PlayerAnimation::PostUpdate(const std::string& state, int x, int y, bool visible, bool flip)
 {
-    if (animations.find(state) != animations.end()) {
+    if (state != currentState && animations.find(state) != animations.end()) {
         currentAnimation = &animations[state];
-        //printf("Animaci�n actual: %s\n", state.c_str());
+
+        if (!currentAnimation->IsLoop()) {
+            currentAnimation->Reset();
+        }
+
+        currentState = state;
     }
 
     bool adjustedFlip = flip;
@@ -44,4 +49,16 @@ void PlayerAnimation::Update(float dt, const std::string& state, int x, int y, b
 
 const SDL_Rect& PlayerAnimation::GetCurrentFrame() const {
     return currentAnimation->GetCurrentFrame();
+}
+
+bool PlayerAnimation::HasFinished() const {
+    return currentAnimation && currentAnimation->HasFinished();
+}
+
+std::string PlayerAnimation::GetCurrentState() const {
+    return currentState;
+}
+
+int PlayerAnimation::GetLoopCount() const {
+    return currentAnimation ? currentAnimation->GetLoopCount() : 0;
 }

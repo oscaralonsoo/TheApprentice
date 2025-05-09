@@ -5,8 +5,6 @@
 #include "Box2D/Box2D.h"
 #include "PlayerAnimation.h"
 #include "Timer.h"
-
-// Añadido
 #include "PlayerMechanics.h"
 
 struct SDL_Texture;
@@ -21,6 +19,7 @@ public:
 	bool Awake();
 	bool Start();
 	bool Update(float dt);
+	bool PostUpdate();
 	bool CleanUp();
 
 	// Manejo de colisiones
@@ -40,13 +39,13 @@ public:
 	int GetMovementDirection() const;
 
 	PlayerMechanics* GetMechanics() { return &mechanics; }
-
+	PlayerAnimation* GetAnimation() { return &animation; }
 
 	int GetTextureWidth() const;
 
 	int targetScene = 0;
 	PhysBody* pbody;
-
+	PhysBody* enemySensor = nullptr;
 
 private:
 

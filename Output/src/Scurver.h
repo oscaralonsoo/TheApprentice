@@ -26,14 +26,13 @@ public:
 
     void Attack(float dt);
     void Slide(float dt);
+    bool IsGroundAhead();
 
 
 private:
     ScurverState currentState = ScurverState::IDLE;
 
-    Animation idleAnim;
     Animation attackAnim;
-    Animation slideAnim;
     Animation deadAnim;
 
     float previousDirection;

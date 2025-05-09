@@ -15,6 +15,13 @@
 #include "PlayerMechanics.h"
 #include "Scene.h"
 
+template<typename T>
+T clamp(const T& value, const T& min, const T& max) {
+	if (value < min) return min;
+	if (value > max) return max;
+	return value;
+}
+
 AbilityZone::AbilityZone() : Entity(EntityType::CAVE_DROP), state(AbilityZoneStates::WAITING)
 {
 }
@@ -54,7 +61,14 @@ bool AbilityZone::Start() {
 	currentAnimation = &idleAnim;
 
 	//Add a physics to an item - initialize the physics body
-	pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::STATIC);
+	pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor(
+		(int)position.getX() + texH / 2,
+		(int)position.getY() + texH / 2,
+		texW, texH,
+		bodyType::STATIC,
+		CATEGORY_ABILITY_ZONE,   // Este sensor es de tipo "AbilityZone"
+		CATEGORY_PLAYER          // Solo interactï¿½a con el player
+	);
 
 	//Assign collider type
 	pbody->ctype = ColliderType::ABILITY_ZONE;
@@ -72,51 +86,92 @@ bool AbilityZone::PreUpdate() {
 
 bool AbilityZone::Update(float dt)
 {
-	b2Transform pbodyPos = pbody->body->GetTransform();
-	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
-	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
+	if (!pbody) return true;
 
 	Player* player = Engine::GetInstance().scene->GetPlayer();
 	PlayerMechanics* mechanics = player->GetMechanics();
 
 	if (playerInside)
 	{
+		// TODO JAVI --- PLAYER CANNOT JUMP IF INSIDE ABILITY ZONE
+		VignetteChange(dt);
+
 		float rightLimit = position.getX() + texW;
-		float targetStopX = rightLimit - 120.0f; // antes era -60, ahora un poco más adelante
+		float targetStopX = rightLimit - 120.0f;
 		float playerRight = player->GetPosition().getX() + player->GetTextureWidth();
 		float distance = abs(playerRight - targetStopX);
+		player->GetMechanics()->GetMovementHandler()->SetCanAttack(true);
 
 		if (distance <= 2.0f) {
 			b2Vec2 stopVelocity = player->pbody->body->GetLinearVelocity();
 			stopVelocity.x = 0.0f;
 			player->pbody->body->SetLinearVelocity(stopVelocity);
-			mechanics->cantMove = true;
+			player->GetMechanics()->GetMovementHandler()->SetCantMove(true);
 		}
 		else {
-			float maxDistance = 250.0f; // empieza a frenar desde más lejos
+			float maxDistance = pbody->width * 1.5f; // empieza a frenar antes si el collider es mï¿½s ancho
 			float t = 1.0f - std::min(distance / maxDistance, 1.0f);
 			b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
-			float slowdownFactor = std::max(0.01f, 1.0f - t); // antes era 0.05f
+			float slowdownFactor = std::max(0.3f, pow(1.0f - t, 1.0f));
 			velocity.x *= slowdownFactor;
 			player->pbody->body->SetLinearVelocity(velocity);
 		}
 
-		// Obtención de la habilidad
 		if (playerRight >= rightLimit - 144.0f) {
-			if (playerInsideJump && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
-				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
-				mechanics->cantMove = false;
-				mechanics->EnableJump(true);
+			bool confirmPressed = false;
+
+			if (!controller) {
+				LOG("Controller es nullptr");
 			}
-			else if (playerInsideDoubleJump && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
-				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
-				mechanics->cantMove = false;
-				mechanics->EnableDoubleJump(true);
+			else if (!SDL_GameControllerGetAttached(controller)) {
+				LOG("Controller no estÃ¡ attached");
 			}
-			else if (playerInsideDash && Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
+			else {
+				LOG("Controller estÃ¡ listo y deberÃ­a detectar botones");
+			}
+
+			// Tecla J
+			if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
+				confirmPressed = true;
+				player->SetState("eat");
+			}
+
+			// BotÃ³n X del gamepad
+			if (controller && SDL_GameControllerGetAttached(controller)) {
+				bool xNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_X);
+				if (xNow && !xHeld) {
+					LOG("BotÃ³n X detectado en AbilityZone");
+					confirmPressed = true;
+				}
+				xHeld = xNow;
+				player->SetState("eat");
+			}
+
+			// Desbloquear habilidad correspondiente
+			if (confirmPressed) {
 				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
-				mechanics->cantMove = false;
-				mechanics->EnableDash(true);
+				player->GetMechanics()->GetMovementHandler()->SetCantMove(true);
+				player->GetMechanics()->GetMovementHandler()->SetCanAttack(true);
+				mechanics->GetHealthSystem()->SetVignetteSize(Engine::GetInstance().scene->previousVignetteSize);
+				markedForDeletion = true;
+
+				if (playerInsideJump) {
+					mechanics->EnableJump(true);
+					Engine::GetInstance().menus->abilityName = "jump";
+					player->GetMechanics()->GetMovementHandler()->SetCantMove(false);
+				}
+				else if (playerInsideDoubleJump) {
+					mechanics->EnableDoubleJump(true);
+					Engine::GetInstance().menus->abilityName = "doublejump";
+					player->GetMechanics()->GetMovementHandler()->SetCantMove(false);
+				}
+				else if (playerInsideDash) {
+					mechanics->EnableDash(true);
+					Engine::GetInstance().menus->abilityName = "dash";
+					player->GetMechanics()->GetMovementHandler()->SetCantMove(false);
+				}
+
+				Engine::GetInstance().menus->StartTransition(false, MenusState::ABILITIES);
 			}
 		}
 	}
@@ -130,10 +185,42 @@ bool AbilityZone::Update(float dt)
 	return true;
 }
 
+bool AbilityZone::PostUpdate() {
+	if (markedForDeletion) {
+		Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+	}
+
+	return true;
+}
+
 bool AbilityZone::CleanUp()
 {
 	Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
 	return true;
+}
+
+void AbilityZone::VignetteChange(float dt)
+{
+	Player* player = Engine::GetInstance().scene->GetPlayer();
+	PlayerMechanics* mechanics = player->GetMechanics();
+
+	float zoneStartX = position.getX();
+	float zoneEndX = zoneStartX + texW;
+	float playerX = player->GetPosition().getX();
+
+	float progress = (playerX - zoneStartX) / (zoneEndX - zoneStartX);
+	progress = clamp(progress, 0.0f, 1.0f);
+	progress = 1.0f - powf(1.0f - progress, 4.0f);
+
+	newVignetteSize = minVignetteSize + static_cast<int>((maxVignetteSize - minVignetteSize) * progress);
+
+	// Aï¿½adir efecto de vibraciï¿½n
+	if (progress > 0.95f) {
+		float offset = sinf(dt * vibrateSpeed) * vibrateAmplitude;
+		newVignetteSize += static_cast<int>(offset);
+	}
+	// Aplicar tamaï¿½o
+	mechanics->GetHealthSystem()->SetVignetteSize(newVignetteSize);
 }
 
 void AbilityZone::SetPosition(Vector2D pos) {
@@ -149,13 +236,14 @@ Vector2D AbilityZone::GetPosition() {
 	return pos;
 }
 
-void AbilityZone::OnCollision(PhysBody* physA, PhysBody* physB){
+void AbilityZone::OnCollision(PhysBody* physA, PhysBody* physB) {
 	Player* player = Engine::GetInstance().scene->GetPlayer();
 	PlayerMechanics* mechanics = player->GetMechanics();
 	switch (physB->ctype) {
 	case ColliderType::PLAYER:
 		playerInside = true;
-		mechanics->canAttack = false;
+		player->GetMechanics()->GetMovementHandler()->SetCanAttack(false);
+		Engine::GetInstance().scene->previousVignetteSize = mechanics->GetHealthSystem()->GetVignetteSize();
 		if (type == "Jump") {
 			playerInsideJump = true;
 		}
@@ -171,18 +259,24 @@ void AbilityZone::OnCollision(PhysBody* physA, PhysBody* physB){
 	}
 }
 
-void AbilityZone::OnCollisionEnd(PhysBody* physA, PhysBody* physB){
+void AbilityZone::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 	Player* player = Engine::GetInstance().scene->GetPlayer();
 	PlayerMechanics* mechanics = player->GetMechanics();
 	switch (physB->ctype) {
 	case ColliderType::PLAYER:
 		playerInside = false;
-		mechanics->canAttack = true;
+		player->GetMechanics()->GetMovementHandler()->SetCanAttack(true);
 		playerInsideJump = false;
 		playerInsideDoubleJump = false;
 		playerInsideDash = false;
+		mechanics->GetHealthSystem()->SetVignetteSize(Engine::GetInstance().scene->previousVignetteSize);
 		break;
 	default:
 		break;
 	}
+}
+
+void AbilityZone::SetController(SDL_GameController* controller) {
+	this->controller = controller;
+	LOG("AbilityZone: controller asignado correctamente: %p", controller);
 }

@@ -39,8 +39,11 @@ bool DustParticle::Start() {
         (int)position.getX() + texW / 2,
         (int)position.getY() + texH / 2,
         texW, texH,
-        bodyType::DYNAMIC
+        bodyType::DYNAMIC,
+        CATEGORY_DUST_PARTICLE,  // su propia categoría
+        0x0000                   // no colisiona con nada
     );
+
     pbody->body->SetGravityScale(0);
 
     currentAnimation = &spawnAnim;

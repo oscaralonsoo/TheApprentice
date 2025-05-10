@@ -39,8 +39,8 @@ public:
 
     HealthSystem healthSystem;
 
-    int GetWallSlideDirection() const { return wallSlideDirection; }
-    void SetWallSlideDirection(int dir) { wallSlideDirection = dir; }
+    JumpMechanic* GetJumpMechanic() { return &movementHandler.GetJumpMechanic(); }
+    void SetIsWallSliding(bool wallSliding) { isWallSliding = wallSliding; }
 
 private:
     Player* player = nullptr;
@@ -55,5 +55,4 @@ private:
     bool isOnGround = false;
     bool isWallSliding = false;
     bool isTouchingWall = false;
-    int wallSlideDirection = 0;
 };

@@ -63,6 +63,9 @@ void AttackMechanic::StartAttack() {
     isAttacking = true;
     attackTimer.Start();
 
+    attackDirection = player->GetMechanics()->GetMovementDirection();
+    attackFlip = (attackDirection < 0);
+
     player->SetState("attack");
 }
 
@@ -70,7 +73,8 @@ void AttackMechanic::UpdateAttackSensor() {
     if (!attackSensor)
         return;
 
-    int offsetX = (player->GetMechanics()->GetMovementDirection() > 0) ? 38 : -38;
+    int offsetX = (attackDirection > 0) ? 38 : -38; // Usa la dirección guardada, NO la actual
+
     int playerX = METERS_TO_PIXELS(player->pbody->body->GetPosition().x) + offsetX;
     int playerY = METERS_TO_PIXELS(player->pbody->body->GetPosition().y) - 10;
 

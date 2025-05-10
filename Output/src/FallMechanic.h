@@ -8,12 +8,12 @@ class FallMechanic {
 public:
     void Init(Player* player);
     void Update(float dt);
+    void CheckFallStart();
     void OnLanding();
     bool IsFalling() const { return isFalling; }
     bool IsStunned() const { return isStunned; }
 
 private:
-    void CheckFallStart();
     void CheckLanding();
 
 private:

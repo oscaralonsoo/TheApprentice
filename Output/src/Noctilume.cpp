@@ -114,6 +114,7 @@ void Noctilume::OnCollision(PhysBody* physA, PhysBody* physB) {
 }
 
 void Noctilume::Idle(float dt) {
+    currentAnimation = &flyingAnim;
     timePassed += dt;
 
     float pingPong = fmod(timePassed * waveFrequency * 2 * horizontalRange, 2 * horizontalRange);
@@ -123,7 +124,8 @@ void Noctilume::Idle(float dt) {
     position.y = originalPosition.y + sin(timePassed * waveFrequency + waveOffset) * waveAmplitude;
 }
 
-void Noctilume::Chasing(float dt) {
+void Noctilume::Chasing(float dt) { 
+    currentAnimation = &flyingAnim;
     timePassed += dt;
 
     Vector2D currentPos = GetBodyPosition();
@@ -156,6 +158,7 @@ void Noctilume::Chasing(float dt) {
 }
 
 void Noctilume::PreAttack(float dt) {
+    currentAnimation = &flyingAnim;
     anticipationTimer += dt;
 
     if (anticipationTimer == dt) {

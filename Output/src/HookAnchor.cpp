@@ -20,7 +20,7 @@ bool HookAnchor::Start()
     float radius = std::max(width, height) * 10.0f;
 
     // Collider principal
-    pbody = Engine::GetInstance().physics->CreateRectangle(centerX, centerY, width, height, STATIC);
+    pbody = Engine::GetInstance().physics->CreateRectangleSensor(centerX, centerY, width, height, STATIC, CATEGORY_HOOK_SENSOR, CATEGORY_PLAYER);
     pbody->ctype = ColliderType::HOOK_ANCHOR;
     pbody->listener = this;
 

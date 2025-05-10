@@ -8,7 +8,7 @@
 #include "Entity.h"
 #include "Log.h"
 
-constexpr int MAX_BROODS = 6;
+constexpr int MAX_BROODS = 4;
 constexpr int BROODS_PER_SPAWN = 1;
 constexpr int MAX_SPAWN_ATTEMPTS = 10;
 constexpr float MIN_SPAWN_DISTANCE = 60.0f;

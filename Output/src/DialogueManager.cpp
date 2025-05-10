@@ -2,6 +2,7 @@
 #include "LOG.h"
 #include "Render.h"
 #include "Engine.h"
+#include "Textures.h"
 
 #include <sstream> 
 #include <string>
@@ -204,7 +205,10 @@ void DialogueManager::SetDialogueAvailable(int dialogueId, bool active) {
 }
 
 void DialogueManager::ShowInteractionPrompt() {
-	Engine::GetInstance().render->DrawText("Press E to talk", 600, 400, { 255, 255, 255, 255 }, 40);
+	texture = Engine::GetInstance().textures->Load("Assets/Textures/UI/Help/listen.png");
+	SDL_Rect camera = Engine::GetInstance().render->camera;
+
+	Engine::GetInstance().render.get()->DrawTexture(texture, -camera.x, -camera.y);
 }
 
 void DialogueManager::ResetTyping() {

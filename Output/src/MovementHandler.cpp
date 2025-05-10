@@ -56,8 +56,10 @@ void MovementHandler::Update(float dt) {
     HandleTimers();
     HandleWallSlide();
 
-    jumpMechanic.Update(dt);
-    dashMechanic.Update(dt);
+    if (!disableAbilities) {
+        jumpMechanic.Update(dt);
+        dashMechanic.Update(dt);
+    }
     attackMechanic.Update(dt);
 
 
@@ -75,7 +77,7 @@ void MovementHandler::HandleMovementInput() {
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
     bool moved = false;
 
-    if (!attackMechanic.IsAttacking() && !dashMechanic.IsDashing()) {
+    if (!dashMechanic.IsDashing()) {
         // Comprobar entrada de gamepad
         if (controller && SDL_GameControllerGetAttached(controller)) {
             Sint16 axisX = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTX);
@@ -177,6 +179,7 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::BOX:
     {
         if (!jumpCooldownActive) {
+            printf("[COLLISION] Plataforma tocada\n");
             jumpMechanic.OnLanding();
             fallMechanic.OnLanding();
 
@@ -189,25 +192,29 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         break;
     }
-    case ColliderType::WALL_SLIDE: // <<< Aqu� nuevo
+    case ColliderType::WALL_SLIDE:
+        if (player->GetMechanics()->IsOnGround()) {
+            break;
+        }
         if (!wallSlideCooldownActive) {
-            isWallSliding = true;      // <<< ACTIVAR AQU�
+            wallSlideFlip = movementDirection < 0;
+            isWallSliding = true;
+            player->GetMechanics()->SetIsWallSliding(true);
             isJumping = false;
-            if (player->GetMechanics()->IsOnGround()) {
-                player->SetState("idle");
-            }
         }
         break;
 
     case ColliderType::WALL:
     case ColliderType::DESTRUCTIBLE_WALL:
+        printf("[COLLISION] Wall tocada\n");
         if (!wallSlideCooldownActive) {
             float playerX = player->GetPosition().getX();
             float wallX = physB->body->GetPosition().x * PIXELS_PER_METER; 
-
-            int dir = (playerX < wallX) ? -1 : 1; 
-
-            wallSlideMechanic.OnTouchWall(dir);
+        }
+        break;
+    case ColliderType::DOWN_CAMERA:
+        if (!downCameraCooldownActive) {
+            Engine::GetInstance().render->cameraOffsetY = 250;
         }
         break;
     default:
@@ -224,17 +231,23 @@ void MovementHandler::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         player->GetMechanics()->SetIsOnGround(false);
         break;
 
-    case ColliderType::WALL_SLIDE: // <<< Aqu� nuevo
-        isWallSliding = false;     // <<< DESACTIVAR AQU�
+    case ColliderType::WALL_SLIDE:
+        isWallSliding = false;
+        player->GetMechanics()->SetIsWallSliding(false);
         wallSlideCooldownTimer.Start();
         wallSlideCooldownActive = true;
         player->pbody->body->SetGravityScale(2.0f); // Volver a gravedad normal
+        player->SetState("fall");
         break;
 
     case ColliderType::WALL:
     case ColliderType::DESTRUCTIBLE_WALL:
         break;
-
+    case ColliderType::DOWN_CAMERA:
+        Engine::GetInstance().render->cameraOffsetY = 400;
+        downCameraCooldownTimer.Start();
+        downCameraCooldownActive = true;
+        break;
     default:
         break;
     }
@@ -249,9 +262,15 @@ void MovementHandler::HandleTimers() {
     if (wallSlideCooldownActive && wallSlideCooldownTimer.ReadMSec() >= wallSlideCooldownTime) {
         wallSlideCooldownActive = false;
     }
+    if (downCameraCooldownActive && downCameraCooldownTimer.ReadMSec() >= downCameraCooldownTime) {
+        downCameraCooldownActive = false;
+    }
 }
 
 void MovementHandler::HandleWallSlide() {
+    if (wallSlideCooldownActive) {
+        return;
+    }
     if (isWallSliding) {
         b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
 

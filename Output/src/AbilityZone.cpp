@@ -159,16 +159,19 @@ bool AbilityZone::Update(float dt)
 					mechanics->EnableJump(true);
 					Engine::GetInstance().menus->abilityName = "jump";
 					player->GetMechanics()->GetMovementHandler()->SetCantMove(false);
+					player->GetMechanics()->GetMovementHandler()->disableAbilities = false;
 				}
 				else if (playerInsideDoubleJump) {
 					mechanics->EnableDoubleJump(true);
 					Engine::GetInstance().menus->abilityName = "doublejump";
 					player->GetMechanics()->GetMovementHandler()->SetCantMove(false);
+					player->GetMechanics()->GetMovementHandler()->disableAbilities = false;
 				}
 				else if (playerInsideDash) {
 					mechanics->EnableDash(true);
 					Engine::GetInstance().menus->abilityName = "dash";
 					player->GetMechanics()->GetMovementHandler()->SetCantMove(false);
+					player->GetMechanics()->GetMovementHandler()->disableAbilities = false;
 				}
 
 				Engine::GetInstance().menus->StartTransition(false, MenusState::ABILITIES);
@@ -244,6 +247,7 @@ void AbilityZone::OnCollision(PhysBody* physA, PhysBody* physB) {
 		playerInside = true;
 		player->GetMechanics()->GetMovementHandler()->SetCanAttack(false);
 		Engine::GetInstance().scene->previousVignetteSize = mechanics->GetHealthSystem()->GetVignetteSize();
+		player->GetMechanics()->GetMovementHandler()->disableAbilities = true;
 		if (type == "Jump") {
 			playerInsideJump = true;
 		}

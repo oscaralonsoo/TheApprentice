@@ -116,8 +116,17 @@ bool Player::Update(float dt) {
 }
 
 bool Player::PostUpdate() {
-	int direction = mechanics.GetMovementDirection();
-	bool flip = direction < 0;
+	bool flip = mechanics.GetMovementDirection() < 0;
+
+	// Si está atacando, forzar el flip a la dirección guardada del ataque
+	if (mechanics.GetMovementHandler()->GetAttackMechanic().IsAttacking()) {
+		flip = mechanics.GetMovementHandler()->GetAttackMechanic().attackFlip;
+	}
+	// Forzar flip del wall slide si está deslizando por la pared
+	else if (mechanics.GetMovementHandler()->IsWallSliding()) {
+		flip = mechanics.GetMovementHandler()->wallSlideFlip;
+	}
+
 	animation.PostUpdate(state, position.getX(), position.getY() - 5, mechanics.IsVisible(), flip);
 	mechanics.PostUpdate();
 	return true;

@@ -38,6 +38,15 @@ public:
     bool IsDashUnlocked() const { return dashMechanic.IsDashUnlocked(); }
 
     SDL_GameController* GetController() const { return controller; }
+    JumpMechanic& GetJumpMechanic() { return jumpMechanic; }
+
+    int GetWallSlideDirection() const { return wallSlideDirection; }
+    void SetWallSlideDirection(int dir) { wallSlideDirection = dir; }
+    bool IsWallSliding() const { return isWallSliding; }
+    AttackMechanic& GetAttackMechanic() { return attackMechanic; }
+
+    bool wallSlideFlip = false;
+    bool disableAbilities = false;
 
     void StartWallSlideCooldown();
 
@@ -76,4 +85,10 @@ private:
     bool isWallSliding = false;
     bool isJumping = false; // para poder desactivar salto cuando haces wall slide
     SDL_GameController* controller = nullptr;
+
+    int wallSlideDirection = 0;
+
+    Timer downCameraCooldownTimer;
+    float downCameraCooldownTime = 100.0f;
+    bool downCameraCooldownActive = false;
 };

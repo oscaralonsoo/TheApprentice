@@ -12,6 +12,11 @@ void DashMechanic::Init(Player* player) {
 void DashMechanic::Update(float dt) {
     if (!dashUnlocked)
         return;
+    // Bloquear dash si estás en wallslide o tocando una pared
+    if (player->GetMechanics()->GetMovementHandler()->IsWallSliding() ||
+        player->GetMechanics()->IsTouchingWall()) {
+        return;
+    }
 
     if (!canDash && dashCooldownTimer.ReadSec() >= dashCooldownTime) {
         canDash = true;
@@ -55,8 +60,13 @@ void DashMechanic::StartDash() {
     player->pbody->body->SetGravityScale(0.0f);
 
     if (player->GetMechanics()->IsWallSliding()) {
+        printf("ENTRAAAAAAAAAA");
         // Dash en dirección contraria a la pared
-        dashDirection = -player->GetMechanics()->GetWallSlideDirection();
+        dashDirection = -player->GetMechanics()->GetMovementHandler()->GetWallSlideDirection();
+
+        // Forzar el desenganche del wallslide
+        player->GetMechanics()->GetMovementHandler()->StartWallSlideCooldown();
+        player->GetMechanics()->SetIsTouchingWall(false);
     }
     else {
         dashDirection = player->GetMechanics()->GetMovementDirection();

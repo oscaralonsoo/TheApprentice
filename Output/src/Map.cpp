@@ -688,7 +688,7 @@ bool Map::Load(std::string path, std::string fileName)
                     }  
                     else if (enemyName == "Noctilume") {
                         enemyNode.append_attribute("gravity") = false;
-                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::NOCTILUME);
+                        //enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::NOCTILUME);
                     }
                     if (enemy != nullptr)
                     {

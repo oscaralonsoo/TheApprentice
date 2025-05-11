@@ -33,23 +33,13 @@ bool Noctilume::Start() {
         }
     }
 
+    int verticalOffset = 50; // sube el collider 10 píxeles (ajusta este valor a gusto)
     pbody = Engine::GetInstance().physics->CreateCircle(
         static_cast<int>(position.x + texH / 2),
-        static_cast<int>(position.y + texH / 2),
+        static_cast<int>(position.y + texH / 2 - verticalOffset),
         texH / 4,
         bodyType::DYNAMIC
     );
-    // Initialize pathfinding
-    pathfinding = new Pathfinding();
-    ResetPath();
-
-    b2Fixture* fixture = pbody->body->GetFixtureList();
-    if (fixture) {
-        b2Filter filter;
-        filter.categoryBits = CATEGORY_ENEMY;
-        filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_ATTACK | CATEGORY_PLAYER_DAMAGE;
-        fixture->SetFilterData(filter);
-    }
 
     originalPosition = position;
     smoothedPosition = position;
@@ -75,7 +65,9 @@ bool Noctilume::Update(float dt) {
 
     playerPos = Engine::GetInstance().scene->GetPlayerPosition();
 
-    smoothedPosition = smoothedPosition + (position - smoothedPosition) * smoothingSpeed * dt;
+    if (currentState != NoctilumeState::CRASH && currentState != NoctilumeState::DEAD) {
+        smoothedPosition = smoothedPosition + (position - smoothedPosition) * smoothingSpeed * dt;
+    }
 
     pbody->body->SetTransform(
         b2Vec2(smoothedPosition.x / PIXELS_PER_METER, smoothedPosition.y / PIXELS_PER_METER),
@@ -98,11 +90,10 @@ bool Noctilume::CleanUp() {
 void Noctilume::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
-        LOG("HOLA");
         if (currentState == NoctilumeState::ATTACK && isDiving) {
-            isDiving = false;
             currentState = NoctilumeState::CRASH;
             crashTimer = 0.0f;
+            isDiving = false;
         }
         break;
     case ColliderType::PLAYER_DAMAGE:
@@ -193,11 +184,14 @@ void Noctilume::Attack(float dt) {
     else {
         Vector2D currentPos = GetBodyPosition();
         currentPos.y -= returnSpeed * dt * 100.0f;
-        position = currentPos;
 
-        if (currentPos.y <= diveStartPos.y)
+        if (currentPos.y <= diveStartPos.y) {
+            currentPos.y = diveStartPos.y;
             currentState = NoctilumeState::CHASING;
+        }
+        position = currentPos;
     }
+
 }
 
 void Noctilume::Crash(float dt) {

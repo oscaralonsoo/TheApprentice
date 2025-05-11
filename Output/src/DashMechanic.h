@@ -43,4 +43,8 @@ private:
 
     SDL_GameController* controller = nullptr; // en private
     bool rtHeldPreviously = false;
+    Vector2D lastPosition;
+    int stuckFrameCounter = 0;
+    const int stuckFrameLimit = 5;  // Número de frames sin moverse antes de cancelar el dash
+
 };

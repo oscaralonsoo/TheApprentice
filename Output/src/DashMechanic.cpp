@@ -56,15 +56,13 @@ void DashMechanic::StartDash() {
     dashCooldownTimer.Start();
 
     dashStartPosition = player->GetPosition();
+    lastPosition = dashStartPosition;  // Inicializar control de atasco
+    stuckFrameCounter = 0;
 
     player->pbody->body->SetGravityScale(0.0f);
 
     if (player->GetMechanics()->IsWallSliding()) {
-        printf("ENTRAAAAAAAAAA");
-        // Dash en dirección contraria a la pared
         dashDirection = -player->GetMechanics()->GetMovementHandler()->GetWallSlideDirection();
-
-        // Forzar el desenganche del wallslide
         player->GetMechanics()->GetMovementHandler()->StartWallSlideCooldown();
         player->GetMechanics()->SetIsTouchingWall(false);
     }
@@ -83,7 +81,23 @@ void DashMechanic::ApplyDashMovement() {
     float distance = abs(player->GetPosition().getX() - dashStartPosition.getX());
     if (distance >= maxDashDistance) {
         CancelDash();
+        return;
     }
+
+    // Comprobar si el jugador se ha quedado atascado (sin moverse)
+    Vector2D currentPosition = player->GetPosition();
+    if (abs(currentPosition.getX() - lastPosition.getX()) < 0.1f) {  // Umbral mínimo de movimiento
+        stuckFrameCounter++;
+        if (stuckFrameCounter >= stuckFrameLimit) {
+            CancelDash();
+            return;
+        }
+    }
+    else {
+        stuckFrameCounter = 0;  // Resetear contador si se ha movido
+    }
+
+    lastPosition = currentPosition;
 }
 
 void DashMechanic::CancelDash() {

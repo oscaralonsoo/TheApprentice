@@ -91,4 +91,8 @@ private:
     Timer downCameraCooldownTimer;
     float downCameraCooldownTime = 100.0f;
     bool downCameraCooldownActive = false;
+
+    Timer boxCooldownTimer;
+    float boxCooldownTime = 100.0f;
+    bool boxCooldownActive = false;
 };

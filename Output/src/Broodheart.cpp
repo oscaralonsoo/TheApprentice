@@ -24,7 +24,7 @@ bool Broodheart::Awake() {
 
 bool Broodheart::Start() {
 
-    spawnInterval = 4500.0f + static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2500.0f;
+    spawnInterval = 6500.0f + static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 4000.0f;
 
     pugi::xml_document configDoc;
     if (!configDoc.load_file("config.xml")) {

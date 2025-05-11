@@ -53,14 +53,17 @@ bool Noctilume::Start() {
 
     originalPosition = position;
     smoothedPosition = position;
-    maxSteps = 12;
+    maxSteps = 15;
 
     return Enemy::Start();
 }
 
 bool Noctilume::Update(float dt) {
     CheckState();
-
+    if (playerPos.x < position.x)
+        direction = -1;
+    else
+        direction = 1;
     switch (currentState) {
     case NoctilumeState::IDLE: Idle(dt); break;
     case NoctilumeState::CHASING: Chasing(dt); break;

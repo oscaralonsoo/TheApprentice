@@ -20,7 +20,7 @@ bool HookAnchor::Start()
     float radius = std::max(width, height) * 10.0f;
 
     // Collider principal
-    pbody = Engine::GetInstance().physics->CreateRectangleSensor(centerX, centerY, width, height, STATIC, CATEGORY_HOOK_SENSOR, CATEGORY_PLAYER);
+    pbody = Engine::GetInstance().physics->CreateRectangleSensor(centerX, centerY, width, height, STATIC, CATEGORY_HOOK, CATEGORY_PLAYER);
     pbody->ctype = ColliderType::HOOK_ANCHOR;
     pbody->listener = this;
 
@@ -58,6 +58,13 @@ bool HookAnchor::Update(float dt)
             Engine::GetInstance().render->DrawLine(x1, y1, x2, y2, 255, 255, 255, 255);
         }
 
+        if (player && !wasOnGroundAtHookStart && player->GetMechanics()->IsOnGround())
+        {
+            LOG("Hook cancelado porque el jugador ha tocado el suelo después de empezar en el aire");
+            EndHook();
+            return true;
+        }
+
         if (hookTimer.ReadMSec() >= hookDuration)
         {
             EndHook();
@@ -78,6 +85,23 @@ bool HookAnchor::Update(float dt)
                 EndHook();
             }
         }
+    }
+
+    // Dibujar un recuadro sobre el gancho si es el activo
+    Scene* scene = Engine::GetInstance().scene.get();
+    IHookable* closest = scene->GetHookManager()->GetClosestHook();
+    if (closest == this)
+    {
+        int borderX = position.getX();
+        int borderY = position.getY();
+        int borderW = width;
+        int borderH = height;
+
+        // Dibuja los 4 lados del recuadro
+        Engine::GetInstance().render->DrawLine(borderX, borderY, borderX + borderW, borderY, 255, 255, 0, 255); // Top
+        Engine::GetInstance().render->DrawLine(borderX, borderY, borderX, borderY + borderH, 255, 255, 0, 255); // Left
+        Engine::GetInstance().render->DrawLine(borderX + borderW, borderY, borderX + borderW, borderY + borderH, 255, 255, 0, 255); // Right
+        Engine::GetInstance().render->DrawLine(borderX, borderY + borderH, borderX + borderW, borderY + borderH, 255, 255, 0, 255); // Bottom
     }
 
     return true;
@@ -184,17 +208,22 @@ void HookAnchor::Use()
 
     if (player && player->pbody && player->pbody->body)
     {
+        Player* player = Engine::GetInstance().scene->GetPlayer();
+        wasOnGroundAtHookStart = player->GetMechanics()->IsOnGround(); // Guarda el estado del suelo
+
         hookUsed = true;
 
         b2Vec2 playerPos = player->pbody->body->GetPosition();
         b2Vec2 hookPos = pbody->body->GetPosition();
 
         b2Vec2 direction = hookPos - playerPos;
+        float distance = direction.Length();
         direction.Normalize();
 
-        float impulseStrength = 30.0f;
-        b2Vec2 impulse = impulseStrength * direction;
+        float desiredTimeToReach = hookDuration / 1000.0f; // Usa tu duración real en segundos
+        float requiredSpeed = distance / desiredTimeToReach;
 
+        b2Vec2 impulse = requiredSpeed * direction;
         player->pbody->body->SetLinearVelocity(impulse);
         player->GetMechanics()->GetMovementHandler()->SetCantMove(true);
         player->pbody->body->SetGravityScale(0.0f);

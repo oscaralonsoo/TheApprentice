@@ -28,6 +28,9 @@ public:
     bool IsHookUsed() const { return hookUsed; }
     PhysBody* GetPhysBody() const { return pbody; }
     void Use();
+    Vector2D GetRenderPosition() const override { return position; }
+    int GetRenderWidth() const override { return width; }
+    int GetRenderHeight() const override { return height; }
 
 private:
     PhysBody* pbody = nullptr;
@@ -43,4 +46,5 @@ private:
     bool cancelledByProximity = false;
     float cancelDistanceThreshold = 30.0f;
     bool hookUsed = false;
+    bool wasOnGroundAtHookStart = false;
 };

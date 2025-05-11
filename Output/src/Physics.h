@@ -38,6 +38,7 @@
 #define CATEGORY_PRESSURE_PLATE   19
 #define CATEGORY_BOX			  20
 #define CATEGORY_HOOK_SENSOR	  21
+#define CATEGORY_HOOK			  22
 
 // types of bodies
 enum bodyType {
@@ -136,6 +137,8 @@ public:
 	std::list<PhysBody*> bodiesToDelete;
 
 	std::list<PhysBody*> listToDelete;
+
+	b2World* GetWorld() const { return world; }
 private:
 	std::vector<int> forces;
 	// Debug mode

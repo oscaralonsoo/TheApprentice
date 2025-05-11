@@ -162,9 +162,6 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::HOOK_ANCHOR:
 		entity = new HookAnchor();
 		break;
-	case EntityType::HOOKABLE_BOX:
-		entity = new HookableBox();
-		break;
 	case EntityType::GEYSER:
 		entity = new Geyser();
 		break;

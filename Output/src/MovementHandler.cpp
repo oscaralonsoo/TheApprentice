@@ -176,7 +176,6 @@ void MovementHandler::SetCanAttack(bool canAttack) {
 void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
-    case ColliderType::BOX:
     {
         if (!jumpCooldownActive) {
             printf("[COLLISION] Plataforma tocada\n");
@@ -192,15 +191,27 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         break;
     }
+    case ColliderType::BOX:
+        if (!boxCooldownActive)
+        {
+            jumpMechanic.OnLanding();
+            fallMechanic.OnLanding();
+        }
+        break;
     case ColliderType::WALL_SLIDE:
         if (player->GetMechanics()->IsOnGround()) {
             break;
         }
         if (!wallSlideCooldownActive) {
+            printf("Entrando en WALL_SLIDE y llamando a OnWallCollision\n");
             wallSlideFlip = movementDirection < 0;
             isWallSliding = true;
             player->GetMechanics()->SetIsWallSliding(true);
             isJumping = false;
+            OnWallCollision();
+        }
+        else {
+            printf("No entra en WALL_SLIDE porque wallSlideCooldownActive está activo\n");
         }
         break;
 
@@ -225,9 +236,13 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
 void MovementHandler::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
-    case ColliderType::BOX:
         jumpCooldownTimer.Start();
         jumpCooldownActive = true;
+        player->GetMechanics()->SetIsOnGround(false);
+        break;
+    case ColliderType::BOX:
+        boxCooldownTimer.Start();
+        boxCooldownActive = true;
         player->GetMechanics()->SetIsOnGround(false);
         break;
 
@@ -264,6 +279,9 @@ void MovementHandler::HandleTimers() {
     }
     if (downCameraCooldownActive && downCameraCooldownTimer.ReadMSec() >= downCameraCooldownTime) {
         downCameraCooldownActive = false;
+    }
+    if (boxCooldownActive && boxCooldownTimer.ReadMSec() >= boxCooldownTime) {
+        boxCooldownActive = false;
     }
 }
 

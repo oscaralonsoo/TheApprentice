@@ -22,7 +22,7 @@ bool PushableBox::Start()
     pbody->listener = this;
 
     pbody->body->SetGravityScale(5.0f);
-    pbody->body->GetFixtureList()->SetFriction(2.0f); // Alta fricción
+pbody->body->GetFixtureList()->SetFriction(0.0f); // Alta fricción
     pbody->body->GetFixtureList()->SetDensity(5.0f);  // Más masa
     pbody->body->ResetMassData();
 

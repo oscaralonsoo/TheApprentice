@@ -21,7 +21,7 @@ Player::Player() : Entity(EntityType::PLAYER)
 Player::~Player() {}
 
 bool Player::Awake() {
-	position = Vector2D(9480, 5322);
+	position = Vector2D(1700, 600);
 	return true;
 }
 
@@ -130,7 +130,6 @@ bool Player::PostUpdate() {
 		flip = mechanics.GetMovementHandler()->wallSlideFlip;
 	}
 
-	animation.PostUpdate(state, position.getX(), position.getY() - 5, mechanics.IsVisible(), flip);
 	mechanics.PostUpdate();
 	return true;
 }

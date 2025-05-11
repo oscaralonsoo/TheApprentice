@@ -51,6 +51,8 @@ bool Bloodrusher::Start() {
         fixture->SetFilterData(filter);
     }
 
+    maxSteps = 15;
+
     currentAnimation = &idleAnim;
 
     return true;

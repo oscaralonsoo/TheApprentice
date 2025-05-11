@@ -21,6 +21,7 @@ public:
 
     bool IsJumpUnlocked() const { return jumpUnlocked; }
     bool IsDoubleJumpUnlocked() const { return doubleJumpUnlocked; }
+    void SetJumpCount(int count) { jumpCount = count; }
 
     void SetController(SDL_GameController* controller);
 

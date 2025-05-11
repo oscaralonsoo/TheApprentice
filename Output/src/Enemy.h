@@ -47,6 +47,8 @@ public:
 
 	std::string GetEnemyType() const { return type; }
 
+	bool IsStaggered() const { return isStaggered; }
+
 public:
 	//Pathfinding
 	int steps = 0;
@@ -71,4 +73,8 @@ protected:
 	const char* texturePath;
 
 	int direction = -1;
+
+	void ApplyKnockbackFromPlayer(int direction);
+
+	bool isStaggered = false;
 };

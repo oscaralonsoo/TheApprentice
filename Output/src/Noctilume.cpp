@@ -35,9 +35,6 @@ bool Noctilume::Start()
         }
     }
 
-    pbody = Engine::GetInstance().physics->CreateCircleSensor( static_cast<int>(position.getX() + texH / 2),
-        static_cast<int>(position.getY() + texH / 2),texH / 2,bodyType::DYNAMIC);
-
     pbody->ctype = ColliderType::ENEMY;
     pbody->listener = this;
 

@@ -45,6 +45,7 @@ bool Scene::Awake()
 	player = (Player*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PLAYER);
 	player->SetParameters(configParameters.child("animations").child("player"));
 	mechanics = player->GetMechanics();
+	hookManager = new HookManager();
 
 	return ret;
 }
@@ -53,7 +54,7 @@ bool Scene::Awake()
 bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
-	Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx");
+	Engine::GetInstance().map->Load("Assets/Maps/", "Map41.tmx");
 	return true;
 }
 
@@ -140,6 +141,9 @@ bool Scene::CleanUp()
 	LOG("Freeing scene");
 
 	SDL_DestroyTexture(img);
+
+	delete hookManager;
+	hookManager = nullptr;
 
 	return true;
 }
@@ -342,5 +346,12 @@ void Scene::VignetteHeartBeat(float dt)
 	if (heartbeatProgress == 1.0f)
 		heartbeatGrowing = false;
 }
+void Scene::SetActiveHook(HookAnchor* hook)
+{
+	activeHook = hook;
+}
 
-
+HookAnchor* Scene::GetActiveHook() const
+{
+	return activeHook;
+}

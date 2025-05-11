@@ -26,6 +26,8 @@
 #include "Noctilume.h"
 #include "HelpZone.h"
 #include "Checkpoint.h"
+#include "HookAnchor.h"
+#include "HokableBox.h"
 #include "Geyser.h"
 
 EntityManager::EntityManager() : Module()
@@ -156,6 +158,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::PLAYER:
 		entity = new Player();
+		break;
+	case EntityType::HOOK_ANCHOR:
+		entity = new HookAnchor();
 		break;
 	case EntityType::GEYSER:
 		entity = new Geyser();

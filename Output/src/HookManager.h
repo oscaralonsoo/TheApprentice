@@ -10,6 +10,8 @@ public:
     void RegisterHook(IHookable* hook);
     void UnregisterHook(IHookable* hook);
     void TryUseClosestHook();
+    IHookable* GetClosestHook() const;
+    bool IsHookVisible(IHookable* hook) const;
 
 private:
     std::vector<IHookable*> hooksInRange;

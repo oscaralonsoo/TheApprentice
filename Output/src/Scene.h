@@ -5,6 +5,9 @@
 #include "Enemy.h"
 #include "PlayerMechanics.h"
 #include "Checkpoint.h"
+#include "HookAnchor.h"
+#include "HookManager.h"
+
 struct SDL_Texture;
 
 struct Checkpoint;
@@ -56,6 +59,14 @@ public:
 	void VignetteHeartBeat(float dt);
 
 	Player* GetPlayer() const { return player; }
+
+	void SetActiveHook(HookAnchor* hook);
+
+	HookAnchor* GetActiveHook() const;
+
+	HookManager* GetHookManager() const { return hookManager; }
+
+
 public:
 	bool isLoading = false;
 	int previousVignetteSize;
@@ -106,4 +117,7 @@ private:
 	//Renderer
 	SDL_Renderer* renderer;
 
+	HookAnchor* activeHook = nullptr;
+
+	HookManager* hookManager = nullptr;
 };

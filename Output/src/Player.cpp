@@ -21,7 +21,7 @@ Player::Player() : Entity(EntityType::PLAYER)
 Player::~Player() {}
 
 bool Player::Awake() {
-	position = Vector2D(1900, 600);
+	position = Vector2D(9480, 5322);
 	return true;
 }
 
@@ -45,7 +45,7 @@ bool Player::Start() {
 		bodyType::DYNAMIC,
 		0, 0,
 		CATEGORY_PLAYER,
-		CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_SPIKE | CATEGORY_ENEMY | CATEGORY_SAVEGAME | CATEGORY_DOWN_CAMERA | CATEGORY_ABILITY_ZONE | CATEGORY_HIDDEN_ZONE | CATEGORY_NPC | CATEGORY_LIFE_PLANT | CATEGORY_DOOR
+		CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_SPIKE | CATEGORY_ENEMY | CATEGORY_SAVEGAME | CATEGORY_DOWN_CAMERA | CATEGORY_ABILITY_ZONE | CATEGORY_HIDDEN_ZONE | CATEGORY_NPC | CATEGORY_LIFE_PLANT | CATEGORY_DOOR | CATEGORY_GEYSER
 	);
 	pbody->listener = this;
 	pbody->ctype = ColliderType::PLAYER;
@@ -73,7 +73,7 @@ bool Player::Start() {
 bool Player::Update(float dt) {
 	if (pbody == nullptr || pbody->body == nullptr) {
 		LOG("ERROR: pbody o body es nullptr");
-		return false;  // o gestión específica
+		return false;  // o gestiï¿½n especï¿½fica
 	}
 
 	if (enemySensor && enemySensor->body) {
@@ -119,7 +119,18 @@ bool Player::Update(float dt) {
 }
 
 bool Player::PostUpdate() {
+	bool flip = mechanics.GetMovementDirection() < 0;
 
+	// Si estï¿½ atacando, forzar el flip a la direcciï¿½n guardada del ataque
+	if (mechanics.GetMovementHandler()->GetAttackMechanic().IsAttacking()) {
+		flip = mechanics.GetMovementHandler()->GetAttackMechanic().attackFlip;
+	}
+	// Forzar flip del wall slide si estï¿½ deslizando por la pared
+	else if (mechanics.GetMovementHandler()->IsWallSliding()) {
+		flip = mechanics.GetMovementHandler()->wallSlideFlip;
+	}
+
+	animation.PostUpdate(state, position.getX(), position.getY() - 5, mechanics.IsVisible(), flip);
 	mechanics.PostUpdate();
 	return true;
 }

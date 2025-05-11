@@ -14,7 +14,10 @@ bool PushableBox::Awake() { return true; }
 bool PushableBox::Start()
 {
     // Crear cuerpo físico dinámico y sin gravedad
-    pbody = Engine::GetInstance().physics->CreateRectangle(position.getX() + texW / 2, position.getY() + texH / 2, texW, texH, DYNAMIC);
+    pbody = Engine::GetInstance().physics->CreateRectangle(position.getX() + texW / 2, position.getY() + texH / 2, texW, texH, DYNAMIC,
+        CATEGORY_BOX,
+        CATEGORY_PLAYER || CATEGORY_PLATFORM
+    );
     pbody->ctype = ColliderType::WALL; // O uno nuevo, como PUSHABLE, si lo defines
     pbody->listener = this;
 
@@ -23,7 +26,7 @@ bool PushableBox::Start()
     pbody->body->GetFixtureList()->SetDensity(5.0f);  // Más masa
     pbody->body->ResetMassData();
 
-    pbody->ctype = ColliderType::PUSHABLE_PLATFORM;
+    pbody->ctype = ColliderType::BOX;
 
     return true;
 }

@@ -40,8 +40,9 @@ void WallSlideMechanic::StopWallSlide() {
     }
 }
 
-void WallSlideMechanic::OnTouchWall() {
+void WallSlideMechanic::OnTouchWall(int direction) {
     player->GetMechanics()->SetIsTouchingWall(true);
+    player->GetMechanics()->GetMovementHandler()->SetWallSlideDirection(direction); // aquí guardamos el dato
     wallSlideCooldownActive = false;
 }
 

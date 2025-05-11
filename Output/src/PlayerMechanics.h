@@ -38,6 +38,10 @@ public:
     FallMechanic* GetFallMechanic() { return &fallMechanic; }
 
     HealthSystem healthSystem;
+
+    JumpMechanic* GetJumpMechanic() { return &movementHandler.GetJumpMechanic(); }
+    void SetIsWallSliding(bool wallSliding) { isWallSliding = wallSliding; }
+
 private:
     Player* player = nullptr;
 

@@ -17,23 +17,27 @@
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
 
-#define CATEGORY_PLAYER           0x0001 
-#define CATEGORY_ENEMY            0x0002  
-#define CATEGORY_PLAYER_DAMAGE    0x0004  
-#define CATEGORY_PLATFORM         0x0008  
-#define CATEGORY_WALL             0x0010  
-#define CATEGORY_SPIKE            0x0020  
-#define CATEGORY_ABILITY_ZONE     0x0040  
-#define CATEGORY_HIDDEN_ZONE      0x0080
-#define CATEGORY_DUST_PARTICLE    0x0100
-#define CATEGORY_SAVEGAME         0x0200
-#define CATEGORY_DOWN_CAMERA      0x0400
-#define CATEGORY_ATTACK           0x0800
-#define CATEGORY_CAVE_DROP        0x1000
-#define CATEGORY_NPC              0x2000
-#define CATEGORY_DOOR             0x4000
-#define CATEGORY_LIFE_PLANT       0x8000
-#define CATEGORY_HELPZONE		  0x0080
+#define CATEGORY_PLAYER           1 
+#define CATEGORY_ENEMY            2  
+#define CATEGORY_PLAYER_DAMAGE    3  
+#define CATEGORY_PLATFORM         4  
+#define CATEGORY_WALL             5  
+#define CATEGORY_SPIKE            6  
+#define CATEGORY_ABILITY_ZONE     7  
+#define CATEGORY_HIDDEN_ZONE      8
+#define CATEGORY_DUST_PARTICLE    9
+#define CATEGORY_SAVEGAME         10
+#define CATEGORY_DOWN_CAMERA      11
+#define CATEGORY_ATTACK           12
+#define CATEGORY_CAVE_DROP        13
+#define CATEGORY_NPC              14
+#define CATEGORY_DOOR             15
+#define CATEGORY_LIFE_PLANT       16
+#define CATEGORY_GEYSER           17
+#define CATEGORY_HELPZONE         18
+#define CATEGORY_PRESSURE_PLATE   19
+#define CATEGORY_BOX			  20
+#define CATEGORY_HOOK_SENSOR	  21
 
 // types of bodies
 enum bodyType {
@@ -51,7 +55,9 @@ enum class ColliderType {
 	WALL,
 	DOWN_CAMERA,
 	ATTACK,
+	GEYSER,
 	CAVE_DROP,
+	PRESSURE_PLATE,
 	NPC,
 	HELPZONE,
 	ENEMY,
@@ -61,7 +67,9 @@ enum class ColliderType {
 	ABILITY_ZONE,
 	HIDDEN_ZONE,
 	DESTRUCTIBLE_WALL,
-	PUSHABLE_PLATFORM,
+	HOOK_ANCHOR,
+	HOOK_SENSOR,
+	BOX,
 	UNKNOWN
 };
 
@@ -112,7 +120,7 @@ public:
 	PhysBody* CreateCircle(int x, int y, int radious, bodyType type);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, bodyType type, uint16 categoryBits, uint16 maskBits);
 	PhysBody* CreatePolygon(int x, int y, const std::vector<b2Vec2>& vertices, bodyType type);
-	PhysBody* CreateCircleSensor(int x, int y, int radius, bodyType type);
+	PhysBody* CreateCircleSensor(int x, int y, int radius, bodyType type, uint16 categoryBits, uint16 maskBits);
 	PhysBody* CreateChain(int x, int y, int* points, int size, bodyType type);
 	
 	// b2ContactListener ---

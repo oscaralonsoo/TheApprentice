@@ -120,6 +120,11 @@ void Enemy::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
 	{
 	case ColliderType::ATTACK:
+		if (physB->listener && physB->listener->GetType() == EntityType::PLAYER) {
+			Player* playerEntity = static_cast<Player*>(physB->listener);
+			isStaggered = true;
+			ApplyKnockbackFromPlayer(playerEntity->GetMechanics()->GetMovementDirection());
+		}
 		break;
 	}
 }
@@ -132,4 +137,12 @@ void Enemy::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
 
 		break;
 	}
+}
+
+void Enemy::ApplyKnockbackFromPlayer(int direction) {
+	float horizontalPower = 4.0f;
+	float verticalPower = -4.0f;
+
+	b2Vec2 knockbackVelocity = b2Vec2(direction * horizontalPower, verticalPower);
+	pbody->body->SetLinearVelocity(knockbackVelocity);
 }

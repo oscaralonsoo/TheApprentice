@@ -70,6 +70,8 @@ bool Checkpoint::Update(float dt)
         if (savingAnim.HasFinished()) {
             state = CheckpointState::SAVED;
             Engine::GetInstance().scene->SaveGameXML();
+            Player* player = Engine::GetInstance().scene->GetPlayer();
+            player->GetMechanics()->GetMovementHandler()->SetCantMove(false);
         }
         break;
     case CheckpointState::SAVED:
@@ -133,6 +135,10 @@ void Checkpoint::CheckSave() {
         }
 
         // TODO JAVI --- PLAYER STOP MOVING
+        Player* player = Engine::GetInstance().scene->GetPlayer();
+        player->GetMechanics()->GetMovementHandler()->SetCantMove(true);
+        b2Vec2 stopVelocity(0.0f, 0.0f);
+        player->pbody->body->SetLinearVelocity(stopVelocity);
     }
 }
 

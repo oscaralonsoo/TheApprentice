@@ -9,7 +9,6 @@ void FallMechanic::Init(Player* player) {
 }
 
 void FallMechanic::Update(float dt) {
-    // Procesar stun aunque ya esté en el suelo
     if (isStunned) {
         if (stunTimer.ReadMSec() >= stunDuration) {
             isStunned = false;
@@ -22,33 +21,25 @@ void FallMechanic::Update(float dt) {
         return;
     }
 
-    // Si está en el suelo, no seguimos procesando la caída
-    if (player->GetMechanics()->IsOnGround())
+    if (player->GetMechanics()->IsOnGround()) {
+        printf("[FALL] Está en el suelo\n");
         return;
+    }
 
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
-    if (velocity.y > 0.1f && !isFalling && !player->GetMechanics()->IsWallSliding()) {
+    if (velocity.y > 0.1f && !isFalling) {
         isFalling = true;
         player->SetState("fall");
+        printf("[FALL] Empieza a caer\n");
     }
 
     CheckFallStart();
     CheckLanding();
 }
 
-void FallMechanic::CheckFallStart() {
-    b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
-
-    if (velocity.y > 0.1f && !isFalling) {
-        isFalling = true;
-        player->SetState("fall");
-    }
-}
-
 void FallMechanic::CheckLanding() {
     if (player->GetMechanics()->IsOnGround() && isFalling) {
         isFalling = false;
-
         float verticalVelocity = player->pbody->body->GetLinearVelocity().y;
 
         if (verticalVelocity > fallStunThreshold) {
@@ -56,10 +47,22 @@ void FallMechanic::CheckLanding() {
             stunTimer.Start();
             player->SetState("landing_stun");
             Engine::GetInstance().render->StartCameraShake(0.2f, 2);
+            printf("[FALL] Aterriza con stun\n");
         }
         else {
             player->SetState("landing");
+            printf("[FALL] Aterriza normal\n");
         }
+    }
+}
+
+void FallMechanic::CheckFallStart() {
+    b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
+
+    if (velocity.y > 0.1f && !isFalling) {
+
+        isFalling = true;
+        player->SetState("fall");
     }
 }
 

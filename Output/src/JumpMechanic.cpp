@@ -59,14 +59,29 @@ void JumpMechanic::HandleJumpInput() {
     }
 
     // ----------- INICIO DE SALTO -----------
-    if (jumpDown && !player->GetMechanics()->GetFallMechanic()->IsFalling()) {
-        if (player->GetMechanics()->IsOnGround() || (doubleJumpUnlocked && jumpCount < maxJumpCount)) {
+    if (jumpDown) {
+        // Primer salto desde el suelo
+        if (jumpCount == 0 && player->GetMechanics()->IsOnGround()) {
+            printf("[JUMP] Primer salto\n");
             velocity.y = -jumpForce;
             isJumping = true;
             isHoldingJump = true;
             jumpStartY = player->GetPosition().getY();
-            jumpCount++;
+            jumpCount = 1; // primer salto
             player->GetMechanics()->SetIsOnGround(false);
+            player->SetState("jump");
+
+            jumpCooldownTimer.Start();
+            jumpCooldownActive = true;
+
+            // Segundo salto en el aire
+        }
+        else if (doubleJumpUnlocked && (jumpCount == 1 || (jumpCount == 0 && !player->GetMechanics()->IsOnGround()))) {
+            velocity.y = -jumpForce;
+            isJumping = true;
+            isHoldingJump = true;
+            jumpStartY = player->GetPosition().getY();
+            jumpCount = 2; // segundo salto (doble salto)
             player->SetState("jump");
 
             jumpCooldownTimer.Start();
@@ -75,7 +90,7 @@ void JumpMechanic::HandleJumpInput() {
     }
 
     // ----------- SALTO PROGRESIVO -----------
-    if (isHoldingJump && jumpRepeat && !player->GetMechanics()->GetFallMechanic()->IsFalling()) {
+    if (isHoldingJump && jumpRepeat ) {
         float currentY = player->GetPosition().getY();
         float heightJumped = jumpStartY - currentY;
 
@@ -114,6 +129,7 @@ void JumpMechanic::OnLanding() {
     isJumping = false;
     player->GetMechanics()->SetIsOnGround(true);
     jumpCount = 0;
+    jumpCooldownActive = false;
 }
 
 void JumpMechanic::OnLeaveGround() {

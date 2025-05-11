@@ -4,6 +4,9 @@
 #include "Timer.h"
 #include <unordered_map>
 
+
+struct SDL_Texture;
+
 struct DialogueEvent {
 	std::string speaker;
 	std::vector<std::string> lines;
@@ -31,6 +34,8 @@ public:
 	void ResetTyping();
 
 private:
+	SDL_Texture* texture;
+
 	std::string dialoguesPath = "dialogues.xml";
 
 	std::unordered_map<int, DialogueEvent> dialogueMap;

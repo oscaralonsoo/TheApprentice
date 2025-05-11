@@ -12,6 +12,11 @@ void DashMechanic::Init(Player* player) {
 void DashMechanic::Update(float dt) {
     if (!dashUnlocked)
         return;
+    // Bloquear dash si estás en wallslide o tocando una pared
+    if (player->GetMechanics()->GetMovementHandler()->IsWallSliding() ||
+        player->GetMechanics()->IsTouchingWall()) {
+        return;
+    }
 
     if (!canDash && dashCooldownTimer.ReadSec() >= dashCooldownTime) {
         canDash = true;
@@ -54,15 +59,21 @@ void DashMechanic::StartDash() {
 
     player->pbody->body->SetGravityScale(0.0f);
 
-    dashDirection = player->GetMechanics()->GetMovementDirection();
-
     if (player->GetMechanics()->IsWallSliding()) {
-        dashDirection *= -1;
+        printf("ENTRAAAAAAAAAA");
+        // Dash en dirección contraria a la pared
+        dashDirection = -player->GetMechanics()->GetMovementHandler()->GetWallSlideDirection();
+
+        // Forzar el desenganche del wallslide
+        player->GetMechanics()->GetMovementHandler()->StartWallSlideCooldown();
+        player->GetMechanics()->SetIsTouchingWall(false);
+    }
+    else {
+        dashDirection = player->GetMechanics()->GetMovementDirection();
     }
 
     Engine::GetInstance().render->DashCameraImpulse(dashDirection, 100);
-
-    player->SetState("dash"); //  AÑADIDO aquí
+    player->SetState("dash");
 }
 
 void DashMechanic::ApplyDashMovement() {
@@ -82,6 +93,9 @@ void DashMechanic::CancelDash() {
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
     velocity.x = 0.0f;
     player->pbody->body->SetLinearVelocity(velocity);
+
+    // Evitar reenganche inmediato al wall slide
+    player->GetMechanics()->GetMovementHandler()->StartWallSlideCooldown();
 }
 
 void DashMechanic::OnWallCollision() {

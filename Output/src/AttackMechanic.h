@@ -14,6 +14,7 @@ public:
     bool IsAttacking() const;
 
     void SetController(SDL_GameController* controller);
+    bool attackFlip = false;
 
 private:
     void StartAttack();
@@ -31,4 +32,6 @@ private:
 
     SDL_GameController* controller = nullptr;
     bool attackHeldPreviously = false;
+
+    int attackDirection = 1;
 };

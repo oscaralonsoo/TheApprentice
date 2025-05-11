@@ -43,7 +43,7 @@ bool Noctilume::Start() {
 
     originalPosition = position;
     smoothedPosition = position;
-    maxSteps = 15;
+    maxSteps = 12;
 
     return Enemy::Start();
 }

@@ -694,6 +694,9 @@ bool Map::Load(std::string path, std::string fileName)
                     else if (enemyName == "Dreadspire") {
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::DREADSPIRE);
                     }
+                    else if (enemyName == "DungBeetle") {
+                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::DUNGBEETLE);
+                    }
                     if (enemy != nullptr)
                     {
                         enemy->SetParameters(enemyNode);

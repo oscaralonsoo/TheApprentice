@@ -9,7 +9,7 @@
 #include "Log.h"
 #include <cmath>
 
-Dreadspire::Dreadspire() : Enemy(EntityType::NOCTILUME) {}
+Dreadspire::Dreadspire() : Enemy(EntityType::DREADSPIRE) {}
 
 Dreadspire::~Dreadspire() {}
 
@@ -38,25 +38,7 @@ bool Dreadspire::Start() {
         texH / 2,
         bodyType::DYNAMIC
     );
-    //Assign collider type
-    pbody->ctype = ColliderType::ENEMY;
-
-    pbody->listener = this;
-
-    // Set the gravity of the body
-    if (!gravity) pbody->body->SetGravityScale(0);
-
-    // Initialize pathfinding
-    pathfinding = new Pathfinding();
-    ResetPath();
-
-    b2Fixture* fixture = pbody->body->GetFixtureList();
-    if (fixture) {
-        b2Filter filter;
-        filter.categoryBits = CATEGORY_ENEMY;
-        filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_ATTACK | CATEGORY_PLAYER_DAMAGE;
-        fixture->SetFilterData(filter);
-    }
+  
     maxSteps = 15;
 
     return Enemy::Start();
@@ -125,33 +107,46 @@ void Dreadspire::Shoot(float dt)
 
     if (fireCooldown > 0) return;
 
-    b2Vec2 toPlayer = b2Vec2(playerPos.x - position.x, playerPos.y - position.y);
-    float baseAngle = atan2(toPlayer.y, toPlayer.x);
-
-    float angles[3] = { -M_PI / 4, 0.0f, M_PI / 4 };
-
-    for (int i = 0; i < 3; ++i) {
-        float shootingAngle = baseAngle + angles[i];
-        b2Vec2 dir = b2Vec2(cos(shootingAngle), sin(shootingAngle));
-
-        float spawnOffset = 40.0f; 
-        float centerX = METERS_TO_PIXELS(pbody->body->GetPosition().x);
-        float centerY = METERS_TO_PIXELS(pbody->body->GetPosition().y);
-
-        float offsetX = centerX + dir.x * spawnOffset;
-        float offsetY = centerY + dir.y * spawnOffset;
-
-        auto bullet = new DreadspireBullet(offsetX, offsetY, 6.0f, dir);
-        Engine::GetInstance().entityManager->AddEntity(bullet);
+    if (bulletsShot == 0 && bulletShootTimer <= 0.0f) {
+        bulletShootTimer = 0.001f; 
     }
 
-    fireCooldown = 2500.0f;
+    if (bulletShootTimer > 0.0f) {
+        bulletShootTimer += dt;
+        if (bulletsShot == 0) {
+            b2Vec2 toPlayer = b2Vec2(playerPos.x - position.x, playerPos.y - position.y);
+            baseAngle = atan2(toPlayer.y, toPlayer.x);
+        }
+        if (bulletsShot < 3 && bulletShootTimer >= (200 * (bulletsShot + 1))) {
+         
+            float shootingAngle = baseAngle + angles[bulletsShot];
+            b2Vec2 dir = b2Vec2(cos(shootingAngle), sin(shootingAngle));
 
-    if (currentAnimation->HasFinished())
-    {
-        currentState = DreadspireState::RECHARGING;
+
+            float centerX = METERS_TO_PIXELS(pbody->body->GetPosition().x);
+            float centerY = METERS_TO_PIXELS(pbody->body->GetPosition().y);
+
+            float offsetX = centerX + dir.x * spawnOffset;
+            float offsetY = centerY + dir.y * spawnOffset;
+
+            auto bullet = new DreadspireBullet(offsetX, offsetY, 15.0f, dir);
+            Engine::GetInstance().entityManager->AddEntity(bullet);
+
+            bulletsShot++;
+        }
+
+        if (bulletsShot >= 3) {
+            bulletShootTimer = 0.0f;
+            bulletsShot = 0;
+            fireCooldown = 2500.0f;
+
+            if (currentAnimation->HasFinished()) {
+                currentState = DreadspireState::RECHARGING;
+            }
+        }
     }
 }
+
 
 void Dreadspire::Recharge(float dt)
 {

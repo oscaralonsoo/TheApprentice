@@ -419,6 +419,37 @@
 						<frame x="0" y="0" w="35" h="180" />
 					</destroyed>
 				</enemy>
+				<enemy type="DungBeetle" w="64" h="64" texture="Assets/Enemies/test.png">
+					<idle loop="true" speed="0.35">
+						<frame x="0" y="0" w="64" h="64" />
+					</idle>
+					<angry loop="true" speed="0.35">
+						<frame x="0" y="64" w="64" h="64" />
+					</angry>
+					<throwing loop="true" speed="0.35">
+						<frame x="0" y="128" w="64" h="64" />
+					</throwing>
+					<ballMode loop="true" speed="0.35">
+						<frame x="0" y="192" w="64" h="64" />
+					</ballMode>
+					<hit loop="true" speed="0.35">
+						<frame x="0" y="256" w="64" h="64" />
+					</hit>
+					<death loop="true" speed="0.35">
+						<frame x="0" y="320" w="64" h="64" />
+					</death>
+				</enemy>
+				<enemy type="DungBeetleBall" w="35" h="180" texture="Assets/Enemies/sword.png">
+					<idle loop="true" speed="0.3">
+						<frame x="0" y="0" w="35" h="180" />
+					</idle>
+					<bounce loop="true" speed="0.3">
+						<frame x="0" y="0" w="35" h="180" />
+					</bounce>
+					<destroyed loop="true" speed="0.3">
+						<frame x="0" y="0" w="35" h="180" />
+					</destroyed>
+				</enemy>
 			</enemies>
 			<props>
 				<geyser w="250" h="250" texture="Assets/Props/geyser.png">

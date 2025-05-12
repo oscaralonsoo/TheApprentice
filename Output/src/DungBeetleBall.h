@@ -6,14 +6,18 @@
 #include "Animation.h"
 #include "Vector2D.h"
 
-class DreadspireBullet : public Entity {
+class DungBeetleBall : public Entity {
 public:
-    DreadspireBullet(float x, float y, float speed, b2Vec2 direction);
-    ~DreadspireBullet();
+    DungBeetleBall(float x, float y, float speed, b2Vec2 direction);
+    ~DungBeetleBall();
 
     bool Update(float dt) override;
     bool CleanUp() override;
-    void OnCollision(PhysBody* physA, PhysBody* physB) override;
+    void OnCollision(PhysBody* physA, PhysBody* physB, const b2Vec2& normal);
+
+    void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
+
+    void Bounce(const b2Vec2& normal);
 
 private:
     PhysBody* pbody = nullptr;

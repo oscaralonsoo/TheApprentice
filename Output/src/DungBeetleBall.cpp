@@ -1,27 +1,31 @@
-#include "DreadspireBullet.h"
+#include "DungBeetleBall.h"
 #include "Engine.h"
 #include "EntityManager.h"
 #include "Scene.h"
-
-DreadspireBullet::DreadspireBullet(float x, float y, float speed, b2Vec2 direction)
-    : Entity(EntityType::BULLET), direction(direction), speed(speed)
+DungBeetleBall::DungBeetleBall(float x, float y, float speed, b2Vec2 direction)
+    : Entity(EntityType::BALL), direction(direction), speed(speed)
 {
-    width = 32;
-    height = 32;
+    width = 64;
+    height = 64;
 
-    pbody = Engine::GetInstance().physics->CreateCircle(x, y, width/2, bodyType::DYNAMIC);
+    pbody = Engine::GetInstance().physics->CreateCircle(x, y, width / 2, bodyType::DYNAMIC);
     pbody->ctype = ColliderType::ENEMY;
     pbody->listener = this;
 
     pbody->body->SetGravityScale(0.0f);
-
     if (b2Fixture* fixture = pbody->body->GetFixtureList()) {
         fixture->SetSensor(false);
 
         b2Filter filter;
         filter.categoryBits = CATEGORY_ENEMY;
-        filter.maskBits = CATEGORY_WALL | CATEGORY_PLAYER_DAMAGE;
+        filter.maskBits = CATEGORY_WALL | CATEGORY_PLAYER_DAMAGE | CATEGORY_PLATFORM;
         fixture->SetFilterData(filter);
+
+        //Bounce Fixture Settings
+        fixture->SetRestitution(1.0f);
+        fixture->SetFriction(0.0f);
+        pbody->body->SetLinearDamping(0.0f);
+        pbody->body->SetAngularDamping(0.0f);
     }
 
     pbody->body->SetLinearVelocity(b2Vec2(direction.x * speed, direction.y * speed));
@@ -38,11 +42,12 @@ DreadspireBullet::DreadspireBullet(float x, float y, float speed, b2Vec2 directi
             idleAnim.LoadAnimations(node.child("idle"));
         }
     }
- 
+
     currentAnimation = &idleAnim;
 }
 
-DreadspireBullet::~DreadspireBullet() {
+DungBeetleBall::~DungBeetleBall()
+{
     if (pbody) {
         Engine::GetInstance().entityManager->DestroyEntity(this);
         pbody = nullptr;
@@ -51,7 +56,7 @@ DreadspireBullet::~DreadspireBullet() {
     currentAnimation = nullptr;
 }
 
-bool DreadspireBullet::Update(float dt)
+bool DungBeetleBall::Update(float dt)
 {
     b2Transform pbodyPos = pbody->body->GetTransform();
 
@@ -71,22 +76,50 @@ bool DreadspireBullet::Update(float dt)
     return true;
 }
 
-
-bool DreadspireBullet::CleanUp()
+bool DungBeetleBall::CleanUp()
 {
     Engine::GetInstance().physics->DeletePhysBody(pbody);
     return true;
 }
 
-void DreadspireBullet::OnCollision(PhysBody* physA, PhysBody* physB)
+void DungBeetleBall::OnCollision(PhysBody* physA, PhysBody* physB, const b2Vec2& normal)
+{
+    switch (physB->ctype)
+    {
+    case ColliderType::PLATFORM:
+    case ColliderType::WALL:
+        Bounce(normal);
+        break;
+    case ColliderType::PLAYER:
+        break;
+    }
+}
+
+void DungBeetleBall::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
 {
     switch (physB->ctype)
     {
     case ColliderType::ATTACK:
     case ColliderType::PLATFORM:
     case ColliderType::WALL:
+        break;
     case ColliderType::PLAYER:
-        Engine::GetInstance().entityManager->DestroyEntity(this);
+
         break;
     }
 }
+void DungBeetleBall::Bounce(const b2Vec2& normal)
+{
+    b2Vec2 velocity = pbody->body->GetLinearVelocity();
+
+    // Reflejar velocidad con respecto a la normal
+    b2Vec2 reflected = velocity - 2.0f * b2Dot(velocity, normal) * normal;
+
+    // Normalizar y mantener la misma velocidad
+    float speed = velocity.Length();
+    reflected.Normalize();
+    reflected *= speed;
+
+    pbody->body->SetLinearVelocity(reflected);
+}
+

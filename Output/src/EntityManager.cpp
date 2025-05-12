@@ -30,6 +30,7 @@
 #include "HookAnchor.h"
 #include "HokableBox.h"
 #include "Geyser.h"
+#include "DungBeetle.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -135,6 +136,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::NULLWARDEN:
 		entity = new Nullwarden();
+		break;
+	case EntityType::DUNGBEETLE:
+		entity = new DungBeetle();
 		break;
 	case EntityType::HIDDEN_ZONE:
 		entity = new HiddenZone();

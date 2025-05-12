@@ -30,9 +30,15 @@ private:
     void Idle(float dt);
     void Shoot(float dt);
     void Recharge(float dt);
-private:
+
     bool shouldBecomeStatic = false;
     bool shouldBecomeDynamic = false;
+
+    float angles[3] = { -M_PI / 10, 0.0f, M_PI / 10 };
+    float spawnOffset = 40.0f;
+    float bulletShootTimer = 0.0f;
+    int bulletsShot = 0;
+    float baseAngle = 0.0f;
 
     Vector2D playerPos;
     DreadspireState currentState = DreadspireState::IDLE;

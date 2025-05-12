@@ -33,7 +33,7 @@ bool Noctilume::Start() {
         }
     }
 
-    int verticalOffset = 50; // sube el collider 10 píxeles (ajusta este valor a gusto)
+    int verticalOffset = 50; 
     pbody = Engine::GetInstance().physics->CreateCircle(
         static_cast<int>(position.x + texH / 2),
         static_cast<int>(position.y + texH / 2 - verticalOffset),
@@ -50,10 +50,12 @@ bool Noctilume::Start() {
 
 bool Noctilume::Update(float dt) {
     CheckState();
-    if (playerPos.x < position.x)
-        direction = -1;
-    else
-        direction = 1;
+
+    playerPos = Engine::GetInstance().scene->GetPlayerPosition();
+
+    if (playerPos.x < position.x) direction = -1;
+    else direction = 1;
+
     switch (currentState) {
     case NoctilumeState::IDLE: Idle(dt); break;
     case NoctilumeState::CHASING: Chasing(dt); break;
@@ -63,16 +65,10 @@ bool Noctilume::Update(float dt) {
     case NoctilumeState::DEAD: Die(); break;
     }
 
-    playerPos = Engine::GetInstance().scene->GetPlayerPosition();
-
     if (currentState != NoctilumeState::CRASH && currentState != NoctilumeState::DEAD) {
         smoothedPosition = smoothedPosition + (position - smoothedPosition) * smoothingSpeed * dt;
     }
-
-    pbody->body->SetTransform(
-        b2Vec2(smoothedPosition.x / PIXELS_PER_METER, smoothedPosition.y / PIXELS_PER_METER),
-        0
-    );
+    pbody->body->SetTransform(b2Vec2(smoothedPosition.x / PIXELS_PER_METER, smoothedPosition.y / PIXELS_PER_METER),0);
 
     return Enemy::Update(dt);
 }

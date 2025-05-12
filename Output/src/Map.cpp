@@ -13,6 +13,7 @@
 #include "EntityManager.h"
 #include "AbilityZone.h"
 #include "HiddenZone.h"
+#include "Dreadspire.h"
 #include "DestructibleWall.h"
 #include "PushableBox.h"
 #include "PressurePlate.h"
@@ -689,6 +690,9 @@ bool Map::Load(std::string path, std::string fileName)
                     else if (enemyName == "Noctilume") {
                         enemyNode.append_attribute("gravity") = true;
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::NOCTILUME);
+                    }
+                    else if (enemyName == "Dreadspire") {
+                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::DREADSPIRE);
                     }
                     if (enemy != nullptr)
                     {

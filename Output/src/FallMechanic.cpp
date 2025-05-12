@@ -22,7 +22,6 @@ void FallMechanic::Update(float dt) {
     }
 
     if (player->GetMechanics()->IsOnGround()) {
-        printf("[FALL] Está en el suelo\n");
         return;
     }
 
@@ -30,7 +29,6 @@ void FallMechanic::Update(float dt) {
     if (velocity.y > 0.1f && !isFalling) {
         isFalling = true;
         player->SetState("fall");
-        printf("[FALL] Empieza a caer\n");
     }
 
     CheckFallStart();

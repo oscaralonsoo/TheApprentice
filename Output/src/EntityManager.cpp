@@ -18,6 +18,7 @@
 #include "Creebler.h"
 #include "Scurver.h"
 #include "Thumpod.h"
+#include "Dreadspire.h"
 #include "Brood.h"
 #include "Broodheart.h"
 #include "DestructibleWall.h"
@@ -125,6 +126,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::BROOD:
 		entity = new Brood();
+		break;
+	case EntityType::DREADSPIRE:
+		entity = new Dreadspire();
 		break;
 	case EntityType::ABILITY_ZONE:
 		entity = new AbilityZone();

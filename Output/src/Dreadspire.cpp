@@ -102,7 +102,15 @@ void Dreadspire::Shoot(float dt)
         float shootingAngle = baseAngle + angles[i];
         b2Vec2 dir = b2Vec2(cos(shootingAngle), sin(shootingAngle));
 
-        auto bullet = new DreadspireBullet(position.getX(), position.getY(), 6.0f, dir);
+        // Desplaza el punto de aparición en la dirección de disparo (evita colisión inicial)
+        float spawnOffset = 50.0f; // píxeles
+        float centerX = METERS_TO_PIXELS(pbody->body->GetPosition().x);
+        float centerY = METERS_TO_PIXELS(pbody->body->GetPosition().y);
+
+        float offsetX = centerX + dir.x * spawnOffset;
+        float offsetY = centerY + dir.y * spawnOffset;
+
+        auto bullet = new DreadspireBullet(offsetX, offsetY, 6.0f, dir);
         Engine::GetInstance().entityManager->AddEntity(bullet);
     }
 

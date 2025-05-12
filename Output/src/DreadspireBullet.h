@@ -23,8 +23,13 @@ private:
     Animation idleAnim;
 
     Vector2D position;
-    int width = 32;
-    int height = 32;
+    int width;
+    int height;
     float speed;
     b2Vec2 direction;
+
+    float time = 0.0f;
+    b2Vec2 baseDirection;
+    b2Vec2 perpDirection;
+    b2Vec2 startPosition;
 };

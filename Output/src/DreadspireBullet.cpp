@@ -38,7 +38,9 @@ DreadspireBullet::DreadspireBullet(float x, float y, float speed, b2Vec2 directi
             idleAnim.LoadAnimations(node.child("idle"));
         }
     }
-
+    baseDirection = direction;
+    perpDirection = b2Vec2(-direction.y, direction.x);
+    startPosition = b2Vec2(x, y);
     currentAnimation = &idleAnim;
 }
 
@@ -66,7 +68,20 @@ bool DreadspireBullet::Update(float dt)
     );
 
     currentAnimation->Update();
+    time += dt;
 
+    float amplitude = 2.0f;    
+    float frequency = 0.005f;     
+
+    // Ondulation
+    b2Vec2 linearMovement = baseDirection;
+    b2Vec2 waveOffset = perpDirection;
+    waveOffset *= sinf(time * frequency) * amplitude / PIXELS_PER_METER;
+
+    b2Vec2 newPos = pbody->body->GetPosition();
+    newPos += waveOffset;
+
+    pbody->body->SetTransform(newPos, pbody->body->GetAngle());
     return true;
 }
 

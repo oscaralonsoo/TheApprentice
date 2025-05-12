@@ -33,21 +33,14 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::ENEMY: {
 
-        Enemy* enemy = static_cast<Enemy*>(physB->listener);
-        if (enemy && enemy->IsStaggered()) {
-            return; // No aplicar daño si el enemigo está en stagger por nuestro ataque
-        }
-
         b2Vec2 enemyPosMeters = physB->body->GetPosition();
         Vector2D enemyPos = Vector2D(METERS_TO_PIXELS(enemyPosMeters.x), METERS_TO_PIXELS(enemyPosMeters.y));
-
-        // Aplicar knockback siempre
-        healthSystem.ApplyKnockback(enemyPos);
 
         // Solo perder vida si no estás invulnerable ni en godmode
         if (!invulnerabilitySystem.IsInvulnerable() && !godModeSystem.IsEnabled()) {
             healthSystem.TakeDamage();
             invulnerabilitySystem.StartInvulnerability();
+            healthSystem.ApplyKnockback(enemyPos);
         }
         break;
     }

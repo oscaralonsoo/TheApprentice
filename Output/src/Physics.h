@@ -39,6 +39,7 @@
 #define CATEGORY_BOX			  20
 #define CATEGORY_HOOK_SENSOR	  21
 #define CATEGORY_HOOK			  22
+#define CATEGORY_LIANA			  23
 
 // types of bodies
 enum bodyType {
@@ -52,6 +53,7 @@ enum class ColliderType {
 	PLAYER_DAMAGE,
 	LIFE_PLANT,
 	SPIKE,
+	LIANA,
 	WALL_SLIDE,
 	WALL,
 	DOWN_CAMERA,

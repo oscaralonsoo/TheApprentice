@@ -95,4 +95,11 @@ private:
     Timer boxCooldownTimer;
     float boxCooldownTime = 100.0f;
     bool boxCooldownActive = false;
+
+    Timer lianaCooldownTimer;
+    float lianaCooldownTime = 100.0f;
+    bool lianaCooldownActive = false;
+
+    bool isOnLiana = false;
+    float lianaCenterX = 0.0f;
 };

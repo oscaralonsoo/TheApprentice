@@ -53,7 +53,6 @@ void MovementHandler::Update(float dt) {
     if (isOnLiana) {
         b2Vec2 velocity(0.0f, 0.0f);
 
-        // Movimiento vertical
         if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
             velocity.y = -8.0f;
         }
@@ -61,7 +60,6 @@ void MovementHandler::Update(float dt) {
             velocity.y = 8.0f;
         }
 
-        // Movimiento horizontal libre
         if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
             velocity.x = -8.0f;
         }
@@ -69,16 +67,29 @@ void MovementHandler::Update(float dt) {
             velocity.x = 8.0f;
         }
 
-        // Centrado suave en X solo si sube o baja (W o S)
-        //if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT ||
-        //    Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT ||
+            Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
 
-        //    float currentX = player->pbody->body->GetPosition().x;
-        //    float smoothing = 5.0f;
-        //    float newX = currentX + (lianaCenterX - currentX) * dt * smoothing;
+            float currentX = player->GetPosition().getX(); // PIXELES
+            float distance = lianaCenterX - currentX;
 
-        //    player->pbody->body->SetTransform(b2Vec2(newX, player->pbody->body->GetPosition().y), 0.0f);
-        //}
+            // Velocidad de centrado constante
+            float centerSpeed = 1.0f * dt; // Ajusta 100.0f según lo que quieras
+            float newX = currentX + centerSpeed * ((distance > 0) ? 1.0f : -1.0f);
+
+            // Evitar pasarse del centro
+            if (fabs(distance) < centerSpeed) {
+                newX = lianaCenterX;
+            }
+
+            // Log para depuración
+            printf("[Liana] currentX (pixeles): %.2f\n", currentX);
+            printf("[Liana] lianaCenterX (pixeles): %.2f\n", lianaCenterX);
+            printf("[Liana] newX (pixeles): %.2f\n", newX);
+            printf("[Liana] newX (metros): %.2f\n", PIXEL_TO_METERS(newX));
+
+            player->pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(newX), player->pbody->body->GetPosition().y), 0.0f);
+        }
 
         player->pbody->body->SetGravityScale(0.0f);
         player->pbody->body->SetLinearVelocity(velocity);
@@ -264,7 +275,7 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (!lianaCooldownActive) {
             printf("Entrando en LIANA\n");
             isOnLiana = true;
-            /*lianaCenterX = physB->body->GetPosition().x * PIXELS_PER_METER;*/ // Guarda el centro en X del collider
+            lianaCenterX = METERS_TO_PIXELS(physB->body->GetPosition().x); // Guardar en PIXELES
             disableAbilities = true; // Bloquear salto y dash
         }
         break;

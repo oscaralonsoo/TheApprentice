@@ -115,7 +115,6 @@ bool HookManager::IsHookVisible(IHookable* hook) const
         // Si hay un tile sólido
         if (tileId != 0)
         {
-            LOG("Obstruido en TILE (%d, %d) - Tile ID: %d", x0, y0, tileId);
             return false;
         }
 
@@ -126,7 +125,5 @@ bool HookManager::IsHookVisible(IHookable* hook) const
         if (e2 > -dy) { err -= dy; x0 += sx; }
         if (e2 < dx) { err += dx; y0 += sy; }
     }
-
-    LOG("Línea libre hasta TILE (%d, %d)", x1, y1);
     return true;
 }

@@ -60,7 +60,6 @@ bool HookAnchor::Update(float dt)
 
         if (player && !wasOnGroundAtHookStart && player->GetMechanics()->IsOnGround())
         {
-            LOG("Hook cancelado porque el jugador ha tocado el suelo después de empezar en el aire");
             EndHook();
             return true;
         }
@@ -178,7 +177,6 @@ bool HookAnchor::IsPlayerWithinSensorRadius() const
     Player* player = Engine::GetInstance().scene->GetPlayer();
     if (!player || !player->pbody || !player->pbody->body || !sensor || !sensor->body)
     {
-        LOG("IsPlayerWithinSensorRadius: algo es nulo");
         return false;
     }
 
@@ -190,8 +188,6 @@ bool HookAnchor::IsPlayerWithinSensorRadius() const
     float distance = sqrtf(dx * dx + dy * dy);
 
     float sensorRadius = PIXEL_TO_METERS(std::max(width, height) * 10.0f); // radio en metros
-
-    LOG("Player-Hook distancia (m): %.2f, radio sensor (m): %.2f", distance, sensorRadius);
 
     return distance <= sensorRadius;
 }

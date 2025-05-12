@@ -9,6 +9,7 @@
 #include "Nullwarden.h"
 #include "LifePlant.h"
 #include "PressurePlate.h"
+#include "Shyver.h"
 #include "PressureDoor.h"
 #include "NPC.h"
 #include "Hypnoviper.h"
@@ -113,6 +114,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::PRESSURE_DOOR:
 		entity = new PressureDoor();
+		break;
+	case EntityType::SHYVER:
+		entity = new Shyver();
 		break;
 	case EntityType::SCURVER:
 		entity = new Scurver();

@@ -281,6 +281,14 @@
 						<frame x="500" y="300" w="100" h="100" />
 					</dead>
 				</enemy>
+				<enemy type="Shyver" w="64" h="64" texture="Assets/Enemies/test.png">
+					<idle loop="true" speed="0.2">
+						<frame x="0" y="0" w="64" h="64" />
+					</idle>
+					<dead loop="false" speed="0.2">
+						<frame x="0" y="64" w="64" h="64" />
+					</dead>
+				</enemy>
 				<enemy type="Mireborn" w="120" h="120" texture="Assets/Enemies/mireborn.png">
 					<idle loop="true" speed="0.1">
 						<frame x="0" y="0" w="120" h="120" />

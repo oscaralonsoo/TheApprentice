@@ -178,7 +178,6 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLATFORM:
     {
         if (!jumpCooldownActive) {
-            printf("[COLLISION] Plataforma tocada\n");
             jumpMechanic.OnLanding();
             fallMechanic.OnLanding();
 

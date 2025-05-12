@@ -22,12 +22,18 @@ public:
     bool CleanUp() override;
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
 
+    void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
+
     void CheckState();
+    void ChangeBodyType();
 private:
     void Idle(float dt);
     void Shoot(float dt);
     void Recharge(float dt);
 private:
+    bool shouldBecomeStatic = false;
+    bool shouldBecomeDynamic = false;
+
     Vector2D playerPos;
     DreadspireState currentState = DreadspireState::IDLE;
 

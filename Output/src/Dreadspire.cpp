@@ -36,15 +36,35 @@ bool Dreadspire::Start() {
         static_cast<int>(position.x + texH / 2),
         static_cast<int>(position.y + texH / 2),
         texH / 2,
-        bodyType::STATIC
+        bodyType::DYNAMIC
     );
+    //Assign collider type
+    pbody->ctype = ColliderType::ENEMY;
 
+    pbody->listener = this;
+
+    // Set the gravity of the body
+    if (!gravity) pbody->body->SetGravityScale(0);
+
+    // Initialize pathfinding
+    pathfinding = new Pathfinding();
+    ResetPath();
+
+    b2Fixture* fixture = pbody->body->GetFixtureList();
+    if (fixture) {
+        b2Filter filter;
+        filter.categoryBits = CATEGORY_ENEMY;
+        filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_ATTACK | CATEGORY_PLAYER_DAMAGE;
+        fixture->SetFilterData(filter);
+    }
     maxSteps = 15;
 
     return Enemy::Start();
 }
 
 bool Dreadspire::Update(float dt) {
+    pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+
     CheckState();
 
     playerPos = Engine::GetInstance().scene->GetPlayerPosition();
@@ -56,14 +76,17 @@ bool Dreadspire::Update(float dt) {
     case DreadspireState::IDLE: Idle(dt); break;
     case DreadspireState::RECHARGING: Recharge(dt); break;
     case DreadspireState::SHOOTING: Shoot(dt); break;
-    case DreadspireState::DEAD:currentAnimation = &dieAnim;  break;
+    case DreadspireState::DEAD: currentAnimation = &dieAnim; break;
     }
+
+    ChangeBodyType();
 
     return Enemy::Update(dt);
 }
 
+
 bool Dreadspire::PostUpdate() {
-    if (currentState == DreadspireState::DEAD)
+    if (currentState == DreadspireState::DEAD && currentAnimation->HasFinished())
         Engine::GetInstance().entityManager->DestroyEntity(this);
     return true;
 }
@@ -71,15 +94,24 @@ bool Dreadspire::PostUpdate() {
 bool Dreadspire::CleanUp() {
     return Enemy::CleanUp();
 }
-
 void Dreadspire::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::ATTACK:
-            currentState = DreadspireState::DEAD;
+        currentState = DreadspireState::DEAD;
+        break;
+    case ColliderType::PLAYER:
+
+        shouldBecomeStatic = true;  
         break;
     }
 }
-
+void Dreadspire::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
+    switch (physB->ctype) {
+    case ColliderType::PLAYER:
+        shouldBecomeDynamic = true; 
+        break;
+    }
+}
 void Dreadspire::Idle(float dt) {
     currentAnimation = &idleAnim;
 }
@@ -102,8 +134,7 @@ void Dreadspire::Shoot(float dt)
         float shootingAngle = baseAngle + angles[i];
         b2Vec2 dir = b2Vec2(cos(shootingAngle), sin(shootingAngle));
 
-        // Desplaza el punto de aparición en la dirección de disparo (evita colisión inicial)
-        float spawnOffset = 50.0f; // píxeles
+        float spawnOffset = 40.0f; 
         float centerX = METERS_TO_PIXELS(pbody->body->GetPosition().x);
         float centerY = METERS_TO_PIXELS(pbody->body->GetPosition().y);
 
@@ -128,6 +159,8 @@ void Dreadspire::Recharge(float dt)
 }
 
 void Dreadspire::CheckState() {
+    if(currentState == DreadspireState::DEAD)
+        return;
 
     if (pathfinding->HasFoundPlayer()) {
         currentState = DreadspireState::SHOOTING;
@@ -139,3 +172,13 @@ void Dreadspire::CheckState() {
     }
 }
 
+void Dreadspire::ChangeBodyType() {
+    if (shouldBecomeStatic && pbody && pbody->body) {
+        pbody->body->SetType(b2_staticBody);
+        shouldBecomeStatic = false;
+    }
+    else if (shouldBecomeDynamic && pbody && pbody->body) {
+        pbody->body->SetType(b2_dynamicBody);
+        shouldBecomeDynamic = false;
+    }
+}

@@ -192,7 +192,7 @@ bool AbilityZone::Update(float dt)
 
 	if (abilitySprite) {
 		int drawX = position.getX() + texW - abilitySpriteW - 100;
-		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 + 40;
+		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 + 20;
 
 		if (type == "Jump" && jumpSprite) {
 			Engine::GetInstance().render->DrawTexture(jumpSprite, drawX, drawY);

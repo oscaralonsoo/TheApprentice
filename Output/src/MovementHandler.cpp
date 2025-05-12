@@ -82,12 +82,6 @@ void MovementHandler::Update(float dt) {
                 newX = lianaCenterX;
             }
 
-            // Log para depuración
-            printf("[Liana] currentX (pixeles): %.2f\n", currentX);
-            printf("[Liana] lianaCenterX (pixeles): %.2f\n", lianaCenterX);
-            printf("[Liana] newX (pixeles): %.2f\n", newX);
-            printf("[Liana] newX (metros): %.2f\n", PIXEL_TO_METERS(newX));
-
             player->pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(newX), player->pbody->body->GetPosition().y), 0.0f);
         }
 
@@ -108,7 +102,9 @@ void MovementHandler::Update(float dt) {
     attackMechanic.Update(dt);
 
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
-        Engine::GetInstance().scene->GetHookManager()->TryUseClosestHook();
+        if (IsHookUnlocked()) {
+            Engine::GetInstance().scene->GetHookManager()->TryUseClosestHook();
+        }
     }
 
     UpdateAnimation();

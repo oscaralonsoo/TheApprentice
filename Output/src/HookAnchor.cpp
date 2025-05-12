@@ -88,6 +88,10 @@ bool HookAnchor::Update(float dt)
 
     // Dibujar un recuadro sobre el gancho si es el activo
     Scene* scene = Engine::GetInstance().scene.get();
+    Player* player = scene->GetPlayer();
+    if (!player || !player->GetMechanics()->GetMovementHandler()->IsHookUnlocked())
+        return true; // No dibuja el marco si no está desbloqueado
+
     IHookable* closest = scene->GetHookManager()->GetClosestHook();
     if (closest == this)
     {

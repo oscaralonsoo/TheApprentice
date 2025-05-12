@@ -44,6 +44,8 @@ public:
     void SetWallSlideDirection(int dir) { wallSlideDirection = dir; }
     bool IsWallSliding() const { return isWallSliding; }
     AttackMechanic& GetAttackMechanic() { return attackMechanic; }
+    bool IsHookUnlocked() const { return hookUnlocked; }
+    void SetHookUnlocked(bool unlocked) { hookUnlocked = unlocked; }
 
     bool wallSlideFlip = false;
     bool disableAbilities = false;
@@ -102,4 +104,6 @@ private:
 
     bool isOnLiana = false;
     float lianaCenterX = 0.0f;
+
+    bool hookUnlocked = true;
 };

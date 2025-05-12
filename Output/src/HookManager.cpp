@@ -19,11 +19,11 @@ void HookManager::UnregisterHook(IHookable* hook)
 
 void HookManager::TryUseClosestHook()
 {
-    if (hooksInRange.empty())
-        return;
-
     Player* player = Engine::GetInstance().scene->GetPlayer();
-    if (!player || !player->pbody || !player->pbody->body)
+    if (!player || !player->GetMechanics()->GetMovementHandler()->IsHookUnlocked())
+        return;  // No permitido si no está desbloqueado
+
+    if (hooksInRange.empty() || !player->pbody || !player->pbody->body)
         return;
 
     b2Vec2 playerPos = player->pbody->body->GetPosition();
@@ -44,9 +44,8 @@ void HookManager::TryUseClosestHook()
         b2Vec2 hookPos = hook->GetPhysBody()->body->GetPosition();
         float horizontalDiff = hookPos.x - playerPos.x;
 
-        // Asegurarse de que esté en la dirección correcta
         if ((playerDirection == -1 && horizontalDiff > 0) || (playerDirection == 1 && horizontalDiff < 0))
-            continue; // Está detrás, ignorar
+            continue;
 
         if (IsHookVisible(hook))
         {

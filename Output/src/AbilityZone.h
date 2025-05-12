@@ -83,4 +83,9 @@ private:
 	bool xHeld = false;
 	SDL_GameController* controller = nullptr;
 	bool waitingForEatAnimation = false;
+
+	SDL_Texture* jumpSprite = nullptr;
+	SDL_Texture* doubleJumpSprite = nullptr;
+	SDL_Texture* dashSprite = nullptr;
+	SDL_Texture* hookSprite = nullptr;
 };

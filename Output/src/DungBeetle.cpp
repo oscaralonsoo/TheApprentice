@@ -67,6 +67,7 @@ bool DungBeetle::Update(float dt) {
 
 bool DungBeetle::PostUpdate() {
     if (currentState == DungBeetleState::DEAD && currentAnimation->HasFinished())
+        pbody->body->GetFixtureList()->SetSensor(true);
         Engine::GetInstance().entityManager->DestroyEntity(this);
     return true;
 }
@@ -181,7 +182,7 @@ void DungBeetle::ChangeBodyType() {
         isDynamic = true;
 }
 int DungBeetle::CheckPuzzleState() {
-    int PuzzlesDone = 3; // TODO OSCAR --- CURRENT PRESSED PLATES
+    int PuzzlesDone = 1; // TODO OSCAR --- CURRENT PRESSED PLATES
     return PuzzlesDone;
 
 }

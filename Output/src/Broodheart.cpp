@@ -73,6 +73,7 @@ bool Broodheart::Update(float dt) {
 bool Broodheart::PostUpdate() {
 
     if (isBroken) {
+        pbody->body->GetFixtureList()->SetSensor(true);
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         return true; // O retornar false si no quieres que se ejecute más lógica
     }

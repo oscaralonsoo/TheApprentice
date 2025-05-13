@@ -670,7 +670,7 @@ bool Map::Load(std::string path, std::string fileName)
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::SCURVER);
                     }
                     else if (enemyName == "Shyver") {
-                        enemyNode.append_attribute("gravity") = true;
+                        enemyNode.append_attribute("gravity") = false;
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::SHYVER);
                     }
                     else if (enemyName == "Nullwarden")

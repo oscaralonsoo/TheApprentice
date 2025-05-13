@@ -32,7 +32,7 @@ bool Shyver::Start() {
             attackAnim.LoadAnimations(enemyNode.child("attack"));
             stunAnim.LoadAnimations(enemyNode.child("stun"));
             deathAnim.LoadAnimations(enemyNode.child("death"));
-            deathAnim.LoadAnimations(enemyNode.child("death"));
+            invisibleAnim.LoadAnimations(enemyNode.child("invisible"));
         }
     }
 
@@ -104,12 +104,32 @@ bool Shyver::CleanUp() {
 
 void Shyver::Appear() {
     Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
-
-    SetPosition(Vector2D(playerPos.x + 90, playerPos.y - 50));
+    Vector2D playerOffset = Vector2D(playerPos.x + 200, playerPos.y - 50);
+    SetPosition(playerOffset);
 }
 
 void Shyver::Attack() {
-    pbody->body->SetLinearVelocity(b2Vec2(direction * 5, 0));
+    const float maxDistance = 650.0f;
+    const float maxSpeed = 20.0f;
+    const float minSpeed = 7.0f;
+
+    if (!attackInProgress) {
+        attackStartX = GetPosition().x;
+        attackInProgress = true;
+    }
+
+    float distanceMoved = std::abs(GetPosition().x - attackStartX);
+    float t = distanceMoved / maxDistance;
+
+    float speed = minSpeed + (maxSpeed - minSpeed) * std::sin(t * M_PI);
+
+    pbody->body->SetLinearVelocity(b2Vec2(direction * speed, 0));
+
+    if (distanceMoved >= maxDistance) {
+        currentState = ShyverState::STUNNED;
+        pbody->body->SetLinearVelocity(b2Vec2_zero);
+        attackInProgress = false;
+    }
 }
 
 void Shyver::Stun() {
@@ -117,7 +137,7 @@ void Shyver::Stun() {
 }
 
 void Shyver::Disappear() {
-
+    
 }
 
 void Shyver::Death() {

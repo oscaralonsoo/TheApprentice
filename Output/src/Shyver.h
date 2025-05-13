@@ -47,4 +47,9 @@ private:
 
     const float appearDuration = 2000.0f;
     Timer appearTimer;
+
+    float attackStartX = 0.0f;
+    bool attackInProgress = false;
+
+
 };

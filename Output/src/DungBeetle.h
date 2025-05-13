@@ -1,6 +1,7 @@
 #pragma once
 #include "Enemy.h"
 #include "SDL2/SDL.h"
+#include "Physics.h"
 
 enum class DungBeetleState {
 	IDLE,
@@ -21,7 +22,7 @@ public:
     bool Update(float dt) override;
     bool PostUpdate();
     bool CleanUp() override;
-    void OnCollision(PhysBody* physA, PhysBody* physB) override;
+    void OnCollision(PhysBody* physA, PhysBody* physB, const b2Vec2& normal);
     void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
     void CheckState(float dt);
@@ -29,8 +30,16 @@ public:
     void Angry();
     void Throw(float dt);
     void BallMode();
+    void ChangeBodyType();
+    int CheckPuzzleState();
+    void Bounce(const b2Vec2& normal);
 private:
     bool hasThrown = false;
+    bool isDynamic = false;
+    bool hasLaunched = false;
+
+    float throwSpeed = 15.0f; 
+    float ballModeSpeed = 17.0f;
 
     Vector2D playerPos;
     DungBeetleState currentState = DungBeetleState::IDLE;

@@ -419,7 +419,7 @@
 						<frame x="0" y="0" w="35" h="180" />
 					</destroyed>
 				</enemy>
-				<enemy type="DungBeetle" w="64" h="64" texture="Assets/Enemies/test.png">
+				<enemy type="DungBeetle" w="128" h="128" texture="Assets/Enemies/test.png">
 					<idle loop="true" speed="0.35">
 						<frame x="0" y="0" w="64" h="64" />
 					</idle>
@@ -439,15 +439,15 @@
 						<frame x="0" y="320" w="64" h="64" />
 					</death>
 				</enemy>
-				<enemy type="DungBeetleBall" w="35" h="180" texture="Assets/Enemies/sword.png">
+				<enemy type="DungBeetleBall" w="128" h="128" texture="Assets/Enemies/sword.png">
 					<idle loop="true" speed="0.3">
-						<frame x="0" y="0" w="35" h="180" />
+						<frame x="0" y="0" w="128" h="128" />
 					</idle>
 					<bounce loop="true" speed="0.3">
-						<frame x="0" y="0" w="35" h="180" />
+						<frame x="0" y="0" w="128" h="128" />
 					</bounce>
 					<destroyed loop="true" speed="0.3">
-						<frame x="0" y="0" w="35" h="180" />
+						<frame x="0" y="0" w="128" h="128" />
 					</destroyed>
 				</enemy>
 			</enemies>

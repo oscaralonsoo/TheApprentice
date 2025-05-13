@@ -5,8 +5,7 @@
 DungBeetleBall::DungBeetleBall(float x, float y, float speed, b2Vec2 direction)
     : Entity(EntityType::BALL), direction(direction), speed(speed)
 {
-    width = 64;
-    height = 64;
+    width = 128;
 
     pbody = Engine::GetInstance().physics->CreateCircle(x, y, width / 2, bodyType::DYNAMIC);
     pbody->ctype = ColliderType::ENEMY;
@@ -35,7 +34,7 @@ DungBeetleBall::DungBeetleBall(float x, float y, float speed, b2Vec2 direction)
 
     for (pugi::xml_node node = loadFile.child("config").child("scene").child("animations").child("enemies").child("enemy"); node; node = node.next_sibling("enemy"))
     {
-        if (std::string(node.attribute("type").as_string()) == "DreadspireBullet")
+        if (std::string(node.attribute("type").as_string()) == "DungBeetleBall")
         {
             texture = Engine::GetInstance().textures.get()->Load(node.attribute("texture").as_string());
 
@@ -86,11 +85,13 @@ void DungBeetleBall::OnCollision(PhysBody* physA, PhysBody* physB, const b2Vec2&
 {
     switch (physB->ctype)
     {
+    case ColliderType ::ATTACK:
     case ColliderType::PLATFORM:
     case ColliderType::WALL:
         Bounce(normal);
         break;
     case ColliderType::PLAYER:
+        // TODO TONI --- ATRAVESAR EL PLAYER O BOUNCE
         break;
     }
 }

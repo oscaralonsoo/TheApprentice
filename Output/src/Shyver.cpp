@@ -48,6 +48,8 @@ bool Shyver::Update(float dt) {
     case ShyverState::IDLE:
         if (currentAnimation != &idleAnim) currentAnimation = &idleAnim;
         currentState = ShyverState::APPEAR;
+        SetPosition(Engine::GetInstance().scene.get()->GetPlayerPosition());
+
         break;
     case ShyverState::APPEAR:
         if (currentAnimation != &appearAnim) {
@@ -103,8 +105,17 @@ bool Shyver::CleanUp() {
 }
 
 void Shyver::Appear() {
+    static float delayedPlayerX = 0.0f;
+    static float delayedPlayerY = 0.0f;
+
     Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
-    Vector2D playerOffset = Vector2D(playerPos.x + 200, playerPos.y - 50);
+
+    // Aplicamos el delay con interpolación lineal (0.02f es el factor de suavizado)
+    delayedPlayerX += (playerPos.x - delayedPlayerX) * 0.02f;
+    delayedPlayerY += (playerPos.y - delayedPlayerY) * 0.02f;
+
+    // Offset relativo al jugador
+    Vector2D playerOffset = Vector2D(delayedPlayerX + 200.0f, delayedPlayerY - 50.0f);
     SetPosition(playerOffset);
 }
 

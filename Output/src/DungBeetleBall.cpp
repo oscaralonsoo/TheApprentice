@@ -5,7 +5,19 @@
 DungBeetleBall::DungBeetleBall(float x, float y, float speed, b2Vec2 direction)
     : Entity(EntityType::BALL), direction(direction), speed(speed)
 {
-    width = 128;
+    pugi::xml_document loadFile;
+    pugi::xml_parse_result result = loadFile.load_file("config.xml");
+
+    for (pugi::xml_node node = loadFile.child("config").child("scene").child("animations").child("enemies").child("enemy"); node; node = node.next_sibling("enemy"))
+    {
+        if (std::string(node.attribute("type").as_string()) == "DungBeetleBall")
+        {
+            texture = Engine::GetInstance().textures.get()->Load(node.attribute("texture").as_string());
+            width = node.attribute("w").as_int();
+            height = node.attribute("h").as_int();
+            idleAnim.LoadAnimations(node.child("idle"));
+        }
+    }
 
     pbody = Engine::GetInstance().physics->CreateCircle(x, y, width / 2, bodyType::DYNAMIC);
     pbody->ctype = ColliderType::ENEMY;
@@ -28,19 +40,6 @@ DungBeetleBall::DungBeetleBall(float x, float y, float speed, b2Vec2 direction)
     }
 
     pbody->body->SetLinearVelocity(b2Vec2(direction.x * speed, direction.y * speed));
-
-    pugi::xml_document loadFile;
-    pugi::xml_parse_result result = loadFile.load_file("config.xml");
-
-    for (pugi::xml_node node = loadFile.child("config").child("scene").child("animations").child("enemies").child("enemy"); node; node = node.next_sibling("enemy"))
-    {
-        if (std::string(node.attribute("type").as_string()) == "DungBeetleBall")
-        {
-            texture = Engine::GetInstance().textures.get()->Load(node.attribute("texture").as_string());
-
-            idleAnim.LoadAnimations(node.child("idle"));
-        }
-    }
 
     currentAnimation = &idleAnim;
 }

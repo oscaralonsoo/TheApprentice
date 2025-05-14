@@ -27,6 +27,8 @@ bool DungBeetle::Start() {
     for (auto node : configDoc.child("config").child("scene").child("animations").child("enemies").children("enemy")) {
         if (node.attribute("type").as_string() == typeName) {
             texture = Engine::GetInstance().textures->Load(node.attribute("texture").as_string());
+            texH = node.attribute("h").as_int();
+            texW = node.attribute("w").as_int();
             idleAnim.LoadAnimations(node.child("idle"));
             angryAnim.LoadAnimations(node.child("angry"));
             throwingAnim.LoadAnimations(node.child("throwing"));
@@ -67,8 +69,10 @@ bool DungBeetle::Update(float dt) {
 
 bool DungBeetle::PostUpdate() {
     if (currentState == DungBeetleState::DEAD && currentAnimation->HasFinished())
+    {
         pbody->body->GetFixtureList()->SetSensor(true);
         Engine::GetInstance().entityManager->DestroyEntity(this);
+    }
     return true;
 }
 

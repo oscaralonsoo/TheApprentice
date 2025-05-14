@@ -25,6 +25,8 @@ bool Dreadspire::Start() {
     for (auto node : configDoc.child("config").child("scene").child("animations").child("enemies").children("enemy")) {
         if (node.attribute("type").as_string() == typeName) {
             texture = Engine::GetInstance().textures->Load(node.attribute("texture").as_string());
+            texH = node.attribute("h").as_int();
+            texW = node.attribute("w").as_int();
             idleAnim.LoadAnimations(node.child("idle"));
             dieAnim.LoadAnimations(node.child("die"));
             currentAnimation = &idleAnim;
@@ -129,7 +131,7 @@ void Dreadspire::Shoot(float dt)
             float offsetX = centerX + dir.x * spawnOffset;
             float offsetY = centerY + dir.y * spawnOffset;
 
-            auto bullet = new DreadspireBullet(offsetX, offsetY, 15.0f, dir);
+            auto bullet = new DreadspireBullet(offsetX, offsetY, 17.0f, dir);
             Engine::GetInstance().entityManager->AddEntity(bullet);
 
             bulletsShot++;

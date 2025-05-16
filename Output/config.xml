@@ -480,6 +480,16 @@
 						<frame x="3750" y="0" w="250" h="250" />
 						<frame x="4000" y="0" w="250" h="250" />
 					</enabled>
+					<disabled loop="true" speed="0.2">
+						<frame x="0" y="250" w="250" h="250" />
+						<frame x="250" y="250" w="250" h="250" />
+						<frame x="500" y="250" w="250" h="250" />
+						<frame x="750" y="250" w="250" h="250" />
+						<frame x="1000" y="250" w="250" h="250" />
+						<frame x="1250" y="250" w="250" h="250" />
+						<frame x="1500" y="250" w="250" h="250" />
+						<frame x="1750" y="250" w="250" h="250" />
+					</disabled>
 				</geyser>
 				<pressure_plate w="64" h="64" texture="Assets/Props/pressurePlate.png">
 					<enabled loop="false" speed="0">

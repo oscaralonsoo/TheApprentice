@@ -385,12 +385,12 @@
 						<frame x="0" y="0" w="32" h="32" />
 					</walking>
 				</enemy>
-				<enemy type="Dreadspire" w="64" h="64" texture="Assets/Enemies/Dreadspire.png">
+				<enemy type="Dreadspire" w="356" h="356" texture="Assets/Enemies/dreadspire.png">
 					<idle loop="true" speed="0.1">
-						<frame x="0" y="0" w="32" h="32" />
+						<frame x="0" y="0" w="356" h="356" />
 					</idle>
-					<shooting loop="false" speed="0.1">
-						<frame x="0" y="0" w="32" h="32" />
+					<shooting loop="true" speed="0.1">
+						<frame x="0" y="0" w="356" h="356" />
 					</shooting>
 					<die loop="false" speed="0.1">
 						<frame x="0" y="0" w="32" h="32" />

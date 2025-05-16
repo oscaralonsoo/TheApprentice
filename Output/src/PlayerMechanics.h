@@ -36,6 +36,7 @@ public:
     MovementHandler* GetMovementHandler() { return &movementHandler; }
     HealthSystem* GetHealthSystem() { return &healthSystem; }
     FallMechanic* GetFallMechanic() { return &fallMechanic; }
+    InvulnerabilitySystem* GetInvulnerabilitySystem() { return &invulnerabilitySystem; }
 
     HealthSystem healthSystem;
 

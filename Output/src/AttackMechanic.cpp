@@ -3,6 +3,7 @@
 #include "Engine.h"
 #include "Input.h"
 #include "Physics.h"
+#include "InvulnerabilitySystem.h"
 
 void AttackMechanic::Init(Player* player) {
     this->player = player;
@@ -65,6 +66,8 @@ void AttackMechanic::StartAttack() {
 
     attackDirection = player->GetMechanics()->GetMovementDirection();
     attackFlip = (attackDirection < 0);
+
+    player->GetMechanics()->GetInvulnerabilitySystem()->StartInvulnerability();
 
     player->SetState("attack");
 }

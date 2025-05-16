@@ -5,14 +5,14 @@
 
 enum class NoctilumeState {
     IDLE,
-    FLYING,
-    DIVE,
-    DIVE_COOLDOWN,
+    CHASING,
+    PRE_ATTACK,
+    ATTACK,
+    CRASH,
     DEAD
 };
 
-class Noctilume : public Enemy
-{
+class Noctilume : public Enemy {
 public:
     Noctilume();
     ~Noctilume() override;
@@ -24,53 +24,64 @@ public:
     bool CleanUp() override;
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
 
-    void IdleFlying(float dt);
-    void Flying(float dt);
-    void Dive(float dt);
+private:
+    void Idle(float dt);
+    void Chasing(float dt);
+    void PreAttack(float dt);
+    void Attack(float dt);
+    void Crash(float dt);
+    void Die();
+    void CheckState();
 
-    float DistanceToPlayer();
-    void HandleStateTransition();
-    void TryInitiateDiveAttack(float dt);
+    Vector2D GetBodyPosition() const;
 
 private:
-    bool playerInRange = false;
     NoctilumeState currentState = NoctilumeState::IDLE;
 
-    PhysBody* pbody = nullptr;
+    Vector2D originalPosition;
+    Vector2D smoothedPosition;
+    Vector2D playerPos;
 
-    Animation idleAnim;
+    float smoothingSpeed = 0.001f;
+
     Animation flyingAnim;
-    Animation divingDownAnim;
-    Animation divingUpAnim;
+    Animation attackAnim;
+    Animation crashAnim;
+    Animation dieAnim;
 
-    // Movement & Flight
-    float timePassed = 0.0f;
-    float sineOffset = 0.0f;
+    // Idle movement
+    const float horizontalRange = 500.0f;
+    const float waveAmplitude = 5.0f;
+    const float waveFrequency = 0.00035f;
     float waveOffset = 0.0f;
-    float flyingTransitionTimer = 0.0f;
-    const float flyingTransitionDuration = 0.5f;
 
-    // Position & Oscilation
-    float lastSinValue = 0.0f;
-    Vector2D direction = { 0.0f, 0.0f };
-    float idleTime = 0.0f;
-
-    float attackCooldown = 3000.0f;
-    float attackTimer = 0.0f;
-    float proximityDuration = 2000.0f;
-    float proximityTimer = 0.0f;
-
-    // Dive
-    Vector2D diveStartPos;
-    Vector2D diveTargetPos;
-    Vector2D diveReferencePlayerPos;
-    Vector2D lastDivePosition;
-    float diveElapsedTime = 0.0f;
-    float diveTime = 0.0f;
-    float diveProgress = 0.0f;
-    bool divingDown = true;
-    bool justFinishedDive = false;
-
+    // Chasing
+    const float hoverHeight = 350.0f;
+    const float oscillationAmplitude = 350.0f;
+    const float oscillationSpeed = 0.002f;
     float delayedPlayerX = 0.0f;
     float delayedPlayerY = 0.0f;
+    float timePassed = 0.0f;
+    float lastSinValue = 0.0f;
+    float oscillationCount = 0.0f;
+    int oscillationsBeforeAttack = 3;
+    bool passedZero = false;
+
+    // Pre-attack
+    Vector2D preAttackStartPos;
+    Vector2D preAttackEndPos;
+    float anticipationTimer = 0.0f;
+    const float anticipationDuration = 500.0f;
+
+    // Attack
+    bool isDiving = true;
+    float diveProgress = 0.0f;
+    float attackSpeed = 0.70f;
+    float returnSpeed = 0.50f;
+    Vector2D diveStartPos;
+    Vector2D attackTarget;
+    Vector2D diveDirection;
+
+    // Crash
+    float crashTimer = 0.0f;
 };

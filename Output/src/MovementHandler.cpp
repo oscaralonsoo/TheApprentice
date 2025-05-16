@@ -48,10 +48,49 @@ void MovementHandler::Init(Player* player) {
 
 void MovementHandler::Update(float dt) {
     fallMechanic.Update(dt);
-    if (fallMechanic.IsStunned())
-    {
+    if (fallMechanic.IsStunned()) return;
+
+    if (isOnLiana) {
+        b2Vec2 velocity(0.0f, 0.0f);
+
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
+            velocity.y = -8.0f;
+        }
+        else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
+            velocity.y = 8.0f;
+        }
+
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+            velocity.x = -8.0f;
+        }
+        else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+            velocity.x = 8.0f;
+        }
+
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT ||
+            Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
+
+            float currentX = player->GetPosition().getX(); // PIXELES
+            float distance = lianaCenterX - currentX;
+
+            // Velocidad de centrado constante
+            float centerSpeed = 1.0f * dt; // Ajusta 100.0f según lo que quieras
+            float newX = currentX + centerSpeed * ((distance > 0) ? 1.0f : -1.0f);
+
+            // Evitar pasarse del centro
+            if (fabs(distance) < centerSpeed) {
+                newX = lianaCenterX;
+            }
+
+            player->pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(newX), player->pbody->body->GetPosition().y), 0.0f);
+        }
+
+        player->pbody->body->SetGravityScale(0.0f);
+        player->pbody->body->SetLinearVelocity(velocity);
+        player->SetState("idle");
         return;
     }
+
     HandleMovementInput();
     HandleTimers();
     HandleWallSlide();
@@ -62,10 +101,10 @@ void MovementHandler::Update(float dt) {
     }
     attackMechanic.Update(dt);
 
-
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
-    {
-        Engine::GetInstance().scene->GetHookManager()->TryUseClosestHook();
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
+        if (IsHookUnlocked()) {
+            Engine::GetInstance().scene->GetHookManager()->TryUseClosestHook();
+        }
     }
 
     UpdateAnimation();
@@ -227,6 +266,14 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
             Engine::GetInstance().render->cameraOffsetY = 250;
         }
         break;
+    case ColliderType::LIANA:
+        if (!lianaCooldownActive) {
+            printf("Entrando en LIANA\n");
+            isOnLiana = true;
+            lianaCenterX = METERS_TO_PIXELS(physB->body->GetPosition().x); // Guardar en PIXELES
+            disableAbilities = true; // Bloquear salto y dash
+        }
+        break;
     default:
         break;
     }
@@ -262,6 +309,14 @@ void MovementHandler::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         downCameraCooldownTimer.Start();
         downCameraCooldownActive = true;
         break;
+    case ColliderType::LIANA:
+        printf("Saliendo de LIANA\n");
+        isOnLiana = false;
+        player->pbody->body->SetGravityScale(2.0f); // Restablece la gravedad normal
+        disableAbilities = false; // Habilitar salto y dash otra vez
+        lianaCooldownTimer.Start();
+        lianaCooldownActive = true;
+        break;
     default:
         break;
     }
@@ -281,6 +336,9 @@ void MovementHandler::HandleTimers() {
     }
     if (boxCooldownActive && boxCooldownTimer.ReadMSec() >= boxCooldownTime) {
         boxCooldownActive = false;
+    }
+    if (lianaCooldownActive && lianaCooldownTimer.ReadMSec() >= lianaCooldownTime) {
+        lianaCooldownActive = false;
     }
 }
 

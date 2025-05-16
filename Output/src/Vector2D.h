@@ -19,7 +19,9 @@ public:
 
     // Vector operations
     float magnitude() const;
-    Vector2D normalized() const;
+    float Length() const;
+
+    Vector2D Normalized() const;
     Vector2D operator+(const Vector2D& other) const;
     Vector2D operator-(const Vector2D& other) const;
     Vector2D operator*(float scalar) const;

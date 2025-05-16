@@ -79,8 +79,6 @@ bool Brood::Update(float dt) {
     return Enemy::Update(dt);
 }
 bool Brood::PostUpdate(float dt) {
-    Enemy::PostUpdate();
-
     return true;
 }
 bool Brood::CleanUp() {
@@ -116,7 +114,7 @@ void Brood::Chase(float dt) {
     }
 
     //Smooth redirection
-    float steeringSmoothness = 0.041f;
+    float steeringSmoothness = 0.030f;
     direction.x = (1.0f - steeringSmoothness) * direction.x + steeringSmoothness * desiredDirection.x;
     direction.y = (1.0f - steeringSmoothness) * direction.y + steeringSmoothness * desiredDirection.y;
 
@@ -127,12 +125,12 @@ void Brood::Chase(float dt) {
     }
 
     // Base Movement
-    float speed = 0.4f;
+    float speed = 0.25f;
     broodPos.x += direction.x * speed * dt;
     broodPos.y += direction.y * speed * dt;
 
     // Ondulation
-    float waveAmplitude = 5.0;
+    float waveAmplitude = 3.0;
     float waveFrequency = 0.003f;
 
     Vector2D perp = { -direction.y, direction.x };

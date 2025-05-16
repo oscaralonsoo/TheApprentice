@@ -18,6 +18,7 @@
 #include "Creebler.h"
 #include "Scurver.h"
 #include "Thumpod.h"
+#include "Dreadspire.h"
 #include "Brood.h"
 #include "Broodheart.h"
 #include "DestructibleWall.h"
@@ -29,6 +30,7 @@
 #include "HookAnchor.h"
 #include "HokableBox.h"
 #include "Geyser.h"
+#include "DungBeetle.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -126,11 +128,17 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::BROOD:
 		entity = new Brood();
 		break;
+	case EntityType::DREADSPIRE:
+		entity = new Dreadspire();
+		break;
 	case EntityType::ABILITY_ZONE:
 		entity = new AbilityZone();
 		break;
 	case EntityType::NULLWARDEN:
 		entity = new Nullwarden();
+		break;
+	case EntityType::DUNGBEETLE:
+		entity = new DungBeetle();
 		break;
 	case EntityType::HIDDEN_ZONE:
 		entity = new HiddenZone();

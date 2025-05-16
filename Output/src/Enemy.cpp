@@ -52,7 +52,6 @@ bool Enemy::Start() {
 bool Enemy::Update(float dt)
 {
 	// Propagate the pathfinding algorithm using A* with the selected heuristic
-
 	ResetPath();	
 
 	steps = 0;
@@ -88,13 +87,6 @@ bool Enemy::Update(float dt)
 
 bool Enemy::PostUpdate()
 {
-	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() - 15, &currentAnimation->GetCurrentFrame(),
-		1.0f,
-		0.0,
-		INT_MAX,
-		INT_MAX,
-		(direction < 0) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
-	currentAnimation->Update();
 	return true;
 }
 
@@ -127,11 +119,7 @@ void Enemy::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
 	{
 	case ColliderType::ATTACK:
-		if (physB->listener && physB->listener->GetType() == EntityType::PLAYER) {
-			Player* playerEntity = static_cast<Player*>(physB->listener);
-			isStaggered = true;
-			ApplyKnockbackFromPlayer(playerEntity->GetMechanics()->GetMovementDirection());
-		}
+		Engine::GetInstance().entityManager.get()->DestroyEntity(this);
 		break;
 	}
 }
@@ -141,16 +129,7 @@ void Enemy::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
 	switch (physB->ctype)
 	{
 	case ColliderType::ATTACK:
-		LOG("Collided with player - DESTROY");
 
 		break;
 	}
-}
-
-void Enemy::ApplyKnockbackFromPlayer(int direction) {
-	float horizontalPower = 4.0f;
-	float verticalPower = -4.0f;
-
-	b2Vec2 knockbackVelocity = b2Vec2(direction * horizontalPower, verticalPower);
-	pbody->body->SetLinearVelocity(knockbackVelocity);
 }

@@ -75,6 +75,11 @@ bool AbilityZone::Start() {
 
 	pbody->listener = this;
 
+	jumpSprite = Engine::GetInstance().textures->Load("Assets/Props/huevosrana.png");
+	doubleJumpSprite = Engine::GetInstance().textures->Load("textures/doublejump_icon.png");
+	dashSprite = Engine::GetInstance().textures->Load("textures/dash_icon.png");
+	hookSprite = Engine::GetInstance().textures->Load("textures/hook_icon.png");
+
 	return true;
 }
 
@@ -173,6 +178,12 @@ bool AbilityZone::Update(float dt)
 					player->GetMechanics()->GetMovementHandler()->SetCantMove(false);
 					player->GetMechanics()->GetMovementHandler()->disableAbilities = false;
 				}
+				else if (type == "Hook") {
+					mechanics->GetMovementHandler()->SetHookUnlocked(true);
+					Engine::GetInstance().menus->abilityName = "hook";
+					player->GetMechanics()->GetMovementHandler()->SetCantMove(false);
+					player->GetMechanics()->GetMovementHandler()->disableAbilities = false;
+				}
 
 				Engine::GetInstance().menus->StartTransition(false, MenusState::ABILITIES);
 			}
@@ -181,8 +192,23 @@ bool AbilityZone::Update(float dt)
 
 	if (abilitySprite) {
 		int drawX = position.getX() + texW - abilitySpriteW - 100;
-		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 + 40;
-		Engine::GetInstance().render->DrawTexture(abilitySprite, drawX, drawY);
+		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 + 20;
+
+		if (type == "Jump" && jumpSprite) {
+			Engine::GetInstance().render->DrawTexture(jumpSprite, drawX, drawY);
+		}
+		else if (type == "DoubleJump" && doubleJumpSprite) {
+			Engine::GetInstance().render->DrawTexture(doubleJumpSprite, drawX, drawY);
+		}
+		else if (type == "Dash" && dashSprite) {
+			Engine::GetInstance().render->DrawTexture(dashSprite, drawX, drawY);
+		}
+		else if (type == "Hook" && hookSprite) {
+			Engine::GetInstance().render->DrawTexture(hookSprite, drawX, drawY);
+		}
+		else {
+			Engine::GetInstance().render->DrawTexture(abilitySprite, drawX, drawY);
+		}
 	}
 
 	return true;

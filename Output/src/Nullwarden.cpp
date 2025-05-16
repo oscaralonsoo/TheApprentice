@@ -134,7 +134,6 @@ bool Nullwarden::Update(float dt) {
 }
 
 bool Nullwarden::PostUpdate() {
-    Enemy::PostUpdate();
     if (currentState == NullwardenState::DEATH && currentAnimation->HasFinished()) {
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
     }

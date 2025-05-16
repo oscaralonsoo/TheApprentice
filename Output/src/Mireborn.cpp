@@ -47,7 +47,6 @@ bool Mireborn::Start() {
 bool Mireborn::Update(float dt) {
     pbody->body->SetGravityScale(0.5);
 
-
     switch (currentState)
     {
     case MirebornState::IDLE:

@@ -71,6 +71,8 @@ bool Player::Start() {
 }
 
 bool Player::Update(float dt) {
+	bool flip = mechanics.GetMovementDirection() < 0;
+
 	if (pbody == nullptr || pbody->body == nullptr) {
 		LOG("ERROR: pbody o body es nullptr");
 		return false;  // o gestión específica
@@ -81,6 +83,7 @@ bool Player::Update(float dt) {
 		enemySensor->body->SetTransform(mainPos, 0);
 	}
 	
+	animation.Update(state, position.getX(), position.getY() - 5, mechanics.IsVisible(), flip);
 	mechanics.Update(dt);
 
 	b2Transform pbodyPos = pbody->body->GetTransform();

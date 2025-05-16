@@ -126,8 +126,6 @@ bool Player::PostUpdate() {
 	else if (mechanics.GetMovementHandler()->IsWallSliding()) {
 		flip = mechanics.GetMovementHandler()->wallSlideFlip;
 	}
-
-	animation.PostUpdate(state, position.getX(), position.getY() - 5, mechanics.IsVisible(), flip);
 	mechanics.PostUpdate();
 	return true;
 }

@@ -480,7 +480,7 @@
 						<frame x="3750" y="0" w="250" h="250" />
 						<frame x="4000" y="0" w="250" h="250" />
 					</enabled>
-					<disabled loop="true" speed="0.2">
+					<disabled loop="true" speed="0.23">
 						<frame x="0" y="250" w="250" h="250" />
 						<frame x="250" y="250" w="250" h="250" />
 						<frame x="500" y="250" w="250" h="250" />
@@ -586,7 +586,7 @@
 					</idle>
 				</castor>
 				<liebre w="342" h="205" texture="Assets/NPC/liebre.png">
-					<idle loop="true" speed="0.15">
+					<idle loop="true" speed="0.1">
 						<frame x="0" y="0" w="342" h="241" />
 						<frame x="342" y="0" w="342" h="241" />
 						<frame x="684" y="0" w="342" h="241" />

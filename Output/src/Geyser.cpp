@@ -67,7 +67,10 @@ bool Geyser::Update(float dt)
         break;
 
     case GeyserState::ENABLED:
-        if (currentAnimation != &enabledAnim) currentAnimation = &enabledAnim;
+        if (currentAnimation != &enabledAnim) {
+            currentAnimation = &enabledAnim;
+            currentAnimation->Reset();
+        }
 
         if (playerInside && !hasPushed)
         {
@@ -79,7 +82,7 @@ bool Geyser::Update(float dt)
 
         if (currentAnimation->HasFinished())
         {
-            currentAnimation->Reset();
+            
             state = GeyserState::DISABLED;
             geyserTimer.Start();
         }

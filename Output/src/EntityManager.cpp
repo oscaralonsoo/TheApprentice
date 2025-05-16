@@ -156,6 +156,15 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::CASTOR:
 		entity = new NPC(EntityType::CASTOR);
 		break;
+	case EntityType::PERDIZ:
+		entity = new NPC(EntityType::PERDIZ);
+		break;
+	case EntityType::LIEBRE:
+		entity = new NPC(EntityType::LIEBRE);
+		break;
+	case EntityType::PANGOLIN:
+		entity = new NPC(EntityType::PANGOLIN);
+		break;
 	case EntityType::NOCTILUME:
 		entity = new Noctilume();
 		break;

@@ -581,10 +581,30 @@
 			</particles>
 			<npcs>
 				<castor w="336" h="164" texture="Assets/NPC/castor.png">
-					<idle loop="false" speed="0">
+					<idle loop="true" speed="0.2">
 						<frame x="0" y="0" w="336" h="164" />
 					</idle>
 				</castor>
+				<liebre w="342" h="205" texture="Assets/NPC/liebre.png">
+					<idle loop="true" speed="0.15">
+						<frame x="0" y="0" w="342" h="241" />
+						<frame x="342" y="0" w="342" h="241" />
+						<frame x="684" y="0" w="342" h="241" />
+						<frame x="1026" y="0" w="342" h="241" />
+						<frame x="1368" y="0" w="342" h="241" />
+						<frame x="1710" y="0" w="342" h="241" />
+					</idle>
+				</liebre>
+				<perdiz w="336" h="164" texture="Assets/NPC/perdiz.png">
+					<idle loop="true" speed="0.2">
+						<frame x="0" y="0" w="336" h="164" />
+					</idle>
+				</perdiz>
+				<pangolin w="336" h="164" texture="Assets/NPC/pangolin.png">
+					<idle loop="true" speed="0.2">
+						<frame x="0" y="0" w="336" h="164" />
+					</idle>
+				</pangolin>
 			</npcs>
 			<abilities>
 				<ability type="Jump" w="144" h="144" texture="Assets/Props/huevosrana.png" />

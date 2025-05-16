@@ -751,8 +751,12 @@ bool Map::Load(std::string path, std::string fileName)
 
                     if (npcName == "Castor")
                         npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CASTOR);
-                    else if (npcName == "JavierGomez")
-                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CASTOR);
+                    else if (npcName == "Liebre")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::LIEBRE);
+                    else if (npcName == "Perdiz")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PERDIZ);
+                    else if (npcName == "Pangolin")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PANGOLIN);
 
                     if (npc != nullptr)
                     {

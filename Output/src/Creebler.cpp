@@ -43,7 +43,7 @@ bool Creebler::Update(float dt) {
     {
     case CreeblerState::WALKING:
         if (currentAnimation != &walkAnim) currentAnimation = &walkAnim;
-        Walk();
+        Walk(dt);
         break;
     case CreeblerState::DEAD:
         if (currentAnimation != &deathAnim) currentAnimation = &deathAnim;
@@ -71,19 +71,21 @@ bool Creebler::CleanUp() {
     return Enemy::CleanUp();
 }
 
-void Creebler::Walk() {
-    pbody->body->SetLinearVelocity(b2Vec2(direction * speed, pbody->body->GetLinearVelocity().y));
+void Creebler::Walk(float dt) {
+    pbody->body->SetLinearVelocity(b2Vec2(direction * speed * dt, pbody->body->GetLinearVelocity().y));
 
-    Vector2D posMap = Engine::GetInstance().map.get()->WorldToMap(position.getX() + texW / 2, position.getY() + texH / 2);
+    Vector2D mapPos = Engine::GetInstance().map.get()->WorldToMap(position.getX() + texW / 2, position.getY() + texH / 2);
 
-    int frontX = posMap.x + direction;
-    int frontY = posMap.y + 1;
+    int frontX = mapPos.x + direction;
+    int frontY = mapPos.y + 1;
 
-    MapLayer* layer = Engine::GetInstance().map.get()->GetNavigationLayer();
+    MapLayer* navigationLayer = Engine::GetInstance().map.get()->GetNavigationLayer();
 
-    if (layer->Get(frontX, posMap.y) || !layer->Get(frontX, frontY))
+    if (navigationLayer->Get(frontX, mapPos.y) || !navigationLayer->Get(frontX, frontY)) {
         direction *= -1;
+    }
 }
+
 
 void Creebler::OnCollision(PhysBody* physA, PhysBody* physB)
 {

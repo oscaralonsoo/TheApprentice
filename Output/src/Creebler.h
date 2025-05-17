@@ -22,7 +22,7 @@ public:
     bool CleanUp() override;
     void OnCollision(PhysBody* physA, PhysBody* physB);
 
-    void Walk();
+    void Walk(float dt);
 
 
 private:
@@ -31,5 +31,5 @@ private:
     Animation walkAnim;
     Animation deathAnim;
 
-    float speed = 2.0f;
+    float speed = 0.125f;
 };

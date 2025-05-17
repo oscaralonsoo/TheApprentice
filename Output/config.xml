@@ -272,7 +272,7 @@
 					</dead>
 				</enemy>
 				<enemy type="Creebler" w="128" h="128" texture="Assets/Enemies/creebler.png">
-					<walk loop="true" speed="0.2">
+					<walk loop="true" speed="0.15">
 						<frame x="0" y="128" w="128" h="128" />
 						<frame x="128" y="128" w="128" h="128" />
 						<frame x="256" y="128" w="128" h="128" />

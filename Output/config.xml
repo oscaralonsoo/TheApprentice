@@ -71,11 +71,11 @@
 					<frame x="224" y="516" w="112" h="120" />
 					<frame x="336" y="516" w="112" h="120" />
 				</hit>
-				<jump loop="true" speed="0.15">
-					<frame x="0" y="625" w="110" h="128" />
-					<frame x="110" y="625" w="110" h="128" />
-					<frame x="220" y="625" w="110" h="128" />
-					<frame x="330" y="625" w="110" h="128" />
+				<jump loop="false" speed="0.25">
+					<frame x="0" y="625" w="110" h="126" />
+					<frame x="110" y="625" w="110" h="126" />
+					<frame x="220" y="625" w="110" h="126" />
+					<frame x="330" y="625" w="110" h="126" />
 				</jump>
 				<fall loop="true" speed="0.15">
 					<frame x="100" y="753" w="100" h="100" />

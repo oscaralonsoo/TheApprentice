@@ -35,17 +35,15 @@ private:
     const int maxJumpCount = 2;
 
     bool isJumping = false;
-    bool isHoldingJump = false;
 
-    float minJumpForce = 60.0f;             // Fuerza inicial para garantizar altura mínima
-    float progressiveJumpForce = 50.0f;     // Fuerza para el salto sostenido
-    float jumpHoldForceFactor = 3.0f;        // Factor inicial de fuerza sostenida
-    float jumpDecayRate = 7.5f;              // Qué tan rápido decae la fuerza sostenida
-    float fallAccelerationFactor = 45.0f;   // Fuerza que empuja hacia abajo al soltar el salto
+    float minJumpForce = 120.0f;             // Fuerza inicial para garantizar altura mínima
+    float progressiveJumpForce = 100.0f;     // Fuerza para el salto sostenido
+    float jumpHoldForceFactor = 2.3f;       // Factor inicial de fuerza sostenida
+    float jumpDecayRate = 4.5f;             // Qué tan rápido decae la fuerza sostenida
+    float fallAccelerationFactor = 40.0f;   // Fuerza que empuja hacia abajo al soltar el salto
 
-    // Parámetros de salto progresivo
-    float jumpStartY = 0.0f;
-    float maxJumpHeight = 240.0f;                 // Altura máxima alcanzable
+    Timer jumpHoldTimer;
+    float jumpHoldDuration = 400.0f;
 
     bool controllerHeldPreviously = false;
     bool keyboardHeldPreviously = false;

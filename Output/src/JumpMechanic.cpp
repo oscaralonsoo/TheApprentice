@@ -42,9 +42,8 @@ void JumpMechanic::HandleJumpInput(float dt) {
     // Iniciar salto
     if (jumpDown) {
         if (jumpCount == 0 && player->GetMechanics()->IsOnGround()) {
+            jumpHoldTimer.Start();
             isJumping = true;
-            isHoldingJump = true;
-            jumpStartY = player->GetPosition().getY();
             jumpCount = 1;
             player->GetMechanics()->SetIsOnGround(false);
             player->SetState("jump");
@@ -57,9 +56,8 @@ void JumpMechanic::HandleJumpInput(float dt) {
             player->pbody->body->ApplyForceToCenter(impulse, true);
         }
         else if (doubleJumpUnlocked && jumpCount < maxJumpCount) {
+            jumpHoldTimer.Start();
             isJumping = true;
-            isHoldingJump = true;
-            jumpStartY = player->GetPosition().getY();
             jumpCount = 2;
             player->SetState("jump");
 
@@ -76,34 +74,34 @@ void JumpMechanic::HandleJumpInput(float dt) {
         }
     }
 
-    // Salto prolongado mientras se mantiene la tecla
-    if (isHoldingJump && jumpRepeat) {
-        float currentY = player->GetPosition().getY();
-        float heightJumped = jumpStartY - currentY;
+    if (isJumping && jumpHoldTimer.ReadMSec() > 0 && jumpRepeat) {
+        float elapsedMs = (float)jumpHoldTimer.ReadMSec();
+        float t = elapsedMs / jumpHoldDuration;
 
-        if (heightJumped < maxJumpHeight) {
-            float t = heightJumped / maxJumpHeight;
-            float forceFactor = jumpHoldForceFactor * exp(-jumpDecayRate * t);
-            float forceY = -progressiveJumpForce * forceFactor;
+        // Clamp manual
+        if (t < 0.0f) t = 0.0f;
+        else if (t > 1.0f) t = 1.0f;
 
-            b2Vec2 force(0, forceY);
-            player->pbody->body->ApplyForceToCenter(force, true);
-        }
-        else {
-            isHoldingJump = false;
+        float forceFactor = jumpHoldForceFactor * exp(-jumpDecayRate * t);
+        float forceY = -progressiveJumpForce * forceFactor;
+
+        b2Vec2 force(0, forceY);
+        player->pbody->body->ApplyForceToCenter(force, true);
+
+        // Si pasó el tiempo máximo, detenemos salto sostenido
+        if (t >= 1.0f) {
+            isJumping = false;
         }
     }
 
     // Finalizar salto si se suelta la tecla
-    if (jumpUp) {
-        isHoldingJump = false;
+    if (jumpUp || jumpHoldTimer.ReadMSec() > jumpHoldDuration) {
+        isJumping = false;
     }
 
-    // Aceleración de caída si no se está saltando ni deslizando por pared
-    if (isJumping && !isHoldingJump && !player->GetMechanics()->IsWallSliding()) {
-        float fallForce = fallAccelerationFactor;
-        b2Vec2 force(0, fallForce);
-        player->pbody->body->ApplyForceToCenter(force, true);
+    if (!isJumping && !player->GetMechanics()->IsOnGround() && !player->GetMechanics()->IsWallSliding()) {
+        b2Vec2 fallForce(0, fallAccelerationFactor);
+        player->pbody->body->ApplyForceToCenter(fallForce, true);
     }
 }
 
@@ -118,7 +116,6 @@ void JumpMechanic::EnableDoubleJump(bool enable) {
 
 void JumpMechanic::OnLanding() {
     isJumping = false;
-    isHoldingJump = false;
     jumpCount = 0;
     player->GetMechanics()->SetIsOnGround(true);
     jumpCooldownActive = false;

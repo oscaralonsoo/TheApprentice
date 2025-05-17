@@ -21,7 +21,7 @@ Player::Player() : Entity(EntityType::PLAYER)
 Player::~Player() {}
 
 bool Player::Awake() {
-	position = Vector2D(576, 3904);
+	position = Vector2D(1792, 960);
 	return true;
 }
 
@@ -75,7 +75,7 @@ bool Player::Update(float dt) {
 
 	if (pbody == nullptr || pbody->body == nullptr) {
 		LOG("ERROR: pbody o body es nullptr");
-		return false;  // o gestión específica
+		return false;  // o gestiï¿½n especï¿½fica
 	}
 
 	if (enemySensor && enemySensor->body) {
@@ -121,14 +121,16 @@ bool Player::Update(float dt) {
 bool Player::PostUpdate() {
 	bool flip = mechanics.GetMovementDirection() < 0;
 
-	// Si está atacando, forzar el flip a la dirección guardada del ataque
+	// Si estï¿½ atacando, forzar el flip a la direcciï¿½n guardada del ataque
 	if (mechanics.GetMovementHandler()->GetAttackMechanic().IsAttacking()) {
 		flip = mechanics.GetMovementHandler()->GetAttackMechanic().attackFlip;
 	}
-	// Forzar flip del wall slide si está deslizando por la pared
+	// Forzar flip del wall slide si estï¿½ deslizando por la pared
 	else if (mechanics.GetMovementHandler()->IsWallSliding()) {
 		flip = mechanics.GetMovementHandler()->wallSlideFlip;
 	}
+
+	animation.PostUpdate(state, position.getX(), position.getY() - 5, mechanics.IsVisible(), flip);
 	mechanics.PostUpdate();
 	return true;
 }

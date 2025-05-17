@@ -26,6 +26,7 @@ bool Dreadspire::Start() {
         if (node.attribute("type").as_string() == typeName) {
             texture = Engine::GetInstance().textures->Load(node.attribute("texture").as_string());
             idleAnim.LoadAnimations(node.child("idle"));
+            shootingAnim.LoadAnimations(node.child("shooting"));
             dieAnim.LoadAnimations(node.child("die"));
             currentAnimation = &idleAnim;
             break;

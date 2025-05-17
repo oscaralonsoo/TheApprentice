@@ -687,6 +687,10 @@ bool Map::Load(std::string path, std::string fileName)
                         enemyNode.append_attribute("gravity") = true;
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::SCURVER);
                     }
+                    else if (enemyName == "Shyver") {
+                        enemyNode.append_attribute("gravity") = false;
+                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::SHYVER);
+                    }
                     else if (enemyName == "Nullwarden")
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::NULLWARDEN);
                     else if (enemyName == "Thumpod")
@@ -747,8 +751,12 @@ bool Map::Load(std::string path, std::string fileName)
 
                     if (npcName == "Castor")
                         npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CASTOR);
-                    else if (npcName == "JavierGomez")
-                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CASTOR);
+                    else if (npcName == "Liebre")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::LIEBRE);
+                    else if (npcName == "Perdiz")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PERDIZ);
+                    else if (npcName == "Pangolin")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PANGOLIN);
 
                     if (npc != nullptr)
                     {

@@ -43,7 +43,7 @@ private:
     float fallAccelerationFactor = 40.0f;   // Fuerza que empuja hacia abajo al soltar el salto
 
     Timer jumpHoldTimer;
-    float jumpHoldDuration = 400.0f;
+    float jumpHoldDuration = 370.0f;
 
     bool controllerHeldPreviously = false;
     bool keyboardHeldPreviously = false;

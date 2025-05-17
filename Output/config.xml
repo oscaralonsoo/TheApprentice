@@ -78,10 +78,10 @@
 					<frame x="330" y="625" w="110" h="126" />
 				</jump>
 				<fall loop="true" speed="0.15">
-					<frame x="100" y="753" w="100" h="100" />
-					<frame x="200" y="753" w="100" h="100" />
-					<frame x="300" y="753" w="100" h="100" />
-					<frame x="400" y="753" w="100" h="100" />
+					<frame x="100" y="751" w="100" h="100" />
+					<frame x="200" y="751" w="100" h="100" />
+					<frame x="300" y="751" w="100" h="100" />
+					<frame x="400" y="751" w="100" h="100" />
 				</fall>
 				<landing_stun loop="false" speed="0.14">
 					<frame x="0" y="853" w="100" h="100" />
@@ -93,10 +93,6 @@
 					<frame x="600" y="853" w="100" h="100" />
 					<frame x="700" y="853" w="100" h="100" />
 					<frame x="800" y="853" w="100" h="100" />
-					<frame x="900" y="853" w="100" h="100" />
-					<frame x="1000" y="853" w="100" h="100" />
-					<frame x="1100" y="853" w="100" h="100" />
-					<frame x="1200" y="853" w="100" h="100" />
 				</landing_stun>
 				<landing loop="false" speed="0.17">
 					<frame x="0" y="953" w="100" h="100" />
@@ -110,14 +106,13 @@
 					<frame x="300" y="1053" w="100" h="100" />
 					<frame x="400" y="1053" w="100" h="100" />
 				</die>
-				<dash loop="true" speed="0.15">
+				<dash loop="true" speed="0.3">
 					<frame x="0" y="1153" w="130" h="100" />
 					<frame x="130" y="1153" w="130" h="100" />
 					<frame x="260" y="1153" w="130" h="100" />
 					<frame x="390" y="1153" w="130" h="100" />
 					<frame x="520" y="1153" w="130" h="100" />
 					<frame x="650" y="1153" w="130" h="100" />
-					<frame x="780" y="1153" w="130" h="100" />
 				</dash>
 				<hook loop="false" speed="0.15">
 					<frame x="0" y="1153" w="130" h="100" />

@@ -48,10 +48,19 @@ bool DungBeetle::Start() {
     );
     if (pbody && pbody->body) {
         b2Fixture* fixture = pbody->body->GetFixtureList();
-        fixture->SetRestitution(1.0f);      
-        fixture->SetFriction(0.0f);        
+        fixture->SetRestitution(1.0f);
+        fixture->SetFriction(0.0f);
+        fixture->SetDensity(1.0f);
+
         pbody->body->SetLinearDamping(0.0f);
         pbody->body->SetAngularDamping(0.0f);
+        pbody->body->SetBullet(true);
+        b2Filter filter;
+        filter.categoryBits = CATEGORY_ENEMY;
+        filter.maskBits = CATEGORY_WALL | CATEGORY_PLAYER | CATEGORY_PLATFORM | CATEGORY_ATTACK;
+        fixture->SetFilterData(filter);
+        pbody->ctype = ColliderType::ENEMY;
+        pbody->listener = this;
     }
 
     maxSteps = 15;
@@ -79,7 +88,7 @@ bool DungBeetle::PostUpdate() {
 bool DungBeetle::CleanUp() {
     return Enemy::CleanUp();
 }
-void DungBeetle::OnCollision(PhysBody* physA, PhysBody* physB, const b2Vec2& normal) {
+void DungBeetle::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::ATTACK:
         if (currentState == DungBeetleState::BALLMODE)
@@ -88,13 +97,14 @@ void DungBeetle::OnCollision(PhysBody* physA, PhysBody* physB, const b2Vec2& nor
     case ColliderType::PLATFORM:
     case ColliderType::WALL: 
         if (currentState == DungBeetleState::BALLMODE) {
-            Bounce(normal);
+            Bounce();
         }
         if (currentState == DungBeetleState::HIT && currentAnimation->HasFinished())
             currentState = DungBeetleState::DEAD;
         break;
     case ColliderType::PLAYER:
-        // TODO TONI --- ATRAVESAR EL PLAYER O BOUNCE
+        // TODO TONI --- DETECTAR COLISION!
+        Bounce();
         break;
     }
 }
@@ -129,8 +139,8 @@ void DungBeetle::Idle()
 void DungBeetle::Angry()
 {
     currentAnimation = &angryAnim;
-   /* if (currentAnimation->HasFinished())
-    {*/
+    //if (currentAnimation->HasFinished())
+    //{
         if (CheckPuzzleState() == 1 || CheckPuzzleState() == 2)
             currentState = DungBeetleState::THROW;
         else
@@ -186,22 +196,40 @@ void DungBeetle::ChangeBodyType() {
         isDynamic = true;
 }
 int DungBeetle::CheckPuzzleState() {
-    int PuzzlesDone = 1; // TODO OSCAR --- CURRENT PRESSED PLATES
+    int PuzzlesDone = 3; // TODO OSCAR --- CURRENT PRESSED PLATES
     return PuzzlesDone;
 
 }
-void DungBeetle::Bounce(const b2Vec2& normal)
+void DungBeetle::Bounce()
 {
     b2Vec2 velocity = pbody->body->GetLinearVelocity();
 
-    // Reflejar velocidad con respecto a la normal
-    b2Vec2 reflected = velocity - 2.0f * b2Dot(velocity, normal) * normal;
+    if (velocity.Length() > 0) {
+        // Normalizar dirección actual
+        velocity.Normalize();
+        // Ángulo actual de movimiento
+        float currentAngle = atan2f(velocity.y, velocity.x);
 
-    // Normalizar y mantener la misma velocidad
-    float speed = velocity.Length();
-    reflected.Normalize();
-    reflected *= speed;
+        float maxOffset = 50.0f * (M_PI / 180.0f); 
+        float randomOffset = ((float)rand() / RAND_MAX) * (2.0f * maxOffset) - maxOffset;
 
-    pbody->body->SetLinearVelocity(reflected);
+        // Nuevo ángulo con desviación
+        float newAngle = currentAngle + randomOffset;
+
+        // Nueva dirección
+        b2Vec2 newDir(cosf(newAngle), sinf(newAngle));
+        newDir.Normalize();
+
+        float speedVariation = ballModeSpeed * 1.05f;
+
+        // Establecer nueva velocidad
+        pbody->body->SetLinearVelocity(speedVariation * newDir);
+    }
+
+    // Detener rotación
+    pbody->body->SetAngularVelocity(0.0f);
 }
+
+
+
 

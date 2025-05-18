@@ -29,14 +29,17 @@ DungBeetleBall::DungBeetleBall(float x, float y, float speed, b2Vec2 direction)
 
         b2Filter filter;
         filter.categoryBits = CATEGORY_ENEMY;
-        filter.maskBits = CATEGORY_WALL | CATEGORY_PLAYER_DAMAGE | CATEGORY_PLATFORM;
+        filter.maskBits = CATEGORY_WALL | CATEGORY_PLAYER_DAMAGE | CATEGORY_PLATFORM | CATEGORY_ATTACK | CATEGORY_PLAYER;
         fixture->SetFilterData(filter);
 
-        //Bounce Fixture Settings
-        fixture->SetRestitution(1.0f);
-        fixture->SetFriction(0.0f);
-        pbody->body->SetLinearDamping(0.0f);
-        pbody->body->SetAngularDamping(0.0f);
+        // Configuración mejorada para rebotes
+        fixture->SetRestitution(1.0f); 
+        fixture->SetFriction(0.0f);     
+        fixture->SetDensity(1.0f);     
+
+        pbody->body->SetLinearDamping(0.0f);   
+        pbody->body->SetAngularDamping(0.0f);   
+        pbody->body->SetBullet(true);          
     }
 
     pbody->body->SetLinearVelocity(b2Vec2(direction.x * speed, direction.y * speed));
@@ -57,22 +60,43 @@ DungBeetleBall::~DungBeetleBall()
 bool DungBeetleBall::Update(float dt)
 {
     b2Transform pbodyPos = pbody->body->GetTransform();
-
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - width / 2);
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - height / 2);
-
-    Engine::GetInstance().render->DrawTexture(
-        texture,
-        (int)position.getX(),
-        (int)position.getY(),
-        &currentAnimation->GetCurrentFrame()
-    );
-
+    Engine::GetInstance().render->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame() );
     currentAnimation->Update();
+
+    b2Vec2 currentPos = pbody->body->GetPosition();
+
+    if (b2DistanceSquared(previousPosition, currentPos) < 0.01f * 0.01f)
+    {
+        timeStuck += dt;
+        if (timeStuck > 1000.0f) 
+        {
+            // Aplicar pequeño impulso aleatorio para liberarla
+            b2Vec2 randomDir((rand() % 100 - 50) / 100.0f, (rand() % 100 - 50) / 100.0f);
+            randomDir.Normalize();
+            pbody->body->ApplyLinearImpulse(0.5f * randomDir, pbody->body->GetWorldCenter(), true);
+            timeStuck = 0.0f; // Resetear contador
+        }
+    }
+    else
+        timeStuck = 0.0f;
+
+    pbody->body->SetAngularVelocity(0.0f);
+
+    b2Vec2 velocity = pbody->body->GetLinearVelocity();
+    if (fabs(velocity.Length() - speed) > 0.1f)
+    {
+        velocity.Normalize();
+        velocity *= speed;
+        pbody->body->SetLinearVelocity(velocity);
+    }
+    previousPosition = currentPos;
     time += dt;
 
     return true;
 }
+
 
 bool DungBeetleBall::CleanUp()
 {
@@ -80,17 +104,18 @@ bool DungBeetleBall::CleanUp()
     return true;
 }
 
-void DungBeetleBall::OnCollision(PhysBody* physA, PhysBody* physB, const b2Vec2& normal)
+void DungBeetleBall::OnCollision(PhysBody* physA, PhysBody* physB)
 {
     switch (physB->ctype)
     {
     case ColliderType ::ATTACK:
     case ColliderType::PLATFORM:
     case ColliderType::WALL:
-        Bounce(normal);
+        Bounce();
         break;
     case ColliderType::PLAYER:
-        // TODO TONI --- ATRAVESAR EL PLAYER O BOUNCE
+        // TODO TONI --- DETECTAR COLISION!
+        Bounce();
         break;
     }
 }
@@ -108,18 +133,17 @@ void DungBeetleBall::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
         break;
     }
 }
-void DungBeetleBall::Bounce(const b2Vec2& normal)
+void DungBeetleBall::Bounce()
 {
     b2Vec2 velocity = pbody->body->GetLinearVelocity();
 
-    // Reflejar velocidad con respecto a la normal
-    b2Vec2 reflected = velocity - 2.0f * b2Dot(velocity, normal) * normal;
-
-    // Normalizar y mantener la misma velocidad
-    float speed = velocity.Length();
-    reflected.Normalize();
-    reflected *= speed;
-
-    pbody->body->SetLinearVelocity(reflected);
+    // Normalizar y mantener velocidad constante
+    if (velocity.Length() > 0) {
+        velocity.Normalize();
+        velocity *= speed;
+        pbody->body->SetLinearVelocity(velocity);
+    }
+    pbody->body->SetAngularVelocity(0.0f); 
 }
+
 

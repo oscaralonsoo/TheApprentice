@@ -22,7 +22,7 @@ public:
     bool Update(float dt) override;
     bool PostUpdate();
     bool CleanUp() override;
-    void OnCollision(PhysBody* physA, PhysBody* physB, const b2Vec2& normal);
+    void OnCollision(PhysBody* physA, PhysBody* physB);
     void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
     void CheckState(float dt);
@@ -32,7 +32,7 @@ public:
     void BallMode();
     void ChangeBodyType();
     int CheckPuzzleState();
-    void Bounce(const b2Vec2& normal);
+    void Bounce();
 private:
     bool hasThrown = false;
     bool isDynamic = false;

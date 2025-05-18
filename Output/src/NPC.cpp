@@ -84,7 +84,7 @@ void NPC::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:
-		Engine::GetInstance().dialogueManager.get()->SetDialogueAvailable(dialogueId, true);
+		Engine::GetInstance().dialogueManager.get()->SetDialogueAvailable(dialogueId, Vector2D(GetPosition().x - texW/2, GetPosition().y - texH), true);
 		break;
 	}
 }
@@ -94,7 +94,7 @@ void NPC::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
 	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:
-		Engine::GetInstance().dialogueManager.get()->SetDialogueAvailable(dialogueId, false);
+		Engine::GetInstance().dialogueManager.get()->SetDialogueAvailable(dialogueId, Vector2D(GetPosition().x - texW / 2, GetPosition().y - texH), false);
 		break;
 	}
 		

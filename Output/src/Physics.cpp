@@ -531,3 +531,83 @@ int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& no
 
 	return ret;
 }
+void Physics::FlipPhysBody(PhysBody* body, bool horizontal, bool vertical)
+{
+	if (body == nullptr || body->body == nullptr)
+		return;
+
+	b2Body* b2body = body->body;
+
+	for (b2Fixture* f = b2body->GetFixtureList(); f != nullptr; f = f->GetNext())
+	{
+		b2Shape::Type type = f->GetType();
+		b2Shape* shape = f->GetShape();
+
+		switch (type)
+		{
+		case b2Shape::e_polygon:
+		{
+			b2PolygonShape* polygon = (b2PolygonShape*)shape;
+			b2Vec2 flippedVerts[b2_maxPolygonVertices];
+
+			for (int i = 0; i < polygon->m_count; ++i)
+			{
+				flippedVerts[i] = polygon->m_vertices[i];
+				if (horizontal)
+					flippedVerts[i].x *= -1;
+				if (vertical)
+					flippedVerts[i].y *= -1;
+			}
+
+			// Reemplazar fixture
+			b2FixtureDef fixtureDef;
+			fixtureDef.shape = nullptr;
+			fixtureDef.density = f->GetDensity();
+			fixtureDef.friction = f->GetFriction();
+			fixtureDef.restitution = f->GetRestitution();
+			fixtureDef.isSensor = f->IsSensor();
+			fixtureDef.filter = f->GetFilterData();
+
+			b2PolygonShape newShape;
+			newShape.Set(flippedVerts, polygon->m_count);
+			fixtureDef.shape = &newShape;
+
+			b2body->DestroyFixture(f);
+			b2body->CreateFixture(&fixtureDef);
+			break;
+		}
+		case b2Shape::e_circle:
+		{
+			// Para círculos, solo necesitamos reflejar el centro si no está centrado
+			b2CircleShape* circle = (b2CircleShape*)shape;
+			b2Vec2 pos = circle->m_p;
+
+			if (horizontal) pos.x *= -1;
+			if (vertical) pos.y *= -1;
+
+			b2CircleShape newCircle;
+			newCircle.m_radius = circle->m_radius;
+			newCircle.m_p = pos;
+
+			b2FixtureDef fixtureDef;
+			fixtureDef.shape = &newCircle;
+			f->GetFilterData(); // Mantener filtros
+			fixtureDef.density = f->GetDensity();
+			fixtureDef.friction = f->GetFriction();
+			fixtureDef.restitution = f->GetRestitution();
+			fixtureDef.isSensor = f->IsSensor();
+			fixtureDef.filter = f->GetFilterData();
+
+			b2body->DestroyFixture(f);
+			b2body->CreateFixture(&fixtureDef);
+			break;
+		}
+		default:
+			LOG("FlipPhysBody: Shape type not supported for flipping.");
+			break;
+		}
+	}
+
+	// También puedes invertir la escala visual si tienes sprites ligados
+}
+

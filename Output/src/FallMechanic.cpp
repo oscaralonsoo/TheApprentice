@@ -22,7 +22,6 @@ void FallMechanic::Update(float dt) {
     }
 
     if (player->GetMechanics()->IsOnGround()) {
-        printf("[FALL] Está en el suelo\n");
         return;
     }
 
@@ -30,7 +29,6 @@ void FallMechanic::Update(float dt) {
     if (velocity.y > 0.1f && !isFalling) {
         isFalling = true;
         player->SetState("fall");
-        printf("[FALL] Empieza a caer\n");
     }
 
     CheckFallStart();
@@ -47,11 +45,9 @@ void FallMechanic::CheckLanding() {
             stunTimer.Start();
             player->SetState("landing_stun");
             Engine::GetInstance().render->StartCameraShake(0.2f, 2);
-            printf("[FALL] Aterriza con stun\n");
         }
         else {
             player->SetState("landing");
-            printf("[FALL] Aterriza normal\n");
         }
     }
 }

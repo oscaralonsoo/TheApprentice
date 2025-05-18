@@ -8,7 +8,7 @@
 #include "Entity.h"
 #include "Log.h"
 
-constexpr int MAX_BROODS = 6;
+constexpr int MAX_BROODS = 4;
 constexpr int BROODS_PER_SPAWN = 1;
 constexpr int MAX_SPAWN_ATTEMPTS = 10;
 constexpr float MIN_SPAWN_DISTANCE = 60.0f;
@@ -24,7 +24,7 @@ bool Broodheart::Awake() {
 
 bool Broodheart::Start() {
 
-    spawnInterval = 4500.0f + static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2500.0f;
+    spawnInterval = 6500.0f + static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 4000.0f;
 
     pugi::xml_document configDoc;
     if (!configDoc.load_file("config.xml")) {
@@ -72,7 +72,6 @@ bool Broodheart::Update(float dt) {
 
 bool Broodheart::PostUpdate() {
 
-    Enemy::PostUpdate();
     if (isBroken) {
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         return true; // O retornar false si no quieres que se ejecute más lógica

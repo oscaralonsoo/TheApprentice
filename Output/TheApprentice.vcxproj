@@ -157,6 +157,10 @@
     <ClCompile Include="src\DashMechanic.cpp" />
     <ClCompile Include="src\DestructibleWall.cpp" />
     <ClCompile Include="src\DialogueManager.cpp" />
+    <ClCompile Include="src\Dreadspire.cpp" />
+    <ClCompile Include="src\DreadspireBullet.cpp" />
+    <ClCompile Include="src\DungBeetle.cpp" />
+    <ClCompile Include="src\DungBeetleBall.cpp" />
     <ClCompile Include="src\DustParticle.cpp" />
     <ClCompile Include="src\Enemy.cpp" />
     <ClCompile Include="src\Engine.cpp" />
@@ -193,6 +197,7 @@
     <ClCompile Include="src\PressureDoor.cpp" />
     <ClCompile Include="src\PressurePlate.cpp" />
     <ClCompile Include="src\PressureSystemController.cpp" />
+    <ClCompile Include="src\Shyver.cpp" />
     <ClCompile Include="src\TheApprentice.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\PlayerAnimation.cpp" />
@@ -223,6 +228,10 @@
     <ClInclude Include="src\DashMechanic.h" />
     <ClInclude Include="src\DestructibleWall.h" />
     <ClInclude Include="src\DialogueManager.h" />
+    <ClInclude Include="src\Dreadspire.h" />
+    <ClInclude Include="src\DreadspireBullet.h" />
+    <ClInclude Include="src\DungBeetle.h" />
+    <ClInclude Include="src\DungBeetleBall.h" />
     <ClInclude Include="src\DustParticle.h" />
     <ClInclude Include="src\Enemy.h" />
     <ClInclude Include="src\Engine.h" />
@@ -271,6 +280,7 @@
     <ClInclude Include="src\RespawnSystem.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\Scurver.h" />
+    <ClInclude Include="src\Shyver.h" />
     <ClInclude Include="src\Textures.h" />
     <ClInclude Include="src\Thumpod.h" />
     <ClInclude Include="src\Timer.h" />

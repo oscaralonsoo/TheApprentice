@@ -13,6 +13,7 @@
 #include "EntityManager.h"
 #include "AbilityZone.h"
 #include "HiddenZone.h"
+#include "Dreadspire.h"
 #include "DestructibleWall.h"
 #include "PushableBox.h"
 #include "PressurePlate.h"
@@ -516,28 +517,6 @@ bool Map::Load(std::string path, std::string fileName)
                     wall->SetParameters(node);
                 }
             }
-            else if (objectGroupName == "PushableBoxes")
-            {
-                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
-                {
-                    int x = objectNode.attribute("x").as_int();
-                    int y = objectNode.attribute("y").as_int();
-                    int width = objectNode.attribute("width").as_int();
-                    int height = objectNode.attribute("height").as_int();
-                    std::string texturePath = objectNode.attribute("texture").as_string();
-
-                    pugi::xml_document tempDoc;
-                    pugi::xml_node node = tempDoc.append_child("box");
-                    node.append_attribute("x") = x;
-                    node.append_attribute("y") = y;
-                    node.append_attribute("w") = width;
-                    node.append_attribute("h") = height;
-                    node.append_attribute("texture") = texturePath.c_str();
-
-                    PushableBox* box = (PushableBox*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PUSHABLE_BOX);
-                    box->SetParameters(node);
-                }
-            }
             else if (objectGroupName == "HookableBoxes")
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
@@ -615,9 +594,8 @@ bool Map::Load(std::string path, std::string fileName)
                     {
                         int x = objectNode.attribute("x").as_int();
                         int y = objectNode.attribute("y").as_int();
-                        int width = objectNode.attribute("width").as_int();
-                        int height = objectNode.attribute("height").as_int();
-                        std::string texturePath = objectNode.attribute("texture").as_string();
+                        int width = 90;
+                        int height = 64;
 
                         pugi::xml_document tempDoc;
                         pugi::xml_node node = tempDoc.append_child("box");
@@ -625,7 +603,6 @@ bool Map::Load(std::string path, std::string fileName)
                         node.append_attribute("y") = y;
                         node.append_attribute("w") = width;
                         node.append_attribute("h") = height;
-                        node.append_attribute("texture") = texturePath.c_str();
 
                         PushableBox* box = (PushableBox*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PUSHABLE_BOX);
                         box->SetParameters(node);
@@ -686,6 +663,10 @@ bool Map::Load(std::string path, std::string fileName)
                         enemyNode.append_attribute("gravity") = true;
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::SCURVER);
                     }
+                    else if (enemyName == "Shyver") {
+                        enemyNode.append_attribute("gravity") = false;
+                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::SHYVER);
+                    }
                     else if (enemyName == "Nullwarden")
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::NULLWARDEN);
                     else if (enemyName == "Thumpod")
@@ -700,12 +681,18 @@ bool Map::Load(std::string path, std::string fileName)
                     enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BROODHEART);
                     }
                     else if (enemyName == "Brood") {
-                        enemyNode.append_attribute("gravity") = false;
+                        enemyNode.append_attribute("gravity") = true;
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BROOD);
                     }  
                     else if (enemyName == "Noctilume") {
-                        enemyNode.append_attribute("gravity") = false;
-                        //enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::NOCTILUME);
+                        enemyNode.append_attribute("gravity") = true;
+                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::NOCTILUME);
+                    }
+                    else if (enemyName == "Dreadspire") {
+                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::DREADSPIRE);
+                    }
+                    else if (enemyName == "DungBeetle") {
+                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::DUNGBEETLE);
                     }
                     if (enemy != nullptr)
                     {
@@ -740,8 +727,12 @@ bool Map::Load(std::string path, std::string fileName)
 
                     if (npcName == "Castor")
                         npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CASTOR);
-                    else if (npcName == "JavierGomez")
-                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CASTOR);
+                    else if (npcName == "Liebre")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::LIEBRE);
+                    else if (npcName == "Perdiz")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PERDIZ);
+                    else if (npcName == "Pangolin")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PANGOLIN);
 
                     if (npc != nullptr)
                     {

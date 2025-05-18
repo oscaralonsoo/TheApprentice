@@ -29,7 +29,9 @@ bool NPC::Start() {
 
 	pugi::xml_document loadFile;
 	pugi::xml_parse_result result = loadFile.load_file("config.xml");
-	pugi::xml_node npcNode = loadFile.child("config").child("scene").child("animations").child("npcs").child("castor");
+	for (char& c : type)
+		c = std::tolower(static_cast<unsigned char>(c));
+	pugi::xml_node npcNode = loadFile.child("config").child("scene").child("animations").child("npcs").child(type.c_str());
 
 	// Cargar textura y animaciones
 	texture = Engine::GetInstance().textures->Load(npcNode.attribute("texture").as_string());
@@ -82,7 +84,7 @@ void NPC::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:
-		Engine::GetInstance().dialogueManager.get()->SetDialogueAvailable(dialogueId, true);
+		Engine::GetInstance().dialogueManager.get()->SetDialogueAvailable(dialogueId, Vector2D(GetPosition().x - texW/2, GetPosition().y - texH), true);
 		break;
 	}
 }
@@ -92,7 +94,7 @@ void NPC::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
 	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:
-		Engine::GetInstance().dialogueManager.get()->SetDialogueAvailable(dialogueId, false);
+		Engine::GetInstance().dialogueManager.get()->SetDialogueAvailable(dialogueId, Vector2D(GetPosition().x - texW / 2, GetPosition().y - texH), false);
 		break;
 	}
 		

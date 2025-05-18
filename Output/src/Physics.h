@@ -131,6 +131,7 @@ public:
 	void EndContact(b2Contact* contact);
 
 	void DeletePhysBody(PhysBody* physBody);
+	void FlipPhysBody(PhysBody* body, bool horizontal, bool vertical);
 	bool IsPendingToDelete(PhysBody* physBody);
 
 	// List of physics bodies

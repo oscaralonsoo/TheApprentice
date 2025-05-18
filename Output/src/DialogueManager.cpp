@@ -32,6 +32,8 @@ bool DialogueManager::Start() {
 		WrapLines(id, boxWidth, dialogueFontSize);
 	}
 
+	texture = Engine::GetInstance().textures->Load("Assets/Textures/UI/Help/listen.png");
+
 	return true;
 }
 
@@ -193,10 +195,11 @@ void DialogueManager::WrapLines(int dialogueId, int boxWidth, int dialogueFontSi
 	}
 }
 
-void DialogueManager::SetDialogueAvailable(int dialogueId, bool active) {
+void DialogueManager::SetDialogueAvailable(int dialogueId, Vector2D npcPos, bool active) {
 	dialogueAvailable = active;
 	dialogueStarted = false;
 	activeDialogueId = active ? dialogueId : -1;
+	promptPos = npcPos;
 
 	if (active) {
 		currentLineIndex = 0;
@@ -205,10 +208,7 @@ void DialogueManager::SetDialogueAvailable(int dialogueId, bool active) {
 }
 
 void DialogueManager::ShowInteractionPrompt() {
-	texture = Engine::GetInstance().textures->Load("Assets/Textures/UI/Help/listen.png");
-	SDL_Rect camera = Engine::GetInstance().render->camera;
-
-	Engine::GetInstance().render.get()->DrawTexture(texture, -camera.x, -camera.y);
+	Engine::GetInstance().render.get()->DrawTexture(texture, promptPos.x, promptPos.y + 105);
 }
 
 void DialogueManager::ResetTyping() {

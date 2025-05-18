@@ -9,6 +9,7 @@
 #include "Nullwarden.h"
 #include "LifePlant.h"
 #include "PressurePlate.h"
+#include "Shyver.h"
 #include "PressureDoor.h"
 #include "NPC.h"
 #include "Hypnoviper.h"
@@ -18,6 +19,7 @@
 #include "Creebler.h"
 #include "Scurver.h"
 #include "Thumpod.h"
+#include "Dreadspire.h"
 #include "Brood.h"
 #include "Broodheart.h"
 #include "DestructibleWall.h"
@@ -29,6 +31,7 @@
 #include "HookAnchor.h"
 #include "HokableBox.h"
 #include "Geyser.h"
+#include "DungBeetle.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -114,6 +117,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::PRESSURE_DOOR:
 		entity = new PressureDoor();
 		break;
+	case EntityType::SHYVER:
+		entity = new Shyver();
+		break;
 	case EntityType::SCURVER:
 		entity = new Scurver();
 		break;
@@ -126,11 +132,17 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::BROOD:
 		entity = new Brood();
 		break;
+	case EntityType::DREADSPIRE:
+		entity = new Dreadspire();
+		break;
 	case EntityType::ABILITY_ZONE:
 		entity = new AbilityZone();
 		break;
 	case EntityType::NULLWARDEN:
 		entity = new Nullwarden();
+		break;
+	case EntityType::DUNGBEETLE:
+		entity = new DungBeetle();
 		break;
 	case EntityType::HIDDEN_ZONE:
 		entity = new HiddenZone();
@@ -143,6 +155,15 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::CASTOR:
 		entity = new NPC(EntityType::CASTOR);
+		break;
+	case EntityType::PERDIZ:
+		entity = new NPC(EntityType::PERDIZ);
+		break;
+	case EntityType::LIEBRE:
+		entity = new NPC(EntityType::LIEBRE);
+		break;
+	case EntityType::PANGOLIN:
+		entity = new NPC(EntityType::PANGOLIN);
 		break;
 	case EntityType::NOCTILUME:
 		entity = new Noctilume();

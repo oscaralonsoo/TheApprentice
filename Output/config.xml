@@ -71,17 +71,17 @@
 					<frame x="224" y="516" w="112" h="120" />
 					<frame x="336" y="516" w="112" h="120" />
 				</hit>
-				<jump loop="true" speed="0.15">
-					<frame x="0" y="625" w="110" h="128" />
-					<frame x="110" y="625" w="110" h="128" />
-					<frame x="220" y="625" w="110" h="128" />
-					<frame x="330" y="625" w="110" h="128" />
+				<jump loop="false" speed="0.25">
+					<frame x="0" y="625" w="110" h="126" />
+					<frame x="110" y="625" w="110" h="126" />
+					<frame x="220" y="625" w="110" h="126" />
+					<frame x="330" y="625" w="110" h="126" />
 				</jump>
 				<fall loop="true" speed="0.15">
-					<frame x="100" y="753" w="100" h="100" />
-					<frame x="200" y="753" w="100" h="100" />
-					<frame x="300" y="753" w="100" h="100" />
-					<frame x="400" y="753" w="100" h="100" />
+					<frame x="100" y="751" w="100" h="100" />
+					<frame x="200" y="751" w="100" h="100" />
+					<frame x="300" y="751" w="100" h="100" />
+					<frame x="400" y="751" w="100" h="100" />
 				</fall>
 				<landing_stun loop="false" speed="0.14">
 					<frame x="0" y="853" w="100" h="100" />
@@ -93,10 +93,6 @@
 					<frame x="600" y="853" w="100" h="100" />
 					<frame x="700" y="853" w="100" h="100" />
 					<frame x="800" y="853" w="100" h="100" />
-					<frame x="900" y="853" w="100" h="100" />
-					<frame x="1000" y="853" w="100" h="100" />
-					<frame x="1100" y="853" w="100" h="100" />
-					<frame x="1200" y="853" w="100" h="100" />
 				</landing_stun>
 				<landing loop="false" speed="0.17">
 					<frame x="0" y="953" w="100" h="100" />
@@ -110,14 +106,13 @@
 					<frame x="300" y="1053" w="100" h="100" />
 					<frame x="400" y="1053" w="100" h="100" />
 				</die>
-				<dash loop="true" speed="0.15">
+				<dash loop="true" speed="0.3">
 					<frame x="0" y="1153" w="130" h="100" />
 					<frame x="130" y="1153" w="130" h="100" />
 					<frame x="260" y="1153" w="130" h="100" />
 					<frame x="390" y="1153" w="130" h="100" />
 					<frame x="520" y="1153" w="130" h="100" />
 					<frame x="650" y="1153" w="130" h="100" />
-					<frame x="780" y="1153" w="130" h="100" />
 				</dash>
 				<hook loop="false" speed="0.15">
 					<frame x="0" y="1153" w="130" h="100" />
@@ -168,35 +163,78 @@
 						<frame x="1708" y="678" w="244" h="244" />
 					</dead>
 				</enemy>
+				<enemy type="Noctilume" w="134" h="134" texture="Assets/Enemies/Noctilume.png">
+					<idle loop="true" speed="0.165">
+						<frame x="0" y="0" w="134" h="134" />
+						<frame x="134" y="0" w="134" h="134" />
+						<frame x="268" y="0" w="134" h="134" />
+						<frame x="402" y="0" w="134" h="134" />
+						<frame x="536" y="0" w="134" h="134" />
+						<frame x="402" y="0" w="134" h="134" />
+						<frame x="670" y="0" w="134" h="134" />
+						<frame x="804" y="0" w="134" h="134" />
+					</idle>
+					<attack loop="true" speed="0.2">
+						<frame x="0" y="134" w="134" h="134" />
+						<frame x="134" y="134" w="134" h="134" />
+						<frame x="268" y="134" w="134" h="134" />
+						<frame x="402" y="134" w="134" h="134" />
+					</attack>
+					<crash loop="true" speed="0.175">
+						<frame x="0" y="268" w="134" h="134" />
+						<frame x="134" y="268" w="134" h="134" />
+						<frame x="268" y="268" w="134" h="134" />
+						<frame x="402" y="268" w="134" h="134" />
+						<frame x="536" y="268" w="134" h="134" />
+						<frame x="670" y="268" w="134" h="134" />
+						<frame x="804" y="268" w="134" h="134" />
+						<frame x="938" y="268" w="134" h="134" />
+						<frame x="1072" y="268" w="134" h="134" />
+					</crash>
+					<die loop="false" speed="0.15">
+						<frame x="0" y="402" w="134" h="134" />
+						<frame x="134" y="402" w="134" h="134" />
+						<frame x="268" y="402" w="134" h="134" />
+						<frame x="402" y="402" w="134" h="134" />
+						<frame x="536" y="402" w="134" h="134" />
+						<frame x="670" y="402" w="134" h="134" />
+						<frame x="804" y="402" w="134" h="134" />
+						<frame x="938" y="402" w="134" h="134" />
+						<frame x="1072" y="402" w="134" h="134" />
+						<frame x="1206" y="402" w="134" h="134" />
+						<frame x="1340" y="402" w="134" h="134" />
+					</die>
+				</enemy>
 				<enemy type="Thumpod" w="256" h="256" texture="Assets/Enemies/thumpod.png">
-					<idle loop="true" speed="0.125">
+					<idle loop="true" speed="0.075">
 						<frame x="0" y="0" w="256" h="256" />
 						<frame x="256" y="0" w="256" h="256" />
 						<frame x="512" y="0" w="256" h="256" />
 						<frame x="768" y="0" w="256" h="256" />
 					</idle>
 					<attackUp loop="false" speed="0.15">
-						<frame x="0" y="256" w="256" h="256" />
-						<frame x="256" y="256" w="256" h="256" />
-						<frame x="512" y="256" w="256" h="256" />
+						<frame x="1024" y="256" w="256" h="256" />
 						<frame x="768" y="256" w="256" h="256" />
+						<frame x="512" y="256" w="256" h="256" />
+						<frame x="256" y="256" w="256" h="256" />
 					</attackUp>
 					<attackDown loop="false" speed="0.15">
+						<frame x="256" y="256" w="256" h="256" />
 						<frame x="768" y="256" w="256" h="256" />
-						<frame x="1024" y="256" w="256" h="256" />
+						<frame x="0" y="256" w="256" h="256" />
 					</attackDown>
 					<dead loop="false" speed="0.15">
-						<frame x="0" y="512ññ" w="256" h="256" />
-						<frame x="256" y="512" w="256" h="256" />
-						<frame x="512" y="512" w="256" h="256" />
-						<frame x="768" y="512" w="256" h="256" />
-						<frame x="1024" y="512" w="256" h="256" />
-						<frame x="1280" y="512" w="256" h="256" />
-						<frame x="1536" y="512" w="256" h="256" />
-						<frame x="1792" y="512" w="256" h="256" />
-						<frame x="2048" y="512" w="256" h="256" />
-						<frame x="2304" y="512" w="256" h="256" />
 						<frame x="2560" y="512" w="256" h="256" />
+						<frame x="2304" y="512" w="256" h="256" />
+						<frame x="2048" y="512" w="256" h="256" />
+						<frame x="1792" y="512" w="256" h="256" />
+						<frame x="1536" y="512" w="256" h="256" />
+						<frame x="1280" y="512" w="256" h="256" />
+						<frame x="1024" y="512" w="256" h="256" />
+						<frame x="768" y="512" w="256" h="256" />
+						<frame x="512" y="512" w="256" h="256" />
+						<frame x="256" y="512" w="256" h="256" />
+						<frame x="0" y="512" w="256" h="256" />
 					</dead>
 				</enemy>
 				<enemy type="Hypnoviper" w="512" h="256" texture="Assets/Enemies/hypnoviper.png">
@@ -281,6 +319,14 @@
 						<frame x="500" y="300" w="100" h="100" />
 					</dead>
 				</enemy>
+				<enemy type="Shyver" w="64" h="64" texture="Assets/Enemies/test.png">
+					<idle loop="true" speed="0.2">
+						<frame x="0" y="0" w="64" h="64" />
+					</idle>
+					<dead loop="false" speed="0.2">
+						<frame x="0" y="64" w="64" h="64" />
+					</dead>
+				</enemy>
 				<enemy type="Mireborn" w="120" h="120" texture="Assets/Enemies/mireborn.png">
 					<idle loop="true" speed="0.1">
 						<frame x="0" y="0" w="120" h="120" />
@@ -334,6 +380,17 @@
 						<frame x="0" y="0" w="32" h="32" />
 					</walking>
 				</enemy>
+				<enemy type="Dreadspire" w="356" h="356" texture="Assets/Enemies/dreadspire.png">
+					<idle loop="true" speed="0.1">
+						<frame x="0" y="0" w="356" h="356" />
+					</idle>
+					<shooting loop="true" speed="0.1">
+						<frame x="0" y="0" w="356" h="356" />
+					</shooting>
+					<die loop="false" speed="0.1">
+						<frame x="0" y="0" w="32" h="32" />
+					</die>
+				</enemy>
 				<enemy type="Nullwarden" w="64" h="64" texture="Assets/Enemies/test.png">
 					<idle loop="true" speed="0.35">
 						<frame x="0" y="0" w="64" h="64" />
@@ -365,6 +422,37 @@
 						<frame x="0" y="0" w="35" h="180" />
 					</destroyed>
 				</enemy>
+				<enemy type="DungBeetle" w="128" h="128" texture="Assets/Enemies/test.png">
+					<idle loop="true" speed="0.35">
+						<frame x="0" y="0" w="64" h="64" />
+					</idle>
+					<angry loop="true" speed="0.35">
+						<frame x="0" y="64" w="64" h="64" />
+					</angry>
+					<throwing loop="true" speed="0.35">
+						<frame x="0" y="128" w="64" h="64" />
+					</throwing>
+					<ballMode loop="true" speed="0.35">
+						<frame x="0" y="192" w="64" h="64" />
+					</ballMode>
+					<hit loop="true" speed="0.35">
+						<frame x="0" y="256" w="64" h="64" />
+					</hit>
+					<death loop="true" speed="0.35">
+						<frame x="0" y="320" w="64" h="64" />
+					</death>
+				</enemy>
+				<enemy type="DungBeetleBall" w="128" h="128" texture="Assets/Enemies/sword.png">
+					<idle loop="true" speed="0.3">
+						<frame x="0" y="0" w="128" h="128" />
+					</idle>
+					<bounce loop="true" speed="0.3">
+						<frame x="0" y="0" w="128" h="128" />
+					</bounce>
+					<destroyed loop="true" speed="0.3">
+						<frame x="0" y="0" w="128" h="128" />
+					</destroyed>
+				</enemy>
 			</enemies>
 			<props>
 				<geyser w="250" h="250" texture="Assets/Props/geyser.png">
@@ -387,6 +475,16 @@
 						<frame x="3750" y="0" w="250" h="250" />
 						<frame x="4000" y="0" w="250" h="250" />
 					</enabled>
+					<disabled loop="true" speed="0.23">
+						<frame x="0" y="250" w="250" h="250" />
+						<frame x="250" y="250" w="250" h="250" />
+						<frame x="500" y="250" w="250" h="250" />
+						<frame x="750" y="250" w="250" h="250" />
+						<frame x="1000" y="250" w="250" h="250" />
+						<frame x="1250" y="250" w="250" h="250" />
+						<frame x="1500" y="250" w="250" h="250" />
+						<frame x="1750" y="250" w="250" h="250" />
+					</disabled>
 				</geyser>
 				<pressure_plate w="64" h="64" texture="Assets/Props/pressurePlate.png">
 					<enabled loop="false" speed="0">
@@ -478,10 +576,30 @@
 			</particles>
 			<npcs>
 				<castor w="336" h="164" texture="Assets/NPC/castor.png">
-					<idle loop="false" speed="0">
+					<idle loop="true" speed="0.2">
 						<frame x="0" y="0" w="336" h="164" />
 					</idle>
 				</castor>
+				<liebre w="342" h="205" texture="Assets/NPC/liebre.png">
+					<idle loop="true" speed="0.1">
+						<frame x="0" y="0" w="342" h="241" />
+						<frame x="342" y="0" w="342" h="241" />
+						<frame x="684" y="0" w="342" h="241" />
+						<frame x="1026" y="0" w="342" h="241" />
+						<frame x="1368" y="0" w="342" h="241" />
+						<frame x="1710" y="0" w="342" h="241" />
+					</idle>
+				</liebre>
+				<perdiz w="336" h="164" texture="Assets/NPC/perdiz.png">
+					<idle loop="true" speed="0.2">
+						<frame x="0" y="0" w="336" h="164" />
+					</idle>
+				</perdiz>
+				<pangolin w="336" h="164" texture="Assets/NPC/pangolin.png">
+					<idle loop="true" speed="0.2">
+						<frame x="0" y="0" w="336" h="164" />
+					</idle>
+				</pangolin>
 			</npcs>
 			<abilities>
 				<ability type="Jump" w="144" h="144" texture="Assets/Props/huevosrana.png" />

@@ -43,9 +43,9 @@ bool Player::Start() {
 		(int)position.getY(),
 		60, 40,
 		bodyType::DYNAMIC,
-		0, 0,
+		0, 5,
 		CATEGORY_PLAYER,
-		CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_SPIKE | CATEGORY_ENEMY | CATEGORY_SAVEGAME | CATEGORY_DOWN_CAMERA | CATEGORY_ABILITY_ZONE | CATEGORY_HIDDEN_ZONE | CATEGORY_NPC | CATEGORY_LIFE_PLANT | CATEGORY_DOOR | CATEGORY_GEYSER | CATEGORY_LIANA
+		CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_SPIKE | CATEGORY_ENEMY | CATEGORY_SAVEGAME | CATEGORY_DOWN_CAMERA | CATEGORY_ABILITY_ZONE | CATEGORY_HIDDEN_ZONE | CATEGORY_NPC | CATEGORY_LIFE_PLANT | CATEGORY_DOOR | CATEGORY_GEYSER
 	);
 	pbody->listener = this;
 	pbody->ctype = ColliderType::PLAYER;
@@ -71,9 +71,11 @@ bool Player::Start() {
 }
 
 bool Player::Update(float dt) {
+	bool flip = mechanics.GetMovementDirection() < 0;
+
 	if (pbody == nullptr || pbody->body == nullptr) {
 		LOG("ERROR: pbody o body es nullptr");
-		return false;  // o gestión específica
+		return false;  // o gestiï¿½n especï¿½fica
 	}
 
 	if (enemySensor && enemySensor->body) {
@@ -81,6 +83,7 @@ bool Player::Update(float dt) {
 		enemySensor->body->SetTransform(mainPos, 0);
 	}
 	
+	animation.Update(state, position.getX(), position.getY() - 5, mechanics.IsVisible(), flip);
 	mechanics.Update(dt);
 
 	b2Transform pbodyPos = pbody->body->GetTransform();
@@ -118,16 +121,15 @@ bool Player::Update(float dt) {
 bool Player::PostUpdate() {
 	bool flip = mechanics.GetMovementDirection() < 0;
 
-	// Si está atacando, forzar el flip a la dirección guardada del ataque
+	// Si estï¿½ atacando, forzar el flip a la direcciï¿½n guardada del ataque
 	if (mechanics.GetMovementHandler()->GetAttackMechanic().IsAttacking()) {
 		flip = mechanics.GetMovementHandler()->GetAttackMechanic().attackFlip;
 	}
-	// Forzar flip del wall slide si está deslizando por la pared
+	// Forzar flip del wall slide si estï¿½ deslizando por la pared
 	else if (mechanics.GetMovementHandler()->IsWallSliding()) {
 		flip = mechanics.GetMovementHandler()->wallSlideFlip;
 	}
 
-	animation.PostUpdate(state, position.getX(), position.getY() - 5, mechanics.IsVisible(), flip);
 	mechanics.PostUpdate();
 	return true;
 }

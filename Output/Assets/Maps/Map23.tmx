@@ -1,28 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="128" height="113" tilewidth="64" tileheight="64" infinite="0" nextlayerid="66" nextobjectid="4219">
- <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="128" height="113" tilewidth="64" tileheight="64" infinite="0" nextlayerid="66" nextobjectid="4230">
+ <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="0" columns="10">
   <image source="../../../../../TheApprentice-Design (1)/TheApprentice-Design/Output/Assets/Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
- <tileset firstgid="101" name="rocas1" tilewidth="64" tileheight="64" tilecount="480" columns="30">
+ <tileset firstgid="1" name="rocas1" tilewidth="64" tileheight="64" tilecount="0" columns="30">
   <image source="../../../../../TheApprentice-Design (1)/TheApprentice-Design/Output/Assets/Environment/rocas1.png" width="1920" height="1080"/>
  </tileset>
- <tileset firstgid="581" name="rocas2" tilewidth="64" tileheight="64" tilecount="480" columns="30">
+ <tileset firstgid="1" name="rocas2" tilewidth="64" tileheight="64" tilecount="0" columns="30">
   <image source="../../../../../TheApprentice-Design (1)/TheApprentice-Design/Output/Assets/Environment/rocas2.png" width="1920" height="1080"/>
  </tileset>
- <tileset firstgid="1061" name="rocas3" tilewidth="64" tileheight="64" tilecount="480" columns="30">
+ <tileset firstgid="1" name="rocas3" tilewidth="64" tileheight="64" tilecount="0" columns="30">
   <image source="../../../../../TheApprentice-Design (1)/TheApprentice-Design/Output/Assets/Environment/rocas3.png" width="1920" height="1080"/>
  </tileset>
- <tileset firstgid="1541" name="rocas4" tilewidth="64" tileheight="64" tilecount="480" columns="30">
+ <tileset firstgid="1" name="rocas4" tilewidth="64" tileheight="64" tilecount="0" columns="30">
   <image source="../../../../../TheApprentice-Design (1)/TheApprentice-Design/Output/Assets/Environment/rocas4.png" width="1920" height="1080"/>
  </tileset>
- <tileset firstgid="2021" name="rocas4_columnas" tilewidth="64" tileheight="64" tilecount="480" columns="30">
+ <tileset firstgid="1" name="rocas4_columnas" tilewidth="64" tileheight="64" tilecount="0" columns="30">
   <image source="../../../../../TheApprentice-Design (1)/TheApprentice-Design/Output/Assets/Environment/rocas4_columnas.png" width="1920" height="1080"/>
  </tileset>
- <tileset firstgid="2501" name="piedras_columnas0" tilewidth="64" tileheight="64" tilecount="480" columns="30">
+ <tileset firstgid="1" name="piedras_columnas0" tilewidth="64" tileheight="64" tilecount="0" columns="30">
   <image source="../../../../../TheApprentice-Design (1)/TheApprentice-Design/Output/Assets/Environment/piedras_columnas0.png" width="1920" height="1080"/>
  </tileset>
- <tileset firstgid="2981" name="piedras0" tilewidth="64" tileheight="64" tilecount="480" columns="30">
+ <tileset firstgid="1" name="piedras0" tilewidth="64" tileheight="64" tilecount="0" columns="30">
   <image source="../../../../../TheApprentice-Design (1)/TheApprentice-Design/Output/Assets/Environment/piedras0.png" width="1920" height="1080"/>
+ </tileset>
+ <tileset firstgid="1" name="tiles_manglar" tilewidth="64" tileheight="64" tilecount="100" columns="10">
+  <image source="../Props/tiles_manglar.png" width="640" height="640"/>
+ </tileset>
+ <tileset firstgid="101" name="PropMala1" tilewidth="64" tileheight="64" tilecount="4" columns="2">
+  <image source="../Props/PropMala1.png" width="128" height="128"/>
  </tileset>
  <group id="70" name="Background" visible="0" offsetx="-9683.68" offsety="-7556.2">
   <properties>
@@ -144739,7 +144745,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="23" name="Platforms" width="128" height="113" visible="0" offsetx="384" offsety="-320" parallaxx="0" parallaxy="0">
+ <layer id="23" name="Platforms" width="128" height="113" parallaxx="0" parallaxy="0">
   <properties>
    <property name="Draw" type="bool" value="true"/>
    <property name="Navigation" type="bool" value="true"/>
@@ -146940,6 +146946,15 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="103"/>
+   <tile gid="103"/>
+   <tile gid="103"/>
+   <tile gid="103"/>
+   <tile gid="103"/>
+   <tile gid="103"/>
+   <tile gid="103"/>
+   <tile gid="103"/>
+   <tile gid="103"/>
    <tile/>
    <tile/>
    <tile/>
@@ -147715,6 +147730,13 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="103"/>
+   <tile gid="103"/>
+   <tile gid="103"/>
+   <tile gid="103"/>
+   <tile gid="103"/>
+   <tile gid="103"/>
+   <tile gid="103"/>
    <tile/>
    <tile/>
    <tile/>
@@ -147836,6 +147858,13 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="103"/>
+   <tile gid="103"/>
+   <tile gid="103"/>
+   <tile gid="103"/>
+   <tile gid="103"/>
+   <tile gid="103"/>
+   <tile gid="103"/>
    <tile/>
    <tile/>
    <tile/>
@@ -147957,6 +147986,13 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="103"/>
+   <tile gid="103"/>
+   <tile gid="103"/>
+   <tile gid="103"/>
+   <tile gid="103"/>
+   <tile gid="103"/>
+   <tile gid="103"/>
    <tile/>
    <tile/>
    <tile/>
@@ -147966,6 +148002,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="103"/>
    <tile/>
    <tile/>
    <tile/>
@@ -148351,6 +148388,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="103"/>
    <tile/>
    <tile/>
    <tile/>
@@ -148732,6 +148770,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="103"/>
    <tile/>
    <tile/>
    <tile/>
@@ -152574,6 +152613,30 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
    <tile/>
    <tile/>
    <tile/>
@@ -153450,6 +153513,12 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
    <tile/>
    <tile/>
    <tile/>
@@ -154072,6 +154141,12 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
    <tile/>
    <tile/>
    <tile/>
@@ -154357,6 +154432,12 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
    <tile/>
    <tile/>
    <tile/>
@@ -155096,6 +155177,30 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
    <tile/>
    <tile/>
    <tile/>
@@ -158031,6 +158136,14 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
    <tile/>
    <tile/>
    <tile/>
@@ -159032,142 +159145,35 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
    <tile/>
    <tile/>
    <tile/>
@@ -173713,7 +173719,7 @@
   <object id="3217" x="4288" y="5887.9" height="640"/>
   <object id="3323" x="2752" y="4352" height="832"/>
   <object id="3354" x="1856" y="832" height="512"/>
-  <object id="3365" x="2944" y="1472" height="192"/>
+  <object id="3365" x="2688" y="1472" height="192"/>
   <object id="3368" x="3264" y="1472" height="704"/>
   <object id="3369" x="3456" y="1472" height="704"/>
   <object id="3371" x="3456" y="1216" height="256"/>
@@ -173756,11 +173762,13 @@
   <object id="4156" x="2048" y="832" height="512"/>
   <object id="3396" x="5504" y="2368" height="384"/>
   <object id="3398" x="6400" y="2368" height="64"/>
+  <object id="4226" x="1856" y="4160" height="256"/>
+  <object id="4227" x="1920" y="4160" height="256"/>
  </objectgroup>
  <objectgroup id="63" name="Spikes">
   <object id="4139" x="1152" y="1088" width="640" height="64"/>
   <object id="4140" x="1152" y="960" width="64" height="192"/>
-  <object id="4149" x="2240" y="1472" width="704" height="192"/>
+  <object id="4149" x="2240" y="1472" width="448" height="192"/>
   <object id="4150" x="3264" y="1600" width="64" height="64"/>
   <object id="4151" x="3392" y="1792" width="64" height="64"/>
   <object id="4152" x="3264" y="1984" width="64" height="64"/>
@@ -173825,12 +173833,11 @@
   <object id="1543" x="576" y="256" width="128"/>
   <object id="1545" x="704" y="320" width="128"/>
   <object id="1547" x="832" y="384" width="128"/>
-  <object id="1603" x="1152" y="2816" height="576"/>
   <object id="1620" x="832" y="832" width="128"/>
   <object id="1623" x="448" y="704" width="128"/>
   <object id="1626" x="576" y="704" width="64"/>
   <object id="1630" x="640" y="768" width="192"/>
-  <object id="2419" x="1152" y="2880" width="3136"/>
+  <object id="2419" x="1280" y="2880" width="3008"/>
   <object id="2422" x="3648" y="2880" width="320"/>
   <object id="2479" x="6592" y="2880" width="320"/>
   <object id="2533" x="1472" y="3968" width="1408"/>
@@ -173900,18 +173907,15 @@
   <object id="3220" x="5568" y="4095.94" width="960"/>
   <object id="3221" x="5568" y="4415.94" width="960"/>
   <object id="3319" x="1088" y="896" width="64"/>
-  <object id="3321" x="1152" y="2688" height="256"/>
-  <object id="3322" x="1152" y="2624" height="64"/>
   <object id="3352" x="1152" y="1152" width="384"/>
   <object id="3355" x="1536" y="1152" width="256"/>
   <object id="3357" x="1536" y="1344" width="320"/>
   <object id="3358" x="1152" y="1472" width="832"/>
-  <object id="3361" x="2688" y="1344" width="192"/>
-  <object id="3362" x="2944" y="1472" width="320"/>
+  <object id="3362" x="2688" y="1472" width="576"/>
   <object id="3375" x="3264" y="2368" width="384"/>
   <object id="3380" x="3648" y="2368" width="192"/>
-  <object id="3382" x="3840" y="1600" width="128"/>
-  <object id="3383" x="3648" y="1280" width="128"/>
+  <object id="3382" x="3840" y="1792" width="128"/>
+  <object id="3383" x="3648" y="1472" width="128"/>
   <object id="3392" x="960" y="896" width="128"/>
   <object id="3397" x="5504" y="2368" width="896"/>
   <object id="3399" x="6272" y="2432" width="128"/>
@@ -173928,10 +173932,9 @@
   <object id="3427" x="960" y="0" width="4160"/>
   <object id="3435" x="4096" y="2176" width="192"/>
   <object id="3436" x="4416" y="1984" width="192"/>
-  <object id="3438" x="3456" y="1472" width="128"/>
+  <object id="3438" x="3456" y="1664" width="128"/>
   <object id="3439" x="1984" y="1472" width="256"/>
-  <object id="3441" x="2240" y="1664" width="704"/>
-  <object id="3444" x="1152" y="1472" height="1216"/>
+  <object id="3441" x="2240" y="1664" width="448"/>
   <object id="3446" x="320" y="1472" width="832"/>
   <object id="3447" x="320" y="768" height="704"/>
   <object id="3448" x="320" y="1024" width="256"/>
@@ -173963,13 +173966,14 @@
   <object id="4183" x="4352" y="6336" width="256"/>
   <object id="4193" x="2368" y="5120" width="192"/>
   <object id="4216" x="5376" y="3904" width="192"/>
+  <object id="4223" x="3456" y="1216" width="192"/>
+  <object id="4225" x="1856" y="4160" width="64"/>
  </objectgroup>
  <objectgroup id="65" name="HookAnchors">
   <object id="4146" x="640" y="896" width="64" height="64"/>
   <object id="4148" x="1600" y="576" width="64" height="64"/>
-  <object id="3437" x="3904" y="1344" width="64" height="64"/>
+  <object id="3437" x="3904" y="1536" width="64" height="64"/>
   <object id="3433" x="5504" y="2048" width="64" height="64"/>
-  <object id="3434" x="3776" y="2112" width="64" height="64"/>
   <object id="3455" x="4672" y="2624" width="64" height="64"/>
   <object id="3454" x="4416" y="2944" width="64" height="64"/>
   <object id="3453" x="4800" y="3136" width="64" height="64"/>
@@ -173980,17 +173984,18 @@
   <object id="4197" x="2368" y="4224" width="64" height="64"/>
   <object id="4213" x="5248" y="3776" width="64" height="64"/>
   <object id="4218" x="2688" y="1152" width="64" height="64"/>
+  <object id="4220" x="3648" y="1088" width="64" height="64"/>
+  <object id="4228" x="1856" y="3968" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="61" name="Props">
   <object id="4144" name="Geyser" x="320" y="960" width="192" height="64"/>
-  <object id="4164" name="Box" x="3840" y="3456" width="64" height="64"/>
-  <object id="4181" name="LifePlant" x="1536" y="3776" width="64" height="64"/>
-  <object id="4182" name="LifePlant" x="5056" y="6464" width="64" height="64"/>
-  <object id="4187" name="LifePlant" x="4352" y="6144" width="64" height="64"/>
+  <object id="4164" name="Box" x="3854" y="3470" width="50" height="50"/>
+  <object id="4182" name="LifePlant" x="5376" y="6976" width="64" height="64"/>
+  <object id="4187" name="PLatnt_max_life" x="4352" y="6144" width="64" height="64"/>
   <object id="4189" name="Geyser" x="2368" y="5696" width="192" height="64"/>
   <object id="4195" name="Geyser" x="2368" y="5056" width="192" height="64"/>
   <object id="4208" name="Checkpoint" x="3840" y="2560" width="384" height="320"/>
-  <object id="4209" name="Checkpoint" x="2816" y="4992" width="384" height="320"/>
+  <object id="4209" name="Checkpoint" x="1664" y="3072" width="384" height="320"/>
   <object id="4211" name="LifePlant" x="5312" y="5120" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="62" name="Liana">
@@ -174009,16 +174014,13 @@
  </objectgroup>
  <objectgroup id="58" name="Wall">
   <object id="2547" x="3456" y="3520" height="64"/>
-  <object id="4008" x="2688" y="1344" height="64"/>
-  <object id="4009" x="2688" y="1408" width="192"/>
-  <object id="4010" x="2880" y="1344" height="64"/>
-  <object id="4011" x="3648" y="1280" height="64"/>
-  <object id="4012" x="3776" y="1280" height="64"/>
-  <object id="4014" x="3584" y="1472" height="64"/>
-  <object id="4015" x="3456" y="1536" width="128"/>
-  <object id="4016" x="3840" y="1600" height="64"/>
-  <object id="4019" x="3840" y="1664" width="128"/>
-  <object id="4020" x="3968" y="1600" height="64"/>
+  <object id="4011" x="3648" y="1472" height="64"/>
+  <object id="4012" x="3776" y="1472" height="64"/>
+  <object id="4014" x="3584" y="1664" height="64"/>
+  <object id="4015" x="3456" y="1728" width="128"/>
+  <object id="4016" x="3840" y="1792" height="64"/>
+  <object id="4019" x="3840" y="1856" width="128"/>
+  <object id="4020" x="3968" y="1792" height="64"/>
   <object id="4021" x="4416" y="1984" height="64"/>
   <object id="4022" x="4416" y="2048" width="192"/>
   <object id="4023" x="4608" y="1984" height="64"/>
@@ -174119,7 +174121,7 @@
   <object id="2727" x="4864" y="5311.94" height="256"/>
   <object id="2728" x="4800" y="5567.94" width="64"/>
   <object id="2729" x="4800" y="5311.94" height="256"/>
-  <object id="4013" x="3648" y="1344" width="128"/>
+  <object id="4013" x="3648" y="1536" width="128"/>
   <object id="4030" x="5376" y="3008" height="64"/>
   <object id="4031" x="4992" y="3072" width="384"/>
   <object id="4137" x="3264" y="5312" width="64" height="320"/>
@@ -174135,6 +174137,8 @@
   <object id="4192" x="2560" y="5120" height="64"/>
   <object id="4214" x="5376" y="3968" width="192"/>
   <object id="4215" x="5376" y="3904" height="64"/>
+  <object id="4221" x="3456" y="1280" width="192"/>
+  <object id="4222" x="3648" y="1216" height="64"/>
  </objectgroup>
  <objectgroup id="60" name="Enemies">
   <object id="4163" name="Dreadpire" x="7680" y="1984" width="64" height="64"/>
@@ -174142,8 +174146,7 @@
   <object id="4166" name="Creebler" x="3904" y="4288" width="64" height="64"/>
   <object id="4167" name="Creebler" x="5376" y="4736" width="64" height="64"/>
   <object id="4172" name="Dreadspire" x="4224" y="4672" width="64" height="64"/>
-  <object id="4173" name="Dreadspire" x="4352" y="5888" width="64" height="64"/>
-  <object id="4174" name="Dreadspire" x="4928" y="5888" width="64" height="64"/>
+  <object id="4173" name="Dreadspire" x="4672" y="5888" width="64" height="64"/>
   <object id="4175" name="Creebler" x="4928" y="6592" width="64" height="64"/>
   <object id="4176" name="Thumpod" x="5184" y="7104" width="64" height="64"/>
   <object id="4177" name="Scurver" x="4672" y="7104" width="64" height="64"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="122" height="66" tilewidth="64" tileheight="64" infinite="0" nextlayerid="68" nextobjectid="4227">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="122" height="66" tilewidth="64" tileheight="64" infinite="0" nextlayerid="68" nextobjectid="4228">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="0" columns="10">
   <image source="../../../../../TheApprentice-Design (1)/TheApprentice-Design/Output/Assets/Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -96797,11 +96797,10 @@
   <object id="4179" name="CaveDrop" x="2368" y="3520" width="64" height="64"/>
   <object id="4180" name="PLanta_vida_max" x="7040" y="1536" width="64" height="64"/>
   <object id="4182" name="LifePlant" x="1664" y="1088" width="64" height="64"/>
-  <object id="4184" name="Checkpoint" x="448" y="3776" width="384" height="320"/>
-  <object id="4192" name="Checkpoint" x="448" y="3776" width="384" height="320"/>
   <object id="4193" name="Checkpoint" x="896" y="1472" width="384" height="320"/>
   <object id="4207" name="Geyser" x="2560" y="1920" width="192" height="64"/>
   <object id="4223" name="Geyser" x="7488" y="1536" width="192" height="64"/>
+  <object id="4227" name="Checkpoint" x="4800" y="2304" width="384" height="320"/>
  </objectgroup>
  <objectgroup id="62" name="Liana">
   <object id="3922" x="2112" y="3456" width="64" height="512"/>
@@ -96897,9 +96896,9 @@
   <object id="4128" x="6016" y="1152" width="448"/>
   <object id="4129" x="5760" y="832" height="64"/>
   <object id="4130" x="5440" y="896" width="320"/>
-  <object id="4155" x="4864" y="2688" width="320"/>
+  <object id="4155" x="4736" y="2688" width="448"/>
   <object id="4156" x="5184" y="2624" height="64"/>
-  <object id="4157" x="4864" y="2624" height="64"/>
+  <object id="4157" x="4736" y="2624" height="64"/>
   <object id="4161" x="5952" y="1408" height="64"/>
   <object id="4162" x="6144" y="1408" height="64"/>
   <object id="4163" x="5952" y="1472" width="192"/>
@@ -96991,7 +96990,7 @@
   <object id="4120" x="6400" y="1472" width="192"/>
   <object id="4124" x="5440" y="832" width="320"/>
   <object id="4125" x="6016" y="1088" width="448"/>
-  <object id="4158" x="4864" y="2624" width="320"/>
+  <object id="4158" x="4736" y="2624" width="448"/>
   <object id="4160" x="5952" y="1408" width="192"/>
   <object id="4170" x="6592" y="960" width="384"/>
   <object id="4204" x="6144" y="896" width="192"/>

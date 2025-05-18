@@ -402,27 +402,102 @@
 						<frame x="0" y="0" w="32" h="32" />
 					</destroyed>
 				</enemy>
-				<enemy type="Nullwarden" w="64" h="64" texture="Assets/Enemies/test.png">
+				<enemy type="Nullwarden" w="254" h="254" texture="Assets/Enemies/Nullwarden.png">
 					<idle loop="true" speed="0.35">
-						<frame x="0" y="0" w="64" h="64" />
+						<frame x="0" y="0" w="254" h="254" />
+						<frame x="254" y="0" w="254" h="254" />
+						<frame x="508" y="0" w="254" h="254" />
+						<frame x="762" y="0" w="254" h="254" />
+						<frame x="1016" y="0" w="254" h="254" />
+						<frame x="1270" y="0" w="254" h="254" />
+						<frame x="1524" y="0" w="254" h="254" />
+						<frame x="1778" y="0" w="254" h="254" />
+						<frame x="2032" y="0" w="254" h="254" />
+						<frame x="2286" y="0" w="254" h="254" />
+						<frame x="2540" y="0" w="254" h="254" />
+						<frame x="2794" y="0" w="254" h="254" />
 					</idle>
-					<attack loop="true" speed="0.35">
-						<frame x="0" y="64" w="64" h="64" />
-					</attack>
-					<charge loop="true" speed="0.35">
-						<frame x="0" y="128" w="64" h="64" />
-					</charge>
-					<impaled loop="true" speed="0.35">
-						<frame x="0" y="192" w="64" h="64" />
-					</impaled>
-					<roar loop="true" speed="0.35">
-						<frame x="0" y="256" w="64" h="64" />
+					<roar loop="false" speed="0.15">
+						<frame x="0" y="254" w="310" h="254" />
+						<frame x="310" y="254" w="310" h="254" />
+						<frame x="620" y="254" w="310" h="254" />
+						<frame x="930" y="254" w="310" h="254" />
+						<frame x="1240" y="254" w="310" h="254" />
+						<frame x="1550" y="254" w="310" h="254" />
+						<frame x="1860" y="254" w="310" h="254" />
+						<frame x="2170" y="254" w="310" h="254" />
+						<frame x="2480" y="254" w="310" h="254" />
+						<frame x="2790" y="254" w="310" h="254" />
+						<frame x="3100" y="254" w="310" h="254" />
+						<frame x="3410" y="254" w="310" h="254" />
 					</roar>
-					<death loop="true" speed="0.35">
+					<charge loop="true" speed="0.15">
+						<frame x="0" y="508" w="380" h="256" />
+						<frame x="380" y="508" w="380" h="256" />
+						<frame x="760" y="508" w="380" h="256" />
+						<frame x="1140" y="508" w="380" h="256" />
+						<frame x="1520" y="508" w="380" h="256" />
+						<frame x="1900" y="508" w="380" h="256" />
+						<frame x="2280" y="508" w="380" h="256" />
+						<frame x="2660" y="508" w="380" h="256" />
+						<frame x="3040" y="508" w="380" h="256" />
+					</charge>
+					<attack loop="false" speed="0.15">
+						<frame x="0" y="765" w="696" h="502" />
+						<frame x="696" y="765" w="696" h="502" />
+						<frame x="1392" y="765" w="696" h="502" />
+						<frame x="2088" y="765" w="696" h="502" />
+						<frame x="2784" y="765" w="696" h="502" />
+						<frame x="3480" y="765" w="696" h="502" />
+						<frame x="4176" y="765" w="696" h="502" />
+						<frame x="4872" y="765" w="696" h="502" />
+						<frame x="5568" y="765" w="696" h="502" />
+						<frame x="6264" y="765" w="696" h="502" />
+						<frame x="6960" y="765" w="696" h="502" />
+						<frame x="7656" y="765" w="696" h="502" />
+						<frame x="8352" y="765" w="696" h="502" />
+						<frame x="9048" y="765" w="696" h="502" />
+						<frame x="9744" y="765" w="696" h="502" />
+						<frame x="10440" y="765" w="696" h="502" />
+						<frame x="11136" y="765" w="696" h="502" />
+					</attack>
+					<impaled loop="true" speed="0.15">
+						<frame x="0" y="1266" w="392" h="256" />
+						<frame x="310" y="1266" w="392" h="256" />
+						<frame x="620" y="1266" w="392" h="256" />
+						<frame x="930" y="1266" w="392" h="256" />
+						<frame x="1240" y="1266" w="392" h="256" />
+						<frame x="1550" y="1266" w="392" h="256" />
+						<frame x="1860" y="1266" w="392" h="256" />
+						<frame x="2170" y="1266" w="392" h="256" />
+						<frame x="2480" y="1266" w="392" h="256" />
+						<frame x="2790" y="1266" w="392" h="256" />
+						<frame x="3100" y="1266" w="392" h="256" />
+						<frame x="3410" y="1266" w="392" h="256" />
+					</impaled>
+					<death loop="true" speed="0.15">
 						<frame x="0" y="320" w="64" h="64" />
 					</death>
 				</enemy>
-				<enemy type="NullwardenSpear" w="35" h="180" texture="Assets/Enemies/sword.png">
+				<enemy type="NullwardenCrystal" w="64" h="64" texture="Assets/Enemies/NullwardenCrystal.png">
+					<pristine>
+						<frame x="0" y="320" w="64" h="64" />
+					</pristine>
+					<cracked>
+						<frame x="0" y="320" w="64" h="64" />
+					</cracked>
+					<shattered>
+						<frame x="0" y="320" w="64" h="64" />
+					</shattered>
+					<broken lopp="false" speed="0.10">
+						<frame x="0" y="320" w="64" h="64" />
+						<frame x="0" y="320" w="64" h="64" />
+						<frame x="0" y="320" w="64" h="64" />
+						<frame x="0" y="320" w="64" h="64" />
+						<frame x="0" y="320" w="64" h="64" />
+					</broken>
+				</enemy>
+				<enemy type="NullwardenSpear" w="35" h="180" texture="Assets/Enemies/NullwardenSpear.png">
 					<spawn loop="true" speed="0.3">
 						<frame x="0" y="0" w="35" h="180" />
 					</spawn>

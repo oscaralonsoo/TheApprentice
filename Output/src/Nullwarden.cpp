@@ -50,6 +50,7 @@ bool Nullwarden::Start() {
         filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_ATTACK | CATEGORY_PLAYER_DAMAGE;
         fixture->SetFilterData(filter);
     }
+    Engine::GetInstance().entityManager->AddEntity(new NullwardenCrystal(position.getX(), position.getY(), 0.0f, b2Vec2_zero, this));
 
     currentAnimation = &idleAnim;
 
@@ -153,8 +154,7 @@ void Nullwarden::OnCollision(PhysBody* physA, PhysBody* physB)
         if (currentState == NullwardenState::ATTACK) {
             currentState = NullwardenState::ROAR;
         } else {
-            lives--;
-            currentState = (lives > 0) ? NullwardenState::ROAR : NullwardenState::DEATH;
+            currentState = (crystal->hits >  0) ? NullwardenState::ROAR : NullwardenState::DEATH;
         }
         break;
     case ColliderType::PLAYER:

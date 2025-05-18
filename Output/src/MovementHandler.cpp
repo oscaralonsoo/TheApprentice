@@ -371,3 +371,7 @@ void MovementHandler::StartWallSlideCooldown() {
     wallSlideCooldownActive = true;
     wallSlideCooldownTimer.Start();
 }
+
+void MovementHandler::EnableGlide(bool enable) {
+    jumpMechanic.EnableGlide(enable);
+}

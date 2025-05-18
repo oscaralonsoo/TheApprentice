@@ -99,7 +99,33 @@ void JumpMechanic::HandleJumpInput(float dt) {
         isJumping = false;
     }
 
-    if (!isJumping && !player->GetMechanics()->IsOnGround() && !player->GetMechanics()->IsWallSliding()) {
+    // Planeo (solo después del doble salto y tras terminar el impulso)
+    if (jumpCount == 2 && !isJumping &&
+        glideUnlocked && jumpRepeat &&
+        !player->GetMechanics()->IsOnGround() &&
+        !player->GetMechanics()->IsWallSliding()) {
+
+        if (!isGliding) {
+            isGliding = true;
+            player->pbody->body->SetGravityScale(glideGravityScale);
+            player->SetState("idle");
+
+            b2Vec2 vel = player->pbody->body->GetLinearVelocity();
+            vel.y = 0.0f;
+            player->pbody->body->SetLinearVelocity(vel);
+        }
+
+    }
+    else if (isGliding && (!jumpRepeat || player->GetMechanics()->IsOnGround())) {
+        isGliding = false;
+        player->pbody->body->SetGravityScale(2.0f);
+    }
+
+    if (!isJumping &&
+        !isGliding &&
+        !player->GetMechanics()->IsOnGround() &&
+        !player->GetMechanics()->IsWallSliding()) {
+
         b2Vec2 fallForce(0, fallAccelerationFactor);
         player->pbody->body->ApplyForceToCenter(fallForce, true);
     }
@@ -119,6 +145,8 @@ void JumpMechanic::OnLanding() {
     jumpCount = 0;
     player->GetMechanics()->SetIsOnGround(true);
     jumpCooldownActive = false;
+    isGliding = false;
+    player->pbody->body->SetGravityScale(2.0f);
 }
 
 void JumpMechanic::OnLeaveGround() {
@@ -129,4 +157,8 @@ void JumpMechanic::OnLeaveGround() {
 
 void JumpMechanic::SetController(SDL_GameController* controller) {
     this->controller = controller;
+}
+
+void JumpMechanic::EnableGlide(bool enable) {
+    glideUnlocked = enable;
 }

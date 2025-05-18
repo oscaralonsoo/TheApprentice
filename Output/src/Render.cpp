@@ -6,6 +6,7 @@
 #include "Map.h"
 #include <SDL2/SDL_image.h>
 #include "SDL2/SDL_ttf.h"
+#include "Scene.h"
 
 #define VSYNC true
 
@@ -254,7 +255,7 @@ bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uin
 	return ret;
 }
 
-void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection, float smoothing)
+void Render::UpdateCamera(const Vector2D& /*unused*/, int movementDirection, float smoothing)
 {
 	if (cameraLocked)
 		return;
@@ -271,10 +272,19 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 	mapWidthPx = Engine::GetInstance().map->GetMapWidth();
 	mapHeightPx = Engine::GetInstance().map->GetMapHeight();
 
-	targetX = static_cast<int>(targetPosition.x);
-	targetY = static_cast<int>(targetPosition.y);
+	// Obtener player desde la escena
+	Scene* scene = Engine::GetInstance().scene.get();
+	if (!scene) return;
 
-	// Cámara look-ahead horizontal
+	Player* player = scene->GetPlayer();
+	if (!player) return;
+
+	// Usar el centro del sprite del jugador
+	Vector2D playerPos = player->GetPosition();  // ya devuelve el centro del sprite según tu implementación
+	targetX = static_cast<int>(playerPos.x);
+	targetY = static_cast<int>(playerPos.y);
+
+	// Look-ahead horizontal
 	if (movementDirection != 0) {
 		if (movementDirection == lastMoveDir) {
 			lookAheadCounter++;
@@ -296,23 +306,18 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 
 	cameraLookAheadOffset = EaseInOut(cameraLookAheadOffset, cameraLookAheadTarget, lookAheadSmoothing);
 
-	int targetCamX = -targetX + camera.w / 2 - static_cast<int>(cameraLookAheadOffset) + cameraImpulseX;
+	int targetCamX = -targetX + camera.w / 2 - static_cast<int>(cameraLookAheadOffset) + cameraImpulseX + 300;
 	camera.x += static_cast<int>((targetCamX - camera.x) * smoothing);
 
 	cameraImpulseX = static_cast<int>(cameraImpulseX * (1.0f - cameraImpulseSmoothing));
 
-	// Coordenadas de la cámara en el mundo
-	int cameraTop = -camera.y;
+	// Vertical
 	int cameraBottom = -camera.y + camera.h;
-
-	// Margen de anticipación (antes de que el player se salga)
 	int anticipationMargin = 100;
-
 	float dynamicSmoothing = smoothing;
 
-	// Si el player está cerca del borde inferior (a punto de salirse)
 	if (targetY > cameraBottom - anticipationMargin) {
-		dynamicSmoothing = smoothing * 2.0f; // acelerar seguimiento vertical
+		dynamicSmoothing = smoothing * 2.0f;
 	}
 
 	int targetCamY = -targetY + camera.h / 2 + cameraOffsetY;
@@ -338,6 +343,7 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 	camera.x += shakeOffsetX;
 	camera.y += shakeOffsetY;
 
+	// Límites del mapa
 	if (camera.x > 0) camera.x = 0;
 	if (camera.y > 0) camera.y = 0;
 	if (camera.x < -(mapWidthPx - camera.w)) camera.x = -(mapWidthPx - camera.w);

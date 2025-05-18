@@ -106,3 +106,7 @@ void PlayerMechanics::SetIsOnGround(bool isGrounded) {
 void PlayerMechanics::SetIsTouchingWall(bool touching) {
     isTouchingWall = touching;
 }
+
+void PlayerMechanics::EnableGlide(bool enable) {
+    movementHandler.EnableGlide(enable);
+}

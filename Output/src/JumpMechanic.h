@@ -25,6 +25,10 @@ public:
 
     void SetController(SDL_GameController* controller);
 
+    void EnableGlide(bool enable);
+    bool IsGliding() const { return isGliding; }
+    bool IsGlideUnlocked() const { return glideUnlocked; }
+
 private:
     Player* player = nullptr;
 
@@ -53,4 +57,8 @@ private:
     bool jumpCooldownActive = false;
 
     SDL_GameController* controller = nullptr;
+
+    bool glideUnlocked = true;
+    bool isGliding = false;
+    float glideGravityScale = 0.5f; // Puedes ajustar este valor
 };

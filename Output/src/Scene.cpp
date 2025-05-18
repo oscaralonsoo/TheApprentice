@@ -54,7 +54,7 @@ bool Scene::Awake()
 bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
-	Engine::GetInstance().map->Load("Assets/Maps/", "Map42.tmx");
+	Engine::GetInstance().map->Load("Assets/Maps/", "Map21.tmx");
 	return true;
 }
 

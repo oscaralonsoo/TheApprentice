@@ -15,20 +15,23 @@
  <tileset firstgid="1" name="rocas4" tilewidth="64" tileheight="64" tilecount="0" columns="30">
   <image source="../../../../../TheApprentice-Design (1)/TheApprentice-Design/Output/Assets/Environment/rocas4.png" width="1920" height="1080"/>
  </tileset>
- <tileset firstgid="261" name="rocas4_columnas" tilewidth="64" tileheight="64" tilecount="0" columns="30">
+ <tileset firstgid="1" name="rocas4_columnas" tilewidth="64" tileheight="64" tilecount="0" columns="30">
   <image source="../../../../../TheApprentice-Design (1)/TheApprentice-Design/Output/Assets/Environment/rocas4_columnas.png" width="1920" height="1080"/>
  </tileset>
- <tileset firstgid="261" name="piedras_columnas0" tilewidth="64" tileheight="64" tilecount="0" columns="30">
+ <tileset firstgid="1" name="piedras_columnas0" tilewidth="64" tileheight="64" tilecount="0" columns="30">
   <image source="../../../../../TheApprentice-Design (1)/TheApprentice-Design/Output/Assets/Environment/piedras_columnas0.png" width="1920" height="1080"/>
  </tileset>
- <tileset firstgid="261" name="piedras0" tilewidth="64" tileheight="64" tilecount="0" columns="30">
+ <tileset firstgid="1" name="piedras0" tilewidth="64" tileheight="64" tilecount="0" columns="30">
   <image source="../../../../../TheApprentice-Design (1)/TheApprentice-Design/Output/Assets/Environment/piedras0.png" width="1920" height="1080"/>
  </tileset>
- <tileset firstgid="261" name="PropMala1" tilewidth="64" tileheight="64" tilecount="4" columns="2">
+ <tileset firstgid="1" name="PropMala1" tilewidth="64" tileheight="64" tilecount="4" columns="2">
   <image source="../Props/PropMala1.png" width="128" height="128"/>
  </tileset>
- <tileset firstgid="265" name="PropMala2" tilewidth="64" tileheight="64" tilecount="4" columns="2">
+ <tileset firstgid="5" name="PropMala2" tilewidth="64" tileheight="64" tilecount="4" columns="2">
   <image source="../Props/PropMala2.png" width="128" height="128"/>
+ </tileset>
+ <tileset firstgid="9" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
+  <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
  <group id="70" name="Background">
   <properties>
@@ -82564,12 +82567,12 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
    <tile/>
    <tile/>
    <tile/>
@@ -84447,12 +84450,12 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
    <tile/>
    <tile/>
    <tile/>
@@ -85023,23 +85026,23 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
    <tile/>
    <tile/>
    <tile/>
@@ -85073,13 +85076,13 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="264"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="4"/>
    <tile/>
    <tile/>
    <tile/>
@@ -85191,10 +85194,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="264"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="4"/>
    <tile/>
    <tile/>
    <tile/>
@@ -85202,10 +85205,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="264"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="4"/>
    <tile/>
    <tile/>
    <tile/>
@@ -85599,18 +85602,18 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
    <tile/>
    <tile/>
    <tile/>
@@ -86044,27 +86047,27 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="264"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="4"/>
    <tile/>
    <tile/>
    <tile/>
@@ -87125,15 +87128,15 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
    <tile/>
    <tile/>
    <tile/>
@@ -88579,26 +88582,26 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="263"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
-   <tile gid="264"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="4"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
+   <tile gid="33"/>
    <tile/>
    <tile/>
    <tile/>

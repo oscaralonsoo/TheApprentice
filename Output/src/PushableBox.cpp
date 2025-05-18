@@ -14,19 +14,23 @@ bool PushableBox::Awake() { return true; }
 bool PushableBox::Start()
 {
     // Crear cuerpo físico dinámico y sin gravedad
-    pbody = Engine::GetInstance().physics->CreateRectangle(position.getX() + texW / 2, position.getY() + texH / 2, texW, texH, DYNAMIC,
+    pbody = Engine::GetInstance().physics->CreateRectangle(position.getX() + texW / 2, position.getY() + texH / 2, texW, texH, DYNAMIC, 7, 20,
         CATEGORY_BOX,
-        CATEGORY_PLAYER || CATEGORY_PLATFORM
+        CATEGORY_PLAYER | CATEGORY_PLATFORM | CATEGORY_BOX
     );
     pbody->ctype = ColliderType::WALL; // O uno nuevo, como PUSHABLE, si lo defines
     pbody->listener = this;
 
     pbody->body->SetGravityScale(5.0f);
-pbody->body->GetFixtureList()->SetFriction(0.0f); // Alta fricción
+    pbody->body->GetFixtureList()->SetFriction(0.0f); // Alta fricción
     pbody->body->GetFixtureList()->SetDensity(5.0f);  // Más masa
     pbody->body->ResetMassData();
 
     pbody->ctype = ColliderType::BOX;
+
+
+    std::string path = "Assets/Props/box" + std::to_string(rand() % 3) + ".png";
+    texture = Engine::GetInstance().textures->Load(path.c_str());
 
     return true;
 }
@@ -48,6 +52,8 @@ bool PushableBox::Update(float dt)
         pbody->body->SetLinearVelocity(b2Vec2(0, currentVelocity.y));
     }
 
+    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY());
+
     return true;
 }
 
@@ -64,9 +70,6 @@ void PushableBox::SetParameters(pugi::xml_node parameters)
     position.y = parameters.attribute("y").as_int();
     texW = parameters.attribute("w").as_int();
     texH = parameters.attribute("h").as_int();
-
-    std::string texturePath = parameters.attribute("texture").as_string();
-    texture = Engine::GetInstance().textures->Load(texturePath.c_str());
 }
 
 void PushableBox::SetPosition(Vector2D pos)

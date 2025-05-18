@@ -16,7 +16,7 @@ public:
     void OnLanding();
     void OnLeaveGround();
 
-    void HandleJumpInput();
+    void HandleJumpInput(float dt);
     bool IsJumping() const { return isJumping; }
 
     bool IsJumpUnlocked() const { return jumpUnlocked; }
@@ -24,6 +24,10 @@ public:
     void SetJumpCount(int count) { jumpCount = count; }
 
     void SetController(SDL_GameController* controller);
+
+    void EnableGlide(bool enable);
+    bool IsGliding() const { return isGliding; }
+    bool IsGlideUnlocked() const { return glideUnlocked; }
 
 private:
     Player* player = nullptr;
@@ -35,17 +39,18 @@ private:
     const int maxJumpCount = 2;
 
     bool isJumping = false;
-    bool isHoldingJump = false;
 
-    float jumpForce = 13.0f;
-    float fallAccelerationFactor = 0.6f;
+    float minJumpForce = 120.0f;             // Fuerza inicial para garantizar altura mínima
+    float progressiveJumpForce = 100.0f;     // Fuerza para el salto sostenido
+    float jumpHoldForceFactor = 2.3f;       // Factor inicial de fuerza sostenida
+    float jumpDecayRate = 4.5f;             // Qué tan rápido decae la fuerza sostenida
+    float fallAccelerationFactor = 40.0f;   // Fuerza que empuja hacia abajo al soltar el salto
 
-    float jumpStartY = 0.0f;
-    float maxJumpHeight = 240.0f;
-    float minHoldJumpHeight = 20.0f;
-    float jumpHoldForceFactor = 0.85f;
-    float jumpDecayRate = 4.0f;
+    Timer jumpHoldTimer;
+    float jumpHoldDuration = 370.0f;
+
     bool controllerHeldPreviously = false;
+    bool keyboardHeldPreviously = false;
 
     Timer jumpCooldownTimer;
     float jumpCooldownTime = 100.0f;
@@ -53,6 +58,7 @@ private:
 
     SDL_GameController* controller = nullptr;
 
-    bool keyboardHeldPreviously = false;
-
+    bool glideUnlocked = true;
+    bool isGliding = false;
+    float glideGravityScale = 0.5f; // Puedes ajustar este valor
 };

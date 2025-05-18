@@ -3,6 +3,7 @@
 #include "Module.h"
 #include "Timer.h"
 #include <unordered_map>
+#include "Vector2D.h"
 
 
 struct SDL_Texture;
@@ -28,7 +29,7 @@ public:
 
 	void RenderDialogue(int id);
 	void LoadDialogues();
-	void SetDialogueAvailable(int dialogueId, bool active);
+	void SetDialogueAvailable(int dialogueId, Vector2D npcPos, bool active);
 	void ShowInteractionPrompt();
 	void WrapLines(int dialogueId, int boxWidth, int dialogueFontSize);
 	void ResetTyping();
@@ -39,6 +40,8 @@ private:
 	std::string dialoguesPath = "dialogues.xml";
 
 	std::unordered_map<int, DialogueEvent> dialogueMap;
+
+	Vector2D promptPos;
 
 	bool dialogueStarted = false;
 	bool dialogueAvailable = false;

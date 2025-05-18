@@ -42,6 +42,7 @@ public:
 
     JumpMechanic* GetJumpMechanic() { return &movementHandler.GetJumpMechanic(); }
     void SetIsWallSliding(bool wallSliding) { isWallSliding = wallSliding; }
+    void EnableGlide(bool enable);
 
 private:
     Player* player = nullptr;

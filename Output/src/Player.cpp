@@ -21,7 +21,7 @@ Player::Player() : Entity(EntityType::PLAYER)
 Player::~Player() {}
 
 bool Player::Awake() {
-	position = Vector2D(1700, 600);
+	position = Vector2D(17000, 5322);
 	return true;
 }
 
@@ -43,9 +43,9 @@ bool Player::Start() {
 		(int)position.getY(),
 		60, 40,
 		bodyType::DYNAMIC,
-		0, 0,
+		0, 5,
 		CATEGORY_PLAYER,
-		CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_SPIKE | CATEGORY_ENEMY | CATEGORY_SAVEGAME | CATEGORY_DOWN_CAMERA | CATEGORY_ABILITY_ZONE | CATEGORY_HIDDEN_ZONE | CATEGORY_NPC | CATEGORY_LIFE_PLANT | CATEGORY_DOOR | CATEGORY_GEYSER | CATEGORY_LIANA
+		CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_SPIKE | CATEGORY_ENEMY | CATEGORY_SAVEGAME | CATEGORY_DOWN_CAMERA | CATEGORY_ABILITY_ZONE | CATEGORY_HIDDEN_ZONE | CATEGORY_NPC | CATEGORY_LIFE_PLANT | CATEGORY_DOOR | CATEGORY_GEYSER
 	);
 	pbody->listener = this;
 	pbody->ctype = ColliderType::PLAYER;
@@ -71,6 +71,8 @@ bool Player::Start() {
 }
 
 bool Player::Update(float dt) {
+	bool flip = mechanics.GetMovementDirection() < 0;
+
 	if (pbody == nullptr || pbody->body == nullptr) {
 		LOG("ERROR: pbody o body es nullptr");
 		return false;  // o gesti�n espec�fica
@@ -81,10 +83,8 @@ bool Player::Update(float dt) {
 		enemySensor->body->SetTransform(mainPos, 0);
 	}
 	
-	mechanics.Update(dt);
-	int direction = mechanics.GetMovementDirection();
-	bool flip = direction < 0;
 	animation.Update(state, position.getX(), position.getY() - 5, mechanics.IsVisible(), flip);
+	mechanics.Update(dt);
 
 	b2Transform pbodyPos = pbody->body->GetTransform();
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texW / 2);

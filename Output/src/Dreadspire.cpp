@@ -28,6 +28,7 @@ bool Dreadspire::Start() {
             texH = node.attribute("h").as_int();
             texW = node.attribute("w").as_int();
             idleAnim.LoadAnimations(node.child("idle"));
+            shootingAnim.LoadAnimations(node.child("shooting"));
             dieAnim.LoadAnimations(node.child("die"));
             currentAnimation = &idleAnim;
             break;

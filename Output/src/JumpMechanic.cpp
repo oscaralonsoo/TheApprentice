@@ -112,6 +112,8 @@ void JumpMechanic::HandleJumpInput(float dt) {
             player->pbody->body->SetLinearVelocity(vel);
             jumpInterrupted = true;
         }
+    }
+
     // Planeo (solo despu�s del doble salto y tras terminar el impulso)
     if (jumpCount == 2 && !isJumping &&
         glideUnlocked && jumpRepeat &&

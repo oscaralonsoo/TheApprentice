@@ -24,6 +24,7 @@ public:
     void OnWallCollision();
 
     void SetCantMove(bool cantMove);
+    bool GetCantMove() const{ return cantMove; }
     bool CanAttack() const;
     void SetCanAttack(bool canAttack);
 

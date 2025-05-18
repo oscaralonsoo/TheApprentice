@@ -47,6 +47,8 @@ public:
     AttackMechanic& GetAttackMechanic() { return attackMechanic; }
     bool IsHookUnlocked() const { return hookUnlocked; }
     void SetHookUnlocked(bool unlocked) { hookUnlocked = unlocked; }
+    void EnableGlide(bool enable);
+    bool IsGlideUnlocked() const { return jumpMechanic.IsGlideUnlocked(); }
 
     bool wallSlideFlip = false;
     bool disableAbilities = false;

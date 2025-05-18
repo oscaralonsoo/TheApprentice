@@ -52,7 +52,7 @@ void JumpMechanic::HandleJumpInput(float dt) {
             jumpCooldownTimer.Start();
             jumpCooldownActive = true;
 
-            // Impulso inicial para garantizar altura mínima
+            // Impulso inicial para garantizar altura mï¿½nima
             b2Vec2 impulse(0, -minJumpForce);
             player->pbody->body->ApplyForceToCenter(impulse, true);
         }
@@ -66,7 +66,7 @@ void JumpMechanic::HandleJumpInput(float dt) {
             jumpCooldownTimer.Start();
             jumpCooldownActive = true;
 
-            // Resetear velocidad vertical para evitar acumulación
+            // Resetear velocidad vertical para evitar acumulaciï¿½n
             b2Vec2 vel = player->pbody->body->GetLinearVelocity();
             vel.y = 0;
             player->pbody->body->SetLinearVelocity(vel);
@@ -112,6 +112,26 @@ void JumpMechanic::HandleJumpInput(float dt) {
             player->pbody->body->SetLinearVelocity(vel);
             jumpInterrupted = true;
         }
+    // Planeo (solo despuï¿½s del doble salto y tras terminar el impulso)
+    if (jumpCount == 2 && !isJumping &&
+        glideUnlocked && jumpRepeat &&
+        !player->GetMechanics()->IsOnGround() &&
+        !player->GetMechanics()->IsWallSliding()) {
+
+        if (!isGliding) {
+            isGliding = true;
+            player->pbody->body->SetGravityScale(glideGravityScale);
+            player->SetState("idle");
+
+            b2Vec2 vel = player->pbody->body->GetLinearVelocity();
+            vel.y = 0.0f;
+            player->pbody->body->SetLinearVelocity(vel);
+        }
+
+    }
+    else if (isGliding && (!jumpRepeat || player->GetMechanics()->IsOnGround())) {
+        isGliding = false;
+        player->pbody->body->SetGravityScale(2.0f);
     }
 }
 
@@ -129,6 +149,8 @@ void JumpMechanic::OnLanding() {
     jumpCount = 0;
     player->GetMechanics()->SetIsOnGround(true);
     jumpCooldownActive = false;
+    isGliding = false;
+    player->pbody->body->SetGravityScale(2.0f);
 }
 
 void JumpMechanic::OnLeaveGround() {
@@ -139,4 +161,8 @@ void JumpMechanic::OnLeaveGround() {
 
 void JumpMechanic::SetController(SDL_GameController* controller) {
     this->controller = controller;
+}
+
+void JumpMechanic::EnableGlide(bool enable) {
+    glideUnlocked = enable;
 }

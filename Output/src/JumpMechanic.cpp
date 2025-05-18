@@ -47,6 +47,7 @@ void JumpMechanic::HandleJumpInput(float dt) {
             jumpCount = 1;
             player->GetMechanics()->SetIsOnGround(false);
             player->SetState("jump");
+            jumpInterrupted = false;
 
             jumpCooldownTimer.Start();
             jumpCooldownActive = true;
@@ -58,6 +59,7 @@ void JumpMechanic::HandleJumpInput(float dt) {
         else if (doubleJumpUnlocked && jumpCount < maxJumpCount) {
             jumpHoldTimer.Start();
             isJumping = true;
+            jumpInterrupted = false;
             jumpCount = 2;
             player->SetState("jump");
 
@@ -88,20 +90,28 @@ void JumpMechanic::HandleJumpInput(float dt) {
         b2Vec2 force(0, forceY);
         player->pbody->body->ApplyForceToCenter(force, true);
 
-        // Si pasó el tiempo máximo, detenemos salto sostenido
         if (t >= 1.0f) {
             isJumping = false;
+
+            // Solo la primera vez que se interrumpe el salto, seteamos la velocidad Y a 0
+            if (!jumpInterrupted) {
+                b2Vec2 vel = player->pbody->body->GetLinearVelocity();
+                vel.y = 0;
+                player->pbody->body->SetLinearVelocity(vel);
+                jumpInterrupted = true;
+            }
         }
     }
 
-    // Finalizar salto si se suelta la tecla
-    if (jumpUp || jumpHoldTimer.ReadMSec() > jumpHoldDuration) {
+    if ((jumpUp || jumpHoldTimer.ReadMSec() > jumpHoldDuration) && isJumping) {
         isJumping = false;
-    }
 
-    if (!isJumping && !player->GetMechanics()->IsOnGround() && !player->GetMechanics()->IsWallSliding()) {
-        b2Vec2 fallForce(0, fallAccelerationFactor);
-        player->pbody->body->ApplyForceToCenter(fallForce, true);
+        if (!jumpInterrupted) {
+            b2Vec2 vel = player->pbody->body->GetLinearVelocity();
+            vel.y = 0;
+            player->pbody->body->SetLinearVelocity(vel);
+            jumpInterrupted = true;
+        }
     }
 }
 

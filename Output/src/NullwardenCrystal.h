@@ -8,6 +8,12 @@
 
 class Nullwarden;
 
+enum class CrystalState {
+    PRISTINE,
+    CRACKED,
+    SHATTERED,
+    BROKEN
+};
 class NullwardenCrystal : public Entity {
 public:
     NullwardenCrystal(float x, float y, float speed, b2Vec2 dir, Nullwarden* owner);
@@ -17,15 +23,17 @@ public:
     bool CleanUp() override;
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
 
+    void UpdateCrystalState();
+
 public:
     int hits = 0;
+
 private:
+    CrystalState currentState = CrystalState::PRISTINE;
     Nullwarden* nullwarden = nullptr;
     PhysBody* pbody = nullptr;
     SDL_Texture* texture = nullptr;
     Animation* currentAnimation = nullptr;
-
-
 
     Animation pristineAnim;
     Animation crackedAnim;

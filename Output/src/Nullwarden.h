@@ -34,19 +34,25 @@ public:
 
     void SpawnHorizontalSpears();
     void SpawnVerticalSpears();
-
+    b2Vec2 GetCrystalOffset() const;
+    void Attack();
+    void Impaled();
+    void Roar();
 public:
-    bool crystalBroken = false;
 
-private:
     NullwardenState currentState = NullwardenState::IDLE;
-    NullwardenCrystal* crystal = nullptr;
+    bool crystalBroken = false;
+    Animation* currentAnimation;
     Animation idleAnim;
     Animation attackAnim;
     Animation chargeAnim;
     Animation impaledAnim;
     Animation roarAnim;
     Animation deathAnim;
+
+private:
+
+    NullwardenCrystal* crystal= nullptr;
 
     const float spearIntervalMs = 2000.0f;
     Timer spearIntervalTimer;

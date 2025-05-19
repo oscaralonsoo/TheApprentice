@@ -481,21 +481,19 @@
 				</enemy>
 				<enemy type="NullwardenCrystal" w="64" h="64" texture="Assets/Enemies/NullwardenCrystal.png">
 					<pristine>
-						<frame x="0" y="320" w="64" h="64" />
+						<frame x="0" y="0" w="64" h="64" />
 					</pristine>
 					<cracked>
-						<frame x="0" y="320" w="64" h="64" />
+						<frame x="64" y="0" w="64" h="64" />
 					</cracked>
 					<shattered>
-						<frame x="0" y="320" w="64" h="64" />
+						<frame x="128" y="0" w="64" h="64" />
 					</shattered>
-					<broken lopp="false" speed="0.10">
-						<frame x="0" y="320" w="64" h="64" />
-						<frame x="0" y="320" w="64" h="64" />
-						<frame x="0" y="320" w="64" h="64" />
-						<frame x="0" y="320" w="64" h="64" />
-						<frame x="0" y="320" w="64" h="64" />
-					</broken>
+					<break loop="false" speed="0.10">
+						<frame x="0" y="0" w="64" h="64" />
+						<frame x="64" y="0" w="64" h="64" />
+						<frame x="128" y="0" w="64" h="64" />
+					</break>
 				</enemy>
 				<enemy type="NullwardenSpear" w="35" h="180" texture="Assets/Enemies/NullwardenSpear.png">
 					<spawn loop="true" speed="0.3">

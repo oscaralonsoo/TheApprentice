@@ -104,3 +104,11 @@ void NullwardenSpear::OnCollision(PhysBody* physA, PhysBody* physB)
         break;
     }
 }
+
+void NullwardenSpear::Activate()
+{
+}
+
+void NullwardenSpear::Deactivate()
+{
+}

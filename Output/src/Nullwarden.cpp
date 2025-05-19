@@ -5,7 +5,7 @@
 #include "Scene.h"
 #include "EntityManager.h"
 #include "Textures.h"
-
+#include "Player.h"
 
 Nullwarden::Nullwarden() : Enemy(EntityType::NULLWARDEN) {
 }
@@ -50,8 +50,8 @@ bool Nullwarden::Start() {
         filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_ATTACK | CATEGORY_PLAYER_DAMAGE;
         fixture->SetFilterData(filter);
     }
-    Engine::GetInstance().entityManager->AddEntity(new NullwardenCrystal(position.getX(), position.getY(), 0.0f, b2Vec2_zero, this));
-
+    crystal = new NullwardenCrystal(position.getX(), position.getY(), 0.0f, b2Vec2_zero, this);
+    Engine::GetInstance().entityManager->AddEntity(crystal);
     currentAnimation = &idleAnim;
 
     return true;
@@ -65,21 +65,7 @@ bool Nullwarden::Update(float dt) {
         currentState = NullwardenState::ATTACK;
         break;
     case NullwardenState::ATTACK:
-        if (currentAnimation != &attackAnim) {
-            currentAnimation = &attackAnim;
-            spearIntervalTimer.Start();
-            spearAttackTimer.Start();
-            direction = -direction;
-        }
-
-        if (spearIntervalTimer.ReadMSec() >= spearIntervalMs) {
-            SpawnHorizontalSpears();
-            spearIntervalTimer.Start();
-        }
-
-        if (spearAttackTimer.ReadMSec() >= spearAttackMs) {
-           currentState = NullwardenState::CHARGE;
-        }
+        Attack();
         break;
     case NullwardenState::CHARGE:
         if (currentAnimation != &chargeAnim) currentAnimation = &chargeAnim;
@@ -88,32 +74,12 @@ bool Nullwarden::Update(float dt) {
         
         break;
     case NullwardenState::IMPALED:
-        if (currentAnimation != &impaledAnim) {
-            currentAnimation = &impaledAnim;
-            impaledTimer.Start();
-        }
-
-        pbody->body->SetLinearVelocity(b2Vec2_zero);
-        pbody->body->SetAngularVelocity(0);
-
-        if (impaledTimer.ReadMSec() >= impaledMs) {
-            currentState = NullwardenState::ROAR;
-        }
-        else if (verticalSpearTimer.ReadMSec() >= verticalSpearIntervalMs && spawnedVerticalSpears < maxVerticalSpears) {
-            SpawnVerticalSpears();
-            verticalSpearTimer.Start();
-        }
+        Impaled();
         break;
     case NullwardenState::ROAR:
-        if (currentAnimation != &roarAnim) {
-            currentAnimation = &roarAnim;
-            roarTimer.Start();
-        }
-
-        if (roarTimer.ReadMSec() >= roarMs) {
-            currentState = NullwardenState::ATTACK;
-        }
+        Roar();
         break;
+
     case NullwardenState::DEATH:
         if (currentAnimation != &deathAnim) currentAnimation = &deathAnim;
         break;
@@ -151,10 +117,17 @@ void Nullwarden::OnCollision(PhysBody* physA, PhysBody* physB)
     switch (physB->ctype)
     {
     case ColliderType::ATTACK:
+        if (!crystalBroken) {
+
+            Engine::GetInstance().render->StartCameraShake(0.2f, 3);
+            currentState = NullwardenState::ROAR;
+            break;
+        }
         if (currentState == NullwardenState::ATTACK) {
             currentState = NullwardenState::ROAR;
-        } else {
-            currentState = (crystal->hits >  0) ? NullwardenState::ROAR : NullwardenState::DEATH;
+        }
+        else {
+            currentState = NullwardenState::DEATH;
         }
         break;
     case ColliderType::PLAYER:
@@ -197,5 +170,97 @@ void Nullwarden::SpawnVerticalSpears() {
     );
 
     spawnedVerticalSpears++;
+}
+b2Vec2 Nullwarden::GetCrystalOffset() const {
+    if (currentAnimation == &idleAnim) {
+        return b2Vec2(0.0f, -1.0f); 
+    }
+    else if (currentAnimation == &attackAnim) {
+        return b2Vec2(1.5f * (direction < 0 ? -1 : 1), 0.0f); 
+    }
+    else if (currentAnimation == &chargeAnim) {
+        return b2Vec2(0.0f, 1.0f);
+    }
+    else if (currentAnimation == &roarAnim) {
+        return b2Vec2(-1.0f * (direction < 0 ? -1 : 1), -0.5f); 
+    }
+    else if (currentAnimation == &deathAnim || currentAnimation == &impaledAnim) {
+        return b2Vec2(-5.0f, 0.0f);
+    }
+    return b2Vec2(0.0f, 0.0f);
+}
+void Nullwarden::Attack() {
+    if (currentAnimation != &attackAnim) {
+        currentAnimation = &attackAnim;
+        spearIntervalTimer.Start();
+        spearAttackTimer.Start();
+        direction = -direction;
+    }
+
+    if (spearIntervalTimer.ReadMSec() >= spearIntervalMs) {
+        SpawnHorizontalSpears();
+        spearIntervalTimer.Start();
+    }
+
+    if (spearAttackTimer.ReadMSec() >= spearAttackMs) {
+        currentState = NullwardenState::CHARGE;
+    }
+}
+void Nullwarden::Impaled() {
+    if (currentAnimation != &impaledAnim) {
+        currentAnimation = &impaledAnim;
+        impaledTimer.Start();
+    }
+    pbody->body->SetLinearVelocity(b2Vec2_zero);
+    pbody->body->SetAngularVelocity(0);
+
+    if (impaledTimer.ReadMSec() >= impaledMs) {
+        currentState = NullwardenState::ROAR;
+    }
+    else if (verticalSpearTimer.ReadMSec() >= verticalSpearIntervalMs && spawnedVerticalSpears < maxVerticalSpears) {
+        SpawnVerticalSpears();
+        verticalSpearTimer.Start();
+    }
+}
+void Nullwarden::Roar() {
+    if (currentAnimation != &roarAnim) {
+        currentAnimation = &roarAnim;
+        roarTimer.Start();
+    }
+    {
+        Player* player = Engine::GetInstance().scene->GetPlayer();
+
+        float playerX = player->position.getX();
+        float playerY = player->position.getY();
+        float nullwardenX = this->position.getX();
+        float nullwardenY = this->position.getY();
+
+        float dx = playerX - nullwardenX;
+        float dy = playerY - nullwardenY;
+
+        float distanceSquared = dx * dx + dy * dy;
+        const float roarRadius = 1000.0f;
+        const float roarRadiusSquared = roarRadius * roarRadius;
+
+        if (distanceSquared <= roarRadiusSquared) {
+            float distance = sqrtf(distanceSquared);
+            float falloff = 1.0f - (distance / roarRadius);
+
+            if (falloff < 0.0f) falloff = 0.0f;
+            else if (falloff > 1.0f) falloff = 1.0f;
+
+            float pushDir = (dx > 0.0f) ? 1.0f : -1.0f;
+            float pushStrength = 50.0f * falloff;
+
+            b2Vec2 push = b2Vec2(pushDir * pushStrength, 0);
+            player->pbody->body->ApplyLinearImpulseToCenter(push, true);
+
+            Engine::GetInstance().render->StartCameraShake(0.2f * falloff, 6 * falloff);
+        }
+
+    }
+    if (roarTimer.ReadMSec() >= roarMs) {
+        currentState = NullwardenState::ATTACK;
+    }
 }
 

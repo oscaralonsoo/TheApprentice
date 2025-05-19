@@ -13,8 +13,8 @@ void DashMechanic::Update(float dt) {
     if (!dashUnlocked)
         return;
     // Bloquear dash si estás en wallslide o tocando una pared
-    if (player->GetMechanics()->GetMovementHandler()->IsWallSliding() ||
-        player->GetMechanics()->IsTouchingWall()) {
+// Solo bloquear si estás tocando pared PERO no estás en wallslide
+    if (player->GetMechanics()->IsTouchingWall()) {
         return;
     }
 

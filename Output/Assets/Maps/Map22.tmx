@@ -1,41 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="155" height="99" tilewidth="64" tileheight="64" infinite="0" nextlayerid="69" nextobjectid="4170">
- <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="0" columns="10">
-  <image source="../../../../../TheApprentice-Design (1)/TheApprentice-Design/Output/Assets/Props/tiles_cave.png" width="640" height="640"/>
- </tileset>
- <tileset firstgid="1" name="rocas1" tilewidth="64" tileheight="64" tilecount="0" columns="30">
-  <image source="../../../../../TheApprentice-Design (1)/TheApprentice-Design/Output/Assets/Environment/rocas1.png" width="1920" height="1080"/>
- </tileset>
- <tileset firstgid="1" name="rocas2" tilewidth="64" tileheight="64" tilecount="0" columns="30">
-  <image source="../../../../../TheApprentice-Design (1)/TheApprentice-Design/Output/Assets/Environment/rocas2.png" width="1920" height="1080"/>
- </tileset>
- <tileset firstgid="1" name="rocas3" tilewidth="64" tileheight="64" tilecount="0" columns="30">
-  <image source="../../../../../TheApprentice-Design (1)/TheApprentice-Design/Output/Assets/Environment/rocas3.png" width="1920" height="1080"/>
- </tileset>
- <tileset firstgid="1" name="rocas4" tilewidth="64" tileheight="64" tilecount="0" columns="30">
-  <image source="../../../../../TheApprentice-Design (1)/TheApprentice-Design/Output/Assets/Environment/rocas4.png" width="1920" height="1080"/>
- </tileset>
- <tileset firstgid="1" name="rocas4_columnas" tilewidth="64" tileheight="64" tilecount="0" columns="30">
-  <image source="../../../../../TheApprentice-Design (1)/TheApprentice-Design/Output/Assets/Environment/rocas4_columnas.png" width="1920" height="1080"/>
- </tileset>
- <tileset firstgid="1" name="piedras_columnas0" tilewidth="64" tileheight="64" tilecount="0" columns="30">
-  <image source="../../../../../TheApprentice-Design (1)/TheApprentice-Design/Output/Assets/Environment/piedras_columnas0.png" width="1920" height="1080"/>
- </tileset>
- <tileset firstgid="1" name="piedras0" tilewidth="64" tileheight="64" tilecount="0" columns="30">
-  <image source="../../../../../TheApprentice-Design (1)/TheApprentice-Design/Output/Assets/Environment/piedras0.png" width="1920" height="1080"/>
- </tileset>
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="155" height="99" tilewidth="64" tileheight="64" infinite="0" nextlayerid="69" nextobjectid="4170">
  <tileset firstgid="1" name="tiles_manglar" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_manglar.png" width="640" height="640"/>
  </tileset>
  <tileset firstgid="101" name="PropMala1" tilewidth="64" tileheight="64" tilecount="4" columns="2">
   <image source="../Props/PropMala1.png" width="128" height="128"/>
  </tileset>
+ <tileset firstgid="105" name="Mangrove_background" tilewidth="64" tileheight="64" tilecount="480" columns="30">
+  <image source="../Environment/Mangrove_background.png" width="1920" height="1080"/>
+ </tileset>
  <group id="70" name="Background" visible="0">
   <properties>
    <property name="Draw" type="bool" value="true"/>
   </properties>
  </group>
- <layer id="44" name="Background" width="155" height="99" visible="0" offsetx="-14784" offsety="-11712" parallaxx="0" parallaxy="0">
+ <layer id="44" name="Background" width="155" height="99" visible="0" offsetx="-0.000736693" offsety="0.0200162" parallaxx="0" parallaxy="0">
   <properties>
    <property name="Draw" type="bool" value="true"/>
   </properties>

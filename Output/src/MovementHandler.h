@@ -48,6 +48,7 @@ public:
     void SetHookUnlocked(bool unlocked) { hookUnlocked = unlocked; }
     void EnableGlide(bool enable);
     bool IsGlideUnlocked() const { return jumpMechanic.IsGlideUnlocked(); }
+    WallSlideMechanic* GetWallSlideMechanic() { return &wallSlideMechanic; }
     void EnableWallJump(bool enable);
     bool IsWallJumpUnlocked() const;
 

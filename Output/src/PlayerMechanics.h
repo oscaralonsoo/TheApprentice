@@ -38,7 +38,7 @@ public:
     FallMechanic* GetFallMechanic() { return &fallMechanic; }
     InvulnerabilitySystem* GetInvulnerabilitySystem() { return &invulnerabilitySystem; }
     void UpdateLastSafePosition(PhysBody* platformCollider);
-
+    WallSlideMechanic* GetWallSlideMechanic() { return movementHandler.GetWallSlideMechanic(); }
     HealthSystem healthSystem;
 
     JumpMechanic* GetJumpMechanic() { return &movementHandler.GetJumpMechanic(); }

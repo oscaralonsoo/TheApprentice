@@ -31,6 +31,7 @@ public:
 
     void EnableWallJump(bool enable);
     bool IsWallJumpUnlocked() const { return wallJumpUnlocked; }
+    bool IsWallJumpLocked() const { return wallJumpLockActive; }
 
 private:
     Player* player = nullptr;
@@ -65,6 +66,13 @@ private:
     bool isGliding = false;
     float glideGravityScale = 0.5f; // Puedes ajustar este valor
 
-    bool wallJumpUnlocked = false;
+    // Wall jump
+    bool wallJumpUnlocked = true;
 
+    Timer wallJumpLockTimer;
+    float wallJumpLockDuration = 200.0f; // ms
+    bool wallJumpLockActive = false;
+
+    float wallJumpHorizontalImpulse = 10.0f;
+    float wallJumpVerticalImpulse = 13.0f;
 };

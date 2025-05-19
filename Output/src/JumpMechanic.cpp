@@ -11,6 +11,10 @@ void JumpMechanic::Init(Player* player) {
 void JumpMechanic::Update(float dt) {
     if (!jumpUnlocked) return;
     HandleJumpInput(dt);
+    // Desbloquear input horizontal tras wall jump
+    if (wallJumpLockActive && wallJumpLockTimer.ReadMSec() >= wallJumpLockDuration) {
+        wallJumpLockActive = false;
+    }
 }
 
 void JumpMechanic::HandleJumpInput(float dt) {
@@ -55,6 +59,31 @@ void JumpMechanic::HandleJumpInput(float dt) {
             b2Vec2 impulse(0, -minJumpForce);
             player->pbody->body->ApplyForceToCenter(impulse, true);
         }
+        else if (wallJumpUnlocked && player->GetMechanics()->IsWallSliding()) {
+            isJumping = true;
+            jumpCount = 1;
+
+            player->SetState("wall_jump");
+            player->GetMechanics()->SetIsWallSliding(false);
+            player->GetMechanics()->SetIsTouchingWall(false);
+
+            MovementHandler* movement = player->GetMechanics()->GetMovementHandler();
+            int wallDir = movement->GetWallSlideDirection();
+            movement->StartWallSlideCooldown();
+            movement->SetWallSlideDirection(0);
+
+            jumpCooldownTimer.Start();
+            jumpCooldownActive = true;
+
+            // Impulso fuerte
+            player->pbody->body->SetLinearVelocity(b2Vec2_zero);
+            b2Vec2 impulse(-wallDir * wallJumpHorizontalImpulse, -wallJumpVerticalImpulse);
+            player->pbody->body->ApplyLinearImpulseToCenter(impulse, true);
+
+            // Bloqueo de input horizontal
+            wallJumpLockActive = true;
+            wallJumpLockTimer.Start();
+        }
         else if (doubleJumpUnlocked && jumpCount < maxJumpCount) {
             jumpHoldTimer.Start();
             isJumping = true;
@@ -71,31 +100,6 @@ void JumpMechanic::HandleJumpInput(float dt) {
 
             b2Vec2 impulse(0, -minJumpForce);
             player->pbody->body->ApplyForceToCenter(impulse, true);
-        }
-        else if (wallJumpUnlocked && player->GetMechanics()->IsWallSliding()) {
-            jumpHoldTimer.Start();
-            isJumping = true;
-            jumpCount = 1;
-
-            player->SetState("jump");
-            player->GetMechanics()->SetIsWallSliding(false);
-            player->GetMechanics()->SetIsTouchingWall(false);
-
-            MovementHandler* movement = player->GetMechanics()->GetMovementHandler();
-            movement->StartWallSlideCooldown();
-            movement->SetWallSlideDirection(0);
-
-            jumpCooldownTimer.Start();
-            jumpCooldownActive = true;
-
-            // Impulso hacia la dirección opuesta de la pared
-            int wallDir = movement->GetWallSlideDirection();
-            float horizontalImpulse = 60.0f;
-            float verticalImpulse = minJumpForce;
-
-            player->pbody->body->SetLinearVelocity(b2Vec2_zero);
-            b2Vec2 impulse(-wallDir * horizontalImpulse, -verticalImpulse);
-            player->pbody->body->ApplyLinearImpulseToCenter(impulse, true);
         }
     }
 

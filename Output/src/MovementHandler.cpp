@@ -113,6 +113,10 @@ void MovementHandler::Update(float dt) {
 void MovementHandler::HandleMovementInput() {
     if (cantMove) return;
 
+    if (player->GetMechanics()->GetJumpMechanic()->IsWallJumpLocked()) {
+        return; // bloquea movimiento lateral tras wall jump
+    }
+
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
     bool moved = false;
 
@@ -249,9 +253,9 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
             player->GetMechanics()->SetIsWallSliding(true);
             isJumping = false;
             OnWallCollision();
-        }
-        else {
-            printf("No entra en WALL_SLIDE porque wallSlideCooldownActive está activo\n");
+
+            int dir = (movementDirection != 0) ? movementDirection : 1;
+            player->GetMechanics()->GetWallSlideMechanic()->OnTouchWall(dir);
         }
         break;
 

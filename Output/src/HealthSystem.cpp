@@ -53,6 +53,7 @@ void HealthSystem::TakeDamage() {
 void HealthSystem::HandleSpikeDamage() {
     if (lives > 0) {
         lives--;
+        invulnerabilitySystem.StartInvulnerability();
     }
 
     if (lives <= 0 && !isDying) {

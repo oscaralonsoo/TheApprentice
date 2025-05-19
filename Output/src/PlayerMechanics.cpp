@@ -46,7 +46,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
     }
     case ColliderType::SPIKE:
         if (!godModeSystem.IsEnabled()) {
-            healthSystem.HandleSpikeDamage();
+            healthSystem.TakeDamage();
             respawnSystem.ForceRespawn();
         }
         break;
@@ -109,4 +109,12 @@ void PlayerMechanics::SetIsTouchingWall(bool touching) {
 
 void PlayerMechanics::EnableGlide(bool enable) {
     movementHandler.EnableGlide(enable);
+}
+
+void PlayerMechanics::EnableWallJump(bool enable) {
+    movementHandler.EnableWallJump(enable);
+}
+
+void PlayerMechanics::UpdateLastSafePosition(PhysBody* platformCollider) {
+    respawnSystem.UpdateLastSafePosition(platformCollider);
 }

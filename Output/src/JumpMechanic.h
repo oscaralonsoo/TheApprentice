@@ -29,6 +29,9 @@ public:
     bool IsGliding() const { return isGliding; }
     bool IsGlideUnlocked() const { return glideUnlocked; }
 
+    void EnableWallJump(bool enable);
+    bool IsWallJumpUnlocked() const { return wallJumpUnlocked; }
+
 private:
     Player* player = nullptr;
 
@@ -61,4 +64,7 @@ private:
     bool glideUnlocked = true;
     bool isGliding = false;
     float glideGravityScale = 0.5f; // Puedes ajustar este valor
+
+    bool wallJumpUnlocked = false;
+
 };

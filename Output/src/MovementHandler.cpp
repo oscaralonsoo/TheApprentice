@@ -226,6 +226,8 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
                 Engine::GetInstance().scene->GetHookManager()->RegisterHook(hook);
                 LOG("Gancho reactivado tras aterrizar");
             }
+
+            lastPlatformCollider = physB;
         }
         break;
     }
@@ -272,6 +274,11 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
             isOnLiana = true;
             lianaCenterX = METERS_TO_PIXELS(physB->body->GetPosition().x); // Guardar en PIXELES
             disableAbilities = true; // Bloquear salto y dash
+        }
+        break;
+    case ColliderType::SPIKE:
+        if (lastPlatformCollider != nullptr) {
+            player->GetMechanics()->UpdateLastSafePosition(lastPlatformCollider);
         }
         break;
     default:
@@ -374,4 +381,11 @@ void MovementHandler::StartWallSlideCooldown() {
 
 void MovementHandler::EnableGlide(bool enable) {
     jumpMechanic.EnableGlide(enable);
+}
+
+void MovementHandler::EnableWallJump(bool enable) {
+    jumpMechanic.EnableWallJump(enable);
+}
+bool MovementHandler::IsWallJumpUnlocked() const {
+    return jumpMechanic.IsWallJumpUnlocked();
 }

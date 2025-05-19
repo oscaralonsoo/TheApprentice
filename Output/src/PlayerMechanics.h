@@ -37,12 +37,14 @@ public:
     HealthSystem* GetHealthSystem() { return &healthSystem; }
     FallMechanic* GetFallMechanic() { return &fallMechanic; }
     InvulnerabilitySystem* GetInvulnerabilitySystem() { return &invulnerabilitySystem; }
+    void UpdateLastSafePosition(PhysBody* platformCollider);
 
     HealthSystem healthSystem;
 
     JumpMechanic* GetJumpMechanic() { return &movementHandler.GetJumpMechanic(); }
     void SetIsWallSliding(bool wallSliding) { isWallSliding = wallSliding; }
     void EnableGlide(bool enable);
+    void EnableWallJump(bool enable);
 
 private:
     Player* player = nullptr;

@@ -108,7 +108,7 @@ void JumpMechanic::HandleJumpInput(float dt) {
 
         if (!jumpInterrupted) {
             b2Vec2 vel = player->pbody->body->GetLinearVelocity();
-            vel.y = 0;
+            vel.y = 3;
             player->pbody->body->SetLinearVelocity(vel);
             jumpInterrupted = true;
         }

@@ -101,8 +101,28 @@ void MovementHandler::Update(float dt) {
     }
     attackMechanic.Update(dt);
 
+    if (!hookUnlocked) return;
+
+    // Input por teclado
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
-        if (IsHookUnlocked()) {
+        Engine::GetInstance().scene->GetHookManager()->TryUseClosestHook();
+    }
+
+    // Input por mando (LT)
+    if (controller && SDL_GameControllerGetAttached(controller)) {
+        static bool ltHeldPreviously = false;
+
+        Sint16 triggerValue = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT);
+        bool triggerNow = triggerValue > 16000;
+
+        bool hookDown = false;
+        if (triggerNow && !ltHeldPreviously) {
+            hookDown = true;
+        }
+
+        ltHeldPreviously = triggerNow;
+
+        if (hookDown) {
             Engine::GetInstance().scene->GetHookManager()->TryUseClosestHook();
         }
     }

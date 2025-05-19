@@ -53,6 +53,20 @@ void MovementHandler::Update(float dt) {
     if (isOnLiana) {
         b2Vec2 velocity(0.0f, 0.0f);
 
+        // --------- Mando ---------
+        if (controller && SDL_GameControllerGetAttached(controller)) {
+            Sint16 axisY = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTY);
+            Sint16 axisX = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTX);
+            const Sint16 deadZone = 8000;
+
+            if (axisY < -deadZone) velocity.y = -8.0f;
+            else if (axisY > deadZone) velocity.y = 8.0f;
+
+            if (axisX < -deadZone) velocity.x = -8.0f;
+            else if (axisX > deadZone) velocity.x = 8.0f;
+        }
+
+        // --------- Teclado ---------
         if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
             velocity.y = -8.0f;
         }
@@ -67,21 +81,13 @@ void MovementHandler::Update(float dt) {
             velocity.x = 8.0f;
         }
 
-        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT ||
-            Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
-
+        // --------- Centrarse en la cuerda si se mueve verticalmente ---------
+        if (velocity.y != 0.0f) {
             float currentX = player->GetPosition().getX(); // PIXELES
             float distance = lianaCenterX - currentX;
-
-            // Velocidad de centrado constante
-            float centerSpeed = 1.0f * dt; // Ajusta 100.0f según lo que quieras
+            float centerSpeed = 1.0f * dt;
             float newX = currentX + centerSpeed * ((distance > 0) ? 1.0f : -1.0f);
-
-            // Evitar pasarse del centro
-            if (fabs(distance) < centerSpeed) {
-                newX = lianaCenterX;
-            }
-
+            if (fabs(distance) < centerSpeed) newX = lianaCenterX;
             player->pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(newX), player->pbody->body->GetPosition().y), 0.0f);
         }
 

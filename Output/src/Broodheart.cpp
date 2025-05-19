@@ -37,11 +37,13 @@ bool Broodheart::Start() {
         if (node.attribute("type").as_string() == typeName) {
             texture = Engine::GetInstance().textures->Load(node.attribute("texture").as_string());
             idleAnim.LoadAnimations(node.child("idle"));
+            spawnAnim.LoadAnimations(node.child("spawn"));
+            deathAnim.LoadAnimations(node.child("death"));
             currentAnimation = &idleAnim;
             break;
         }
     }
-    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW / 2, bodyType::DYNAMIC);
+    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW / 3, bodyType::DYNAMIC);
 
     pbody->ctype = ColliderType::ENEMY;
     if (!gravity) pbody->body->SetGravityScale(0);
@@ -67,15 +69,21 @@ bool Broodheart::Update(float dt) {
         shouldSpawn = true;
         spawnCooldown = 0.0f;
     }
+
+    if (shouldSpawn == false && currentAnimation == &spawnAnim && spawnAnim.HasFinished()) {
+
+        currentAnimation = &idleAnim;
+    }
+
     return Enemy::Update(dt);
 }
 
 bool Broodheart::PostUpdate() {
 
-    if (isBroken) {
+    if (isBroken && currentAnimation->HasFinished()) {
         pbody->body->GetFixtureList()->SetSensor(true);
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
-        return true; // O retornar false si no quieres que se ejecute más lógica
+        return true; 
     }
     if (shouldSpawn) {
         Spawn();
@@ -97,12 +105,14 @@ void Broodheart::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLAYER:
     case ColliderType::ATTACK:
         isBroken = true;
+        currentAnimation = &deathAnim;
+
         break;
     }
 }
 void Broodheart::Spawn() {
     if (broodsAlive.size() >= MAX_BROODS) return;
-
+    currentAnimation = &spawnAnim;
     std::vector<SDL_FPoint> newPositions;
 
     for (int i = 0; i < BROODS_PER_SPAWN && broodsAlive.size() < MAX_BROODS; ++i) {
@@ -147,5 +157,8 @@ void Broodheart::Spawn() {
 
 void Broodheart::OnBroodDeath(Brood* brood) {
     broodsAlive.remove(brood);
-    Engine::GetInstance().entityManager.get()->DestroyEntity(brood);
+    if (brood->deathAnim.HasFinished())
+    {
+        Engine::GetInstance().entityManager.get()->DestroyEntity(brood);
+    }
 }

@@ -364,21 +364,46 @@
 						<frame x="840" y="240" w="120" h="120" />
 					</death>
 				</enemy>
-				<enemy type="Broodheart" w="64" h="64" texture="Assets/Enemies/broodheart.png">
-					<idle loop="true" speed="0.1">
-						<frame x="0" y="0" w="64" h="64" />
+				<enemy type="Broodheart" w="220" h="144" texture="Assets/Enemies/broodheart.png">
+					<idle loop="true" speed="0.075">
+						<frame x="0" y="0" w="220" h="144" />
+						<frame x="250" y="0" w="220" h="144" />
+						<frame x="501" y="0" w="220" h="144" />
+						<frame x="0" y="144" w="220" h="144" />
+						<frame x="501" y="0" w="220" h="144" />
+						<frame x="250" y="0" w="220" h="144" />
 					</idle>
-					<walking loop="false" speed="0.1">
-						<frame x="0" y="0" w="64" h="64" />
-					</walking>
+					<spawn loop="false" speed="0.1">
+						<frame x="0" y="0" w="220" h="144" />
+						<frame x="250" y="0" w="220" h="144" />
+						<frame x="501" y="0" w="220" h="144" />
+						<frame x="0" y="144" w="220" h="144" />
+						<frame x="252" y="144" w="220" h="144" />
+						<frame x="502" y="144" w="220" h="144" />
+						<frame x="0" y="288" w="220" h="144" />
+						<frame x="250" y="288" w="220" h="144" />
+					</spawn>
+					<death>
+						<frame x="0" y="0" w="220" h="144" />
+						<frame x="0" y="0" w="220" h="144" />
+						<frame x="0" y="0" w="220" h="144" />
+						<frame x="0" y="0" w="220" h="144" />
+					</death>
 				</enemy>
 				<enemy type="Brood" w="32" h="32" texture="Assets/Enemies/brood.png">
-					<idle loop="true" speed="0.1">
+					<flying loop="true" speed="0.1">
 						<frame x="0" y="0" w="32" h="32" />
-					</idle>
-					<walking loop="false" speed="0.1">
 						<frame x="0" y="0" w="32" h="32" />
-					</walking>
+						<frame x="0" y="0" w="32" h="32" />
+						<frame x="0" y="0" w="32" h="32" />
+						<frame x="0" y="0" w="32" h="32" />
+					</flying>
+					<death loop="false" speed="0.1">
+						<frame x="0" y="0" w="32" h="32" />
+						<frame x="0" y="0" w="32" h="32" />
+						<frame x="0" y="0" w="32" h="32" />
+						<frame x="0" y="0" w="32" h="32" />
+					</death>
 				</enemy>
 				<enemy type="Dreadspire" w="64" h="64" texture="Assets/Enemies/dreadspire.png">
 					<idle loop="true" speed="0.1">
@@ -692,8 +717,8 @@
 			</abilities>
 		</animations>
 		<save_data isSaved="1">
-			<player x="2317" y="1259" w="44" h="54" lives="3" />
-			<abilities jump="true" doublejump="true" dash="true" />
+			<player x="1750" y="1072" w="44" h="54" lives="3" />
+			<abilities jump="false" doublejump="false" dash="false" />
 			<scene actualScene="0" />
 			<enemies />
 		</save_data>

@@ -117,7 +117,7 @@ private:
     const int SLIDER_MAX = 1510;
     const int BUTTON_WIDTH = 200;
     const int BUTTON_HEIGHT = 15;
-    const int BUTTON_SPACING = 70;
+    const int BUTTON_SPACING = 50;
 
     int musicVolumeSliderX = SLIDER_MIN;
     int fxVolumeSliderX = SLIDER_MIN;

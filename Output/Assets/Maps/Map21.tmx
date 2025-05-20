@@ -1,103 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="122" height="67" tilewidth="64" tileheight="64" infinite="0" nextlayerid="69" nextobjectid="4415">
  <tileset firstgid="1" name="PropMala1" tilewidth="64" tileheight="64" tilecount="4" columns="2">
-  <image source="TheApprentice/Output/Assets/Props/PropMala1.png" width="128" height="128"/>
+  <image source="../Props/PropMala1.png" width="128" height="128"/>
  </tileset>
  <tileset firstgid="5" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
-  <image source="TheApprentice/Output/Assets/Props/tiles_cave.png" width="640" height="640"/>
+  <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
  <tileset firstgid="105" name="tiles_manglar" tilewidth="64" tileheight="64" tilecount="100" columns="10">
-  <image source="TheApprentice/Output/Assets/Props/tiles_manglar.png" width="640" height="640"/>
+  <image source="../Props/tiles_manglar.png" width="640" height="640"/>
  </tileset>
  <tileset firstgid="205" name="Mangrove_background" tilewidth="64" tileheight="64" tilecount="480" columns="30">
-  <image source="TheApprentice/Output/Assets/Environment/Mangrove_background.png" width="1920" height="1080"/>
+  <image source="../Environment/Mangrove_background.png" width="1920" height="1080"/>
  </tileset>
  <tileset firstgid="685" name="Mangrove_Tree1" tilewidth="64" tileheight="64" tilecount="1140" columns="30">
-  <image source="TheApprentice/Output/Assets/Environment/Mangrove_Tree1.png" width="1920" height="2444"/>
+  <image source="../Environment/Mangrove_Tree1.png" width="1920" height="2444"/>
  </tileset>
  <tileset firstgid="1825" name="Mangrove_Tree1.1" tilewidth="64" tileheight="64" tilecount="1140" columns="30">
-  <image source="TheApprentice/Output/Assets/Environment/Mangrove_Tree1.1.png" width="1920" height="2444"/>
+  <image source="../Environment/Mangrove_Tree1.1.png" width="1920" height="2444"/>
  </tileset>
  <tileset firstgid="2965" name="Mangrove_Tree1.2" tilewidth="64" tileheight="64" tilecount="1140" columns="30">
-  <image source="TheApprentice/Output/Assets/Environment/Mangrove_Tree1.2.png" width="1920" height="2444"/>
+  <image source="../Environment/Mangrove_Tree1.2.png" width="1920" height="2444"/>
  </tileset>
  <tileset firstgid="4105" name="Mangrove_Tree2.1" tilewidth="64" tileheight="64" tilecount="480" columns="30">
-  <image source="TheApprentice/Output/Assets/Environment/Mangrove_Tree2.1.png" width="1920" height="1080"/>
+  <image source="../Environment/Mangrove_Tree2.1.png" width="1920" height="1080"/>
  </tileset>
  <tileset firstgid="4585" name="Mangrove_Tree2.2" tilewidth="64" tileheight="64" tilecount="480" columns="30">
-  <image source="TheApprentice/Output/Assets/Environment/Mangrove_Tree2.2.png" width="1920" height="1080"/>
+  <image source="../Environment/Mangrove_Tree2.2.png" width="1920" height="1080"/>
  </tileset>
  <tileset firstgid="5065" name="Mangrove_Tree2" tilewidth="64" tileheight="64" tilecount="480" columns="30">
-  <image source="TheApprentice/Output/Assets/Environment/Mangrove_Tree2.png" width="1920" height="1080"/>
+  <image source="../Environment/Mangrove_Tree2.png" width="1920" height="1080"/>
  </tileset>
  <tileset firstgid="5545" name="Mangrove_Tree3.1" tilewidth="64" tileheight="64" tilecount="480" columns="30">
-  <image source="TheApprentice/Output/Assets/Environment/Mangrove_Tree3.1.png" width="1920" height="1080"/>
+  <image source="../Environment/Mangrove_Tree3.1.png" width="1920" height="1080"/>
  </tileset>
  <tileset firstgid="6025" name="Mangrove_Tree3.2" tilewidth="64" tileheight="64" tilecount="480" columns="30">
-  <image source="TheApprentice/Output/Assets/Environment/Mangrove_Tree3.2.png" width="1920" height="1080"/>
+  <image source="../Environment/Mangrove_Tree3.2.png" width="1920" height="1080"/>
  </tileset>
  <tileset firstgid="6505" name="Mangrove_Tree3" tilewidth="64" tileheight="64" tilecount="480" columns="30">
-  <image source="TheApprentice/Output/Assets/Environment/Mangrove_Tree3.png" width="1920" height="1080"/>
+  <image source="../Environment/Mangrove_Tree3.png" width="1920" height="1080"/>
  </tileset>
  <tileset firstgid="6985" name="rocas1" tilewidth="64" tileheight="64" tilecount="480" columns="30">
-  <image source="TheApprentice/Output/Assets/Environment/rocas1.png" width="1920" height="1080"/>
+  <image source="../Environment/rocas1.png" width="1920" height="1080"/>
  </tileset>
  <tileset firstgid="7465" name="rocas2" tilewidth="64" tileheight="64" tilecount="480" columns="30">
-  <image source="TheApprentice/Output/Assets/Environment/rocas2.png" width="1920" height="1080"/>
+  <image source="../Environment/rocas2.png" width="1920" height="1080"/>
  </tileset>
  <tileset firstgid="7945" name="rocas3" tilewidth="64" tileheight="64" tilecount="480" columns="30">
-  <image source="TheApprentice/Output/Assets/Environment/rocas3.png" width="1920" height="1080"/>
+  <image source="../Environment/rocas3.png" width="1920" height="1080"/>
  </tileset>
  <tileset firstgid="8425" name="rocas4" tilewidth="64" tileheight="64" tilecount="480" columns="30">
-  <image source="TheApprentice/Output/Assets/Environment/rocas4.png" width="1920" height="1080"/>
+  <image source="../Environment/rocas4.png" width="1920" height="1080"/>
  </tileset>
  <tileset firstgid="8905" name="Mangrove_Fog3" tilewidth="64" tileheight="64" tilecount="1140" columns="30">
-  <image source="TheApprentice/Output/Assets/Environment/Mangrove_Fog3.png" width="1920" height="2444"/>
+  <image source="../Environment/Mangrove_Fog3.png" width="1920" height="2444"/>
  </tileset>
  <tileset firstgid="10045" name="Mangrove_Fog1" tilewidth="64" tileheight="64" tilecount="1140" columns="30">
-  <image source="TheApprentice/Output/Assets/Environment/Mangrove_Fog1.png" width="1920" height="2444"/>
+  <image source="../Environment/Mangrove_Fog1.png" width="1920" height="2444"/>
  </tileset>
  <tileset firstgid="11185" name="niebla_fondo" tilewidth="64" tileheight="64" tilecount="480" columns="30">
-  <image source="TheApprentice/Output/Assets/Environment/niebla_fondo.png" width="1920" height="1080"/>
+  <image source="../Environment/niebla_fondo.png" width="1920" height="1080"/>
  </tileset>
  <tileset firstgid="11665" name="niebla2" tilewidth="64" tileheight="64" tilecount="480" columns="30">
-  <image source="TheApprentice/Output/Assets/Environment/niebla2.png" width="1920" height="1080"/>
+  <image source="../Environment/niebla2.png" width="1920" height="1080"/>
  </tileset>
  <tileset firstgid="12145" name="Mangrove_Foreground_Tree" tilewidth="64" tileheight="64" tilecount="480" columns="30">
-  <image source="TheApprentice/Output/Assets/Environment/Mangrove_Foreground_Tree.png" width="1920" height="1080"/>
+  <image source="../Environment/Mangrove_Foreground_Tree.png" width="1920" height="1080"/>
  </tileset>
  <tileset firstgid="12625" name="Mangrove_Foreground_Plants" tilewidth="64" tileheight="64" tilecount="480" columns="30">
-  <image source="TheApprentice/Output/Assets/Environment/Mangrove_Foreground_Plants.png" width="1920" height="1080"/>
+  <image source="../Environment/Mangrove_Foreground_Plants.png" width="1920" height="1080"/>
  </tileset>
  <tileset firstgid="13105" name="Mangrove_Plants" tilewidth="64" tileheight="64" tilecount="1140" columns="30">
-  <image source="TheApprentice/Output/Assets/Environment/Mangrove_Plants.png" width="1920" height="2444"/>
+  <image source="../Environment/Mangrove_Plants.png" width="1920" height="2444"/>
  </tileset>
  <tileset firstgid="14245" name="Cave_Mangrove_Background" tilewidth="64" tileheight="64" tilecount="1140" columns="30">
-  <image source="TheApprentice/Output/Assets/Environment/Cave_Mangrove_Background.png" width="1920" height="2444"/>
+  <image source="../Environment/Cave_Mangrove_Background.png" width="1920" height="2444"/>
  </tileset>
  <tileset firstgid="15385" name="spike_puple" tilewidth="64" tileheight="64" tilecount="4" columns="2">
-  <image source="TheApprentice/Output/Assets/Props/spike_puple.png" width="128" height="128"/>
+  <image source="../Props/spike_puple.png" width="128" height="128"/>
  </tileset>
  <tileset firstgid="15389" name="piedras0" tilewidth="64" tileheight="64" tilecount="480" columns="30">
-  <image source="TheApprentice/Output/Assets/Environment/piedras0.png" width="1920" height="1080"/>
+  <image source="../Environment/piedras0.png" width="1920" height="1080"/>
  </tileset>
  <tileset firstgid="15869" name="Planta1" tilewidth="64" tileheight="64" tilecount="4" columns="2">
-  <image source="TheApprentice/Output/Assets/Props/Planta1.png" width="128" height="128"/>
+  <image source="../Props/Planta1.png" width="128" height="128"/>
  </tileset>
  <tileset firstgid="15873" name="Planta2" tilewidth="64" tileheight="64" tilecount="4" columns="2">
-  <image source="TheApprentice/Output/Assets/Props/Planta2.png" width="128" height="128"/>
+  <image source="../Props/Planta2.png" width="128" height="128"/>
  </tileset>
  <tileset firstgid="15877" name="Planta3" tilewidth="64" tileheight="64" tilecount="4" columns="2">
-  <image source="TheApprentice/Output/Assets/Props/Planta3.png" width="128" height="128"/>
+  <image source="../Props/Planta3.png" width="128" height="128"/>
  </tileset>
  <tileset firstgid="15881" name="Planta4" tilewidth="64" tileheight="64" tilecount="4" columns="2">
-  <image source="TheApprentice/Output/Assets/Props/Planta4.png" width="128" height="128"/>
+  <image source="../Props/Planta4.png" width="128" height="128"/>
  </tileset>
  <tileset firstgid="15885" name="Planta5" tilewidth="64" tileheight="64" tilecount="4" columns="2">
-  <image source="TheApprentice/Output/Assets/Props/Planta5.png" width="128" height="128"/>
+  <image source="../Props/Planta5.png" width="128" height="128"/>
  </tileset>
  <tileset firstgid="15889" name="Planta6" tilewidth="64" tileheight="64" tilecount="4" columns="2">
-  <image source="TheApprentice/Output/Assets/Props/Planta6.png" width="128" height="128"/>
+  <image source="../Props/Planta6.png" width="128" height="128"/>
  </tileset>
  <group id="70" name="Background">
   <properties>

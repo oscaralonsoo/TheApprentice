@@ -196,7 +196,11 @@ void Scene::ChangeScene(int nextScene)
 {
 	LOG("Cambiando a escena: %d", nextScene);
 	Engine::GetInstance().map->CleanUp(); 	// CleanUp of the previous Map
-	Engine::GetInstance().entityManager.get()->DestroyAllEntities(); // Previous Enemies CleanUp
+	if (hookManager) {
+		hookManager->ClearHooks(); // lo implementamos abajo
+	}
+
+	Engine::GetInstance().entityManager.get()->DestroyAllEntities();
 
 	// Look for the XML node
 	std::string mapKey = "Map_" + std::to_string(nextScene);

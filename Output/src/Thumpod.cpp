@@ -31,15 +31,14 @@ bool Thumpod::Start() {
         }
     }
 
-   shape = {
+    shape = {
         {PIXEL_TO_METERS(40), PIXEL_TO_METERS(-45)},
         {PIXEL_TO_METERS(-105), PIXEL_TO_METERS(75)},
         {PIXEL_TO_METERS(85), PIXEL_TO_METERS(75)}
-
     };
 
     pbody = Engine::GetInstance().physics->CreatePolygon((int)position.getX(), (int)position.getY(), shape, bodyType::DYNAMIC);
-    maxSteps = 20;
+    maxSteps = 15;
     return Enemy::Start();
 }
 
@@ -63,20 +62,37 @@ bool Thumpod::Update(float dt) {
 
     return Enemy::Update(dt);
 }
+
 bool Thumpod::PostUpdate() {
-    if (currentState == ThumpodState::DEAD && currentAnimation->HasFinished()) 
+    if (currentState == ThumpodState::DEAD && currentAnimation->HasFinished())
         Engine::GetInstance().entityManager->DestroyEntity(this);
-    
+
     return true;
 }
+
 bool Thumpod::CleanUp() {
     return Enemy::CleanUp();
 }
+
 void Thumpod::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
-        isOnGround = true;
-        [[fallthrough]];
+    case ColliderType::WALL:
+    {
+        b2Vec2 velocity = pbody->body->GetLinearVelocity();
+
+        if (velocity.y >= 0.0f) {
+            isOnGround = true;
+
+            if (canPlayAttackDownAnim && isFallingTowardsPlayer) {
+                currentAnimation = &attackDownAnim;
+                canPlayAttackDownAnim = false;
+                hasLanded = isPlayingAttackDown = true;
+                attackDownTimer = 0.0f;
+            }
+        }
+    }
+    break;
 
     case ColliderType::PLAYER:
         if (canPlayAttackDownAnim) {
@@ -92,6 +108,7 @@ void Thumpod::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     }
 }
+
 void Thumpod::Idle() {
     currentAnimation = &idleAnim;
     if (pathfinding->HasFoundPlayer() && jumpCooldown >= jumpInterval && currentState != ThumpodState::ATTACK)
@@ -103,12 +120,14 @@ void Thumpod::Idle() {
         currentState = ThumpodState::IDLE;
     }
 }
+
 void Thumpod::Attack(float dt) {
     float mass = pbody->body->GetMass();
     TryStartJump(mass);
     TryChangeToFallingState(mass);
     TryFinishAttackDown(dt);
 }
+
 void Thumpod::TryStartJump(float mass) {
     if (!hasJumped && jumpCooldown >= jumpInterval) {
         currentAnimation = &attackUpAnim;
@@ -120,6 +139,7 @@ void Thumpod::TryStartJump(float mass) {
         pbody->body->ApplyLinearImpulseToCenter({ 0, jumpForceY * mass }, true);
     }
 }
+
 void Thumpod::TryChangeToFallingState(float mass) {
     if (isJumpingUp && pbody->body->GetLinearVelocity().y > 0) {
         isJumpingUp = false;
@@ -127,6 +147,7 @@ void Thumpod::TryChangeToFallingState(float mass) {
         pbody->body->ApplyLinearImpulseToCenter({ 8.0f * direction * mass, 0 }, true);
     }
 }
+
 void Thumpod::TryFinishAttackDown(float dt) {
     if (hasLanded && currentAnimation == &attackDownAnim) {
         attackDownTimer += dt;
@@ -137,10 +158,12 @@ void Thumpod::TryFinishAttackDown(float dt) {
         }
     }
 }
+
 void Thumpod::ResetAttackState() {
     hasJumped = isOnGround = isJumpingUp = isFallingTowardsPlayer = hasLanded = isPlayingAttackDown = false;
     attackDownTimer = jumpCooldown = 0.0f;
 }
+
 void Thumpod::Die() {
     currentAnimation = &deadAnim;
     if (pbody && pbody->body) {
@@ -150,6 +173,7 @@ void Thumpod::Die() {
             pbody->body->GetFixtureList()->SetSensor(true);
     }
 }
+
 void Thumpod::UpdateDirectionFacingPlayer() {
     float playerX = Engine::GetInstance().scene->GetPlayerPosition().getX();
     float thumpodX = position.getX();

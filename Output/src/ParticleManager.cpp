@@ -120,7 +120,7 @@ bool ParticleManager::Update(float dt)
 
 	if (rand() % 100 < 12) // % de probabilidad cada frame
 	{
-		//SpawnRandomParticles();
+		SpawnRandomParticles();
 	}
 
 	// Actualizar partículas activas

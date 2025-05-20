@@ -2,10 +2,13 @@
 
 #include "Enemy.h"
 #include "NullwardenSpear.h"
+#include "NullwardenCrystal.h"
 #include "SDL2/SDL.h"
 #include "Timer.h"
 
 class Spear;
+
+class NullwardenCrystal;
 
 enum class NullwardenState {
     IDLE,
@@ -31,16 +34,25 @@ public:
 
     void SpawnHorizontalSpears();
     void SpawnVerticalSpears();
+    b2Vec2 GetCrystalOffset() const;
+    void Attack();
+    void Impaled();
+    void Roar();
+public:
 
-private:
     NullwardenState currentState = NullwardenState::IDLE;
-
+    bool crystalBroken = false;
+    Animation* currentAnimation;
     Animation idleAnim;
     Animation attackAnim;
     Animation chargeAnim;
     Animation impaledAnim;
     Animation roarAnim;
     Animation deathAnim;
+
+private:
+
+    NullwardenCrystal* crystal= nullptr;
 
     const float spearIntervalMs = 2000.0f;
     Timer spearIntervalTimer;
@@ -56,5 +68,6 @@ private:
     const int maxVerticalSpears = 15;
     const float verticalSpearGap = 80.0f;
 
-    int lives = 3;
+
+
 };

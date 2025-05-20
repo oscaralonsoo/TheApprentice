@@ -53,6 +53,20 @@ void MovementHandler::Update(float dt) {
     if (isOnLiana) {
         b2Vec2 velocity(0.0f, 0.0f);
 
+        // --------- Mando ---------
+        if (controller && SDL_GameControllerGetAttached(controller)) {
+            Sint16 axisY = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTY);
+            Sint16 axisX = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTX);
+            const Sint16 deadZone = 8000;
+
+            if (axisY < -deadZone) velocity.y = -8.0f;
+            else if (axisY > deadZone) velocity.y = 8.0f;
+
+            if (axisX < -deadZone) velocity.x = -8.0f;
+            else if (axisX > deadZone) velocity.x = 8.0f;
+        }
+
+        // --------- Teclado ---------
         if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
             velocity.y = -8.0f;
         }
@@ -67,21 +81,13 @@ void MovementHandler::Update(float dt) {
             velocity.x = 8.0f;
         }
 
-        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT ||
-            Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
-
+        // --------- Centrarse en la cuerda si se mueve verticalmente ---------
+        if (velocity.y != 0.0f) {
             float currentX = player->GetPosition().getX(); // PIXELES
             float distance = lianaCenterX - currentX;
-
-            // Velocidad de centrado constante
-            float centerSpeed = 1.0f * dt; // Ajusta 100.0f según lo que quieras
+            float centerSpeed = 1.0f * dt;
             float newX = currentX + centerSpeed * ((distance > 0) ? 1.0f : -1.0f);
-
-            // Evitar pasarse del centro
-            if (fabs(distance) < centerSpeed) {
-                newX = lianaCenterX;
-            }
-
+            if (fabs(distance) < centerSpeed) newX = lianaCenterX;
             player->pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(newX), player->pbody->body->GetPosition().y), 0.0f);
         }
 
@@ -101,8 +107,28 @@ void MovementHandler::Update(float dt) {
     }
     attackMechanic.Update(dt);
 
+    if (!hookUnlocked) return;
+
+    // Input por teclado
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
-        if (IsHookUnlocked()) {
+        Engine::GetInstance().scene->GetHookManager()->TryUseClosestHook();
+    }
+
+    // Input por mando (LT)
+    if (controller && SDL_GameControllerGetAttached(controller)) {
+        static bool ltHeldPreviously = false;
+
+        Sint16 triggerValue = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT);
+        bool triggerNow = triggerValue > 16000;
+
+        bool hookDown = false;
+        if (triggerNow && !ltHeldPreviously) {
+            hookDown = true;
+        }
+
+        ltHeldPreviously = triggerNow;
+
+        if (hookDown) {
             Engine::GetInstance().scene->GetHookManager()->TryUseClosestHook();
         }
     }
@@ -112,6 +138,10 @@ void MovementHandler::Update(float dt) {
 
 void MovementHandler::HandleMovementInput() {
     if (cantMove) return;
+
+    if (player->GetMechanics()->GetJumpMechanic()->IsWallJumpLocked()) {
+        return; // bloquea movimiento lateral tras wall jump
+    }
 
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
     bool moved = false;
@@ -226,6 +256,8 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
                 Engine::GetInstance().scene->GetHookManager()->RegisterHook(hook);
                 LOG("Gancho reactivado tras aterrizar");
             }
+
+            lastPlatformCollider = physB;
         }
         break;
     }
@@ -247,9 +279,9 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
             player->GetMechanics()->SetIsWallSliding(true);
             isJumping = false;
             OnWallCollision();
-        }
-        else {
-            printf("No entra en WALL_SLIDE porque wallSlideCooldownActive está activo\n");
+
+            int dir = (movementDirection != 0) ? movementDirection : 1;
+            player->GetMechanics()->GetWallSlideMechanic()->OnTouchWall(dir);
         }
         break;
 
@@ -272,6 +304,11 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
             isOnLiana = true;
             lianaCenterX = METERS_TO_PIXELS(physB->body->GetPosition().x); // Guardar en PIXELES
             disableAbilities = true; // Bloquear salto y dash
+        }
+        break;
+    case ColliderType::SPIKE:
+        if (lastPlatformCollider != nullptr) {
+            player->GetMechanics()->UpdateLastSafePosition(lastPlatformCollider);
         }
         break;
     default:
@@ -374,4 +411,11 @@ void MovementHandler::StartWallSlideCooldown() {
 
 void MovementHandler::EnableGlide(bool enable) {
     jumpMechanic.EnableGlide(enable);
+}
+
+void MovementHandler::EnableWallJump(bool enable) {
+    jumpMechanic.EnableWallJump(enable);
+}
+bool MovementHandler::IsWallJumpUnlocked() const {
+    return jumpMechanic.IsWallJumpUnlocked();
 }

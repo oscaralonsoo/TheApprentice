@@ -86,7 +86,7 @@ public:
 	PlayerMechanics* mechanics = nullptr;
 
 	float heartbeatTimer = 0.0f;
-	float heartbeatInterval = 1250.0f;
+	float heartbeatInterval = 2000.0f;
 	bool heartbeatGrowing = false;
 	float heartbeatProgress = 0.0f; 
 private:

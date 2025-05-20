@@ -42,8 +42,10 @@ private:
 
     float previousDirection;
     Timer timer;
-
     Timer turnTimer;
-    float turnDelay = 0.25f;
+    float turnDelay = 0.5f; 
     bool turning = false;
+    float exponentialFactor = 1.007f;
+    float velocityBase = 0.15f;
+    float maxSpeed = 15.0f;
 };

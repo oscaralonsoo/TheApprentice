@@ -12,7 +12,7 @@
 
 
 
-Menus::Menus() : currentState(MenusState::GAME), transitionAlpha(0.0f), inTransition(false), fadingIn(false), nextState(MenusState::NONE),
+Menus::Menus() : currentState(MenusState::MAINMENU), transitionAlpha(0.0f), inTransition(false), fadingIn(false), nextState(MenusState::NONE),
 fastTransition(false), menuBackground(nullptr), pauseBackground(nullptr) {}
 
 Menus::~Menus() {}
@@ -161,7 +161,17 @@ void Menus::Intro(float dt) {
 }
 
 void Menus::MainMenu(float dt) {
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+    bool buttonPressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN;
+
+    if (controller && SDL_GameControllerGetAttached(controller)) {
+        bool aNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A);
+        if (aNow && !aHeld) {
+            buttonPressed = true;
+        }
+        aHeld = aNow;
+    }
+
+    if (buttonPressed) {
         switch (selectedButton) {
         case 0: NewGame(); break;
         case 1: if (isSaved != 0) { Engine::GetInstance().scene.get()->LoadGameXML(); StartTransition(false, MenusState::GAME); 
@@ -198,8 +208,18 @@ void Menus::NewGame() {
     StartTransition(false, MenusState::GAME);
 }
 void Menus::Pause(float dt) {
+    bool buttonPressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN;
+
+    if (controller && SDL_GameControllerGetAttached(controller)) {
+        bool aNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A);
+        if (aNow && !aHeld) {
+            buttonPressed = true;
+        }
+        aHeld = aNow;
+    }
+
     if (inTransition) return;
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+    if (buttonPressed) {
         switch (selectedButton) {
         case 0: isPaused = false; StartTransition(true, MenusState::GAME); break;
         case 1: inConfig = true; StartTransition(true, MenusState::SETTINGS); break;
@@ -208,7 +228,17 @@ void Menus::Pause(float dt) {
     }
 }
 void Menus::Settings() {
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+    bool buttonPressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN;
+
+    if (controller && SDL_GameControllerGetAttached(controller)) {
+        bool aNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A);
+        if (aNow && !aHeld) {
+            buttonPressed = true;
+        }
+        aHeld = aNow;
+    }
+
+    if (buttonPressed) {
         nextState = (previousState == MenusState::PAUSE) ? MenusState::PAUSE : previousState;
         inConfig = false;
         StartTransition(true, nextState);
@@ -336,13 +366,24 @@ void Menus::CreateButtons() {
     int spacing = static_cast<int>(BUTTON_SPACING * scale);
     int totalHeight = names.size() * (buttonHeight + spacing) - spacing;
 
-    int startX = (width - buttonWidth) / 2-20;
-    int startY = (height - totalHeight) / 2 + static_cast<int>(50 * scale);
+    int startX = (width - buttonWidth) / 2 - 20;
+
+    int startY;
+    if (currentState == MenusState::PAUSE) {
+        spacing = static_cast<int>(BUTTON_SPACING * scale * 1.5f);
+        startY = (height - totalHeight) / 2 - static_cast<int>(20 * scale); 
+    }
+    else if (currentState == MenusState::SETTINGS) {
+        startY = (height - totalHeight) / 2 + static_cast<int>(40 * scale); 
+        spacing = static_cast<int>(BUTTON_SPACING * scale * 1.5f); 
+    }
+    else {
+        startY = (height - totalHeight) / 2 + static_cast<int>(120 * scale); 
+    }
 
     for (size_t i = 0; i < names.size(); ++i) {
         CreateButton(names[i], startX, startY + static_cast<int>(i * (buttonHeight + spacing)), buttonWidth, buttonHeight, i);
     }
-
 }
 
 std::vector<std::string> Menus::GetButtonNamesForCurrentState() const {

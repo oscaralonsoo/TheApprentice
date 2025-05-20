@@ -110,3 +110,11 @@ void PlayerMechanics::SetIsTouchingWall(bool touching) {
 void PlayerMechanics::EnableGlide(bool enable) {
     movementHandler.EnableGlide(enable);
 }
+
+void PlayerMechanics::EnableWallJump(bool enable) {
+    movementHandler.EnableWallJump(enable);
+}
+
+void PlayerMechanics::UpdateLastSafePosition(PhysBody* platformCollider) {
+    respawnSystem.UpdateLastSafePosition(platformCollider);
+}

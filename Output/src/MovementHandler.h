@@ -24,6 +24,7 @@ public:
     void OnWallCollision();
 
     void SetCantMove(bool cantMove);
+    bool GetCantMove() const{ return cantMove; }
     bool CanAttack() const;
     void SetCanAttack(bool canAttack);
 
@@ -48,6 +49,9 @@ public:
     void SetHookUnlocked(bool unlocked) { hookUnlocked = unlocked; }
     void EnableGlide(bool enable);
     bool IsGlideUnlocked() const { return jumpMechanic.IsGlideUnlocked(); }
+    WallSlideMechanic* GetWallSlideMechanic() { return &wallSlideMechanic; }
+    void EnableWallJump(bool enable);
+    bool IsWallJumpUnlocked() const;
 
     bool wallSlideFlip = false;
     bool disableAbilities = false;
@@ -108,4 +112,6 @@ private:
     float lianaCenterX = 0.0f;
 
     bool hookUnlocked = true;
+
+    PhysBody* lastPlatformCollider = nullptr;
 };

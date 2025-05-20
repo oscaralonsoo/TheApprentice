@@ -21,6 +21,7 @@ enum class EntityType
 	THUMPOD,
 	SCURVER,
 	SPEAR,
+	CRYSTAL,
 	BULLET,
 	BALL,
 	LIFE_PLANT,

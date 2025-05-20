@@ -34,21 +34,13 @@ void RespawnSystem::UpdateLastSafePosition(PhysBody* platformCollider) {
     float verticalOffset = 100.0f;
     float respawnY = topY - verticalOffset;
 
-    float platformCenterX = METERS_TO_PIXELS(posMeters.x);
-    float platformHalfWidth = width / 2.0f;
+    float platformCenterX = METERS_TO_PIXELS(posMeters.x) - 32;
 
-    float respawnX = 0.0f;
-
-    if (lastMovementDirection > 0) {
-        respawnX = platformCenterX + platformHalfWidth - 20;
-    }
-    else {
-        respawnX = platformCenterX - platformHalfWidth - 103;
-    }
+    // Ahora se reaparece en el centro de la plataforma
+    float respawnX = platformCenterX;
 
     lastSafePosition = Vector2D(respawnX, respawnY);
 }
-
 
 void RespawnSystem::ForceRespawn() {
     shouldRespawn = true;

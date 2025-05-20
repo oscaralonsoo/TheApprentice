@@ -29,6 +29,10 @@ public:
     bool IsGliding() const { return isGliding; }
     bool IsGlideUnlocked() const { return glideUnlocked; }
 
+    void EnableWallJump(bool enable);
+    bool IsWallJumpUnlocked() const { return wallJumpUnlocked; }
+    bool IsWallJumpLocked() const { return wallJumpLockActive; }
+
 private:
     Player* player = nullptr;
 
@@ -39,11 +43,12 @@ private:
     const int maxJumpCount = 2;
 
     bool isJumping = false;
+    bool jumpInterrupted = false;
 
-    float minJumpForce = 120.0f;             // Fuerza inicial para garantizar altura mínima
-    float progressiveJumpForce = 100.0f;     // Fuerza para el salto sostenido
+    float minJumpForce = 120.0f;            // Fuerza inicial para garantizar altura mï¿½nima
+    float progressiveJumpForce = 100.0f;    // Fuerza para el salto sostenido
     float jumpHoldForceFactor = 2.3f;       // Factor inicial de fuerza sostenida
-    float jumpDecayRate = 4.5f;             // Qué tan rápido decae la fuerza sostenida
+    float jumpDecayRate = 4.5f;             // Quï¿½ tan rï¿½pido decae la fuerza sostenida
     float fallAccelerationFactor = 40.0f;   // Fuerza que empuja hacia abajo al soltar el salto
 
     Timer jumpHoldTimer;
@@ -61,4 +66,14 @@ private:
     bool glideUnlocked = true;
     bool isGliding = false;
     float glideGravityScale = 0.5f; // Puedes ajustar este valor
+
+    // Wall jump
+    bool wallJumpUnlocked = true;
+
+    Timer wallJumpLockTimer;
+    float wallJumpLockDuration = 200.0f; // ms
+    bool wallJumpLockActive = false;
+
+    float wallJumpHorizontalImpulse = 10.0f;
+    float wallJumpVerticalImpulse = 13.0f;
 };

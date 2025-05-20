@@ -39,12 +39,13 @@ private:
     const int maxJumpCount = 2;
 
     bool isJumping = false;
+    bool jumpInterrupted = false;
 
-    float minJumpForce = 120.0f;             // Fuerza inicial para garantizar altura mínima
-    float progressiveJumpForce = 100.0f;     // Fuerza para el salto sostenido
-    float jumpHoldForceFactor = 2.3f;       // Factor inicial de fuerza sostenida
-    float jumpDecayRate = 4.5f;             // Qué tan rápido decae la fuerza sostenida
-    float fallAccelerationFactor = 40.0f;   // Fuerza que empuja hacia abajo al soltar el salto
+    float minJumpForce = 100.0f;             // Fuerza inicial para garantizar altura mínima
+    float progressiveJumpForce = 220.0f;     // Fuerza para el salto sostenido
+    float jumpHoldForceFactor = 1.7f;       // Factor inicial de fuerza sostenida
+    float jumpDecayRate = 6.5f;             // Qué tan rápido decae la fuerza sostenida
+    float fallAccelerationFactor = 0.0f;   // Fuerza que empuja hacia abajo al soltar el salto
 
     Timer jumpHoldTimer;
     float jumpHoldDuration = 370.0f;

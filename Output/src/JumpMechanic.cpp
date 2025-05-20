@@ -47,24 +47,26 @@ void JumpMechanic::HandleJumpInput(float dt) {
             jumpCount = 1;
             player->GetMechanics()->SetIsOnGround(false);
             player->SetState("jump");
+            jumpInterrupted = false;
 
             jumpCooldownTimer.Start();
             jumpCooldownActive = true;
 
-            // Impulso inicial para garantizar altura mínima
+            // Impulso inicial para garantizar altura mï¿½nima
             b2Vec2 impulse(0, -minJumpForce);
             player->pbody->body->ApplyForceToCenter(impulse, true);
         }
         else if (doubleJumpUnlocked && jumpCount < maxJumpCount) {
             jumpHoldTimer.Start();
             isJumping = true;
+            jumpInterrupted = false;
             jumpCount = 2;
             player->SetState("jump");
 
             jumpCooldownTimer.Start();
             jumpCooldownActive = true;
 
-            // Resetear velocidad vertical para evitar acumulación
+            // Resetear velocidad vertical para evitar acumulaciï¿½n
             b2Vec2 vel = player->pbody->body->GetLinearVelocity();
             vel.y = 0;
             player->pbody->body->SetLinearVelocity(vel);
@@ -88,18 +90,31 @@ void JumpMechanic::HandleJumpInput(float dt) {
         b2Vec2 force(0, forceY);
         player->pbody->body->ApplyForceToCenter(force, true);
 
-        // Si pasó el tiempo máximo, detenemos salto sostenido
         if (t >= 1.0f) {
             isJumping = false;
+
+            // Solo la primera vez que se interrumpe el salto, seteamos la velocidad Y a 0
+            if (!jumpInterrupted) {
+                b2Vec2 vel = player->pbody->body->GetLinearVelocity();
+                vel.y = 0;
+                player->pbody->body->SetLinearVelocity(vel);
+                jumpInterrupted = true;
+            }
         }
     }
 
-    // Finalizar salto si se suelta la tecla
-    if (jumpUp || jumpHoldTimer.ReadMSec() > jumpHoldDuration) {
+    if ((jumpUp || jumpHoldTimer.ReadMSec() > jumpHoldDuration) && isJumping) {
         isJumping = false;
+
+        if (!jumpInterrupted) {
+            b2Vec2 vel = player->pbody->body->GetLinearVelocity();
+            vel.y = 3;
+            player->pbody->body->SetLinearVelocity(vel);
+            jumpInterrupted = true;
+        }
     }
 
-    // Planeo (solo después del doble salto y tras terminar el impulso)
+    // Planeo (solo despuï¿½s del doble salto y tras terminar el impulso)
     if (jumpCount == 2 && !isJumping &&
         glideUnlocked && jumpRepeat &&
         !player->GetMechanics()->IsOnGround() &&
@@ -119,15 +134,6 @@ void JumpMechanic::HandleJumpInput(float dt) {
     else if (isGliding && (!jumpRepeat || player->GetMechanics()->IsOnGround())) {
         isGliding = false;
         player->pbody->body->SetGravityScale(2.0f);
-    }
-
-    if (!isJumping &&
-        !isGliding &&
-        !player->GetMechanics()->IsOnGround() &&
-        !player->GetMechanics()->IsWallSliding()) {
-
-        b2Vec2 fallForce(0, fallAccelerationFactor);
-        player->pbody->body->ApplyForceToCenter(fallForce, true);
     }
 }
 

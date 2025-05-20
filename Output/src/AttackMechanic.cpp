@@ -10,6 +10,8 @@ void AttackMechanic::Init(Player* player) {
 }
 
 void AttackMechanic::Update(float dt) {
+    if (!player->GetMechanics()->GetMovementHandler()->CanAttack())
+        return;
     if (!isAttacking) {
         bool attackPressed = false;
 

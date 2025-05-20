@@ -22,6 +22,7 @@ private:
     bool isWallSliding = false;
 
     Timer wallSlideCooldownTimer;
-    float wallSlideCooldownTime = 100.0f; // tiempo de enfriamiento para volver a engancharse
+    float wallSlideCooldownTime = 3000.0f; // tiempo de enfriamiento para volver a engancharse
     bool wallSlideCooldownActive = false;
+
 };

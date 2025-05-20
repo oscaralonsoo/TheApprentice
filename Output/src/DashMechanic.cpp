@@ -12,11 +12,6 @@ void DashMechanic::Init(Player* player) {
 void DashMechanic::Update(float dt) {
     if (!dashUnlocked)
         return;
-    // Bloquear dash si estás en wallslide o tocando una pared
-    if (player->GetMechanics()->GetMovementHandler()->IsWallSliding() ||
-        player->GetMechanics()->IsTouchingWall()) {
-        return;
-    }
 
     if (!canDash && dashCooldownTimer.ReadSec() >= dashCooldownTime) {
         canDash = true;

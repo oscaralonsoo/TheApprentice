@@ -65,18 +65,35 @@ IHookable* HookManager::GetClosestHook() const
         return nullptr;
 
     b2Vec2 playerPos = player->pbody->body->GetPosition();
+    int playerDirection = player->GetMovementDirection(); // -1 izquierda, 1 derecha
 
-    auto closest = std::min_element(hooksInRange.begin(), hooksInRange.end(),
-        [playerPos](IHookable* a, IHookable* b) {
-            b2Vec2 aPos = a->GetPhysBody()->body->GetPosition();
-            b2Vec2 bPos = b->GetPhysBody()->body->GetPosition();
-            return b2Distance(playerPos, aPos) < b2Distance(playerPos, bPos);
-        });
+    IHookable* closest = nullptr;
+    float closestDistance = std::numeric_limits<float>::max();
 
-    if (closest != hooksInRange.end() && IsHookVisible(*closest))
-        return *closest;
+    for (IHookable* hook : hooksInRange)
+    {
+        if (hook->IsHookUsed())
+            continue;
 
-    return nullptr;
+        b2Vec2 hookPos = hook->GetPhysBody()->body->GetPosition();
+        float horizontalDiff = hookPos.x - playerPos.x;
+
+        // Filtrar por dirección: si mira izquierda y el gancho está a la derecha, se salta
+        if ((playerDirection == -1 && horizontalDiff > 0) || (playerDirection == 1 && horizontalDiff < 0))
+            continue;
+
+        if (!IsHookVisible(hook))
+            continue;
+
+        float distance = b2Distance(playerPos, hookPos);
+        if (distance < closestDistance)
+        {
+            closest = hook;
+            closestDistance = distance;
+        }
+    }
+
+    return closest;
 }
 
 bool HookManager::IsHookVisible(IHookable* hook) const

@@ -125,35 +125,23 @@ bool AbilityZone::Update(float dt)
 		if (playerRight >= rightLimit - 144.0f) {
 			bool confirmPressed = false;
 
-			if (!controller) {
-				LOG("Controller es nullptr");
-			}
-			else if (!SDL_GameControllerGetAttached(controller)) {
-				LOG("Controller no está attached");
-			}
-			else {
-				LOG("Controller está listo y debería detectar botones");
-			}
-
-			// Tecla J
+			// J del teclado
 			if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
 				confirmPressed = true;
-				player->SetState("eat");
 			}
 
-			// Botón X del gamepad
+			// Botón X del mando (como en los menús con A)
 			if (controller && SDL_GameControllerGetAttached(controller)) {
 				bool xNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_X);
 				if (xNow && !xHeld) {
-					LOG("Botón X detectado en AbilityZone");
 					confirmPressed = true;
 				}
 				xHeld = xNow;
-				player->SetState("eat");
 			}
 
-			// Desbloquear habilidad correspondiente
 			if (confirmPressed) {
+				player->SetState("eat");
+
 				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
 				player->GetMechanics()->GetMovementHandler()->SetCantMove(true);
 				player->GetMechanics()->GetMovementHandler()->SetCanAttack(true);
@@ -163,28 +151,22 @@ bool AbilityZone::Update(float dt)
 				if (playerInsideJump) {
 					mechanics->EnableJump(true);
 					Engine::GetInstance().menus->abilityName = "jump";
-					player->GetMechanics()->GetMovementHandler()->SetCantMove(false);
-					player->GetMechanics()->GetMovementHandler()->disableAbilities = false;
 				}
 				else if (playerInsideDoubleJump) {
 					mechanics->EnableDoubleJump(true);
 					Engine::GetInstance().menus->abilityName = "doublejump";
-					player->GetMechanics()->GetMovementHandler()->SetCantMove(false);
-					player->GetMechanics()->GetMovementHandler()->disableAbilities = false;
 				}
 				else if (playerInsideDash) {
 					mechanics->EnableDash(true);
 					Engine::GetInstance().menus->abilityName = "dash";
-					player->GetMechanics()->GetMovementHandler()->SetCantMove(false);
-					player->GetMechanics()->GetMovementHandler()->disableAbilities = false;
 				}
 				else if (type == "Hook") {
 					mechanics->GetMovementHandler()->SetHookUnlocked(true);
 					Engine::GetInstance().menus->abilityName = "hook";
-					player->GetMechanics()->GetMovementHandler()->SetCantMove(false);
-					player->GetMechanics()->GetMovementHandler()->disableAbilities = false;
 				}
 
+				player->GetMechanics()->GetMovementHandler()->SetCantMove(false);
+				player->GetMechanics()->GetMovementHandler()->disableAbilities = false;
 				Engine::GetInstance().menus->StartTransition(false, MenusState::ABILITIES);
 			}
 		}

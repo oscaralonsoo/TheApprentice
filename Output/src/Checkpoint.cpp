@@ -7,6 +7,9 @@
 #include "Scene.h"
 #include "Log.h"
 #include "Physics.h"
+#include "PlayerMechanics.h"
+#include "Player.h"
+#include "MovementHandler.h"
 
 Checkpoint::Checkpoint() : Entity(EntityType::CHECKPOINT), state(CheckpointState::UNSAVED)
 {
@@ -76,6 +79,8 @@ bool Checkpoint::Update(float dt)
         break;
     case CheckpointState::SAVED:
         if (currentAnimation != &savedAnim) currentAnimation = &savedAnim;
+        Player* player = Engine::GetInstance().scene->GetPlayer();
+        player->GetMechanics()->GetMovementHandler()->SetCantMove(false);
         break;
     }
 
@@ -126,7 +131,27 @@ void Checkpoint::OnCollisionEnd(PhysBody* physA, PhysBody* physB){
     }
 }
 void Checkpoint::CheckSave() {
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && insideCheckpoint) {
+    bool saveRequested = false;
+
+    // Tecla W
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
+        saveRequested = true;
+    }
+
+    // Botón Y del mando (desde MovementHandler)
+    Player* player = Engine::GetInstance().scene->GetPlayer();
+    SDL_GameController* controller = player->GetMechanics()->GetMovementHandler()->GetController();
+
+    if (controller && SDL_GameControllerGetAttached(controller)) {
+        bool yNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_Y);
+        if (yNow && !yHeld) {
+            saveRequested = true;
+        }
+        yHeld = yNow;
+    }
+
+    // Ejecutar guardado si se ha pedido y estás dentro del checkpoint
+    if (saveRequested && insideCheckpoint) {
         if (state == CheckpointState::UNSAVED) {
             state = CheckpointState::SAVING;
         }
@@ -134,8 +159,6 @@ void Checkpoint::CheckSave() {
             Engine::GetInstance().scene->SaveGameXML();
         }
 
-        // TODO JAVI --- PLAYER STOP MOVING
-        Player* player = Engine::GetInstance().scene->GetPlayer();
         player->GetMechanics()->GetMovementHandler()->SetCantMove(true);
         b2Vec2 stopVelocity(0.0f, 0.0f);
         player->pbody->body->SetLinearVelocity(stopVelocity);

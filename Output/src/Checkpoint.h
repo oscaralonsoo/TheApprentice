@@ -53,4 +53,5 @@ private:
 
     bool isSaving = false;
     bool insideCheckpoint = false;
+    bool yHeld = false;
 };

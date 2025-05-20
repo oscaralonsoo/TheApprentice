@@ -31,6 +31,8 @@ private:
     PhysBody* physBody = nullptr;
 
     Animation idleAnim;
+    Animation spawnAnim;
+    Animation deathAnim;
 
     // Brood Spawn
     float spawnCooldown = 0.0f;

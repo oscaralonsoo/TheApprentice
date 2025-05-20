@@ -41,7 +41,6 @@ bool Scene::Awake()
 	LOG("Loading Scene");
 	bool ret = true;
 
-	//L04: TODO 3b: Instantiate the player using the entity manager
 	player = (Player*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PLAYER);
 	player->SetParameters(configParameters.child("animations").child("player"));
 	mechanics = player->GetMechanics();
@@ -54,7 +53,7 @@ bool Scene::Awake()
 bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
-	Engine::GetInstance().map->Load("Assets/Maps/", "Map21.tmx");
+	Engine::GetInstance().map->Load("Assets/Maps/", "Map1.tmx");
 	return true;
 }
 
@@ -341,7 +340,7 @@ void Scene::VignetteHeartBeat(float dt)
 		heartbeatTimer = 0.0f;
 		heartbeatGrowing = true;
 	}
-	float speed = heartbeatGrowing ? 0.01f : -0.005f;
+	float speed = heartbeatGrowing ? 0.005f : -0.0025f;
 	heartbeatProgress = Clamp(heartbeatProgress + dt * speed, 0.0f, 1.0f);
 	if (heartbeatProgress == 1.0f)
 		heartbeatGrowing = false;

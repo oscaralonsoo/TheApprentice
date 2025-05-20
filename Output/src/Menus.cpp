@@ -366,13 +366,24 @@ void Menus::CreateButtons() {
     int spacing = static_cast<int>(BUTTON_SPACING * scale);
     int totalHeight = names.size() * (buttonHeight + spacing) - spacing;
 
-    int startX = (width - buttonWidth) / 2-20;
-    int startY = (height - totalHeight) / 2 + static_cast<int>(50 * scale);
+    int startX = (width - buttonWidth) / 2 - 20;
+
+    int startY;
+    if (currentState == MenusState::PAUSE) {
+        spacing = static_cast<int>(BUTTON_SPACING * scale * 1.5f);
+        startY = (height - totalHeight) / 2 - static_cast<int>(20 * scale); 
+    }
+    else if (currentState == MenusState::SETTINGS) {
+        startY = (height - totalHeight) / 2 + static_cast<int>(40 * scale); 
+        spacing = static_cast<int>(BUTTON_SPACING * scale * 1.5f); 
+    }
+    else {
+        startY = (height - totalHeight) / 2 + static_cast<int>(120 * scale); 
+    }
 
     for (size_t i = 0; i < names.size(); ++i) {
         CreateButton(names[i], startX, startY + static_cast<int>(i * (buttonHeight + spacing)), buttonWidth, buttonHeight, i);
     }
-
 }
 
 std::vector<std::string> Menus::GetButtonNamesForCurrentState() const {

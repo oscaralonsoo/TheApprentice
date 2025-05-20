@@ -13,11 +13,11 @@ public:
 
     bool Update(float dt) override;
     bool CleanUp() override;
-    void OnCollision(PhysBody* physA, PhysBody* physB, const b2Vec2& normal);
+    void OnCollision(PhysBody* physA, PhysBody* physB);
 
     void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
-    void Bounce(const b2Vec2& normal);
+    void Bounce();
 
 private:
     PhysBody* pbody = nullptr;
@@ -25,7 +25,8 @@ private:
     Animation* currentAnimation = nullptr;
 
     Animation idleAnim;
-
+    float timeStuck = 0.0f;
+    b2Vec2 previousPosition;
     Vector2D position;
     int width;
     int height;

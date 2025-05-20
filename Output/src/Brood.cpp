@@ -35,9 +35,10 @@ bool Brood::Start() {
         if (std::string(enemyNode.attribute("type").as_string()) == type) {
             texture = Engine::GetInstance().textures.get()->Load(enemyNode.attribute("texture").as_string());
 
-            idleAnim.LoadAnimations(enemyNode.child("idle"));
+            flyingAnim.LoadAnimations(enemyNode.child("flying"));
+            deathAnim.LoadAnimations(enemyNode.child("death"));
 
-            currentAnimation = &idleAnim;
+            currentAnimation = &flyingAnim;
             break;
         }
     }
@@ -74,6 +75,9 @@ bool Brood::Update(float dt) {
         Chase(dt);
         break;
     case BroodState::DEAD:
+        if (broodHeart) {
+            broodHeart->OnBroodDeath(this);
+        }
         break;
     }
     return Enemy::Update(dt);
@@ -90,10 +94,8 @@ void Brood::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLAYER:
         break;
     case ColliderType::ATTACK:
-        if (broodHeart) {
-            broodHeart->OnBroodDeath(this);
-        }
         currentState = BroodState::DEAD; 
+        currentAnimation = &deathAnim;
         break;
     }
 }

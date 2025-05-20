@@ -104,7 +104,6 @@ void Bloodrusher::Idle() {
 void Bloodrusher::Attack(float dt)
 {
     if (pathfinding->pathTiles.empty()) {
-
         pbody->body->SetLinearVelocity(b2Vec2(0, 0));
         return;
     }
@@ -119,15 +118,24 @@ void Bloodrusher::Attack(float dt)
     direction = (nextTileWorld.getX() > position.getX()) ? 1.0f :
         (nextTileWorld.getX() < position.getX() ? -1.0f : 0.0f);
 
-    if (direction != previousDirection)
+    if (direction != previousDirection && !turning)
     {
-        currentState = BloodrusherState::SLIDING;
-        timer.Start();
+        turning = true;
+        turnTimer.Start();
+    }
 
+    if (turning) {
+        if (turnTimer.ReadSec() >= turnDelay) {
+            turning = false;
+            currentState = BloodrusherState::SLIDING;
+        }
+        else {
+
+            direction = previousDirection;
+        }
     }
 
     float exponentialVelocityIncrease = velocityBase * (pow(exponentialFactor, dt));
-
     currentVelocity.x += direction * exponentialVelocityIncrease;
 
     currentVelocity.x = fmin(fmax(currentVelocity.x, -maxSpeed), maxSpeed);
@@ -152,7 +160,6 @@ void Bloodrusher::Slide(float dt) {
         currentState = BloodrusherState::IDLE;
     }
 
-    // Aplicar la nueva velocidad al cuerpo
     pbody->body->SetLinearVelocity(currentVelocity);
 }
 

@@ -29,6 +29,8 @@ public:
     // Setters
     void SetParent(Broodheart* p) { broodHeart = p; }
 
+    Animation flyingAnim;
+    Animation deathAnim;
 private:
     bool isDead = false;
     Broodheart* broodHeart = nullptr;
@@ -42,5 +44,4 @@ private:
 
     BroodState currentState = BroodState::IDLE;
 
-    Animation idleAnim;
 };

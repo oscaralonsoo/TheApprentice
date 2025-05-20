@@ -87,7 +87,7 @@ private:
     bool wallSlideCooldownActive = false;
 
     // Configuración de tiempos
-    float jumpCooldownTime = 100.0f; // ms
+    float jumpCooldownTime = 1.0f; // ms
     float wallSlideCooldownTime = 100.0f; // ms
 
     bool isWallSliding = false;

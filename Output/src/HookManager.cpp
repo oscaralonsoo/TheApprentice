@@ -143,3 +143,8 @@ bool HookManager::IsHookVisible(IHookable* hook) const
     }
     return true;
 }
+
+void HookManager::ClearHooks()
+{
+    hooksInRange.clear(); // limpia el set o lista de hooks registrados
+}

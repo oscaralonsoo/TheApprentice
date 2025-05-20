@@ -3,6 +3,7 @@
 #include "Render.h"
 #include "Engine.h"
 #include "Textures.h"
+#include "Scene.h"
 
 #include <sstream> 
 #include <string>
@@ -38,10 +39,19 @@ bool DialogueManager::Start() {
 }
 
 bool DialogueManager::Update(float dt) {
+	SDL_GameController* controller = Engine::GetInstance().scene->GetPlayer()->GetMechanics()->GetMovementHandler()->GetController();
+	bool l1Pressed = false;
+
+	if (controller && SDL_GameControllerGetAttached(controller)) {
+		l1Pressed = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == 1;
+	}
+
 	if (dialogueAvailable && !dialogueStarted) {
 		ShowInteractionPrompt();
 
-		if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
+		bool interactKeyPressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_E) == KEY_DOWN;
+
+		if (interactKeyPressed || l1Pressed) {
 			dialogueStarted = true;
 			currentLineIndex = 0;
 			ResetTyping();
@@ -49,7 +59,9 @@ bool DialogueManager::Update(float dt) {
 	}
 
 	if (dialogueStarted && activeDialogueId != -1) {
-		if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+		bool nextKeyPressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN;
+
+		if (nextKeyPressed || l1Pressed) {
 			if (!typingFinished) {
 				forceTypingFinish = true;
 			}

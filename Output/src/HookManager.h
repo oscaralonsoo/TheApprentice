@@ -12,6 +12,7 @@ public:
     void TryUseClosestHook();
     IHookable* GetClosestHook() const;
     bool IsHookVisible(IHookable* hook) const;
+    void ClearHooks();
 
 private:
     std::vector<IHookable*> hooksInRange;

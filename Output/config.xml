@@ -126,7 +126,7 @@
 			</player>
 			<enemies>
 				<enemy type="Bloodrusher" w="220" h="220" texture="Assets/Enemies/bloodrusher.png">
-					<idle loop="true" speed="0.35">
+					<idle loop="true" speed="0.2">
 						<frame x="0" y="0" w="220" h="220" />
 						<frame x="220" y="0" w="220" h="220" />
 						<frame x="440" y="0" w="220" h="220" />

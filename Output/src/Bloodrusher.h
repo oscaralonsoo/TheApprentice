@@ -29,6 +29,7 @@ public:
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
     BloodrusherState GetCurrentState() const { return currentState; }
     void SetState(BloodrusherState state) { currentState = state; }
+    bool IsGroundAhead();
 
 
 private:
@@ -42,7 +43,7 @@ private:
     float previousDirection;
     Timer timer;
 
-    float exponentialFactor = 1.007f;
-    float velocityBase = 0.15f;
-    float maxSpeed = 15.0f;
+    Timer turnTimer;
+    float turnDelay = 0.25f;
+    bool turning = false;
 };

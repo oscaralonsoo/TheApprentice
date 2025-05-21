@@ -101,7 +101,6 @@ void DungBeetle::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         break;
     case ColliderType::PLAYER:
-        // TODO TONI --- DETECTAR COLISION!
         Bounce();
         break;
     }
@@ -210,7 +209,7 @@ void DungBeetle::ChangeBodyType() {
         isDynamic = true;
 }
 int DungBeetle::CheckPuzzleState() {
-    int PuzzlesDone = 2; // TODO OSCAR --- CURRENT PRESSED PLATES
+    int PuzzlesDone = 3; // TODO OSCAR --- CURRENT PRESSED PLATES
     return PuzzlesDone;
 
 }

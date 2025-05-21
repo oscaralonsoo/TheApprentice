@@ -20,6 +20,7 @@ Menus::~Menus() {}
 bool Menus::Awake() { return true; }
 
 bool Menus::Start() {
+    SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &width, &height);
     LoadTextures();
     CreateButtons();
     LoadConfig();
@@ -110,11 +111,14 @@ bool Menus::PostUpdate() {
     return !isExit;
 }
 void Menus::DrawBackground() {
-    SDL_Rect cameraRect = { 0, 0, width, height };
     std::string bgKey = GetBackgroundKey();
     auto it = backgroundTextures.find(bgKey);
     if (it != backgroundTextures.end() && it->second) {
-        Engine::GetInstance().render->DrawTexture(it->second, cameraRect.x - Engine::GetInstance().render->camera.x, cameraRect.y - Engine::GetInstance().render->camera.y, &cameraRect);
+        int texW, texH;
+        SDL_QueryTexture(it->second, NULL, NULL, &texW, &texH);
+
+        SDL_Rect destRect = { 0, 0, width, height };
+        SDL_RenderCopy(Engine::GetInstance().render->renderer, it->second, nullptr, &destRect);
     }
 }
 std::string Menus::GetBackgroundKey() const {
@@ -228,29 +232,29 @@ void Menus::Pause(float dt) {
     }
 }
 void Menus::Settings() {
-    bool buttonPressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN;
-
+    bool buttonPressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN;
+    bool aNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A);
     if (controller && SDL_GameControllerGetAttached(controller)) {
-        bool aNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A);
-        if (aNow && !aHeld) {
+        bool bNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_B);
+
+        if (buttonPressed) {
+        if (bNow && !aHeld) {
             buttonPressed = true;
         }
-        aHeld = aNow;
-    }
-
-    if (buttonPressed) {
+        aHeld = bNow;
+        }
         nextState = (previousState == MenusState::PAUSE) ? MenusState::PAUSE : previousState;
         inConfig = false;
         StartTransition(true, nextState);
     }
-    else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+    else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN || aNow && aHeld) {
         HandleSettingsSelection();
     }
     HandleVolumeSliders();
 }
 void Menus::HandleSettingsSelection() {
     switch (selectedButton) {
-    case 0: /*ToggleFullScreen(); */break;
+    case 0: ToggleFullScreen(); break;
     case 1: ToggleVSync(); break;
     }
 }
@@ -519,7 +523,6 @@ void Menus::DrawPlayerLives() {
 bool Menus::ContinueLoadingScreen()
 {
     if (Engine::GetInstance().scene->isLoading) {
-        // Aplica fade out progresivo a negro
         if (transitionAlpha < 1.0f) {
             transitionAlpha += 0.01f;
         }

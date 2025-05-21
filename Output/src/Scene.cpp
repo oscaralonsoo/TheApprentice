@@ -53,7 +53,7 @@ bool Scene::Awake()
 bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
-	Engine::GetInstance().map->Load("Assets/Maps/", "Map1.tmx");
+	Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx");
 	return true;
 }
 
@@ -266,10 +266,11 @@ void Scene::LoadGameXML() {
     if (saveData) {
         pugi::xml_node playerNode = saveData.child("player");
         if (playerNode) {
-            float playerX = playerNode.attribute("x").as_float();
-            float playerY = playerNode.attribute("y").as_float();
+			int offset = 100;
+            float playerX = playerNode.attribute("x").as_float() ;
+            float playerY = playerNode.attribute("y").as_float() - offset;
 			player->GetMechanics()->GetHealthSystem()->SetLives(playerNode.attribute("lives").as_int());
-            newPosition = Vector2D(playerX, playerY - 100); 
+            newPosition = Vector2D(playerX, playerY); 
         }
 		pugi::xml_node abilitiesNode = saveData.child("abilities"); // Abilities Load
 		if (abilitiesNode) {

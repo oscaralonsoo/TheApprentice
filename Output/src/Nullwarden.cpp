@@ -19,7 +19,7 @@ bool Nullwarden::Awake() {
 
 bool Nullwarden::Start() {
     //Add a physics to an item - initialize the physics body
-    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texW / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::DYNAMIC);
+    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texW / 2, (int)position.getY() + texH , texW/3+10, bodyType::DYNAMIC);
 
     //Assign collider type
     pbody->ctype = ColliderType::ENEMY;
@@ -89,7 +89,7 @@ bool Nullwarden::Update(float dt) {
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texW / 2);
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
-    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame(),
+    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + drawOffset , (int)position.getY(), &currentAnimation->GetCurrentFrame(),
         1.0f,
         0.0,
         INT_MAX,
@@ -97,6 +97,7 @@ bool Nullwarden::Update(float dt) {
         (direction < 0) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
     currentAnimation->Update();
 
+    idleCrystalOffsetTimer += dt;
     return true;
 }
 
@@ -104,7 +105,6 @@ bool Nullwarden::PostUpdate() {
     if (currentState == NullwardenState::DEATH && currentAnimation->HasFinished()) {
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
     }
-
     return true;
 }
 
@@ -172,29 +172,58 @@ void Nullwarden::SpawnVerticalSpears() {
     spawnedVerticalSpears++;
 }
 b2Vec2 Nullwarden::GetCrystalOffset() const {
+
     if (currentAnimation == &idleAnim) {
-        return b2Vec2(0.0f, -1.0f); 
+        return b2Vec2(-1.0f * (direction < 0 ? -1 : 1), -1.5f);
     }
     else if (currentAnimation == &attackAnim) {
         return b2Vec2(1.5f * (direction < 0 ? -1 : 1), 0.0f); 
     }
     else if (currentAnimation == &chargeAnim) {
-        return b2Vec2(0.0f, 1.0f);
+        return b2Vec2(-1.0f * (direction < 0 ? -1 : 1), -2.0f);
     }
     else if (currentAnimation == &roarAnim) {
         return b2Vec2(-1.0f * (direction < 0 ? -1 : 1), -0.5f); 
     }
-    else if (currentAnimation == &deathAnim || currentAnimation == &impaledAnim) {
-        return b2Vec2(-5.0f, 0.0f);
+    else if (currentAnimation == &impaledAnim) {
+        Uint32 time = SDL_GetTicks();
+        Uint32 interval = 995;  
+        Uint32 jerkDuration = 500;  
+
+        float baseX = -1.45f;
+        float jerkOffset = -0.2f; 
+
+        bool isJerking = (time % interval) < jerkDuration;
+
+        float offsetX = (baseX + (isJerking ? jerkOffset : 0.0f)) * (direction < 0 ? -1 : 1);
+        return b2Vec2(offsetX, -1.0f);
     }
     return b2Vec2(0.0f, 0.0f);
 }
+float Nullwarden::GetCrystalRotation() const {
+    if (currentAnimation == &idleAnim) {
+        return 90.0f * (direction < 0 ? -1 : 1);
+    }
+    else if (currentAnimation == &attackAnim) {
+        return 270.0f * (direction < 0 ? -1 : 1);  
+    }
+    else if (currentAnimation == &chargeAnim) {
+        return 90.0f * (direction < 0 ? -1 : 1);  
+    }
+    else if (currentAnimation == &roarAnim) {
+        return -20.0f * (direction < 0 ? -1 : 1);
+    }
+    else if ( currentAnimation == &impaledAnim) {
+        return 90.0f * (direction < 0 ? -1 : 1);  
+    }
+    return 0.0f;
+}
 void Nullwarden::Attack() {
     if (currentAnimation != &attackAnim) {
+        direction = -direction;
         currentAnimation = &attackAnim;
         spearIntervalTimer.Start();
         spearAttackTimer.Start();
-        direction = -direction;
     }
 
     if (spearIntervalTimer.ReadMSec() >= spearIntervalMs) {

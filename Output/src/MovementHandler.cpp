@@ -419,3 +419,11 @@ void MovementHandler::EnableWallJump(bool enable) {
 bool MovementHandler::IsWallJumpUnlocked() const {
     return jumpMechanic.IsWallJumpUnlocked();
 }
+
+void MovementHandler::EnablePush(bool enable) {
+    canPushBoxes = enable;
+}
+
+bool MovementHandler::CanPush() const {
+    return canPushBoxes;
+}

@@ -2,6 +2,7 @@
 
 #include "Entity.h"
 #include "SDL2/SDL.h"
+#include "Physics.h"
 
 class PushableBox : public Entity
 {
@@ -18,6 +19,8 @@ public:
     void SetPosition(Vector2D pos);
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
     void OnCollisionEnd(PhysBody* physA, PhysBody* physB) override;
+    void RecreateBody(bodyType type);
+
     Vector2D GetPosition() const;
 
 protected:
@@ -27,4 +30,5 @@ protected:
     int texH = 0;
     Vector2D position;
     bool touchingPlayer = false;
+    bool isStatic = false;
 };

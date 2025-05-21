@@ -88,4 +88,7 @@ private:
 	SDL_Texture* doubleJumpSprite = nullptr;
 	SDL_Texture* dashSprite = nullptr;
 	SDL_Texture* hookSprite = nullptr;
+	SDL_Texture* glideSprite = nullptr;
+	SDL_Texture* pushSprite = nullptr;
+	SDL_Texture* wallJumpSprite = nullptr;
 };

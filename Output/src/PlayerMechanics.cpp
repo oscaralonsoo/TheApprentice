@@ -118,3 +118,11 @@ void PlayerMechanics::EnableWallJump(bool enable) {
 void PlayerMechanics::UpdateLastSafePosition(PhysBody* platformCollider) {
     respawnSystem.UpdateLastSafePosition(platformCollider);
 }
+
+void PlayerMechanics::EnablePush(bool enable) {
+    movementHandler.EnablePush(enable);
+}
+
+bool PlayerMechanics::CanPush() const {
+    return movementHandler.CanPush();
+}

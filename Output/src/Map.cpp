@@ -486,12 +486,10 @@ bool Map::Load(std::string path, std::string fileName)
                         abilityZone = (AbilityZone*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ABILITY_ZONE);
                     if (abilityZone != nullptr)
                     {
-                        printf("[Map] AbilityZone final size: type=%s, x=%d, y=%d, w=%d, h=%d\n",
-                            abilityName.c_str(), x, y, width, height);
-
                         abilityZone->SetParameters(abilityNode);
 
-                        LOG("Created enemy '%s' at x: %d, y: %d", abilityName.c_str(), x, y);
+                        printf("[Map] AbilityZone final size: type=%s, x=%d, y=%d, w=%d, h=%d\n",
+                            abilityName.c_str(), x, y, width, height);
                     }
                 }
             }

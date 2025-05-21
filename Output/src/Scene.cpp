@@ -246,7 +246,11 @@ void Scene::SaveGameXML() {
 	abilitiesNode.attribute("jump") = player->GetMechanics()->GetMovementHandler()->IsJumpUnlocked();
 	abilitiesNode.attribute("doublejump") = player->GetMechanics()->GetMovementHandler()->IsDoubleJumpUnlocked();
 	abilitiesNode.attribute("dash") = player->GetMechanics()->GetMovementHandler()->IsDashUnlocked();
-
+	abilitiesNode.attribute("glide") = player->GetMechanics()->GetMovementHandler()->IsGlideUnlocked();
+	abilitiesNode.attribute("walljump") = player->GetMechanics()->GetMovementHandler()->IsWallJumpUnlocked();
+	abilitiesNode.attribute("hook") = player->GetMechanics()->GetMovementHandler()->IsHookUnlocked();
+	abilitiesNode.attribute("push") = player->GetMechanics()->GetMovementHandler()->IsHookUnlocked(); //TODO JAVI --- IsPushUnlocked()
+	
 	pugi::xml_node sceneNode = saveData.child("scene"); // Save Actual Scene
 	sceneNode.attribute("actualScene") = nextScene;
 	saveData.attribute("isSaved") = Engine::GetInstance().menus->isSaved;
@@ -285,6 +289,18 @@ void Scene::LoadGameXML() {
 			}
 			if (abilitiesNode.attribute("dash").as_bool() == true) {
 				mechanics->EnableDash(true);
+			}
+			if (abilitiesNode.attribute("hook").as_bool() == true) {
+				mechanics->GetMovementHandler()->SetHookUnlocked(true);
+			}
+			if (abilitiesNode.attribute("walljump").as_bool() == true) {
+				mechanics->EnableWallJump(true);
+			}
+			if (abilitiesNode.attribute("glide").as_bool() == true) {
+				mechanics->EnableGlide(true);
+			}
+			if (abilitiesNode.attribute("push").as_bool() == true) {
+				mechanics->GetMovementHandler()->SetHookUnlocked(true);
 			}
 		}
         pugi::xml_node sceneNode = saveData.child("scene");

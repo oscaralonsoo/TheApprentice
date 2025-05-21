@@ -152,17 +152,25 @@ bool AbilityZone::Update(float dt)
 				mechanics->GetHealthSystem()->SetVignetteSize(Engine::GetInstance().scene->previousVignetteSize);
 				markedForDeletion = true;
 
-				if (playerInsideJump) {
+				if (type == "Jump") {
 					mechanics->EnableJump(true);
 					Engine::GetInstance().menus->abilityName = "jump";
 				}
-				else if (playerInsideDoubleJump) {
+				else if (type == "DoubleJump") {
 					mechanics->EnableDoubleJump(true);
 					Engine::GetInstance().menus->abilityName = "doublejump";
 				}
-				else if (playerInsideDash) {
+				else if (type == "Dash") {
 					mechanics->EnableDash(true);
 					Engine::GetInstance().menus->abilityName = "dash";
+				}
+				else if (type == "WallJump") {
+					mechanics->EnableDash(true);
+					Engine::GetInstance().menus->abilityName = "walljump";
+				}
+				else if (type == "Glide") {
+					mechanics->EnableGlide(true);
+					Engine::GetInstance().menus->abilityName = "glide";
 				}
 				else if (type == "Hook") {
 					mechanics->GetMovementHandler()->SetHookUnlocked(true);

@@ -56,7 +56,7 @@ public:
 
 	void Vignette(int size, float strength, SDL_Color color);
 
-	void VignetteHeartBeat(float dt);
+	void VignetteChanges(float dt);
 
 	Player* GetPlayer() const { return player; }
 
@@ -89,6 +89,11 @@ public:
 	float heartbeatInterval = 2000.0f;
 	bool heartbeatGrowing = false;
 	float heartbeatProgress = 0.0f; 
+
+	// Healing
+	bool healingEffectActive = false;
+	Timer healingEffectTimer;
+	const float healingEffectDuration = 0.6f;
 private:
 	SDL_Texture* img;
 	//L03: TODO 3b: Declare a Player attribute
@@ -112,6 +117,7 @@ private:
 	float blackScreenTimer = 0.0f;
 	const float blackScreenDelay = 1000.0f; 
 	bool waitingBlackScreen = false;
+
 
 
 	//Renderer

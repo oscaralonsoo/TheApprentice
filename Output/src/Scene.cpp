@@ -53,7 +53,7 @@ bool Scene::Awake()
 bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
-	Engine::GetInstance().map->Load("Assets/Maps/", "Map0.tmx");
+	Engine::GetInstance().map->Load("Assets/Maps/", "Map1.tmx");
 	return true;
 }
 
@@ -96,8 +96,7 @@ bool Scene::Update(float dt)
 		SaveGameXML();
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 		LoadGameXML();
-	// L�gica para el efecto de latidos
-	VignetteHeartBeat(dt);
+	VignetteChanges(dt);
 	return true;
 }
 
@@ -328,24 +327,46 @@ void Scene::Vignette(int size, float strength, SDL_Color color)
 		SDL_RenderFillRect(renderer, &right);
 	}
 }
-void Scene::VignetteHeartBeat(float dt)
+void Scene::VignetteChanges(float dt)
 {
-	if (mechanics->GetHealthSystem()->GetLives() != 1)
-	{
+	if (healingEffectActive) {
+		if (healingEffectTimer.ReadMSec() == 0.0f) {
+			healingEffectTimer.Start();
+		}
+		float t = healingEffectTimer.ReadMSec() / healingEffectDuration;
+		t = Clamp(t, 0.0f, 1.0f);
+
+		// Interpolar de blanco a negro
+		vignetteColor.r = static_cast<Uint8>((1.0f - t) * 255);
+		vignetteColor.g = static_cast<Uint8>((1.0f - t) * 255);
+		vignetteColor.b = static_cast<Uint8>((1.0f - t) * 255);
+
+		if (healingEffectTimer.ReadMSec() >= healingEffectDuration) {
+			vignetteColor.r = 0;
+			vignetteColor.g = 0;
+			vignetteColor.b = 0;
+			vignetteColor.a = 255;
+			healingEffectActive = false;
+		}
+	}
+
+	if (mechanics->GetHealthSystem()->GetLives() != 1) {
 		heartbeatProgress = 0.0f;
 		return;
 	}
+
 	heartbeatTimer += dt;
-	if (heartbeatTimer >= heartbeatInterval)
-	{
+	if (heartbeatTimer >= heartbeatInterval) {
 		heartbeatTimer = 0.0f;
 		heartbeatGrowing = true;
 	}
+
 	float speed = heartbeatGrowing ? 0.005f : -0.0025f;
 	heartbeatProgress = Clamp(heartbeatProgress + dt * speed, 0.0f, 1.0f);
 	if (heartbeatProgress == 1.0f)
 		heartbeatGrowing = false;
 }
+
 void Scene::SetActiveHook(HookAnchor* hook)
 {
 	activeHook = hook;

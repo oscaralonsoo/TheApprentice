@@ -61,6 +61,8 @@ bool LifePlant::Update(float dt) {
         break;
     case LifePlantStates::CONSUMED:
         if (currentAnimation != &consumedAnim) currentAnimation = &consumedAnim;
+        Engine::GetInstance().scene->vignetteColor = { 241, 241, 238, 255 };
+        Engine::GetInstance().scene->healingEffectActive = true;
         break;
     }
 

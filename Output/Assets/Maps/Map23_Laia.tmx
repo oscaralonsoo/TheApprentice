@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="128" height="113" tilewidth="64" tileheight="64" infinite="0" nextlayerid="66" nextobjectid="4230">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="113" tilewidth="64" tileheight="64" infinite="0" nextlayerid="66" nextobjectid="4311">
  <tileset firstgid="1" name="tiles_manglar" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_manglar.png" width="640" height="640"/>
  </tileset>
@@ -130338,7 +130338,6 @@
   <object id="2540" x="1792" y="3584" height="128"/>
   <object id="2542" x="4288" y="2944" height="640"/>
   <object id="2549" x="2688" y="3456" height="64"/>
-  <object id="2551" x="2048" y="3328" height="128"/>
   <object id="2556" x="2880" y="3328" height="128"/>
   <object id="2558" x="3584" y="3456" height="64"/>
   <object id="2679" x="4992" y="2944" height="960"/>
@@ -130353,12 +130352,10 @@
   <object id="3184" x="3520" y="5823.9" height="448"/>
   <object id="3217" x="4288" y="5887.9" height="640"/>
   <object id="3323" x="2752" y="4352" height="832"/>
-  <object id="3354" x="1856" y="832" height="512"/>
   <object id="3365" x="2688" y="1472" height="192"/>
   <object id="3368" x="3264" y="1472" height="704"/>
   <object id="3369" x="3456" y="1472" height="704"/>
   <object id="3371" x="3456" y="1216" height="256"/>
-  <object id="3374" x="3264" y="2176" height="192"/>
   <object id="3381" x="3840" y="2368" height="512"/>
   <object id="3391" x="960" y="832" height="64"/>
   <object id="3400" x="6272" y="2432" height="64"/>
@@ -130382,7 +130379,6 @@
   <object id="3185" x="3584" y="6335.9" height="64"/>
   <object id="4002" x="576" y="1024" height="64"/>
   <object id="4003" x="320" y="1088" width="256"/>
-  <object id="4024" x="4096" y="2176" height="64"/>
   <object id="4086" x="3712" y="5184" height="64"/>
   <object id="4087" x="3712" y="5248" width="1536"/>
   <object id="4088" x="5248" y="5184" height="64"/>
@@ -130394,32 +130390,34 @@
   <object id="4122" x="4352" y="6656" height="64"/>
   <object id="4127" x="4096" y="7040" height="64"/>
   <object id="4138" x="1152" y="896" height="256"/>
-  <object id="4156" x="2048" y="832" height="512"/>
   <object id="3396" x="5504" y="2368" height="384"/>
   <object id="3398" x="6400" y="2368" height="64"/>
   <object id="4226" x="1856" y="4160" height="256"/>
   <object id="4227" x="1920" y="4160" height="256"/>
+  <object id="4295" x="2240" y="2944" height="384"/>
  </objectgroup>
- <objectgroup id="63" name="Spikes" visible="0">
+ <objectgroup id="63" name="Spikes">
   <object id="4139" x="1152" y="1088" width="640" height="64"/>
   <object id="4140" x="1152" y="960" width="64" height="192"/>
   <object id="4149" x="2240" y="1472" width="448" height="192"/>
   <object id="4150" x="3264" y="1600" width="64" height="64"/>
   <object id="4151" x="3392" y="1792" width="64" height="64"/>
   <object id="4152" x="3264" y="1984" width="64" height="64"/>
-  <object id="4159" x="6528" y="2688" width="128" height="64"/>
+  <object id="4232" name="spikes " x="2304" y="1408" width="64" height="64"/>
+  <object id="4233" name="spikes " x="2368" y="1344" width="64" height="128"/>
+  <object id="4234" name="spikes " x="2432" y="1280" width="64" height="192"/>
+  <object id="4235" name="spikes " x="2496" y="1344" width="64" height="128"/>
+  <object id="4238" name="spikes " x="2560" y="1408" width="64" height="64"/>
+  <object id="4290" name="spikes" x="6464" y="2560" width="192" height="192"/>
  </objectgroup>
  <objectgroup id="64" name="PressureSystem">
-  <object id="4142" name="Plate" x="448" y="1408" width="64" height="64">
-   <properties>
-    <property name="id" type="int" value="0"/>
-   </properties>
-  </object>
   <object id="4143" name="Door" x="320" y="704" width="128" height="64">
    <properties>
     <property name="id" type="int" value="0"/>
    </properties>
   </object>
+  <object id="4250" x="512" y="1664" width="1088"/>
+  <object id="4255" name="Plate" x="512" y="1600" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="25" name="Doors">
   <properties>
@@ -130478,7 +130476,6 @@
   <object id="2533" x="1472" y="3968" width="1408"/>
   <object id="2539" x="1792" y="3712" width="1280"/>
   <object id="2541" x="1280" y="3584" width="512"/>
-  <object id="2553" x="2048" y="3328" width="832"/>
   <object id="2557" x="2880" y="3456" width="704"/>
   <object id="2559" x="3584" y="3520" width="704"/>
   <object id="2646" x="3008" y="3904" width="1984"/>
@@ -130547,7 +130544,6 @@
   <object id="3357" x="1536" y="1344" width="320"/>
   <object id="3358" x="1152" y="1472" width="832"/>
   <object id="3362" x="2688" y="1472" width="576"/>
-  <object id="3375" x="3264" y="2368" width="384"/>
   <object id="3380" x="3648" y="2368" width="192"/>
   <object id="3382" x="3840" y="1792" width="128"/>
   <object id="3383" x="3648" y="1472" width="128"/>
@@ -130565,22 +130561,12 @@
   <object id="3425" x="4992" y="2752" width="1984" height="128"/>
   <object id="3426" x="6912" y="1664" width="1280"/>
   <object id="3427" x="960" y="0" width="4160"/>
-  <object id="3435" x="4096" y="2176" width="192"/>
-  <object id="3436" x="4416" y="1984" width="192"/>
   <object id="3438" x="3456" y="1664" width="128"/>
   <object id="3439" x="1984" y="1472" width="256"/>
   <object id="3441" x="2240" y="1664" width="448"/>
   <object id="3446" x="320" y="1472" width="832"/>
   <object id="3447" x="320" y="768" height="704"/>
   <object id="3448" x="320" y="1024" width="256"/>
-  <object id="3701" x="4160" y="3072" width="128"/>
-  <object id="3702" x="4160" y="3072" height="64"/>
-  <object id="3703" x="4096" y="3136" width="64"/>
-  <object id="3704" x="4096" y="3136" height="128"/>
-  <object id="3705" x="3968" y="3264" width="128"/>
-  <object id="3706" x="3968" y="3264" height="64"/>
-  <object id="3707" x="3904" y="3328" width="64"/>
-  <object id="3708" x="3904" y="3328" height="128"/>
   <object id="3844" x="5120" y="128" width="192"/>
   <object id="3846" x="5312" y="256" width="192"/>
   <object id="3848" x="5504" y="320" width="64"/>
@@ -130597,19 +130583,33 @@
   <object id="4056" x="2752" y="4288" height="64"/>
   <object id="4092" x="3264" y="5312" height="64"/>
   <object id="4112" x="3520" y="6272" height="64"/>
-  <object id="4155" x="1856" y="832" width="192"/>
   <object id="4183" x="4352" y="6336" width="256"/>
   <object id="4193" x="2368" y="5120" width="192"/>
   <object id="4216" x="5376" y="3904" width="192"/>
   <object id="4223" x="3456" y="1216" width="192"/>
   <object id="4225" x="1856" y="4160" width="64"/>
+  <object id="4230" x="2240" y="1472" width="448"/>
+  <object id="4240" x="3904" y="2176" width="192"/>
+  <object id="4260" x="1920" y="896" width="64"/>
+  <object id="4261" x="1984" y="960" width="64"/>
+  <object id="4262" x="1856" y="832" width="64"/>
+  <object id="4275" x="1792" y="1216" width="64"/>
+  <object id="4278" x="1728" y="1280" width="64"/>
+  <object id="4279" x="3264" y="2240" width="64"/>
+  <object id="4280" x="3328" y="2304" width="64"/>
+  <object id="4284" x="3392" y="2368" width="256"/>
+  <object id="4302" x="1856" y="3200" width="64"/>
+  <object id="4303" x="1920" y="3136" width="128"/>
+  <object id="4304" x="2048" y="3008" width="64"/>
+  <object id="4305" x="2112" y="2944" width="128"/>
+  <object id="4306" x="2048" y="3392" width="192"/>
+  <object id="4309" x="1792" y="3648" width="128"/>
  </objectgroup>
- <objectgroup id="65" name="HookAnchors" visible="0">
+ <objectgroup id="65" name="HookAnchors">
   <object id="4146" name="Hook" x="640" y="896" width="64" height="64"/>
-  <object id="4148" name="Hook" x="1600" y="576" width="64" height="64"/>
   <object id="3437" name="Hook" x="3904" y="1536" width="64" height="64"/>
   <object id="3433" name="Hook" x="5504" y="2048" width="64" height="64"/>
-  <object id="3455" name="Hook" x="4672" y="2624" width="64" height="64"/>
+  <object id="3455" name="Hook" x="4224" y="2624" width="64" height="64"/>
   <object id="3454" name="Hook" x="4416" y="2944" width="64" height="64"/>
   <object id="3453" name="Hook" x="4800" y="3136" width="64" height="64"/>
   <object id="4160" name="Hook" x="7040" y="1664" width="64" height="64"/>
@@ -130618,22 +130618,24 @@
   <object id="4196" name="Hook" x="2496" y="4928" width="64" height="64"/>
   <object id="4197" name="Hook" x="2368" y="4224" width="64" height="64"/>
   <object id="4213" name="Hook" x="5248" y="3776" width="64" height="64"/>
-  <object id="4218" name="Hook" x="2688" y="1152" width="64" height="64"/>
+  <object id="4218" name="Hook" x="2432" y="1088" width="64" height="64"/>
   <object id="4220" name="Hook" x="3648" y="1088" width="64" height="64"/>
   <object id="4228" name="Hook" x="1856" y="3968" width="64" height="64"/>
+  <object id="4287" name="Hook" x="6656" y="1792" width="64" height="64"/>
+  <object id="4292" name="Hook" x="3904" y="2172" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="61" name="Props">
   <object id="4144" name="Geyser" x="320" y="960" width="192" height="64"/>
-  <object id="4164" name="Box" x="3854" y="3470" width="50" height="50"/>
   <object id="4182" name="LifePlant" x="5376" y="6976" width="64" height="64"/>
   <object id="4187" name="PLatnt_max_life" x="4352" y="6144" width="64" height="64"/>
   <object id="4189" name="Geyser" x="2368" y="5696" width="192" height="64"/>
   <object id="4195" name="Geyser" x="2368" y="5056" width="192" height="64"/>
-  <object id="4208" name="Checkpoint" x="3840" y="2560" width="384" height="320"/>
-  <object id="4209" name="Checkpoint" x="1664" y="3072" width="384" height="320"/>
   <object id="4211" name="LifePlant" x="5312" y="5120" width="64" height="64"/>
+  <object id="4256" name="Box" x="896" y="1600" width="64" height="64"/>
+  <object id="4286" name="HeallingPlant" x="6208" y="2688" width="64" height="64"/>
+  <object id="4296" name="Box " x="1792" y="3328" width="64" height="64"/>
  </objectgroup>
- <objectgroup id="62" name="Liana" visible="0">
+ <objectgroup id="62" name="Liana">
   <object id="3710" x="16256" y="19712" width="64" height="512"/>
   <object id="3712" x="16576" y="19136" width="64" height="320"/>
   <object id="3713" x="16768" y="18816" width="64" height="448"/>
@@ -130646,6 +130648,7 @@
   <object id="3720" x="22752" y="19552"/>
   <object id="3722" x="17280" y="19968" width="64" height="640"/>
   <object id="3740" x="1344" y="1152" width="64" height="192"/>
+  <object id="4293" x="6336" y="2368" width="64" height="320"/>
  </objectgroup>
  <objectgroup id="58" name="Wall">
   <object id="2547" x="3456" y="3520" height="64"/>
@@ -130656,11 +130659,6 @@
   <object id="4016" x="3840" y="1792" height="64"/>
   <object id="4019" x="3840" y="1856" width="128"/>
   <object id="4020" x="3968" y="1792" height="64"/>
-  <object id="4021" x="4416" y="1984" height="64"/>
-  <object id="4022" x="4416" y="2048" width="192"/>
-  <object id="4023" x="4608" y="1984" height="64"/>
-  <object id="4026" x="4096" y="2240" width="192"/>
-  <object id="4027" x="4288" y="2176" height="64"/>
   <object id="4028" x="4672" y="2880" height="64"/>
   <object id="4029" x="4672" y="2944" width="320"/>
   <object id="4032" x="4800" y="3392" height="64"/>
@@ -130774,6 +130772,38 @@
   <object id="4215" x="5376" y="3904" height="64"/>
   <object id="4221" x="3456" y="1280" width="192"/>
   <object id="4222" x="3648" y="1216" height="64"/>
+  <object id="4241" x="4096" y="2176" height="64"/>
+  <object id="4242" x="3904" y="2240" width="192"/>
+  <object id="4243" x="3904" y="2176" height="64"/>
+  <object id="4244" x="512" y="1088" height="64"/>
+  <object id="4245" x="384" y="1152" width="128"/>
+  <object id="4246" x="384" y="1152" height="64"/>
+  <object id="4247" x="320" y="1216" width="64"/>
+  <object id="4248" x="320" y="1344" width="64" height="128"/>
+  <object id="4249" x="384" y="1408" width="64" height="64"/>
+  <object id="4251" x="1600" y="1600" height="64"/>
+  <object id="4252" x="512" y="1600" width="1088"/>
+  <object id="4253" x="512" y="1600" height="64"/>
+  <object id="4259" x="1728" y="1280" height="64"/>
+  <object id="4263" x="1856" y="832" height="256"/>
+  <object id="4264" x="1920" y="832" height="64"/>
+  <object id="4265" x="1984" y="896" height="64"/>
+  <object id="4266" x="2048" y="960" height="192"/>
+  <object id="4267" x="1856" y="1088" height="128"/>
+  <object id="4272" x="2048" y="1152" height="128"/>
+  <object id="4273" x="1984" y="1280" width="64"/>
+  <object id="4274" x="1984" y="1280" height="64"/>
+  <object id="4276" x="1792" y="1216" height="64"/>
+  <object id="4281" x="3264" y="2176" height="64"/>
+  <object id="4282" x="3328" y="2240" height="64"/>
+  <object id="4283" x="3392" y="2304" height="64"/>
+  <object id="4298" x="1856" y="3200" height="128"/>
+  <object id="4299" x="1920" y="3136" height="64"/>
+  <object id="4300" x="2048" y="3008" height="128"/>
+  <object id="4301" x="2112" y="2944" height="64"/>
+  <object id="4307" x="2240" y="3328" height="64"/>
+  <object id="4308" x="2240" y="2880" height="64"/>
+  <object id="4310" x="1920" y="3648" height="64"/>
  </objectgroup>
  <objectgroup id="60" name="Enemies">
   <object id="4163" name="Dreadpire" x="7680" y="1984" width="64" height="64"/>
@@ -130789,5 +130819,6 @@
   <object id="4180" name="Creebler" x="5888" y="2304" width="64" height="64"/>
   <object id="4198" name="Creebler" x="3072" y="4608" width="64" height="64"/>
   <object id="4212" name="Creebler" x="4544" y="5120" width="64" height="64"/>
+  <object id="4257" name="Scurver" x="1216" y="1600" width="64" height="64"/>
  </objectgroup>
 </map>

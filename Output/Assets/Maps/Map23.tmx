@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="128" height="113" tilewidth="64" tileheight="64" infinite="0" nextlayerid="66" nextobjectid="4232">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="113" tilewidth="64" tileheight="64" infinite="0" nextlayerid="66" nextobjectid="4260">
  <tileset firstgid="1" name="tiles_manglar" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_manglar.png" width="640" height="640"/>
  </tileset>
@@ -57,7 +57,7 @@
  <tileset firstgid="11085" name="Mangrove_Plants" tilewidth="64" tileheight="64" tilecount="1140" columns="30">
   <image source="../Environment/Mangrove_Plants.png" width="1920" height="2444"/>
  </tileset>
- <group id="70" name="Background" offsetx="-9683.68" offsety="-7556.2">
+ <group id="70" name="Background" offsetx="6380.32" offsety="-3076.2">
   <properties>
    <property name="Draw" type="bool" value="true"/>
   </properties>
@@ -130361,7 +130361,6 @@
   <object id="3185" x="3584" y="6335.9" height="64"/>
   <object id="4002" x="576" y="1024" height="64"/>
   <object id="4003" x="320" y="1088" width="256"/>
-  <object id="4024" x="4096" y="2176" height="64"/>
   <object id="4086" x="3712" y="5184" height="64"/>
   <object id="4087" x="3712" y="5248" width="1536"/>
   <object id="4088" x="5248" y="5184" height="64"/>
@@ -130378,6 +130377,9 @@
   <object id="3398" x="6400" y="2368" height="64"/>
   <object id="4226" x="1856" y="4160" height="256"/>
   <object id="4227" x="1920" y="4160" height="256"/>
+  <object id="4233" x="3904" y="2176" height="64"/>
+  <object id="4235" x="3904" y="2240" width="192"/>
+  <object id="4236" x="4096" y="2176" height="64"/>
  </objectgroup>
  <objectgroup id="63" name="Spikes">
   <object id="4139" x="1152" y="1088" width="640" height="64"/>
@@ -130526,8 +130528,7 @@
   <object id="3357" x="1536" y="1344" width="320"/>
   <object id="3358" x="1152" y="1472" width="832"/>
   <object id="3362" x="2688" y="1472" width="576"/>
-  <object id="3375" x="3264" y="2368" width="384"/>
-  <object id="3380" x="3648" y="2368" width="192"/>
+  <object id="3375" x="3264" y="2368" width="576"/>
   <object id="3382" x="3840" y="1792" width="128"/>
   <object id="3383" x="3648" y="1472" width="128"/>
   <object id="3392" x="960" y="896" width="128"/>
@@ -130544,8 +130545,6 @@
   <object id="3425" x="4992" y="2752" width="1984" height="128"/>
   <object id="3426" x="6912" y="1664" width="1280"/>
   <object id="3427" x="960" y="0" width="4160"/>
-  <object id="3435" x="4096" y="2176" width="192"/>
-  <object id="3436" x="4416" y="1984" width="192"/>
   <object id="3438" x="3456" y="1664" width="128"/>
   <object id="3439" x="1984" y="1472" width="256"/>
   <object id="3441" x="2240" y="1664" width="448"/>
@@ -130582,10 +130581,15 @@
   <object id="4216" x="5376" y="3904" width="192"/>
   <object id="4223" x="3456" y="1216" width="192"/>
   <object id="4225" x="1856" y="4160" width="64"/>
+  <object id="4232" x="3904" y="2176" width="192"/>
+  <object id="4255" x="2304" y="1408" width="64" height="64"/>
+  <object id="4256" x="2368" y="1344" width="64" height="64"/>
+  <object id="4257" x="2432" y="1280" width="64" height="64"/>
+  <object id="4258" x="2496" y="1344" width="64" height="64"/>
+  <object id="4259" x="2560" y="1408" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="65" name="HookAnchors">
   <object id="4146" name="Hook" x="640" y="896" width="64" height="64"/>
-  <object id="4148" name="Hook" x="1600" y="576" width="64" height="64"/>
   <object id="3437" name="Hook" x="3904" y="1536" width="64" height="64"/>
   <object id="3433" name="Hook" x="5504" y="2048" width="64" height="64"/>
   <object id="3455" name="Hook" x="4672" y="2624" width="64" height="64"/>
@@ -130597,7 +130601,7 @@
   <object id="4196" name="Hook" x="2496" y="4928" width="64" height="64"/>
   <object id="4197" name="Hook" x="2368" y="4224" width="64" height="64"/>
   <object id="4213" name="Hook" x="5248" y="3776" width="64" height="64"/>
-  <object id="4218" name="Hook" x="2688" y="1152" width="64" height="64"/>
+  <object id="4218" name="Hook" x="2432" y="1088" width="64" height="64"/>
   <object id="4220" name="Hook" x="3648" y="1088" width="64" height="64"/>
   <object id="4228" name="Hook" x="1856" y="3968" width="64" height="64"/>
  </objectgroup>
@@ -130635,11 +130639,6 @@
   <object id="4016" x="3840" y="1792" height="64"/>
   <object id="4019" x="3840" y="1856" width="128"/>
   <object id="4020" x="3968" y="1792" height="64"/>
-  <object id="4021" x="4416" y="1984" height="64"/>
-  <object id="4022" x="4416" y="2048" width="192"/>
-  <object id="4023" x="4608" y="1984" height="64"/>
-  <object id="4026" x="4096" y="2240" width="192"/>
-  <object id="4027" x="4288" y="2176" height="64"/>
   <object id="4028" x="4672" y="2880" height="64"/>
   <object id="4029" x="4672" y="2944" width="320"/>
   <object id="4032" x="4800" y="3392" height="64"/>

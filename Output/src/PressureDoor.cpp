@@ -8,7 +8,7 @@
 #include "Log.h"
 #include "Physics.h"
 
-PressureDoor::PressureDoor() : Entity(EntityType::PRESSURE_PLATE), state(PressureDoorState::DISABLED)
+PressureDoor::PressureDoor() : Entity(EntityType::PRESSURE_PLATE), state(PressureDoorState::DISABLE)
 {
     name = "PressureDoor";
 }
@@ -19,7 +19,7 @@ PressureDoor::~PressureDoor()
 
 bool PressureDoor::Awake()
 {
-	return false;
+    return false;
 }
 
 bool PressureDoor::Start()
@@ -29,11 +29,9 @@ bool PressureDoor::Start()
     pugi::xml_node node = loadFile.child("config").child("scene").child("animations").child("props").child("pressure_door");
 
     texture = Engine::GetInstance().textures->Load(node.attribute("texture").as_string());
-    disabledAnim.LoadAnimations(node.child("disabled"));
-    enabledAnim.LoadAnimations(node.child("enabled"));
-
-    width = node.attribute("w").as_int();
-    height = node.attribute("h").as_int();
+    disabledAnim.LoadAnimations(node.child("disable"));
+    enabledAnim.LoadAnimations(node.child("enable"));
+    idleAnim.LoadAnimations(node.child("idle"));
 
     pbody = Engine::GetInstance().physics->CreateRectangle(
         (int)position.getX() + width / 2,
@@ -44,9 +42,11 @@ bool PressureDoor::Start()
         CATEGORY_PLAYER
     );
 
-    pbody->ctype = ColliderType::WALL;
+    pbody->ctype = ColliderType::PLATFORM;
     pbody->listener = this;
     pbody->body->SetGravityScale(0);
+
+    if (width > height) isHorizontal = true;
 
     currentAnimation = &disabledAnim;
     return true;
@@ -55,43 +55,59 @@ bool PressureDoor::Start()
 bool PressureDoor::Update(float dt)
 {
     switch (state) {
-    case PressureDoorState::DISABLED:
-        if (currentAnimation != &disabledAnim) currentAnimation = &disabledAnim;
+    case PressureDoorState::DISABLE:
+        if (currentAnimation != &disabledAnim) {
+            currentAnimation = &disabledAnim;
+            currentAnimation->Reset();
+            pbody->body->GetFixtureList()->SetSensor(true);
+        }
+
+        if (!isOpen) state = PressureDoorState::ENABLE;
+
         break;
-    case PressureDoorState::ENABLED:
-        if (currentAnimation != &enabledAnim) currentAnimation = &enabledAnim;
+    case PressureDoorState::ENABLE:
+        if (currentAnimation != &enabledAnim) {
+            currentAnimation = &enabledAnim;
+            currentAnimation->Reset();
+            pbody->body->GetFixtureList()->SetSensor(false);
+        }
+
+        if (currentAnimation->HasFinished()) state = PressureDoorState::IDLE;
+        
+        break;
+    case PressureDoorState::IDLE:
+        if (currentAnimation != &idleAnim) currentAnimation = &idleAnim;
+
+        if (isOpen) state = PressureDoorState::DISABLE;
 
         break;
     }
 
     RenderTexture();
-
     return true;
 }
 
 bool PressureDoor::PostUpdate()
 {
-    if (isOpen) Engine::GetInstance().entityManager.get()->DestroyEntity(this);
-    
-	return true;
+    return true;
 }
 
 bool PressureDoor::CleanUp()
 {
     Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
-	return true;
+    return true;
 }
 
-void PressureDoor::SetOpen(bool value) {
-    isOpen = value;
-}
-
-
-void PressureDoor::RenderTexture() {
+void PressureDoor::RenderTexture()
+{
     b2Transform pbodyPos = pbody->body->GetTransform();
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - (texW / 2));
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - (texH / 2));
 
-    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + width / 2 - texW / 2, (int)position.getY() + height - texH, &currentAnimation->GetCurrentFrame());
+    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
     currentAnimation->Update();
+}
+
+void PressureDoor::SetOpen(bool value) {
+    isOpen = value;
 }

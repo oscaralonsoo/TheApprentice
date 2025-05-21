@@ -27,6 +27,6 @@ void PressureSystemController::UpdateSystem()
 
     for (auto* door : doors)
     {
-        door->SetOpen(systemActive[door->id]);
+       door->SetOpen(systemActive[door->id]);
     }
 }

@@ -185,8 +185,33 @@ void Menus::MainMenu(float dt) {
     if (buttonPressed) {
         switch (selectedButton) {
         case 0: NewGame(); break;
-        case 1: if (isSaved != 0) { Engine::GetInstance().scene.get()->LoadGameXML(); StartTransition(false, MenusState::GAME); 
-                                    Engine::GetInstance().scene->isLoading = true; } break;
+        case 1: if (isSaved != 0) {
+            Engine::GetInstance().scene.get()->LoadGameXML();
+            Engine::GetInstance().scene->isLoading = true;
+
+            int sceneIndex = Engine::GetInstance().scene->nextScene; 
+
+            switch (sceneIndex) {
+            case 0:
+                Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 2.0f, 1.0f);
+                break;
+            case 21:
+                Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/manglar_music.ogg", 2.0f, 1.0f);
+                break;
+            case 41:
+                Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/snowforest_music.ogg", 2.0f, 1.0f);
+                break;
+            case 46:
+                Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/snowforest_music.ogg", 2.0f, 1.0f);
+                break;
+            default:
+                Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 2.0f, 1.0f); 
+                break;
+            }
+
+            StartTransition(false, MenusState::GAME);
+        }
+              break;
         case 2: inConfig = true; StartTransition(true, MenusState::SETTINGS); break;
         case 3: inCredits = true; StartTransition(true, MenusState::CREDITS); break;
         case 4: currentState = MenusState::EXIT; break;

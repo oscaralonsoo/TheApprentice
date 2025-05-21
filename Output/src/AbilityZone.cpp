@@ -77,8 +77,12 @@ bool AbilityZone::Start() {
 
 	jumpSprite = Engine::GetInstance().textures->Load("Assets/Props/huevosrana.png");
 	doubleJumpSprite = Engine::GetInstance().textures->Load("textures/doublejump_icon.png");
-	dashSprite = Engine::GetInstance().textures->Load("textures/dash_icon.png");
-	hookSprite = Engine::GetInstance().textures->Load("textures/hook_icon.png");
+	dashSprite = Engine::GetInstance().textures->Load("Assets/Props/Dash_Icon.png");
+	hookSprite = Engine::GetInstance().textures->Load("Assets/Props/Dash_Icon.png");
+	glideSprite = Engine::GetInstance().textures->Load("Assets/Props/Dash_Icon.png");
+	wallJumpSprite = Engine::GetInstance().textures->Load("Assets/Props/Dash_Icon.png");
+	glideSprite = Engine::GetInstance().textures->Load("Assets/Props/Dash_Icon.png");
+	pushSprite = Engine::GetInstance().textures->Load("Assets/Props/Dash_Icon.png");
 
 	return true;
 }
@@ -172,8 +176,16 @@ bool AbilityZone::Update(float dt)
 					mechanics->GetMovementHandler()->SetHookUnlocked(true);
 					Engine::GetInstance().menus->abilityName = "hook";
 				}
+				else if (type == "Glide") {
+					mechanics->EnableGlide(true);
+					Engine::GetInstance().menus->abilityName = "glide";
+				}
+				else if (type == "WallJump") {
+					mechanics->EnableWallJump(true);
+					Engine::GetInstance().menus->abilityName = "walljump";
+				}
 				else if (type == "Push") {
-					mechanics->GetMovementHandler()->SetHookUnlocked(true); //TODO JAVI -- SetPushUnlocked(true)
+					mechanics->EnablePush(true);
 					Engine::GetInstance().menus->abilityName = "push";
 				}
 
@@ -184,25 +196,31 @@ bool AbilityZone::Update(float dt)
 		}
 	}
 
-	if (abilitySprite) {
-		int drawX = position.getX() + texW - abilitySpriteW - 100;
-		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 + 20;
+	int drawX = position.getX() + texW - abilitySpriteW - 100;
+	int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 + 20;
 
-		if (type == "Jump" && jumpSprite) {
-			Engine::GetInstance().render->DrawTexture(jumpSprite, drawX, drawY);
-		}
-		else if (type == "DoubleJump" && doubleJumpSprite) {
-			Engine::GetInstance().render->DrawTexture(doubleJumpSprite, drawX, drawY);
-		}
-		else if (type == "Dash" && dashSprite) {
-			Engine::GetInstance().render->DrawTexture(dashSprite, drawX, drawY);
-		}
-		else if (type == "Hook" && hookSprite) {
-			Engine::GetInstance().render->DrawTexture(hookSprite, drawX, drawY);
-		}
-		else {
-			Engine::GetInstance().render->DrawTexture(abilitySprite, drawX, drawY);
-		}
+	bool drawn = false;
+
+	if (type == "Jump" && jumpSprite) {
+		Engine::GetInstance().render->DrawTexture(jumpSprite, drawX, drawY);
+		drawn = true;
+	}
+	else if (type == "DoubleJump" && doubleJumpSprite) {
+		Engine::GetInstance().render->DrawTexture(doubleJumpSprite, drawX, drawY);
+		drawn = true;
+	}
+	else if (type == "Dash" && dashSprite) {
+		Engine::GetInstance().render->DrawTexture(dashSprite, drawX, drawY);
+		drawn = true;
+	}
+	else if (type == "Hook" && hookSprite) {
+		Engine::GetInstance().render->DrawTexture(hookSprite, drawX, drawY);
+		drawn = true;
+	}
+
+	// Si no se ha dibujado ninguna específica, usa abilitySprite
+	if (!drawn && abilitySprite) {
+		Engine::GetInstance().render->DrawTexture(abilitySprite, drawX, drawY);
 	}
 
 	return true;

@@ -45,6 +45,8 @@ public:
     void SetIsWallSliding(bool wallSliding) { isWallSliding = wallSliding; }
     void EnableGlide(bool enable);
     void EnableWallJump(bool enable);
+    void EnablePush(bool enable);
+    bool CanPush() const;
 
 private:
     Player* player = nullptr;

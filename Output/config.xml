@@ -129,7 +129,7 @@
 			</player>
 			<enemies>
 				<enemy type="Bloodrusher" w="220" h="220" texture="Assets/Enemies/bloodrusher.png">
-					<idle loop="true" speed="0.35">
+					<idle loop="true" speed="0.2">
 						<frame x="0" y="0" w="220" h="220" />
 						<frame x="220" y="0" w="220" h="220" />
 						<frame x="440" y="0" w="220" h="220" />
@@ -538,78 +538,35 @@
 						<frame x="0" y="0" w="35" h="180" />
 					</destroyed>
 				</enemy>
-				<enemy type="DungBeetle" w="240" h="320" texture="Assets/Enemies/DungBeetle.png">
-					<idle loop="true" speed="0.125">
-						<frame x="0" y="0" w="240" h="320" />
-						<frame x="240" y="0" w="240" h="320" />
+				<enemy type="DungBeetle" w="128" h="128" texture="Assets/Enemies/test.png">
+					<idle loop="true" speed="0.35">
+						<frame x="0" y="0" w="64" h="64" />
 					</idle>
-					<angry loop="false" speed="0.125">
-						<frame x="0" y="320" w="240" h="320" />
-						<frame x="240" y="320" w="240" h="320" />
-						<frame x="0" y="320" w="240" h="320" />
-						<frame x="240" y="320" w="240" h="320" />
-						<frame x="0" y="320" w="240" h="320" />
-						<frame x="240" y="320" w="240" h="320" />
-						<frame x="0" y="320" w="240" h="320" />
-						<frame x="240" y="320" w="240" h="320" />
+					<angry loop="true" speed="0.35">
+						<frame x="0" y="64" w="64" h="64" />
 					</angry>
-					<throwing loop="false" speed="0.125">
-						<frame x="0" y="640" w="240" h="320" />
-						<frame x="240" y="640" w="240" h="320" />
-						<frame x="480" y="640" w="240" h="320" />
-						<frame x="720" y="640" w="240" h="320" />
-						<frame x="960" y="640" w="240" h="320" />
-						<frame x="1200" y="640" w="240" h="320" />
-						<frame x="1440" y="640" w="240" h="320" />
-						<frame x="1680" y="640" w="240" h="320" />
-						<frame x="0" y="960" w="240" h="320" />
-						<frame x="240" y="960" w="240" h="320" />
-						<frame x="480" y="960" w="240" h="320" />
-						<frame x="720" y="960" w="240" h="320" />
-						<frame x="960" y="960" w="240" h="320" />
-						<frame x="1200" y="960" w="240" h="320" />
-						<frame x="1440" y="960" w="240" h="320" />
-						<frame x="1680" y="960" w="240" h="320" />
-						<frame x="1920" y="960" w="240" h="320" />
+					<throwing loop="true" speed="0.35">
+						<frame x="0" y="128" w="64" h="64" />
 					</throwing>
-					<ballMode loop="false" speed="0.175">
-						<frame x="0" y="1280" w="240" h="320" />
-						<frame x="240" y="1280" w="240" h="320" />
-						<frame x="480" y="1280" w="240" h="320" />
-						<frame x="720" y="1280" w="240" h="320" />
-						<frame x="960" y="1280" w="240" h="320" />
-						<frame x="1200" y="1280" w="240" h="320" />
-						<frame x="1440" y="1280" w="240" h="320" />
-						<frame x="1680" y="1280" w="240" h="320" />
-						<frame x="1920" y="1280" w="240" h="320" />
-						<frame x="0" y="1600" w="240" h="320" />
-						<frame x="240" y="1600" w="240" h="320" />
-						<frame x="480" y="1600" w="240" h="320" />
-						<frame x="720" y="1600" w="240" h="320" />
+					<ballMode loop="true" speed="0.35">
+						<frame x="0" y="192" w="64" h="64" />
 					</ballMode>
-					<ball loop="true" speed="0.15">
-						<frame x="960" y="1600" w="240" h="320" />
-					</ball>
-					<hit loop="false" speed="0.125">
-						<frame x="0" y="1920" w="240" h="320" />
-						<frame x="240" y="1920" w="240" h="320" />
-						<frame x="480" y="1920" w="240" h="320" />
+					<hit loop="true" speed="0.35">
+						<frame x="0" y="256" w="64" h="64" />
 					</hit>
-					<death loop="false" speed="0.15">
+					<death loop="true" speed="0.35">
 						<frame x="0" y="320" w="64" h="64" />
 					</death>
 				</enemy>
-				<enemy type="DungBeetleBall" w="112" h="112" texture="Assets/Enemies/DungBeetleBall.png">
+				<enemy type="DungBeetleBall" w="128" h="128" texture="Assets/Enemies/DungBeetleBall.png">
 					<idle loop="true" speed="0.3">
-						<frame x="0" y="0" w="112" h="112" />
-						<frame x="112" y="0" w="112" h="112" />
+						<frame x="0" y="0" w="128" h="128" />
 					</idle>
 					<bounce loop="true" speed="0.3">
-						<frame x="0" y="0" w="112" h="112" />
-						<frame x="112" y="0" w="112" h="112" />
+						<frame x="0" y="0" w="128" h="128" />
 					</bounce>
 					<destroyed loop="true" speed="0.3">
-						<frame x="0" y="0" w="112" h="112" />
+						<frame x="0" y="0" w="128" h="128" />
 					</destroyed>
 				</enemy>
 			</enemies>
@@ -767,8 +724,8 @@
 			</abilities>
 		</animations>
 		<save_data isSaved="1">
-			<player x="350" y="650" w="44" h="54" lives="3" />
-			<abilities jump="false" doublejump="false" dash="false" glide="false" walljump="false" hook="false" push="false" />
+			<player x="1750" y="950" w="44" h="54" lives="3" />
+			<abilities jump="false" doublejump="false" dash="false" />
 			<scene actualScene="0" />
 			<enemies />
 		</save_data>

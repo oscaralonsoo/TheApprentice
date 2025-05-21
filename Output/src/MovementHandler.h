@@ -58,6 +58,9 @@ public:
 
     void StartWallSlideCooldown();
 
+    void EnablePush(bool enable);
+    bool CanPush() const;
+
 private:
     void HandleMovementInput();
     void UpdateAnimation();
@@ -114,4 +117,6 @@ private:
     bool hookUnlocked = true;
 
     PhysBody* lastPlatformCollider = nullptr;
+
+    bool canPushBoxes = true;
 };

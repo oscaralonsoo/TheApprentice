@@ -8,7 +8,7 @@
 struct SDL_Texture;
 
 enum class PressureDoorState {
-    DISABLED, ENABLED
+    DISABLE, ENABLE, IDLE
 };
 
 class PressureDoor : public Entity {
@@ -39,9 +39,12 @@ private:
     PhysBody* pbody;
     SDL_Texture* texture;
 
-    PressureDoorState state = PressureDoorState::DISABLED;
+    PressureDoorState state = PressureDoorState::DISABLE;
 
     Animation disabledAnim;
     Animation enabledAnim;
+    Animation idleAnim;
     Animation* currentAnimation = nullptr;
+
+    bool isHorizontal = false;
 };

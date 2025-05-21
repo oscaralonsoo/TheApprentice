@@ -40,7 +40,7 @@ bool PressurePlate::Start()
         width, height,
         STATIC,
         CATEGORY_PRESSURE_PLATE,
-        CATEGORY_PLAYER | CATEGORY_PLATFORM | CATEGORY_BOX
+        CATEGORY_PLATFORM | CATEGORY_BOX
     );
 
     pbody->ctype = ColliderType::PRESSURE_PLATE;
@@ -58,7 +58,10 @@ bool PressurePlate::Update(float dt)
         if (currentAnimation != &disabledAnim) currentAnimation = &disabledAnim;
         break;
     case PressurePlateState::ENABLED:
-        if (currentAnimation != &enabledAnim) currentAnimation = &enabledAnim;
+        if (currentAnimation != &enabledAnim) {
+            currentAnimation = &enabledAnim;
+            currentAnimation->Reset();
+        }
 
         break;
     }

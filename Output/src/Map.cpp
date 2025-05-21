@@ -482,16 +482,14 @@ bool Map::Load(std::string path, std::string fileName)
 
                     AbilityZone* abilityZone = nullptr;
 
-                    if (abilityName == "Jump")
+                    if (abilityName == "Jump" || abilityName == "DoubleJump" || abilityName == "Dash" || abilityName == "Glide" || abilityName == "WallJump" || abilityName == "Hook" || abilityName == "Push")
                         abilityZone = (AbilityZone*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ABILITY_ZONE);
                     if (abilityZone != nullptr)
                     {
-                        printf("[Map] AbilityZone final size: type=%s, x=%d, y=%d, w=%d, h=%d\n",
-                            abilityName.c_str(), x, y, width, height);
-
                         abilityZone->SetParameters(abilityNode);
 
-                        LOG("Created enemy '%s' at x: %d, y: %d", abilityName.c_str(), x, y);
+                        printf("[Map] AbilityZone final size: type=%s, x=%d, y=%d, w=%d, h=%d\n",
+                            abilityName.c_str(), x, y, width, height);
                     }
                 }
             }
@@ -752,8 +750,8 @@ bool Map::Load(std::string path, std::string fileName)
 
                     int x = objectNode.attribute("x").as_int();
                     int y = objectNode.attribute("y").as_int();
-                    int w = objectNode.attribute("w").as_int();
-                    int h = objectNode.attribute("h").as_int();
+                    int w = objectNode.attribute("width").as_int();
+                    int h = objectNode.attribute("height").as_int();
                     int id = objectNode.attribute("groupId").as_int();
 
                     if (objectName == "Plate")
@@ -767,8 +765,12 @@ bool Map::Load(std::string path, std::string fileName)
                     }
                     else if (objectName == "Door")
                     {
+                        int isHorizontal = objectNode.attribute("isHorizontal").as_bool();
+
                         PressureDoor* door = (PressureDoor*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PRESSURE_DOOR);
                         door->position = Vector2D(x, y);
+                        door->width = w;
+                        door->height = h;
                         door->id = id;
                         doors.push_back(door);
 

@@ -33,6 +33,7 @@ bool DungBeetle::Start() {
             angryAnim.LoadAnimations(node.child("angry"));
             throwingAnim.LoadAnimations(node.child("throwing"));
             ballModeAnim.LoadAnimations(node.child("ballMode"));
+            ballAnim.LoadAnimations(node.child("ball"));
             hitAnim.LoadAnimations(node.child("hit"));
             dieAnim.LoadAnimations(node.child("death"));
             currentAnimation = &idleAnim;
@@ -121,76 +122,98 @@ void DungBeetle::CheckState(float dt)
     case DungBeetleState::ANGRY: Angry();  break;
     case DungBeetleState::THROW: Throw(dt); break;
     case DungBeetleState::BALLMODE: BallMode();  break;
-    case DungBeetleState::HIT: currentAnimation = &hitAnim; break;
+    case DungBeetleState::HIT: Hit(); break;
     case DungBeetleState::DEAD:currentAnimation = &dieAnim; break;
     }
 }
-
 void DungBeetle::Idle()
 {
     currentAnimation = &idleAnim;
-    CheckPuzzleState();
-    if (CheckPuzzleState() != 0)
+
+    currentStatePuzzle = CheckPuzzleState();
+
+    if (currentStatePuzzle != lastPuzzleState && ballsThrown < 2)
     {
         currentState = DungBeetleState::ANGRY;
     }
+
+    lastPuzzleState = currentStatePuzzle;
 }
+
 
 void DungBeetle::Angry()
 {
     currentAnimation = &angryAnim;
-    //if (currentAnimation->HasFinished())
-    //{
+    if (currentAnimation->HasFinished())
+    {
         if (CheckPuzzleState() == 1 || CheckPuzzleState() == 2)
             currentState = DungBeetleState::THROW;
         else
             currentState = DungBeetleState::BALLMODE;
-    //}
+    }
 }
 
 void DungBeetle::Throw(float dt)
 {
     currentAnimation = &throwingAnim;
-
-    if (!hasThrown) {
-        float angle = ((float)rand() / RAND_MAX) * (7.0f * M_PI / 4.0f - 5.0f * M_PI / 4.0f) + (5.0f * M_PI / 4.0f);
-        b2Vec2 dir(cosf(angle), sinf(angle));
-        dir.Normalize();
-
-        float spawnX = METERS_TO_PIXELS(pbody->body->GetPosition().x);
-        float spawnY = METERS_TO_PIXELS(pbody->body->GetPosition().y);
-
-        Engine::GetInstance().entityManager->AddEntity(new DungBeetleBall(spawnX, spawnY, throwSpeed, dir));
-        hasThrown = true;
-    }
-
     if (currentAnimation->HasFinished())
     {
+        if (!hasThrown && ballsThrown < 2) {
+            float angle = ((float)rand() / RAND_MAX) * (7.0f * M_PI / 4.0f - 5.0f * M_PI / 4.0f) + (5.0f * M_PI / 4.0f);
+            b2Vec2 dir(cosf(angle), sinf(angle));
+            dir.Normalize();
+
+            float spawnX = METERS_TO_PIXELS(pbody->body->GetPosition().x);
+            float spawnY = METERS_TO_PIXELS(pbody->body->GetPosition().y);
+
+            Engine::GetInstance().entityManager->AddEntity(new DungBeetleBall(spawnX, spawnY, throwSpeed, dir));
+
+            hasThrown = true;
+            ballsThrown++;
+        }
         currentState = DungBeetleState::IDLE;
         hasThrown = false;
     }
+
 }
 
 
 void DungBeetle::BallMode()
 {
     if (!isDynamic)
-        ChangeBodyType();
-
-    currentAnimation = &ballModeAnim;
-
-    if (!hasLaunched)
     {
-        float angle = ((float)rand() / RAND_MAX) * (7.0f * M_PI / 4.0f - 5.0f * M_PI / 4.0f) + (5.0f * M_PI / 4.0f);
-        b2Vec2 dir(cosf(angle), sinf(angle));
-        dir.Normalize();
+        ChangeBodyType();
+        currentAnimation = &ballModeAnim;
+    }
 
-        pbody->body->SetLinearVelocity(ballModeSpeed * dir);
 
-        hasLaunched = true;
+    if (currentAnimation->HasFinished())
+    {
+        if (!hasLaunched)
+        {
+            currentAnimation = &ballAnim;
+
+            float angle = ((float)rand() / RAND_MAX) * (7.0f * M_PI / 4.0f - 5.0f * M_PI / 4.0f) + (5.0f * M_PI / 4.0f);
+            b2Vec2 dir(cosf(angle), sinf(angle));
+            dir.Normalize();
+
+            pbody->body->SetLinearVelocity(ballModeSpeed * dir);
+
+            hasLaunched = true;
+   
+            ChangeColliderRadius(70.0f);
+        }
     }
 }
+void DungBeetle::Hit() {
+    pbody->body->SetLinearVelocity(b2Vec2_zero);
+    pbody->body->SetAngularVelocity(0);
 
+    currentAnimation = &hitAnim;
+
+    if (currentAnimation->HasFinished()) { currentState = DungBeetleState::DEAD; }
+
+}
 void DungBeetle::ChangeBodyType() {
         pbody->body->SetType(b2_dynamicBody);
         isDynamic = true;
@@ -205,29 +228,52 @@ void DungBeetle::Bounce()
     b2Vec2 velocity = pbody->body->GetLinearVelocity();
 
     if (velocity.Length() > 0) {
-        // Normalizar dirección actual
+
         velocity.Normalize();
-        // Ángulo actual de movimiento
+
         float currentAngle = atan2f(velocity.y, velocity.x);
 
         float maxOffset = 50.0f * (M_PI / 180.0f); 
         float randomOffset = ((float)rand() / RAND_MAX) * (2.0f * maxOffset) - maxOffset;
 
-        // Nuevo ángulo con desviación
+
         float newAngle = currentAngle + randomOffset;
 
-        // Nueva dirección
         b2Vec2 newDir(cosf(newAngle), sinf(newAngle));
         newDir.Normalize();
 
         float speedVariation = ballModeSpeed * 1.05f;
 
-        // Establecer nueva velocidad
         pbody->body->SetLinearVelocity(speedVariation * newDir);
     }
 
     // Detener rotación
     pbody->body->SetAngularVelocity(0.0f);
+}
+void DungBeetle::ChangeColliderRadius(float newRadius)
+{
+    if (!pbody || !pbody->body) return;
+
+    // Elimina el fixture anterior
+    b2Fixture* oldFixture = pbody->body->GetFixtureList();
+    if (oldFixture) {
+        pbody->body->DestroyFixture(oldFixture);
+    }
+
+    // Crea un nuevo fixture con el nuevo radio
+    b2CircleShape circleShape;
+    circleShape.m_radius = PIXEL_TO_METERS(newRadius);
+
+    b2FixtureDef fixtureDef;
+    fixtureDef.shape = &circleShape;
+    fixtureDef.density = 1.0f;
+    fixtureDef.friction = 0.0f;
+    fixtureDef.restitution = 1.0f;
+
+    fixtureDef.filter.categoryBits = CATEGORY_ENEMY;
+    fixtureDef.filter.maskBits = CATEGORY_WALL | CATEGORY_PLAYER | CATEGORY_PLATFORM | CATEGORY_ATTACK;
+
+    pbody->body->CreateFixture(&fixtureDef);
 }
 
 

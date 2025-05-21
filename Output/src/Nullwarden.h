@@ -35,6 +35,7 @@ public:
     void SpawnHorizontalSpears();
     void SpawnVerticalSpears();
     b2Vec2 GetCrystalOffset() const;
+    float GetCrystalRotation() const;
     void Attack();
     void Impaled();
     void Roar();
@@ -51,7 +52,8 @@ public:
     Animation deathAnim;
 
 private:
-
+    float drawOffset = 0.0f;
+    float idleCrystalOffsetTimer = 0.0f;
     NullwardenCrystal* crystal= nullptr;
 
     const float spearIntervalMs = 2000.0f;
@@ -67,7 +69,5 @@ private:
     int spawnedVerticalSpears = 0;
     const int maxVerticalSpears = 15;
     const float verticalSpearGap = 80.0f;
-
-
 
 };

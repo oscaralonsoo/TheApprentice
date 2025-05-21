@@ -29,6 +29,7 @@ public:
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
     BloodrusherState GetCurrentState() const { return currentState; }
     void SetState(BloodrusherState state) { currentState = state; }
+    bool IsGroundAhead();
 
 
 private:

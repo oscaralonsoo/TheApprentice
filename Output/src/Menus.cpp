@@ -9,6 +9,7 @@
 #include "Log.h"
 #include <SDL2/SDL_mixer.h>
 #include "Textures.h"
+#include "Audio.h"
 
 
 
@@ -165,6 +166,12 @@ void Menus::Intro(float dt) {
 }
 
 void Menus::MainMenu(float dt) {
+    static bool menuMusicStarted = false;
+
+    if (!menuMusicStarted) {
+        Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/mainmenu_music.ogg", 2.0f, 1.0f); 
+        menuMusicStarted = true;
+    }
     bool buttonPressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN;
 
     if (controller && SDL_GameControllerGetAttached(controller)) {
@@ -208,6 +215,9 @@ void Menus::NewGame() {
     config.save_file("config.xml");
 
     Engine::GetInstance().scene.get()->SaveGameXML();
+
+    Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 2.0f, 1.0f); 
+
 
     StartTransition(false, MenusState::GAME);
 }

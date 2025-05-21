@@ -450,3 +450,9 @@ float Render::GetCameraZoom() const
 {
 	return cameraZoom;
 }
+
+void Render::SetCameraPosition(int x, int y)
+{
+	camera.x = x;
+	camera.y = y;
+}

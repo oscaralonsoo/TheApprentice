@@ -9,8 +9,12 @@
 void HookManager::RegisterHook(IHookable* hook)
 {
     if (std::find(hooksInRange.begin(), hooksInRange.end(), hook) == hooksInRange.end())
+    {
         hooksInRange.push_back(hook);
+        LOG("Hook registrado en hooksInRange");
+    }
 }
+
 
 void HookManager::UnregisterHook(IHookable* hook)
 {
@@ -44,8 +48,11 @@ void HookManager::TryUseClosestHook()
         b2Vec2 hookPos = hook->GetPhysBody()->body->GetPosition();
         float horizontalDiff = hookPos.x - playerPos.x;
 
-        if ((playerDirection == -1 && horizontalDiff > 0) || (playerDirection == 1 && horizontalDiff < 0))
-            continue;
+        float verticalDiff = hookPos.y - playerPos.y;
+        if (verticalDiff > -0.1f) {
+            if ((playerDirection == -1 && horizontalDiff > 0) || (playerDirection == 1 && horizontalDiff < 0))
+                continue;
+        }
 
         if (IsHookVisible(hook))
         {
@@ -78,9 +85,11 @@ IHookable* HookManager::GetClosestHook() const
         b2Vec2 hookPos = hook->GetPhysBody()->body->GetPosition();
         float horizontalDiff = hookPos.x - playerPos.x;
 
-        // Filtrar por dirección: si mira izquierda y el gancho está a la derecha, se salta
-        if ((playerDirection == -1 && horizontalDiff > 0) || (playerDirection == 1 && horizontalDiff < 0))
-            continue;
+        float verticalDiff = hookPos.y - playerPos.y;
+        if (verticalDiff > -0.1f) {
+            if ((playerDirection == -1 && horizontalDiff > 0) || (playerDirection == 1 && horizontalDiff < 0))
+                continue;
+        }
 
         if (!IsHookVisible(hook))
             continue;
@@ -142,4 +151,9 @@ bool HookManager::IsHookVisible(IHookable* hook) const
         if (e2 < dx) { err += dx; y0 += sy; }
     }
     return true;
+}
+
+void HookManager::ClearHooks()
+{
+    hooksInRange.clear(); // limpia el set o lista de hooks registrados
 }

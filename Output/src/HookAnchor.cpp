@@ -117,6 +117,13 @@ bool HookAnchor::CleanUp()
         Engine::GetInstance().physics->DeletePhysBody(pbody);
         pbody = nullptr;
     }
+
+    if (sensor)
+    {
+        Engine::GetInstance().physics->DeletePhysBody(sensor);
+        sensor = nullptr;
+    }
+
     return true;
 }
 
@@ -155,10 +162,13 @@ void HookAnchor::OnCollision(PhysBody* physA, PhysBody* physB)
 
 void HookAnchor::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
 {
-    // Por ahora simplemente logueamos
     if (physB->ctype == ColliderType::PLAYER)
     {
-        Engine::GetInstance().scene->GetHookManager()->UnregisterHook(this);
+        Scene* scene = Engine::GetInstance().scene.get();
+        if (scene && scene->GetHookManager())
+        {
+            scene->GetHookManager()->UnregisterHook(this);
+        }
     }
 }
 
@@ -230,6 +240,8 @@ void HookAnchor::Use()
 
         isHooking = true;
         hookTimer.Start();
+
+        LOG("Intentando usar hook");
     }
 }
 

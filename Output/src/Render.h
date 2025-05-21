@@ -45,6 +45,7 @@ public:
 	void DashCameraImpulse(int direction, int intensity);
 	void StartCameraShake(int durationSec, int intensity);
 	void ToggleCameraLock();
+	void SetCameraPosition(int x, int y);
 
 public:
 

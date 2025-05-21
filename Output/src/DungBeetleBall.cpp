@@ -137,13 +137,19 @@ void DungBeetleBall::Bounce()
 {
     b2Vec2 velocity = pbody->body->GetLinearVelocity();
 
-    // Normalizar y mantener velocidad constante
     if (velocity.Length() > 0) {
         velocity.Normalize();
-        velocity *= speed;
-        pbody->body->SetLinearVelocity(velocity);
+
+        float randomAngle = ((rand() % 100) / 100.0f - 0.5f) * 0.4f;
+        float angle = atan2(velocity.y, velocity.x) + randomAngle;
+
+        b2Vec2 newVelocity(cosf(angle), sinf(angle));
+        newVelocity *= speed;
+        pbody->body->SetLinearVelocity(newVelocity);
     }
-    pbody->body->SetAngularVelocity(0.0f); 
+
+    pbody->body->SetAngularVelocity(0.0f);
 }
+
 
 

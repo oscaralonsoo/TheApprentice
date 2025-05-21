@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="113" tilewidth="64" tileheight="64" infinite="0" nextlayerid="66" nextobjectid="4260">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="128" height="113" tilewidth="64" tileheight="64" infinite="0" nextlayerid="68" nextobjectid="4233">
  <tileset firstgid="1" name="tiles_manglar" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_manglar.png" width="640" height="640"/>
  </tileset>
@@ -130767,5 +130767,12 @@
   <object id="4180" name="Creebler" x="5888" y="2304" width="64" height="64"/>
   <object id="4198" name="Creebler" x="3072" y="4608" width="64" height="64"/>
   <object id="4212" name="Creebler" x="4544" y="5120" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup id="67" name="NPC">
+  <object id="4232" name="Castor" x="5000" y="2380" width="464" height="368">
+   <properties>
+    <property name="dialogueld" type="int" value="31"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

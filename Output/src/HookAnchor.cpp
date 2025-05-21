@@ -233,6 +233,8 @@ void HookAnchor::Use()
 
         isHooking = true;
         hookTimer.Start();
+
+        LOG("Intentando usar hook");
     }
 }
 

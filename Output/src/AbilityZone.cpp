@@ -79,10 +79,9 @@ bool AbilityZone::Start() {
 	doubleJumpSprite = Engine::GetInstance().textures->Load("textures/doublejump_icon.png");
 	dashSprite = Engine::GetInstance().textures->Load("Assets/Props/Dash_Icon.png");
 	hookSprite = Engine::GetInstance().textures->Load("Assets/Props/Dash_Icon.png");
-	glideSprite = Engine::GetInstance().textures->Load("Assets/Props/Dash_Icon.png");
-	wallJumpSprite = Engine::GetInstance().textures->Load("Assets/Props/Dash_Icon.png");
-	glideSprite = Engine::GetInstance().textures->Load("Assets/Props/Dash_Icon.png");
-	pushSprite = Engine::GetInstance().textures->Load("Assets/Props/Dash_Icon.png");
+	glideSprite = Engine::GetInstance().textures->Load("Assets/Props/Glide_Icon.png");
+	wallJumpSprite = Engine::GetInstance().textures->Load("Assets/Props/WallJump_Icon.png");
+	pushSprite = Engine::GetInstance().textures->Load("Assets/Props/Push_Icon.png");
 
 	return true;
 }

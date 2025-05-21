@@ -39,9 +39,6 @@ bool PushableBox::Start()
 
 bool PushableBox::Update(float dt)
 {
-    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY());
-
-    // Actualizar posición lógica desde física
     if (pbody && pbody->body)
     {
         b2Vec2 pos = pbody->body->GetPosition();
@@ -49,24 +46,33 @@ bool PushableBox::Update(float dt)
         position.y = METERS_TO_PIXELS(pos.y) - texH / 2;
     }
 
-    // Obtener jugador
     Player* player = Engine::GetInstance().scene->GetPlayer();
 
-    // Si el jugador no tiene la habilidad de empujar, impedir movimiento horizontal
     if (player && !player->GetMechanics()->CanPush())
     {
-        b2Vec2 currentVelocity = pbody->body->GetLinearVelocity();
-        pbody->body->SetLinearVelocity(b2Vec2(0, currentVelocity.y));
-        return true;
+        if (!isStatic)
+        {
+            RecreateBody(STATIC); // Usa tu enum, no el de Box2D
+            isStatic = true;
+        }
     }
-    // Si no está tocando al jugador, tampoco debe moverse
-    if (!touchingPlayer)
+    else
     {
-        b2Vec2 currentVelocity = pbody->body->GetLinearVelocity();
-        pbody->body->SetLinearVelocity(b2Vec2(0, currentVelocity.y));
+        if (isStatic)
+        {
+            RecreateBody(DYNAMIC);
+            isStatic = false;
+        }
+
+        if (!touchingPlayer && pbody)
+        {
+            b2Vec2 vel = pbody->body->GetLinearVelocity();
+            vel.x = 0.0f;
+            pbody->body->SetLinearVelocity(vel);
+        }
     }
 
-    // Pintar la textura
+    Engine::GetInstance().render->DrawTexture(texture, (int)position.getX(), (int)position.getY());
 
     return true;
 }
@@ -115,4 +121,29 @@ void PushableBox::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
     {
         touchingPlayer = false;
     }
+}
+
+void PushableBox::RecreateBody(bodyType type)
+{
+    if (pbody)
+    {
+        Engine::GetInstance().physics->DeletePhysBody(pbody);
+        pbody = nullptr;
+    }
+
+    pbody = Engine::GetInstance().physics->CreateRectangle(
+        position.getX() + texW / 2,
+        position.getY() + texH / 2,
+        texW, texH,
+        type,
+        CATEGORY_BOX,
+        CATEGORY_PLAYER | CATEGORY_PLATFORM | CATEGORY_BOX
+    );
+
+    pbody->ctype = ColliderType::BOX;
+    pbody->listener = this;
+
+    pbody->body->SetGravityScale(5.0f);
+    pbody->body->GetFixtureList()->SetDensity(5.0f);
+    pbody->body->ResetMassData();
 }

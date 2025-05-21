@@ -61,8 +61,6 @@ bool LifePlant::Update(float dt) {
         break;
     case LifePlantStates::CONSUMED:
         if (currentAnimation != &consumedAnim) currentAnimation = &consumedAnim;
-        Engine::GetInstance().scene->vignetteColor = { 241, 241, 238, 255 };
-        Engine::GetInstance().scene->healingEffectActive = true;
         break;
     }
 
@@ -93,6 +91,7 @@ void LifePlant::OnCollision(PhysBody* physA, PhysBody* physB) {
         {
             state = LifePlantStates::CONSUMED;
             Engine::GetInstance().scene->GetPlayer()->GetMechanics()->GetHealthSystem()->HealFull();
+            Engine::GetInstance().scene->TriggerVignetteFlash();
         }
         break;
     }

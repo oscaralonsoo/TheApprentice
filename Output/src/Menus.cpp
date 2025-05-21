@@ -212,7 +212,7 @@ void Menus::NewGame() {
     StartTransition(false, MenusState::GAME);
 }
 void Menus::Pause(float dt) {
-    bool buttonPressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN;
+    bool buttonPressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN;
 
     if (controller && SDL_GameControllerGetAttached(controller)) {
         bool aNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A);
@@ -221,9 +221,15 @@ void Menus::Pause(float dt) {
         }
         aHeld = aNow;
     }
-
     if (inTransition) return;
+
     if (buttonPressed) {
+        isPaused = false;
+        StartTransition(true, MenusState::GAME); 
+        return; 
+    }
+
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
         switch (selectedButton) {
         case 0: isPaused = false; StartTransition(true, MenusState::GAME); break;
         case 1: inConfig = true; StartTransition(true, MenusState::SETTINGS); break;
@@ -231,27 +237,27 @@ void Menus::Pause(float dt) {
         }
     }
 }
+
 void Menus::Settings() {
     bool buttonPressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN;
     bool aNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A);
-    if (controller && SDL_GameControllerGetAttached(controller)) {
+
+    if (controller && SDL_GameControllerGetAttached(controller) || buttonPressed) {
         bool bNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_B);
 
-        if (buttonPressed) {
-        if (bNow && !aHeld) {
-            buttonPressed = true;
+        if (buttonPressed || (bNow && !aHeld)) {
+            nextState = (previousState == MenusState::PAUSE) ? MenusState::PAUSE : previousState;
+            inConfig = false;
+            StartTransition(true, nextState);
         }
         aHeld = bNow;
-        }
-        nextState = (previousState == MenusState::PAUSE) ? MenusState::PAUSE : previousState;
-        inConfig = false;
-        StartTransition(true, nextState);
     }
     else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN || aNow && aHeld) {
         HandleSettingsSelection();
     }
     HandleVolumeSliders();
 }
+
 void Menus::HandleSettingsSelection() {
     switch (selectedButton) {
     case 0: ToggleFullScreen(); break;

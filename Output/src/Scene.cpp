@@ -53,7 +53,7 @@ bool Scene::Awake()
 bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
-	Engine::GetInstance().map->Load("Assets/Maps/", "Map1.tmx");
+	Engine::GetInstance().map->Load("Assets/Maps/", "Testing.tmx");
 	return true;
 }
 
@@ -328,28 +328,35 @@ void Scene::Vignette(int size, float strength, SDL_Color color)
 	}
 }
 void Scene::VignetteChanges(float dt)
-{
-	if (healingEffectActive) {
-		if (healingEffectTimer.ReadMSec() == 0.0f) {
-			healingEffectTimer.Start();
+{	//HEALING
+	if (vignetteFlashActive)
+	{
+		vignetteFlashTimer += dt;
+
+		const float fadeDuration = vignetteFlashDuration / 2.0f;
+		if (vignetteFlashTimer < fadeDuration)
+		{
+			vignetteLerpProgress = vignetteFlashTimer / fadeDuration;
+
+			vignetteColor.r = static_cast<Uint8>(originalVignetteColor.r + (vignetteTargetColor.r - originalVignetteColor.r) * vignetteLerpProgress);
+			vignetteColor.g = static_cast<Uint8>(originalVignetteColor.g + (vignetteTargetColor.g - originalVignetteColor.g) * vignetteLerpProgress);
+			vignetteColor.b = static_cast<Uint8>(originalVignetteColor.b + (vignetteTargetColor.b - originalVignetteColor.b) * vignetteLerpProgress);
 		}
-		float t = healingEffectTimer.ReadMSec() / healingEffectDuration;
-		t = Clamp(t, 0.0f, 1.0f);
+		else if (vignetteFlashTimer < vignetteFlashDuration)
+		{
+			float lerpBack = (vignetteFlashTimer - fadeDuration) / fadeDuration;
 
-		// Interpolar de blanco a negro
-		vignetteColor.r = static_cast<Uint8>((1.0f - t) * 255);
-		vignetteColor.g = static_cast<Uint8>((1.0f - t) * 255);
-		vignetteColor.b = static_cast<Uint8>((1.0f - t) * 255);
-
-		if (healingEffectTimer.ReadMSec() >= healingEffectDuration) {
-			vignetteColor.r = 0;
-			vignetteColor.g = 0;
-			vignetteColor.b = 0;
-			vignetteColor.a = 255;
-			healingEffectActive = false;
+			vignetteColor.r = static_cast<Uint8>(vignetteTargetColor.r + (originalVignetteColor.r - vignetteTargetColor.r) * lerpBack);
+			vignetteColor.g = static_cast<Uint8>(vignetteTargetColor.g + (originalVignetteColor.g - vignetteTargetColor.g) * lerpBack);
+			vignetteColor.b = static_cast<Uint8>(vignetteTargetColor.b + (originalVignetteColor.b - vignetteTargetColor.b) * lerpBack);
+		}
+		else
+		{
+			vignetteColor = originalVignetteColor;
+			vignetteFlashActive = false;
 		}
 	}
-
+	// HEARTBEAT
 	if (mechanics->GetHealthSystem()->GetLives() != 1) {
 		heartbeatProgress = 0.0f;
 		return;
@@ -366,7 +373,14 @@ void Scene::VignetteChanges(float dt)
 	if (heartbeatProgress == 1.0f)
 		heartbeatGrowing = false;
 }
-
+void Scene::TriggerVignetteFlash()
+{
+	vignetteFlashActive = true;
+	vignetteFlashTimer = 0.0f;
+	vignetteLerpProgress = 0.0f;
+	originalVignetteColor = vignetteColor;
+	vignetteTargetColor = { 241, 241, 238, 255 };
+}
 void Scene::SetActiveHook(HookAnchor* hook)
 {
 	activeHook = hook;

@@ -58,6 +58,7 @@ public:
 
 	void VignetteChanges(float dt);
 
+	void TriggerVignetteFlash();
 	Player* GetPlayer() const { return player; }
 
 	void SetActiveHook(HookAnchor* hook);
@@ -90,10 +91,14 @@ public:
 	bool heartbeatGrowing = false;
 	float heartbeatProgress = 0.0f; 
 
-	// Healing
-	bool healingEffectActive = false;
-	Timer healingEffectTimer;
-	const float healingEffectDuration = 0.6f;
+	// Vignette flash effect
+	bool vignetteFlashActive = false;
+	float vignetteFlashTimer = 0.0f;
+	const float vignetteFlashDuration = 1000.0f; 
+	SDL_Color originalVignetteColor;
+	float vignetteLerpProgress = 0.0f;
+	SDL_Color vignetteTargetColor;
+
 private:
 	SDL_Texture* img;
 	//L03: TODO 3b: Declare a Player attribute
@@ -104,7 +109,6 @@ private:
 	bool fadingIn = false;
 	float transitionAlpha = 0.0f;
 	bool pendingLoadWithTransition = false;
-
 
 	//Vignette
 	float distFactor = 0.0f;
@@ -117,8 +121,6 @@ private:
 	float blackScreenTimer = 0.0f;
 	const float blackScreenDelay = 1000.0f; 
 	bool waitingBlackScreen = false;
-
-
 
 	//Renderer
 	SDL_Renderer* renderer;

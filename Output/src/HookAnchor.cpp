@@ -117,6 +117,13 @@ bool HookAnchor::CleanUp()
         Engine::GetInstance().physics->DeletePhysBody(pbody);
         pbody = nullptr;
     }
+
+    if (sensor)
+    {
+        Engine::GetInstance().physics->DeletePhysBody(sensor);
+        sensor = nullptr;
+    }
+
     return true;
 }
 

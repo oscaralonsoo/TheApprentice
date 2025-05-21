@@ -4,6 +4,8 @@
 #include "Textures.h"
 #include "Physics.h"
 #include "Log.h"
+#include "Player.h"
+#include "Scene.h"
 
 PushableBox::PushableBox() : Entity(EntityType::PUSHABLE_BOX) {}
 
@@ -37,7 +39,8 @@ bool PushableBox::Start()
 
 bool PushableBox::Update(float dt)
 {
-    
+    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY());
+
     // Actualizar posición lógica desde física
     if (pbody && pbody->body)
     {
@@ -46,13 +49,24 @@ bool PushableBox::Update(float dt)
         position.y = METERS_TO_PIXELS(pos.y) - texH / 2;
     }
 
+    // Obtener jugador
+    Player* player = Engine::GetInstance().scene->GetPlayer();
+
+    // Si el jugador no tiene la habilidad de empujar, impedir movimiento horizontal
+    if (player && !player->GetMechanics()->CanPush())
+    {
+        b2Vec2 currentVelocity = pbody->body->GetLinearVelocity();
+        pbody->body->SetLinearVelocity(b2Vec2(0, currentVelocity.y));
+        return true;
+    }
+    // Si no está tocando al jugador, tampoco debe moverse
     if (!touchingPlayer)
     {
         b2Vec2 currentVelocity = pbody->body->GetLinearVelocity();
         pbody->body->SetLinearVelocity(b2Vec2(0, currentVelocity.y));
     }
 
-    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY());
+    // Pintar la textura
 
     return true;
 }

@@ -482,7 +482,7 @@ bool Map::Load(std::string path, std::string fileName)
 
                     AbilityZone* abilityZone = nullptr;
 
-                    if (abilityName == "Jump")
+                    if (abilityName == "Jump" || abilityName == "DoubleJump" || abilityName == "Dash" || abilityName == "Glide" || abilityName == "WallJump" || abilityName == "Hook" || abilityName == "Push")
                         abilityZone = (AbilityZone*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ABILITY_ZONE);
                     if (abilityZone != nullptr)
                     {

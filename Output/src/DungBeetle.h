@@ -30,14 +30,18 @@ public:
     void Angry();
     void Throw(float dt);
     void BallMode();
+    void Hit();
     void ChangeBodyType();
     int CheckPuzzleState();
     void Bounce();
+    void ChangeColliderRadius(float newRadius);
 private:
     bool hasThrown = false;
     bool isDynamic = false;
     bool hasLaunched = false;
-
+    int ballsThrown = 0;
+    int currentStatePuzzle = 0;
+    int lastPuzzleState = 0;
     float throwSpeed = 15.0f; 
     float ballModeSpeed = 17.0f;
 
@@ -48,6 +52,7 @@ private:
     Animation angryAnim;
     Animation throwingAnim;
     Animation ballModeAnim;
+    Animation ballAnim;
     Animation hitAnim;
     Animation dieAnim;
 };

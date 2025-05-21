@@ -91,6 +91,7 @@ void LifePlant::OnCollision(PhysBody* physA, PhysBody* physB) {
         {
             state = LifePlantStates::CONSUMED;
             Engine::GetInstance().scene->GetPlayer()->GetMechanics()->GetHealthSystem()->HealFull();
+            Engine::GetInstance().scene->TriggerVignetteFlash();
         }
         break;
     }

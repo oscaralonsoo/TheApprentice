@@ -53,7 +53,7 @@ bool Scene::Awake()
 bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
-	Engine::GetInstance().map->Load("Assets/Maps/", "Map1.tmx");
+	Engine::GetInstance().map->Load("Assets/Maps/", "Testing.tmx");
 	return true;
 }
 
@@ -96,8 +96,7 @@ bool Scene::Update(float dt)
 		SaveGameXML();
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 		LoadGameXML();
-	// L�gica para el efecto de latidos
-	VignetteHeartBeat(dt);
+	VignetteChanges(dt);
 	return true;
 }
 
@@ -270,10 +269,11 @@ void Scene::LoadGameXML() {
     if (saveData) {
         pugi::xml_node playerNode = saveData.child("player");
         if (playerNode) {
-            float playerX = playerNode.attribute("x").as_float();
-            float playerY = playerNode.attribute("y").as_float();
+			int offset = 100;
+            float playerX = playerNode.attribute("x").as_float() ;
+            float playerY = playerNode.attribute("y").as_float() - offset;
 			player->GetMechanics()->GetHealthSystem()->SetLives(playerNode.attribute("lives").as_int());
-            newPosition = Vector2D(playerX, playerY - 100); 
+            newPosition = Vector2D(playerX, playerY); 
         }
 		pugi::xml_node abilitiesNode = saveData.child("abilities"); // Abilities Load
 		if (abilitiesNode) {
@@ -331,23 +331,59 @@ void Scene::Vignette(int size, float strength, SDL_Color color)
 		SDL_RenderFillRect(renderer, &right);
 	}
 }
-void Scene::VignetteHeartBeat(float dt)
-{
-	if (mechanics->GetHealthSystem()->GetLives() != 1)
+void Scene::VignetteChanges(float dt)
+{	//HEALING
+	if (vignetteFlashActive)
 	{
+		vignetteFlashTimer += dt;
+
+		const float fadeDuration = vignetteFlashDuration / 2.0f;
+		if (vignetteFlashTimer < fadeDuration)
+		{
+			vignetteLerpProgress = vignetteFlashTimer / fadeDuration;
+
+			vignetteColor.r = static_cast<Uint8>(originalVignetteColor.r + (vignetteTargetColor.r - originalVignetteColor.r) * vignetteLerpProgress);
+			vignetteColor.g = static_cast<Uint8>(originalVignetteColor.g + (vignetteTargetColor.g - originalVignetteColor.g) * vignetteLerpProgress);
+			vignetteColor.b = static_cast<Uint8>(originalVignetteColor.b + (vignetteTargetColor.b - originalVignetteColor.b) * vignetteLerpProgress);
+		}
+		else if (vignetteFlashTimer < vignetteFlashDuration)
+		{
+			float lerpBack = (vignetteFlashTimer - fadeDuration) / fadeDuration;
+
+			vignetteColor.r = static_cast<Uint8>(vignetteTargetColor.r + (originalVignetteColor.r - vignetteTargetColor.r) * lerpBack);
+			vignetteColor.g = static_cast<Uint8>(vignetteTargetColor.g + (originalVignetteColor.g - vignetteTargetColor.g) * lerpBack);
+			vignetteColor.b = static_cast<Uint8>(vignetteTargetColor.b + (originalVignetteColor.b - vignetteTargetColor.b) * lerpBack);
+		}
+		else
+		{
+			vignetteColor = originalVignetteColor;
+			vignetteFlashActive = false;
+		}
+	}
+	// HEARTBEAT
+	if (mechanics->GetHealthSystem()->GetLives() != 1) {
 		heartbeatProgress = 0.0f;
 		return;
 	}
+
 	heartbeatTimer += dt;
-	if (heartbeatTimer >= heartbeatInterval)
-	{
+	if (heartbeatTimer >= heartbeatInterval) {
 		heartbeatTimer = 0.0f;
 		heartbeatGrowing = true;
 	}
+
 	float speed = heartbeatGrowing ? 0.005f : -0.0025f;
 	heartbeatProgress = Clamp(heartbeatProgress + dt * speed, 0.0f, 1.0f);
 	if (heartbeatProgress == 1.0f)
 		heartbeatGrowing = false;
+}
+void Scene::TriggerVignetteFlash()
+{
+	vignetteFlashActive = true;
+	vignetteFlashTimer = 0.0f;
+	vignetteLerpProgress = 0.0f;
+	originalVignetteColor = vignetteColor;
+	vignetteTargetColor = { 241, 241, 238, 255 };
 }
 void Scene::SetActiveHook(HookAnchor* hook)
 {

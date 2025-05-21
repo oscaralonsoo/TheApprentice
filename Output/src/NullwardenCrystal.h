@@ -27,7 +27,9 @@ public:
 
 public:
     int hits = 0;
-
+    bool delayRoar = false;
+    Timer roarDelayTimer;
+    Animation breakAnim;
 private:
     CrystalState currentState = CrystalState::PRISTINE;
     Nullwarden* nullwarden = nullptr;
@@ -38,7 +40,7 @@ private:
     Animation pristineAnim;
     Animation crackedAnim;
     Animation shatteredAnim;
-    Animation breakAnim;
+
 
     Vector2D position;
     int width, height;

@@ -14,7 +14,7 @@ NullwardenCrystal::NullwardenCrystal(float x, float y, float speed, b2Vec2 dir, 
     width = 64;
     height = 64;
 
-    pbody = Engine::GetInstance().physics->CreateCircle(x, y, width, bodyType::DYNAMIC);
+    pbody = Engine::GetInstance().physics->CreateCircle(x, y, width/2, bodyType::DYNAMIC);
     pbody->ctype = ColliderType::ENEMY;
     pbody->listener = this;
 
@@ -55,39 +55,50 @@ NullwardenCrystal::~NullwardenCrystal() {
     }
 }
 bool NullwardenCrystal::Update(float dt) {
-
     UpdateCrystalState();
+
+    // Posicionamiento del cristal
     if (nullwarden && nullwarden->pbody) {
         b2Vec2 nullPos = nullwarden->pbody->body->GetPosition();
         b2Vec2 offset = nullwarden->GetCrystalOffset();
         pbody->body->SetTransform(nullPos + offset, 0.0f);
     }
 
+    // Posición de renderizado
     b2Transform pbodyPos = pbody->body->GetTransform();
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - width / 2);
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - height / 2);
 
     currentAnimation->Update();
 
+    // Dibujo
     SDL_RendererFlip flip = (direction.x < 0) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-
-    Engine::GetInstance().render.get()->DrawTexture(
-        texture,
-        (int)position.getX(),
-        (int)position.getY(),
-        &currentAnimation->GetCurrentFrame(),
-        1.0f,
-        INT_MAX,
-        INT_MAX,
-        flip
-    );
-
-    if (currentState == CrystalState::BROKEN && currentAnimation->HasFinished()) {
-        Engine::GetInstance().entityManager->DestroyEntity(this);
+    float angle = 0.0f;
+    if (nullwarden) {
+        angle = nullwarden->GetCrystalRotation();
     }
+    Engine::GetInstance().render->DrawTexture( texture, (int)position.getX(), (int)position.getY(),
+        &currentAnimation->GetCurrentFrame(), 1.0f, angle, INT_MAX, INT_MAX, flip );
+
+
+    // Lógica del delay para rugido
+    if (currentState == CrystalState::BROKEN && currentAnimation->HasFinished()) {
+        if (!delayRoar) {
+            delayRoar = true;
+            roarDelayTimer.Start(); 
+        }
+        else if (roarDelayTimer.ReadMSec() >= 500) { 
+            if (nullwarden) {
+                nullwarden->currentState = NullwardenState::ROAR;
+            }
+            Engine::GetInstance().entityManager->DestroyEntity(this);
+        }
+    }
+
 
     return true;
 }
+
 
 bool NullwardenCrystal::CleanUp() {
     if (pbody) {
@@ -100,8 +111,11 @@ bool NullwardenCrystal::CleanUp() {
 void NullwardenCrystal::OnCollision(PhysBody* physA, PhysBody* physB) {
     if (physB->ctype == ColliderType::ATTACK && hits < 4) {
         hits++;
+        if(hits < 3){
+            nullwarden->currentState = NullwardenState::ROAR;
+        }
         Engine::GetInstance().render->StartCameraShake(0.3f, 2);
-        nullwarden->currentState = NullwardenState::ROAR;
+
     }
 }
 void NullwardenCrystal::UpdateCrystalState() {
@@ -121,5 +135,3 @@ void NullwardenCrystal::UpdateCrystalState() {
         break;
     }
 }
-
-

@@ -14,10 +14,14 @@ public:
     void HealFull();
 
     int GetLives() const;
+    int GetMaxLives() const;
     float GetVignetteSize() const;
 
     void AddLife();
     void SetLives(int lives);
+
+    void AddMaxLife();
+    void SetMaxLives(int lives);
 
     void SetVignetteSize(float size);
 
@@ -35,6 +39,7 @@ private:
     Player* player = nullptr;
 
     int lives = 3;
+    int maxlives = 3;
     float vignetteSize = 300.0f;
 
     Timer knockbackTimer;

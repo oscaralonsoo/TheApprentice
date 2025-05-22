@@ -814,9 +814,15 @@
 						<frame x="180" y="0" w="180" h="180" />
 					</idle>
 				</liebre>
-				<perdiz w="336" h="164" texture="Assets/NPC/perdiz.png">
+				<perdiz w="236" h="225" texture="Assets/NPC/perdiz.png">
 					<idle loop="true" speed="0.2">
-						<frame x="0" y="0" w="336" h="164" />
+						<frame x="0" y="0" w="236" h="225" />
+						<frame x="236" y="0" w="236" h="225" />
+						<frame x="472" y="0" w="236" h="225" />
+						<frame x="708" y="0" w="236" h="225" />
+						<frame x="944" y="0" w="236" h="225" />
+						<frame x="1180" y="0" w="236" h="225" />
+						<frame x="1416" y="0" w="236" h="225" />
 					</idle>
 				</perdiz>
 				<pangolin w="336" h="164" texture="Assets/NPC/pangolin.png">

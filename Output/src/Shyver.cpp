@@ -39,7 +39,7 @@ bool Shyver::Start() {
 
     currentAnimation = &attackAnim;
     maxSteps = 15;
-    soundWalkId = Engine::GetInstance().audio->LoadFx("shyver_walk.ogg", 1.0f);
+    soundWalkId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/shyver_walk.ogg", 1.0f);
 
 
     return Enemy::Start();

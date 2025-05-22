@@ -36,8 +36,8 @@ bool Scurver::Start() {
     currentAnimation = &attackAnim;
     maxSteps = 15;
 
-    soundWalkId = Engine::GetInstance().audio->LoadFx("scruver_walk.ogg", 1.0f);
-    soundDeadId = Engine::GetInstance().audio->LoadFx("monster_death.ogg", 1.0f);
+    soundWalkId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/scruver_walk.ogg", 1.0f);
+    soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/monster_death.ogg", 1.0f);
 
     return Enemy::Start();
 }

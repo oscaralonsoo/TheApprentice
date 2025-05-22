@@ -192,7 +192,7 @@ void Menus::MainMenu(float dt) {
             int sceneIndex = Engine::GetInstance().scene->nextScene; 
 
             switch (sceneIndex) {
-            case 0:
+            case 1:
                 Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 2.0f, 1.0f);
                 break;
             case 21:

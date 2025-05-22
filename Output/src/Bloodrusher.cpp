@@ -56,9 +56,9 @@ bool Bloodrusher::Start() {
 
     currentAnimation = &idleAnim;
 
-    soundMoveId = Engine::GetInstance().audio->LoadFx("bloodrusher_walk.ogg", 1.0f);
-    soundSlideId = Engine::GetInstance().audio->LoadFx("bloodrusher_slide.ogg", 1.0f);
-    soundDeadId = Engine::GetInstance().audio->LoadFx("monster_dead.ogg", 1.0f);
+    soundMoveId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/bloodrusher_walk.ogg", 1.0f);
+    soundSlideId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/bloodrusher_slide.ogg", 1.0f);
+    soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/monster_dead.ogg", 1.0f);
 
     return true;
 }

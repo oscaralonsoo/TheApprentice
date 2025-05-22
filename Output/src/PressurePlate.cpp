@@ -40,7 +40,7 @@ bool PressurePlate::Start()
         width, height,
         STATIC,
         CATEGORY_PRESSURE_PLATE,
-        CATEGORY_PLATFORM | CATEGORY_BOX
+        CATEGORY_PLATFORM | CATEGORY_BOX | CATEGORY_PLAYER
     );
 
     pbody->ctype = ColliderType::PRESSURE_PLATE;

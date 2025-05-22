@@ -144,6 +144,9 @@
  <tileset firstgid="43405" name="MapMetadata" tilewidth="64" tileheight="64" tilecount="2" columns="2">
   <image source="MapMetadata.png" width="128" height="64"/>
  </tileset>
+ <tileset firstgid="43407" name="tiles_manglar" tilewidth="64" tileheight="64" tilecount="100" columns="10">
+  <image source="../Props/tiles_manglar.png" width="640" height="640"/>
+ </tileset>
  <layer id="44" name="Background" width="180" height="63" parallaxx="0" parallaxy="0">
   <properties>
    <property name="Draw" type="bool" value="true"/>
@@ -83958,7 +83961,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="43408"/>
    <tile/>
    <tile/>
    <tile gid="41106"/>
@@ -86827,7 +86830,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="43408"/>
    <tile/>
    <tile/>
    <tile/>
@@ -88243,13 +88246,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile gid="1073783013"/>
-   <tile/>
+   <tile gid="43408"/>
    <tile/>
    <tile/>
    <tile/>
@@ -88257,7 +88254,13 @@
    <tile gid="1073783013"/>
    <tile/>
    <tile/>
+   <tile gid="43408"/>
    <tile/>
+   <tile/>
+   <tile gid="1073783013"/>
+   <tile/>
+   <tile/>
+   <tile gid="43408"/>
    <tile/>
    <tile/>
    <tile/>
@@ -88414,7 +88417,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="43408"/>
    <tile gid="41191"/>
    <tile gid="41192"/>
    <tile gid="1073783023"/>
@@ -88778,7 +88781,7 @@
    <tile/>
    <tile/>
    <tile gid="2147524837"/>
-   <tile/>
+   <tile gid="1610656144"/>
    <tile/>
    <tile/>
    <tile/>
@@ -89322,7 +89325,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="2684397968"/>
    <tile gid="41181"/>
    <tile gid="41182"/>
    <tile gid="41183"/>
@@ -94917,9 +94920,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
    <tile gid="43405"/>
    <tile gid="43405"/>
    <tile gid="43405"/>
@@ -94950,6 +94950,9 @@
    <tile gid="43405"/>
    <tile gid="43405"/>
    <tile gid="43405"/>
+   <tile gid="43405"/>
+   <tile gid="43405"/>
+   <tile gid="43405"/>
    <tile/>
    <tile/>
    <tile/>
@@ -98373,7 +98376,6 @@
    <tile gid="43405"/>
    <tile gid="43405"/>
    <tile gid="43405"/>
-   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -98507,9 +98509,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="43405"/>
+   <tile gid="43405"/>
+   <tile gid="43405"/>
+   <tile gid="43405"/>
    <tile/>
    <tile/>
    <tile/>
@@ -113698,7 +113701,7 @@
   <object id="4059" name="Box" x="1152" y="2880" width="64" height="64"/>
   <object id="4139" name="Box" x="3200" y="2944" width="64" height="64"/>
   <object id="4174" name="Geyser" x="3776" y="2560" width="128" height="64"/>
-  <object id="4381" name="MaxLifePlant" x="2752" y="3200" width="64" height="64"/>
+  <object id="4381" name="LifePlantMax" x="2688" y="3072" width="64" height="64"/>
   <object id="4569" name="Box" x="8384" y="1088" width="64" height="64"/>
   <object id="4649" name="LifePlantMax" x="8640" y="1728" width="192" height="192"/>
  </objectgroup>

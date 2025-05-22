@@ -668,7 +668,10 @@ bool Map::Load(std::string path, std::string fileName)
                     else if (enemyName == "Nullwarden")
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::NULLWARDEN);
                     else if (enemyName == "Thumpod")
+                    {
+                        enemyNode.append_attribute("gravity") = true;
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::THUMPOD);
+                    }
                     else if (enemyName == "Mireborn") {
                         enemyNode.append_attribute("gravity") = true;
                         enemyNode.append_attribute("tier") = "Alpha";

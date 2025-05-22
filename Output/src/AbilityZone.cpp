@@ -201,23 +201,48 @@ bool AbilityZone::Update(float dt)
 	bool drawn = false;
 
 	if (type == "Jump" && jumpSprite) {
+		int drawX = position.getX() + texW - abilitySpriteW - 100;
+		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 + 20;
 		Engine::GetInstance().render->DrawTexture(jumpSprite, drawX, drawY);
 		drawn = true;
 	}
 	else if (type == "DoubleJump" && doubleJumpSprite) {
+		int drawX = position.getX() + texW - abilitySpriteW - 100;
+		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 + 20;
 		Engine::GetInstance().render->DrawTexture(doubleJumpSprite, drawX, drawY);
 		drawn = true;
 	}
 	else if (type == "Dash" && dashSprite) {
+		int drawX = position.getX() + texW - abilitySpriteW - 100;
+		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 + 20;
 		Engine::GetInstance().render->DrawTexture(dashSprite, drawX, drawY);
 		drawn = true;
 	}
 	else if (type == "Hook" && hookSprite) {
+		int drawX = position.getX() + texW - abilitySpriteW - 100;
+		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 + 20;
 		Engine::GetInstance().render->DrawTexture(hookSprite, drawX, drawY);
 		drawn = true;
 	}
+	else if (type == "Glide" && glideSprite) {
+		int drawX = position.getX() + texW - abilitySpriteW - 200;
+		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 - 50;
+		Engine::GetInstance().render->DrawTexture(glideSprite, drawX, drawY);
+		drawn = true;
+	}
+	else if (type == "WallJump" && wallJumpSprite) {
+		int drawX = position.getX() + texW - abilitySpriteW - 400;
+		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 - 350;
+		Engine::GetInstance().render->DrawTexture(wallJumpSprite, drawX, drawY);
+		drawn = true;
+	}
+	else if (type == "Push" && pushSprite) {
+		int drawX = position.getX() + texW - abilitySpriteW - 250;
+		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 - 125;
+		Engine::GetInstance().render->DrawTexture(pushSprite, drawX, drawY);
+		drawn = true;
+	}
 
-	// Si no se ha dibujado ninguna específica, usa abilitySprite
 	if (!drawn && abilitySprite) {
 		Engine::GetInstance().render->DrawTexture(abilitySprite, drawX, drawY);
 	}

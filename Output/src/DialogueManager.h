@@ -35,7 +35,8 @@ public:
 	void ResetTyping();
 
 private:
-	SDL_Texture* texture;
+	SDL_Texture* listenTexture;
+	SDL_Texture* dialogueTexture;
 
 	std::string dialoguesPath = "dialogues.xml";
 

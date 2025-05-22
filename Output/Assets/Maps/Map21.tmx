@@ -83691,10 +83691,10 @@
    <tile/>
    <tile gid="120"/>
    <tile gid="122"/>
-   <tile gid="1"/>
-   <tile gid="2"/>
-   <tile gid="1"/>
-   <tile gid="2"/>
+   <tile gid="15385"/>
+   <tile gid="15386"/>
+   <tile gid="15385"/>
+   <tile gid="15386"/>
    <tile gid="120"/>
    <tile gid="121"/>
    <tile gid="121"/>
@@ -83859,10 +83859,10 @@
    <tile gid="3221225589"/>
    <tile gid="138"/>
    <tile gid="132"/>
-   <tile gid="3"/>
-   <tile gid="4"/>
-   <tile gid="3"/>
-   <tile gid="4"/>
+   <tile gid="15387"/>
+   <tile gid="15388"/>
+   <tile gid="15387"/>
+   <tile gid="15388"/>
    <tile gid="130"/>
    <tile gid="131"/>
    <tile gid="131"/>
@@ -89949,10 +89949,10 @@
    <tile gid="16"/>
    <tile gid="16"/>
    <tile gid="17"/>
-   <tile gid="1"/>
-   <tile gid="2"/>
-   <tile gid="1"/>
-   <tile gid="2"/>
+   <tile gid="15385"/>
+   <tile gid="15386"/>
+   <tile gid="15385"/>
+   <tile gid="15386"/>
    <tile gid="5"/>
    <tile gid="6"/>
    <tile gid="48"/>
@@ -90117,10 +90117,10 @@
    <tile gid="16"/>
    <tile gid="16"/>
    <tile gid="28"/>
-   <tile gid="3"/>
-   <tile gid="4"/>
-   <tile gid="3"/>
-   <tile gid="4"/>
+   <tile gid="15387"/>
+   <tile gid="15388"/>
+   <tile gid="15387"/>
+   <tile gid="15388"/>
    <tile gid="30"/>
    <tile gid="16"/>
    <tile gid="16"/>
@@ -112760,7 +112760,7 @@
   <object id="3947" name="Spikes" x="5888" y="2890" width="1280" height="64"/>
   <object id="4425" name="Spikes" x="2944" y="1216" width="384" height="64"/>
   <object id="4427" name="Spikes" x="3584" y="1088" width="256" height="64"/>
-  <object id="4505" name="Spikes" x="1344" y="2176" width="1024" height="128"/>
+  <object id="4505" name="Spikes" x="1344" y="2176" width="1024" height="84"/>
   <object id="4569" name="Spikes" x="1408" y="1816.24" width="256" height="103.758"/>
   <object id="4573" name="Spikes" x="1472" y="2395.27" width="128" height="100.727"/>
   <object id="4574" name="Spikes" x="1856" y="2389.21" width="128" height="106.788"/>
@@ -112772,7 +112772,7 @@
  <objectgroup id="65" name="NPC">
   <object id="4041" name="Castor" x="4992" y="2624" width="576" height="384">
    <properties>
-    <property name="dialogueId" type="int" value="1"/>
+    <property name="dialogueId" type="int" value="11"/>
    </properties>
   </object>
  </objectgroup>
@@ -112965,7 +112965,7 @@
   <object id="4401" x="8640" y="512" height="192"/>
   <object id="4413" x="10240" y="768" height="64"/>
   <object id="4414" x="10432" y="768" height="64"/>
-  <object id="4415" x="7168" y="2880" height="128"/>
+  <object id="4415" x="7168" y="2886.67" height="121.333"/>
   <object id="4418" x="3648" y="1216" height="64"/>
   <object id="4419" x="3328" y="1280" width="320"/>
   <object id="4420" x="3456" y="1280" height="64"/>
@@ -112981,7 +112981,7 @@
   <object id="4444" x="3776" y="1280" width="192"/>
   <object id="4446" x="3776" y="1216" height="64"/>
   <object id="4458" x="1920" y="1792" height="64"/>
-  <object id="4459" x="1664" y="1792" height="64"/>
+  <object id="4459" x="1664" y="1797.5" height="58.5"/>
   <object id="4462" x="2816" y="2176" height="192"/>
   <object id="4472" x="2048" y="1472" width="256"/>
   <object id="4473" x="2304" y="1344" height="128"/>
@@ -113004,8 +113004,8 @@
   <object id="4509" x="1216" y="2240" width="128"/>
   <object id="4510" x="1216" y="2176" height="64"/>
   <object id="4513" x="256" y="1984" width="960"/>
-  <object id="4520" x="1408" y="1792" height="64"/>
-  <object id="4521" x="1280" y="1792" height="64"/>
+  <object id="4520" x="1408" y="1796.5" height="59.5"/>
+  <object id="4521" x="1280" y="1798" height="58"/>
   <object id="4522" x="1280" y="1856" width="128"/>
   <object id="4523" x="1024" y="1728" height="64"/>
   <object id="4524" x="832" y="1792" width="192"/>
@@ -113015,18 +113015,18 @@
   <object id="4529" x="1408" y="1856" height="64"/>
   <object id="4530" x="1408" y="1920" width="256"/>
   <object id="4531" x="1664" y="1856" height="64"/>
-  <object id="4541" x="1472" y="2368" height="128"/>
+  <object id="4541" x="1472" y="2371.5" height="124.5"/>
   <object id="4542" x="1472" y="2496" width="128"/>
-  <object id="4543" x="1600" y="2368" height="128"/>
-  <object id="4544" x="1856" y="2368" height="128"/>
+  <object id="4543" x="1600" y="2371.5" height="124.5"/>
+  <object id="4544" x="1856" y="2372" height="124"/>
   <object id="4545" x="1856" y="2496" width="128"/>
-  <object id="4546" x="1984" y="2368" height="128"/>
+  <object id="4546" x="1984" y="2372" height="124"/>
   <object id="4552" x="1920" y="1856" height="64"/>
   <object id="4554" x="2368" y="1856" height="64"/>
   <object id="4555" x="1920" y="1920" width="448"/>
-  <object id="4558" x="2240" y="2368" height="128"/>
+  <object id="4558" x="2240" y="2371" height="125"/>
   <object id="4559" x="2240" y="2496" width="128"/>
-  <object id="4560" x="2368" y="2368" height="128"/>
+  <object id="4560" x="2368" y="2373.5" height="122.5"/>
   <object id="4563" x="2112" y="1728" width="64"/>
   <object id="4565" x="2624" y="1856" height="64"/>
   <object id="4570" x="2368" y="2240" width="320"/>
@@ -113181,8 +113181,8 @@
   <object id="4215" name="Hook" x="10304" y="832" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="57" name="WallSlide">
-  <object id="3872" x="4096" y="4096" height="192"/>
-  <object id="3873" x="4352" y="4160" height="128"/>
+  <object id="3872" x="4096" y="4100.67" width="0.333333" height="187.333"/>
+  <object id="3873" x="4352" y="4164" height="124"/>
   <object id="3874" x="5376" y="3840" height="320"/>
   <object id="3875" x="5504" y="3712" height="128"/>
   <object id="3878" x="5440" y="3520" height="192"/>
@@ -113191,7 +113191,7 @@
   <object id="3884" x="4864" y="3008" height="128"/>
   <object id="3892" x="3392" y="3456" height="64"/>
   <object id="3901" x="3968" y="2816" height="256"/>
-  <object id="3945" x="5888" y="2816" height="192"/>
+  <object id="3945" x="5888" y="2826.67" height="181.333"/>
   <object id="3959" x="4032" y="2688" height="128"/>
   <object id="3961" x="4160" y="2560" height="128"/>
   <object id="4001" x="5696" y="896" height="1088"/>
@@ -113228,7 +113228,7 @@
  <objectgroup id="66" name="HelpZone">
   <object id="4044" name="Dash" x="640" y="2176" width="192" height="192"/>
  </objectgroup>
- <objectgroup id="71" name="Zones">
+ <objectgroup id="71" name="Zones" visible="0">
   <object id="4571" name="HiddenZone" x="640" y="1216" width="2176" height="832"/>
   <object id="4572" name="HiddenZone" x="1216" y="1920" width="1408" height="704"/>
  </objectgroup>

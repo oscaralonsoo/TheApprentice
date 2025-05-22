@@ -441,7 +441,18 @@ void Menus::DrawAbilities() {
         Engine::GetInstance().render->DrawTexture(abilityTexture, cameraRect.x - Engine::GetInstance().render->camera.x, cameraRect.y - Engine::GetInstance().render->camera.y, &cameraRect);
     }
 
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+    bool spacePressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN;
+    bool aPressed = false;
+
+    if (controller && SDL_GameControllerGetAttached(controller)) {
+        bool aNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A);
+        if (aNow && !aHeld) {
+            aPressed = true;
+        }
+        aHeld = aNow;
+    }
+
+    if (spacePressed || aPressed) {
         StartTransition(false, MenusState::GAME);
         drawingAbilityBackground = false;
     }

@@ -602,7 +602,7 @@ bool Map::Load(std::string path, std::string fileName)
                     {
                         int x = objectNode.attribute("x").as_int();
                         int y = objectNode.attribute("y").as_int();
-                        int width = 90;
+                        int width = 64;
                         int height = 64;
 
                         pugi::xml_document tempDoc;

@@ -33,12 +33,13 @@ bool DialogueManager::Start() {
 		WrapLines(id, boxWidth, dialogueFontSize);
 	}
 
-	texture = Engine::GetInstance().textures->Load("Assets/Textures/UI/Help/listen.png");
+	listenTexture = Engine::GetInstance().textures->Load("Assets/Textures/UI/Help/listen.png");
+	dialogueTexture = Engine::GetInstance().textures->Load("Assets/Textures/UI/Dialogue/dialogue.png");
 
 	return true;
 }
 
-bool DialogueManager::Update(float dt) {
+bool DialogueManager::PostUpdate() {
 	SDL_GameController* controller = Engine::GetInstance().scene->GetPlayer()->GetMechanics()->GetMovementHandler()->GetController();
 	bool l1Pressed = false;
 
@@ -76,7 +77,7 @@ bool DialogueManager::Update(float dt) {
 	return true;
 }
 
-bool DialogueManager::PostUpdate() {
+bool DialogueManager::Update(float dt) {
 	return true;
 }
 
@@ -129,13 +130,13 @@ void DialogueManager::RenderDialogue(int dialogueId) {
     int boxY = windowHeight - boxHeight - (windowHeight * 0.05f);
 
     SDL_Rect dialogueBox = { -camera.x + boxX, -camera.y + boxY, boxWidth, boxHeight };
-    Engine::GetInstance().render->DrawRectangle(dialogueBox, 0, 0, 0, 180, true, true);
+	Engine::GetInstance().render->DrawTexture(dialogueTexture, dialogueBox.x, dialogueBox.y);
 
     int marginX = boxWidth * 0.05f;
     int marginTop = boxHeight * 0.15f;
     int lineSpacing = boxHeight * 0.2f;
 
-    int speakerFontSize = boxHeight * 0.25f;
+    int speakerFontSize = boxHeight * 0.21f;
     int dialogueFontSize = boxHeight * 0.15f;
 
     int speakerX = boxX + marginX;
@@ -144,7 +145,7 @@ void DialogueManager::RenderDialogue(int dialogueId) {
     int dialogueX = boxX + marginX;
     int dialogueY = speakerY + lineSpacing;
 
-    Engine::GetInstance().render->DrawText(event.speaker.c_str(), speakerX, speakerY, { 255, 255, 100, 255 }, speakerFontSize);
+    Engine::GetInstance().render->DrawText(event.speaker.c_str(), speakerX + 90, speakerY - 22, { 255, 255, 255, 255 }, speakerFontSize);
 
 	const std::vector<std::string>& lines = event.wrappedLines[currentLineIndex];
 
@@ -220,7 +221,7 @@ void DialogueManager::SetDialogueAvailable(int dialogueId, Vector2D npcPos, bool
 }
 
 void DialogueManager::ShowInteractionPrompt() {
-	Engine::GetInstance().render.get()->DrawTexture(texture, promptPos.x, promptPos.y + 105);
+	Engine::GetInstance().render.get()->DrawTexture(listenTexture, promptPos.x, promptPos.y + 105);
 }
 
 void DialogueManager::ResetTyping() {

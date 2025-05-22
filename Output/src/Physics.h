@@ -40,6 +40,7 @@
 #define CATEGORY_HOOK_SENSOR	  21
 #define CATEGORY_HOOK			  22
 #define CATEGORY_LIANA			  23
+#define	CATEGORY_PROJECTILE		  24
 
 // types of bodies
 enum bodyType {

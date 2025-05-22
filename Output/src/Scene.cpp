@@ -53,7 +53,7 @@ bool Scene::Awake()
 bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
-	Engine::GetInstance().map->Load("Assets/Maps/", "Map1.tmx");
+	Engine::GetInstance().map->Load("Assets/Maps/", "Map41.tmx");
 	return true;
 }
 
@@ -193,6 +193,7 @@ void Scene::UpdateTransition(float dt)
 // Called before changing the scene
 void Scene::ChangeScene(int nextScene)
 {
+	LOG("Cambiando a escena: %d", nextScene);
 	Engine::GetInstance().map->CleanUp(); 	// CleanUp of the previous Map
 	if (hookManager) {
 		hookManager->ClearHooks(); // lo implementamos abajo
@@ -209,12 +210,27 @@ void Scene::ChangeScene(int nextScene)
 		std::string name = mapNode.attribute("name").as_string();
 
 		if (!path.empty() && !name.empty()) {
-			Engine::GetInstance().map->Load(path, name); // Load New Map
+			Engine::GetInstance().map->Load(path, name);
 
 			if (!isLoading)
 			{
-				player->pbody->body->SetLinearVelocity(b2Vec2(0, 0)); // Stop All Movement
-				player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, newPosition.y / PIXELS_PER_METER), 0); // Set New Player Position
+				player->pbody->body->SetLinearVelocity(b2Vec2(0, 0)); 
+				player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, newPosition.y / PIXELS_PER_METER), 0);
+			}
+
+			switch (nextScene) {
+			case 0:
+				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 2.0f, 1.0f);
+				break;
+			case 21:
+				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/manglar_music.ogg", 2.0f, 1.0f);
+				break;
+			case 41:
+				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/snowforest_music.ogg", 2.0f, 1.0f);
+				break;
+			case 46:
+				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/snowforest_music.ogg", 2.0f, 1.0f);
+				break;
 			}
 
 			Engine::GetInstance().entityManager->Start();

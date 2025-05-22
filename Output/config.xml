@@ -713,6 +713,11 @@
 						<frame x="18" y="72" w="18" h="18" />
 					</splash>
 				</cave_drop>
+				<destructible_wall w="64" h="128" texture="Assets/Props/destructibleWall.png">
+					<idle loop="false" speed="0">
+						<frame x="0" y="0" w="64" h="128" />
+					</idle>
+				</destructible_wall>
 				<life_plant w="256" h="256" texture="Assets/Props/lifePlant.png">
 					<available loop="true" speed="0.12">
 						<frame x="0" y="0" w="256" h="256" />

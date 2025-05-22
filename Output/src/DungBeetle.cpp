@@ -68,13 +68,6 @@ bool DungBeetle::Start() {
 
 bool DungBeetle::Update(float dt) {
 
-    if (currentState != DungBeetleState::BALLMODE)
-    {
-        if (playerPos.x < position.x) direction = -1;
-        else direction = 1;
-    }
-
-
     playerPos = Engine::GetInstance().scene->GetPlayerPosition();
 
     CheckState(dt);

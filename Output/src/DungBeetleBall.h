@@ -18,6 +18,7 @@ public:
     void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
     void Bounce();
+
     void CollisionNavigationLayer();
 
 private:

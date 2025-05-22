@@ -68,6 +68,13 @@ bool DungBeetle::Start() {
 
 bool DungBeetle::Update(float dt) {
 
+    if (currentState != DungBeetleState::BALLMODE)
+    {
+        if (playerPos.x < position.x) direction = -1;
+        else direction = 1;
+    }
+
+
     playerPos = Engine::GetInstance().scene->GetPlayerPosition();
 
     CheckState(dt);
@@ -93,10 +100,7 @@ void DungBeetle::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (currentState == DungBeetleState::BALLMODE)
             currentState = DungBeetleState::HIT;
         break;
-    case ColliderType::PLATFORM:
     case ColliderType::PLAYER:
-    case ColliderType::WALL: 
-    case ColliderType::BOX:
         if (currentState == DungBeetleState::BALLMODE) {
             Bounce();
         }
@@ -168,7 +172,7 @@ void DungBeetle::Throw(float dt)
     if (currentAnimation->HasFinished())
     {
         if (!hasThrown && ballsThrown < 2) {
-            b2Vec2 dir((direction < 0 )? -0.1:0.1f, 1.0f);
+            b2Vec2 dir((direction < 0 )? -1.0f:1.0f, 1.0f);
 
             float spawnX = METERS_TO_PIXELS(pbody->body->GetPosition().x);
             float spawnY = METERS_TO_PIXELS(pbody->body->GetPosition().y) + 50.0f;
@@ -227,24 +231,17 @@ void DungBeetle::Bounce()
     b2Vec2 velocity = pbody->body->GetLinearVelocity();
 
     if (velocity.Length() > 0) {
-
         velocity.Normalize();
 
-        float currentAngle = atan2f(velocity.y, velocity.x);
+        float randomAngle = ((rand() % 100) / 100.0f - 0.5f) * 0.4f;
+        float angle = atan2(velocity.y, velocity.x) + randomAngle;
 
-        float maxOffset = 50.0f * (M_PI / 180.0f); 
-        float randomOffset = ((float)rand() / RAND_MAX) * (2.0f * maxOffset) - maxOffset;
-
-
-        float newAngle = currentAngle + randomOffset;
-
-        b2Vec2 newDir(cosf(newAngle), sinf(newAngle));
-        newDir.Normalize();
-
-        float speedVariation = ballModeSpeed * 1.05f;
-
-        pbody->body->SetLinearVelocity(speedVariation * newDir);
+        b2Vec2 newVelocity(cosf(angle), sinf(angle));
+        newVelocity *= ballModeSpeed;
+        pbody->body->SetLinearVelocity(-newVelocity);
     }
+
+    pbody->body->SetAngularVelocity(0.0f);
 
     pbody->body->SetAngularVelocity(0.0f);
 }

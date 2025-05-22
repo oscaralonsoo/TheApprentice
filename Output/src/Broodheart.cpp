@@ -7,6 +7,7 @@
 #include "Textures.h"
 #include "Entity.h"
 #include "Log.h"
+#include "Audio.h"
 
 constexpr int MAX_BROODS = 4;
 constexpr int BROODS_PER_SPAWN = 1;
@@ -61,6 +62,8 @@ bool Broodheart::Start() {
         fixture->SetFilterData(filter);
     }
 
+    soundSpawnId = Engine::GetInstance().audio->LoadFx("broodheart_spawn.ogg", 1.0f);
+    soundDeathId = Engine::GetInstance().audio->LoadFx("monster_death.ogg", 1.0f);
     maxSteps = 20;
 
     return true;
@@ -73,9 +76,15 @@ bool Broodheart::Update(float dt) {
         spawnCooldown = 0.0f;
     }
 
-    if (shouldSpawn == false && currentAnimation == &spawnAnim && spawnAnim.HasFinished()) {
-
-        currentAnimation = &idleAnim;
+    if (shouldSpawn == false && currentAnimation == &spawnAnim) {
+        if (!spawnSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundSpawnId, 1.0f, 0);
+            spawnSoundPlayed = true;
+        }
+        if (spawnAnim.HasFinished()) {
+            currentAnimation = &idleAnim;
+            spawnSoundPlayed = false;
+        }
     }
 
     return Enemy::Update(dt);
@@ -109,6 +118,10 @@ void Broodheart::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::ATTACK:
         isBroken = true;
         currentAnimation = &deathAnim;
+        if (!deathSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundSpawnId, 1.0f, 0);
+            deathSoundPlayed = true;
+        }
 
         break;
     }

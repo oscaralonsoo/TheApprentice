@@ -56,4 +56,13 @@ private:
     Animation deathAnim;
 
     bool isDivided = false;
+    
+    int soundDivideId = 0;
+    int soundDeathId = 0;
+    int soundWalkId = 0;
+
+    bool divideSoundPlayed = false;
+    bool deathSoundPlayed = false;
+    bool walkSoundPlayed = false;
+
 };

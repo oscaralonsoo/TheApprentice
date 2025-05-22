@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "EntityManager.h"
 #include "Textures.h"
+#include "Audio.h"
 
 
 Mireborn::Mireborn() : Enemy(EntityType::MIREBORN) {
@@ -41,6 +42,11 @@ bool Mireborn::Start() {
             (tier == "Gamma") ? 0.5f :
                                 1.0f;
     maxSteps = 15;
+
+    soundWalkId = Engine::GetInstance().audio->LoadFx("mireborn_walk.ogg", 1.0f);
+    soundDivideId = Engine::GetInstance().audio->LoadFx("mireborn_divide.ogg", 1.0f);
+    soundDeathId = Engine::GetInstance().audio->LoadFx("monster_death.ogg", 1.0f);
+
     return Enemy::Start();
 }
 
@@ -54,13 +60,36 @@ bool Mireborn::Update(float dt) {
         Idle(dt);
         break;
     case MirebornState::WALKING:
+        if (!walkSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundWalkId, 1.0f, 0);
+            walkSoundPlayed = true;
+        }
+        divideSoundPlayed = false;
+        deathSoundPlayed = false;
+
         Walk(dt);
         break;
     case MirebornState::DIVIDING:
+
+        if (!divideSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundDivideId, 1.0f, 0);
+            divideSoundPlayed = true;
+        }
+        walkSoundPlayed = false;
+        deathSoundPlayed = false;
+
         if (currentAnimation != &divideAnim) currentAnimation = &divideAnim;
         pbody->body->SetLinearVelocity(b2Vec2(0, 0));
         break;
     case MirebornState::DEATH:
+
+        if (!deathSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundDeathId, 1.0f, 0);
+            deathSoundPlayed = true;
+        }
+        walkSoundPlayed = false;
+        divideSoundPlayed = false;
+
         if (currentAnimation != &deathAnim) currentAnimation = &deathAnim;
         pbody->body->SetLinearVelocity(b2Vec2(0, 0));
         break;

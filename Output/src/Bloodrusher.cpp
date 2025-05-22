@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "EntityManager.h"
 #include "Textures.h"
+#include "Audio.h"
 
 
 Bloodrusher::Bloodrusher() : Enemy(EntityType::BLOODRUSHER) {
@@ -54,6 +55,10 @@ bool Bloodrusher::Start() {
     maxSteps = 15;
 
     currentAnimation = &idleAnim;
+
+    soundMoveId = Engine::GetInstance().audio->LoadFx("bloodrusher_walk.ogg", 1.0f);
+    soundSlideId = Engine::GetInstance().audio->LoadFx("bloodrusher_slide.ogg", 1.0f);
+    soundDeadId = Engine::GetInstance().audio->LoadFx("monster_dead.ogg", 1.0f);
 
     return true;
 }
@@ -117,9 +122,16 @@ void Bloodrusher::Idle() {
     else {
         currentAnimation = &idleAnim;
     }
+    moveSoundPlayed = false;
+    slideSoundPlayed = false;
+    deadSoundPlayed = false;
 }
 
 void Bloodrusher::Attack(float dt) {
+    if (!moveSoundPlayed) {
+        Engine::GetInstance().audio->PlayFx(soundMoveId, 1.0f, 0);
+        moveSoundPlayed = true;
+    }
     if (pathfinding->pathTiles.empty()) {
         pbody->body->SetLinearVelocity(b2Vec2(0, 0));
         return;
@@ -156,6 +168,11 @@ void Bloodrusher::Attack(float dt) {
 void Bloodrusher::Slide(float dt) {
     b2Vec2 currentVelocity = pbody->body->GetLinearVelocity();
 
+    if (!slideSoundPlayed) {
+        Engine::GetInstance().audio->PlayFx(soundSlideId, 1.0f, 0);
+        slideSoundPlayed = true;
+    }
+
     if (IsGroundAhead()) {
         timer.Start();
     }
@@ -185,6 +202,12 @@ void Bloodrusher::Dead() {
 
     pbody->body->SetLinearVelocity(b2Vec2_zero);
     pbody->body->SetAngularVelocity(0);
+
+    if (!deadSoundPlayed) {
+        Engine::GetInstance().audio->PlayFx(soundDeadId, 1.0f, 0);
+        deadSoundPlayed = true;
+    }
+
 }
 
 void Bloodrusher::OnCollision(PhysBody* physA, PhysBody* physB)

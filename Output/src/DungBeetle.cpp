@@ -136,10 +136,20 @@ void DungBeetle::Angry()
     currentAnimation = &angryAnim;
     if (currentAnimation->HasFinished())
     {
-        if (CheckPuzzleState() == 1 || CheckPuzzleState() == 2)
+        if (CheckPuzzleState() == 1 && ballsThrown ==0) {
             currentState = DungBeetleState::THROW;
-        else
+        }
+
+        else if (CheckPuzzleState() == 2 && ballsThrown == 1) {
+            currentState = DungBeetleState::THROW;
+        }
+        else if (CheckPuzzleState() == 3 && !hasLaunched)
+        {
             currentState = DungBeetleState::BALLMODE;
+        }
+        else {
+            currentState = DungBeetleState::IDLE;
+        }
     }
 }
 
@@ -161,6 +171,7 @@ void DungBeetle::Throw(float dt)
             hasThrown = true;
             ballsThrown++;
         }
+        lastPuzzleState = currentStatePuzzle;
         currentState = DungBeetleState::IDLE;
         hasThrown = false;
     }

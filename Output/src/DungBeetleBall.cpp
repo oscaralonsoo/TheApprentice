@@ -25,7 +25,7 @@ DungBeetleBall::DungBeetleBall(float x, float y, float speed, b2Vec2 direction)
 
     pbody->body->SetGravityScale(0.0f);
     if (b2Fixture* fixture = pbody->body->GetFixtureList()) {
-        fixture->SetSensor(false);
+        fixture->SetSensor(true);
 
         b2Filter filter;
         filter.categoryBits = CATEGORY_ENEMY;
@@ -39,7 +39,8 @@ DungBeetleBall::DungBeetleBall(float x, float y, float speed, b2Vec2 direction)
 
         pbody->body->SetLinearDamping(0.0f);   
         pbody->body->SetAngularDamping(0.0f);   
-        pbody->body->SetBullet(true);          
+        pbody->body->SetBullet(true);
+
     }
 
     pbody->body->SetLinearVelocity(b2Vec2(direction.x * speed, direction.y * speed));
@@ -59,6 +60,14 @@ DungBeetleBall::~DungBeetleBall()
 
 bool DungBeetleBall::Update(float dt)
 {
+
+    if (time > 1000.0f) 
+    {
+        if (pbody->body->GetFixtureList()->IsSensor()) {
+            pbody->body->GetFixtureList()->SetSensor(false); // desactivar sensor
+        }
+    }
+
     b2Transform pbodyPos = pbody->body->GetTransform();
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - width / 2);
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - height / 2);
@@ -112,10 +121,7 @@ void DungBeetleBall::OnCollision(PhysBody* physA, PhysBody* physB)
     case ColliderType::ENEMY:
     case ColliderType::PLATFORM:
     case ColliderType::WALL:
-        Bounce();
-        break;
     case ColliderType::PLAYER:
-        // TODO TONI --- DETECTAR COLISION!
         Bounce();
         break;
     }

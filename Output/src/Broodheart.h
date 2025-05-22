@@ -41,4 +41,9 @@ private:
     const float spawnRadius = 100.0f;
     std::list<Brood*> broodsAlive;
     bool isBroken = false;
+
+    bool spawnSoundPlayed = false;
+    bool deathSoundPlayed = false;
+    int soundSpawnId = 0;
+    int soundDeathId = 0;
 };

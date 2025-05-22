@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "EntityManager.h"
 #include "Textures.h"
+#include "Audio.h"
 
 
 Mireborn::Mireborn() : Enemy(EntityType::MIREBORN) {
@@ -41,6 +42,10 @@ bool Mireborn::Start() {
             (tier == "Gamma") ? 0.5f :
                                 1.0f;
     maxSteps = 15;
+
+    soundDivideId = Engine::GetInstance().audio->LoadFx("mireborn_divide.ogg", 1.0f);
+    soundDeathId = Engine::GetInstance().audio->LoadFx("monster_death.ogg", 1.0f);
+
     return Enemy::Start();
 }
 

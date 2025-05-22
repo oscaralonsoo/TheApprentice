@@ -48,4 +48,13 @@ private:
     float exponentialFactor = 1.007f;
     float velocityBase = 0.15f;
     float maxSpeed = 15.0f;
+
+    int soundMoveId = 0;
+    int soundSlideId = 0;
+    int soundDeadId = 0;
+
+    bool moveSoundPlayed = false;
+    bool slideSoundPlayed = false;
+    bool deadSoundPlayed = false;
+
 };

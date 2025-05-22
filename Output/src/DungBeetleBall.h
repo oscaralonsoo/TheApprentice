@@ -18,6 +18,7 @@ public:
     void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
     void Bounce();
+    void CollisionNavigationLayer();
 
 private:
     PhysBody* pbody = nullptr;
@@ -35,4 +36,6 @@ private:
     b2Vec2 direction;
 
     float time = 0.0f;
+
+    Vector2D currentTileMap;
 };

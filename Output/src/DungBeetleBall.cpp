@@ -31,14 +31,13 @@ DungBeetleBall::DungBeetleBall(float x, float y, float speed, b2Vec2 direction)
         filter.maskBits = CATEGORY_WALL | CATEGORY_PLAYER_DAMAGE | CATEGORY_PLATFORM | CATEGORY_ATTACK | CATEGORY_PLAYER;
         fixture->SetFilterData(filter);
 
-        // Configuración mejorada para rebotes
         fixture->SetRestitution(1.0f); 
         fixture->SetFriction(0.0f);     
         fixture->SetDensity(1.0f);     
 
         pbody->body->SetLinearDamping(0.0f);   
-        pbody->body->SetAngularDamping(0.0f);   
-
+        pbody->body->SetAngularDamping(0.0f); 
+        pbody->body->SetBullet(true);
     }
 
     pbody->body->SetLinearVelocity(b2Vec2(direction.x * speed, direction.y * speed));
@@ -58,12 +57,6 @@ DungBeetleBall::~DungBeetleBall()
 
 bool DungBeetleBall::Update(float dt)
 {
-
-    if (time > 1000.0f && pbody->body->GetFixtureList()->IsSensor()) {
-        pbody->body->GetFixtureList()->SetSensor(false);
-        pbody->body->SetBullet(true);
-    }
-
     b2Transform pbodyPos = pbody->body->GetTransform();
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - width / 2);
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - height / 2);
@@ -77,11 +70,10 @@ bool DungBeetleBall::Update(float dt)
         timeStuck += dt;
         if (timeStuck > 1000.0f) 
         {
-            // Aplicar pequeño impulso aleatorio para liberarla
             b2Vec2 randomDir((rand() % 100 - 50) / 100.0f, (rand() % 100 - 50) / 100.0f);
             randomDir.Normalize();
             pbody->body->ApplyLinearImpulse(0.5f * randomDir, pbody->body->GetWorldCenter(), true);
-            timeStuck = 0.0f; // Resetear contador
+            timeStuck = 0.0f;
         }
     }
     else
@@ -97,7 +89,9 @@ bool DungBeetleBall::Update(float dt)
         pbody->body->SetLinearVelocity(velocity);
     }
     previousPosition = currentPos;
-    time += dt;
+
+    CollisionNavigationLayer();
+
 
     return true;
 }
@@ -110,15 +104,10 @@ bool DungBeetleBall::CleanUp()
 }
 void DungBeetleBall::OnCollision(PhysBody* physA, PhysBody* physB)
 {
-    // Ignora colisiones si aún es sensor
-    if (pbody->body->GetFixtureList()->IsSensor()) return;
 
     switch (physB->ctype)
     {
     case ColliderType::ATTACK:
-    case ColliderType::ENEMY:
-    case ColliderType::PLATFORM:
-    case ColliderType::WALL:
     case ColliderType::PLAYER:
         Bounce();
         break;
@@ -134,7 +123,6 @@ void DungBeetleBall::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
     case ColliderType::WALL:
         break;
     case ColliderType::PLAYER:
-
         break;
     }
 }
@@ -150,10 +138,25 @@ void DungBeetleBall::Bounce()
 
         b2Vec2 newVelocity(cosf(angle), sinf(angle));
         newVelocity *= speed;
-        pbody->body->SetLinearVelocity(newVelocity);
+        pbody->body->SetLinearVelocity(-newVelocity);
     }
 
     pbody->body->SetAngularVelocity(0.0f);
+}
+
+void DungBeetleBall::CollisionNavigationLayer() {
+    Vector2D posMap = Engine::GetInstance().map.get()->WorldToMap(position.getX() + width / 2, position.getY() + height / 2);
+
+    MapLayer* layer = Engine::GetInstance().map.get()->GetNavigationLayer();
+
+    if (currentTileMap != posMap)
+    {
+        if (layer->Get(posMap.x, posMap.y))
+            Bounce();
+
+        currentTileMap = posMap;
+    }
+
 }
 
 

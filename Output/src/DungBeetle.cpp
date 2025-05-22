@@ -42,7 +42,7 @@ bool DungBeetle::Start() {
         }
     }
 
-    pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + texW / 2, (int)position.getY() + texH / 1.5, texW/ 1.5, texH/1.5, bodyType::STATIC, -37, 32);
+    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texW / 2, (int)position.getY() + texH / 1.5, texW/ 1.5, texH/1.5, bodyType::STATIC);
 
     if (pbody && pbody->body) {
         b2Fixture* fixture = pbody->body->GetFixtureList();
@@ -67,13 +67,7 @@ bool DungBeetle::Start() {
 }
 
 bool DungBeetle::Update(float dt) {
-    if (hasLaunched)
-    {
-        time += dt;
-    }
-    if (time > 700.0f && pbody->body->GetFixtureList()->IsSensor() && hasLaunched) {
-        pbody->body->GetFixtureList()->SetSensor(false); 
-    }
+
     playerPos = Engine::GetInstance().scene->GetPlayerPosition();
 
     CheckState(dt);
@@ -100,13 +94,12 @@ void DungBeetle::OnCollision(PhysBody* physA, PhysBody* physB) {
             currentState = DungBeetleState::HIT;
         break;
     case ColliderType::PLATFORM:
+    case ColliderType::PLAYER:
     case ColliderType::WALL: 
+    case ColliderType::BOX:
         if (currentState == DungBeetleState::BALLMODE) {
             Bounce();
         }
-        break;
-    case ColliderType::PLAYER:
-        Bounce();
         break;
     }
 }
@@ -130,17 +123,14 @@ void DungBeetle::CheckState(float dt)
 void DungBeetle::Idle()
 {
     currentAnimation = &idleAnim;
-
+    angryAnim.Reset();
     currentStatePuzzle = CheckPuzzleState();
 
     if (currentStatePuzzle != lastPuzzleState && ballsThrown <= 2)
     {
         currentState = DungBeetleState::ANGRY;
     }
-    else if (currentStatePuzzle != 3) {
-        hasLaunched = false;
-    }
-    else if (ballsThrown >= 2) {
+    else if (ballsThrown < 2) {
         hasThrown = false; 
     }
 
@@ -150,15 +140,17 @@ void DungBeetle::Idle()
 
 void DungBeetle::Angry()
 {
+    throwingAnim.Reset();
     currentAnimation = &angryAnim;
     if (currentAnimation->HasFinished())
     {
-        if (CheckPuzzleState() == 1 && ballsThrown ==0) {
+        if (CheckPuzzleState() == 1 && ballsThrown == 0) {
             currentState = DungBeetleState::THROW;
         }
 
-        else if (CheckPuzzleState() == 2 && ballsThrown == 1) {
+        else if (CheckPuzzleState() == 2 && ballsThrown <2 ) {
             currentState = DungBeetleState::THROW;
+            hasThrown = false;
         }
         else if (CheckPuzzleState() == 3 && !hasLaunched)
         {
@@ -171,15 +163,12 @@ void DungBeetle::Angry()
 }
 
 void DungBeetle::Throw(float dt)
-{   //TODO TONI -- NO SE LANZA SEGUNDA BOLA & ANIM CORRECTION && ANGLE CORRECTION O COLLIDER DE BOLA
+{
     currentAnimation = &throwingAnim;
     if (currentAnimation->HasFinished())
     {
         if (!hasThrown && ballsThrown < 2) {
-            float angle = -((float)rand() / RAND_MAX) * (20.0f * M_PI / 180.0f) + (260.0f * M_PI / 180.0f);
-
-            b2Vec2 dir(cosf(angle), sinf(angle));
-            dir.Normalize();
+            b2Vec2 dir((direction < 0 )? -0.1:0.1f, 1.0f);
 
             float spawnX = METERS_TO_PIXELS(pbody->body->GetPosition().x);
             float spawnY = METERS_TO_PIXELS(pbody->body->GetPosition().y) + 50.0f;
@@ -232,7 +221,6 @@ void DungBeetle::ChangeBodyType() {
 int DungBeetle::CheckPuzzleState() {
     int PuzzlesDone = Engine::GetInstance().pressureSystem.get()->GetActivePlatesCount(0);
     return PuzzlesDone; 
-
 }
 void DungBeetle::Bounce()
 {

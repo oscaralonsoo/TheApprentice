@@ -42,7 +42,7 @@ bool Brood::Start() {
             break;
         }
     }
-
+    
     //Assign collider type
     pbody->ctype = ColliderType::ENEMY;
 
@@ -55,10 +55,12 @@ bool Brood::Start() {
     b2Fixture* fixture = pbody->body->GetFixtureList();
     if (fixture) {
         b2Filter filter;
-        filter.categoryBits = CATEGORY_ENEMY;
+        filter.categoryBits = CATEGORY_BROOD;
         filter.maskBits = CATEGORY_ATTACK | CATEGORY_PLAYER_DAMAGE;
         fixture->SetFilterData(filter);
     }
+
+    maxSteps = 20;
  
     return true;
 }

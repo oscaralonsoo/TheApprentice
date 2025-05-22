@@ -93,8 +93,10 @@ bool Noctilume::Update(float dt) {
 
 bool Noctilume::PostUpdate() {
     if (currentState == NoctilumeState::DEAD && currentAnimation && currentAnimation->HasFinished())
+    {
         pbody->body->GetFixtureList()->SetSensor(true);
         Engine::GetInstance().entityManager->DestroyEntity(this);
+    }
     return true;
 }
 

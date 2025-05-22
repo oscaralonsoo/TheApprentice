@@ -6,6 +6,7 @@
 #include "Scene.h"
 #include "EntityManager.h"
 #include "Textures.h"
+#include "PressureSystemController.h"
 #include "Entity.h"
 #include "Log.h"
 #include <cmath>
@@ -34,19 +35,15 @@ bool DungBeetle::Start() {
             throwingAnim.LoadAnimations(node.child("throwing"));
             ballModeAnim.LoadAnimations(node.child("ballMode"));
             ballAnim.LoadAnimations(node.child("ball"));
-            hitAnim.LoadAnimations(node.child("hit"));
-            dieAnim.LoadAnimations(node.child("death"));
+            deathAnim.LoadAnimations(node.child("death"));
+
             currentAnimation = &idleAnim;
             break;
         }
     }
 
-    pbody = Engine::GetInstance().physics->CreateCircle(
-        static_cast<int>(position.x + texH / 2),
-        static_cast<int>(position.y + texH / 2),
-        texH / 2,
-        bodyType::STATIC
-    );
+    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texW / 2, (int)position.getY() + texH / 1.5, texW/ 1.5, texH/1.5, bodyType::STATIC, -37, 32);
+
     if (pbody && pbody->body) {
         b2Fixture* fixture = pbody->body->GetFixtureList();
         fixture->SetRestitution(1.0f);
@@ -78,8 +75,7 @@ bool DungBeetle::Update(float dt) {
 }
 
 bool DungBeetle::PostUpdate() {
-    if (currentState == DungBeetleState::DEAD && currentAnimation->HasFinished())
-    {
+    if (currentState == DungBeetleState::HIT && currentAnimation->HasFinished()) {
         pbody->body->GetFixtureList()->SetSensor(true);
         Engine::GetInstance().entityManager->DestroyEntity(this);
     }
@@ -100,11 +96,8 @@ void DungBeetle::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (currentState == DungBeetleState::BALLMODE) {
             Bounce();
         }
-        if (currentState == DungBeetleState::HIT && currentAnimation->HasFinished())
-            currentState = DungBeetleState::DEAD;
         break;
     case ColliderType::PLAYER:
-        // TODO TONI --- DETECTAR COLISION!
         Bounce();
         break;
     }
@@ -123,7 +116,6 @@ void DungBeetle::CheckState(float dt)
     case DungBeetleState::THROW: Throw(dt); break;
     case DungBeetleState::BALLMODE: BallMode();  break;
     case DungBeetleState::HIT: Hit(); break;
-    case DungBeetleState::DEAD:currentAnimation = &dieAnim; break;
     }
 }
 void DungBeetle::Idle()
@@ -136,20 +128,28 @@ void DungBeetle::Idle()
     {
         currentState = DungBeetleState::ANGRY;
     }
-
     lastPuzzleState = currentStatePuzzle;
 }
-
 
 void DungBeetle::Angry()
 {
     currentAnimation = &angryAnim;
     if (currentAnimation->HasFinished())
     {
-        if (CheckPuzzleState() == 1 || CheckPuzzleState() == 2)
+        if (CheckPuzzleState() == 1 && ballsThrown ==0) {
             currentState = DungBeetleState::THROW;
-        else
+        }
+
+        else if (CheckPuzzleState() == 2 && ballsThrown == 1) {
+            currentState = DungBeetleState::THROW;
+        }
+        else if (CheckPuzzleState() == 3 && !hasLaunched)
+        {
             currentState = DungBeetleState::BALLMODE;
+        }
+        else {
+            currentState = DungBeetleState::IDLE;
+        }
     }
 }
 
@@ -159,7 +159,7 @@ void DungBeetle::Throw(float dt)
     if (currentAnimation->HasFinished())
     {
         if (!hasThrown && ballsThrown < 2) {
-            float angle = ((float)rand() / RAND_MAX) * (7.0f * M_PI / 4.0f - 5.0f * M_PI / 4.0f) + (5.0f * M_PI / 4.0f);
+            float angle = ((float)rand() / RAND_MAX) * (5.0f * M_PI / 6.0f - M_PI / 6.0f) + M_PI / 6.0f + M_PI / 2.0f;
             b2Vec2 dir(cosf(angle), sinf(angle));
             dir.Normalize();
 
@@ -171,6 +171,7 @@ void DungBeetle::Throw(float dt)
             hasThrown = true;
             ballsThrown++;
         }
+        lastPuzzleState = currentStatePuzzle;
         currentState = DungBeetleState::IDLE;
         hasThrown = false;
     }
@@ -209,18 +210,15 @@ void DungBeetle::Hit() {
     pbody->body->SetLinearVelocity(b2Vec2_zero);
     pbody->body->SetAngularVelocity(0);
 
-    currentAnimation = &hitAnim;
-
-    if (currentAnimation->HasFinished()) { currentState = DungBeetleState::DEAD; }
-
+    currentAnimation = &deathAnim;
 }
 void DungBeetle::ChangeBodyType() {
         pbody->body->SetType(b2_dynamicBody);
         isDynamic = true;
 }
 int DungBeetle::CheckPuzzleState() {
-    int PuzzlesDone = 3; // TODO OSCAR --- CURRENT PRESSED PLATES
-    return PuzzlesDone;
+    int PuzzlesDone = Engine::GetInstance().pressureSystem.get()->GetActivePlatesCount(0);
+    return PuzzlesDone; 
 
 }
 void DungBeetle::Bounce()

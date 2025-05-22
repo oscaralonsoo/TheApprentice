@@ -8,6 +8,7 @@
 #include "Bloodrusher.h"
 #include "Nullwarden.h"
 #include "LifePlant.h"
+#include "LifePlantMax.h"
 #include "PressurePlate.h"
 #include "Shyver.h"
 #include "PressureDoor.h"
@@ -165,11 +166,17 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::PANGOLIN:
 		entity = new NPC(EntityType::PANGOLIN);
 		break;
+	case EntityType::ARDILLA:
+		entity = new NPC(EntityType::ARDILLA);
+		break;
 	case EntityType::NOCTILUME:
 		entity = new Noctilume();
 		break;
 	case EntityType::LIFE_PLANT:
 		entity = new LifePlant();
+		break;
+	case EntityType::LIFE_PLANT_MAX:
+		entity = new LifePlantMax();
 		break;
 	case EntityType::HELP_ZONE:
 		entity = new HelpZone();

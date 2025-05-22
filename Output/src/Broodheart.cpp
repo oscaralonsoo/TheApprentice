@@ -46,6 +46,7 @@ bool Broodheart::Start() {
     }
     pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW / 3, bodyType::DYNAMIC);
 
+
     pbody->ctype = ColliderType::ENEMY;
     if (!gravity) pbody->body->SetGravityScale(0);
     pbody->listener = this;
@@ -63,6 +64,7 @@ bool Broodheart::Start() {
 
     soundSpawnId = Engine::GetInstance().audio->LoadFx("broodheart_spawn.ogg", 1.0f);
     soundDeathId = Engine::GetInstance().audio->LoadFx("monster_death.ogg", 1.0f);
+    maxSteps = 20;
 
     return true;
 }

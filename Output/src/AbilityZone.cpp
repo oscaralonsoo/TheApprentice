@@ -79,10 +79,25 @@ bool AbilityZone::Start() {
 	doubleJumpSprite = Engine::GetInstance().textures->Load("textures/doublejump_icon.png");
 	dashSprite = Engine::GetInstance().textures->Load("Assets/Props/Dash_Icon.png");
 	hookSprite = Engine::GetInstance().textures->Load("Assets/Props/Dash_Icon.png");
-	glideSprite = Engine::GetInstance().textures->Load("Assets/Props/Dash_Icon.png");
-	wallJumpSprite = Engine::GetInstance().textures->Load("Assets/Props/Dash_Icon.png");
-	glideSprite = Engine::GetInstance().textures->Load("Assets/Props/Dash_Icon.png");
-	pushSprite = Engine::GetInstance().textures->Load("Assets/Props/Dash_Icon.png");
+	glideSprite = Engine::GetInstance().textures->Load("Assets/Props/Glide_Icon.png");
+	wallJumpSprite = Engine::GetInstance().textures->Load("Assets/Props/WallJump_Icon.png");
+	pushSprite = Engine::GetInstance().textures->Load("Assets/Props/Push_Icon.png");
+
+	// Obtener el controller directamente desde el MovementHandler del jugador
+	Player* player = Engine::GetInstance().scene->GetPlayer();
+	if (player) {
+		PlayerMechanics* mechanics = player->GetMechanics();
+		if (mechanics) {
+			SDL_GameController* controller = mechanics->GetMovementHandler()->GetController();
+			if (controller) {
+				SetController(controller);
+				LOG("AbilityZone: controller obtenido directamente en Start");
+			}
+			else {
+				LOG("AbilityZone: no se pudo obtener el controller desde MovementHandler");
+			}
+		}
+	}
 
 	return true;
 }
@@ -134,13 +149,20 @@ bool AbilityZone::Update(float dt)
 				confirmPressed = true;
 			}
 
-			// Botón X del mando (como en los menús con A)
 			if (controller && SDL_GameControllerGetAttached(controller)) {
-				bool xNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_X);
-				if (xNow && !xHeld) {
+				bool r1Now = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
+
+				LOG("AbilityZone: mando conectado: %s", SDL_GameControllerName(controller));
+				LOG("AbilityZone: botón R1 estado actual: %d", r1Now);
+
+				if (r1Now && !xHeld) {
+					LOG("AbilityZone: botón R1 pulsado");
 					confirmPressed = true;
 				}
-				xHeld = xNow;
+				xHeld = r1Now;
+			}
+			else {
+				LOG("AbilityZone: mando no conectado o no válido");
 			}
 
 			if (confirmPressed) {
@@ -202,23 +224,48 @@ bool AbilityZone::Update(float dt)
 	bool drawn = false;
 
 	if (type == "Jump" && jumpSprite) {
+		int drawX = position.getX() + texW - abilitySpriteW - 100;
+		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 + 20;
 		Engine::GetInstance().render->DrawTexture(jumpSprite, drawX, drawY);
 		drawn = true;
 	}
 	else if (type == "DoubleJump" && doubleJumpSprite) {
+		int drawX = position.getX() + texW - abilitySpriteW - 100;
+		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 + 20;
 		Engine::GetInstance().render->DrawTexture(doubleJumpSprite, drawX, drawY);
 		drawn = true;
 	}
 	else if (type == "Dash" && dashSprite) {
+		int drawX = position.getX() + texW - abilitySpriteW - 100;
+		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 + 20;
 		Engine::GetInstance().render->DrawTexture(dashSprite, drawX, drawY);
 		drawn = true;
 	}
 	else if (type == "Hook" && hookSprite) {
+		int drawX = position.getX() + texW - abilitySpriteW - 100;
+		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 + 20;
 		Engine::GetInstance().render->DrawTexture(hookSprite, drawX, drawY);
 		drawn = true;
 	}
+	else if (type == "Glide" && glideSprite) {
+		int drawX = position.getX() + texW - abilitySpriteW - 200;
+		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 - 50;
+		Engine::GetInstance().render->DrawTexture(glideSprite, drawX, drawY);
+		drawn = true;
+	}
+	else if (type == "WallJump" && wallJumpSprite) {
+		int drawX = position.getX() + texW - abilitySpriteW - 400;
+		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 - 350;
+		Engine::GetInstance().render->DrawTexture(wallJumpSprite, drawX, drawY);
+		drawn = true;
+	}
+	else if (type == "Push" && pushSprite) {
+		int drawX = position.getX() + texW - abilitySpriteW - 250;
+		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 - 125;
+		Engine::GetInstance().render->DrawTexture(pushSprite, drawX, drawY);
+		drawn = true;
+	}
 
-	// Si no se ha dibujado ninguna específica, usa abilitySprite
 	if (!drawn && abilitySprite) {
 		Engine::GetInstance().render->DrawTexture(abilitySprite, drawX, drawY);
 	}

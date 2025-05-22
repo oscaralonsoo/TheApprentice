@@ -26,6 +26,8 @@ public:
 
 	void UpdateSystem();
 
+    int GetActivePlatesCount(int id);
+
     std::vector<PressurePlate*> plates;
     std::vector<PressureDoor*> doors;
 

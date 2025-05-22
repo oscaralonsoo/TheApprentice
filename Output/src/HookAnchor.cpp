@@ -47,6 +47,8 @@ bool HookAnchor::Update(float dt)
         Player* player = Engine::GetInstance().scene->GetPlayer();
         if (player && player->pbody && player->pbody->body)
         {
+            if (player->GetState() != "hook")  
+                player->SetState("hook");
             b2Vec2 playerPos = player->pbody->body->GetPosition();
             b2Vec2 hookPos = pbody->body->GetPosition();
 

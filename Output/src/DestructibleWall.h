@@ -26,4 +26,5 @@ private:
     int texW = 0;
     int texH = 0;
     bool destroyed = false;
+
 };

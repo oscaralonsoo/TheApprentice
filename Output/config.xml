@@ -798,14 +798,20 @@
 						<frame x="0" y="0" w="336" h="164" />
 					</idle>
 				</castor>
-				<liebre w="342" h="205" texture="Assets/NPC/liebre.png">
-					<idle loop="true" speed="0.1">
-						<frame x="0" y="0" w="342" h="241" />
-						<frame x="342" y="0" w="342" h="241" />
-						<frame x="684" y="0" w="342" h="241" />
-						<frame x="1026" y="0" w="342" h="241" />
-						<frame x="1368" y="0" w="342" h="241" />
-						<frame x="1710" y="0" w="342" h="241" />
+				<liebre w="180" h="180" texture="Assets/NPC/liebre.png">
+					<idle loop="true" speed="0.2">
+						<frame x="0" y="0" w="180" h="180" />
+						<frame x="180" y="0" w="180" h="180" />
+						<frame x="360" y="0" w="180" h="180" />
+						<frame x="540" y="0" w="180" h="180" />
+						<frame x="720" y="0" w="180" h="180" />
+						<frame x="900" y="0" w="180" h="180" />
+						<frame x="1080" y="0" w="180" h="180" />
+						<frame x="900" y="0" w="180" h="180" />
+						<frame x="720" y="0" w="180" h="180" />
+						<frame x="540" y="0" w="180" h="180" />
+						<frame x="360" y="0" w="180" h="180" />
+						<frame x="180" y="0" w="180" h="180" />
 					</idle>
 				</liebre>
 				<perdiz w="336" h="164" texture="Assets/NPC/perdiz.png">

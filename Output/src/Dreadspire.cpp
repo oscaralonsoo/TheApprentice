@@ -35,12 +35,7 @@ bool Dreadspire::Start() {
         }
     }
 
-    pbody = Engine::GetInstance().physics->CreateCircle(
-        static_cast<int>(position.x + texH / 2),
-        static_cast<int>(position.y + texH / 2),
-        texH / 2,
-        bodyType::DYNAMIC
-    );
+    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texW / 2, (int)position.getY() + texH / 2, 64, 100 , bodyType::DYNAMIC, 20, -3);
   
     maxSteps = 15;
 

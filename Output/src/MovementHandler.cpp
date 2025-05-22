@@ -286,6 +286,7 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
     {
+        lastPlatformCollider = physB;
         if (!jumpCooldownActive) {
             jumpMechanic.OnLanding();
             fallMechanic.OnLanding();
@@ -297,7 +298,6 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
                 LOG("Gancho reactivado tras aterrizar");
             }
 
-            lastPlatformCollider = physB;
         }
         break;
     }

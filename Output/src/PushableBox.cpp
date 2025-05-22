@@ -152,4 +152,15 @@ void PushableBox::RecreateBody(bodyType type)
     pbody->body->SetGravityScale(5.0f);
     pbody->body->GetFixtureList()->SetDensity(5.0f);
     pbody->body->ResetMassData();
+
+    if (type == DYNAMIC) {
+        // Obtener la posición actual del body en metros
+        b2Vec2 currentPos = pbody->body->GetPosition();
+
+        // Moverlo un poco a la derecha (por ejemplo, 0.1 metros)
+        b2Vec2 newPos = b2Vec2(currentPos.x + 0.65f, currentPos.y - 0.15);
+
+        // Aplicar la nueva posición
+        pbody->body->SetTransform(newPos, 0);
+    }
 }

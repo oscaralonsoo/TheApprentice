@@ -26,7 +26,7 @@ void HealthSystem::Update(float dt) {
         isDying = false;
 
         // Aquí podrías reiniciar vida o mover al respawn
-        lives = 3;
+        lives = maxlives;
         // O llamar a algún método como scene->ReloadPlayer();
     }
 }
@@ -96,19 +96,35 @@ int HealthSystem::GetLives() const {
     return lives;
 }
 
+int HealthSystem::GetMaxLives() const {
+    return maxlives;
+}
+
+
 float HealthSystem::GetVignetteSize() const {
     return vignetteSize;
 }
 
 void HealthSystem::AddLife() {
-    if (lives < 3) {
+    if (lives < maxlives) {
         lives++;
+        UpdateVignette();
     }
+}
+
+void HealthSystem::AddMaxLife() {
+    maxlives++;
+    lives++;
     UpdateVignette();
 }
 
 void HealthSystem::SetLives(int lives) {
     this->lives = lives;
+    UpdateVignette();
+}
+
+void HealthSystem::SetMaxLives(int lives) {
+    this->maxlives = lives;
     UpdateVignette();
 }
 

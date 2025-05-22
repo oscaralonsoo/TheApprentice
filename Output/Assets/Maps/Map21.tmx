@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="168" height="67" tilewidth="64" tileheight="64" infinite="0" nextlayerid="72" nextobjectid="4577">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="168" height="67" tilewidth="64" tileheight="64" infinite="0" nextlayerid="72" nextobjectid="4578">
  <tileset firstgid="1" name="PropMala1" tilewidth="64" tileheight="64" tilecount="4" columns="2">
   <image source="../Props/PropMala1.png" width="128" height="128"/>
  </tileset>
@@ -114,12 +114,12 @@
  <tileset firstgid="16887" name="Mangrove_Plants0" tilewidth="64" tileheight="64" tilecount="990" columns="30">
   <image source="../Environment/Mangrove_Plants0.png" width="1920" height="2160"/>
  </tileset>
- <group id="70" name="Background">
+ <group id="70" name="Background" offsetx="96" offsety="-32">
   <properties>
    <property name="Draw" type="bool" value="true"/>
   </properties>
  </group>
- <layer id="44" name="Background" width="168" height="67" offsetx="-0.0146359" offsety="0.00748166" parallaxx="0" parallaxy="0">
+ <layer id="44" name="Background" width="168" height="67" visible="0" offsetx="-0.0146359" offsety="0.00748166" parallaxx="0" parallaxy="0">
   <properties>
    <property name="Draw" type="bool" value="true"/>
   </properties>
@@ -11382,7 +11382,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="56" name="Background_Fog" width="168" height="67" parallaxx="0" parallaxy="0">
+ <layer id="56" name="Background_Fog" width="168" height="67" visible="0" parallaxx="0" parallaxy="0">
   <properties>
    <property name="Draw" type="bool" value="true"/>
   </properties>
@@ -22645,7 +22645,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="49" name="Layer_4" width="168" height="67" parallaxx="0" parallaxy="0">
+ <layer id="49" name="Layer_4" width="168" height="67" visible="0" parallaxx="0" parallaxy="0">
   <properties>
    <property name="Draw" type="bool" value="true"/>
   </properties>
@@ -33908,7 +33908,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="48" name="Layer_3" width="168" height="67" parallaxx="0" parallaxy="0">
+ <layer id="48" name="Layer_3" width="168" height="67" visible="0" parallaxx="0" parallaxy="0">
   <properties>
    <property name="Draw" type="bool" value="true"/>
   </properties>
@@ -45171,7 +45171,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="47" name="Layer_2" width="168" height="67" parallaxx="0" parallaxy="0">
+ <layer id="47" name="Layer_2" width="168" height="67" visible="0" parallaxx="0" parallaxy="0">
   <properties>
    <property name="Draw" type="bool" value="true"/>
   </properties>
@@ -56434,7 +56434,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="45" name="Trees" width="168" height="67" parallaxx="0" parallaxy="0">
+ <layer id="45" name="Trees" width="168" height="67" visible="0" parallaxx="0" parallaxy="0">
   <properties>
    <property name="Draw" type="bool" value="true"/>
   </properties>
@@ -67697,7 +67697,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="50" name="Fog_1" width="168" height="67" parallaxx="0" parallaxy="0">
+ <layer id="50" name="Fog_1" width="168" height="67" visible="0" parallaxx="0" parallaxy="0">
   <properties>
    <property name="Draw" type="bool" value="true"/>
   </properties>
@@ -82633,13 +82633,13 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="156"/>
-   <tile gid="157"/>
-   <tile gid="157"/>
-   <tile gid="157"/>
-   <tile gid="157"/>
-   <tile gid="157"/>
-   <tile gid="158"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -82801,13 +82801,13 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="156"/>
+   <tile gid="157"/>
+   <tile gid="157"/>
+   <tile gid="157"/>
+   <tile gid="157"/>
+   <tile gid="157"/>
+   <tile gid="158"/>
    <tile/>
    <tile/>
    <tile/>
@@ -90223,7 +90223,7 @@
    <tile gid="131"/>
   </data>
  </layer>
- <layer id="54" name="Forward_Layer" width="168" height="67" parallaxx="0" parallaxy="0">
+ <layer id="54" name="Forward_Layer" width="168" height="67" visible="0" parallaxx="0" parallaxy="0">
   <properties>
    <property name="Draw" type="bool" value="true"/>
    <property name="Forward" type="bool" value="true"/>
@@ -93897,13 +93897,13 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="169"/>
-   <tile gid="170"/>
-   <tile gid="171"/>
-   <tile gid="191"/>
    <tile/>
    <tile/>
-   <tile gid="191"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -94235,11 +94235,11 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="179"/>
+   <tile gid="180"/>
+   <tile gid="180"/>
+   <tile gid="180"/>
+   <tile gid="181"/>
    <tile/>
    <tile/>
    <tile/>
@@ -101487,7 +101487,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="69" name="Navigation" width="168" height="67">
+ <layer id="69" name="Navigation" width="168" height="67" visible="0">
   <properties>
    <property name="Navigation" type="bool" value="true"/>
   </properties>
@@ -112750,12 +112750,12 @@
    <tile/>
   </data>
  </layer>
- <objectgroup id="70" name="DownCamera">
+ <objectgroup id="70" name="DownCamera" visible="0">
   <object id="4441" name="Camera" x="3200" y="3904" width="1216" height="320"/>
   <object id="4442" name="DownCamera" x="4160" y="1600" width="832" height="320"/>
   <object id="4484" x="5952" y="2432" width="1024" height="320"/>
  </objectgroup>
- <objectgroup id="63" name="Spikes">
+ <objectgroup id="63" name="Spikes" visible="0">
   <object id="3902" name="Spikes" x="4096" y="4170" width="256" height="64"/>
   <object id="3947" name="Spikes" x="5888" y="2890" width="1280" height="64"/>
   <object id="4425" name="Spikes" x="2944" y="1216" width="384" height="64"/>
@@ -112766,10 +112766,10 @@
   <object id="4574" name="Spikes" x="1856" y="2389.21" width="128" height="106.788"/>
   <object id="4575" name="Spikes" x="2240" y="2386.18" width="128" height="109.818"/>
  </objectgroup>
- <objectgroup id="64" name="Abilities">
+ <objectgroup id="64" name="Abilities" visible="0">
   <object id="3996" name="Dash" x="704" y="2304" width="64" height="64"/>
  </objectgroup>
- <objectgroup id="65" name="NPC">
+ <objectgroup id="65" name="NPC" visible="0">
   <object id="4041" name="Castor" x="4992" y="2624" width="576" height="384">
    <properties>
     <property name="dialogueId" type="int" value="11"/>
@@ -112803,15 +112803,15 @@
   </object>
   <object id="4409" x="7680" y="3520" width="384" height="64"/>
  </objectgroup>
- <objectgroup id="61" name="Props">
+ <objectgroup id="61" name="Props" visible="0">
   <object id="4133" name="Geyser" x="9344" y="2496" width="192" height="64"/>
-  <object id="4134" name="Geyser" x="9088" y="1280" width="192" height="64"/>
+  <object id="4134" name="Geyser" x="9088" y="1344" width="192" height="64"/>
   <object id="4175" name="CaveDrop" x="3328" y="3712" width="64" height="64"/>
   <object id="4176" name="CaveDrop" x="3392" y="3456" width="64" height="64"/>
   <object id="4177" name="CaveDrop" x="3904" y="3264" width="64" height="64"/>
   <object id="4178" name="CaveDrop" x="3520" y="3200" width="64" height="64"/>
   <object id="4179" name="CaveDrop" x="5248" y="3520" width="64" height="64"/>
-  <object id="4180" name="PLanta_vida_max" x="10240" y="1472" width="64" height="64"/>
+  <object id="4180" name="LifePlantMax" x="10304" y="1408" width="64" height="64"/>
   <object id="4182" name="LifePlant" x="4480" y="1088" width="64" height="64"/>
   <object id="4193" name="Checkpoint" x="3712" y="1472" width="384" height="320"/>
   <object id="4207" name="Geyser" x="5504" y="1920" width="192" height="64"/>
@@ -112824,7 +112824,7 @@
   <object id="4251" name="CaveDrop" x="4928" y="3136" width="64" height="64"/>
   <object id="4391" name="Geyser" x="9592" y="1790" width="192" height="64"/>
  </objectgroup>
- <objectgroup id="62" name="Liana">
+ <objectgroup id="62" name="Liana" visible="0">
   <object id="3922" x="5056" y="3520" width="64" height="448"/>
   <object id="3935" x="4096" y="3200" width="64" height="448"/>
   <object id="3974" x="4416" y="2432" width="64" height="448"/>
@@ -112834,10 +112834,10 @@
   <object id="4066" x="7744" y="1536" width="64" height="256"/>
   <object id="4092" x="9024" y="1856" width="64" height="320"/>
   <object id="4205" x="3008" y="1408" width="64" height="576"/>
-  <object id="4408" x="9152" y="512" width="64" height="320"/>
+  <object id="4408" x="9152" y="512" width="64" height="384"/>
   <object id="4487" x="3264" y="1408" width="64" height="320"/>
  </objectgroup>
- <objectgroup id="58" name="Wall">
+ <objectgroup id="58" name="Wall" visible="0">
   <object id="3905" x="4864" y="3840" height="64"/>
   <object id="3906" x="4608" y="3840" height="64"/>
   <object id="3907" x="4608" y="3904" width="256"/>
@@ -112887,9 +112887,9 @@
   <object id="4086" x="9024" y="1856" width="192"/>
   <object id="4087" x="9280" y="1728" height="64"/>
   <object id="4088" x="9024" y="1728" height="128"/>
-  <object id="4126" x="8960" y="1344" height="64"/>
-  <object id="4127" x="9408" y="1344" height="64"/>
-  <object id="4128" x="8960" y="1408" width="448"/>
+  <object id="4126" x="8960" y="1408" height="64"/>
+  <object id="4127" x="9408" y="1408" height="64"/>
+  <object id="4128" x="8960" y="1472" width="448"/>
   <object id="4155" x="7680" y="2688" width="448"/>
   <object id="4156" x="8128" y="2624" height="64"/>
   <object id="4157" x="7680" y="2624" height="64"/>
@@ -113030,7 +113030,7 @@
   <object id="4565" x="2624" y="1856" height="64"/>
   <object id="4570" x="2368" y="2240" width="320"/>
  </objectgroup>
- <objectgroup id="26" name="Collisions">
+ <objectgroup id="26" name="Collisions" visible="0">
   <object id="3868" x="2944" y="4096" width="1152"/>
   <object id="3869" x="4096" y="4288" width="256"/>
   <object id="3871" x="4352" y="4160" width="1024"/>
@@ -113090,7 +113090,7 @@
   <object id="4106" x="8128" y="1216" width="64"/>
   <object id="4107" x="8192" y="1152" width="128"/>
   <object id="4108" x="8320" y="1024" width="128"/>
-  <object id="4125" x="8960" y="1344" width="448"/>
+  <object id="4125" x="8960" y="1408" width="448"/>
   <object id="4158" x="7680" y="2624" width="448"/>
   <object id="4219" x="9920" y="1600" width="64"/>
   <object id="4225" x="10304" y="1024" width="64"/>
@@ -113177,10 +113177,10 @@
   <object id="4445" x="3776" y="1216" width="192"/>
   <object id="4576" x="576" y="1856" width="704"/>
  </objectgroup>
- <objectgroup id="67" name="HookAnchors">
+ <objectgroup id="67" name="HookAnchors" visible="0">
   <object id="4215" name="Hook" x="10304" y="832" width="64" height="64"/>
  </objectgroup>
- <objectgroup id="57" name="WallSlide">
+ <objectgroup id="57" name="WallSlide" visible="0">
   <object id="3872" x="4096" y="4100.67" width="0.333333" height="187.333"/>
   <object id="3873" x="4352" y="4164" height="124"/>
   <object id="3874" x="5376" y="3840" height="320"/>
@@ -113216,7 +113216,7 @@
   <object id="4561" x="2176" y="1472" height="256"/>
   <object id="4562" x="2112" y="1472" height="256"/>
  </objectgroup>
- <objectgroup id="60" name="Enemies">
+ <objectgroup id="60" name="Enemies" visible="0">
   <object id="3903" name="Creebler" x="4928" y="4096" width="64" height="64"/>
   <object id="3992" name="Thumpod" x="3456" y="2176" width="64" height="64"/>
   <object id="4042" name="Creebler" x="5120" y="3328" width="64" height="64"/>
@@ -113225,7 +113225,7 @@
   <object id="4550" name="Creebler" x="1984" y="1792" width="64" height="64"/>
   <object id="4566" name="Creebler" x="768" y="1792" width="64" height="64"/>
  </objectgroup>
- <objectgroup id="66" name="HelpZone">
+ <objectgroup id="66" name="HelpZone" visible="0">
   <object id="4044" name="Dash" x="640" y="2176" width="192" height="192"/>
  </objectgroup>
  <objectgroup id="71" name="Zones" visible="0">

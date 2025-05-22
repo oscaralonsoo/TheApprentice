@@ -127,7 +127,7 @@ void Dreadspire::Shoot(float dt)
             float offsetX = centerX + dir.x * spawnOffset;
             float offsetY = centerY + dir.y * spawnOffset;
 
-            auto bullet = new DreadspireBullet(offsetX, offsetY, 17.0f, dir);
+            auto bullet = new DreadspireBullet(offsetX, offsetY, 12.0f, dir);
             Engine::GetInstance().entityManager->AddEntity(bullet);
 
             bulletsShot++;

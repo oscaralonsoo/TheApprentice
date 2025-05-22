@@ -7,6 +7,7 @@
 #include "Entity.h"
 #include "Log.h"
 #include <cmath>
+#include "Audio.h"
 
 Noctilume::Noctilume() : Enemy(EntityType::NOCTILUME) {}
 

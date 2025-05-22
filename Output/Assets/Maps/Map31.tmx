@@ -144,6 +144,9 @@
  <tileset firstgid="41365" name="spike_puple" tilewidth="64" tileheight="64" tilecount="4" columns="2">
   <image source="../Props/spike_puple.png" width="128" height="128"/>
  </tileset>
+ <tileset firstgid="41369" name="tiles_manglar" tilewidth="64" tileheight="64" tilecount="100" columns="10">
+  <image source="../Props/tiles_manglar.png" width="640" height="640"/>
+ </tileset>
  <group id="70" name="Background">
   <properties>
    <property name="Draw" type="bool" value="true"/>
@@ -34953,7 +34956,7 @@
    <tile gid="41297"/>
    <tile gid="41298"/>
    <tile/>
-   <tile/>
+   <tile gid="41370"/>
    <tile/>
    <tile gid="41286"/>
    <tile gid="41287"/>
@@ -35526,7 +35529,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="41370"/>
    <tile/>
    <tile/>
    <tile gid="41286"/>

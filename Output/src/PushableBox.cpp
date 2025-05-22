@@ -15,8 +15,8 @@ bool PushableBox::Awake() { return true; }
 
 bool PushableBox::Start()
 {
-    // Crear cuerpo físico dinámico y sin gravedad
-    pbody = Engine::GetInstance().physics->CreateRectangle(position.getX() + texW / 2, position.getY() + texH / 2, texW, texH, DYNAMIC, 7, 20,
+    // Crear cuerpo fï¿½sico dinï¿½mico y sin gravedad
+    pbody = Engine::GetInstance().physics->CreateRectangle(position.getX(), position.getY()+3, texW, texH, DYNAMIC, 0, 0,
         CATEGORY_BOX,
         CATEGORY_PLAYER | CATEGORY_PLATFORM | CATEGORY_BOX
     );
@@ -24,8 +24,8 @@ bool PushableBox::Start()
     pbody->listener = this;
 
     pbody->body->SetGravityScale(5.0f);
-    pbody->body->GetFixtureList()->SetFriction(0.0f); // Alta fricción
-    pbody->body->GetFixtureList()->SetDensity(5.0f);  // Más masa
+    pbody->body->GetFixtureList()->SetFriction(0.0f); // Alta fricciï¿½n
+    pbody->body->GetFixtureList()->SetDensity(5.0f);  // Mï¿½s masa
     pbody->body->ResetMassData();
 
     pbody->ctype = ColliderType::BOX;
@@ -72,7 +72,13 @@ bool PushableBox::Update(float dt)
         }
     }
 
-    Engine::GetInstance().render->DrawTexture(texture, (int)position.getX(), (int)position.getY());
+    if (player && player->GetMechanics()->CanPush() && touchingPlayer)
+    {
+        player->SetState("push");
+    }
+
+
+    Engine::GetInstance().render->DrawTexture(texture, (int)position.getX() +20, (int)position.getY() +22);
 
     return true;
 }
@@ -132,8 +138,8 @@ void PushableBox::RecreateBody(bodyType type)
     }
 
     pbody = Engine::GetInstance().physics->CreateRectangle(
-        position.getX() + texW / 2,
-        position.getY() + texH / 2,
+        position.getX(),
+        position.getY() + 40,
         texW, texH,
         type,
         CATEGORY_BOX,

@@ -156,4 +156,9 @@ private:
     SDL_Texture* lifeTexture = nullptr;
     int lifeW = 32;
     int lifeH = 32;
+
+    bool bHeld = false;
+
+    bool dpadLeftHeld = false;
+    bool dpadRightHeld = false;
 };

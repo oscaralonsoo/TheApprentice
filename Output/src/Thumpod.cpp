@@ -60,7 +60,38 @@ bool Thumpod::Update(float dt) {
         break;
     }
 
-    return Enemy::Update(dt);
+
+    ResetPath();
+
+    steps = 0;
+    while (pathfinding->pathTiles.empty() && steps < maxSteps) {
+        pathfinding->PropagateAStar(SQUARED);
+        steps++;
+    }
+
+    b2Transform pbodyPos = pbody->body->GetTransform();
+    position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
+    position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
+
+    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() - 8, &currentAnimation->GetCurrentFrame(),
+        1.0f,
+        0.0,
+        INT_MAX,
+        INT_MAX,
+        (direction < 0) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL,
+        scale
+    );
+    currentAnimation->Update();
+
+    //Show|Hide Path
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
+        showPath = !showPath;
+    }
+    if (showPath) {
+        pathfinding->DrawPath();
+    }
+
+    return true;
 }
 
 bool Thumpod::PostUpdate() {

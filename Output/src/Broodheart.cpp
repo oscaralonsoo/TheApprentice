@@ -46,6 +46,7 @@ bool Broodheart::Start() {
     }
     pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW / 3, bodyType::DYNAMIC);
 
+
     pbody->ctype = ColliderType::ENEMY;
     if (!gravity) pbody->body->SetGravityScale(0);
     pbody->listener = this;

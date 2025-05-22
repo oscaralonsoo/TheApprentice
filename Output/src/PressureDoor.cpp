@@ -101,10 +101,40 @@ bool PressureDoor::CleanUp()
 void PressureDoor::RenderTexture()
 {
     b2Transform pbodyPos = pbody->body->GetTransform();
-    position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - (texW / 2));
-    position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - (texH / 2));
 
-    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
+    float x = METERS_TO_PIXELS(pbodyPos.p.x);
+    float y = METERS_TO_PIXELS(pbodyPos.p.y);
+    float angle = 0.0f;
+
+    int offsetX = 0;
+    int offsetY = 0;
+
+    if (isHorizontal) {
+        angle = 90.0f;
+        offsetX = -width / 2 + 5;
+        offsetY = -height / 2 - 60;
+        x -= texH / 2;
+        y -= texW / 2;
+    }
+    else {
+        offsetX = -width / 2 - 60;
+        offsetY = -height / 2 + 5;
+        x -= texW / 2;
+        y -= texH / 2;
+    }
+
+    position.setX(x);
+    position.setY(y);
+
+    Engine::GetInstance().render.get()->DrawTexture(
+        texture,
+        (int)x + offsetX,
+        (int)y + offsetY,
+        &currentAnimation->GetCurrentFrame(),
+        1.0f,
+        angle
+    );
+
     currentAnimation->Update();
 }
 

@@ -21,7 +21,7 @@ Player::Player() : Entity(EntityType::PLAYER)
 Player::~Player() {}
 
 bool Player::Awake() {
-	position = Vector2D(1700, 900);
+	position = Vector2D(1000, 800);
 	return true;
 }
 
@@ -72,6 +72,12 @@ bool Player::Start() {
 
 bool Player::Update(float dt) {
 	bool flip = mechanics.GetMovementDirection() < 0;
+
+	if (GetState() == "hook" && pbody && pbody->body) {
+		float vx = pbody->body->GetLinearVelocity().x;
+		if (vx < -0.1f) flip = true;
+		else if (vx > 0.1f) flip = false;
+	}
 
 	if (pbody == nullptr || pbody->body == nullptr) {
 		LOG("ERROR: pbody o body es nullptr");

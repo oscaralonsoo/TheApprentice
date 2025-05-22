@@ -31,16 +31,16 @@ bool PressurePlate::Start()
     disabledAnim.LoadAnimations(node.child("disabled"));
     enabledAnim.LoadAnimations(node.child("enabled"));
 
-    width = node.attribute("w").as_int();
-    height = node.attribute("h").as_int();
+    width = 64;
+    height = 64;
 
     pbody = Engine::GetInstance().physics->CreateRectangleSensor(
-        (int)position.getX() + width / 2,
+        (int)position.getX() + width / 2 - 20,
         (int)position.getY() + height / 2,
         width, height,
         STATIC,
         CATEGORY_PRESSURE_PLATE,
-        CATEGORY_PLATFORM | CATEGORY_BOX
+        CATEGORY_PLATFORM | CATEGORY_BOX | CATEGORY_PLAYER
     );
 
     pbody->ctype = ColliderType::PRESSURE_PLATE;
@@ -102,7 +102,7 @@ void PressurePlate::RenderTexture() {
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x));
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y));
 
-    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
+    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - width * 1.5 , (int)position.getY() - height / 2, &currentAnimation->GetCurrentFrame());
     currentAnimation->Update();
 }
 

@@ -9,6 +9,7 @@
 #include "Enemy.h"
 #include "CaveDrop.h"
 #include "LifePlant.h"
+#include "LifePlantMax.h"
 #include "Engine.h"
 #include "EntityManager.h"
 #include "AbilityZone.h"
@@ -561,6 +562,15 @@ bool Map::Load(std::string path, std::string fileName)
 
                         LOG("Created LifePlant at x: %d, y: %d", x, y);
                     }
+                    else if (objectName == "LifePlantMax") {
+                        int x = objectNode.attribute("x").as_int();
+                        int y = objectNode.attribute("y").as_int();
+
+                        LifePlantMax* lifePlantMax = (LifePlantMax*)Engine::GetInstance().entityManager->CreateEntity(EntityType::LIFE_PLANT_MAX);
+                        lifePlantMax->position = Vector2D(x, y);
+
+                        LOG("Created LifePlant at x: %d, y: %d", x, y);
+                    }
                     else if (objectName == "Checkpoint")
                     {
                         int x = objectNode.attribute("x").as_int();
@@ -592,7 +602,7 @@ bool Map::Load(std::string path, std::string fileName)
                     {
                         int x = objectNode.attribute("x").as_int();
                         int y = objectNode.attribute("y").as_int();
-                        int width = 90;
+                        int width = 64;
                         int height = 64;
 
                         pugi::xml_document tempDoc;
@@ -668,7 +678,10 @@ bool Map::Load(std::string path, std::string fileName)
                     else if (enemyName == "Nullwarden")
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::NULLWARDEN);
                     else if (enemyName == "Thumpod")
+                    {
+                        enemyNode.append_attribute("gravity") = true;
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::THUMPOD);
+                    }
                     else if (enemyName == "Mireborn") {
                         enemyNode.append_attribute("gravity") = true;
                         enemyNode.append_attribute("tier") = "Alpha";
@@ -731,6 +744,8 @@ bool Map::Load(std::string path, std::string fileName)
                         npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PERDIZ);
                     else if (npcName == "Pangolin")
                         npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PANGOLIN);
+                    else if (npcName == "Ardilla")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ARDILLA);
 
                     if (npc != nullptr)
                     {

@@ -39,7 +39,7 @@ private:
     PhysBody* pbody;
     SDL_Texture* texture;
 
-    PressureDoorState state = PressureDoorState::DISABLE;
+    PressureDoorState state = PressureDoorState::IDLE;
 
     Animation disabledAnim;
     Animation enabledAnim;

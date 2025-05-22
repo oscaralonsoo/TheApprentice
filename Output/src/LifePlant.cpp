@@ -39,8 +39,8 @@ bool LifePlant::Start() {
         (int)position.getY() + texH / 2,
         texW, texH,
         bodyType::DYNAMIC,
-        60,
-        20,
+        0,
+        0,
         CATEGORY_LIFE_PLANT,
         CATEGORY_ATTACK
     );

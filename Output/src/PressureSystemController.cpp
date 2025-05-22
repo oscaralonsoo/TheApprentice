@@ -30,3 +30,16 @@ void PressureSystemController::UpdateSystem()
        door->SetOpen(systemActive[door->id]);
     }
 }
+
+int PressureSystemController::GetActivePlatesCount(int id)
+{
+    int count = 0;
+    for (auto* plate : plates)
+    {
+        if (plate->id == id && plate->IsActive())
+        {
+            ++count;
+        }
+    }
+    return count;
+}

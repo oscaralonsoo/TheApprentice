@@ -35,7 +35,7 @@ private:
     bool isDead = false;
     Broodheart* broodHeart = nullptr;
 
-    float detectionRange = 100000.0f;
+    float detectionRange = 100.0f;
     float timePassed = 0.0f;
     float waveOffset = 0.0f;
     float distanceToPlayer = 0.0f;

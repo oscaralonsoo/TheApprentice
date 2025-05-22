@@ -6,6 +6,7 @@
 #include "Scene.h"
 #include "EntityManager.h"
 #include "Textures.h"
+#include "PressureSystemController.h"
 #include "Entity.h"
 #include "Log.h"
 #include <cmath>
@@ -41,12 +42,8 @@ bool DungBeetle::Start() {
         }
     }
 
-    pbody = Engine::GetInstance().physics->CreateCircle(
-        static_cast<int>(position.x + texH / 2),
-        static_cast<int>(position.y + texH / 2),
-        texH / 2,
-        bodyType::STATIC
-    );
+    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texW / 2, (int)position.getY() + texH / 1.5, texW/ 1.5, texH/1.5, bodyType::STATIC, -37, 32);
+
     if (pbody && pbody->body) {
         b2Fixture* fixture = pbody->body->GetFixtureList();
         fixture->SetRestitution(1.0f);
@@ -209,8 +206,8 @@ void DungBeetle::ChangeBodyType() {
         isDynamic = true;
 }
 int DungBeetle::CheckPuzzleState() {
-    int PuzzlesDone = 3; // TODO OSCAR --- CURRENT PRESSED PLATES
-    return PuzzlesDone;
+    int PuzzlesDone = Engine::GetInstance().pressureSystem.get()->GetActivePlatesCount(0);
+    return PuzzlesDone; 
 
 }
 void DungBeetle::Bounce()

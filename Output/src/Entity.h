@@ -25,6 +25,7 @@ enum class EntityType
 	BULLET,
 	BALL,
 	LIFE_PLANT,
+	LIFE_PLANT_MAX,
 	CHECKPOINT,
 	HELP_ZONE,
 	BROOD,

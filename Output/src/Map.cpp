@@ -9,6 +9,7 @@
 #include "Enemy.h"
 #include "CaveDrop.h"
 #include "LifePlant.h"
+#include "LifePlantMax.h"
 #include "Engine.h"
 #include "EntityManager.h"
 #include "AbilityZone.h"
@@ -558,6 +559,15 @@ bool Map::Load(std::string path, std::string fileName)
 
                         LifePlant* lifePlant = (LifePlant*)Engine::GetInstance().entityManager->CreateEntity(EntityType::LIFE_PLANT);
                         lifePlant->position = Vector2D(x, y);
+
+                        LOG("Created LifePlant at x: %d, y: %d", x, y);
+                    }
+                    else if (objectName == "LifePlantMax") {
+                        int x = objectNode.attribute("x").as_int();
+                        int y = objectNode.attribute("y").as_int();
+
+                        LifePlantMax* lifePlantMax = (LifePlantMax*)Engine::GetInstance().entityManager->CreateEntity(EntityType::LIFE_PLANT_MAX);
+                        lifePlantMax->position = Vector2D(x, y);
 
                         LOG("Created LifePlant at x: %d, y: %d", x, y);
                     }

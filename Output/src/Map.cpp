@@ -744,6 +744,8 @@ bool Map::Load(std::string path, std::string fileName)
                         npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PERDIZ);
                     else if (npcName == "Pangolin")
                         npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PANGOLIN);
+                    else if (npcName == "Ardilla")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ARDILLA);
 
                     if (npc != nullptr)
                     {

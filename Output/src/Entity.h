@@ -18,6 +18,7 @@ enum class EntityType
 	PERDIZ,
 	PANGOLIN,
 	LIEBRE,
+	ARDILLA,
 	THUMPOD,
 	SCURVER,
 	SPEAR,

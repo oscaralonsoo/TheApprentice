@@ -602,14 +602,47 @@
 						<frame x="1750" y="250" w="250" h="250" />
 					</disabled>
 				</geyser>
-				<pressure_plate w="64" h="64" texture="Assets/Props/pressurePlate.png">
-					<enabled loop="false" speed="0">
-						<frame x="64" y="0" w="64" h="64" />
+				<pressure_plate w="192" h="64" texture="Assets/Props/pressurePlate.png">
+					<enabled loop="false" speed="0.2">
+						<frame x="0" y="64" w="192" h="64" />
+						<frame x="192" y="64" w="192" h="64" />
+						<frame x="384" y="64" w="192" h="64" />
+						<frame x="576" y="64" w="192" h="64" />
+						<frame x="768" y="64" w="192" h="64" />
 					</enabled>
-					<disabled loop="false" speed="0">
-						<frame x="0" y="0" w="64" h="64" />
+					<disabled loop="true" speed="0.11">
+						<frame x="0" y="0" w="192" h="64" />
+						<frame x="192" y="0" w="192" h="64" />
+						<frame x="384" y="0" w="192" h="64" />
+						<frame x="576" y="0" w="192" h="64" />
 					</disabled>
 				</pressure_plate>
+				<pressure_door w="192" h="192" texture="Assets/Props/pressureDoor.png">
+					<disable loop="false" speed="0.2">
+						<frame x="0" y="256" w="192" h="192" />
+						<frame x="192" y="256" w="192" h="192" />
+						<frame x="384" y="256" w="192" h="192" />
+						<frame x="576" y="256" w="192" h="192" />
+						<frame x="768" y="256" w="192" h="192" />
+						<frame x="960" y="256" w="192" h="192" />
+					</disable>
+					<enable loop="false" speed="0.2">
+						<frame x="960" y="256" w="192" h="192" />
+						<frame x="768" y="256" w="192" h="192" />
+						<frame x="576" y="256" w="192" h="192" />
+						<frame x="384" y="256" w="192" h="192" />
+						<frame x="192" y="256" w="192" h="192" />
+						<frame x="0" y="256" w="192" h="192" />
+					</enable>
+					<idle loop="true" speed="0.11">
+						<frame x="0" y="0" w="192" h="192" />
+						<frame x="192" y="0" w="192" h="192" />
+						<frame x="384" y="0" w="192" h="192" />
+						<frame x="576" y="0" w="192" h="192" />
+						<frame x="768" y="0" w="192" h="192" />
+						<frame x="960" y="0" w="192" h="192" />
+					</idle>
+				</pressure_door>
 				<cave_drop w="18" h="18" texture="Assets/Props/caveDrop.png">
 					<start loop="false" speed="0.13">
 						<frame x="0" y="0" w="18" h="18" />

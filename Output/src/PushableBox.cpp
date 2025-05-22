@@ -72,6 +72,12 @@ bool PushableBox::Update(float dt)
         }
     }
 
+    if (player && player->GetMechanics()->CanPush() && touchingPlayer)
+    {
+        player->SetState("push");
+    }
+
+
     Engine::GetInstance().render->DrawTexture(texture, (int)position.getX(), (int)position.getY());
 
     return true;

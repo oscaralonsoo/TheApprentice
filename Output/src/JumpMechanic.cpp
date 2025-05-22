@@ -62,9 +62,10 @@ void JumpMechanic::HandleJumpInput(float dt) {
         }
         else if (wallJumpUnlocked && player->GetMechanics()->IsWallSliding()) {
             isJumping = true;
+            wallJumpActive = true;
             jumpCount = 1;
 
-            player->SetState("wall_jump");
+            player->SetState("walljump");
             player->GetMechanics()->SetIsWallSliding(false);
             player->GetMechanics()->SetIsTouchingWall(false);
 
@@ -90,7 +91,7 @@ void JumpMechanic::HandleJumpInput(float dt) {
             isJumping = true;
             jumpInterrupted = false;
             jumpCount = 2;
-            player->SetState("jump");
+            player->SetState("doublejump");
 
             jumpCooldownTimer.Start();
             jumpCooldownActive = true;
@@ -152,7 +153,7 @@ void JumpMechanic::HandleJumpInput(float dt) {
         if (!isGliding) {
             isGliding = true;
             player->pbody->body->SetGravityScale(glideGravityScale);
-            player->SetState("idle");
+            player->SetState("glide");
 
             b2Vec2 vel = player->pbody->body->GetLinearVelocity();
             vel.y = 0.0f;
@@ -182,6 +183,7 @@ void JumpMechanic::OnLanding() {
     jumpCooldownActive = false;
     isGliding = false;
     player->pbody->body->SetGravityScale(2.0f);
+    wallJumpActive = false;
 }
 
 void JumpMechanic::OnLeaveGround() {

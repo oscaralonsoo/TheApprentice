@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="168" height="67" tilewidth="64" tileheight="64" infinite="0" nextlayerid="72" nextobjectid="4576">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="168" height="67" tilewidth="64" tileheight="64" infinite="0" nextlayerid="72" nextobjectid="4577">
  <tileset firstgid="1" name="PropMala1" tilewidth="64" tileheight="64" tilecount="4" columns="2">
   <image source="../Props/PropMala1.png" width="128" height="128"/>
  </tileset>
@@ -112787,7 +112787,7 @@
     <property name="TargetScene" type="int" value="22"/>
    </properties>
   </object>
-  <object id="4191" x="8640" y="704" width="64" height="1152" rotation="270">
+  <object id="4191" x="8640" y="640" width="1152" height="64">
    <properties>
     <property name="PlayerPosX" type="int" value="6336"/>
     <property name="PlayerPosY" type="int" value="6144"/>
@@ -113011,7 +113011,6 @@
   <object id="4524" x="832" y="1792" width="192"/>
   <object id="4525" x="832" y="1728" height="64"/>
   <object id="4527" x="576" y="1728" height="128"/>
-  <object id="4528" x="576" y="1856" width="704"/>
   <object id="4529" x="1408" y="1856" height="64"/>
   <object id="4530" x="1408" y="1920" width="256"/>
   <object id="4531" x="1664" y="1856" height="64"/>
@@ -113176,6 +113175,7 @@
   <object id="4534" x="2624" y="1920" width="192"/>
   <object id="4438" x="4288" y="832" width="320"/>
   <object id="4445" x="3776" y="1216" width="192"/>
+  <object id="4576" x="576" y="1856" width="704"/>
  </objectgroup>
  <objectgroup id="67" name="HookAnchors">
   <object id="4215" name="Hook" x="10304" y="832" width="64" height="64"/>

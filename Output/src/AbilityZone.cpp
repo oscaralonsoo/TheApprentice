@@ -83,6 +83,22 @@ bool AbilityZone::Start() {
 	wallJumpSprite = Engine::GetInstance().textures->Load("Assets/Props/WallJump_Icon.png");
 	pushSprite = Engine::GetInstance().textures->Load("Assets/Props/Push_Icon.png");
 
+	// Obtener el controller directamente desde el MovementHandler del jugador
+	Player* player = Engine::GetInstance().scene->GetPlayer();
+	if (player) {
+		PlayerMechanics* mechanics = player->GetMechanics();
+		if (mechanics) {
+			SDL_GameController* controller = mechanics->GetMovementHandler()->GetController();
+			if (controller) {
+				SetController(controller);
+				LOG("AbilityZone: controller obtenido directamente en Start");
+			}
+			else {
+				LOG("AbilityZone: no se pudo obtener el controller desde MovementHandler");
+			}
+		}
+	}
+
 	return true;
 }
 
@@ -133,13 +149,20 @@ bool AbilityZone::Update(float dt)
 				confirmPressed = true;
 			}
 
-			// Botón X del mando (como en los menús con A)
 			if (controller && SDL_GameControllerGetAttached(controller)) {
-				bool xNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_X);
-				if (xNow && !xHeld) {
+				bool r1Now = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
+
+				LOG("AbilityZone: mando conectado: %s", SDL_GameControllerName(controller));
+				LOG("AbilityZone: botón R1 estado actual: %d", r1Now);
+
+				if (r1Now && !xHeld) {
+					LOG("AbilityZone: botón R1 pulsado");
 					confirmPressed = true;
 				}
-				xHeld = xNow;
+				xHeld = r1Now;
+			}
+			else {
+				LOG("AbilityZone: mando no conectado o no válido");
 			}
 
 			if (confirmPressed) {

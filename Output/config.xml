@@ -649,13 +649,11 @@
 					<idle loop="true" speed="0.15">
 						<frame x="0" y="0" w="128" h="128" />
 					</idle>
-					<destroyed loop="true" speed="0.15">
-						<frame x="0" y="0" w="128" h="128" />
-						<frame x="128" y="0" w="128" h="128" />
-						<frame x="128" y="0" w="128" h="128" />
-						<frame x="128" y="0" w="128" h="128" />
-						<frame x="128" y="0" w="128" h="128" />
-						<frame x="128" y="0" w="128" h="128" />
+					<destroyed loop="false" speed="0.15">
+						<frame x="0" y="128" w="128" h="128" />
+						<frame x="128" y="128" w="128" h="128" />
+						<frame x="128" y="128" w="128" h="128" />
+						<frame x="128" y="128" w="128" h="128" />
 					</destroyed>
 				</enemy>
 			</enemies>

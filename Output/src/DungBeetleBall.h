@@ -20,11 +20,13 @@ public:
     void Bounce();
 
     void CollisionNavigationLayer();
-
+public:
+    Animation* currentAnimation = nullptr;
+    Animation destroyAnim;
 private:
     PhysBody* pbody = nullptr;
     SDL_Texture* texture = nullptr;
-    Animation* currentAnimation = nullptr;
+
 
 
     Animation idleAnim;

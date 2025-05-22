@@ -16,6 +16,7 @@ DungBeetleBall::DungBeetleBall(float x, float y, float speed, b2Vec2 direction)
             width = node.attribute("w").as_int();
             height = node.attribute("h").as_int();
             idleAnim.LoadAnimations(node.child("idle"));
+            destroyAnim.LoadAnimations(node.child("destroyed"));;
         }
     }
 
@@ -133,7 +134,7 @@ void DungBeetleBall::Bounce()
     if (velocity.Length() > 0) {
         velocity.Normalize();
 
-        float randomAngle = ((rand() % 100) / 100.0f - 0.5f) * 0.4f;
+        float randomAngle = ((rand() % 100) / 100.0f - 0.5f) * M_PI / 2.0f;
         float angle = atan2(velocity.y, velocity.x) + randomAngle;
 
         b2Vec2 newVelocity(cosf(angle), sinf(angle));

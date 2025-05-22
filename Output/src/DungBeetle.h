@@ -1,7 +1,9 @@
 #pragma once
 #include "Enemy.h"
 #include "SDL2/SDL.h"
+#include "DungBeetleBall.h"
 #include "Physics.h"
+#include <vector>
 
 enum class DungBeetleState {
 	IDLE,
@@ -10,6 +12,7 @@ enum class DungBeetleState {
     BALLMODE,
 	HIT,
 };
+class DungBeetleBall;
 
 class DungBeetle : public Enemy {
 public:
@@ -34,6 +37,9 @@ public:
     int CheckPuzzleState();
     void Bounce();
     void ChangeColliderRadius(float newRadius, bool isSensor);
+    void CollisionNavigationLayer();
+
+    void AssignBalls(DungBeetleBall* ball);
 private:
     bool hasThrown = false;
     bool isDynamic = false;
@@ -42,10 +48,11 @@ private:
     int ballsThrown = 0;
     int currentStatePuzzle = 0;
     int lastPuzzleState = 0;
-    float throwSpeed = 17.0f; 
-    float ballModeSpeed = 18.0f;
+    float throwSpeed = 19.0f; 
+    float ballModeSpeed = 20.0f;
     float time= 0.0;
     Vector2D playerPos;
+    Vector2D currentTileMap;
     DungBeetleState currentState = DungBeetleState::IDLE;
 
     Animation idleAnim;
@@ -54,4 +61,6 @@ private:
     Animation ballModeAnim;
     Animation ballAnim;
     Animation deathAnim;
+
+    std::vector<DungBeetleBall*> dungBalls;
 };

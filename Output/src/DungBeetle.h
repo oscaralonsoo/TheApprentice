@@ -9,7 +9,6 @@ enum class DungBeetleState {
     THROW,
     BALLMODE,
 	HIT,
-	DEAD,
 };
 
 class DungBeetle : public Enemy {
@@ -42,8 +41,8 @@ private:
     int ballsThrown = 0;
     int currentStatePuzzle = 0;
     int lastPuzzleState = 0;
-    float throwSpeed = 15.0f; 
-    float ballModeSpeed = 17.0f;
+    float throwSpeed = 17.0f; 
+    float ballModeSpeed = 18.0f;
 
     Vector2D playerPos;
     DungBeetleState currentState = DungBeetleState::IDLE;
@@ -53,6 +52,5 @@ private:
     Animation throwingAnim;
     Animation ballModeAnim;
     Animation ballAnim;
-    Animation hitAnim;
-    Animation dieAnim;
+    Animation deathAnim;
 };

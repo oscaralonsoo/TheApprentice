@@ -107,13 +107,6 @@ void MovementHandler::Update(float dt) {
     }
     attackMechanic.Update(dt);
 
-    if (!hookUnlocked) return;
-
-    // Input por teclado
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
-        Engine::GetInstance().scene->GetHookManager()->TryUseClosestHook();
-    }
-
     // Input por mando (LT)
     if (controller && SDL_GameControllerGetAttached(controller)) {
         static bool ltHeldPreviously = false;
@@ -133,7 +126,45 @@ void MovementHandler::Update(float dt) {
         }
     }
 
+    // DEBUG: activar habilidades con teclas numéricas
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
+        EnableJump(true);
+        LOG("Jump habilitado");
+    }
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) {
+        EnableDoubleJump(true);
+        LOG("Double Jump habilitado");
+    }
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_3) == KEY_DOWN) {
+        EnableDash(true);
+        LOG("Dash habilitado");
+    }
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_4) == KEY_DOWN) {
+        EnableGlide(true);
+        LOG("Glide habilitado");
+    }
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_5) == KEY_DOWN) {
+        EnableWallJump(true);
+        LOG("Wall Jump habilitado");
+    }
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_6) == KEY_DOWN) {
+        EnablePush(true);
+        LOG("Push habilitado");
+    }
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_7) == KEY_DOWN) {
+        SetHookUnlocked(true);
+        LOG("Hook habilitado");
+    }
+
+
     UpdateAnimation();
+
+    if (!hookUnlocked) return;
+
+    // Input por teclado
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
+        Engine::GetInstance().scene->GetHookManager()->TryUseClosestHook();
+    }
 }
 
 void MovementHandler::HandleMovementInput() {

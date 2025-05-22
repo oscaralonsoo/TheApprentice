@@ -34,8 +34,8 @@ bool DungBeetle::Start() {
             throwingAnim.LoadAnimations(node.child("throwing"));
             ballModeAnim.LoadAnimations(node.child("ballMode"));
             ballAnim.LoadAnimations(node.child("ball"));
-            hitAnim.LoadAnimations(node.child("hit"));
-            dieAnim.LoadAnimations(node.child("death"));
+            deathAnim.LoadAnimations(node.child("death"));
+
             currentAnimation = &idleAnim;
             break;
         }
@@ -78,8 +78,7 @@ bool DungBeetle::Update(float dt) {
 }
 
 bool DungBeetle::PostUpdate() {
-    if (currentState == DungBeetleState::DEAD && currentAnimation->HasFinished())
-    {
+    if (currentState == DungBeetleState::HIT && currentAnimation->HasFinished()) {
         pbody->body->GetFixtureList()->SetSensor(true);
         Engine::GetInstance().entityManager->DestroyEntity(this);
     }
@@ -100,11 +99,8 @@ void DungBeetle::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (currentState == DungBeetleState::BALLMODE) {
             Bounce();
         }
-        if (currentState == DungBeetleState::HIT && currentAnimation->HasFinished())
-            currentState = DungBeetleState::DEAD;
         break;
     case ColliderType::PLAYER:
-        // TODO TONI --- DETECTAR COLISION!
         Bounce();
         break;
     }
@@ -123,7 +119,6 @@ void DungBeetle::CheckState(float dt)
     case DungBeetleState::THROW: Throw(dt); break;
     case DungBeetleState::BALLMODE: BallMode();  break;
     case DungBeetleState::HIT: Hit(); break;
-    case DungBeetleState::DEAD:currentAnimation = &dieAnim; break;
     }
 }
 void DungBeetle::Idle()
@@ -136,10 +131,8 @@ void DungBeetle::Idle()
     {
         currentState = DungBeetleState::ANGRY;
     }
-
     lastPuzzleState = currentStatePuzzle;
 }
-
 
 void DungBeetle::Angry()
 {
@@ -159,7 +152,7 @@ void DungBeetle::Throw(float dt)
     if (currentAnimation->HasFinished())
     {
         if (!hasThrown && ballsThrown < 2) {
-            float angle = ((float)rand() / RAND_MAX) * (7.0f * M_PI / 4.0f - 5.0f * M_PI / 4.0f) + (5.0f * M_PI / 4.0f);
+            float angle = ((float)rand() / RAND_MAX) * (5.0f * M_PI / 6.0f - M_PI / 6.0f) + M_PI / 6.0f + M_PI / 2.0f;
             b2Vec2 dir(cosf(angle), sinf(angle));
             dir.Normalize();
 
@@ -209,10 +202,7 @@ void DungBeetle::Hit() {
     pbody->body->SetLinearVelocity(b2Vec2_zero);
     pbody->body->SetAngularVelocity(0);
 
-    currentAnimation = &hitAnim;
-
-    if (currentAnimation->HasFinished()) { currentState = DungBeetleState::DEAD; }
-
+    currentAnimation = &deathAnim;
 }
 void DungBeetle::ChangeBodyType() {
         pbody->body->SetType(b2_dynamicBody);

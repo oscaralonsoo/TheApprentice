@@ -63,12 +63,12 @@ private:
 
     SDL_GameController* controller = nullptr;
 
-    bool glideUnlocked = true;
+    bool glideUnlocked = false;
     bool isGliding = false;
     float glideGravityScale = 0.5f; // Puedes ajustar este valor
 
     // Wall jump
-    bool wallJumpUnlocked = true;
+    bool wallJumpUnlocked = false;
 
     Timer wallJumpLockTimer;
     float wallJumpLockDuration = 200.0f; // ms

@@ -33,7 +33,7 @@ public:
     void ChangeBodyType();
     int CheckPuzzleState();
     void Bounce();
-    void ChangeColliderRadius(float newRadius);
+    void ChangeColliderRadius(float newRadius, bool isSensor);
 private:
     bool hasThrown = false;
     bool isDynamic = false;
@@ -44,7 +44,7 @@ private:
     int lastPuzzleState = 0;
     float throwSpeed = 17.0f; 
     float ballModeSpeed = 18.0f;
-
+    float time= 0.0;
     Vector2D playerPos;
     DungBeetleState currentState = DungBeetleState::IDLE;
 

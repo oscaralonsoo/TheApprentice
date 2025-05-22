@@ -19,13 +19,12 @@ DungBeetleBall::DungBeetleBall(float x, float y, float speed, b2Vec2 direction)
         }
     }
 
-    pbody = Engine::GetInstance().physics->CreateCircle(x, y, width / 2, bodyType::DYNAMIC);
+    pbody = Engine::GetInstance().physics->CreateCircleSensor(x, y, width / 2, bodyType::DYNAMIC, 2, 5);
     pbody->ctype = ColliderType::ENEMY;
     pbody->listener = this;
 
     pbody->body->SetGravityScale(0.0f);
     if (b2Fixture* fixture = pbody->body->GetFixtureList()) {
-        fixture->SetSensor(true);
 
         b2Filter filter;
         filter.categoryBits = CATEGORY_ENEMY;
@@ -39,12 +38,11 @@ DungBeetleBall::DungBeetleBall(float x, float y, float speed, b2Vec2 direction)
 
         pbody->body->SetLinearDamping(0.0f);   
         pbody->body->SetAngularDamping(0.0f);   
-        pbody->body->SetBullet(true);
 
     }
 
     pbody->body->SetLinearVelocity(b2Vec2(direction.x * speed, direction.y * speed));
-
+    time = 0.0f;
     currentAnimation = &idleAnim;
 }
 
@@ -61,11 +59,9 @@ DungBeetleBall::~DungBeetleBall()
 bool DungBeetleBall::Update(float dt)
 {
 
-    if (time > 1000.0f) 
-    {
-        if (pbody->body->GetFixtureList()->IsSensor()) {
-            pbody->body->GetFixtureList()->SetSensor(false); // desactivar sensor
-        }
+    if (time > 1000.0f && pbody->body->GetFixtureList()->IsSensor()) {
+        pbody->body->GetFixtureList()->SetSensor(false);
+        pbody->body->SetBullet(true);
     }
 
     b2Transform pbodyPos = pbody->body->GetTransform();
@@ -112,12 +108,14 @@ bool DungBeetleBall::CleanUp()
     Engine::GetInstance().physics->DeletePhysBody(pbody);
     return true;
 }
-
 void DungBeetleBall::OnCollision(PhysBody* physA, PhysBody* physB)
 {
+    // Ignora colisiones si aún es sensor
+    if (pbody->body->GetFixtureList()->IsSensor()) return;
+
     switch (physB->ctype)
     {
-    case ColliderType ::ATTACK:
+    case ColliderType::ATTACK:
     case ColliderType::ENEMY:
     case ColliderType::PLATFORM:
     case ColliderType::WALL:

@@ -59,6 +59,8 @@ bool Brood::Start() {
         filter.maskBits = CATEGORY_ATTACK | CATEGORY_PLAYER_DAMAGE;
         fixture->SetFilterData(filter);
     }
+
+    maxSteps = 20;
  
     return true;
 }

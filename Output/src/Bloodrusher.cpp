@@ -191,6 +191,7 @@ void Bloodrusher::OnCollision(PhysBody* physA, PhysBody* physB)
 {
     switch (physB->ctype)
     {
+    case ColliderType::DESTRUCTIBLE_WALL:
     case ColliderType::WALL:
         if (currentState == BloodrusherState::ATTACKING)
         {

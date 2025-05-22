@@ -79576,6 +79576,7 @@
  <layer id="23" name="Platforms" width="180" height="63" parallaxx="0" parallaxy="0">
   <properties>
    <property name="Draw" type="bool" value="true"/>
+   <property name="Navigation" type="bool" value="true"/>
   </properties>
   <data>
    <tile/>
@@ -90920,7 +90921,7 @@
    <tile gid="41182"/>
   </data>
  </layer>
- <layer id="71" name="Navigation" width="180" height="63" visible="0">
+ <layer id="71" name="Navigation" width="180" height="63">
   <properties>
    <property name="Navigation" type="bool" value="true"/>
   </properties>
@@ -113660,8 +113661,8 @@
   </properties>
   <object id="4760" x="6464" y="192" width="64" height="640">
    <properties>
-    <property name="PlayerPosX" type="int" value="3392"/>
-    <property name="PlayerPosY" type="int" value="2752"/>
+    <property name="PlayerPosX" type="int" value="1950"/>
+    <property name="PlayerPosY" type="int" value="2368"/>
     <property name="TargetScene" type="int" value="31"/>
    </properties>
   </object>

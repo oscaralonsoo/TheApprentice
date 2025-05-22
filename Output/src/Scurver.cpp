@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "EntityManager.h"
 #include "Textures.h"
+#include "Audio.h"
 
 
 Scurver::Scurver() : Enemy(EntityType::SCURVER) {
@@ -35,6 +36,9 @@ bool Scurver::Start() {
     currentAnimation = &attackAnim;
     maxSteps = 15;
 
+    soundWalkId = Engine::GetInstance().audio->LoadFx("scruver_walk.ogg", 1.0f);
+    soundDeadId = Engine::GetInstance().audio->LoadFx("monster_death.ogg", 1.0f);
+
     return Enemy::Start();
 }
 
@@ -42,6 +46,10 @@ bool Scurver::Update(float dt) {
     switch (currentState)
     {
     case ScurverState::IDLE:
+        if (currentState == ScurverState::IDLE) {
+            walkSoundPlayed = false;
+            deadSoundPlayed = false;
+        }
         pbody->body->SetLinearVelocity(b2Vec2_zero);
         pbody->body->SetAngularVelocity(0);
 
@@ -61,6 +69,10 @@ bool Scurver::Update(float dt) {
 
         break;
     case ScurverState::ATTACK:
+        if (!walkSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundWalkId, 1.0f, 0);
+            walkSoundPlayed = true;
+        }
         if (currentAnimation != &attackAnim) currentAnimation = &attackAnim;
         currentAnimation->SetPaused(false);
 
@@ -71,6 +83,10 @@ bool Scurver::Update(float dt) {
         Slide(dt);
         break;
     case ScurverState::DEAD:
+        if (!deadSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundDeadId, 1.0f, 0);
+            deadSoundPlayed = true;
+        }
         if (currentAnimation != &deadAnim) currentAnimation = &deadAnim;
 
         pbody->body->SetLinearVelocity(b2Vec2_zero);

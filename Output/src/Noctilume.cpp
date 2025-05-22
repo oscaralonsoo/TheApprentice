@@ -7,6 +7,7 @@
 #include "Entity.h"
 #include "Log.h"
 #include <cmath>
+#include <Audio.h>
 
 Noctilume::Noctilume() : Enemy(EntityType::NOCTILUME) {}
 
@@ -45,6 +46,10 @@ bool Noctilume::Start() {
     smoothedPosition = position;
     maxSteps = 12;
 
+    soundChasingId = Engine::GetInstance().audio->LoadFx("noctilume_walk.ogg", 1.0f);
+    soundDeadId = Engine::GetInstance().audio->LoadFx("monster_death.ogg", 1.0f);
+
+
     return Enemy::Start();
 }
 
@@ -58,11 +63,24 @@ bool Noctilume::Update(float dt) {
 
     switch (currentState) {
     case NoctilumeState::IDLE: Idle(dt); break;
-    case NoctilumeState::CHASING: Chasing(dt); break;
+    case NoctilumeState::CHASING: 
+        if (!chasingSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundChasingId, 1.0f, 0);
+            chasingSoundPlayed = true;
+        }
+        deadSoundPlayed = false;
+        Chasing(dt); break;
     case NoctilumeState::PRE_ATTACK: PreAttack(dt); break;
     case NoctilumeState::ATTACK: Attack(dt); break;
     case NoctilumeState::CRASH: Crash(dt); break;
-    case NoctilumeState::DEAD: Die(); break;
+    case NoctilumeState::DEAD: 
+        if (!deadSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundDeadId, 1.0f, 0);
+            deadSoundPlayed = true;
+        }
+        chasingSoundPlayed = false;
+        
+        Die(); break;
     }
 
     if (currentState != NoctilumeState::CRASH && currentState != NoctilumeState::DEAD) {

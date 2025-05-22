@@ -84,4 +84,10 @@ private:
 
     // Crash
     float crashTimer = 0.0f;
+
+    int soundChasingId = 0;
+    int soundDeadId = 0;
+
+    bool chasingSoundPlayed = false;
+    bool deadSoundPlayed = false;
 };

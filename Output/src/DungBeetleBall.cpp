@@ -140,7 +140,6 @@ void DungBeetleBall::Bounce()
         newVelocity *= speed;
         pbody->body->SetLinearVelocity(-newVelocity);
     }
-
     pbody->body->SetAngularVelocity(0.0f);
 }
 

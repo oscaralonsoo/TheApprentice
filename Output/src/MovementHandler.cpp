@@ -93,7 +93,6 @@ void MovementHandler::Update(float dt) {
 
         player->pbody->body->SetGravityScale(0.0f);
         player->pbody->body->SetLinearVelocity(velocity);
-        player->SetState("idle");
         return;
     }
 
@@ -219,6 +218,16 @@ void MovementHandler::UpdateAnimation() {
     if (player->GetMechanics()->GetHealthSystem()->IsInHitAnim()) return;
     if (player->GetState() == "die") return;
     if (dashMechanic.IsDashing()) return;
+
+    if (jumpMechanic.wallJumpActive) {
+        player->SetState("walljump");
+        return;
+    }
+
+    if (jumpMechanic.IsJumping()) {
+        player->SetState("jump");
+        return;
+    }
 
     if (!attackMechanic.IsAttacking() &&
         !dashMechanic.IsDashing() &&

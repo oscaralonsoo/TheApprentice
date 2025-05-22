@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "EntityManager.h"
 #include "Textures.h"
+#include "Audio.h"
 
 
 Shyver::Shyver() : Enemy(EntityType::SHYVER) {
@@ -38,6 +39,8 @@ bool Shyver::Start() {
 
     currentAnimation = &attackAnim;
     maxSteps = 15;
+    soundWalkId = Engine::GetInstance().audio->LoadFx("shyver_walk.ogg", 1.0f);
+
 
     return Enemy::Start();
 }
@@ -46,6 +49,11 @@ bool Shyver::Update(float dt) {
     switch (currentState)
     {
     case ShyverState::IDLE:
+
+        if (!walkSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundWalkId, 1.0f, 0);
+            walkSoundPlayed = true;
+        }
         if (currentAnimation != &idleAnim) currentAnimation = &idleAnim;
         currentState = ShyverState::APPEAR;
         SetPosition(Engine::GetInstance().scene.get()->GetPlayerPosition());
@@ -80,6 +88,12 @@ bool Shyver::Update(float dt) {
         Invisible();
         break;
     case ShyverState::DEATH:
+        if (!deadSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundDeadId, 1.0f, 0);
+            deadSoundPlayed = true;
+        }
+        walkSoundPlayed = false;
+
         if (currentAnimation != &deathAnim) currentAnimation = &deathAnim;
 
         pbody->body->SetLinearVelocity(b2Vec2_zero);

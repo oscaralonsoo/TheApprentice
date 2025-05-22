@@ -24,6 +24,7 @@ private:
     SDL_Texture* texture = nullptr;
     Animation* currentAnimation = nullptr;
 
+
     Animation idleAnim;
     float timeStuck = 0.0f;
     b2Vec2 previousPosition;

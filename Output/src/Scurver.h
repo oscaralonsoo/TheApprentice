@@ -37,4 +37,10 @@ private:
 
     float previousDirection;
     Timer timer;
+
+    int soundWalkId = 0;
+    int soundDeadId = 0;
+
+    bool walkSoundPlayed = false;
+    bool deadSoundPlayed = false;
 };

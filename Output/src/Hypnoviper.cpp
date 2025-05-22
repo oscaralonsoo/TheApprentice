@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "EntityManager.h"
 #include "Textures.h"
+#include "Audio.h"
 
 
 Hypnoviper::Hypnoviper() : Enemy(EntityType::HYPNOVIPER) {
@@ -53,6 +54,9 @@ bool Hypnoviper::Start() {
 
     currentAnimation = &sleepAnim;
 
+    soundSleepId = Engine::GetInstance().audio->LoadFx("hypnoviper_sleep.ogg", 1.0f);
+    soundDeadId = Engine::GetInstance().audio->LoadFx("monster_death.ogg", 1.0f);
+
     return true;
 }
 
@@ -61,6 +65,12 @@ bool Hypnoviper::Update(float dt) {
     switch (currentState)
     {
     case HypnoviperState::SLEEPING:
+        if (!sleepSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundSleepId, 1.0f, 0);
+            sleepSoundPlayed = true;
+        }
+        deadSoundPlayed = false;
+
         if (currentAnimation != &sleepAnim) currentAnimation = &sleepAnim;
 
         break;
@@ -74,6 +84,12 @@ bool Hypnoviper::Update(float dt) {
 
         break;
     case HypnoviperState::DEAD:
+        if (!deadSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundDeadId, 1.0f, 0);
+            deadSoundPlayed = true;
+        }
+        sleepSoundPlayed = false;
+
         if (currentAnimation != &deadAnim) currentAnimation = &deadAnim;
         
         pbody->body->GetFixtureList()->SetSensor(true);

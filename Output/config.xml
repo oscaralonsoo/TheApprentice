@@ -713,12 +713,13 @@
 						<frame x="18" y="72" w="18" h="18" />
 					</splash>
 				</cave_drop>
-				<life_plant w="240" h="192" texture="Assets/Props/lifePlant.png">
-					<available loop="false" speed="0">
-						<frame x="240" y="0" w="240" h="192" />
+				<life_plant w="256" h="256" texture="Assets/Props/lifePlant.png">
+					<available loop="true" speed="0.1">
+						<frame x="0" y="0" w="256" h="256" />
+						<frame x="256" y="0" w="256" h="256" />
 					</available>
 					<consumed loop="false" speed="0">
-						<frame x="0" y="0" w="240" h="192" />
+						<frame x="0" y="256" w="256" h="256" />
 					</consumed>
 				</life_plant>
 				<checkpoint w="384" h="320" texture="Assets/Props/CheckPoint_Spritesheet.png">

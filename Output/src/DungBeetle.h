@@ -38,6 +38,7 @@ private:
     bool hasThrown = false;
     bool isDynamic = false;
     bool hasLaunched = false;
+
     int ballsThrown = 0;
     int currentStatePuzzle = 0;
     int lastPuzzleState = 0;

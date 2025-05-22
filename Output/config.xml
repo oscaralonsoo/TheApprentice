@@ -21,6 +21,10 @@
 			<Map_21 path="Assets/Maps/" name="Map21.tmx" />
 			<Map_22 path="Assets/Maps/" name="Map22.tmx" />
 			<Map_23 path="Assets/Maps/" name="Map23.tmx" />
+			<Map_31 path="Assets/Maps/" name="Map31.tmx" />
+			<Map_41 path="Assets/Maps/" name="Map41.tmx" />
+			<Map_42 path="Assets/Maps/" name="Map42.tmx" />
+			<Map_666 path="Assets/Maps/" name="Map666.tmx" />
 		</maps>
 		<animations>
 			<player w="100" h="100" texture="Assets/Slime/slime.png">
@@ -181,7 +185,7 @@
 						<frame x="660" y="458" w="220" h="220" />
 						<frame x="880" y="458" w="220" h="220" />
 					</slide>
-					<dead loop="false" speed="0.15">
+					<dead loop="false" speed="0.3">
 						<frame x="0" y="678" w="244" h="244" />
 						<frame x="244" y="678" w="244" h="244" />
 						<frame x="488" y="678" w="244" h="244" />

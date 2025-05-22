@@ -33,6 +33,8 @@ public:
     bool IsWallJumpUnlocked() const { return wallJumpUnlocked; }
     bool IsWallJumpLocked() const { return wallJumpLockActive; }
 
+    bool wallJumpActive = false;
+
 private:
     Player* player = nullptr;
 

@@ -114,9 +114,9 @@ private:
     bool isOnLiana = false;
     float lianaCenterX = 0.0f;
 
-    bool hookUnlocked = true;
+    bool hookUnlocked = false;
 
     PhysBody* lastPlatformCollider = nullptr;
 
-    bool canPushBoxes = true;
+    bool canPushBoxes = false;
 };

@@ -247,24 +247,29 @@ void Menus::NewGame() {
     StartTransition(false, MenusState::GAME);
 }
 void Menus::Pause(float dt) {
-    bool buttonPressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN;
+    if (inTransition) return;
+
+    bool selectPressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN;
+    bool backPressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN;
 
     if (controller && SDL_GameControllerGetAttached(controller)) {
         bool aNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A);
-        if (aNow && !aHeld) {
-            buttonPressed = true;
-        }
+        bool bNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_B);
+
+        if (aNow && !aHeld) selectPressed = true;
+        if (bNow && !bHeld) backPressed = true;
+
         aHeld = aNow;
+        bHeld = bNow;
     }
-    if (inTransition) return;
 
-    if (buttonPressed) {
+    if (backPressed) {
         isPaused = false;
-        StartTransition(true, MenusState::GAME); 
-        return; 
+        StartTransition(true, MenusState::GAME);
+        return;
     }
 
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+    if (selectPressed) {
         switch (selectedButton) {
         case 0: isPaused = false; StartTransition(true, MenusState::GAME); break;
         case 1: inConfig = true; StartTransition(true, MenusState::SETTINGS); break;
@@ -274,22 +279,36 @@ void Menus::Pause(float dt) {
 }
 
 void Menus::Settings() {
-    bool buttonPressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN;
-    bool aNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A);
+    bool escapePressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN;
 
-    if (controller && SDL_GameControllerGetAttached(controller) || buttonPressed) {
+    if (controller && SDL_GameControllerGetAttached(controller)) {
+        bool aNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A);
         bool bNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_B);
 
-        if (buttonPressed || (bNow && !aHeld)) {
+        if (bNow && !bHeld) {
             nextState = (previousState == MenusState::PAUSE) ? MenusState::PAUSE : previousState;
             inConfig = false;
             StartTransition(true, nextState);
         }
-        aHeld = bNow;
+
+        if (aNow && !aHeld) {
+            HandleSettingsSelection();
+        }
+
+        aHeld = aNow;
+        bHeld = bNow;
     }
-    else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN || aNow && aHeld) {
+
+    if (escapePressed) {
+        nextState = (previousState == MenusState::PAUSE) ? MenusState::PAUSE : previousState;
+        inConfig = false;
+        StartTransition(true, nextState);
+    }
+
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
         HandleSettingsSelection();
     }
+
     HandleVolumeSliders();
 }
 
@@ -322,16 +341,56 @@ void Menus::HandleVolumeSliders() {
     }
 }
 void Menus::AdjustVolume(int& sliderX, int minX, int maxX) {
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+    auto input = Engine::GetInstance().input;
+
+    bool moveLeft = input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT ||
+        input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT;
+
+    bool moveRight = input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT ||
+        input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT;
+
+    // Soporte para mando
+    if (controller && SDL_GameControllerGetAttached(controller)) {
+        Sint16 axisX = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTX);
+        const Sint16 DEADZONE = 8000;  // evita falsos positivos
+
+        if (axisX < -DEADZONE && !dpadLeftHeld) {
+            moveLeft = true;
+            dpadLeftHeld = true;
+        }
+        else if (axisX > DEADZONE && !dpadRightHeld) {
+            moveRight = true;
+            dpadRightHeld = true;
+        }
+
+        if (axisX > -DEADZONE && axisX < DEADZONE) {
+            dpadLeftHeld = false;
+            dpadRightHeld = false;
+        }
+
+        if (!dpadLeftHeld && SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_LEFT)) {
+            moveLeft = true;
+            dpadLeftHeld = true;
+        }
+        if (!dpadRightHeld && SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_RIGHT)) {
+            moveRight = true;
+            dpadRightHeld = true;
+        }
+    }
+
+    if (moveLeft) {
         sliderX -= VOLUME_ADJUSTMENT_STEP;
         sliderX = std::max(sliderX, minX);
     }
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+
+    if (moveRight) {
         sliderX += VOLUME_ADJUSTMENT_STEP;
         sliderX = std::min(sliderX, maxX);
     }
+
     UpdateVolume(sliderX, minX, maxX);
 }
+
 void Menus::UpdateVolume(int sliderX, int minX, int maxX) {
     float volume = (float)(sliderX - minX) / (maxX - minX);
     volume = (volume < 0.0f) ? 0.0f : (volume > 1.0f) ? 1.0f : volume;
@@ -466,7 +525,18 @@ void Menus::DrawAbilities() {
         Engine::GetInstance().render->DrawTexture(abilityTexture, cameraRect.x - Engine::GetInstance().render->camera.x, cameraRect.y - Engine::GetInstance().render->camera.y, &cameraRect);
     }
 
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+    bool spacePressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN;
+    bool aPressed = false;
+
+    if (controller && SDL_GameControllerGetAttached(controller)) {
+        bool aNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A);
+        if (aNow && !aHeld) {
+            aPressed = true;
+        }
+        aHeld = aNow;
+    }
+
+    if (spacePressed || aPressed) {
         StartTransition(false, MenusState::GAME);
         drawingAbilityBackground = false;
     }

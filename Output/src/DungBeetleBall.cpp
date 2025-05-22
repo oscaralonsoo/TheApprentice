@@ -109,6 +109,7 @@ void DungBeetleBall::OnCollision(PhysBody* physA, PhysBody* physB)
     switch (physB->ctype)
     {
     case ColliderType ::ATTACK:
+    case ColliderType::ENEMY:
     case ColliderType::PLATFORM:
     case ColliderType::WALL:
         Bounce();

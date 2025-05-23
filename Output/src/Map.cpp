@@ -768,12 +768,14 @@ bool Map::Load(std::string path, std::string fileName)
                     int w = objectNode.attribute("width").as_int();
                     int h = objectNode.attribute("height").as_int();
                     int id = objectNode.attribute("groupId").as_int();
+                    bool isInvisible = objectNode.attribute("isInvisible").as_bool();
                     bool isOpen = objectNode.attribute("isOpen").as_bool();
 
                     if (objectName == "Plate")
-                    {
+                    {   //TODO OSCAR -- REVISAR VALORES
                         PressurePlate* plate = (PressurePlate*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PRESSURE_PLATE);
                         plate->position = Vector2D(x, y);
+                        plate->isInvisible = isInvisible;
                         plate->id = id;
                         plates.push_back(plate);
 
@@ -781,7 +783,6 @@ bool Map::Load(std::string path, std::string fileName)
                     }
                     else if (objectName == "Door")
                     {
-                        int isHorizontal = objectNode.attribute("isHorizontal").as_bool();
 
                         PressureDoor* door = (PressureDoor*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PRESSURE_DOOR);
                         door->position = Vector2D(x, y);

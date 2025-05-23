@@ -37,7 +37,7 @@ public:
     int height, width;
     int id;
     bool isOpen;
-    bool StartsOpen;
+    bool shouldBeOpen;
 
 private:
     PhysBody* pbody;

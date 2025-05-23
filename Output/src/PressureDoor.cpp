@@ -146,7 +146,7 @@ void PressureDoor::SetOpen(bool value) {
 }
 void PressureDoor::CheckStartState() {
     
-    if (StartsOpen) {
+    if (shouldBeOpen) {
         SetOpen(true);
         state = PressureDoorState::ENABLE;
     }

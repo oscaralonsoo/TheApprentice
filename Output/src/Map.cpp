@@ -788,7 +788,7 @@ bool Map::Load(std::string path, std::string fileName)
                         door->width = w;
                         door->height = h;
                         door->id = id;
-                        door->StartsOpen = isOpen;
+                        door->shouldBeOpen = isOpen;
                         doors.push_back(door);
 
                         LOG("Created Door at x: %d, y: %d", x, y);

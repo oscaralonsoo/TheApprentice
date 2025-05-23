@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "SDL2/SDL.h"
 #include "Animation.h"
-#include "Physics.h"
+#include "Timer.h"
 
 struct SDL_Texture;
 
@@ -16,7 +16,6 @@ enum class DustParticleState {
 class DustParticle : public Entity
 {
 public:
-
     DustParticle();
     ~DustParticle();
 
@@ -27,12 +26,13 @@ public:
     bool CleanUp();
 
     void SetPosition(Vector2D pos);
+
 private:
-    PhysBody* pbody;
-    SDL_Texture* texture;
-    const char* texturePath;
-    int texW, texH;
+    SDL_Texture* texture = nullptr;
+    int texW = 0, texH = 0;
     float scale = 1.0f;
+
+    Vector2D velocity;
 
     Animation spawnAnim;
     Animation floatAnim;

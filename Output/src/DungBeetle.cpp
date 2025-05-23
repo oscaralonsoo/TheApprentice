@@ -90,7 +90,7 @@ bool DungBeetle::PostUpdate() {
             }
         }
         dungBalls.clear(); 
-
+        Engine::GetInstance().pressureSystem->OpenDoor(2);
         Engine::GetInstance().entityManager->DestroyEntity(this);
     }
     return true;

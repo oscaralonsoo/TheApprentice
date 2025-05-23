@@ -43,3 +43,25 @@ int PressureSystemController::GetActivePlatesCount(int id)
     }
     return count;
 }
+void PressureSystemController::OpenDoor(int id)
+{
+    for (auto* door : doors)
+    {
+        if (door->id == id)
+        {
+            door->SetOpen(true);
+            break;
+        }
+    }
+}
+void PressureSystemController::CloseDoor(int id)
+{
+    for (auto* door : doors)
+    {
+        if (door->id == id)
+        {
+            door->SetOpen(false);
+            break;
+        }
+    }
+}

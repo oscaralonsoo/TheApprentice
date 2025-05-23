@@ -768,6 +768,7 @@ bool Map::Load(std::string path, std::string fileName)
                     int w = objectNode.attribute("width").as_int();
                     int h = objectNode.attribute("height").as_int();
                     int id = objectNode.attribute("groupId").as_int();
+                    bool isOpen = objectNode.attribute("isOpen").as_bool();
 
                     if (objectName == "Plate")
                     {
@@ -787,6 +788,7 @@ bool Map::Load(std::string path, std::string fileName)
                         door->width = w;
                         door->height = h;
                         door->id = id;
+                        door->StartsOpen = isOpen;
                         doors.push_back(door);
 
                         LOG("Created Door at x: %d, y: %d", x, y);

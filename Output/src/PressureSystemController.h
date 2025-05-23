@@ -28,6 +28,10 @@ public:
 
     int GetActivePlatesCount(int id);
 
+    void OpenDoor(int id);
+
+    void CloseDoor(int id);
+
     std::vector<PressurePlate*> plates;
     std::vector<PressureDoor*> doors;
 

@@ -48,12 +48,15 @@ bool PressureDoor::Start()
 
     if (width > height) isHorizontal = true;
 
-    currentAnimation = &disabledAnim;
+
     return true;
 }
 
+
 bool PressureDoor::Update(float dt)
-{
+{   
+    CheckStartState();
+
     switch (state) {
     case PressureDoorState::DISABLE:
         if (currentAnimation != &disabledAnim) {
@@ -111,8 +114,8 @@ void PressureDoor::RenderTexture()
 
     if (isHorizontal) {
         angle = 90.0f;
-        offsetX = -width / 2 + 5;
-        offsetY = -height / 2 - 60;
+        offsetX = -width / 2;
+        offsetY = -height / 2 - 62;
         x -= texH / 2;
         y -= texW / 2;
     }
@@ -140,4 +143,15 @@ void PressureDoor::RenderTexture()
 
 void PressureDoor::SetOpen(bool value) {
     isOpen = value;
+}
+void PressureDoor::CheckStartState() {
+    
+    if (StartsOpen) {
+        SetOpen(true);
+        state = PressureDoorState::ENABLE;
+    }
+    else {
+        state = PressureDoorState::DISABLE;
+        pbody->body->GetFixtureList()->SetSensor(true);
+    }
 }

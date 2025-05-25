@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="155" height="99" tilewidth="64" tileheight="64" infinite="0" nextlayerid="72" nextobjectid="4552">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="155" height="99" tilewidth="64" tileheight="64" infinite="0" nextlayerid="72" nextobjectid="4559">
  <tileset firstgid="1" name="tiles_manglar" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_manglar.png" width="640" height="640"/>
  </tileset>
@@ -112616,8 +112616,8 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
    <tile gid="16"/>
-   <tile gid="17"/>
    <tile gid="18"/>
    <tile/>
    <tile/>
@@ -112771,8 +112771,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="24"/>
-   <tile gid="27"/>
+   <tile gid="16"/>
+   <tile gid="34"/>
    <tile gid="22"/>
    <tile/>
    <tile/>
@@ -153646,10 +153646,6 @@
   <object id="4064" name="Hook" x="4800" y="1728" width="64" height="64"/>
   <object id="4078" name="Hook" x="6848" y="1920" width="64" height="64"/>
   <object id="4161" name="Hook" x="2432" y="640" width="64" height="64"/>
-  <object id="4538" x="5760" y="2240" height="64"/>
-  <object id="4539" x="6144" y="2240" height="64"/>
-  <object id="4540" x="5760" y="2304" width="384"/>
-  <object id="4541" x="5760" y="2240" width="384"/>
  </objectgroup>
  <objectgroup id="66" name="HelpZone"/>
  <objectgroup id="68" name="Abilities">
@@ -153674,6 +153670,7 @@
  </objectgroup>
  <objectgroup id="71" name="DownCamera">
   <object id="4462" x="6080" y="3008" width="640" height="576"/>
+  <object id="4558" x="6912" y="1792" width="320" height="768"/>
  </objectgroup>
  <objectgroup id="58" name="Wall">
   <object id="3891" x="7232" y="2304" width="64"/>
@@ -153867,6 +153864,9 @@
   <object id="4547" x="7040" y="1536" height="128"/>
   <object id="4548" x="7104" y="1664" height="192"/>
   <object id="4549" x="7168" y="1856" height="64"/>
+  <object id="4552" x="5760" y="2240" height="64"/>
+  <object id="4553" x="6144" y="2240" height="64"/>
+  <object id="4557" x="6912" y="2048" height="64"/>
  </objectgroup>
  <objectgroup id="65" name="Spikes">
   <object id="3902" x="7178" y="1920" width="64" height="384"/>
@@ -153926,7 +153926,7 @@
   <object id="3322" x="8704" y="4352" height="64"/>
   <object id="3330" x="5184" y="2048" width="320"/>
   <object id="3335" x="6400" y="2432" width="448"/>
-  <object id="3337" x="6848" y="2048" width="192"/>
+  <object id="3337" x="6912" y="2048" width="128"/>
   <object id="3343" x="7040" y="2624" width="192"/>
   <object id="3388" x="7232" y="2496" width="256"/>
   <object id="3445" x="7616" y="2496" width="704"/>
@@ -154077,6 +154077,9 @@
   <object id="4543" x="6976" y="1536" width="64"/>
   <object id="4544" x="7040" y="1664" width="64"/>
   <object id="4545" x="7104" y="1856" width="64"/>
+  <object id="4554" x="5760" y="2240" width="384"/>
+  <object id="4555" x="5760" y="2304" width="384"/>
+  <object id="4556" x="6848" y="2112" width="64"/>
  </objectgroup>
  <objectgroup id="57" name="WallSlide">
   <object id="3394" x="2816" y="4224" height="320"/>
@@ -154102,7 +154105,7 @@
   <object id="1520" x="6720" y="960" height="256"/>
   <object id="1522" x="6976" y="1216" height="256"/>
   <object id="2950" x="3456" y="0" height="192"/>
-  <object id="3336" x="6848" y="2048" height="384"/>
+  <object id="3336" x="6848" y="2112" height="320"/>
   <object id="3338" x="7040" y="2048" height="576"/>
   <object id="3344" x="7232" y="2496" height="128"/>
   <object id="3387" x="7616" y="2496" height="256"/>

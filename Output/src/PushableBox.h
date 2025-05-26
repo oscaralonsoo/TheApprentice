@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "SDL2/SDL.h"
 #include "Physics.h"
+#include "Timer.h"
 
 class PushableBox : public Entity
 {
@@ -31,4 +32,14 @@ protected:
     Vector2D position;
     bool touchingPlayer = false;
     bool isStatic = false;
+    bool touchingEnemy = false;
+    bool touchingPlatform = false;
+
+    Timer pushEnemy;
+    float pushEnemyTimer = 100.0f;
+    bool canEnemyPush = true;
+
+    Timer pushPlatform;
+    float pushPlatformTimer = 100.0f;
+    bool canPlatformPush = true;
 };

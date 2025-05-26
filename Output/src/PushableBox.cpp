@@ -39,6 +39,16 @@ bool PushableBox::Start()
 
 bool PushableBox::Update(float dt)
 {
+    if (!canEnemyPush && pushEnemy.ReadMSec() >= pushEnemyTimer)
+    {
+        canEnemyPush = true;
+    }
+
+    if (!canPlatformPush && pushEnemy.ReadMSec() >= pushPlatformTimer)
+    {
+        canPlatformPush = true;
+    }
+
     if (pbody && pbody->body)
     {
         b2Vec2 pos = pbody->body->GetPosition();
@@ -48,14 +58,18 @@ bool PushableBox::Update(float dt)
 
     Player* player = Engine::GetInstance().scene->GetPlayer();
 
-    if (player && !player->GetMechanics()->CanPush())
+    bool playerCanPush = player && player->GetMechanics()->CanPush();
+    bool someoneCanPush = playerCanPush || touchingEnemy;
+
+    if (!someoneCanPush && touchingPlatform)
     {
         if (!isStatic)
         {
-            RecreateBody(STATIC); // Usa tu enum, no el de Box2D
+            RecreateBody(STATIC);
             isStatic = true;
         }
     }
+
     else
     {
         if (isStatic)
@@ -64,7 +78,7 @@ bool PushableBox::Update(float dt)
             isStatic = false;
         }
 
-        if (!touchingPlayer && pbody)
+        if (!touchingPlayer && !touchingEnemy && pbody)
         {
             b2Vec2 vel = pbody->body->GetLinearVelocity();
             vel.x = 0.0f;
@@ -72,11 +86,10 @@ bool PushableBox::Update(float dt)
         }
     }
 
-    if (player && player->GetMechanics()->CanPush() && touchingPlayer)
+    if (playerCanPush && touchingPlayer)
     {
         player->SetState("push");
     }
-
 
     Engine::GetInstance().render->DrawTexture(texture, (int)position.getX() +20, (int)position.getY() +22);
 
@@ -119,6 +132,21 @@ void PushableBox::OnCollision(PhysBody* physA, PhysBody* physB)
     {
         touchingPlayer = true;
     }
+    if (physB->ctype == ColliderType::ENEMY)
+    {
+        if (canEnemyPush)
+        {
+            touchingEnemy = true;
+        }
+    }
+    if (physB->ctype == ColliderType::PLATFORM || physB->ctype == ColliderType::WALL)
+    {
+        if (canPlatformPush)
+        {
+            touchingPlatform = true;
+        }
+    }
+
 }
 
 void PushableBox::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
@@ -127,6 +155,19 @@ void PushableBox::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
     {
         touchingPlayer = false;
     }
+    if (physB->ctype == ColliderType::ENEMY)
+    {
+        touchingEnemy = false;
+        canEnemyPush = false;
+        pushEnemy.Start();
+    }
+    if (physB->ctype == ColliderType::PLATFORM || physB->ctype == ColliderType::WALL)
+    {
+        touchingPlatform = false;
+        canPlatformPush = false;
+        pushPlatform.Start();
+    }
+
 }
 
 void PushableBox::RecreateBody(bodyType type)
@@ -152,6 +193,9 @@ void PushableBox::RecreateBody(bodyType type)
     pbody->body->SetGravityScale(5.0f);
     pbody->body->GetFixtureList()->SetDensity(5.0f);
     pbody->body->ResetMassData();
+
+    // ✅ Añadimos el damping para frenar la caja de forma suave
+    pbody->body->SetLinearDamping(10.0f);  // Puedes ajustar este valor
 
     if (type == DYNAMIC) {
         // Obtener la posición actual del body en metros

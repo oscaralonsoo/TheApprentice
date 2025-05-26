@@ -90,7 +90,7 @@ void LifePlantMax::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (state == LifePlantMaxStates::AVAILABLE)
         {
             state = LifePlantMaxStates::CONSUMED;
-            Engine::GetInstance().scene->GetPlayer()->GetMechanics()->GetHealthSystem()->HealFull();
+            Engine::GetInstance().scene->GetPlayer()->GetMechanics()->GetHealthSystem()->AddMaxLife();
             Engine::GetInstance().scene->TriggerVignetteFlash();
         }
         break;

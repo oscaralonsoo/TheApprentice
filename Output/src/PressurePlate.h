@@ -39,8 +39,9 @@ public:
     int texW, texH;
     int height, width;
     int id;
+    bool isInvisible;
     bool active;
-
+    bool triggered = false;
 private:
     PhysBody* pbody;
     SDL_Texture* texture;

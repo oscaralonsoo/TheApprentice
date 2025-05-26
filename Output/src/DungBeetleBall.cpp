@@ -16,35 +16,33 @@ DungBeetleBall::DungBeetleBall(float x, float y, float speed, b2Vec2 direction)
             width = node.attribute("w").as_int();
             height = node.attribute("h").as_int();
             idleAnim.LoadAnimations(node.child("idle"));
+            destroyAnim.LoadAnimations(node.child("destroyed"));;
         }
     }
 
-    pbody = Engine::GetInstance().physics->CreateCircle(x, y, width / 2, bodyType::DYNAMIC);
+    pbody = Engine::GetInstance().physics->CreateCircleSensor(x, y, width / 2, bodyType::DYNAMIC, 2, 5);
     pbody->ctype = ColliderType::ENEMY;
     pbody->listener = this;
 
     pbody->body->SetGravityScale(0.0f);
     if (b2Fixture* fixture = pbody->body->GetFixtureList()) {
-        fixture->SetSensor(true);
 
         b2Filter filter;
         filter.categoryBits = CATEGORY_ENEMY;
         filter.maskBits = CATEGORY_WALL | CATEGORY_PLAYER_DAMAGE | CATEGORY_PLATFORM | CATEGORY_ATTACK | CATEGORY_PLAYER;
         fixture->SetFilterData(filter);
 
-        // Configuración mejorada para rebotes
         fixture->SetRestitution(1.0f); 
         fixture->SetFriction(0.0f);     
         fixture->SetDensity(1.0f);     
 
         pbody->body->SetLinearDamping(0.0f);   
-        pbody->body->SetAngularDamping(0.0f);   
+        pbody->body->SetAngularDamping(0.0f); 
         pbody->body->SetBullet(true);
-
     }
 
     pbody->body->SetLinearVelocity(b2Vec2(direction.x * speed, direction.y * speed));
-
+    time = 0.0f;
     currentAnimation = &idleAnim;
 }
 
@@ -60,14 +58,6 @@ DungBeetleBall::~DungBeetleBall()
 
 bool DungBeetleBall::Update(float dt)
 {
-
-    if (time > 1000.0f) 
-    {
-        if (pbody->body->GetFixtureList()->IsSensor()) {
-            pbody->body->GetFixtureList()->SetSensor(false); // desactivar sensor
-        }
-    }
-
     b2Transform pbodyPos = pbody->body->GetTransform();
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - width / 2);
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - height / 2);
@@ -81,11 +71,10 @@ bool DungBeetleBall::Update(float dt)
         timeStuck += dt;
         if (timeStuck > 1000.0f) 
         {
-            // Aplicar pequeño impulso aleatorio para liberarla
             b2Vec2 randomDir((rand() % 100 - 50) / 100.0f, (rand() % 100 - 50) / 100.0f);
             randomDir.Normalize();
             pbody->body->ApplyLinearImpulse(0.5f * randomDir, pbody->body->GetWorldCenter(), true);
-            timeStuck = 0.0f; // Resetear contador
+            timeStuck = 0.0f;
         }
     }
     else
@@ -101,7 +90,9 @@ bool DungBeetleBall::Update(float dt)
         pbody->body->SetLinearVelocity(velocity);
     }
     previousPosition = currentPos;
-    time += dt;
+
+    CollisionNavigationLayer();
+
 
     return true;
 }
@@ -112,15 +103,12 @@ bool DungBeetleBall::CleanUp()
     Engine::GetInstance().physics->DeletePhysBody(pbody);
     return true;
 }
-
 void DungBeetleBall::OnCollision(PhysBody* physA, PhysBody* physB)
 {
+
     switch (physB->ctype)
     {
-    case ColliderType ::ATTACK:
-    case ColliderType::ENEMY:
-    case ColliderType::PLATFORM:
-    case ColliderType::WALL:
+    case ColliderType::ATTACK:
     case ColliderType::PLAYER:
         Bounce();
         break;
@@ -136,7 +124,6 @@ void DungBeetleBall::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
     case ColliderType::WALL:
         break;
     case ColliderType::PLAYER:
-
         break;
     }
 }
@@ -147,15 +134,29 @@ void DungBeetleBall::Bounce()
     if (velocity.Length() > 0) {
         velocity.Normalize();
 
-        float randomAngle = ((rand() % 100) / 100.0f - 0.5f) * 0.4f;
+        float randomAngle = ((rand() % 100) / 100.0f - 0.5f) * M_PI / 2.0f;
         float angle = atan2(velocity.y, velocity.x) + randomAngle;
 
         b2Vec2 newVelocity(cosf(angle), sinf(angle));
         newVelocity *= speed;
-        pbody->body->SetLinearVelocity(newVelocity);
+        pbody->body->SetLinearVelocity(-newVelocity);
+    }
+    pbody->body->SetAngularVelocity(0.0f);
+}
+
+void DungBeetleBall::CollisionNavigationLayer() {
+    Vector2D posMap = Engine::GetInstance().map.get()->WorldToMap(position.getX() + width / 2, position.getY() + height / 2);
+
+    MapLayer* layer = Engine::GetInstance().map.get()->GetNavigationLayer();
+
+    if (currentTileMap != posMap)
+    {
+        if (layer->Get(posMap.x, posMap.y))
+            Bounce();
+
+        currentTileMap = posMap;
     }
 
-    pbody->body->SetAngularVelocity(0.0f);
 }
 
 

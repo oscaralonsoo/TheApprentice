@@ -143,11 +143,6 @@ void Bloodrusher::Attack(float dt) {
     direction = (nextTileWorld.getX() > position.getX()) ? 1.0f :
         (nextTileWorld.getX() < position.getX() ? -1.0f : 0.0f);
 
-    if (!IsGroundAhead()) {
-        currentState = BloodrusherState::SLIDING;
-        return;
-    }
-
     b2Vec2 currentVelocity = pbody->body->GetLinearVelocity();
 
     static float exponentialFactor = 1.007f;
@@ -215,11 +210,7 @@ void Bloodrusher::OnCollision(PhysBody* physA, PhysBody* physB)
     switch (physB->ctype)
     {
     case ColliderType::DESTRUCTIBLE_WALL:
-    case ColliderType::WALL:
-        if (currentState == BloodrusherState::ATTACKING)
-        {
-            currentState = BloodrusherState::DEAD;
-        }
+        currentState = BloodrusherState::DEAD;
         break;
     }
 }

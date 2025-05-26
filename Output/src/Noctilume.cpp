@@ -9,7 +9,6 @@
 #include "Audio.h"
 #include <cmath>
 
-
 Noctilume::Noctilume() : Enemy(EntityType::NOCTILUME) {}
 
 Noctilume::~Noctilume() {}
@@ -66,7 +65,7 @@ bool Noctilume::Update(float dt) {
     case NoctilumeState::IDLE: Idle(dt); break;
     case NoctilumeState::CHASING: 
         if (!chasingSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundChasingId, 1.0f, 0);
+            //Engine::GetInstance().audio->PlayFx(soundChasingId, 1.0f, 0);
             chasingSoundPlayed = true;
         }
         deadSoundPlayed = false;
@@ -76,7 +75,7 @@ bool Noctilume::Update(float dt) {
     case NoctilumeState::CRASH: Crash(dt); break;
     case NoctilumeState::DEAD: 
         if (!deadSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundDeadId, 1.0f, 0);
+            //Engine::GetInstance().audio->PlayFx(soundDeadId, 1.0f, 0);
             deadSoundPlayed = true;
         }
         chasingSoundPlayed = false;

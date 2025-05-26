@@ -41,7 +41,7 @@ void PlayerAnimation::Update(const std::string& state, int x, int y, bool visibl
     }
 
     if (state == "push" && adjustedFlip) {  // no está flippeado -> mirando a la derecha
-        drawX = x - 100; // desplaza 10 píxeles a la izquierda para el sprite
+        drawX = x - 80; // desplaza 10 píxeles a la izquierda para el sprite
     }
     else if (state == "push" && !adjustedFlip) {  // no está flippeado -> mirando a la derecha
         drawX = x - 10; // desplaza 10 píxeles a la izquierda para el sprite

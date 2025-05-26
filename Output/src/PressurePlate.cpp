@@ -82,10 +82,27 @@ bool PressurePlate::CleanUp()
 	return true;
 }
 
-void PressurePlate::OnCollision(PhysBody* physA, PhysBody* physB) {
-    if (physB->ctype == ColliderType::PLAYER || physB->ctype == ColliderType::BOX) {
+void PressurePlate::OnCollision(PhysBody* physA, PhysBody* physB)
+{
+    if (physB->ctype == ColliderType::PLAYER || physB->ctype == ColliderType::BOX)
+    {
         state = PressurePlateState::ENABLED;
         SetActive(true);
+
+        if (isInvisible && !triggered)
+        {
+            triggered = true;
+
+            for (auto* door : Engine::GetInstance().pressureSystem->doors)
+            {
+                if (door->id == this->id)
+                {
+                    door->shouldBeOpen = !door->shouldBeOpen;
+                    door->SetOpen(door->shouldBeOpen);
+                    break;
+                }
+            }
+        }
     }
 }
 
@@ -96,8 +113,12 @@ void PressurePlate::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     }
 }
 
-
 void PressurePlate::RenderTexture() {
+    if (isInvisible)
+    {
+        return;
+    }
+
     b2Transform pbodyPos = pbody->body->GetTransform();
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x));
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y));

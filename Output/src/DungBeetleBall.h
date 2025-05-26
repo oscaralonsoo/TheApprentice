@@ -19,10 +19,14 @@ public:
 
     void Bounce();
 
+    void CollisionNavigationLayer();
+public:
+    Animation* currentAnimation = nullptr;
+    Animation destroyAnim;
 private:
     PhysBody* pbody = nullptr;
     SDL_Texture* texture = nullptr;
-    Animation* currentAnimation = nullptr;
+
 
 
     Animation idleAnim;
@@ -35,4 +39,6 @@ private:
     b2Vec2 direction;
 
     float time = 0.0f;
+
+    Vector2D currentTileMap;
 };

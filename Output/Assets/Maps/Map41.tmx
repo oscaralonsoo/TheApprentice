@@ -144,6 +144,9 @@
  <tileset firstgid="43405" name="MapMetadata" tilewidth="64" tileheight="64" tilecount="2" columns="2">
   <image source="MapMetadata.png" width="128" height="64"/>
  </tileset>
+ <tileset firstgid="43407" name="tiles_manglar" tilewidth="64" tileheight="64" tilecount="100" columns="10">
+  <image source="../Props/tiles_manglar.png" width="640" height="640"/>
+ </tileset>
  <layer id="44" name="Background" width="180" height="63" parallaxx="0" parallaxy="0">
   <properties>
    <property name="Draw" type="bool" value="true"/>
@@ -79576,6 +79579,7 @@
  <layer id="23" name="Platforms" width="180" height="63" parallaxx="0" parallaxy="0">
   <properties>
    <property name="Draw" type="bool" value="true"/>
+   <property name="Navigation" type="bool" value="true"/>
   </properties>
   <data>
    <tile/>
@@ -83957,7 +83961,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="43408"/>
    <tile/>
    <tile/>
    <tile gid="41106"/>
@@ -86826,7 +86830,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="43408"/>
    <tile/>
    <tile/>
    <tile/>
@@ -88242,13 +88246,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile gid="1073783013"/>
-   <tile/>
+   <tile gid="43408"/>
    <tile/>
    <tile/>
    <tile/>
@@ -88256,7 +88254,13 @@
    <tile gid="1073783013"/>
    <tile/>
    <tile/>
+   <tile gid="43408"/>
    <tile/>
+   <tile/>
+   <tile gid="1073783013"/>
+   <tile/>
+   <tile/>
+   <tile gid="43408"/>
    <tile/>
    <tile/>
    <tile/>
@@ -88413,7 +88417,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="43408"/>
    <tile gid="41191"/>
    <tile gid="41192"/>
    <tile gid="1073783023"/>
@@ -88777,7 +88781,7 @@
    <tile/>
    <tile/>
    <tile gid="2147524837"/>
-   <tile/>
+   <tile gid="1610656144"/>
    <tile/>
    <tile/>
    <tile/>
@@ -89321,7 +89325,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="2684397968"/>
    <tile gid="41181"/>
    <tile gid="41182"/>
    <tile gid="41183"/>
@@ -90920,7 +90924,7 @@
    <tile gid="41182"/>
   </data>
  </layer>
- <layer id="71" name="Navigation" width="180" height="63" visible="0">
+ <layer id="71" name="Navigation" width="180" height="63">
   <properties>
    <property name="Navigation" type="bool" value="true"/>
   </properties>
@@ -94916,9 +94920,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
    <tile gid="43405"/>
    <tile gid="43405"/>
    <tile gid="43405"/>
@@ -94949,6 +94950,9 @@
    <tile gid="43405"/>
    <tile gid="43405"/>
    <tile gid="43405"/>
+   <tile gid="43405"/>
+   <tile gid="43405"/>
+   <tile gid="43405"/>
    <tile/>
    <tile/>
    <tile/>
@@ -98372,7 +98376,6 @@
    <tile gid="43405"/>
    <tile gid="43405"/>
    <tile gid="43405"/>
-   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -98506,9 +98509,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="43405"/>
+   <tile gid="43405"/>
+   <tile gid="43405"/>
+   <tile gid="43405"/>
    <tile/>
    <tile/>
    <tile/>
@@ -113660,8 +113664,8 @@
   </properties>
   <object id="4760" x="6464" y="192" width="64" height="640">
    <properties>
-    <property name="PlayerPosX" type="int" value="3392"/>
-    <property name="PlayerPosY" type="int" value="2752"/>
+    <property name="PlayerPosX" type="int" value="1950"/>
+    <property name="PlayerPosY" type="int" value="2368"/>
     <property name="TargetScene" type="int" value="31"/>
    </properties>
   </object>
@@ -113697,7 +113701,7 @@
   <object id="4059" name="Box" x="1152" y="2880" width="64" height="64"/>
   <object id="4139" name="Box" x="3200" y="2944" width="64" height="64"/>
   <object id="4174" name="Geyser" x="3776" y="2560" width="128" height="64"/>
-  <object id="4381" name="MaxLifePlant" x="2752" y="3200" width="64" height="64"/>
+  <object id="4381" name="LifePlantMax" x="2688" y="3072" width="64" height="64"/>
   <object id="4569" name="Box" x="8384" y="1088" width="64" height="64"/>
   <object id="4649" name="LifePlantMax" x="8640" y="1728" width="192" height="192"/>
  </objectgroup>
@@ -114106,7 +114110,6 @@
   <object id="3908" name="DoubleJump" x="9600" y="1536" width="512" height="192"/>
  </objectgroup>
  <objectgroup id="60" name="Enemies">
-  <object id="4064" name="Creebler" x="1216" y="2688" width="64" height="64"/>
   <object id="4220" name="Scurver" x="2624" y="1856" width="64" height="64"/>
   <object id="4379" name="Bloodrusher" x="2688" y="1216" width="64" height="64"/>
   <object id="4496" name="Broodheart." x="6272" y="1536" width="64" height="64"/>

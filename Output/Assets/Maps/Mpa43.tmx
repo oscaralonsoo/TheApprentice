@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="62" height="71" tilewidth="64" tileheight="64" infinite="0" nextlayerid="74" nextobjectid="5001">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="62" height="71" tilewidth="64" tileheight="64" infinite="0" nextlayerid="74" nextobjectid="4994">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -149,14 +149,8 @@
   <image source="../Props/spike_puple.png" width="128" height="128"/>
  </tileset>
  <objectgroup id="73" name="Zones">
-  <object id="4992" name="HiddenZone" x="2560" y="4032" width="320" height="320"/>
+  <object id="4913" name="HiddenZone" x="2560" y="4032" width="320" height="320"/>
   <object id="4993" name="HiddenZone" x="2304" y="4032" width="320" height="320"/>
-  <object id="4994" name="HiddenZone" x="2048" y="4032" width="320" height="320"/>
-  <object id="4996" name="HiddenZone" x="1792" y="4032" width="320" height="320"/>
-  <object id="4997" name="HiddenZone" x="1536" y="4032" width="320" height="320"/>
-  <object id="4998" name="HiddenZone" x="1280" y="4032" width="320" height="320"/>
-  <object id="4999" name="HiddenZone" x="2560" y="3776" width="320" height="320"/>
-  <object id="5000" name="HiddenZone" x="2560" y="3520" width="320" height="320"/>
  </objectgroup>
  <layer id="44" name="Background" width="62" height="71" parallaxx="0" parallaxy="0">
   <properties>
@@ -39865,13 +39859,13 @@
   <object id="4840" x="3904" y="2304" height="832"/>
   <object id="4909" x="3840" y="3072" height="704"/>
  </objectgroup>
- <objectgroup id="68" name="Enemies" visible="0">
+ <objectgroup id="68" name="Enemies">
   <object id="4639" name="Thumpod" x="1600" y="3584" width="64" height="64"/>
   <object id="4640" name="Broodrusher" x="1344" y="4224" width="64" height="64"/>
   <object id="4642" name="Mireborn" x="1024" y="3904" width="64" height="64"/>
   <object id="4643" name="Thumpod" x="1600" y="3840" width="64" height="64"/>
  </objectgroup>
- <objectgroup id="25" name="Doors" visible="0">
+ <objectgroup id="25" name="Doors">
   <properties>
    <property name="Doors" type="bool" value="true"/>
   </properties>
@@ -39890,7 +39884,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="26" name="Collisions" visible="0">
+ <objectgroup id="26" name="Collisions">
   <object id="3386" x="2368" y="1664" width="448"/>
   <object id="3447" x="2752" y="2240" width="64"/>
   <object id="3451" x="512" y="4288" width="2304"/>
@@ -39926,7 +39920,7 @@
   <object id="4864" x="3904" y="4032" height="320"/>
   <object id="4868" x="3904" y="3136" height="640"/>
  </objectgroup>
- <objectgroup id="71" name="PressureSystem" visible="0">
+ <objectgroup id="71" name="PressureSystem">
   <object id="4863" name="Door" x="3840" y="3776" width="64" height="256">
    <properties>
     <property name="id" type="int" value="0"/>
@@ -39938,8 +39932,8 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="70" name="NPC" visible="0"/>
- <objectgroup id="58" name="Wall" visible="0">
+ <objectgroup id="70" name="NPC"/>
+ <objectgroup id="58" name="Wall">
   <object id="3441" x="3968" y="1280" height="64"/>
   <object id="4744" x="576" y="2944" width="384"/>
   <object id="4670" x="2688" y="3008" width="64"/>
@@ -39996,14 +39990,14 @@
   <object id="4835" x="2944" y="2112" width="64"/>
   <object id="4841" x="3904" y="3136" width="64"/>
  </objectgroup>
- <objectgroup id="61" name="Props" visible="0">
+ <objectgroup id="61" name="Props">
   <object id="4017" name="LifePlant" x="576" y="3392" width="64" height="64"/>
   <object id="4644" name="Checkpoint" x="3072" y="3712" width="384" height="320"/>
  </objectgroup>
- <objectgroup id="64" name="Spikes" visible="0"/>
- <objectgroup id="62" name="Abilities" visible="0"/>
- <objectgroup id="66" name="Liana" visible="0"/>
- <objectgroup id="69" name="HookAnchors" visible="0">
+ <objectgroup id="64" name="Spikes"/>
+ <objectgroup id="62" name="Abilities"/>
+ <objectgroup id="66" name="Liana"/>
+ <objectgroup id="69" name="HookAnchors">
   <object id="4041" name="Hook" x="3776" y="2880" width="64" height="64"/>
   <object id="4042" name="Hook" x="2240" y="3456" width="64" height="64"/>
   <object id="4043" name="Hook" x="960" y="3456" width="64" height="64"/>

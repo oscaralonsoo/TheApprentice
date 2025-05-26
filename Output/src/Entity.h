@@ -43,6 +43,7 @@ enum class EntityType
 	DUST_PARTICLE,
 	HOOK_ANCHOR,
 	HOOKABLE_BOX,
+	STALACTITE,
 	UNKNOWN
 };
 
@@ -111,4 +112,5 @@ public:
 
 	Vector2D position;
 	bool renderable = true;
+	bool toDelete = false;
 };

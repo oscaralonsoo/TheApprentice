@@ -33,6 +33,7 @@
 #include "HokableBox.h"
 #include "Geyser.h"
 #include "DungBeetle.h"
+#include "Stalactite.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -193,6 +194,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::GEYSER:
 		entity = new Geyser();
 		break;
+	case EntityType::STALACTITE:
+		entity = new Stalactite();
+		break;
 	default:
 		break;
 	}
@@ -269,7 +273,6 @@ bool EntityManager::PostUpdate()
 {
 	bool ret = true;
 
-	// Copia segura de las entidades activas
 	std::vector<Entity*> activeEntities;
 	for (auto entity : entities)
 	{
@@ -277,11 +280,15 @@ bool EntityManager::PostUpdate()
 			activeEntities.push_back(entity);
 	}
 
-	// Ahora iteramos sobre la copia, aunque la original se modifique
 	for (auto entity : activeEntities)
 	{
 		ret = entity->PostUpdate();
+
+		if (entity->toDelete) {
+			QueueEntityForDestruction(entity);
+		}
 	}
+	ProcessPendingDestructions();
 
 	return ret;
 }

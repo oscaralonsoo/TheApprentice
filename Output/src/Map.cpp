@@ -24,6 +24,7 @@
 #include "HookAnchor.h"
 #include "HokableBox.h"
 #include "Geyser.h"
+#include "Stalactite.h"
 
 Map::Map() : Module(), mapLoaded(false)
 {
@@ -552,6 +553,15 @@ bool Map::Load(std::string path, std::string fileName)
                         caveDrop->position = Vector2D(x, y); 
 
                         LOG("Created CaveDrop at x: %d, y: %d", x, y);
+                    }
+                    else if (objectName == "Stalactite") {
+                        int x = objectNode.attribute("x").as_int();
+                        int y = objectNode.attribute("y").as_int();
+
+                        Stalactite* stalactite = (Stalactite*)Engine::GetInstance().entityManager->CreateEntity(EntityType::STALACTITE);
+                        stalactite->position = Vector2D(x, y);
+
+                        LOG("Created Stalactite at x: %d, y: %d", x, y);
                     }
                     else if (objectName == "LifePlant") {
                         int x = objectNode.attribute("x").as_int();

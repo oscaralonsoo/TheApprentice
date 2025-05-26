@@ -277,7 +277,7 @@ void Scene::SaveGameXML() {
 	mechanics->healthSystem.HealFull();//Heal The Player
 }
 void Scene::LoadGameXML() {
-	if (isLoading || transitioning) return;
+	if (isLoading) return;
 
     isLoading = true;
 

@@ -59,31 +59,37 @@ bool Brood::Start() {
         filter.maskBits = CATEGORY_ATTACK | CATEGORY_PLAYER_DAMAGE;
         fixture->SetFilterData(filter);
     }
-
+    initialPosition = position;
     maxSteps = 20;
  
     return true;
 }
-
 bool Brood::Update(float dt) {
-    
-    UpdateChaseState();
+    UpdateChaseState(dt);
 
     switch (currentState)
     {
     case BroodState::IDLE:
         break;
+
     case BroodState::CHASING:
         Chase(dt);
         break;
+
+    case BroodState::RETURNING:
+        ReturnToInitial(dt);
+        break;
+
     case BroodState::DEAD:
         if (broodHeart) {
             broodHeart->OnBroodDeath(this);
         }
         break;
     }
+
     return Enemy::Update(dt);
 }
+
 bool Brood::PostUpdate(float dt) {
     return true;
 }
@@ -150,16 +156,62 @@ void Brood::Chase(float dt) {
         );
     }
 }
-void Brood::UpdateChaseState()
+void Brood::UpdateChaseState(float dt)
 {
     Vector2D playerPos = Engine::GetInstance().scene->GetPlayerPosition();
     Vector2D broodPos = (pbody != nullptr)
         ? Vector2D{ static_cast<float>(METERS_TO_PIXELS(pbody->body->GetPosition().x)), static_cast<float>(METERS_TO_PIXELS(pbody->body->GetPosition().y)) }
     : position;
-    distanceToPlayer = sqrt(pow(playerPos.x - broodPos.x, 2) + pow(playerPos.y - broodPos.y, 2));
 
-    if (distanceToPlayer < detectionRange || pathfinding->HasFoundPlayer()) {
-        currentState = BroodState::CHASING;
+    Vector2D toPlayer = playerPos - broodPos;
+    float distSq = toPlayer.x * toPlayer.x + toPlayer.y * toPlayer.y;
+
+    if (currentState == BroodState::IDLE || currentState == BroodState::RETURNING) {
+        if (distSq <= detectRange * detectRange) {
+            currentState = BroodState::CHASING;
+        }
+    }
+    else if (currentState == BroodState::CHASING) {
+        if (distSq > detectRange * detectRange) {
+            currentState = BroodState::RETURNING;
+        }
+    }
+}
+
+
+
+void Brood::SetParent(Broodheart* parent) {
+    broodHeart = parent;
+    if (broodHeart != nullptr) {
+        initialPosition = broodHeart->position;
+    }
+}
+
+void Brood::ReturnToInitial(float dt) {
+    Vector2D broodPos = (pbody != nullptr)
+        ? Vector2D{ static_cast<float>(METERS_TO_PIXELS(pbody->body->GetPosition().x)), static_cast<float>(METERS_TO_PIXELS(pbody->body->GetPosition().y)) }
+    : position;
+
+    Vector2D toInitial = initialPosition - broodPos;
+    float dist = sqrt(toInitial.x * toInitial.x + toInitial.y * toInitial.y);
+
+    if (dist < 2.0f) { 
+        currentState = BroodState::IDLE;
+        return;
+    }
+
+    Vector2D direction = { toInitial.x / dist, toInitial.y / dist };
+
+    broodPos.x += direction.x * returningSpeed * dt;
+    broodPos.y += direction.y * returningSpeed * dt;
+
+    position = broodPos;
+
+    if (pbody != nullptr) {
+        pbody->body->SetTransform(
+            b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)),
+            0.0f
+        );
     }
 }
 

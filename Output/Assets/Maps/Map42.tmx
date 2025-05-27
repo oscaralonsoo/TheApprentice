@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="117" height="71" tilewidth="64" tileheight="64" infinite="0" nextlayerid="76" nextobjectid="5067">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="117" height="71" tilewidth="64" tileheight="64" infinite="0" nextlayerid="76" nextobjectid="5086">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -64730,11 +64730,11 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="1"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile gid="37748"/>
    <tile gid="37749"/>
    <tile gid="37749"/>
@@ -64838,20 +64838,20 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="1"/>
+   <tile gid="7"/>
+   <tile gid="8"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="2"/>
    <tile gid="2"/>
    <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
+   <tile gid="26"/>
+   <tile gid="12"/>
+   <tile gid="12"/>
+   <tile gid="12"/>
+   <tile gid="12"/>
    <tile gid="37756"/>
    <tile gid="37749"/>
    <tile gid="37749"/>
@@ -64956,12 +64956,12 @@
    <tile/>
    <tile/>
    <tile gid="11"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
+   <tile gid="2684354586"/>
+   <tile gid="25"/>
+   <tile gid="25"/>
+   <tile gid="25"/>
+   <tile gid="25"/>
+   <tile gid="26"/>
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
@@ -65072,8 +65072,8 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
    <tile gid="11"/>
-   <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
@@ -65189,10 +65189,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="11"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
+   <tile/>
+   <tile gid="21"/>
+   <tile gid="5"/>
+   <tile gid="6"/>
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
@@ -65306,10 +65306,10 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="11"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
@@ -65423,10 +65423,10 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="11"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
@@ -65540,10 +65540,10 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="11"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
@@ -65657,10 +65657,10 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="11"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
@@ -65774,10 +65774,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="11"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
+   <tile/>
+   <tile/>
+   <tile gid="1"/>
+   <tile gid="26"/>
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
@@ -65891,9 +65891,9 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="11"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
+   <tile/>
+   <tile gid="1"/>
+   <tile gid="26"/>
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
@@ -66008,8 +66008,8 @@
    <tile gid="37824"/>
    <tile gid="37823"/>
    <tile gid="37824"/>
-   <tile gid="11"/>
-   <tile gid="12"/>
+   <tile gid="1"/>
+   <tile gid="26"/>
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
@@ -75261,7 +75261,6 @@
   <object id="4856" x="4096" y="2112" height="2432"/>
   <object id="4864" x="64" y="4032" height="320"/>
   <object id="4868" x="64" y="3136" height="640"/>
-  <object id="4870" x="3200" y="3520" height="832"/>
   <object id="4878" x="1408" y="3520" height="512"/>
   <object id="4879" x="1728" y="3264" height="576"/>
   <object id="4881" x="448" y="3520" width="960"/>
@@ -75274,11 +75273,17 @@
   <object id="4905" x="896" y="3968" width="128" height="64"/>
   <object id="4906" x="704" y="3904" width="192" height="64"/>
   <object id="4907" x="448" y="3840" width="256" height="64"/>
-  <object id="4861" x="3200" y="3520" width="896"/>
+  <object id="4861" x="3200" y="3520" width="128"/>
   <object id="5004" x="2176" y="3648" width="192"/>
   <object id="5005" x="2368" y="3648" height="448"/>
   <object id="5006" x="2176" y="4096" width="192"/>
   <object id="4858" x="3264" y="2432" width="256"/>
+  <object id="5067" x="3328" y="3520" height="64"/>
+  <object id="5068" x="3328" y="3584" width="256"/>
+  <object id="5069" x="3584" y="3520" height="64"/>
+  <object id="5070" x="3584" y="3520" width="192"/>
+  <object id="5071" x="3776" y="3456" height="64"/>
+  <object id="5072" x="3776" y="3456" width="320"/>
  </objectgroup>
  <objectgroup id="71" name="PressureSystem">
   <object id="4900" name="Plate" x="64" y="4288" width="64" height="64">
@@ -75437,6 +75442,17 @@
   <object id="5061" x="1408" y="1408" height="128"/>
   <object id="5062" x="704" y="1408" height="128"/>
   <object id="5066" x="0" y="192" width="256"/>
+  <object id="5073" x="3200" y="3520" height="128"/>
+  <object id="5074" x="3200" y="3648" width="64"/>
+  <object id="5075" x="3264" y="3648" height="128"/>
+  <object id="5078" x="3264" y="3776" width="128"/>
+  <object id="5079" x="3392" y="3776" height="256"/>
+  <object id="5080" x="3328" y="4032" width="64"/>
+  <object id="5081" x="3328" y="4032" height="64"/>
+  <object id="5082" x="3264" y="4096" width="64"/>
+  <object id="5083" x="3264" y="4096" height="64"/>
+  <object id="5084" x="3200" y="4160" width="64"/>
+  <object id="5085" x="3200" y="4160" height="64"/>
  </objectgroup>
  <objectgroup id="61" name="Props">
   <object id="4899" name="Box" x="192" y="4297" width="55" height="55"/>

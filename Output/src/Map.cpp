@@ -798,7 +798,7 @@ bool Map::Load(std::string path, std::string fileName)
                     int w = objectNode.attribute("width").as_int();
                     int h = objectNode.attribute("height").as_int();
 
-                    int id = 1;
+                    int id=0;
                     bool isInvisible = false; 
                     bool isOpen = false;
 

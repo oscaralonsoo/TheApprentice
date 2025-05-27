@@ -58,7 +58,7 @@ public:
 public:
 	//Pathfinding
 	int steps = 0;
-	int maxSteps = 50;
+	int maxSteps = 30;
 	PhysBody* pbody = nullptr;
 
 

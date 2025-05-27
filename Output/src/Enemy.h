@@ -53,7 +53,7 @@ public:
 	int steps = 0;
 	int maxSteps = 50;
 	PhysBody* pbody;
-
+	bool upsiteDown = false;
 
 protected:
 	Pathfinding* pathfinding;

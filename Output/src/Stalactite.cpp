@@ -25,7 +25,8 @@ bool Stalactite::Start() {
 
     pugi::xml_node node = loadFile.child("config").child("scene").child("animations").child("props").child("stalactite");
 
-    texture = Engine::GetInstance().textures->Load(node.attribute("texture").as_string());
+    std::string textureAttrName = "texture" + std::to_string(variant);
+    texture = Engine::GetInstance().textures->Load(node.attribute(textureAttrName.c_str()).as_string());
 
     idleAnim.LoadAnimations(node.child("idle"));
     fallAnim.LoadAnimations(node.child("fall"));
@@ -53,7 +54,7 @@ bool Stalactite::Start() {
         }
     }
 
-    triggerZone = { (int)position.getX() - 20, (int)position.getY() + texH, texW + 40, 600 };//DEFINIR TRIGGER ZONE, VER TILES HASTA EL SUELO?
+    triggerZone = { (int)position.getX() - 20, (int)position.getY() + texH, texW + 40, 600 };
 
     currentAnimation = &idleAnim;
 

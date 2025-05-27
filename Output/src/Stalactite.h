@@ -29,7 +29,7 @@ public:
     bool CleanUp() override;
 
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
-
+    int variant = 0;
 private:
     SDL_Texture* texture;
     int texW, texH;
@@ -45,5 +45,6 @@ private:
     SDL_Point playerPoint;
     SDL_Rect triggerZone;
     bool playerUnder = false;
+
 };
 

@@ -35,7 +35,7 @@ bool PressurePlate::Start()
     height = 64;
 
     pbody = Engine::GetInstance().physics->CreateRectangleSensor(
-        (int)position.getX() + width / 2 - 20,
+        (int)position.getX() + width / 2 ,
         (int)position.getY() + height / 2,
         width, height,
         STATIC,

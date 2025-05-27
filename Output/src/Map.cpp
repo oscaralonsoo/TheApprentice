@@ -456,7 +456,7 @@ bool Map::Load(std::string path, std::string fileName)
 
                     Engine::GetInstance().physics->listToDelete.push_back(downCameraCollider);
                 }
-                }
+            }
             else if (objectGroupName == "Abilities") //Abilities from object layer "Abilities"
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
@@ -478,7 +478,7 @@ bool Map::Load(std::string path, std::string fileName)
 
                     abilityNode.append_attribute("type") = abilityName.c_str();
                     abilityNode.append_attribute("x") = x + width / 2;
-                    abilityNode.append_attribute("y") = y ;
+                    abilityNode.append_attribute("y") = y;
                     abilityNode.append_attribute("w") = width;
                     abilityNode.append_attribute("h") = height;
 
@@ -550,16 +550,17 @@ bool Map::Load(std::string path, std::string fileName)
                         int y = objectNode.attribute("y").as_int();
 
                         CaveDrop* caveDrop = (CaveDrop*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CAVE_DROP);
-                        caveDrop->position = Vector2D(x, y); 
+                        caveDrop->position = Vector2D(x, y);
 
                         LOG("Created CaveDrop at x: %d, y: %d", x, y);
                     }
                     else if (objectName == "Stalactite") {
                         int x = objectNode.attribute("x").as_int();
                         int y = objectNode.attribute("y").as_int();
-
+                        int stalactiteVariant = objectNode.child("properties").child("property").attribute("value").as_int();
                         Stalactite* stalactite = (Stalactite*)Engine::GetInstance().entityManager->CreateEntity(EntityType::STALACTITE);
                         stalactite->position = Vector2D(x, y);
+                        stalactite->variant = stalactiteVariant;
 
                         LOG("Created Stalactite at x: %d, y: %d", x, y);
                     }
@@ -608,7 +609,8 @@ bool Map::Load(std::string path, std::string fileName)
                         geyser->width = width;
 
                         LOG("Created Geyser at x: %d, y: %d", x, y);
-                    } else if (objectName == "Box")
+                    }
+                    else if (objectName == "Box")
                     {
                         int x = objectNode.attribute("x").as_int();
                         int y = objectNode.attribute("y").as_int();
@@ -643,7 +645,7 @@ bool Map::Load(std::string path, std::string fileName)
                         hiddenZone->position = Vector2D(x, y);
                         hiddenZone->SetWidth(w);
                         hiddenZone->SetHeight(h);
-                        
+
                         LOG("Created Hidden Zone at x: %d, y: %d", x, y);
                     }
                 }
@@ -697,20 +699,22 @@ bool Map::Load(std::string path, std::string fileName)
                         enemyNode.append_attribute("tier") = "Alpha";
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::MIREBORN);
                     }
-                    else if (enemyName == "Broodheart"){
+                    else if (enemyName == "Broodheart") {
                         enemyNode.append_attribute("gravity") = false;
-                    enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BROODHEART);
+                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BROODHEART);
                     }
                     else if (enemyName == "Brood") {
                         enemyNode.append_attribute("gravity") = true;
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BROOD);
-                    }  
+                    }
                     else if (enemyName == "Noctilume") {
                         enemyNode.append_attribute("gravity") = true;
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::NOCTILUME);
                     }
                     else if (enemyName == "Dreadspire") {
+                        bool UpsiteDown = objectNode.child("properties").child("property").attribute("value").as_bool();
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::DREADSPIRE);
+                        enemy->upsiteDown = UpsiteDown;
                     }
                     else if (enemyName == "DungBeetle") {
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::DUNGBEETLE);
@@ -777,12 +781,31 @@ bool Map::Load(std::string path, std::string fileName)
                     int y = objectNode.attribute("y").as_int();
                     int w = objectNode.attribute("width").as_int();
                     int h = objectNode.attribute("height").as_int();
-                    int id = objectNode.attribute("groupId").as_int();
-                    bool isInvisible = objectNode.attribute("isInvisible").as_bool();
-                    bool isOpen = objectNode.attribute("isOpen").as_bool();
+
+                    int id = 1;
+                    bool isInvisible = false; 
+                    bool isOpen = false;
+
+                    // Accede a las propiedades del objeto
+                    for (pugi::xml_node propertyNode = objectNode.child("properties").child("property"); propertyNode; propertyNode = propertyNode.next_sibling("property"))
+                    {
+                        std::string propertyName = propertyNode.attribute("name").as_string();
+                        if (propertyName == "groupId")
+                        {
+                            id = propertyNode.attribute("value").as_int();
+                        }
+                        else if (propertyName == "isInvisible")
+                        {
+                            isInvisible = propertyNode.attribute("value").as_bool();
+                        }
+                        else if (propertyName == "isOpen")
+                        {
+                            isOpen = propertyNode.attribute("value").as_bool();
+                        }
+                    }
 
                     if (objectName == "Plate")
-                    {   //TODO OSCAR -- REVISAR VALORES
+                    {
                         PressurePlate* plate = (PressurePlate*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PRESSURE_PLATE);
                         plate->position = Vector2D(x, y);
                         plate->isInvisible = isInvisible;
@@ -793,7 +816,6 @@ bool Map::Load(std::string path, std::string fileName)
                     }
                     else if (objectName == "Door")
                     {
-
                         PressureDoor* door = (PressureDoor*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PRESSURE_DOOR);
                         door->position = Vector2D(x, y);
                         door->width = w;
@@ -807,7 +829,6 @@ bool Map::Load(std::string path, std::string fileName)
                 }
                 Engine::GetInstance().pressureSystem->plates = plates;
                 Engine::GetInstance().pressureSystem->doors = doors;
-
             }
         }
         ret = true;

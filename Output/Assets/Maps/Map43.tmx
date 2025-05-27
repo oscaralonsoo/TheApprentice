@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="62" height="71" tilewidth="64" tileheight="64" infinite="0" nextlayerid="74" nextobjectid="4992">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="62" height="71" tilewidth="64" tileheight="64" infinite="0" nextlayerid="74" nextobjectid="5004">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -149,78 +149,14 @@
   <image source="../Props/spike_puple.png" width="128" height="128"/>
  </tileset>
  <objectgroup id="73" name="Zones">
-  <object id="4913" name="HiddenZone" x="2624" y="4096" width="192" height="192"/>
-  <object id="4918" name="HiddenZone" x="2624" y="3840" width="192" height="192"/>
-  <object id="4919" name="HiddenZone" x="2624" y="3648" width="192" height="192"/>
-  <object id="4920" name="HiddenZone" x="2624" y="3456" width="192" height="192"/>
-  <object id="4921" name="HiddenZone" x="2624" y="3264" width="192" height="192"/>
-  <object id="4922" name="HiddenZone" x="2624" y="3072" width="192" height="192"/>
-  <object id="4924" name="HiddenZone" x="2432" y="4096" width="192" height="192"/>
-  <object id="4925" name="HiddenZone" x="2432" y="3840" width="192" height="192"/>
-  <object id="4926" name="HiddenZone" x="2432" y="3648" width="192" height="192"/>
-  <object id="4927" name="HiddenZone" x="2432" y="3456" width="192" height="192"/>
-  <object id="4928" name="HiddenZone" x="2432" y="3264" width="192" height="192"/>
-  <object id="4929" name="HiddenZone" x="2432" y="3072" width="192" height="192"/>
-  <object id="4930" name="HiddenZone" x="2240" y="4096" width="192" height="192"/>
-  <object id="4931" name="HiddenZone" x="2240" y="3840" width="192" height="192"/>
-  <object id="4932" name="HiddenZone" x="2240" y="3648" width="192" height="192"/>
-  <object id="4933" name="HiddenZone" x="2240" y="3456" width="192" height="192"/>
-  <object id="4934" name="HiddenZone" x="2240" y="3264" width="192" height="192"/>
-  <object id="4935" name="HiddenZone" x="2240" y="3072" width="192" height="192"/>
-  <object id="4936" name="HiddenZone" x="2048" y="4096" width="192" height="192"/>
-  <object id="4937" name="HiddenZone" x="2048" y="3840" width="192" height="192"/>
-  <object id="4938" name="HiddenZone" x="2048" y="3648" width="192" height="192"/>
-  <object id="4939" name="HiddenZone" x="2048" y="3456" width="192" height="192"/>
-  <object id="4940" name="HiddenZone" x="2048" y="3264" width="192" height="192"/>
-  <object id="4941" name="HiddenZone" x="2048" y="3072" width="192" height="192"/>
-  <object id="4942" name="HiddenZone" x="1856" y="4096" width="192" height="192"/>
-  <object id="4943" name="HiddenZone" x="1856" y="3840" width="192" height="192"/>
-  <object id="4944" name="HiddenZone" x="1856" y="3648" width="192" height="192"/>
-  <object id="4945" name="HiddenZone" x="1856" y="3456" width="192" height="192"/>
-  <object id="4946" name="HiddenZone" x="1856" y="3264" width="192" height="192"/>
-  <object id="4947" name="HiddenZone" x="1856" y="3072" width="192" height="192"/>
-  <object id="4948" name="HiddenZone" x="1664" y="4096" width="192" height="192"/>
-  <object id="4949" name="HiddenZone" x="1664" y="3840" width="192" height="192"/>
-  <object id="4950" name="HiddenZone" x="1664" y="3648" width="192" height="192"/>
-  <object id="4951" name="HiddenZone" x="1664" y="3456" width="192" height="192"/>
-  <object id="4952" name="HiddenZone" x="1664" y="3264" width="192" height="192"/>
-  <object id="4953" name="HiddenZone" x="1664" y="3072" width="192" height="192"/>
-  <object id="4954" name="HiddenZone" x="1472" y="4096" width="192" height="192"/>
-  <object id="4955" name="HiddenZone" x="1472" y="3840" width="192" height="192"/>
-  <object id="4956" name="HiddenZone" x="1472" y="3648" width="192" height="192"/>
-  <object id="4957" name="HiddenZone" x="1472" y="3456" width="192" height="192"/>
-  <object id="4958" name="HiddenZone" x="1472" y="3264" width="192" height="192"/>
-  <object id="4959" name="HiddenZone" x="1472" y="3072" width="192" height="192"/>
-  <object id="4960" name="HiddenZone" x="1280" y="4096" width="192" height="192"/>
-  <object id="4961" name="HiddenZone" x="1280" y="3840" width="192" height="192"/>
-  <object id="4962" name="HiddenZone" x="1280" y="3648" width="192" height="192"/>
-  <object id="4963" name="HiddenZone" x="1280" y="3456" width="192" height="192"/>
-  <object id="4964" name="HiddenZone" x="1280" y="3264" width="192" height="192"/>
-  <object id="4965" name="HiddenZone" x="1280" y="3072" width="192" height="192"/>
-  <object id="4966" name="HiddenZone" x="1088" y="4096" width="192" height="192"/>
-  <object id="4967" name="HiddenZone" x="1088" y="3840" width="192" height="192"/>
-  <object id="4968" name="HiddenZone" x="1088" y="3648" width="192" height="192"/>
-  <object id="4969" name="HiddenZone" x="1088" y="3456" width="192" height="192"/>
-  <object id="4970" name="HiddenZone" x="1088" y="3264" width="192" height="192"/>
-  <object id="4971" name="HiddenZone" x="1088" y="3072" width="192" height="192"/>
-  <object id="4972" name="HiddenZone" x="896" y="4096" width="192" height="192"/>
-  <object id="4973" name="HiddenZone" x="896" y="3840" width="192" height="192"/>
-  <object id="4974" name="HiddenZone" x="896" y="3648" width="192" height="192"/>
-  <object id="4975" name="HiddenZone" x="896" y="3456" width="192" height="192"/>
-  <object id="4976" name="HiddenZone" x="896" y="3264" width="192" height="192"/>
-  <object id="4977" name="HiddenZone" x="896" y="3072" width="192" height="192"/>
-  <object id="4978" name="HiddenZone" x="704" y="4096" width="192" height="192"/>
-  <object id="4979" name="HiddenZone" x="704" y="3840" width="192" height="192"/>
-  <object id="4980" name="HiddenZone" x="704" y="3648" width="192" height="192"/>
-  <object id="4981" name="HiddenZone" x="704" y="3456" width="192" height="192"/>
-  <object id="4982" name="HiddenZone" x="704" y="3264" width="192" height="192"/>
-  <object id="4983" name="HiddenZone" x="704" y="3072" width="192" height="192"/>
-  <object id="4984" name="HiddenZone" x="512" y="4096" width="192" height="192"/>
-  <object id="4985" name="HiddenZone" x="512" y="3840" width="192" height="192"/>
-  <object id="4986" name="HiddenZone" x="512" y="3648" width="192" height="192"/>
-  <object id="4987" name="HiddenZone" x="512" y="3456" width="192" height="192"/>
-  <object id="4988" name="HiddenZone" x="512" y="3264" width="192" height="192"/>
-  <object id="4989" name="HiddenZone" x="512" y="3072" width="192" height="192"/>
+  <object id="4992" name="HiddenZone" x="2560" y="4032" width="320" height="320"/>
+  <object id="4993" name="HiddenZone" x="2304" y="4032" width="320" height="320"/>
+  <object id="4994" name="HiddenZone" x="2048" y="4032" width="320" height="320"/>
+  <object id="4996" name="HiddenZone" x="1792" y="4032" width="320" height="320"/>
+  <object id="4997" name="HiddenZone" x="1536" y="4032" width="320" height="320"/>
+  <object id="4998" name="HiddenZone" x="1280" y="4032" width="320" height="320"/>
+  <object id="4999" name="HiddenZone" x="2560" y="3776" width="320" height="320"/>
+  <object id="5000" name="HiddenZone" x="2560" y="3520" width="320" height="320"/>
  </objectgroup>
  <layer id="44" name="Background" width="62" height="71" parallaxx="0" parallaxy="0">
   <properties>
@@ -39935,7 +39871,7 @@
   <object id="4642" name="Mireborn" x="1024" y="3904" width="64" height="64"/>
   <object id="4643" name="Thumpod" x="1600" y="3840" width="64" height="64"/>
  </objectgroup>
- <objectgroup id="25" name="Doors">
+ <objectgroup id="25" name="Doors" visible="0">
   <properties>
    <property name="Doors" type="bool" value="true"/>
   </properties>

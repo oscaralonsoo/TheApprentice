@@ -34,8 +34,6 @@ public:
 
 private:
 	PhysBody* pbody;
-	int width;
-	int height;
 
 	int alpha = 255;
 	bool fadingIn = false;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="128" height="113" tilewidth="64" tileheight="64" infinite="0" nextlayerid="70" nextobjectid="5416">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="128" height="113" tilewidth="64" tileheight="64" infinite="0" nextlayerid="70" nextobjectid="5419">
  <tileset firstgid="1" name="tiles_manglar" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_manglar.png" width="640" height="640"/>
  </tileset>
@@ -102057,7 +102057,7 @@
    <tile gid="1871"/>
    <tile gid="1872"/>
    <tile gid="1873"/>
-   <tile gid="2"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -102431,7 +102431,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="2"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile gid="1957"/>
@@ -102836,7 +102836,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="2"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -103485,7 +103485,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="2"/>
+   <tile/>
    <tile/>
    <tile gid="55"/>
    <tile gid="56"/>
@@ -103622,7 +103622,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="2"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -104522,7 +104522,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="2"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -105286,7 +105286,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="2"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -105441,20 +105441,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="2"/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
@@ -105469,7 +105455,21 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="2"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -130360,6 +130360,11 @@
   <object id="4915" x="2368" y="384" height="320"/>
   <object id="4916" x="1152" y="768" height="320"/>
   <object id="4917" x="832" y="704" height="256"/>
+  <object id="5361" x="5248" y="2496" height="256"/>
+  <object id="5366" x="5504" y="2368" height="256"/>
+  <object id="5370" x="6336" y="2368" height="256"/>
+  <object id="5373" x="6528" y="2368" height="256"/>
+  <object id="5376" x="7296" y="2368" height="192"/>
  </objectgroup>
  <objectgroup id="63" name="Spikes">
   <object id="5407" x="5568" y="2624" width="704" height="64"/>
@@ -130367,7 +130372,16 @@
  </objectgroup>
  <objectgroup id="67" name="Abilities"/>
  <objectgroup id="64" name="PressureSystem">
-  <object id="5343" name="Plate" x="4544" y="6272" width="64" height="64"/>
+  <object id="5343" name="Plate" x="4544" y="6272" width="64" height="64">
+   <properties>
+    <property name="id" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="5354" name="Door" x="5056" y="6144" width="64" height="192">
+   <properties>
+    <property name="id" type="int" value="0"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="25" name="Doors">
   <properties>
@@ -130408,7 +130422,6 @@
     <property name="TargetScene" type="int" value="42"/>
    </properties>
   </object>
-  <object id="5354" name="Door" x="5056" y="6144" width="64" height="192"/>
  </objectgroup>
  <objectgroup id="26" name="Collisions">
   <object id="2704" x="4032" y="5823.9" width="1152"/>
@@ -130681,7 +130694,7 @@
   <object id="5211" name="Hook" x="4288" y="5056" width="64" height="64"/>
   <object id="5381" name="Hook" x="6912" y="1984" width="64" height="64"/>
  </objectgroup>
- <objectgroup id="68" name="Zones" visible="0">
+ <objectgroup id="68" name="Zones">
   <object id="4909" name="HiddenZone" x="2176" y="-133.333" width="768" height="645.333"/>
  </objectgroup>
  <objectgroup id="61" name="Props">
@@ -130916,20 +130929,15 @@
   <object id="5349" x="5120" y="6080" height="64"/>
   <object id="5357" x="4608" y="6267" height="69"/>
   <object id="5358" x="3968" y="6267" height="69"/>
-  <object id="5361" x="5248" y="2496" height="256"/>
   <object id="5362" x="5312" y="2368" height="128"/>
   <object id="5363" x="5376" y="2240" height="128"/>
   <object id="5364" x="5568" y="2240" height="128"/>
-  <object id="5366" x="5504" y="2368" height="256"/>
   <object id="5368" x="5568" y="2624" height="128"/>
   <object id="5369" x="6272" y="2624" height="128"/>
-  <object id="5370" x="6336" y="2368" height="256"/>
   <object id="5371" x="6400" y="2240" height="128"/>
   <object id="5372" x="6592" y="2240" height="128"/>
-  <object id="5373" x="6528" y="2368" height="256"/>
   <object id="5374" x="6592" y="2624" height="128"/>
   <object id="5375" x="7360" y="2560" height="192"/>
-  <object id="5376" x="7296" y="2368" height="192"/>
   <object id="5377" x="7360" y="2240" height="128"/>
   <object id="5385" x="7936" y="2048" height="64"/>
   <object id="5386" x="7808" y="2112" height="64"/>

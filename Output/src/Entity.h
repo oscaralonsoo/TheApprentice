@@ -101,11 +101,15 @@ public:
 
 	virtual void OnCollisionEnd(PhysBody* physA, PhysBody* physB) {}
 
+	virtual void SetPhysicsActive(bool active) {}
+
 	// Nuevo método para obtener el tipo de entidad
 	EntityType GetType() const { return type; }
 
 
 public:
+	int width = 0;
+	int height = 0;
 	std::string name;
 	EntityType type;
 	bool active = true;

@@ -74,8 +74,24 @@ void Map::DrawMapLayers(bool forwardOnly)
         if (mapLayer->properties.GetProperty("Draw") != NULL &&
             mapLayer->properties.GetProperty("Draw")->value == true) {
 
-            for (int i = 0; i < mapData.width; i++) {
-                for (int j = 0; j < mapData.height; j++) {
+            Vector2D camPos = Vector2D(Engine::GetInstance().render->camera.x * -1, Engine::GetInstance().render->camera.y * -1);
+            if (camPos.getX() < 0) camPos.setX(0);
+            if (camPos.getY() < 0) camPos.setY(0);
+            Vector2D camPosTile = WorldToMap(camPos.getX(), camPos.getY());
+
+            int windowWidth, windowHeight;
+            SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &windowWidth, &windowHeight);
+
+            Vector2D camOffset = {5, 5};
+            Vector2D camSize = Vector2D(windowWidth, windowHeight);
+            Vector2D camSizeTile = WorldToMap(camSize.getX(), camSize.getY());
+
+            Vector2D limits = Vector2D(camPosTile.getX() + camSizeTile.getX() + camOffset.x, camPosTile.getY() + camSizeTile.getY() + camOffset.y);
+            if (limits.getX() > mapData.width) limits.setX(mapData.width);
+            if (limits.getY() > mapData.height) limits.setY(mapData.height);
+
+            for (int i = camPosTile.getX(); i < limits.getX(); i++) {
+                for (int j = camPosTile.getY(); j < limits.getY(); j++) {
 
                     uint32_t raw_gid = static_cast<uint32_t>(mapLayer->Get(i, j));
                     if (raw_gid != 0) {

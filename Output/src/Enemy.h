@@ -4,6 +4,7 @@
 #include "SDL2/SDL.h"
 #include "Animation.h"
 #include "Pathfinding.h"
+#include "Physics.h"
 #include "Timer.h"
 
 struct SDL_Texture;
@@ -47,6 +48,12 @@ public:
 	virtual void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
 	std::string GetEnemyType() const { return type; }
+
+	void SetPhysicsActive(bool active) override {
+		if (pbody && pbody->body) {
+			pbody->body->SetEnabled(active);
+		}
+	}
 
 public:
 	//Pathfinding

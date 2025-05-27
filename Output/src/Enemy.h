@@ -58,8 +58,8 @@ public:
 public:
 	//Pathfinding
 	int steps = 0;
-	int maxSteps = 50;
-	PhysBody* pbody;
+	int maxSteps = 30;
+	PhysBody* pbody = nullptr;
 	bool upsiteDown = false;
 
 protected:

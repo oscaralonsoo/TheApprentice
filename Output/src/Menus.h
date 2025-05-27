@@ -39,6 +39,7 @@ public:
     bool Awake() override;
     bool Start() override;
     void LoadConfig();
+    void SaveConfig();
     void LoadButtonTextures(pugi::xml_document& doc);
     void LoadCheckboxTextures(pugi::xml_document& doc);
     void LoadCheckboxTexture(pugi::xml_node node, SDL_Texture*& texture);
@@ -105,6 +106,10 @@ public:
     bool startHeld = false;
     bool dpadUpHeld = false;
     bool dpadDownHeld = false;
+    int musicVolumeSliderX = SLIDER_MIN;
+    int fxVolumeSliderX = SLIDER_MIN;
+    int masterVolumeSliderX = SLIDER_MAX;
+
 private:
     const std::string CONFIG_FILE = "config.xml";
     const std::string ART_FILE = "art.xml";
@@ -119,9 +124,7 @@ private:
     const int BUTTON_HEIGHT = 15;
     const int BUTTON_SPACING = 50;
 
-    int musicVolumeSliderX = SLIDER_MIN;
-    int fxVolumeSliderX = SLIDER_MIN;
-    int masterVolumeSliderX = SLIDER_MAX;
+
 
     std::unordered_map<std::string, SDL_Texture*> backgroundTextures;
     std::unordered_map<std::string, SDL_Texture*> buttonTextures;

@@ -143,15 +143,23 @@ void PressureDoor::RenderTexture()
 
 void PressureDoor::SetOpen(bool value) {
     isOpen = value;
+    if (value)
+        state = PressureDoorState::DISABLE;
+    else
+        state = PressureDoorState::ENABLE;
+
+    if (pbody && pbody->body && pbody->body->GetFixtureList())
+        pbody->body->GetFixtureList()->SetSensor(value);
 }
 void PressureDoor::CheckStartState() {
     
     if (shouldBeOpen) {
         SetOpen(true);
-        state = PressureDoorState::ENABLE;
+        state = PressureDoorState::DISABLE;
+                pbody->body->GetFixtureList()->SetSensor(true);
     }
     else {
-        state = PressureDoorState::DISABLE;
-        pbody->body->GetFixtureList()->SetSensor(true);
+        state = PressureDoorState::ENABLE;
+
     }
 }

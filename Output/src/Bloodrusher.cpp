@@ -146,7 +146,7 @@ void Bloodrusher::Attack(float dt) {
     b2Vec2 currentVelocity = pbody->body->GetLinearVelocity();
 
     static float exponentialFactor = 1.007f;
-    static float velocityBase = 0.8f;
+    static float velocityBase = 0.15f;
     static float maxSpeed = 15.0f;
 
     if (direction != previousDirection) currentState = BloodrusherState::SLIDING;

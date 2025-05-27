@@ -248,7 +248,6 @@ void EntityManager::AddEntity(Entity* entity)
 
 bool EntityManager::Update(float dt)
 {
-	// Obtener posición y tamaño de la cámara en tiles
 	Vector2D camPos = Vector2D(Engine::GetInstance().render->camera.x * -1, Engine::GetInstance().render->camera.y * -1);
 	Vector2D camTilePos = Engine::GetInstance().map->WorldToMap(camPos.x, camPos.y);
 
@@ -258,8 +257,8 @@ bool EntityManager::Update(float dt)
 	Vector2D camSizeWorld = { static_cast<float>(windowWidth), static_cast<float>(windowHeight) };
 	Vector2D camSizeTile = Engine::GetInstance().map->WorldToMap(camSizeWorld.x, camSizeWorld.y);
 
-	constexpr int OFFSET_X = 5;
-	constexpr int OFFSET_Y = 5;
+	constexpr int OFFSET_X = 11;
+	constexpr int OFFSET_Y = 11;
 
 	if (Engine::GetInstance().menus->currentState != MenusState::GAME || Engine::GetInstance().menus->isPaused)
 		return true;
@@ -270,11 +269,9 @@ bool EntityManager::Update(float dt)
 	{
 		if (!entity->active) continue;
 
-		// Calcular bounding box del entity en mundo
 		Vector2D entityMinWorld = entity->position;
 		Vector2D entityMaxWorld = { entity->position.x + entity->width, entity->position.y + entity->height };
 
-		// Convertir bounding box del entity a coordenadas de tile
 		Vector2D entityMinTile = Engine::GetInstance().map->WorldToMap(entityMinWorld.x, entityMinWorld.y);
 		Vector2D entityMaxTile = Engine::GetInstance().map->WorldToMap(entityMaxWorld.x, entityMaxWorld.y);
 

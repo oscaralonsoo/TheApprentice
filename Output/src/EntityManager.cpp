@@ -244,6 +244,19 @@ void EntityManager::AddEntity(Entity* entity)
 
 bool EntityManager::Update(float dt)
 {
+	Vector2D camPos = Vector2D(Engine::GetInstance().render->camera.x * -1, Engine::GetInstance().render->camera.y * -1);
+
+	Vector2D camTilePos = Engine::GetInstance().map->WorldToMap(camPos.x, camPos.y);
+
+	int windowWidth, windowHeight;
+	SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &windowWidth, &windowHeight);
+
+	Vector2D camSizeWorld = { static_cast<float>(windowWidth), static_cast<float>(windowHeight) };
+	Vector2D camSizeTile = Engine::GetInstance().map->WorldToMap(camSizeWorld.x, camSizeWorld.y);
+
+	constexpr int OFFSET_X = 5;
+	constexpr int OFFSET_Y = 5;
+
 	if (Engine::GetInstance().menus->currentState != MenusState::GAME|| Engine::GetInstance().menus->isPaused /*TODO JAVI-- - SI VIDAS = 0, NO SE DIBUJA NINGUNA ENTIDAD*/)
 		return true;
 
@@ -259,7 +272,13 @@ bool EntityManager::Update(float dt)
 
 	for (auto entity : activeEntities)
 	{
-		ret = entity->Update(dt);
+		Vector2D entityTilePos = Engine::GetInstance().map->WorldToMap(entity->position.x, entity->position.y);
+
+		if (entityTilePos.x >= camTilePos.x - OFFSET_X && entityTilePos.x <= camTilePos.x + camSizeTile.x + OFFSET_X &&
+			entityTilePos.y >= camTilePos.y - OFFSET_Y && entityTilePos.y <= camTilePos.y + camSizeTile.y + OFFSET_Y)
+		{
+			ret = entity->Update(dt);
+		}
 	}
 
 	return ret;

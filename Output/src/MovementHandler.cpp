@@ -307,9 +307,6 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
             jumpMechanic.OnLanding();
             fallMechanic.OnLanding();
         }
-        player->pbody->body->SetLinearVelocity(
-            b2Vec2{ player->pbody->body->GetLinearVelocity().x + physB->body->GetLinearVelocity().x, player->pbody->body->GetLinearVelocity().y }
-        );
 
         break;
     case ColliderType::WALL_SLIDE:

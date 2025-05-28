@@ -53,7 +53,7 @@ bool Scene::Awake()
 bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
-	Engine::GetInstance().map->Load("Assets/Maps/", "Map1.tmx");
+	Engine::GetInstance().map->Load("Assets/Maps/", "Map666.tmx");
 	return true;
 }
 
@@ -163,18 +163,15 @@ void Scene::UpdateTransition(float dt)
 		transitionAlpha += dt * 0.0025f;
 		if (transitionAlpha >= 1.0f) {
 			transitionAlpha = 1.0f;
-
 			if (!waitingBlackScreen) {
-				ChangeScene(nextScene);          
-				waitingBlackScreen = true;       
-				blackScreenTimer = 0.0f;  
+				waitingBlackScreen = true;
+				blackScreenTimer = 0.0f;
 			}
 			else {
 				blackScreenTimer += dt;
-
 				if (blackScreenTimer >= blackScreenDelay) {
+					ChangeScene(nextScene); 
 					fadingIn = true;
-					waitingBlackScreen = false;
 				}
 			}
 		}

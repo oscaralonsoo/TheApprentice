@@ -45,7 +45,7 @@ void AttackMechanic::Update(float dt) {
 }
 
 void AttackMechanic::StartAttack() {
-    int offsetX = (player->GetMechanics()->GetMovementDirection() > 0) ? 38 : -38;
+    int offsetX = (player->GetMechanics()->GetMovementDirection() > 0) ? 48 : -48;
 
     int playerX = METERS_TO_PIXELS(player->pbody->body->GetPosition().x) + offsetX;
     int playerY = METERS_TO_PIXELS(player->pbody->body->GetPosition().y) - 10;

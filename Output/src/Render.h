@@ -46,6 +46,8 @@ public:
 	void StartCameraShake(int durationSec, int intensity);
 	void ToggleCameraLock();
 	void SetCameraPosition(int x, int y);
+	int GetExtraCameraOffsetY() const;
+	void SetExtraCameraOffsetY(int offset);
 
 public:
 
@@ -88,5 +90,6 @@ public:
 
 	TTF_Font* font;
 
-	int cameraOffsetY = 400;
+	float cameraVerticalOffsetFactor = 0.45f; // valor base
+	int extraCameraOffsetY = 0;
 };

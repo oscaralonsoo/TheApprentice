@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="117" height="71" tilewidth="64" tileheight="64" infinite="0" nextlayerid="76" nextobjectid="5086">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="117" height="71" tilewidth="64" tileheight="64" infinite="0" nextlayerid="76" nextobjectid="5095">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -62162,7 +62162,7 @@
    <tile gid="37739"/>
    <tile gid="37739"/>
    <tile gid="37739"/>
-   <tile gid="37748"/>
+   <tile gid="37756"/>
    <tile gid="37749"/>
    <tile gid="37749"/>
    <tile gid="37749"/>
@@ -62259,27 +62259,27 @@
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
-   <tile gid="13"/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile gid="37748"/>
-   <tile gid="37756"/>
+   <tile gid="37734"/>
+   <tile gid="37759"/>
+   <tile gid="37759"/>
+   <tile gid="37759"/>
+   <tile gid="37759"/>
+   <tile gid="37759"/>
+   <tile gid="37759"/>
+   <tile gid="37759"/>
+   <tile gid="37759"/>
+   <tile gid="37759"/>
+   <tile gid="37759"/>
+   <tile gid="37759"/>
+   <tile gid="37759"/>
+   <tile gid="37759"/>
+   <tile gid="37759"/>
+   <tile gid="37759"/>
+   <tile gid="37759"/>
+   <tile gid="37759"/>
+   <tile gid="37759"/>
+   <tile gid="37736"/>
+   <tile gid="37749"/>
    <tile gid="37749"/>
    <tile gid="37749"/>
    <tile gid="37749"/>
@@ -74978,7 +74978,7 @@
  </layer>
  <objectgroup id="57" name="WallSlide">
   <object id="4237" x="5376" y="1408" height="320"/>
-  <object id="4286" x="4160" y="1856" height="256"/>
+  <object id="4286" x="4160" y="1856" height="192"/>
   <object id="4462" x="6400" y="2880" height="384"/>
   <object id="4651" x="1792" y="1280" height="192"/>
   <object id="4123" x="7040" y="1024" height="128"/>
@@ -75029,7 +75029,7 @@
   <object id="4813" x="5760" y="192" height="128"/>
   <object id="5007" x="2176" y="3648" height="448"/>
   <object id="5009" x="64" y="1344" height="128"/>
-  <object id="5028" x="2944" y="2112" height="640"/>
+  <object id="5028" x="2944" y="2176" height="576"/>
   <object id="5030" x="3264" y="2432" height="320"/>
   <object id="5031" x="3264" y="2752" width="128"/>
   <object id="5032" x="3392" y="2752" height="64"/>
@@ -75039,10 +75039,11 @@
   <object id="5036" x="3520" y="2880" height="256"/>
  </objectgroup>
  <objectgroup id="68" name="Enemies">
-  <object id="4780" name="Broodheart " x="128" y="1408" width="64" height="64"/>
   <object id="4782" name="Noctilume " x="5120" y="768" width="64" height="64"/>
   <object id="4897" name="Scurver" x="2944" y="4288" width="64" height="64"/>
-  <object id="5018" name="Noctilume " x="1024" y="1152" width="64" height="64"/>
+  <object id="5092" name="Creebler" x="1088" y="1344" width="64" height="64"/>
+  <object id="5093" name="Noctilume" x="1024" y="1088" width="64" height="64"/>
+  <object id="5094" name="Broodheart" x="128" y="1408" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="25" name="Doors">
   <properties>
@@ -75058,18 +75059,19 @@
   </object>
   <object id="4994" name="Map 43" x="0" y="3776" width="64" height="256">
    <properties>
-    <property name="PlayerPosX" type="int" value="0"/>
-    <property name="PlayerPosY" type="int" value="0"/>
+    <property name="PlayerPosX" type="int" value="4352"/>
+    <property name="PlayerPosY" type="int" value="3968"/>
     <property name="TargetScene" type="int" value="43"/>
    </properties>
   </object>
   <object id="5064" name="Map 43" x="0" y="192" width="64" height="1088">
    <properties>
-    <property name="PlayerPosX" type="int" value="0"/>
-    <property name="PlayerPosY" type="int" value="0"/>
+    <property name="PlayerPosX" type="int" value="4416"/>
+    <property name="PlayerPosY" type="int" value="1216"/>
     <property name="TargetScene" type="int" value="43"/>
    </properties>
   </object>
+  <object id="5091" x="-400" y="-1800"/>
  </objectgroup>
  <objectgroup id="26" name="Collisions">
   <object id="3416" x="384" y="1536" width="192"/>
@@ -75258,7 +75260,7 @@
   <object id="4800" x="768" y="128" height="64"/>
   <object id="4806" x="3200" y="128" height="64"/>
   <object id="4811" x="4352" y="256" height="64"/>
-  <object id="4856" x="4096" y="2112" height="2432"/>
+  <object id="4856" x="4096" y="2176" height="2368"/>
   <object id="4864" x="64" y="4032" height="320"/>
   <object id="4868" x="64" y="3136" height="640"/>
   <object id="4878" x="1408" y="3520" height="512"/>
@@ -75267,7 +75269,7 @@
   <object id="4883" x="1856" y="3264" height="576"/>
   <object id="4895" x="448" y="3520" height="320"/>
   <object id="4896" x="64" y="4288" width="3136"/>
-  <object id="4902" x="2944" y="2112" width="1216"/>
+  <object id="4902" x="2944" y="2176" width="1152"/>
   <object id="4903" x="2368" y="3648" width="64" height="448"/>
   <object id="4904" x="1024" y="4032" width="384" height="64"/>
   <object id="4905" x="896" y="3968" width="128" height="64"/>
@@ -75408,7 +75410,6 @@
   <object id="4810" x="4096" y="256" width="256"/>
   <object id="4812" x="4352" y="320" width="1408"/>
   <object id="4814" x="5760" y="192" width="1408"/>
-  <object id="4857" x="3200" y="2048"/>
   <object id="4859" x="64" y="4352" width="4032"/>
   <object id="4860" x="3648" y="2560" height="696"/>
   <object id="4862" x="64" y="3264" width="3584"/>

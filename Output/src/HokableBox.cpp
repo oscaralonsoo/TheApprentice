@@ -14,10 +14,10 @@ bool HookableBox::Start()
 {
     PushableBox::Start(); // llama al base para crear el pbody
 
-    float radius = std::max(texW, texH) * 10.0f;
+    float radius = std::max(width, height) * 10.0f;
     sensor = Engine::GetInstance().physics->CreateCircleSensor(
-        position.getX() + texW / 2,
-        position.getY() + texH / 2,
+        position.getX() + width / 2,
+        position.getY() + height / 2,
         radius,
         STATIC,
         CATEGORY_HOOK_SENSOR,

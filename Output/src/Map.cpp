@@ -630,8 +630,8 @@ bool Map::Load(std::string path, std::string fileName)
                     {
                         int x = objectNode.attribute("x").as_int();
                         int y = objectNode.attribute("y").as_int();
-                        int width = 64;
-                        int height = 64;
+                        int width = objectNode.attribute("width").as_int();
+                        int height = objectNode.attribute("height").as_int();
 
                         pugi::xml_document tempDoc;
                         pugi::xml_node node = tempDoc.append_child("box");

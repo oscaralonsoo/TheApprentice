@@ -52,13 +52,14 @@ public:
     Animation deathAnim;
 
 private:
+    int direction = 1;
     float drawOffset = 0.0f;
     float idleCrystalOffsetTimer = 0.0f;
     NullwardenCrystal* crystal= nullptr;
 
     const float spearIntervalMs = 2000.0f;
     Timer spearIntervalTimer;
-    const float spearAttackMs = 100.0f;
+    const float spearAttackMs = 20000.0f;
     Timer spearAttackTimer;
     const float impaledMs = 20000.0f;
     Timer impaledTimer;
@@ -67,7 +68,7 @@ private:
     Timer verticalSpearTimer;
     const float verticalSpearIntervalMs = 300.0f;
     int spawnedVerticalSpears = 0;
-    const int maxVerticalSpears = 15;
-    const float verticalSpearGap = 80.0f;
+    const int maxVerticalSpears = 8;
+    const float verticalSpearGap = 200.0f;
 
 };

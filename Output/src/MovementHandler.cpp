@@ -335,7 +335,7 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::DOWN_CAMERA:
         if (!downCameraCooldownActive) {
-            Engine::GetInstance().render->cameraOffsetY = 250;
+            Engine::GetInstance().render->SetExtraCameraOffsetY(- 100); // o el valor que necesites
         }
         break;
     case ColliderType::LIANA:
@@ -382,7 +382,7 @@ void MovementHandler::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     case ColliderType::DESTRUCTIBLE_WALL:
         break;
     case ColliderType::DOWN_CAMERA:
-        Engine::GetInstance().render->cameraOffsetY = 400;
+        Engine::GetInstance().render->SetExtraCameraOffsetY(0);
         downCameraCooldownTimer.Start();
         downCameraCooldownActive = true;
         break;

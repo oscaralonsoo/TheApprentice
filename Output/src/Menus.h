@@ -8,6 +8,7 @@
 #include "GuiControlButton.h"
 #include "GuiControl.h"
 #include "GuiManager.h"
+#include "MenuParticle.h"
 #include <unordered_map> 
 #include <SDL2/SDL_gamecontroller.h>
 
@@ -77,6 +78,10 @@ public:
     void DrawAbilities();
     void DrawSliders();
     void SetController(SDL_GameController* controller);
+    void SpawnMenuParticles();
+    void UpdateMenuParticles();
+    void DestroyAllParticles();
+    void DestroyMenuParticle(MenuParticle* particle);
     bool ContinueLoadingScreen();
     void DrawSlider(int minX, int y, int& sliderX, bool isSelected, const std::string& label);
     void DrawPlayerLives();
@@ -164,4 +169,6 @@ private:
 
     bool dpadLeftHeld = false;
     bool dpadRightHeld = false;
+
+    std::vector<MenuParticle*> menuParticles;
 };

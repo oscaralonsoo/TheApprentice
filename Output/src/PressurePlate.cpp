@@ -86,22 +86,9 @@ void PressurePlate::OnCollision(PhysBody* physA, PhysBody* physB)
 {
     if (physB->ctype == ColliderType::PLAYER || physB->ctype == ColliderType::BOX)
     {
-        state = PressurePlateState::ENABLED;
-        SetActive(true);
-
-        if (isInvisible && !triggered)
         {
-            triggered = true;
-
-            for (auto* door : Engine::GetInstance().pressureSystem->doors)
-            {
-                if (door->id == this->id)
-                {
-                    door->shouldBeOpen = !door->shouldBeOpen;
-                    door->SetOpen(door->shouldBeOpen);
-                    break;
-                }
-            }
+            state = PressurePlateState::ENABLED;
+            SetActive(true);
         }
     }
 }

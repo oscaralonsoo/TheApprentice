@@ -163,18 +163,15 @@ void Scene::UpdateTransition(float dt)
 		transitionAlpha += dt * 0.0025f;
 		if (transitionAlpha >= 1.0f) {
 			transitionAlpha = 1.0f;
-
 			if (!waitingBlackScreen) {
-				ChangeScene(nextScene);          
-				waitingBlackScreen = true;       
-				blackScreenTimer = 0.0f;  
+				waitingBlackScreen = true;
+				blackScreenTimer = 0.0f;
 			}
 			else {
 				blackScreenTimer += dt;
-
 				if (blackScreenTimer >= blackScreenDelay) {
+					ChangeScene(nextScene); 
 					fadingIn = true;
-					waitingBlackScreen = false;
 				}
 			}
 		}

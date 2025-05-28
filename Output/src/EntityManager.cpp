@@ -275,7 +275,7 @@ bool EntityManager::Update(float dt)
 		Vector2D entityMinTile = Engine::GetInstance().map->WorldToMap(entityMinWorld.x, entityMinWorld.y);
 		Vector2D entityMaxTile = Engine::GetInstance().map->WorldToMap(entityMaxWorld.x, entityMaxWorld.y);
 
-		// Verificar si hay intersección con el área extendida de la cámara
+		// Verificar si hay intersecciï¿½n con el ï¿½rea extendida de la cï¿½mara
 		bool isInCamera =
 			entityMaxTile.x >= camTilePos.x - OFFSET_X &&
 			entityMinTile.x <= camTilePos.x + camSizeTile.x + OFFSET_X &&

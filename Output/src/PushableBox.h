@@ -16,30 +16,27 @@ public:
     bool Update(float dt) override;
     bool CleanUp() override;
 
-    void SetParameters(pugi::xml_node parameters);
     void SetPosition(Vector2D pos);
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
     void OnCollisionEnd(PhysBody* physA, PhysBody* physB) override;
-    void RecreateBody(bodyType type);
 
     Vector2D GetPosition() const;
+
+    void SetParameters(pugi::xml_node parameters) {
+        this->parameters = parameters;
+        position.x = parameters.attribute("x").as_int();
+        position.y = parameters.attribute("y").as_int();
+        width = parameters.attribute("w").as_int();
+        height = parameters.attribute("h").as_int();
+    }
 
 protected:
     PhysBody* pbody = nullptr;
     SDL_Texture* texture = nullptr;
-    int texW = 0;
-    int texH = 0;
+    pugi::xml_node parameters;
+    
     Vector2D position;
-    bool touchingPlayer = false;
-    bool isStatic = false;
-    bool touchingEnemy = false;
-    bool touchingPlatform = false;
 
-    Timer pushEnemy;
-    float pushEnemyTimer = 100.0f;
-    bool canEnemyPush = true;
-
-    Timer pushPlatform;
-    float pushPlatformTimer = 100.0f;
-    bool canPlatformPush = true;
+    bool isPlayerPushing = false;
+    bool isEnemyPushing = false;
 };

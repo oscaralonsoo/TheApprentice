@@ -11,20 +11,11 @@ NullwardenSpear::NullwardenSpear(float x, float y, float speed, b2Vec2 direction
     width = horizontal ? 180 : 35;
     height = horizontal ? 35 : 180;
 
-    pbody = Engine::GetInstance().physics->CreateRectangle(x, y, width, height, bodyType::DYNAMIC);
+    pbody = Engine::GetInstance().physics->CreateRectangleSensor(x, y, width, height, bodyType::DYNAMIC, CATEGORY_ENEMY, CATEGORY_WALL | CATEGORY_PLAYER_DAMAGE);
     pbody->ctype = ColliderType::ENEMY;
     pbody->listener = this;
 
     pbody->body->SetGravityScale(0.0f);
-
-    if (b2Fixture* fixture = pbody->body->GetFixtureList()) {
-        fixture->SetSensor(false);
-
-        b2Filter filter;
-        filter.categoryBits = CATEGORY_ENEMY;
-        filter.maskBits = CATEGORY_WALL | CATEGORY_PLAYER_DAMAGE;
-        fixture->SetFilterData(filter);
-    }
 
     pbody->body->SetLinearVelocity(b2Vec2(direction.x * speed, direction.y * speed));
 

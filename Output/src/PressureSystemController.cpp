@@ -10,26 +10,29 @@ PressureSystemController::~PressureSystemController() {}
 
 void PressureSystemController::UpdateSystem()
 {
-    std::unordered_map<int, bool> systemActive;
+    std::unordered_map<int, int> totalPlates;
+    std::unordered_map<int, int> activePlates;
 
     for (auto* plate : plates)
     {
-        if (systemActive.find(plate->id) == systemActive.end())
+        totalPlates[plate->id]++;
+        if (plate->IsActive())
         {
-            systemActive[plate->id] = true;
-        }
-
-        if (!plate->IsActive())
-        {
-            systemActive[plate->id] = false;
+            activePlates[plate->id]++;
         }
     }
 
     for (auto* door : doors)
     {
-       door->SetOpen(systemActive[door->id]);
+        int total = totalPlates[door->id];
+        int active = activePlates[door->id];
+
+        bool shouldOpen = (total > 0 && active == total);
+        door->shouldBeOpen = shouldOpen;
+        door->SetOpen(shouldOpen);
     }
 }
+
 
 int PressureSystemController::GetActivePlatesCount(int id)
 {
@@ -49,11 +52,14 @@ void PressureSystemController::OpenDoor(int id)
     {
         if (door->id == id)
         {
+            door->shouldBeOpen = true;
             door->SetOpen(true);
+            door->state = PressureDoorState::DISABLE; // Fuerza cambio inmediato
             break;
         }
     }
 }
+
 void PressureSystemController::CloseDoor(int id)
 {
     for (auto* door : doors)

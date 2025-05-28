@@ -33,6 +33,7 @@
 #include "HokableBox.h"
 #include "Geyser.h"
 #include "DungBeetle.h"
+#include "Stalactite.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -193,6 +194,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::GEYSER:
 		entity = new Geyser();
 		break;
+	case EntityType::STALACTITE:
+		entity = new Stalactite();
+		break;
 	default:
 		break;
 	}
@@ -244,32 +248,55 @@ void EntityManager::AddEntity(Entity* entity)
 
 bool EntityManager::Update(float dt)
 {
-	if (Engine::GetInstance().menus->currentState != MenusState::GAME|| Engine::GetInstance().menus->isPaused /*TODO JAVI-- - SI VIDAS = 0, NO SE DIBUJA NINGUNA ENTIDAD*/)
+	Vector2D camPos = Vector2D(Engine::GetInstance().render->camera.x * -1, Engine::GetInstance().render->camera.y * -1);
+	Vector2D camTilePos = Engine::GetInstance().map->WorldToMap(camPos.x, camPos.y);
+
+	int windowWidth, windowHeight;
+	SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &windowWidth, &windowHeight);
+
+	Vector2D camSizeWorld = { static_cast<float>(windowWidth), static_cast<float>(windowHeight) };
+	Vector2D camSizeTile = Engine::GetInstance().map->WorldToMap(camSizeWorld.x, camSizeWorld.y);
+
+	constexpr int OFFSET_X = 11;
+	constexpr int OFFSET_Y = 11;
+
+	if (Engine::GetInstance().menus->currentState != MenusState::GAME || Engine::GetInstance().menus->isPaused)
 		return true;
 
 	bool ret = true;
 
-	std::vector<Entity*> activeEntities;
 	for (auto entity : entities)
 	{
-		if (entity->active)
-			activeEntities.push_back(entity);
-	}
+		if (!entity->active) continue;
 
+		Vector2D entityMinWorld = entity->position;
+		Vector2D entityMaxWorld = { entity->position.x + entity->width, entity->position.y + entity->height };
 
-	for (auto entity : activeEntities)
-	{
-		ret = entity->Update(dt);
+		Vector2D entityMinTile = Engine::GetInstance().map->WorldToMap(entityMinWorld.x, entityMinWorld.y);
+		Vector2D entityMaxTile = Engine::GetInstance().map->WorldToMap(entityMaxWorld.x, entityMaxWorld.y);
+
+		// Verificar si hay intersección con el área extendida de la cámara
+		bool isInCamera =
+			entityMaxTile.x >= camTilePos.x - OFFSET_X &&
+			entityMinTile.x <= camTilePos.x + camSizeTile.x + OFFSET_X &&
+			entityMaxTile.y >= camTilePos.y - OFFSET_Y &&
+			entityMinTile.y <= camTilePos.y + camSizeTile.y + OFFSET_Y;
+
+		entity->SetPhysicsActive(isInCamera);
+
+		if (isInCamera)
+			ret = entity->Update(dt);
 	}
 
 	return ret;
 }
 
+
+
 bool EntityManager::PostUpdate()
 {
 	bool ret = true;
 
-	// Copia segura de las entidades activas
 	std::vector<Entity*> activeEntities;
 	for (auto entity : entities)
 	{
@@ -277,11 +304,15 @@ bool EntityManager::PostUpdate()
 			activeEntities.push_back(entity);
 	}
 
-	// Ahora iteramos sobre la copia, aunque la original se modifique
 	for (auto entity : activeEntities)
 	{
 		ret = entity->PostUpdate();
+
+		if (entity->toDelete) {
+			QueueEntityForDestruction(entity);
+		}
 	}
+	ProcessPendingDestructions();
 
 	return ret;
 }

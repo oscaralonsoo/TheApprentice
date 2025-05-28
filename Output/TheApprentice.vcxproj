@@ -105,8 +105,9 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;TRACY_ENABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions>/Zc:preprocessor %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -184,6 +185,7 @@
     <ClCompile Include="src\LifePlantMax.cpp" />
     <ClCompile Include="src\Log.cpp" />
     <ClCompile Include="src\Map.cpp" />
+    <ClCompile Include="src\MenuParticle.cpp" />
     <ClCompile Include="src\Menus.cpp" />
     <ClCompile Include="src\Mireborn.cpp" />
     <ClCompile Include="src\MovementHandler.cpp" />
@@ -200,6 +202,7 @@
     <ClCompile Include="src\PressurePlate.cpp" />
     <ClCompile Include="src\PressureSystemController.cpp" />
     <ClCompile Include="src\Shyver.cpp" />
+    <ClCompile Include="src\Stalactite.cpp" />
     <ClCompile Include="src\TheApprentice.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\PlayerAnimation.cpp" />
@@ -260,6 +263,7 @@
     <ClInclude Include="src\LifePlantMax.h" />
     <ClInclude Include="src\Log.h" />
     <ClInclude Include="src\Map.h" />
+    <ClInclude Include="src\MenuParticle.h" />
     <ClInclude Include="src\Menus.h" />
     <ClInclude Include="src\Mireborn.h" />
     <ClInclude Include="src\Module.h" />
@@ -285,6 +289,7 @@
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\Scurver.h" />
     <ClInclude Include="src\Shyver.h" />
+    <ClInclude Include="src\Stalactite.h" />
     <ClInclude Include="src\Textures.h" />
     <ClInclude Include="src\Thumpod.h" />
     <ClInclude Include="src\Timer.h" />

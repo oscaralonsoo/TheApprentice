@@ -215,7 +215,12 @@ void Scene::ChangeScene(int nextScene)
 			if (!isLoading)
 			{
 				player->pbody->body->SetLinearVelocity(b2Vec2(0, 0)); 
-				player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, newPosition.y / PIXELS_PER_METER), 0);
+				player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, (newPosition.y - 200)/ PIXELS_PER_METER), 0);
+
+
+				LOG("Posición tras cambio de escena: X=%.2f Y=%.2f", newPosition.x, newPosition.y);
+				LOG("isOnGround tras cambio de escena: %d", player->GetMechanics()->IsOnGround());
+				LOG("jumpCount tras cambio de escena: %d", player->GetMechanics()->GetJumpMechanic()->IsJumpUnlocked());
 			}
 
 			switch (nextScene) {
@@ -277,7 +282,7 @@ void Scene::SaveGameXML() {
 	mechanics->healthSystem.HealFull();//Heal The Player
 }
 void Scene::LoadGameXML() {
-	if (isLoading || transitioning) return;
+	if (isLoading) return;
 
     isLoading = true;
 

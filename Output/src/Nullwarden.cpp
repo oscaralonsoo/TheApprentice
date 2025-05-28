@@ -50,8 +50,8 @@ bool Nullwarden::Start() {
         filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_ATTACK | CATEGORY_PLAYER_DAMAGE;
         fixture->SetFilterData(filter);
     }
-    crystal = new NullwardenCrystal(position.getX(), position.getY(), 0.0f, b2Vec2_zero, this);
-    Engine::GetInstance().entityManager->AddEntity(crystal);
+    //crystal = new NullwardenCrystal(position.getX(), position.getY(), 0.0f, b2Vec2_zero, this);
+    //Engine::GetInstance().entityManager->AddEntity(crystal);
     currentAnimation = &idleAnim;
 
     return true;
@@ -97,7 +97,7 @@ bool Nullwarden::Update(float dt) {
         (direction < 0) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
     currentAnimation->Update();
 
-    idleCrystalOffsetTimer += dt;
+    //idleCrystalOffsetTimer += dt;
     return true;
 }
 
@@ -117,12 +117,12 @@ void Nullwarden::OnCollision(PhysBody* physA, PhysBody* physB)
     switch (physB->ctype)
     {
     case ColliderType::ATTACK:
-        if (!crystalBroken) {
+        /*if (!crystalBroken) {
 
             Engine::GetInstance().render->StartCameraShake(0.2f, 3);
             currentState = NullwardenState::ROAR;
             break;
-        }
+        }*/
         if (currentState == NullwardenState::ATTACK) {
             currentState = NullwardenState::ROAR;
         }
@@ -142,7 +142,7 @@ void Nullwarden::OnCollision(PhysBody* physA, PhysBody* physB)
 
 void Nullwarden::SpawnHorizontalSpears() {
     const float baseX = position.getX() + 200.0f * direction;
-    const float baseY = position.getY() + 20;
+    const float baseY = position.getY() + 170.0f;
     const int totalPositions = 4;
     const float gap = 100.0f;
 
@@ -162,14 +162,20 @@ void Nullwarden::SpawnHorizontalSpears() {
 }
 
 void Nullwarden::SpawnVerticalSpears() {
-    float baseY = position.getY() + texH;
-    float spearX = position.getX() + ((direction < 0) ? -50.0f : texW + 50.0f) + (spawnedVerticalSpears * verticalSpearGap * (direction < 0 ? -1 : 1));
+    float baseY = position.getY() + 400.0f;
+    float spearX = position.getX() + ((direction > 0) ? -50.0f : texW + 50.0f) + (spawnedVerticalSpears * verticalSpearGap * (direction > 0 ? -1 : 1));
 
     Engine::GetInstance().entityManager->AddEntity(
         new NullwardenSpear(spearX, baseY, 10.0f, b2Vec2(0.0f, -1.0f))
     );
 
-    spawnedVerticalSpears++;
+    if (spawnedVerticalSpears >= maxVerticalSpears)
+    {
+        spawnedVerticalSpears = 0;
+    }
+    else {
+        spawnedVerticalSpears++;
+    }
 }
 b2Vec2 Nullwarden::GetCrystalOffset() const {
 
@@ -245,8 +251,9 @@ void Nullwarden::Impaled() {
 
     if (impaledTimer.ReadMSec() >= impaledMs) {
         currentState = NullwardenState::ROAR;
+        spawnedVerticalSpears = 0;
     }
-    else if (verticalSpearTimer.ReadMSec() >= verticalSpearIntervalMs && spawnedVerticalSpears < maxVerticalSpears) {
+    else if (verticalSpearTimer.ReadMSec() >= verticalSpearIntervalMs && spawnedVerticalSpears <= maxVerticalSpears) {
         SpawnVerticalSpears();
         verticalSpearTimer.Start();
     }

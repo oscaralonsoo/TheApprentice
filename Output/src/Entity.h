@@ -33,6 +33,7 @@ enum class EntityType
 	NULLWARDEN,
 	NOCTILUME,
 	DREADSPIRE,
+	MENU_PARTICLE,
 	DUNGBEETLE,
 	CAVE_DROP,
 	ABILITY_ZONE,
@@ -43,6 +44,7 @@ enum class EntityType
 	DUST_PARTICLE,
 	HOOK_ANCHOR,
 	HOOKABLE_BOX,
+	STALACTITE,
 	UNKNOWN
 };
 
@@ -100,15 +102,20 @@ public:
 
 	virtual void OnCollisionEnd(PhysBody* physA, PhysBody* physB) {}
 
+	virtual void SetPhysicsActive(bool active) {}
+
 	// Nuevo método para obtener el tipo de entidad
 	EntityType GetType() const { return type; }
 
 
 public:
+	int width = 0;
+	int height = 0;
 	std::string name;
 	EntityType type;
 	bool active = true;
 
 	Vector2D position;
 	bool renderable = true;
+	bool toDelete = false;
 };

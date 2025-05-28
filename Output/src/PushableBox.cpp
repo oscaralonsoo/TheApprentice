@@ -22,7 +22,7 @@ bool PushableBox::Start()
     pbody->listener = this;
 
     pbody->body->SetGravityScale(5.0f);
-    pbody->body->GetFixtureList()->SetFriction(0.0f); 
+    pbody->body->GetFixtureList()->SetFriction(0.0f);
     pbody->body->GetFixtureList()->SetDensity(4.0f);  
     pbody->body->ResetMassData();
 
@@ -78,7 +78,9 @@ void PushableBox::SetPosition(Vector2D pos) {
 
 Vector2D PushableBox::GetPosition() const
 {
-    return position;
+    b2Vec2 bodyPos = pbody->body->GetTransform().p;
+    Vector2D pos = Vector2D(METERS_TO_PIXELS(bodyPos.x), METERS_TO_PIXELS(bodyPos.y));
+    return pos;
 }
 
 void PushableBox::OnCollision(PhysBody* physA, PhysBody* physB)

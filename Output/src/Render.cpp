@@ -272,17 +272,21 @@ void Render::UpdateCamera(const Vector2D& /*unused*/, int movementDirection, flo
 	mapWidthPx = Engine::GetInstance().map->GetMapWidth();
 	mapHeightPx = Engine::GetInstance().map->GetMapHeight();
 
-	// Obtener player desde la escena
 	Scene* scene = Engine::GetInstance().scene.get();
 	if (!scene) return;
 
 	Player* player = scene->GetPlayer();
 	if (!player) return;
 
-	// Usar el centro del sprite del jugador
-	Vector2D playerPos = player->GetPosition();  // ya devuelve el centro del sprite según tu implementación
+	Vector2D playerPos = player->GetPosition();
 	targetX = static_cast<int>(playerPos.x);
 	targetY = static_cast<int>(playerPos.y);
+
+	// Adaptar offsets a resolución
+	float horizontalOffsetFactor = 0.15f; // 15% del ancho de cámara
+
+	int offsetX = static_cast<int>(camera.w * horizontalOffsetFactor);
+	int offsetY = static_cast<int>(camera.h * cameraVerticalOffsetFactor) + extraCameraOffsetY;
 
 	// Look-ahead horizontal
 	if (movementDirection != 0) {
@@ -306,12 +310,13 @@ void Render::UpdateCamera(const Vector2D& /*unused*/, int movementDirection, flo
 
 	cameraLookAheadOffset = EaseInOut(cameraLookAheadOffset, cameraLookAheadTarget, lookAheadSmoothing);
 
-	int targetCamX = -targetX + camera.w / 2 - static_cast<int>(cameraLookAheadOffset) + cameraImpulseX + 300;
+	// Centrado más offset horizontal dinámico
+	int centerCamX = -targetX + camera.w / 2;
+	int targetCamX = centerCamX - static_cast<int>(cameraLookAheadOffset) + cameraImpulseX + offsetX;
 	camera.x += static_cast<int>((targetCamX - camera.x) * smoothing);
-
 	cameraImpulseX = static_cast<int>(cameraImpulseX * (1.0f - cameraImpulseSmoothing));
 
-	// Vertical
+	// Vertical con offset dinámico
 	int cameraBottom = -camera.y + camera.h;
 	int anticipationMargin = 100;
 	float dynamicSmoothing = smoothing;
@@ -320,7 +325,8 @@ void Render::UpdateCamera(const Vector2D& /*unused*/, int movementDirection, flo
 		dynamicSmoothing = smoothing * 2.0f;
 	}
 
-	int targetCamY = -targetY + camera.h / 2 + cameraOffsetY;
+	int centerCamY = -targetY + camera.h / 2;
+	int targetCamY = centerCamY + offsetY;
 	camera.y += static_cast<int>((targetCamY - camera.y) * dynamicSmoothing);
 
 	// Shake
@@ -349,6 +355,7 @@ void Render::UpdateCamera(const Vector2D& /*unused*/, int movementDirection, flo
 	if (camera.x < -(mapWidthPx - camera.w)) camera.x = -(mapWidthPx - camera.w);
 	if (camera.y < -(mapHeightPx - camera.h)) camera.y = -(mapHeightPx - camera.h);
 }
+
 
 bool Render::DrawText(const char* text, int posx, int posy, SDL_Color color, int fontSize) const {
 	TTF_Font* customFont = TTF_OpenFont("Assets/Fonts/The-Apprentice-F1.ttf", fontSize);
@@ -455,4 +462,12 @@ void Render::SetCameraPosition(int x, int y)
 {
 	camera.x = x;
 	camera.y = y;
+}
+
+void Render::SetExtraCameraOffsetY(int offset) {
+	extraCameraOffsetY = offset;
+}
+
+int Render::GetExtraCameraOffsetY() const {
+	return extraCameraOffsetY;
 }

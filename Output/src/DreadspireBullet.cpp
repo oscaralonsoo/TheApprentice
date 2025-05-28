@@ -80,10 +80,7 @@ void DreadspireBullet::OnCollision(PhysBody* physA, PhysBody* physB)
 {
     switch (physB->ctype)
     {
-    case ColliderType::ATTACK:
-    case ColliderType::PLATFORM:
-    case ColliderType::WALL:
-    case ColliderType::PLAYER:
+    default:
         Engine::GetInstance().entityManager->DestroyEntity(this);
         break;
     }

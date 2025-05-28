@@ -35,7 +35,9 @@ public:
 
 	void DestroyAllParticles();
 
-	void SpawnRandomParticles();
+	void SpawnDustParticles();
+
+	void SetParticlesByMap(int scene);
 
 public:
 	std::list<Entity*> particles;

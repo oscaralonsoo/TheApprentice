@@ -6,6 +6,7 @@
 #include "Window.h"
 #include "Render.h"
 #include "Log.h"
+#include "Scene.h"
 #include <cstdlib>
 
 ParticleManager::ParticleManager() : Module()
@@ -118,12 +119,8 @@ bool ParticleManager::Update(float dt)
 	if (Engine::GetInstance().menus->currentState != MenusState::GAME || Engine::GetInstance().menus->isPaused)
 		return true;
 
-	if (rand() % 100 < 12) // % de probabilidad cada frame
-	{
-		SpawnRandomParticles();
-	}
+	SetParticlesByMap(Engine::GetInstance().scene->nextScene);
 
-	// Actualizar partículas activas
 	for (auto particle : particles)
 	{
 		if (particle->active)
@@ -155,23 +152,49 @@ bool ParticleManager::PostUpdate()
 	return ret;
 }
 
-void ParticleManager::SpawnRandomParticles()
+void ParticleManager::SpawnDustParticles()
 {
-	int windowWidth, windowHeight;
-	SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &windowWidth, &windowHeight);
+	if (rand() % 100 < 12)
+	{
+		int windowWidth, windowHeight;
+		SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &windowWidth, &windowHeight);
 
-	SDL_Rect camera = Engine::GetInstance().render->camera;
+		SDL_Rect camera = Engine::GetInstance().render->camera;
 
-	int randX = rand() % windowWidth;
-	int randY = rand() % windowHeight;
+		int randX = rand() % windowWidth;
+		int randY = rand() % windowHeight;
 
-	Vector2D posMap = Engine::GetInstance().map.get()->WorldToMap(randX - camera.x, randY - camera.y);
+		Vector2D posMap = Engine::GetInstance().map.get()->WorldToMap(randX - camera.x, randY - camera.y);
 
-	MapLayer* layer = Engine::GetInstance().map.get()->GetNavigationLayer();
+		MapLayer* layer = Engine::GetInstance().map.get()->GetNavigationLayer();
 
-	if (!layer->Get(posMap.x, posMap.y)) {
-		DustParticle* particle = (DustParticle*)CreateParticle(EntityType::DUST_PARTICLE);
-		particle->Start();
-		particle->SetPosition({ (float)randX - camera.x, (float)randY - camera.y });
+		if (!layer->Get(posMap.x, posMap.y)) {
+			DustParticle* particle = (DustParticle*)CreateParticle(EntityType::DUST_PARTICLE);
+			particle->Start();
+			particle->SetPosition({ (float)randX - camera.x, (float)randY - camera.y });
+		}
+	}
+}
+
+void ParticleManager::SetParticlesByMap(int scene) {
+
+	switch (scene) {
+	case 0:
+		break;
+	case 1:
+		SpawnDustParticles();
+		break;
+	case 21:
+
+		break;
+	case 41:
+
+		break;
+	case 46:
+
+		break;
+	default:
+
+		break;
 	}
 }

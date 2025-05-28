@@ -664,7 +664,7 @@ void Menus::SetController(SDL_GameController* controller) {
 }
 
 void Menus::SpawnMenuParticles() {
-    if (rand() % 100 < 12)
+    if (rand() % 100 < 10)
     {
         int windowWidth, windowHeight;
         SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &windowWidth, &windowHeight);

@@ -28,7 +28,7 @@ bool MenuParticle::Start() {
     floatAnim.LoadAnimations(dustNode.child("float"));
     fadeAnim.LoadAnimations(dustNode.child("fade"));
 
-    scale = 0.3f + static_cast<float>(rand()) / RAND_MAX * (1.0f - 0.3f);
+    scale = 0.4f + static_cast<float>(rand()) / RAND_MAX * (1.3f - 0.4f);
 
     texW = dustNode.attribute("w").as_int() * scale;
     texH = dustNode.attribute("h").as_int() * scale;

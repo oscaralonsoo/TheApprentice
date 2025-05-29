@@ -38,9 +38,9 @@ bool PressurePlate::Start()
         (int)position.getX() + width / 2 ,
         (int)position.getY() + height / 2,
         width, height,
-        STATIC,
+        DYNAMIC,
         CATEGORY_PRESSURE_PLATE,
-        CATEGORY_PLATFORM | CATEGORY_BOX | CATEGORY_PLAYER
+        CATEGORY_PLATFORM | CATEGORY_BOX
     );
 
     pbody->ctype = ColliderType::PRESSURE_PLATE;

@@ -81,13 +81,14 @@ bool PressureDoor::Update(float dt)
             Engine::GetInstance().map.get()->SetNavigationTileRegion(positionWorld.x, positionWorld.y, width / 64, height / 64, 1);
         }
         if (currentAnimation->HasFinished()) state = PressureDoorState::IDLE;
-        
+
         break;
     case PressureDoorState::IDLE:
-        if (currentAnimation != &idleAnim) currentAnimation = &idleAnim;
-
+        if (currentAnimation != &idleAnim) {
+            currentAnimation = &idleAnim;
+            currentAnimation->Reset(); // Esto reinicia el índice y el temporizador
+        }
         if (isOpen) state = PressureDoorState::DISABLE;
-
         break;
     }
 

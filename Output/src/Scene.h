@@ -119,7 +119,7 @@ private:
 
 	bool pendingLoadAfterDeath = false;
 	float blackScreenTimer = 0.0f;
-	const float blackScreenDelay = 1000.0f; 
+	const float blackScreenDelay = 500.0f; 
 	bool waitingBlackScreen = false;
 
 	//Renderer

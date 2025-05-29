@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "EntityManager.h"
 #include "Textures.h"
+#include "Audio.h"
 
 
 Creebler::Creebler() : Enemy(EntityType::CREEBLER) {
@@ -35,6 +36,9 @@ bool Creebler::Start() {
 
     currentAnimation = &walkAnim;
 
+    soundWalkId = Engine::GetInstance().audio->LoadFx("Assets/Audio/fx/creebler_walk.ogg", 1.0f);
+    soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/fx/monster_death.ogg", 1.0f);
+
     return Enemy::Start();
 }
 
@@ -42,10 +46,21 @@ bool Creebler::Update(float dt) {
     switch (currentState)
     {
     case CreeblerState::WALKING:
+        if (!walkSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundWalkId, 1.0f, 0);
+            walkSoundPlayed = true;
+        }
+        deadSoundPlayed = false;
+
         if (currentAnimation != &walkAnim) currentAnimation = &walkAnim;
         Walk();
         break;
     case CreeblerState::DEAD:
+        if (!deadSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundDeadId, 1.0f, 0);
+            deadSoundPlayed = true;
+        }
+        walkSoundPlayed = false;
         if (currentAnimation != &deathAnim) currentAnimation = &deathAnim;
 
         pbody->body->SetLinearVelocity(b2Vec2_zero);

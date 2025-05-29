@@ -6,8 +6,8 @@
 #include "Textures.h"
 #include "Entity.h"
 #include "Log.h"
-#include <cmath>
 #include "Audio.h"
+#include <cmath>
 
 Noctilume::Noctilume() : Enemy(EntityType::NOCTILUME) {}
 
@@ -46,8 +46,8 @@ bool Noctilume::Start() {
     smoothedPosition = position;
     maxSteps = 12;
 
-    //soundChasingId = Engine::GetInstance().audio->LoadFx("noctilume_walk.ogg", 1.0f);
-    //soundDeadId = Engine::GetInstance().audio->LoadFx("monster_death.ogg", 1.0f);
+    soundChasingId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/noctilume_walk.ogg", 1.0f);
+    soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/monster_death.ogg", 1.0f);
 
 
     return Enemy::Start();

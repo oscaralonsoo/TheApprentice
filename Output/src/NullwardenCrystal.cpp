@@ -8,11 +8,11 @@
 #include "Nullwarden.h"
 #include "EntityManager.h"
 
-NullwardenCrystal::NullwardenCrystal(float x, float y, float speed, b2Vec2 dir, Nullwarden* owner)
-    : Entity(EntityType::CRYSTAL), direction(dir), nullwarden(owner)
+NullwardenCrystal::NullwardenCrystal(float x, float y, float speed, b2Vec2 dir, Nullwarden* owner, b2Vec2 offset)
+    : Entity(EntityType::CRYSTAL), direction(dir), nullwarden(owner), relativeOffset(offset)
 {
-    width = 64;
-    height = 64;
+    width = 80;
+    height = 80;
 
     pbody = Engine::GetInstance().physics->CreateCircle(x, y, width/2, bodyType::DYNAMIC);
     pbody->ctype = ColliderType::ENEMY;
@@ -65,13 +65,21 @@ bool NullwardenCrystal::Update(float dt) {
 
         float offsetX = METERS_TO_PIXELS(nullwarden->pbody->body->GetFixtureList()->GetShape()->m_radius) + width / 2;
 
-        if (nullwarden->direction < 0) {
-            pbody->body->SetTransform(b2Vec2(nullPos.x + PIXEL_TO_METERS(offsetX), nullPos.y), 0.0f);
+        //TODO AJUSTAR CRISTAL
+        if (nullwarden->direction < 0 && nullwarden->currentState == NullwardenState::IMPALED) {
+            relativeOffset = b2Vec2(3, -1.5f);
+            pbody->body->SetTransform(b2Vec2(nullPos.x + relativeOffset.x, nullPos.y + relativeOffset.y), 0.0f);
             direction = b2Vec2(1, 0);
         }
+        else if (nullwarden->direction > 0 && nullwarden->currentState == NullwardenState::IMPALED) {
+            relativeOffset = b2Vec2(-3, -1.5f);
+            pbody->body->SetTransform(b2Vec2(nullPos.x + relativeOffset.x, nullPos.y + relativeOffset.y), 0.0f);
+            direction = b2Vec2(-1, -0);
+        }
         else {
-            pbody->body->SetTransform(b2Vec2(nullPos.x - PIXEL_TO_METERS(offsetX), nullPos.y), 0.0f);
-            direction = b2Vec2(-1, 0);
+            relativeOffset = b2Vec2(0, 0);
+            pbody->body->SetTransform(b2Vec2(nullPos.x + relativeOffset.x, nullPos.y + relativeOffset.y), 0.0f);
+            direction = b2Vec2(0, 0);
         }
     }
 
@@ -83,11 +91,6 @@ bool NullwardenCrystal::Update(float dt) {
 
     SDL_RendererFlip flip = (direction.x < 0) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
     float angle = 0.0f;
-
-    Engine::GetInstance().render->DrawTexture(texture,
-        (int)position.getX(), (int)position.getY(),
-        &currentAnimation->GetCurrentFrame(), 1.0f, angle,
-        INT_MAX, INT_MAX, flip);
 
     // Animación de ruptura
     if (currentState == CrystalState::BROKEN && currentAnimation->HasFinished()) {

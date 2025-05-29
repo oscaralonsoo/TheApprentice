@@ -16,7 +16,7 @@ enum class CrystalState {
 };
 class NullwardenCrystal : public Entity {
 public:
-    NullwardenCrystal(float x, float y, float speed, b2Vec2 dir, Nullwarden* owner);
+    NullwardenCrystal(float x, float y, float speed, b2Vec2 dir, Nullwarden* owner, b2Vec2 offset = b2Vec2(0.0f, 0.0f));
     ~NullwardenCrystal();
 
     bool Update(float dt) override;
@@ -31,6 +31,8 @@ public:
     Timer roarDelayTimer;
     Animation breakAnim;
     CrystalState currentState = CrystalState::PRISTINE;
+    b2Vec2 relativeOffset = b2Vec2(0.0f, 0.0f);
+
 private:
     Nullwarden* nullwarden = nullptr;
     PhysBody* pbody = nullptr;

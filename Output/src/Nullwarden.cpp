@@ -90,7 +90,9 @@ bool Nullwarden::Update(float dt) {
         break;
 
     case NullwardenState::DEATH:
-        if (currentAnimation != &deathAnim) currentAnimation = &deathAnim;
+        if (currentAnimation != &deathAnim) currentAnimation = &hitAnim;
+
+        if (currentAnimation != &deathAnim && currentAnimation->HasFinished()) currentAnimation = &deathAnim;
         break;
     }
     if (currentAnimation != previousAnimation) {
@@ -110,8 +112,6 @@ bool Nullwarden::Update(float dt) {
         (direction < 0) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
 
     currentAnimation->Update();
-
-    //idleCrystalOffsetTimer += dt;
     return true;
 }
 

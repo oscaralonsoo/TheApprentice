@@ -64,6 +64,7 @@ bool Nullwarden::Start() {
     drawX = (int)position.getX();
     currentAnimation = &idleAnim;
 
+    direction = -1;
     return true;
 }
 
@@ -112,7 +113,7 @@ bool Nullwarden::Update(float dt) {
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
     UpdateDraw();
-    Engine::GetInstance().render.get()->DrawTexture(texture, drawX + drawOffset , drawY, &currentAnimation->GetCurrentFrame(),
+    Engine::GetInstance().render.get()->DrawTexture(texture, drawX , drawY, &currentAnimation->GetCurrentFrame(),
         1.0f,
         0.0,
         INT_MAX,
@@ -165,8 +166,15 @@ void Nullwarden::OnCollision(PhysBody* physA, PhysBody* physB)
 }
 
 void Nullwarden::SpawnHorizontalSpears() {
-    const float baseX = position.getX() + 200.0f * direction;
-    const float baseY = position.getY() + 170.0f;
+    float baseX;
+    if (direction > 0)
+    {
+        baseX = position.getX() + 350.0f * direction;
+    }
+    else {
+        baseX = position.getX() + 150.0f * direction;
+    }
+    const float baseY = position.getY() + 230.0f;
     const int totalPositions = 4;
     const float gap = 100.0f;
 

@@ -27,7 +27,5 @@ private:
     Animation idleAnim;
     Animation destroyedAnim;
 
-    Vector2D position;
-    int width, height;
     b2Vec2 direction;
 };

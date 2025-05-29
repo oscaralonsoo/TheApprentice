@@ -283,8 +283,13 @@ bool EntityManager::Update(float dt)
 
 		entity->SetPhysicsActive(isInCamera);
 
-		if (isInCamera)
+		if (isInCamera) {
 			ret = entity->Update(dt);
+
+		}
+		else {
+			printf("hola");
+		}
 
 	}
 

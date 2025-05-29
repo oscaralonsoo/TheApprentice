@@ -1,4 +1,4 @@
-#include "NullwardenCrystal.h"
+ï»¿#include "NullwardenCrystal.h"
 #include "Engine.h"
 #include "Enemy.h"
 #include "Textures.h"
@@ -57,37 +57,45 @@ NullwardenCrystal::~NullwardenCrystal() {
 bool NullwardenCrystal::Update(float dt) {
     UpdateCrystalState();
 
-    // Posicionamiento del cristal
     if (nullwarden && nullwarden->pbody) {
         b2Vec2 nullPos = nullwarden->pbody->body->GetPosition();
-        b2Vec2 offset = nullwarden->GetCrystalOffset();
-        pbody->body->SetTransform(nullPos + offset, 0.0f);
+
+        float nullX = METERS_TO_PIXELS(nullPos.x);
+        float nullY = METERS_TO_PIXELS(nullPos.y);
+
+        float offsetX = METERS_TO_PIXELS(nullwarden->pbody->body->GetFixtureList()->GetShape()->m_radius) + width / 2;
+
+        if (nullwarden->direction < 0) {
+            pbody->body->SetTransform(b2Vec2(nullPos.x + PIXEL_TO_METERS(offsetX), nullPos.y), 0.0f);
+            direction = b2Vec2(1, 0);
+        }
+        else {
+            pbody->body->SetTransform(b2Vec2(nullPos.x - PIXEL_TO_METERS(offsetX), nullPos.y), 0.0f);
+            direction = b2Vec2(-1, 0);
+        }
     }
 
-    // Posición de renderizado
     b2Transform pbodyPos = pbody->body->GetTransform();
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - width / 2);
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - height / 2);
 
     currentAnimation->Update();
 
-    // Dibujo
     SDL_RendererFlip flip = (direction.x < 0) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
     float angle = 0.0f;
-    if (nullwarden) {
-        angle = nullwarden->GetCrystalRotation();
-    }
-    Engine::GetInstance().render->DrawTexture( texture, (int)position.getX(), (int)position.getY(),
-        &currentAnimation->GetCurrentFrame(), 1.0f, angle, INT_MAX, INT_MAX, flip );
 
+    Engine::GetInstance().render->DrawTexture(texture,
+        (int)position.getX(), (int)position.getY(),
+        &currentAnimation->GetCurrentFrame(), 1.0f, angle,
+        INT_MAX, INT_MAX, flip);
 
-    // Lógica del delay para rugido
+    // AnimaciÃ³n de ruptura
     if (currentState == CrystalState::BROKEN && currentAnimation->HasFinished()) {
         if (!delayRoar) {
             delayRoar = true;
-            roarDelayTimer.Start(); 
+            roarDelayTimer.Start();
         }
-        else if (roarDelayTimer.ReadMSec() >= 500) { 
+        else if (roarDelayTimer.ReadMSec() >= 500) {
             if (nullwarden) {
                 nullwarden->currentState = NullwardenState::ROAR;
             }
@@ -95,9 +103,9 @@ bool NullwardenCrystal::Update(float dt) {
         }
     }
 
-
     return true;
 }
+
 
 
 bool NullwardenCrystal::CleanUp() {

@@ -30,8 +30,8 @@ public:
     bool delayRoar = false;
     Timer roarDelayTimer;
     Animation breakAnim;
-private:
     CrystalState currentState = CrystalState::PRISTINE;
+private:
     Nullwarden* nullwarden = nullptr;
     PhysBody* pbody = nullptr;
     SDL_Texture* texture = nullptr;

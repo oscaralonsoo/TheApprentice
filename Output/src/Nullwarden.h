@@ -34,11 +34,12 @@ public:
 
     void SpawnHorizontalSpears();
     void SpawnVerticalSpears();
-    b2Vec2 GetCrystalOffset() const;
-    float GetCrystalRotation() const;
     void Attack();
     void Impaled();
     void Roar();
+    void ChangeImpaledAnim();
+    void UpdateDraw();
+    void UpdateColliderSizeToCurrentAnimation();
 public:
 
     NullwardenState currentState = NullwardenState::IDLE;
@@ -47,19 +48,33 @@ public:
     Animation idleAnim;
     Animation attackAnim;
     Animation chargeAnim;
-    Animation impaledAnim;
     Animation roarAnim;
+    Animation hitAnim;
     Animation deathAnim;
 
-private:
+    Animation crystalAppearAnim1;
+    Animation crystalAppearAnim2;
+    Animation crystalAppearAnim3;
+
+    Animation impaledAnim;
+    Animation impaledAnim1;
+    Animation impaledAnim2;
+    Animation impaledAnim3;
+
     int direction = 1;
+private:
+  
+    int drawY = 0;
+    int drawX = 0;
+    Animation* previousAnimation = nullptr;
     float drawOffset = 0.0f;
+    bool changedDirection = false;
     float idleCrystalOffsetTimer = 0.0f;
     NullwardenCrystal* crystal= nullptr;
-
+    bool attackAnimDone = false;
     const float spearIntervalMs = 2000.0f;
     Timer spearIntervalTimer;
-    const float spearAttackMs = 20000.0f;
+    const float spearAttackMs = 2000.0f;
     Timer spearAttackTimer;
     const float impaledMs = 20000.0f;
     Timer impaledTimer;
@@ -70,5 +85,7 @@ private:
     int spawnedVerticalSpears = 0;
     const int maxVerticalSpears = 8;
     const float verticalSpearGap = 200.0f;
+
+    bool startedImpaledAnim = false;
 
 };

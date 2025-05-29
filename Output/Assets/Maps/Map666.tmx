@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="43" height="21" tilewidth="64" tileheight="64" infinite="0" nextlayerid="86" nextobjectid="1608">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="43" height="21" tilewidth="64" tileheight="64" infinite="0" nextlayerid="86" nextobjectid="1609">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -10084,7 +10084,13 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="79" name="Props"/>
+ <objectgroup id="79" name="Props">
+  <object id="1608" name="Stalactite" x="832" y="192" width="64" height="64">
+   <properties>
+    <property name="variant" type="int" value="2"/>
+   </properties>
+  </object>
+ </objectgroup>
  <objectgroup id="26" name="Collisions">
   <object id="1402" x="384" y="1216" width="1984"/>
   <object id="1404" x="384" y="192" width="1984"/>

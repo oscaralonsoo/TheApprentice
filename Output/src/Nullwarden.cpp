@@ -6,6 +6,7 @@
 #include "EntityManager.h"
 #include "Textures.h"
 #include "Player.h"
+#include "PressureSystemController.h"
 
 Nullwarden::Nullwarden() : Enemy(EntityType::NULLWARDEN) {
 }
@@ -124,7 +125,9 @@ bool Nullwarden::Update(float dt) {
 
 bool Nullwarden::PostUpdate() {
     if (currentState == NullwardenState::DEATH && currentAnimation == &deathAnim && currentAnimation->HasFinished()) {
+
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+        Engine::GetInstance().pressureSystem->OpenDoor(2);
     }
     return true;
 }
@@ -149,6 +152,7 @@ void Nullwarden::OnCollision(PhysBody* physA, PhysBody* physB)
         }
         else if(crystalBroken && currentState == NullwardenState::IMPALED){
             currentState = NullwardenState::DEATH;
+            pbody->body->GetFixtureList()->SetSensor(true);
         }
         break;
     case ColliderType::PLAYER:
@@ -261,7 +265,7 @@ void Nullwarden::Roar() {
         float dy = playerY - nullwardenY;
 
         float distanceSquared = dx * dx + dy * dy;
-        const float roarRadius = 1250.0f;
+        const float roarRadius = 1350.0f;
         const float roarRadiusSquared = roarRadius * roarRadius;
 
         if (distanceSquared <= roarRadiusSquared) {
@@ -272,9 +276,10 @@ void Nullwarden::Roar() {
             else if (falloff > 1.0f) falloff = 1.0f;
 
             float pushDir = (dx > 0.0f) ? 1.0f : -1.0f;
-            float pushStrength = 35.0f * falloff;
+            float pushStrength = 25.0f * falloff;
 
             b2Vec2 push = b2Vec2(pushDir * pushStrength, 0);
+            player->pbody->body->SetAngularVelocity(0);
             player->pbody->body->ApplyLinearImpulseToCenter(push, true);
 
             Engine::GetInstance().render->StartCameraShake(0.2f * falloff, 6 * falloff);
@@ -369,6 +374,7 @@ void Nullwarden::UpdateColliderSizeToCurrentAnimation() {
         width = PIXEL_TO_METERS(texW);
         height = PIXEL_TO_METERS(texH);
     }
+
     else {
         SDL_Rect frame = currentAnimation->GetCurrentFrame();
         width = PIXEL_TO_METERS(frame.w);

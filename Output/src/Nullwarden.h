@@ -68,6 +68,7 @@ private:
     int drawY = 0;
     int drawX = 0;
     Animation* previousAnimation = nullptr;
+    NullwardenState previousState = NullwardenState::IDLE;
     float drawOffset = 0.0f;
     bool changedDirection = false;
     float idleCrystalOffsetTimer = 0.0f;

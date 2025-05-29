@@ -67,6 +67,13 @@ bool Nullwarden::Start() {
 }
 
 bool Nullwarden::Update(float dt) {
+    if (currentState != previousState) {
+        if (currentState == NullwardenState::ATTACK) {
+            spearAttackTimer.Start(); 
+            attackAnimDone = false;   
+        }
+        previousState = currentState; 
+    }
     switch (currentState)
     {
     case NullwardenState::IDLE:
@@ -328,44 +335,24 @@ void Nullwarden::ChangeImpaledAnim() {
 void Nullwarden::UpdateDraw() {
     drawY = (int)position.getY();
     drawX = (int)position.getX();
-    switch (currentState)
+
+    if (currentAnimation == &attackAnim) {
+        drawY -= 150;
+        drawX += (direction < 0) ? -200 : -100;
+    }
+    else if (currentState == NullwardenState::IMPALED) 
     {
-    case NullwardenState::ATTACK:
-        if (direction < 0)
-        {
-            drawY -= 150;
-            drawX -= 200;
-        }
-        if (direction > 0)
-        {
-            drawY -= 150;
-            drawX -= 100;
-        }
-            break;
-    case NullwardenState::IMPALED:
-        if (direction < 0)
-        {
-            drawX -= 80;
-        }
-        if (direction > 0)
-        {
-            drawX -= 50;
-        }
-        break;
-    case NullwardenState::CHARGE:
-        if (direction < 0)
-        {
-            drawY += 50;
-            drawX -= 100;
-        }
-        if (direction > 0)
-        {
-            drawY += 50;
-            drawX -= 50;
-        }
-        break;
+        drawX += (direction < 0) ? -80 : -50;
+    }
+    else if (currentAnimation == &chargeAnim) {
+        drawY += 50;
+        drawX += (direction < 0) ? -60 : -60;
+    }
+    else if (currentAnimation == &roarAnim) {
+        drawX += (direction < 0) ? -50 : -50;
     }
 }
+
 void Nullwarden::UpdateColliderSizeToCurrentAnimation() {
     if (!pbody || !pbody->body) return;
 
@@ -385,7 +372,7 @@ void Nullwarden::UpdateColliderSizeToCurrentAnimation() {
 
     b2Fixture* fixture = pbody->body->GetFixtureList();
     if (!fixture) return;
-
+        
     pbody->body->DestroyFixture(fixture);
 
     b2PolygonShape newShape;

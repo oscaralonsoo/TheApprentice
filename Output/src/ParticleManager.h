@@ -38,6 +38,7 @@ public:
 	void DestroyAllParticles();
 
 	void SpawnDustParticles(DustParticleVariant variant);
+	void SpawnFireflyParticles();
 
 	void SetParticlesByMap(int scene);
 

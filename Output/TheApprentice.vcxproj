@@ -167,6 +167,7 @@
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\EntityManager.cpp" />
     <ClCompile Include="src\FallMechanic.cpp" />
+    <ClCompile Include="src\FireflyParticle.cpp" />
     <ClCompile Include="src\Geyser.cpp" />
     <ClCompile Include="src\GodModeSystem.cpp" />
     <ClCompile Include="src\GuiControlButton.cpp" />
@@ -243,6 +244,7 @@
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\EntityManager.h" />
     <ClInclude Include="src\FallMechanic.h" />
+    <ClInclude Include="src\FireflyParticle.h" />
     <ClInclude Include="src\Geyser.h" />
     <ClInclude Include="src\GodModeSystem.h" />
     <ClInclude Include="src\GuiControl.h" />

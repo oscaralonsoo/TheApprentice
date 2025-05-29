@@ -50,7 +50,8 @@ bool PushableBox::Update(float dt)
         pbody->body->SetType(b2_dynamicBody);
     }
     else {
-        pbody->body->SetType(b2_staticBody);
+        pbody->body->SetType(b2_kinematicBody);
+        pbody->body->SetLinearVelocity({ 0, 0 });
     }
 
     b2Transform pbodyPos = pbody->body->GetTransform();

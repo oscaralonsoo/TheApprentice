@@ -54,7 +54,7 @@ bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
 	nextScene = 1;
-	Engine::GetInstance().map->Load("Assets/Maps/", "Map" + std::to_string(nextScene) + ".tmx");
+	Engine::GetInstance().map->Load("Assets/Maps/", "Map666"/* + std::to_string(nextScene) + ".tmx"*/);
 
 	return true;
 }

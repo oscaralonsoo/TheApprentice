@@ -98,6 +98,7 @@ bool Nullwarden::Update(float dt) {
         UpdateColliderSizeToCurrentAnimation();
         previousAnimation = currentAnimation;
     }
+
     b2Transform pbodyPos = pbody->body->GetTransform();
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texW / 2);
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
@@ -190,17 +191,10 @@ void Nullwarden::SpawnVerticalSpears() {
     }
 }
 void Nullwarden::Attack() {
-    if (!changedDirection)
-    {
-        direction = -direction;
-        changedDirection = true;
-    }
     if (!attackAnimDone) {
         attackAnim.Reset();
         currentAnimation = &attackAnim;
         attackAnimDone = true;
-
-
     }
     if (!currentAnimation->HasFinished()) {
         return;
@@ -238,10 +232,14 @@ void Nullwarden::Impaled() {
     }
 }
 void Nullwarden::Roar() {
+    if (!changedDirection)
+    {
+        direction = -direction;
+        changedDirection = true;
+    }
     if (currentAnimation != &roarAnim) {
         roarAnim.Reset();
         currentAnimation = &roarAnim;
-        roarTimer.Start();
         startedImpaledAnim = false;
     }
     {
@@ -256,7 +254,7 @@ void Nullwarden::Roar() {
         float dy = playerY - nullwardenY;
 
         float distanceSquared = dx * dx + dy * dy;
-        const float roarRadius = 500.0f;
+        const float roarRadius = 1000.0f;
         const float roarRadiusSquared = roarRadius * roarRadius;
 
         if (distanceSquared <= roarRadiusSquared) {
@@ -275,7 +273,7 @@ void Nullwarden::Roar() {
             Engine::GetInstance().render->StartCameraShake(0.2f * falloff, 6 * falloff);
         }
     }
-    if (roarTimer.ReadMSec() >= roarMs && currentAnimation->HasFinished()) {
+    if (currentAnimation->HasFinished()) {
         currentState = NullwardenState::ATTACK;
     }
 }
@@ -365,7 +363,6 @@ void Nullwarden::UpdateDraw() {
             drawY += 50;
             drawX -= 50;
         }
-
         break;
     }
 }

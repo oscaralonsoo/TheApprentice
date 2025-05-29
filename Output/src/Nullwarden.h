@@ -61,6 +61,7 @@ public:
     Animation impaledAnim2;
     Animation impaledAnim3;
 
+    bool startedImpaledAnim = false;
     int direction = 1;
 private:
   
@@ -78,7 +79,7 @@ private:
     Timer spearAttackTimer;
     const float impaledMs = 20000.0f;
     Timer impaledTimer;
-    const float roarMs = 2000.0f;
+    const float roarMs = 1100.0f;
     Timer roarTimer;
     Timer verticalSpearTimer;
     const float verticalSpearIntervalMs = 300.0f;
@@ -86,6 +87,5 @@ private:
     const int maxVerticalSpears = 8;
     const float verticalSpearGap = 200.0f;
 
-    bool startedImpaledAnim = false;
 
 };

@@ -80,7 +80,6 @@ bool Nullwarden::Update(float dt) {
         if (currentAnimation != &chargeAnim) currentAnimation = &chargeAnim;
         startedImpaledAnim = false;
         pbody->body->SetLinearVelocity(b2Vec2(direction * 12.0f, 0.0f));
-        
         break;
     case NullwardenState::IMPALED:
         Impaled();
@@ -90,7 +89,7 @@ bool Nullwarden::Update(float dt) {
         break;
 
     case NullwardenState::DEATH:
-        if (currentAnimation != &deathAnim) currentAnimation = &hitAnim;
+        if (currentAnimation != &hitAnim) { currentAnimation = &hitAnim; }
 
         if (currentAnimation != &deathAnim && currentAnimation->HasFinished()) currentAnimation = &deathAnim;
         break;
@@ -116,7 +115,7 @@ bool Nullwarden::Update(float dt) {
 }
 
 bool Nullwarden::PostUpdate() {
-    if (currentState == NullwardenState::DEATH && currentAnimation->HasFinished()) {
+    if (currentState == NullwardenState::DEATH && currentAnimation == &deathAnim && currentAnimation->HasFinished()) {
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
     }
     return true;
@@ -151,7 +150,6 @@ void Nullwarden::OnCollision(PhysBody* physA, PhysBody* physB)
         if (currentState == NullwardenState::CHARGE) currentState = NullwardenState::IMPALED;
         break;
     }
-
 }
 
 void Nullwarden::SpawnHorizontalSpears() {
@@ -198,9 +196,10 @@ void Nullwarden::Attack() {
         changedDirection = true;
     }
     if (!attackAnimDone) {
+        attackAnim.Reset();
         currentAnimation = &attackAnim;
         attackAnimDone = true;
-        attackAnim.Reset(); 
+
 
     }
     if (!currentAnimation->HasFinished()) {
@@ -220,7 +219,6 @@ void Nullwarden::Attack() {
         changedDirection = false;
     }
 }
-
 void Nullwarden::Impaled() {
     pbody->body->SetLinearVelocity(b2Vec2_zero);
     pbody->body->SetAngularVelocity(0);
@@ -232,7 +230,6 @@ void Nullwarden::Impaled() {
         if (impaledTimer.ReadMSec() >= impaledMs) {
             currentState = NullwardenState::ROAR;
             spawnedVerticalSpears = 0;
-            startedImpaledAnim = false;
         }
         else if (verticalSpearTimer.ReadMSec() >= verticalSpearIntervalMs && spawnedVerticalSpears <= maxVerticalSpears) {
             SpawnVerticalSpears();
@@ -245,6 +242,7 @@ void Nullwarden::Roar() {
         roarAnim.Reset();
         currentAnimation = &roarAnim;
         roarTimer.Start();
+        startedImpaledAnim = false;
     }
     {
         Player* player = Engine::GetInstance().scene->GetPlayer();
@@ -258,7 +256,7 @@ void Nullwarden::Roar() {
         float dy = playerY - nullwardenY;
 
         float distanceSquared = dx * dx + dy * dy;
-        const float roarRadius = 1000.0f;
+        const float roarRadius = 500.0f;
         const float roarRadiusSquared = roarRadius * roarRadius;
 
         if (distanceSquared <= roarRadiusSquared) {
@@ -269,7 +267,7 @@ void Nullwarden::Roar() {
             else if (falloff > 1.0f) falloff = 1.0f;
 
             float pushDir = (dx > 0.0f) ? 1.0f : -1.0f;
-            float pushStrength = 40.0f * falloff;
+            float pushStrength = 30.0f * falloff;
 
             b2Vec2 push = b2Vec2(pushDir * pushStrength, 0);
             player->pbody->body->ApplyLinearImpulseToCenter(push, true);
@@ -277,12 +275,20 @@ void Nullwarden::Roar() {
             Engine::GetInstance().render->StartCameraShake(0.2f * falloff, 6 * falloff);
         }
     }
-    if (roarTimer.ReadMSec() >= roarMs) {
-
+    if (roarTimer.ReadMSec() >= roarMs && currentAnimation->HasFinished()) {
         currentState = NullwardenState::ATTACK;
     }
 }
 void Nullwarden::ChangeImpaledAnim() {
+    if (crystalBroken)
+    {
+        if (currentAnimation != &impaledAnim) {
+            currentAnimation = &impaledAnim;
+            impaledTimer.Start();
+            startedImpaledAnim = true;
+        }
+        return;
+    }
     switch (crystal->currentState) {
     case CrystalState::PRISTINE:
         if (currentAnimation != &crystalAppearAnim1) {
@@ -315,14 +321,6 @@ void Nullwarden::ChangeImpaledAnim() {
         }
         else if (currentAnimation->HasFinished()) {
             currentAnimation = &impaledAnim3;
-            impaledTimer.Start();
-            startedImpaledAnim = true;
-        }
-        break;
-
-    case CrystalState::BROKEN:
-        if (currentAnimation != &impaledAnim) {
-            currentAnimation = &impaledAnim;
             impaledTimer.Start();
             startedImpaledAnim = true;
         }

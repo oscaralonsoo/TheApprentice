@@ -535,13 +535,13 @@
 						<frame x="8460" y="656" w="564" h="416" />
 					</attack>
 					<impaled loop="true" speed="0.15">
-						<frame x="1568" y="1072" w="384" h="256" />
-						<frame x="1952" y="1072" w="400" h="256" />
-						<frame x="2352" y="1072" w="392" h="256" />
-						<frame x="2744" y="1072" w="392" h="256" />
-						<frame x="3136" y="1072" w="392" h="256" />
-						<frame x="3528" y="1072" w="392" h="256" />
-						<frame x="3920" y="1072" w="392" h="256" />
+						<frame x="4304" y="1614" w="384" h="256" />
+						<frame x="4688" y="1614" w="400" h="256" />
+						<frame x="5088" y="1614" w="392" h="256" />
+						<frame x="5480" y="1614" w="392" h="256" />
+						<frame x="5872" y="1614" w="392" h="256" />
+						<frame x="6256" y="1614" w="392" h="256" />
+						<frame x="6656" y="1614" w="392" h="256" />
 					</impaled>
 					<impaled1 loop="true" speed="0.15">
 						<frame x="1568" y="1072" w="384" h="256" />
@@ -553,15 +553,6 @@
 						<frame x="3920" y="1072" w="392" h="256" />
 					</impaled1>
 					<impaled2 loop="true" speed="0.15">
-						<frame x="5872" y="1072" w="384" h="256" />
-						<frame x="6256" y="1072" w="400" h="256" />
-						<frame x="6656" y="1072" w="392" h="256" />
-						<frame x="7048" y="1072" w="392" h="256" />
-						<frame x="7440" y="1072" w="392" h="256" />
-						<frame x="7832" y="1072" w="392" h="256" />
-						<frame x="8224" y="1072" w="392" h="256" />
-					</impaled2>
-					<impaled3 loop="true" speed="0.15">
 						<frame x="5872" y="1328" w="384" h="256" />
 						<frame x="6256" y="1328" w="400" h="256" />
 						<frame x="6656" y="1328" w="392" h="256" />
@@ -569,6 +560,15 @@
 						<frame x="7440" y="1328" w="392" h="256" />
 						<frame x="7832" y="1328" w="392" h="256" />
 						<frame x="8224" y="1328" w="392" h="256" />
+					</impaled2>
+					<impaled3 loop="true" speed="0.15">
+						<frame x="5872" y="1072" w="384" h="256" />
+						<frame x="6256" y="1072" w="400" h="256" />
+						<frame x="6656" y="1072" w="392" h="256" />
+						<frame x="7048" y="1072" w="392" h="256" />
+						<frame x="7440" y="1072" w="392" h="256" />
+						<frame x="7832" y="1072" w="392" h="256" />
+						<frame x="8224" y="1072" w="392" h="256" />
 					</impaled3>
 					<crystalAppear1 loop="false" speed="0.15">
 						<frame x="0" y="1072" w="384" h="256" />
@@ -578,18 +578,18 @@
 						<frame x="1568" y="1072" w="384" h="256" />
 					</crystalAppear1>
 					<crystalAppear2 loop="false" speed="0.15">
+						<frame x="4304" y="1328" w="384" h="256" />
+						<frame x="4688" y="1328" w="400" h="256" />
+						<frame x="5088" y="1328" w="392" h="256" />
+						<frame x="5480" y="1328" w="392" h="256" />
+						<frame x="5872" y="1328" w="384" h="256" />
+					</crystalAppear2>
+					<crystalAppear3 loop="false" speed="0.15">
 						<frame x="4304" y="1072" w="384" h="256" />
 						<frame x="4688" y="1072" w="400" h="256" />
 						<frame x="5088" y="1072" w="392" h="256" />
 						<frame x="5480" y="1072" w="392" h="256" />
 						<frame x="5872" y="1072" w="384" h="256" />
-					</crystalAppear2>
-					<crystalAppear3 loop="false" speed="0.15">
-						<frame x="0" y="1328" w="384" h="256" />
-						<frame x="384" y="1328" w="400" h="256" />
-						<frame x="784" y="1328" w="392" h="256" />
-						<frame x="1176" y="1328" w="392" h="256" />
-						<frame x="1568" y="1328" w="384" h="256" />
 					</crystalAppear3>
 					<hit loop="false" speed="0.15">
 						<frame x="0" y="1312" w="154" h="288" />

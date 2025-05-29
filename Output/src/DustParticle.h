@@ -16,7 +16,7 @@ enum class DustParticleState {
 class DustParticle : public Entity
 {
 public:
-    DustParticle();
+    DustParticle(int variant);
     ~DustParticle();
 
     bool Awake();
@@ -42,4 +42,6 @@ private:
     DustParticleState state = DustParticleState::SPAWNING;
 
     Timer floatTimer;
+
+    int variant;
 };

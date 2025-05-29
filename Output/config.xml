@@ -840,7 +840,7 @@
 				</checkpoint>
 			</props>
 			<particles>
-				<dust w="20" h="20" texture="Assets/Particles/dust.png">
+				<dust w="20" h="20" texture="Assets/Particles/dust0.png">
 					<spawn loop="false" speed="0.13">
 						<frame x="0" y="0" w="20" h="20" />
 						<frame x="20" y="0" w="20" h="20" />
@@ -862,6 +862,28 @@
 						<frame x="160" y="40" w="20" h="20" />
 					</fade>
 				</dust>
+				<firefly w="20" h="20" texture="Assets/Particles/firefly.png">
+					<spawn loop="false" speed="0.13">
+						<frame x="0" y="0" w="20" h="20" />
+						<frame x="20" y="0" w="20" h="20" />
+						<frame x="40" y="0" w="20" h="20" />
+						<frame x="60" y="0" w="20" h="20" />
+					</spawn>
+					<float loop="true" speed="0.13">
+						<frame x="0" y="20" w="20" h="20" />
+					</float>
+					<fade loop="false" speed="0.13">
+						<frame x="0" y="40" w="20" h="20" />
+						<frame x="20" y="40" w="20" h="20" />
+						<frame x="40" y="40" w="20" h="20" />
+						<frame x="60" y="40" w="20" h="20" />
+						<frame x="80" y="40" w="20" h="20" />
+						<frame x="100" y="40" w="20" h="20" />
+						<frame x="120" y="40" w="20" h="20" />
+						<frame x="140" y="40" w="20" h="20" />
+						<frame x="160" y="40" w="20" h="20" />
+					</fade>
+				</firefly>
 			</particles>
 			<npcs>
 				<castor w="336" h="164" texture="Assets/NPC/castor.png">

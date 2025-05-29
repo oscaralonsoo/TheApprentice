@@ -185,8 +185,6 @@ void Player::SetPosition(Vector2D pos) {
 		return;
 	}
 
-	printf("SetPosition a: X = %.2f, Y = %.2f\n", pos.getX(), pos.getY());
-
 	pos.setX(pos.getX() + texW / 2);
 	pos.setY(pos.getY() + texH / 2);
 	b2Vec2 bodyPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));

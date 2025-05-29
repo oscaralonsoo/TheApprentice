@@ -4,6 +4,11 @@
 #include "Entity.h"
 #include <list>
 
+enum class DustParticleVariant {
+	CAVE,
+	CRYSTAL_CAVE
+};
+
 class ParticleManager : public Module
 {
 public:
@@ -28,14 +33,11 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	// Additional methods
-	Entity* CreateParticle(EntityType type);
-
 	void DestroyParticle(Entity* particle);
 
 	void DestroyAllParticles();
 
-	void SpawnDustParticles();
+	void SpawnDustParticles(DustParticleVariant variant);
 
 	void SetParticlesByMap(int scene);
 

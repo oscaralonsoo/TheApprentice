@@ -65,25 +65,6 @@ bool ParticleManager::CleanUp()
 	return ret;
 }
 
-Entity* ParticleManager::CreateParticle(EntityType type)
-{
-	Entity* particle = nullptr; 
-
-	//L04: TODO 3a: Instantiate particle according to the type and add the new particle to the list of Entities
-	switch (type)
-	{
-	case EntityType::DUST_PARTICLE:
-		particle = new DustParticle();
-		break;
-	default:
-		break;
-	}
-
-	particles.push_back(particle);
-
-	return particle;
-}
-
 // Function to destroy a specific Particle
 void ParticleManager::DestroyParticle(Entity* particle)
 {
@@ -152,7 +133,7 @@ bool ParticleManager::PostUpdate()
 	return ret;
 }
 
-void ParticleManager::SpawnDustParticles()
+void ParticleManager::SpawnDustParticles(DustParticleVariant variant)
 {
 	if (rand() % 100 < 12)
 	{
@@ -169,7 +150,8 @@ void ParticleManager::SpawnDustParticles()
 		MapLayer* layer = Engine::GetInstance().map.get()->GetNavigationLayer();
 
 		if (!layer->Get(posMap.x, posMap.y)) {
-			DustParticle* particle = (DustParticle*)CreateParticle(EntityType::DUST_PARTICLE);
+			DustParticle* particle = new DustParticle((int)variant);
+			particles.push_back(particle);
 			particle->Start();
 			particle->SetPosition({ (float)randX - camera.x, (float)randY - camera.y });
 		}
@@ -180,9 +162,10 @@ void ParticleManager::SetParticlesByMap(int scene) {
 
 	switch (scene) {
 	case 0:
+		SpawnDustParticles(DustParticleVariant::CRYSTAL_CAVE);
 		break;
 	case 1:
-		SpawnDustParticles();
+		SpawnDustParticles(DustParticleVariant::CAVE);
 		break;
 	case 21:
 

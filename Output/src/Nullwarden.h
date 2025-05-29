@@ -76,7 +76,7 @@ private:
     bool attackAnimDone = false;
     const float spearIntervalMs = 2000.0f;
     Timer spearIntervalTimer;
-    const float spearAttackMs = 20000.0f;
+    const float spearAttackMs = 2000.0f;
     Timer spearAttackTimer;
     const float impaledMs = 20000.0f;
     Timer impaledTimer;

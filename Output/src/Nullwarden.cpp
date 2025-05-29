@@ -138,7 +138,7 @@ void Nullwarden::OnCollision(PhysBody* physA, PhysBody* physB)
     switch (physB->ctype)
     {
     case ColliderType::ATTACK:
-        if (!crystalBroken) {
+        if (!crystalBroken && currentState == NullwardenState::IMPALED) {
 
             Engine::GetInstance().render->StartCameraShake(0.2f, 3);
             currentState = NullwardenState::ROAR;
@@ -147,7 +147,7 @@ void Nullwarden::OnCollision(PhysBody* physA, PhysBody* physB)
         if (currentState == NullwardenState::ATTACK) {
             currentState = NullwardenState::ROAR;
         }
-        else {
+        else if(crystalBroken && currentState == NullwardenState::IMPALED){
             currentState = NullwardenState::DEATH;
         }
         break;
@@ -180,7 +180,6 @@ void Nullwarden::SpawnHorizontalSpears() {
         Engine::GetInstance().entityManager->AddEntity(new NullwardenSpear(baseX, spearPositions[i], 10.0f, b2Vec2(direction, 0.0f)));
     }
 }
-
 void Nullwarden::SpawnVerticalSpears() {
     float baseY = position.getY() + 400.0f;
     float spearX = position.getX() + ((direction > 0) ? -50.0f : texW + 50.0f) + (spawnedVerticalSpears * verticalSpearGap * (direction > 0 ? -1 : 1));
@@ -197,6 +196,7 @@ void Nullwarden::SpawnVerticalSpears() {
         spawnedVerticalSpears++;
     }
 }
+
 void Nullwarden::Attack() {
     if (!attackAnimDone) {
         attackAnim.Reset();
@@ -261,7 +261,7 @@ void Nullwarden::Roar() {
         float dy = playerY - nullwardenY;
 
         float distanceSquared = dx * dx + dy * dy;
-        const float roarRadius = 1000.0f;
+        const float roarRadius = 1250.0f;
         const float roarRadiusSquared = roarRadius * roarRadius;
 
         if (distanceSquared <= roarRadiusSquared) {
@@ -272,7 +272,7 @@ void Nullwarden::Roar() {
             else if (falloff > 1.0f) falloff = 1.0f;
 
             float pushDir = (dx > 0.0f) ? 1.0f : -1.0f;
-            float pushStrength = 30.0f * falloff;
+            float pushStrength = 35.0f * falloff;
 
             b2Vec2 push = b2Vec2(pushDir * pushStrength, 0);
             player->pbody->body->ApplyLinearImpulseToCenter(push, true);
@@ -350,6 +350,11 @@ void Nullwarden::UpdateDraw() {
     }
     else if (currentAnimation == &roarAnim) {
         drawX += (direction < 0) ? -50 : -50;
+    }
+    else if (currentAnimation == &deathAnim)
+    {
+        drawY -= 50;
+        drawX += (direction < 0) ? -60 : -60;
     }
 }
 

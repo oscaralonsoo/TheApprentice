@@ -53,7 +53,9 @@ bool Scene::Awake()
 bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
-	Engine::GetInstance().map->Load("Assets/Maps/", "Map666.tmx");
+	nextScene = 1;
+	Engine::GetInstance().map->Load("Assets/Maps/", "Map" + std::to_string(nextScene) + ".tmx");
+
 	return true;
 }
 
@@ -215,7 +217,7 @@ void Scene::ChangeScene(int nextScene)
 				player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, (newPosition.y - 200)/ PIXELS_PER_METER), 0);
 
 
-				LOG("Posición tras cambio de escena: X=%.2f Y=%.2f", newPosition.x, newPosition.y);
+				LOG("Posiciï¿½n tras cambio de escena: X=%.2f Y=%.2f", newPosition.x, newPosition.y);
 				LOG("isOnGround tras cambio de escena: %d", player->GetMechanics()->IsOnGround());
 				LOG("jumpCount tras cambio de escena: %d", player->GetMechanics()->GetJumpMechanic()->IsJumpUnlocked());
 			}

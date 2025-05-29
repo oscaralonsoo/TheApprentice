@@ -307,13 +307,13 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
             jumpMechanic.OnLanding();
             fallMechanic.OnLanding();
         }
+
         break;
     case ColliderType::WALL_SLIDE:
         if (player->GetMechanics()->IsOnGround()) {
             break;
         }
         if (!wallSlideCooldownActive) {
-            printf("Entrando en WALL_SLIDE y llamando a OnWallCollision\n");
             wallSlideFlip = movementDirection < 0;
             isWallSliding = true;
             player->GetMechanics()->SetIsWallSliding(true);
@@ -327,7 +327,6 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
 
     case ColliderType::WALL:
     case ColliderType::DESTRUCTIBLE_WALL:
-        printf("[COLLISION] Wall tocada\n");
         if (!wallSlideCooldownActive) {
             float playerX = player->GetPosition().getX();
             float wallX = physB->body->GetPosition().x * PIXELS_PER_METER; 
@@ -340,7 +339,6 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::LIANA:
         if (!lianaCooldownActive) {
-            printf("Entrando en LIANA\n");
             isOnLiana = true;
             lianaCenterX = METERS_TO_PIXELS(physB->body->GetPosition().x); // Guardar en PIXELES
             disableAbilities = true; // Bloquear salto y dash

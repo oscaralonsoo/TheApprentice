@@ -156,6 +156,7 @@ public:
     int GetMapHeight() const { return mapData.height * mapData.tileHeight; }
 
     MapLayer* GetNavigationLayer();
+    void SetNavigationTileRegion(int x, int y, int w, int h, uint32_t newTileId);
 
 public:
     std::string mapFileName;

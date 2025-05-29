@@ -42,6 +42,7 @@
 #define CATEGORY_LIANA			  23
 #define CATEGORY_BROOD			  24
 #define	CATEGORY_PROJECTILE		  25
+#define CATEGORY_PRESSURE_DOOR    26
 
 // types of bodies
 enum bodyType {

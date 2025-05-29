@@ -5,7 +5,7 @@
 #include "pugixml.hpp"
 #include "Scene.h"
 
-HelpZone::HelpZone() : Entity(EntityType::HELP_ZONE), texture(nullptr), width(0), height(0) {
+HelpZone::HelpZone() : Entity(EntityType::HELP_ZONE), texture(nullptr) {
 }
 
 HelpZone::~HelpZone() {

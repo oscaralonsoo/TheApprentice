@@ -4,8 +4,10 @@
 #include "Textures.h"
 #include "Scene.h"
 #include "Window.h"
+#include "FireflyParticle.h"
 #include "Render.h"
 #include "Log.h"
+#include "Scene.h"
 #include <cstdlib>
 
 ParticleManager::ParticleManager() : Module()
@@ -64,25 +66,6 @@ bool ParticleManager::CleanUp()
 	return ret;
 }
 
-Entity* ParticleManager::CreateParticle(EntityType type)
-{
-	Entity* particle = nullptr; 
-
-	//L04: TODO 3a: Instantiate particle according to the type and add the new particle to the list of Entities
-	switch (type)
-	{
-	case EntityType::DUST_PARTICLE:
-		particle = new DustParticle();
-		break;
-	default:
-		break;
-	}
-
-	particles.push_back(particle);
-
-	return particle;
-}
-
 // Function to destroy a specific Particle
 void ParticleManager::DestroyParticle(Entity* particle)
 {
@@ -118,12 +101,8 @@ bool ParticleManager::Update(float dt)
 	if (Engine::GetInstance().menus->currentState != MenusState::GAME || Engine::GetInstance().menus->isPaused)
 		return true;
 
-	if (rand() % 100 < 12) // % de probabilidad cada frame
-	{
-		SpawnRandomParticles();
-	}
+	SetParticlesByMap(Engine::GetInstance().scene->nextScene);
 
-	// Actualizar partículas activas
 	for (auto particle : particles)
 	{
 		if (particle->active)
@@ -155,23 +134,72 @@ bool ParticleManager::PostUpdate()
 	return ret;
 }
 
-void ParticleManager::SpawnRandomParticles()
+void ParticleManager::SpawnDustParticles(DustParticleVariant variant)
 {
-	int windowWidth, windowHeight;
-	SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &windowWidth, &windowHeight);
+	if (rand() % 100 < 12)
+	{
+		int windowWidth, windowHeight;
+		SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &windowWidth, &windowHeight);
 
-	SDL_Rect camera = Engine::GetInstance().render->camera;
+		SDL_Rect camera = Engine::GetInstance().render->camera;
 
-	int randX = rand() % windowWidth;
-	int randY = rand() % windowHeight;
+		int randX = rand() % windowWidth;
+		int randY = rand() % windowHeight;
 
-	Vector2D posMap = Engine::GetInstance().map.get()->WorldToMap(randX - camera.x, randY - camera.y);
+		Vector2D posMap = Engine::GetInstance().map.get()->WorldToMap(randX - camera.x, randY - camera.y);
 
-	MapLayer* layer = Engine::GetInstance().map.get()->GetNavigationLayer();
+		MapLayer* layer = Engine::GetInstance().map.get()->GetNavigationLayer();
 
-	if (!layer->Get(posMap.x, posMap.y)) {
-		DustParticle* particle = (DustParticle*)CreateParticle(EntityType::DUST_PARTICLE);
-		particle->Start();
-		particle->SetPosition({ (float)randX - camera.x, (float)randY - camera.y });
+		if (!layer->Get(posMap.x, posMap.y)) {
+			DustParticle* particle = new DustParticle((int)variant);
+			particles.push_back(particle);
+			particle->Start();
+			particle->SetPosition({ (float)randX - camera.x, (float)randY - camera.y });
+		}
+	}
+}
+
+void ParticleManager::SpawnFireflyParticles()
+{
+	if (rand() % 100 < 5)
+	{
+		int windowWidth, windowHeight;
+		SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &windowWidth, &windowHeight);
+
+		SDL_Rect camera = Engine::GetInstance().render->camera;
+
+		int randX = rand() % windowWidth;
+		int randY = rand() % windowHeight;
+
+		Vector2D posMap = Engine::GetInstance().map.get()->WorldToMap(randX - camera.x, randY - camera.y);
+
+		MapLayer* layer = Engine::GetInstance().map.get()->GetNavigationLayer();
+
+		if (!layer->Get(posMap.x, posMap.y)) {
+			FireflyParticle* particle = new FireflyParticle();
+			particles.push_back(particle);
+			particle->Start();
+			particle->SetPosition({ (float)randX - camera.x, (float)randY - camera.y });
+		}
+	}
+}
+
+void ParticleManager::SetParticlesByMap(int scene) {
+
+	switch (scene) {
+	case 0:
+		SpawnDustParticles(DustParticleVariant::CRYSTAL_CAVE);
+		break;
+	case 1:
+		SpawnDustParticles(DustParticleVariant::CAVE);
+		break;
+	case 21:
+	case 22:
+	case 23:
+		SpawnFireflyParticles();
+		break;
+	default:
+		SpawnDustParticles(DustParticleVariant::CAVE);
+		break;
 	}
 }

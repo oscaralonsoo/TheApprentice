@@ -204,7 +204,7 @@ void Menus::MainMenu(float dt) {
             int sceneIndex = Engine::GetInstance().scene->nextScene; 
 
             switch (sceneIndex) {
-            case 0:
+            case 1:
                 Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 2.0f, 1.0f);
                 break;
             case 21:
@@ -664,7 +664,7 @@ void Menus::SetController(SDL_GameController* controller) {
 }
 
 void Menus::SpawnMenuParticles() {
-    if (rand() % 100 < 12)
+    if (rand() % 100 < 10)
     {
         int windowWidth, windowHeight;
         SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &windowWidth, &windowHeight);

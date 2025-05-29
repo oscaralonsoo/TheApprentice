@@ -48,21 +48,25 @@ bool PressureDoor::Start()
 
     if (width > height) isHorizontal = true;
 
+    currentAnimation = &idleAnim;
+
+    CheckStartState();
 
     return true;
 }
 
 
 bool PressureDoor::Update(float dt)
-{   
-    CheckStartState();
-
+{
     switch (state) {
     case PressureDoorState::DISABLE:
         if (currentAnimation != &disabledAnim) {
             currentAnimation = &disabledAnim;
             currentAnimation->Reset();
             pbody->body->GetFixtureList()->SetSensor(true);
+
+            Vector2D positionWorld = Engine::GetInstance().map->WorldToMap(position.x, position.y);
+            Engine::GetInstance().map.get()->SetNavigationTileRegion(positionWorld.x, positionWorld.y, width / 64, height / 64, 0);
         }
 
         if (!isOpen) state = PressureDoorState::ENABLE;
@@ -73,16 +77,15 @@ bool PressureDoor::Update(float dt)
             currentAnimation = &enabledAnim;
             currentAnimation->Reset();
             pbody->body->GetFixtureList()->SetSensor(false);
+            Vector2D positionWorld = Engine::GetInstance().map->WorldToMap(position.x, position.y);
+            Engine::GetInstance().map.get()->SetNavigationTileRegion(positionWorld.x, positionWorld.y, width / 64, height / 64, 1);
         }
-
         if (currentAnimation->HasFinished()) state = PressureDoorState::IDLE;
-        
+
         break;
     case PressureDoorState::IDLE:
         if (currentAnimation != &idleAnim) currentAnimation = &idleAnim;
-
         if (isOpen) state = PressureDoorState::DISABLE;
-
         break;
     }
 
@@ -109,30 +112,20 @@ void PressureDoor::RenderTexture()
     float y = METERS_TO_PIXELS(pbodyPos.p.y);
     float angle = 0.0f;
 
-    int offsetX = 0;
-    int offsetY = 0;
-
     if (isHorizontal) {
         angle = 90.0f;
-        offsetX = -width / 2;
-        offsetY = -height / 2 - 62;
-        x -= texH / 2;
-        y -= texW / 2;
+        x -= width / 2;
+        y -= height + 25;
     }
     else {
-        offsetX = -width / 2 - 60;
-        offsetY = -height / 2 + 5;
-        x -= texW / 2;
-        y -= texH / 2;
+        x -= width + 25;
+        y -= height / 2;
     }
-
-    position.setX(x);
-    position.setY(y);
 
     Engine::GetInstance().render.get()->DrawTexture(
         texture,
-        (int)x + offsetX,
-        (int)y + offsetY,
+        (int)x ,
+        (int)y,
         &currentAnimation->GetCurrentFrame(),
         1.0f,
         angle

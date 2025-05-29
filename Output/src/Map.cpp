@@ -931,6 +931,29 @@ MapLayer* Map::GetNavigationLayer() {
     return nullptr;
 }
 
+void Map::SetNavigationTileRegion(int x, int y, int w, int h, uint32_t newTileId) {
+    for (const auto& layer : mapData.layers) {
+        if (layer->properties.GetProperty("Navigation") != nullptr &&
+            layer->properties.GetProperty("Navigation")->value) {
+
+            for (int j = 0; j < h; ++j) {
+                for (int i = 0; i < w; ++i) {
+                    int tileX = x + i;
+                    int tileY = y + j;
+
+                    if (tileX < 0 || tileY < 0 || tileX >= layer->width || tileY >= layer->height)
+                        continue;
+
+                    size_t index = tileY * layer->width + tileX;
+                    layer->tiles[index] = newTileId;
+                }
+            }
+
+            break;
+        }
+    }
+}
+
 Properties::Property* Properties::GetProperty(const char* name)
 {
     for (const auto& property : propertyList) {

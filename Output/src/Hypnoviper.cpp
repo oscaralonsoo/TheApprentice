@@ -54,8 +54,8 @@ bool Hypnoviper::Start() {
 
     currentAnimation = &sleepAnim;
 
-    soundSleepId = Engine::GetInstance().audio->LoadFx("hypnoviper_sleep.ogg", 1.0f);
-    soundDeadId = Engine::GetInstance().audio->LoadFx("monster_death.ogg", 1.0f);
+    soundSleepId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/hypnoviper_sleep.ogg", 1.0f);
+    soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/monster_death.ogg", 1.0f);
 
     return true;
 }

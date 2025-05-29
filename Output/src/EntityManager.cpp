@@ -257,8 +257,8 @@ bool EntityManager::Update(float dt)
 	Vector2D camSizeWorld = { static_cast<float>(windowWidth), static_cast<float>(windowHeight) };
 	Vector2D camSizeTile = Engine::GetInstance().map->WorldToMap(camSizeWorld.x, camSizeWorld.y);
 
-	constexpr int OFFSET_X = 20;
-	constexpr int OFFSET_Y = 20;
+	constexpr int OFFSET_X = 2;
+	constexpr int OFFSET_Y = 4;
 
 	if (Engine::GetInstance().menus->currentState != MenusState::GAME || Engine::GetInstance().menus->isPaused)
 		return true;
@@ -275,7 +275,6 @@ bool EntityManager::Update(float dt)
 		Vector2D entityMinTile = Engine::GetInstance().map->WorldToMap(entityMinWorld.x, entityMinWorld.y);
 		Vector2D entityMaxTile = Engine::GetInstance().map->WorldToMap(entityMaxWorld.x, entityMaxWorld.y);
 
-		// Verificar si hay intersecci�n con el �rea extendida de la c�mara
 		bool isInCamera =
 			entityMaxTile.x >= camTilePos.x - OFFSET_X &&
 			entityMinTile.x <= camTilePos.x + camSizeTile.x + OFFSET_X &&
@@ -286,6 +285,7 @@ bool EntityManager::Update(float dt)
 
 		if (isInCamera)
 			ret = entity->Update(dt);
+
 	}
 
 	return ret;

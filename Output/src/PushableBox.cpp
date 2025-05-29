@@ -22,7 +22,7 @@ bool PushableBox::Start()
     pbody->listener = this;
 
     pbody->body->SetGravityScale(5.0f);
-    pbody->body->GetFixtureList()->SetFriction(0.0f); 
+    pbody->body->GetFixtureList()->SetFriction(0.0f);
     pbody->body->GetFixtureList()->SetDensity(4.0f);  
     pbody->body->ResetMassData();
 
@@ -50,7 +50,8 @@ bool PushableBox::Update(float dt)
         pbody->body->SetType(b2_dynamicBody);
     }
     else {
-        pbody->body->SetType(b2_staticBody);
+        pbody->body->SetType(b2_kinematicBody);
+        pbody->body->SetLinearVelocity({ 0, 0 });
     }
 
     b2Transform pbodyPos = pbody->body->GetTransform();
@@ -78,7 +79,9 @@ void PushableBox::SetPosition(Vector2D pos) {
 
 Vector2D PushableBox::GetPosition() const
 {
-    return position;
+    b2Vec2 bodyPos = pbody->body->GetTransform().p;
+    Vector2D pos = Vector2D(METERS_TO_PIXELS(bodyPos.x), METERS_TO_PIXELS(bodyPos.y));
+    return pos;
 }
 
 void PushableBox::OnCollision(PhysBody* physA, PhysBody* physB)

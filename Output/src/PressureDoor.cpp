@@ -50,14 +50,14 @@ bool PressureDoor::Start()
 
     currentAnimation = &idleAnim;
 
+    CheckStartState();
+
     return true;
 }
 
 
 bool PressureDoor::Update(float dt)
 {
-    CheckStartState();
-
     switch (state) {
     case PressureDoorState::DISABLE:
         if (currentAnimation != &disabledAnim) {
@@ -84,10 +84,7 @@ bool PressureDoor::Update(float dt)
 
         break;
     case PressureDoorState::IDLE:
-        if (currentAnimation != &idleAnim) {
-            currentAnimation = &idleAnim;
-            currentAnimation->Reset(); // Esto reinicia el índice y el temporizador
-        }
+        if (currentAnimation != &idleAnim) currentAnimation = &idleAnim;
         if (isOpen) state = PressureDoorState::DISABLE;
         break;
     }

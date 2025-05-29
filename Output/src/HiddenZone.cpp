@@ -44,11 +44,11 @@ bool HiddenZone::Start() {
 	return true;
 }
 
-bool HiddenZone::Update(float dt)
+bool HiddenZone::PostUpdate()
 {
 	if (fadingOut)
 	{
-		alpha -= (int)(fadeSpeed * dt);
+		alpha -= (int)(fadeSpeed);
 		if (alpha <= 0)
 		{
 			alpha = 0;

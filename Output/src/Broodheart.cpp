@@ -166,6 +166,7 @@ void Broodheart::Spawn() {
         brood->Start();
         brood->SetParent(this);
 
+
         broodsAlive.push_back(brood);
     }
 }

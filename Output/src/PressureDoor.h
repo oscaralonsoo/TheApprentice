@@ -38,12 +38,12 @@ public:
     int id;
     bool isOpen;
     bool shouldBeOpen;
-
+    bool triggeredOnce = false;
+    PressureDoorState state = PressureDoorState::IDLE;
 private:
     PhysBody* pbody;
     SDL_Texture* texture;
 
-    PressureDoorState state = PressureDoorState::IDLE;
 
     Animation disabledAnim;
     Animation enabledAnim;

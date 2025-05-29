@@ -18,6 +18,7 @@
 		<maps>
 			<Map_0 path="Assets/Maps/" name="Map0.tmx" />
 			<Map_1 path="Assets/Maps/" name="Map1.tmx" />
+			<Map_12 path="Assets/Maps/" name="Map12.tmx" />
 			<Map_21 path="Assets/Maps/" name="Map21.tmx" />
 			<Map_22 path="Assets/Maps/" name="Map22.tmx" />
 			<Map_23 path="Assets/Maps/" name="Map23.tmx" />
@@ -734,6 +735,26 @@
 						<frame x="960" y="0" w="192" h="192" />
 					</idle>
 				</pressure_door>
+				<stalactite w="64" h="64" texture0="Assets/Props/Stalactite.png" texture1="Assets/Props/Stalactite1.png" texture2="Assets/Props/Stalactite2.png" texture3="Assets/Props/Stalactite3.png" texture4="Assets/Props/Stalactite4.png" texture5="Assets/Props/Stalactite5.png">
+					<idle loop="false" speed="0.13">
+						<frame x="0" y="0" w="64" h="64" />
+					</idle>
+					<fall loop="true" speed="0">
+						<frame x="0" y="0" w="64" h="64" />
+					</fall>
+					<splash loop="false" speed="0.4">
+						<frame x="64" y="0" w="64" h="64" />
+						<frame x="128" y="0" w="64" h="64" />
+						<frame x="192" y="0" w="64" h="64" />
+						<frame x="256" y="0" w="64" h="64" />
+						<frame x="320" y="0" w="64" h="64" />
+						<frame x="384" y="0" w="64" h="64" />
+						<frame x="448" y="0" w="64" h="64" />
+						<frame x="512" y="0" w="64" h="64" />
+						<frame x="576" y="0" w="64" h="64" />
+						<frame x="640" y="0" w="64" h="64" />
+					</splash>
+				</stalactite>
 				<cave_drop w="18" h="18" texture="Assets/Props/caveDrop.png">
 					<start loop="false" speed="0.13">
 						<frame x="0" y="0" w="18" h="18" />
@@ -789,7 +810,7 @@
 					<unsaved loop="false" speed="0">
 						<frame x="0" y="0" w="384" h="320" />
 					</unsaved>
-					<saving loop="false" speed="0.125">
+					<saving loop="false" speed="0.15">
 						<frame x="0" y="0" w="384" h="320" />
 						<frame x="384" y="0" w="384" h="320" />
 						<frame x="768" y="0" w="384" h="320" />
@@ -981,7 +1002,7 @@
 			</abilities>
 		</animations>
 		<save_data isSaved="1">
-			<player x="1050" y="850" w="44" h="54" lives="3" />
+			<player x="1202" y="1020" w="44" h="54" lives="3" />
 			<abilities jump="false" doublejump="false" dash="false" />
 			<scene actualScene="0" />
 			<enemies />

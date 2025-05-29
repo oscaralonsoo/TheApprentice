@@ -10,6 +10,8 @@
 #include <SDL2/SDL_mixer.h>
 #include "Textures.h"
 #include "Audio.h"
+#include "MenuParticle.h"
+#include "ParticleManager.h"
 
 
 
@@ -106,10 +108,20 @@ bool Menus::PostUpdate() {
     DrawBackground();
     DrawButtons();
     ContinueLoadingScreen();
+
     if (currentState == MenusState::ABILITIES) DrawAbilities();
     if (currentState == MenusState::GAME) DrawPlayerLives();
+    if (currentState == MenusState::MAINMENU)
+    {
+        SpawnMenuParticles();
+        UpdateMenuParticles();
+    }
+    else {
+        DestroyAllParticles();
+    }
     if (inTransition) ApplyTransitionEffect();
     return !isExit;
+
 }
 void Menus::DrawBackground() {
     std::string bgKey = GetBackgroundKey();
@@ -649,5 +661,56 @@ bool Menus::ContinueLoadingScreen()
 
 void Menus::SetController(SDL_GameController* controller) {
     this->controller = controller;
+}
+
+void Menus::SpawnMenuParticles() {
+    if (rand() % 100 < 12)
+    {
+        int windowWidth, windowHeight;
+        SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &windowWidth, &windowHeight);
+
+        SDL_Rect camera = Engine::GetInstance().render->camera;
+
+        int randX = rand() % windowWidth;
+        int randY = rand() % windowHeight;
+
+        MenuParticle* particle = new MenuParticle();;
+
+        if (particle)
+        {
+            particle->Start();
+            particle->SetPosition({ (float)randX - camera.x, (float)randY - camera.y });
+            menuParticles.push_back(particle);
+        }
+    }
+}
+
+void Menus::UpdateMenuParticles() {
+    for (MenuParticle* particle : menuParticles) {
+        particle->Update();
+    }
+}
+
+void Menus::DestroyAllParticles() {
+
+    for (auto it = menuParticles.begin(); it != menuParticles.end(); ) {
+        delete* it;
+        it = menuParticles.erase(it);
+    }
+}
+
+void Menus::DestroyMenuParticle(MenuParticle* particle) {
+    for (auto it = menuParticles.begin(); it != menuParticles.end();)
+    {
+        if (*it == particle) {
+            (*it)->CleanUp();
+            delete* it;
+            it = menuParticles.erase(it);
+            break;
+        }
+        else {
+            ++it;
+        }
+    }
 }
 

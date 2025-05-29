@@ -4,6 +4,7 @@
 #include "SDL2/SDL.h"
 #include "Animation.h"
 #include "Pathfinding.h"
+#include "Physics.h"
 #include "Timer.h"
 
 struct SDL_Texture;
@@ -48,12 +49,18 @@ public:
 
 	std::string GetEnemyType() const { return type; }
 
+	void SetPhysicsActive(bool active) override {
+		if (pbody && pbody->body) {
+			pbody->body->SetEnabled(active);
+		}
+	}
+
 public:
 	//Pathfinding
 	int steps = 0;
-	int maxSteps = 50;
-	PhysBody* pbody;
-
+	int maxSteps = 30;
+	PhysBody* pbody = nullptr;
+	bool upsiteDown = false;
 
 protected:
 	Pathfinding* pathfinding;

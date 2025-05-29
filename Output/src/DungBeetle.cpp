@@ -228,7 +228,7 @@ void DungBeetle::ChangeBodyType() {
         isDynamic = true;
 }
 int DungBeetle::CheckPuzzleState() {
-    int PuzzlesDone = Engine::GetInstance().pressureSystem.get()->GetActivePlatesCount(0);
+    int PuzzlesDone = Engine::GetInstance().pressureSystem.get()->GetActivePlatesCount(1);
     return PuzzlesDone; 
 }
 void DungBeetle::Bounce()

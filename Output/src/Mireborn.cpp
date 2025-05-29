@@ -113,6 +113,7 @@ bool Mireborn::CleanUp() {
 
 void Mireborn::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
+    case ColliderType::BOX:
     case ColliderType::PLATFORM:
         isOnGround = true;
         break;

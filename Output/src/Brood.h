@@ -7,6 +7,7 @@
 enum class BroodState {
     IDLE,
     CHASING,
+    RETURNING,
     DEAD
 };
 
@@ -25,9 +26,11 @@ public:
 
     // Brood Methods
     void Chase(float dt);
-    void UpdateChaseState();
+    void UpdateChaseState(float dt);
     // Setters
-    void SetParent(Broodheart* p) { broodHeart = p; }
+    void SetParent(Broodheart* parent);
+
+    void ReturnToInitial(float dt);
 
     Animation flyingAnim;
     Animation deathAnim;
@@ -35,11 +38,14 @@ private:
     bool isDead = false;
     Broodheart* broodHeart = nullptr;
 
-    float detectionRange = 100.0f;
+    Vector2D initialPosition;   
+    float returnSpeed = 0.1f;   
+    bool returningToHeart = false;
     float timePassed = 0.0f;
     float waveOffset = 0.0f;
     float distanceToPlayer = 0.0f;
-
+    const float detectRange = 1280.0f;
+    float returningSpeed = 0.2f;
     Vector2D direction = { 0, 0 };
 
     BroodState currentState = BroodState::IDLE;

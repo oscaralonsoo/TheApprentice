@@ -72,8 +72,8 @@ bool HelpZone::Update(float dt) {
 }
 bool HelpZone::PostUpdate() {
     if (alpha > 0.0f) {
-        int drawX = (int)(position.getX());
-        int drawY = (int)(position.getY() - height/2);
+        int drawX = (int)(position.getX() - width/4);
+        int drawY = (int)(position.getY() - height/1.5);
 
         SDL_Rect destRect = { drawX, drawY, width, height }; 
         Engine::GetInstance().render->DrawTexture(

@@ -3,6 +3,7 @@
 #include "Engine.h"
 #include "Input.h"
 #include "Physics.h"
+#include "Log.h"
 
 void JumpMechanic::Init(Player* player) {
     this->player = player;
@@ -42,6 +43,8 @@ void JumpMechanic::HandleJumpInput(float dt) {
 
         controllerHeldPreviously = controllerPressed;
     }
+
+    LOG("Intentando saltar. jumpDown=%d, jumpCount=%d, isOnGround=%d", jumpDown, jumpCount, player->GetMechanics()->IsOnGround());
 
     // Iniciar salto
     if (jumpDown) {
@@ -177,6 +180,9 @@ void JumpMechanic::EnableDoubleJump(bool enable) {
 }
 
 void JumpMechanic::OnLanding() {
+    LOG("[JumpMechanic] OnLanding() llamado");
+    LOG("Reset jumpCount a 0");
+
     isJumping = false;
     jumpCount = 0;
     player->GetMechanics()->SetIsOnGround(true);

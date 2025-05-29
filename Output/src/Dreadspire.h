@@ -26,6 +26,8 @@ public:
 
     void CheckState();
     void ChangeBodyType();
+
+
 private:
     void Idle(float dt);
     void Shoot(float dt);

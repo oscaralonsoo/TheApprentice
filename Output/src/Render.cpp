@@ -114,7 +114,6 @@ void Render::ResetViewPort()
 	SDL_RenderSetViewport(renderer, &viewport);
 }
 
-// Blit to screen
 bool Render::DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SDL_Rect* section, float speed, double angle, uint32_t pivotX, uint32_t pivotY, SDL_RendererFlip flip, float scale, float alpha) const
 {
 	bool ret = true;

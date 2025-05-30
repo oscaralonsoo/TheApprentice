@@ -60,6 +60,7 @@ bool Dreadspire::Update(float dt) {
     }
 
     ChangeBodyType();
+        SDL_Rect frame = currentAnimation->GetCurrentFrame();
 
     return Enemy::Update(dt);
 }

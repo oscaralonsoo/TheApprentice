@@ -213,15 +213,10 @@ bool Map::Load(std::string path, std::string fileName)
         ret = false;
     }
     else {
-
-        // L06: TODO 3: Implement LoadMap to load the map properties
-        // retrieve the paremeters of the <map> node and store the into the mapData struct
         mapData.width = mapFileXML.child("map").attribute("width").as_int();
         mapData.height = mapFileXML.child("map").attribute("height").as_int();
         mapData.tileWidth = mapFileXML.child("map").attribute("tilewidth").as_int();
         mapData.tileHeight = mapFileXML.child("map").attribute("tileheight").as_int();
-
-        // L06: TODO 4: Implement the LoadTileSet function to load the tileset properties
 
         //Iterate the Tileset
         for (pugi::xml_node tilesetNode = mapFileXML.child("map").child("tileset"); tilesetNode != NULL; tilesetNode = tilesetNode.next_sibling("tileset"))
@@ -244,18 +239,14 @@ bool Map::Load(std::string path, std::string fileName)
             mapData.tilesets.push_back(tileSet);
         }
 
-        // L07: TODO 3: Iterate all layers in the TMX and load each of them
         for (pugi::xml_node layerNode = mapFileXML.child("map").child("layer"); layerNode != NULL; layerNode = layerNode.next_sibling("layer")) {
 
-            // L07: TODO 4: Implement the load of a single layer 
-            //Load the attributes and saved in a new MapLayer
             MapLayer* mapLayer = new MapLayer();
             mapLayer->id = layerNode.attribute("id").as_int();
             mapLayer->name = layerNode.attribute("name").as_string();
             mapLayer->width = layerNode.attribute("width").as_int();
             mapLayer->height = layerNode.attribute("height").as_int();
 
-            //L09: TODO 6 Call Load Layer Properties
             LoadProperties(layerNode, mapLayer->properties);
 
             //Iterate over all the tiles and assign the values in the data array
@@ -267,11 +258,7 @@ bool Map::Load(std::string path, std::string fileName)
             mapData.layers.push_back(mapLayer);
         }
 
-        // L08 TODO 3: Create colliders
-        // L08 TODO 7: Assign collider type
-        // Later you can create a function here to load and create the colliders from the map
-
-        // L08 TODO 3: Create colliders
+        // Create colliders
         for (pugi::xml_node objectGroupNode = mapFileXML.child("map").child("objectgroup"); objectGroupNode; objectGroupNode = objectGroupNode.next_sibling("objectgroup"))
         {
             std::string objectGroupName = objectGroupNode.attribute("name").as_string();
@@ -420,7 +407,6 @@ bool Map::Load(std::string path, std::string fileName)
                     int width = objectNode.attribute("width").as_int();
                     int height = objectNode.attribute("height").as_int();
 
-                    // Create Door type Collider
                     PhysBody* doorCollider = Engine::GetInstance().physics->CreateRectangleSensor(x + (width / 2), y + (height / 2), width, height, STATIC, CATEGORY_DOOR, CATEGORY_PLAYER);
                     doorCollider->ctype = ColliderType::DOOR;
 
@@ -465,8 +451,8 @@ bool Map::Load(std::string path, std::string fileName)
                         y + (height / 2),
                         width, height,
                         STATIC,
-                        CATEGORY_DOWN_CAMERA,   // su categoría
-                        CATEGORY_PLAYER         // solo colisiona con el jugador
+                        CATEGORY_DOWN_CAMERA, 
+                        CATEGORY_PLAYER       
                     );
                     downCameraCollider->ctype = ColliderType::DOWN_CAMERA;
 
@@ -728,9 +714,14 @@ bool Map::Load(std::string path, std::string fileName)
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::NOCTILUME);
                     }
                     else if (enemyName == "Dreadspire") {
-                        bool UpsiteDown = objectNode.child("properties").child("property").attribute("value").as_bool();
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::DREADSPIRE);
-                        enemy->upsiteDown = UpsiteDown;
+                        for (pugi::xml_node propertyNode = objectNode.child("properties").child("property"); propertyNode != NULL; propertyNode = propertyNode.next_sibling("property"))
+                        {
+                            std::string propertyName = propertyNode.attribute("name").as_string();
+
+                            if (propertyName == "upsiteDown")
+                                enemy->upsiteDown = propertyNode.attribute("value").as_bool();
+                        }
                     }
                     else if (enemyName == "DungBeetle") {
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::DUNGBEETLE);

@@ -9,8 +9,8 @@ NullwardenSpear::NullwardenSpear(float x, float y, float speed, b2Vec2 direction
     position = Vector2D(x, y);
     bool horizontal = (direction.x != 0.0f);
 
-    width = horizontal ? 180 : 35;
-    height = horizontal ? 35 : 180;
+    width = horizontal ? 180 : 24;
+    height = horizontal ? 24 : 180;
 
     pbody = Engine::GetInstance().physics->CreateRectangleSensor(position.x, position.y, width, height, bodyType::DYNAMIC, CATEGORY_ENEMY, CATEGORY_WALL | CATEGORY_PLAYER_DAMAGE);
     pbody->ctype = ColliderType::ENEMY;

@@ -64,12 +64,19 @@ bool Enemy::Update(float dt)
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
-	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() - 15, &currentAnimation->GetCurrentFrame(),
+	SDL_RendererFlip flip = SDL_FLIP_NONE;
+	if (direction > 0) flip = (SDL_RendererFlip)(flip | SDL_FLIP_HORIZONTAL);
+	if (upsiteDown)    flip = (SDL_RendererFlip)(flip | SDL_FLIP_VERTICAL);
+
+	Engine::GetInstance().render.get()->DrawTexture(texture,
+		(int)position.getX(),
+		(int)position.getY() - 15,
+		&currentAnimation->GetCurrentFrame(),
 		1.0f,
 		0.0,
 		INT_MAX,
 		INT_MAX,
-		(direction < 0) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL,
+		flip,
 		scale
 	);
 	currentAnimation->Update();

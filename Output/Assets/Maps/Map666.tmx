@@ -10103,7 +10103,11 @@
  </objectgroup>
  <objectgroup id="84" name="Spikes"/>
  <objectgroup id="80" name="Enemies">
-  <object id="1409" name="Nullwarden" x="1472" y="896" width="64" height="64"/>
+  <object id="1409" name="Nullwarden" x="640" y="960" width="64" height="64">
+   <properties>
+    <property name="upsiteDown" type="bool" value="true"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="82" name="PressureSystem">
   <object id="1413" name="Door" x="1216" y="512" width="192" height="64">

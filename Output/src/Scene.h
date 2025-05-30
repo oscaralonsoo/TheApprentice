@@ -69,6 +69,7 @@ public:
 
 
 public:
+	bool isChangingScene = false;
 	bool isLoading = false;
 	int previousVignetteSize;
 	Vector2D newPosition;
@@ -83,6 +84,7 @@ public:
 
 	bool isDead = false;
 	SDL_Color vignetteColor;
+	bool pendingLoadAfterDeath = false;
 
 	PlayerMechanics* mechanics = nullptr;
 
@@ -98,7 +100,6 @@ public:
 	SDL_Color originalVignetteColor;
 	float vignetteLerpProgress = 0.0f;
 	SDL_Color vignetteTargetColor;
-
 private:
 	SDL_Texture* img;
 	//L03: TODO 3b: Declare a Player attribute
@@ -117,7 +118,7 @@ private:
 	Uint8 alpha;
 	SDL_Rect top, bottom, left, right;
 
-	bool pendingLoadAfterDeath = false;
+
 	float blackScreenTimer = 0.0f;
 	const float blackScreenDelay = 500.0f; 
 	bool waitingBlackScreen = false;

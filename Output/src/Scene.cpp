@@ -273,6 +273,15 @@ void Scene::SaveGameXML() {
 	pugi::xml_node sceneNode = saveData.child("scene"); // Save Actual Scene
 	sceneNode.attribute("actualScene") = nextScene;
 	saveData.attribute("isSaved") = Engine::GetInstance().menus->isSaved;
+
+	pugi::xml_node audioNode = config.child("config").child("audio");
+	if (!audioNode) {
+		audioNode = config.child("config").append_child("audio");
+	}
+	audioNode.append_child("master").append_attribute("value") = Engine::GetInstance().audio->masterVolume;
+	audioNode.append_child("music").append_attribute("value") = Engine::GetInstance().audio->musicVolume;
+	audioNode.append_child("sfx").append_attribute("value") = Engine::GetInstance().audio->sfxVolume;
+
 	config.save_file("config.xml"); // Save Changes
 
 	Engine::GetInstance().menus->StartTransition(false, Engine::GetInstance().menus->currentState); // Final Transition
@@ -282,9 +291,11 @@ void Scene::SaveGameXML() {
 void Scene::LoadGameXML() {
 	if (isLoading) return;
 
+
     isLoading = true;
 
     pugi::xml_document config;
+
     pugi::xml_parse_result result = config.load_file("config.xml");
 
     pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
@@ -338,6 +349,17 @@ void Scene::LoadGameXML() {
 				pendingLoadWithTransition = true;
 				StartTransition(savedScene);
 			}
+		}
+		// Cargar configuración de audio
+		pugi::xml_node audioNode = config.child("config").child("audio");
+		if (audioNode) {
+			float masterVol = audioNode.child("master").attribute("value").as_float(1.0f);
+			float musicVol = audioNode.child("music").attribute("value").as_float(1.0f);
+			float sfxVol = audioNode.child("sfx").attribute("value").as_float(1.0f);
+
+			Engine::GetInstance().audio->SetMasterVolume(masterVol);
+			Engine::GetInstance().audio->SetMusicVolume(musicVol);
+			Engine::GetInstance().audio->SetSfxVolume(sfxVol);
 		}
 	}
 }

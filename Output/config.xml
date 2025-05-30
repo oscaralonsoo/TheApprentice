@@ -925,6 +925,11 @@
 						<frame x="0" y="0" w="20" h="20" />
 					</idle>
 				</rain>
+				<snow w="20" h="20" texture="Assets/Particles/snow.png">
+					<idle loop="false" speed="0.2">
+						<frame x="20" y="0" w="20" h="20" />
+					</idle>
+				</snow>
 				<firefly w="20" h="20" texture="Assets/Particles/firefly.png">
 					<spawn loop="false" speed="0.13">
 						<frame x="0" y="0" w="20" h="20" />

@@ -276,11 +276,11 @@ void Scene::SaveGameXML() {
 
 	pugi::xml_node audioNode = config.child("config").child("audio");
 	if (!audioNode) {
-		audioNode = config.child("config").append_child("audio");
+		audioNode = config.child("config").child("audio");
 	}
-	audioNode.append_child("master").append_attribute("value") = Engine::GetInstance().audio->masterVolume;
-	audioNode.append_child("music").append_attribute("value") = Engine::GetInstance().audio->musicVolume;
-	audioNode.append_child("sfx").append_attribute("value") = Engine::GetInstance().audio->sfxVolume;
+	audioNode.child("master").attribute("value") = Engine::GetInstance().audio->masterVolume;
+	audioNode.child("music").attribute("value") = Engine::GetInstance().audio->musicVolume;
+	audioNode.child("sfx").attribute("value") = Engine::GetInstance().audio->sfxVolume;
 
 	config.save_file("config.xml"); // Save Changes
 

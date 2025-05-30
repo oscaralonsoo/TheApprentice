@@ -186,7 +186,7 @@ void ParticleManager::SpawnFireflyParticles()
 }
 
 void ParticleManager::SpawnRainParticles() {
-	if (rand() % 100 < 7)
+	if (rand() % 100 < 15)
 	{
 		Vector2D camPos = Vector2D(
 			Engine::GetInstance().render->camera.x * -1,
@@ -216,6 +216,8 @@ void ParticleManager::SetParticlesByMap(int scene) {
 		SpawnDustParticles(DustParticleVariant::CRYSTAL_CAVE);
 		break;
 	case 1:
+		SpawnRainParticles();
+
 		SpawnDustParticles(DustParticleVariant::CAVE);
 		break;
 	case 21:

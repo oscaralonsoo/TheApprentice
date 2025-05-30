@@ -7,7 +7,7 @@
 #include <cstdlib>
 
 FireflyParticle::FireflyParticle()
-    : Entity(EntityType::DUST_PARTICLE), state(FireflyParticleState::SPAWNING)
+    : Entity(EntityType::PARTICLE), state(FireflyParticleState::SPAWNING)
 {
     velocity = { 0.0f, 0.0f };
     directionAngle = static_cast<float>(rand()) / RAND_MAX * 2.0f * M_PI;
@@ -30,7 +30,7 @@ bool FireflyParticle::Start() {
     floatAnim.LoadAnimations(fireflyNode.child("float"));
     fadeAnim.LoadAnimations(fireflyNode.child("fade"));
 
-    scale = 0.3f + static_cast<float>(rand()) / RAND_MAX * (1.0f - 0.3f);
+    scale = 0.7f + static_cast<float>(rand()) / RAND_MAX * (1.2f - 0.7f);
 
     texW = fireflyNode.attribute("w").as_int() * scale;
     texH = fireflyNode.attribute("h").as_int() * scale;
@@ -49,7 +49,7 @@ bool FireflyParticle::Update(float dt) {
     case FireflyParticleState::FLOATING:
         if (currentAnimation != &floatAnim) currentAnimation = &floatAnim;
         if (floatTimer.ReadMSec() == 0) floatTimer.Start();
-        if (floatTimer.ReadMSec() > 2500) state = FireflyParticleState::FADING;
+        if (floatTimer.ReadMSec() > 4000) state = FireflyParticleState::FADING;
         break;
     case FireflyParticleState::FADING:
         if (currentAnimation != &fadeAnim) currentAnimation = &fadeAnim;

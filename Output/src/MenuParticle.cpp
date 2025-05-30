@@ -5,7 +5,7 @@
 #include "Textures.h"
 #include <cmath>
 
-MenuParticle::MenuParticle() : Entity(EntityType::MENU_PARTICLE), state(MenuParticleState::SPAWNING)
+MenuParticle::MenuParticle() : Entity(EntityType::PARTICLE), state(MenuParticleState::SPAWNING)
 {
     velocity = { 0.0f, 0.0f };
 }

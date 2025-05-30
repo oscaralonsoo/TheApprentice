@@ -44,8 +44,5 @@ private:
     Animation crackedAnim;
     Animation shatteredAnim;
 
-
-    Vector2D position;
-    int width, height;
     b2Vec2 direction;
 };

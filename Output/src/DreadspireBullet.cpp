@@ -6,6 +6,7 @@
 DreadspireBullet::DreadspireBullet(float x, float y, float speed, b2Vec2 direction)
     : Entity(EntityType::BULLET), direction(direction), speed(speed)
 {
+    position = Vector2D(x, y);
     pugi::xml_document loadFile;
     pugi::xml_parse_result result = loadFile.load_file("config.xml");
 
@@ -20,7 +21,7 @@ DreadspireBullet::DreadspireBullet(float x, float y, float speed, b2Vec2 directi
         }
     }
 
-    pbody = Engine::GetInstance().physics->CreateCircle(x, y, width/2, bodyType::DYNAMIC);
+    pbody = Engine::GetInstance().physics->CreateCircle(position.x, position.y, width/2, bodyType::DYNAMIC);
     pbody->ctype = ColliderType::ENEMY;
     pbody->listener = this;
 

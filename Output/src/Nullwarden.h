@@ -69,22 +69,21 @@ private:
     int drawX = 0;
     Animation* previousAnimation = nullptr;
     NullwardenState previousState = NullwardenState::IDLE;
-    float drawOffset = 0.0f;
     bool changedDirection = false;
-    float idleCrystalOffsetTimer = 0.0f;
     NullwardenCrystal* crystal= nullptr;
     bool attackAnimDone = false;
     const float spearIntervalMs = 2000.0f;
     Timer spearIntervalTimer;
-    const float spearAttackMs = 2000.0f;
+    const float spearAttackMs = 15000.0f;
     Timer spearAttackTimer;
-    const float impaledMs = 20000.0f;
+    const float impaledMs = 10000.0f;
+    Timer beforeChargeTimer;
+    const float beforeChargeMs = 1100.0f;
     Timer impaledTimer;
     Timer verticalSpearTimer;
     const float verticalSpearIntervalMs = 300.0f;
     int spawnedVerticalSpears = 0;
     const int maxVerticalSpears = 8;
     const float verticalSpearGap = 200.0f;
-
 
 };

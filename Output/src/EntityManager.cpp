@@ -289,6 +289,7 @@ bool EntityManager::Update(float dt)
 		if (isInCamera)
 			ret = entity->Update(dt);
 
+
 	}
 
 	return ret;

@@ -53,7 +53,7 @@ bool Scene::Awake()
 bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
-	nextScene = 69;
+	nextScene = 1;
 	Engine::GetInstance().map->Load("Assets/Maps/", "Map" + std::to_string(nextScene) + ".tmx");
 
 	return true;
@@ -264,6 +264,7 @@ void Scene::SaveGameXML() {
 		playerNode.attribute("x") = playerPos.x;
 		playerNode.attribute("y") = playerPos.y;
 		playerNode.attribute("lives") = player->GetMechanics()->GetHealthSystem()->GetLives();
+		playerNode.attribute("maxlives") = player->GetMechanics()->GetHealthSystem()->GetMaxLives();
 
 	pugi::xml_node abilitiesNode = saveData.child("abilities");
 	abilitiesNode.attribute("jump") = player->GetMechanics()->GetMovementHandler()->IsJumpUnlocked();
@@ -272,7 +273,7 @@ void Scene::SaveGameXML() {
 	abilitiesNode.attribute("glide") = player->GetMechanics()->GetMovementHandler()->IsGlideUnlocked();
 	abilitiesNode.attribute("walljump") = player->GetMechanics()->GetMovementHandler()->IsWallJumpUnlocked();
 	abilitiesNode.attribute("hook") = player->GetMechanics()->GetMovementHandler()->IsHookUnlocked();
-	abilitiesNode.attribute("push") = player->GetMechanics()->GetMovementHandler()->IsHookUnlocked(); //TODO JAVI --- IsPushUnlocked()
+	abilitiesNode.attribute("push") = player->GetMechanics()->GetMovementHandler()->CanPush(); 
 	
 	pugi::xml_node sceneNode = saveData.child("scene"); // Save Actual Scene
 	sceneNode.attribute("actualScene") = nextScene;
@@ -295,14 +296,22 @@ void Scene::LoadGameXML() {
 
     if (saveData) {
         pugi::xml_node playerNode = saveData.child("player");
-        if (playerNode) {
-			int offset = 100;
-            float playerX = playerNode.attribute("x").as_float() ;
-            float playerY = playerNode.attribute("y").as_float() - offset;
-			player->GetMechanics()->GetHealthSystem()->SetLives(playerNode.attribute("lives").as_int());
-            newPosition = Vector2D(playerX, playerY); 
-        }
-		pugi::xml_node abilitiesNode = saveData.child("abilities"); // Abilities Load
+		if (playerNode) {
+			int offset = 100;	//Position
+			float playerX = playerNode.attribute("x").as_float();
+			float playerY = playerNode.attribute("y").as_float() - offset;
+			newPosition = Vector2D(playerX, playerY);
+
+			int loadedLives = playerNode.attribute("lives").as_int(); //Lives
+			int loadedMaxLives = playerNode.attribute("maxlives").as_int();
+			player->GetMechanics()->GetHealthSystem()->SetMaxLives(loadedMaxLives);
+			if (loadedLives <= 0 || loadedLives > loadedMaxLives) {
+				loadedLives = 3; 
+			}
+			player->GetMechanics()->GetHealthSystem()->SetLives(loadedLives);
+		}
+
+		pugi::xml_node abilitiesNode = saveData.child("abilities"); // Abilities
 		if (abilitiesNode) {
 			if (abilitiesNode.attribute("jump").as_bool() == true) {
 				mechanics->EnableJump(true);
@@ -323,7 +332,7 @@ void Scene::LoadGameXML() {
 				mechanics->EnableGlide(true);
 			}
 			if (abilitiesNode.attribute("push").as_bool() == true) {
-				mechanics->GetMovementHandler()->SetHookUnlocked(true);
+				mechanics->GetMovementHandler()->EnablePush(true);
 			}
 		}
         pugi::xml_node sceneNode = saveData.child("scene");
@@ -336,7 +345,6 @@ void Scene::LoadGameXML() {
 			}
 		}
 	}
-
 }
 void Scene::Vignette(int size, float strength, SDL_Color color)
 {
@@ -428,7 +436,6 @@ void Scene::SetActiveHook(HookAnchor* hook)
 {
 	activeHook = hook;
 }
-
 HookAnchor* Scene::GetActiveHook() const
 {
 	return activeHook;

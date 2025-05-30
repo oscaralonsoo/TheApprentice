@@ -119,7 +119,12 @@ void HealthSystem::AddMaxLife() {
 }
 
 void HealthSystem::SetLives(int lives) {
-    this->lives = lives;
+    if (lives <= 0 || lives > maxlives) {
+        this->lives = 3;
+    }
+    else {
+        this->lives = lives;
+    }
     UpdateVignette();
 }
 

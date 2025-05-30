@@ -27,12 +27,12 @@ bool RainParticle::Start() {
     texture = Engine::GetInstance().textures->Load(rainNode.attribute("texture").as_string());
     idleAnim.LoadAnimations(rainNode.child("idle"));
 
-    scale = 0.3f + static_cast<float>(rand()) / RAND_MAX * (1.0f - 0.3f);
+    scale = 0.2f + static_cast<float>(rand()) / RAND_MAX * (0.7f - 0.2f);
 
     texW = rainNode.attribute("w").as_int() * scale;
     texH = rainNode.attribute("h").as_int() * scale;
 
-    velocity.y = 7.0f + static_cast<float>(rand()) / RAND_MAX * (10.0f - 7.0f);
+    velocity.y = 14.0f + static_cast<float>(rand()) / RAND_MAX * (19.0f - 14.0f);
 
     currentAnimation = &idleAnim;
 

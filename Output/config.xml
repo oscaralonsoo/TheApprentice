@@ -922,7 +922,7 @@
 				</dust>
 				<rain w="20" h="20" texture="Assets/Particles/rain.png">
 					<idle loop="false" speed="0.2">
-						<frame x="80" y="0" w="20" h="20" />
+						<frame x="0" y="0" w="20" h="20" />
 					</idle>
 				</rain>
 				<firefly w="20" h="20" texture="Assets/Particles/firefly.png">

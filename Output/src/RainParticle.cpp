@@ -43,7 +43,7 @@ bool RainParticle::Update(float dt) {
     position.setX(position.getX() + velocity.x);
     position.setY(position.getY() + velocity.y);
 
-    Engine::GetInstance().render->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, SDL_FLIP_NONE, SDL_FLIP_NONE, scale);
+    Engine::GetInstance().render->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, SDL_FLIP_NONE, scale);
 
     currentAnimation->Update();
 

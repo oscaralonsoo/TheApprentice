@@ -121,12 +121,11 @@ bool Scene::PostUpdate()
 	}
 
 	Vignette(player->GetMechanics()->GetHealthSystem()->GetVignetteSize(), 0.8f, vignetteColor);
-
-	if (isDead) {
+	if (isDead && !isChangingScene) { 
 		isDead = false;
 		pendingLoadAfterDeath = true;
+		isChangingScene = true;
 	}
-
 	return ret;
 }
 
@@ -287,11 +286,11 @@ void Scene::SaveGameXML() {
 	Engine::GetInstance().menus->StartTransition(false, Engine::GetInstance().menus->currentState); // Final Transition
 
 	mechanics->healthSystem.HealFull();//Heal The Player
+
+
 }
 void Scene::LoadGameXML() {
 	if (isLoading||transitioning) return;
-
-
     isLoading = true;
 
     pugi::xml_document config;
@@ -312,7 +311,7 @@ void Scene::LoadGameXML() {
 			int loadedMaxLives = playerNode.attribute("maxlives").as_int();
 			player->GetMechanics()->GetHealthSystem()->SetMaxLives(loadedMaxLives);
 			if (loadedLives <= 0 || loadedLives > loadedMaxLives) {
-				loadedLives = 3; 
+				loadedLives = loadedMaxLives; 
 			}
 			player->GetMechanics()->GetHealthSystem()->SetLives(loadedLives);
 		}
@@ -361,6 +360,7 @@ void Scene::LoadGameXML() {
 			Engine::GetInstance().audio->SetMusicVolume(musicVol);
 			Engine::GetInstance().audio->SetSfxVolume(sfxVol);
 		}
+		isChangingScene = false;
 	}
 }
 void Scene::Vignette(int size, float strength, SDL_Color color)

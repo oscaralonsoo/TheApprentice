@@ -69,7 +69,7 @@ public:
 
 
 public:
-	bool loadAlreadyCalled = false;
+	bool isChangingScene = false;
 	bool isLoading = false;
 	int previousVignetteSize;
 	Vector2D newPosition;

@@ -25,7 +25,6 @@ void HealthSystem::Update(float dt) {
     if (isDying && deathTimer.ReadMSec() >= deathAnimDuration) {
         isDying = false;
 
-        // Aquí podrías reiniciar vida o mover al respawn
         lives = maxlives;
     }
 }
@@ -71,8 +70,7 @@ void HealthSystem::HandleSpikeDamage() {
 void HealthSystem::HealFull() {
     if (lives < 3)
     {
-        lives = 3;
-        
+        lives = maxlives;
     }
     vignetteSize = 300.0f;
 }
@@ -90,8 +88,12 @@ void HealthSystem::CheckDeath() {
         deathTimer.Start();
 
         Engine::GetInstance().scene->isDead = true;
+        if (!Engine::GetInstance().scene->isChangingScene) {
+            Engine::GetInstance().scene->isChangingScene = true; 
+        }
     }
 }
+
 
 int HealthSystem::GetLives() const {
     return lives;
@@ -121,7 +123,7 @@ void HealthSystem::AddMaxLife() {
 
 void HealthSystem::SetLives(int lives) {
     if (lives <= 0 || lives > maxlives) {
-        this->lives = 3;
+        this->lives = maxlives;
     }
     else {
         this->lives = lives;
@@ -139,7 +141,7 @@ void HealthSystem::SetVignetteSize(float size) {
 }
 
 void HealthSystem::ApplyKnockback(const Vector2D& sourcePosition) {
-    if (lives <= 1) return; // Si va a morir, no aplicar knockback
+    if (lives <= 1) return;
 
     b2Vec2 playerPos = player->pbody->body->GetPosition();
     float direction = (playerPos.x < PIXEL_TO_METERS(sourcePosition.x)) ? -1.0f : 1.0f;

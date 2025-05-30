@@ -48,7 +48,7 @@ private:
     float jumpCooldown = 0.0f;
     float attackDownTimer = 0.0f;
 
-    const float jumpInterval = 1500.0f;
+    const float jumpInterval = 750.0f;
     const float minAttackDownTime = 500.0f;
     const float jumpForceY = -12.0f;
 

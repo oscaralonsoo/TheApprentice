@@ -27,7 +27,6 @@ void HealthSystem::Update(float dt) {
 
         // Aquí podrías reiniciar vida o mover al respawn
         lives = maxlives;
-        // O llamar a algún método como scene->ReloadPlayer();
     }
 }
 
@@ -41,7 +40,7 @@ void HealthSystem::TakeDamage() {
         isDying = true;
         player->SetState("die");
         deathTimer.Start();
-        Engine::GetInstance().scene->isDead = true;
+        Engine::GetInstance().scene->isDead = true; 
     }
     else {
         player->SetState("hit");
@@ -85,14 +84,12 @@ void HealthSystem::UpdateVignette() {
 }
 
 void HealthSystem::CheckDeath() {
-    if (lives <= 0 && !isDying) {
+    if (GetLives() <= 0 && !isDying) {
         isDying = true;
         player->SetState("die");
         deathTimer.Start();
 
         Engine::GetInstance().scene->isDead = true;
-
-        // lives = 3; ← espera al final de la animación para resetear
     }
 }
 

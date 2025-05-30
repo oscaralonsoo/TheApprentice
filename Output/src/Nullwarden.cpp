@@ -19,7 +19,6 @@ bool Nullwarden::Awake() {
 }
 
 bool Nullwarden::Start() {
-    //Add a physics to an item - initialize the physics body
     pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX(),(int)position.getY(), texW, texH , bodyType::DYNAMIC, CATEGORY_ENEMY, CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_ATTACK | CATEGORY_PLAYER_DAMAGE);
 
     //Assign collider type
@@ -166,6 +165,7 @@ void Nullwarden::OnCollision(PhysBody* physA, PhysBody* physB)
         }
         if (currentState == NullwardenState::ATTACK) {
             Roar();
+
         }
         else if(crystalBroken && currentState == NullwardenState::IMPALED){
             currentState = NullwardenState::DEATH;
@@ -269,8 +269,6 @@ void Nullwarden::Impaled() {
     }
 }
 void Nullwarden::Roar() {
-
-    
     Player* player = Engine::GetInstance().scene->GetPlayer();
 
     float playerX = player->position.getX();
@@ -282,7 +280,7 @@ void Nullwarden::Roar() {
     float dy = playerY - nullwardenY;
 
     float distanceSquared = dx * dx + dy * dy;
-    const float roarRadius = 3500.0f;
+    const float roarRadius = 2000.0f;
     const float roarRadiusSquared = roarRadius * roarRadius;
 
     if (distanceSquared <= roarRadiusSquared) {

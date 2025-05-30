@@ -441,9 +441,6 @@ void Menus::UpdateVolume(int sliderX, int minX, int maxX) {
 
     Mix_VolumeMusic(finalMusicVolume);
     Mix_Volume(-1, finalSfxVolume);
-
-    LOG("musicVolume: %.2f | masterVolume: %.2f | final: %d",
-        audio.musicVolume, audio.masterVolume, finalMusicVolume);
 }
 void Menus::Credits() {
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {

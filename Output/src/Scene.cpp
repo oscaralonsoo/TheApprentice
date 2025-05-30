@@ -51,7 +51,7 @@ bool Scene::Awake()
 bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
-	nextScene = 1;
+	nextScene = 666;
 	Engine::GetInstance().map->Load("Assets/Maps/", "Map" + std::to_string(nextScene) + ".tmx");
 
 	return true;
@@ -289,7 +289,7 @@ void Scene::SaveGameXML() {
 	mechanics->healthSystem.HealFull();//Heal The Player
 }
 void Scene::LoadGameXML() {
-	if (isLoading) return;
+	if (isLoading||transitioning) return;
 
 
     isLoading = true;

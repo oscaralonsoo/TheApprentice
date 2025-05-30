@@ -6,12 +6,13 @@
 NullwardenSpear::NullwardenSpear(float x, float y, float speed, b2Vec2 direction)
     : Entity(EntityType::SPEAR), direction(direction)
 {
+    position = Vector2D(x, y);
     bool horizontal = (direction.x != 0.0f);
 
     width = horizontal ? 180 : 35;
     height = horizontal ? 35 : 180;
 
-    pbody = Engine::GetInstance().physics->CreateRectangleSensor(x, y, width, height, bodyType::DYNAMIC, CATEGORY_ENEMY, CATEGORY_WALL | CATEGORY_PLAYER_DAMAGE);
+    pbody = Engine::GetInstance().physics->CreateRectangleSensor(position.x, position.y, width, height, bodyType::DYNAMIC, CATEGORY_ENEMY, CATEGORY_WALL | CATEGORY_PLAYER_DAMAGE);
     pbody->ctype = ColliderType::ENEMY;
     pbody->listener = this;
 

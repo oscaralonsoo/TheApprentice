@@ -7,11 +7,12 @@ PressureSystemController::PressureSystemController()
 }
 
 PressureSystemController::~PressureSystemController() {}
-
 void PressureSystemController::UpdateSystem()
 {
     std::unordered_map<int, int> totalPlates;
     std::unordered_map<int, int> activePlates;
+    std::unordered_map<int, int> totalInvisiblePlates;
+    std::unordered_map<int, int> activeInvisiblePlates;
 
     for (auto* plate : plates)
     {
@@ -20,14 +21,32 @@ void PressureSystemController::UpdateSystem()
         {
             activePlates[plate->id]++;
         }
+
+        if (plate->isInvisible)
+        {
+            totalInvisiblePlates[plate->id]++;
+            if (plate->IsActive())
+            {
+                activeInvisiblePlates[plate->id]++;
+            }
+        }
     }
 
     for (auto* door : doors)
     {
-        int total = totalPlates[door->id];
-        int active = activePlates[door->id];
+        if (totalInvisiblePlates[door->id] > 0)
+        {
+            bool allInvisiblesActive = (activeInvisiblePlates[door->id] == totalInvisiblePlates[door->id]);
 
-        bool shouldOpen = (total > 0 && active == total);
+            if (allInvisiblesActive && !door->triggeredOnce)
+            {
+                door->SetOpen(true);
+                door->triggeredOnce = true;
+                door->shouldBeOpen = !door->shouldBeOpen;
+            }
+            continue;
+        }
+        bool shouldOpen = (totalPlates[door->id] > 0 && activePlates[door->id] == totalPlates[door->id]);
         door->shouldBeOpen = shouldOpen;
         door->SetOpen(shouldOpen);
     }
@@ -54,7 +73,7 @@ void PressureSystemController::OpenDoor(int id)
         {
             door->shouldBeOpen = true;
             door->SetOpen(true);
-            door->state = PressureDoorState::DISABLE; // Fuerza cambio inmediato
+            door->state = PressureDoorState::DISABLE;
             break;
         }
     }

@@ -70,7 +70,11 @@ void HealthSystem::HandleSpikeDamage() {
 }
 
 void HealthSystem::HealFull() {
-    lives = 3;
+    if (lives < 3)
+    {
+        lives = 3;
+        
+    }
     vignetteSize = 300.0f;
 }
 
@@ -119,7 +123,12 @@ void HealthSystem::AddMaxLife() {
 }
 
 void HealthSystem::SetLives(int lives) {
-    this->lives = lives;
+    if (lives <= 0 || lives > maxlives) {
+        this->lives = 3;
+    }
+    else {
+        this->lives = lives;
+    }
     UpdateVignette();
 }
 

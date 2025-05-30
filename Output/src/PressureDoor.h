@@ -38,7 +38,7 @@ public:
     int id;
     bool isOpen;
     bool shouldBeOpen;
-    bool overriden = false;
+    bool triggeredOnce = false;
     PressureDoorState state = PressureDoorState::IDLE;
 private:
     PhysBody* pbody;

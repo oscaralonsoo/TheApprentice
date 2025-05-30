@@ -62,9 +62,8 @@ bool Broodheart::Start() {
         fixture->SetFilterData(filter);
     }
 
-    soundSpawnId = Engine::GetInstance().audio->LoadFx("broodheart_spawn.ogg", 1.0f);
-    soundDeathId = Engine::GetInstance().audio->LoadFx("monster_death.ogg", 1.0f);
-    maxSteps = 20;
+    soundSpawnId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/broodheart_spawn.ogg", 1.0f);
+    soundDeathId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/monster_death.ogg", 1.0f);
 
     return true;
 }

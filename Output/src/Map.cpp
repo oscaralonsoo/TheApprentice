@@ -776,6 +776,8 @@ bool Map::Load(std::string path, std::string fileName)
                         npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PANGOLIN);
                     else if (npcName == "Ardilla")
                         npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ARDILLA);
+                    else if (npcName == "Bichopalo")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BICHOPALO);
 
                     if (npc != nullptr)
                     {
@@ -798,7 +800,7 @@ bool Map::Load(std::string path, std::string fileName)
                     int w = objectNode.attribute("width").as_int();
                     int h = objectNode.attribute("height").as_int();
 
-                    int id = 1;
+                    int id=0;
                     bool isInvisible = false; 
                     bool isOpen = false;
 
@@ -929,6 +931,29 @@ MapLayer* Map::GetNavigationLayer() {
     }
 
     return nullptr;
+}
+
+void Map::SetNavigationTileRegion(int x, int y, int w, int h, uint32_t newTileId) {
+    for (const auto& layer : mapData.layers) {
+        if (layer->properties.GetProperty("Navigation") != nullptr &&
+            layer->properties.GetProperty("Navigation")->value) {
+
+            for (int j = 0; j < h; ++j) {
+                for (int i = 0; i < w; ++i) {
+                    int tileX = x + i;
+                    int tileY = y + j;
+
+                    if (tileX < 0 || tileY < 0 || tileX >= layer->width || tileY >= layer->height)
+                        continue;
+
+                    size_t index = tileY * layer->width + tileX;
+                    layer->tiles[index] = newTileId;
+                }
+            }
+
+            break;
+        }
+    }
 }
 
 Properties::Property* Properties::GetProperty(const char* name)

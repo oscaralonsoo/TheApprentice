@@ -16,10 +16,11 @@ enum class CrystalState {
 };
 class NullwardenCrystal : public Entity {
 public:
-    NullwardenCrystal(float x, float y, float speed, b2Vec2 dir, Nullwarden* owner);
+    NullwardenCrystal(float x, float y, float speed, b2Vec2 dir, Nullwarden* owner, b2Vec2 offset = b2Vec2(0.0f, 0.0f));
     ~NullwardenCrystal();
 
     bool Update(float dt) override;
+    bool PostUpdate();
     bool CleanUp() override;
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
 
@@ -30,8 +31,10 @@ public:
     bool delayRoar = false;
     Timer roarDelayTimer;
     Animation breakAnim;
-private:
     CrystalState currentState = CrystalState::PRISTINE;
+    b2Vec2 relativeOffset = b2Vec2(0.0f, 0.0f);
+
+private:
     Nullwarden* nullwarden = nullptr;
     PhysBody* pbody = nullptr;
     SDL_Texture* texture = nullptr;
@@ -41,8 +44,5 @@ private:
     Animation crackedAnim;
     Animation shatteredAnim;
 
-
-    Vector2D position;
-    int width, height;
     b2Vec2 direction;
 };

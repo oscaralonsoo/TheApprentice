@@ -1,4 +1,4 @@
-#include "NullwardenCrystal.h"
+ï»¿#include "NullwardenCrystal.h"
 #include "Engine.h"
 #include "Enemy.h"
 #include "Textures.h"
@@ -8,11 +8,11 @@
 #include "Nullwarden.h"
 #include "EntityManager.h"
 
-NullwardenCrystal::NullwardenCrystal(float x, float y, float speed, b2Vec2 dir, Nullwarden* owner)
-    : Entity(EntityType::CRYSTAL), direction(dir), nullwarden(owner)
+NullwardenCrystal::NullwardenCrystal(float x, float y, float speed, b2Vec2 dir, Nullwarden* owner, b2Vec2 offset)
+    : Entity(EntityType::CRYSTAL), direction(dir), nullwarden(owner), relativeOffset(offset)
 {
-    width = 64;
-    height = 64;
+    width = 80;
+    height = 80;
 
     pbody = Engine::GetInstance().physics->CreateCircle(x, y, width/2, bodyType::DYNAMIC);
     pbody->ctype = ColliderType::ENEMY;
@@ -57,49 +57,65 @@ NullwardenCrystal::~NullwardenCrystal() {
 bool NullwardenCrystal::Update(float dt) {
     UpdateCrystalState();
 
-    // Posicionamiento del cristal
     if (nullwarden && nullwarden->pbody) {
         b2Vec2 nullPos = nullwarden->pbody->body->GetPosition();
-        b2Vec2 offset = nullwarden->GetCrystalOffset();
-        pbody->body->SetTransform(nullPos + offset, 0.0f);
+
+        float nullX = METERS_TO_PIXELS(nullPos.x);
+        float nullY = METERS_TO_PIXELS(nullPos.y);
+
+        float offsetX = METERS_TO_PIXELS(nullwarden->pbody->body->GetFixtureList()->GetShape()->m_radius) + width / 2;
+
+        //TODO AJUSTAR CRISTAL
+        if (nullwarden->direction < 0 && nullwarden->currentState == NullwardenState::IMPALED) {
+            pbody->body->GetFixtureList()->SetSensor(false);
+            relativeOffset = b2Vec2(3, -1.6f);
+            pbody->body->SetTransform(b2Vec2(nullPos.x + relativeOffset.x, nullPos.y + relativeOffset.y), 0.0f);
+            pbody->body->SetLinearVelocity(b2Vec2_zero);
+            pbody->body->SetAngularVelocity(0);
+            direction = b2Vec2(1, 0);
+        }
+        else if (nullwarden->direction > 0 && nullwarden->currentState == NullwardenState::IMPALED) {
+            pbody->body->GetFixtureList()->SetSensor(false);
+            relativeOffset = b2Vec2(-3, -1.6f);
+            pbody->body->SetTransform(b2Vec2(nullPos.x + relativeOffset.x, nullPos.y + relativeOffset.y), 0.0f);
+            pbody->body->SetLinearVelocity(b2Vec2_zero);
+            pbody->body->SetAngularVelocity(0);
+            direction = b2Vec2(-1, -0);
+        }
+        else {
+            pbody->body->GetFixtureList()->SetSensor(true);
+            relativeOffset = b2Vec2(0, 4);
+            pbody->body->SetTransform(b2Vec2(nullPos.x + relativeOffset.x, nullPos.y + relativeOffset.y), 0.0f);
+            direction = b2Vec2(0, 0);
+        }
     }
 
-    // Posición de renderizado
     b2Transform pbodyPos = pbody->body->GetTransform();
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - width / 2);
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - height / 2);
 
     currentAnimation->Update();
 
-    // Dibujo
     SDL_RendererFlip flip = (direction.x < 0) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
     float angle = 0.0f;
-    if (nullwarden) {
-        angle = nullwarden->GetCrystalRotation();
-    }
-    Engine::GetInstance().render->DrawTexture( texture, (int)position.getX(), (int)position.getY(),
-        &currentAnimation->GetCurrentFrame(), 1.0f, angle, INT_MAX, INT_MAX, flip );
 
-
-    // Lógica del delay para rugido
-    if (currentState == CrystalState::BROKEN && currentAnimation->HasFinished()) {
-        if (!delayRoar) {
-            delayRoar = true;
-            roarDelayTimer.Start(); 
-        }
-        else if (roarDelayTimer.ReadMSec() >= 500) { 
-            if (nullwarden) {
-                nullwarden->currentState = NullwardenState::ROAR;
-            }
-            Engine::GetInstance().entityManager->DestroyEntity(this);
+    // AnimaciÃ³n de ruptura
+    if (currentState == CrystalState::BROKEN) {
+        if (nullwarden) {
+            nullwarden->currentState = NullwardenState::ROAR;
         }
     }
-
 
     return true;
 }
 
 
+bool NullwardenCrystal::PostUpdate() {
+    if (currentState == CrystalState::BROKEN && currentAnimation->HasFinished())
+        Engine::GetInstance().entityManager->DestroyEntity(this);
+
+    return true;
+}
 bool NullwardenCrystal::CleanUp() {
     if (pbody) {
         Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
@@ -115,7 +131,6 @@ void NullwardenCrystal::OnCollision(PhysBody* physA, PhysBody* physB) {
             nullwarden->currentState = NullwardenState::ROAR;
         }
         Engine::GetInstance().render->StartCameraShake(0.3f, 2);
-
     }
 }
 void NullwardenCrystal::UpdateCrystalState() {
@@ -132,6 +147,7 @@ void NullwardenCrystal::UpdateCrystalState() {
         currentState = CrystalState::BROKEN;
         currentAnimation = &breakAnim;
         nullwarden->crystalBroken = true;
+        nullwarden->startedImpaledAnim = false;
         break;
     }
 }

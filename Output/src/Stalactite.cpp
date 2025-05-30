@@ -54,7 +54,7 @@ bool Stalactite::Start() {
         }
     }
 
-    triggerZone = { (int)position.getX() - 20, (int)position.getY() + texH, texW + 40, 600 };
+    triggerZone = { (int)position.getX() - 20, (int)position.getY() + texH, texW + 40, 1000 };
 
     currentAnimation = &idleAnim;
 

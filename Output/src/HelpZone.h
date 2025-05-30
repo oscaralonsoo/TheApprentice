@@ -23,13 +23,10 @@ public:
 
 public:
     bool playerInside =false;
-    Vector2D position;
 private:
     PhysBody* pbody;
     std::string textureName; 
     SDL_Texture* texture; 
-    int width;
-    int height;
 
     //Fade In/Out
     bool fadingIn = false;

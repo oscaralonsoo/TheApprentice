@@ -69,12 +69,14 @@ bool Checkpoint::Update(float dt)
         if (currentAnimation != &unsavedAnim) currentAnimation = &unsavedAnim;
         break;
     case CheckpointState::SAVING:
-        if (currentAnimation != &savingAnim) currentAnimation = &savingAnim;
-        if (savingAnim.HasFinished()) {
-            state = CheckpointState::SAVED;
-            Engine::GetInstance().scene->SaveGameXML();
+        if (currentAnimation != &savingAnim)  {
+            currentAnimation = &savingAnim;
             Player* player = Engine::GetInstance().scene->GetPlayer();
             player->GetMechanics()->GetMovementHandler()->SetCantMove(false);
+            Engine::GetInstance().scene->SaveGameXML();
+        }
+        if (savingAnim.HasFinished()) {
+            state = CheckpointState::SAVED;
         }
         break;
     case CheckpointState::SAVED:
@@ -84,7 +86,6 @@ bool Checkpoint::Update(float dt)
         break;
     }
 
-    // Actualizar posición basada en el cuerpo físico
     b2Transform pbodyPos = pbody->body->GetTransform();
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - (texW/2)); 
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y)- (texH/2)); 
@@ -99,7 +100,6 @@ bool Checkpoint::Update(float dt)
         Engine::GetInstance().render->DrawTexture(texture, drawX, drawY, &frame);
         currentAnimation->Update();
     }
-
     return true;
 }
 
@@ -133,12 +133,10 @@ void Checkpoint::OnCollisionEnd(PhysBody* physA, PhysBody* physB){
 void Checkpoint::CheckSave() {
     bool saveRequested = false;
 
-    // Tecla W
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
         saveRequested = true;
     }
 
-    // Botón Y del mando (desde MovementHandler)
     Player* player = Engine::GetInstance().scene->GetPlayer();
     SDL_GameController* controller = player->GetMechanics()->GetMovementHandler()->GetController();
 
@@ -150,7 +148,6 @@ void Checkpoint::CheckSave() {
         yHeld = yNow;
     }
 
-    // Ejecutar guardado si se ha pedido y estás dentro del checkpoint
     if (saveRequested && insideCheckpoint) {
         if (state == CheckpointState::UNSAVED) {
             state = CheckpointState::SAVING;
@@ -158,7 +155,6 @@ void Checkpoint::CheckSave() {
         else if (state == CheckpointState::SAVED) {
             Engine::GetInstance().scene->SaveGameXML();
         }
-
         player->GetMechanics()->GetMovementHandler()->SetCantMove(true);
         b2Vec2 stopVelocity(0.0f, 0.0f);
         player->pbody->body->SetLinearVelocity(stopVelocity);

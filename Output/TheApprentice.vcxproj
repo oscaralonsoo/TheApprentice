@@ -167,6 +167,7 @@
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\EntityManager.cpp" />
     <ClCompile Include="src\FallMechanic.cpp" />
+    <ClCompile Include="src\FireflyParticle.cpp" />
     <ClCompile Include="src\Geyser.cpp" />
     <ClCompile Include="src\GodModeSystem.cpp" />
     <ClCompile Include="src\GuiControlButton.cpp" />
@@ -201,6 +202,7 @@
     <ClCompile Include="src\PressureDoor.cpp" />
     <ClCompile Include="src\PressurePlate.cpp" />
     <ClCompile Include="src\PressureSystemController.cpp" />
+    <ClCompile Include="src\RainParticle.cpp" />
     <ClCompile Include="src\Shyver.cpp" />
     <ClCompile Include="src\Stalactite.cpp" />
     <ClCompile Include="src\TheApprentice.cpp" />
@@ -243,6 +245,7 @@
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\EntityManager.h" />
     <ClInclude Include="src\FallMechanic.h" />
+    <ClInclude Include="src\FireflyParticle.h" />
     <ClInclude Include="src\Geyser.h" />
     <ClInclude Include="src\GodModeSystem.h" />
     <ClInclude Include="src\GuiControl.h" />
@@ -284,6 +287,7 @@
     <ClInclude Include="src\PressurePlate.h" />
     <ClInclude Include="src\PressureSystemController.h" />
     <ClInclude Include="src\PushableBox.h" />
+    <ClInclude Include="src\RainParticle.h" />
     <ClInclude Include="src\Render.h" />
     <ClInclude Include="src\RespawnSystem.h" />
     <ClInclude Include="src\Scene.h" />

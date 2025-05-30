@@ -5,7 +5,7 @@
 #include "Textures.h"
 #include <cmath>
 
-MenuParticle::MenuParticle() : Entity(EntityType::MENU_PARTICLE), state(MenuParticleState::SPAWNING)
+MenuParticle::MenuParticle() : Entity(EntityType::PARTICLE), state(MenuParticleState::SPAWNING)
 {
     velocity = { 0.0f, 0.0f };
 }
@@ -28,7 +28,7 @@ bool MenuParticle::Start() {
     floatAnim.LoadAnimations(dustNode.child("float"));
     fadeAnim.LoadAnimations(dustNode.child("fade"));
 
-    scale = 0.3f + static_cast<float>(rand()) / RAND_MAX * (1.0f - 0.3f);
+    scale = 0.4f + static_cast<float>(rand()) / RAND_MAX * (1.3f - 0.4f);
 
     texW = dustNode.attribute("w").as_int() * scale;
     texH = dustNode.attribute("h").as_int() * scale;

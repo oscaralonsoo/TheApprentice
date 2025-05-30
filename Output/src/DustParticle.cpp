@@ -5,7 +5,8 @@
 #include "Textures.h"
 #include <cmath>
 
-DustParticle::DustParticle() : Entity(EntityType::DUST_PARTICLE), state(DustParticleState::SPAWNING)
+DustParticle::DustParticle(int variant)
+    : Entity(EntityType::PARTICLE), state(DustParticleState::SPAWNING), variant(variant)
 {
     velocity = { 0.0f, 0.0f };
 }
@@ -20,10 +21,11 @@ bool DustParticle::Awake() {
 bool DustParticle::Start() {
     pugi::xml_document loadFile;
     pugi::xml_parse_result result = loadFile.load_file("config.xml");
+    std::string path = "Assets/Particles/dust" + std::to_string(variant) + ".png";
     pugi::xml_node dustNode = loadFile.child("config").child("scene").child("animations").child("particles").child("dust");
 
     // Cargar textura y animaciones
-    texture = Engine::GetInstance().textures->Load(dustNode.attribute("texture").as_string());
+    texture = Engine::GetInstance().textures->Load(path.c_str());
     spawnAnim.LoadAnimations(dustNode.child("spawn"));
     floatAnim.LoadAnimations(dustNode.child("float"));
     fadeAnim.LoadAnimations(dustNode.child("fade"));

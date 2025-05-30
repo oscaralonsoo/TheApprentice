@@ -35,7 +35,6 @@ Scene::Scene() : Module()
 Scene::~Scene()
 {}
 
-// Called before render is available
 bool Scene::Awake()
 {
 	LOG("Loading Scene");
@@ -49,21 +48,20 @@ bool Scene::Awake()
 	return ret;
 }
 
-// Called before the first frame
 bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
-	Engine::GetInstance().map->Load("Assets/Maps/", "Map1.tmx");
+	nextScene = 1;
+	Engine::GetInstance().map->Load("Assets/Maps/", "Map" + std::to_string(nextScene) + ".tmx");
+
 	return true;
 }
 
-// Called each loop iteration
 bool Scene::PreUpdate()
 {
 	return true;
 }
 
-// Called each loop iteration
 bool Scene::Update(float dt)
 {
 	if (Engine::GetInstance().menus->currentState != MenusState::GAME)
@@ -78,7 +76,6 @@ bool Scene::Update(float dt)
 
 	Engine::GetInstance().render.get()->UpdateCamera(player->GetPosition(), player->GetMovementDirection(), 0.05);
 	
-	//L03 TODO 3: Make the camera movement independent of framerate
 	float camSpeed = 1;
 
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
@@ -163,18 +160,15 @@ void Scene::UpdateTransition(float dt)
 		transitionAlpha += dt * 0.0025f;
 		if (transitionAlpha >= 1.0f) {
 			transitionAlpha = 1.0f;
-
 			if (!waitingBlackScreen) {
-				ChangeScene(nextScene);          
-				waitingBlackScreen = true;       
-				blackScreenTimer = 0.0f;  
+				waitingBlackScreen = true;
+				blackScreenTimer = 0.0f;
 			}
 			else {
 				blackScreenTimer += dt;
-
 				if (blackScreenTimer >= blackScreenDelay) {
+					ChangeScene(nextScene); 
 					fadingIn = true;
-					waitingBlackScreen = false;
 				}
 			}
 		}
@@ -218,7 +212,7 @@ void Scene::ChangeScene(int nextScene)
 				player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, (newPosition.y - 200)/ PIXELS_PER_METER), 0);
 
 
-				LOG("Posición tras cambio de escena: X=%.2f Y=%.2f", newPosition.x, newPosition.y);
+				LOG("Posiciï¿½n tras cambio de escena: X=%.2f Y=%.2f", newPosition.x, newPosition.y);
 				LOG("isOnGround tras cambio de escena: %d", player->GetMechanics()->IsOnGround());
 				LOG("jumpCount tras cambio de escena: %d", player->GetMechanics()->GetJumpMechanic()->IsJumpUnlocked());
 			}
@@ -235,6 +229,9 @@ void Scene::ChangeScene(int nextScene)
 				break;
 			case 46:
 				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/snowforest_music.ogg", 2.0f, 1.0f);
+				break;
+			case 69:
+				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/palo.wav", 2.0f, 1.0f);
 				break;
 			}
 
@@ -262,6 +259,7 @@ void Scene::SaveGameXML() {
 		playerNode.attribute("x") = playerPos.x;
 		playerNode.attribute("y") = playerPos.y;
 		playerNode.attribute("lives") = player->GetMechanics()->GetHealthSystem()->GetLives();
+		playerNode.attribute("maxlives") = player->GetMechanics()->GetHealthSystem()->GetMaxLives();
 
 	pugi::xml_node abilitiesNode = saveData.child("abilities");
 	abilitiesNode.attribute("jump") = player->GetMechanics()->GetMovementHandler()->IsJumpUnlocked();
@@ -270,11 +268,20 @@ void Scene::SaveGameXML() {
 	abilitiesNode.attribute("glide") = player->GetMechanics()->GetMovementHandler()->IsGlideUnlocked();
 	abilitiesNode.attribute("walljump") = player->GetMechanics()->GetMovementHandler()->IsWallJumpUnlocked();
 	abilitiesNode.attribute("hook") = player->GetMechanics()->GetMovementHandler()->IsHookUnlocked();
-	abilitiesNode.attribute("push") = player->GetMechanics()->GetMovementHandler()->IsHookUnlocked(); //TODO JAVI --- IsPushUnlocked()
+	abilitiesNode.attribute("push") = player->GetMechanics()->GetMovementHandler()->CanPush(); 
 	
 	pugi::xml_node sceneNode = saveData.child("scene"); // Save Actual Scene
 	sceneNode.attribute("actualScene") = nextScene;
 	saveData.attribute("isSaved") = Engine::GetInstance().menus->isSaved;
+
+	pugi::xml_node audioNode = config.child("config").child("audio");
+	if (!audioNode) {
+		audioNode = config.child("config").child("audio");
+	}
+	audioNode.child("master").attribute("value") = Engine::GetInstance().audio->masterVolume;
+	audioNode.child("music").attribute("value") = Engine::GetInstance().audio->musicVolume;
+	audioNode.child("sfx").attribute("value") = Engine::GetInstance().audio->sfxVolume;
+
 	config.save_file("config.xml"); // Save Changes
 
 	Engine::GetInstance().menus->StartTransition(false, Engine::GetInstance().menus->currentState); // Final Transition
@@ -284,23 +291,33 @@ void Scene::SaveGameXML() {
 void Scene::LoadGameXML() {
 	if (isLoading) return;
 
+
     isLoading = true;
 
     pugi::xml_document config;
+
     pugi::xml_parse_result result = config.load_file("config.xml");
 
     pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
 
     if (saveData) {
         pugi::xml_node playerNode = saveData.child("player");
-        if (playerNode) {
-			int offset = 100;
-            float playerX = playerNode.attribute("x").as_float() ;
-            float playerY = playerNode.attribute("y").as_float() - offset;
-			player->GetMechanics()->GetHealthSystem()->SetLives(playerNode.attribute("lives").as_int());
-            newPosition = Vector2D(playerX, playerY); 
-        }
-		pugi::xml_node abilitiesNode = saveData.child("abilities"); // Abilities Load
+		if (playerNode) {
+			int offset = 100;	//Position
+			float playerX = playerNode.attribute("x").as_float();
+			float playerY = playerNode.attribute("y").as_float() - offset;
+			newPosition = Vector2D(playerX, playerY);
+
+			int loadedLives = playerNode.attribute("lives").as_int(); //Lives
+			int loadedMaxLives = playerNode.attribute("maxlives").as_int();
+			player->GetMechanics()->GetHealthSystem()->SetMaxLives(loadedMaxLives);
+			if (loadedLives <= 0 || loadedLives > loadedMaxLives) {
+				loadedLives = 3; 
+			}
+			player->GetMechanics()->GetHealthSystem()->SetLives(loadedLives);
+		}
+
+		pugi::xml_node abilitiesNode = saveData.child("abilities"); // Abilities
 		if (abilitiesNode) {
 			if (abilitiesNode.attribute("jump").as_bool() == true) {
 				mechanics->EnableJump(true);
@@ -321,7 +338,7 @@ void Scene::LoadGameXML() {
 				mechanics->EnableGlide(true);
 			}
 			if (abilitiesNode.attribute("push").as_bool() == true) {
-				mechanics->GetMovementHandler()->SetHookUnlocked(true);
+				mechanics->GetMovementHandler()->EnablePush(true);
 			}
 		}
         pugi::xml_node sceneNode = saveData.child("scene");
@@ -333,8 +350,18 @@ void Scene::LoadGameXML() {
 				StartTransition(savedScene);
 			}
 		}
-	}
+		// Cargar configuraciÃ³n de audio
+		pugi::xml_node audioNode = config.child("config").child("audio");
+		if (audioNode) {
+			float masterVol = audioNode.child("master").attribute("value").as_float(1.0f);
+			float musicVol = audioNode.child("music").attribute("value").as_float(1.0f);
+			float sfxVol = audioNode.child("sfx").attribute("value").as_float(1.0f);
 
+			Engine::GetInstance().audio->SetMasterVolume(masterVol);
+			Engine::GetInstance().audio->SetMusicVolume(musicVol);
+			Engine::GetInstance().audio->SetSfxVolume(sfxVol);
+		}
+	}
 }
 void Scene::Vignette(int size, float strength, SDL_Color color)
 {
@@ -426,7 +453,6 @@ void Scene::SetActiveHook(HookAnchor* hook)
 {
 	activeHook = hook;
 }
-
 HookAnchor* Scene::GetActiveHook() const
 {
 	return activeHook;

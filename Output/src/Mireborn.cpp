@@ -43,9 +43,9 @@ bool Mireborn::Start() {
                                 1.0f;
     maxSteps = 15;
 
-    soundWalkId = Engine::GetInstance().audio->LoadFx("mireborn_walk.ogg", 1.0f);
-    soundDivideId = Engine::GetInstance().audio->LoadFx("mireborn_divide.ogg", 1.0f);
-    soundDeathId = Engine::GetInstance().audio->LoadFx("monster_death.ogg", 1.0f);
+    soundWalkId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/mireborn_walk.ogg", 1.0f);
+    soundDivideId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/mireborn_divide.ogg", 1.0f);
+    soundDeathId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/monster_death.ogg", 1.0f);
 
     return Enemy::Start();
 }

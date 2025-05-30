@@ -186,7 +186,7 @@ void ParticleManager::SpawnFireflyParticles()
 }
 
 void ParticleManager::SpawnRainParticles() {
-	if (rand() % 100 < 15)
+	if (rand() % 100 < 25)
 	{
 		Vector2D camPos = Vector2D(
 			Engine::GetInstance().render->camera.x * -1,

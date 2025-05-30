@@ -92,21 +92,19 @@ bool Nullwarden::Update(float dt) {
         break;
     case NullwardenState::IMPALED:
         if (!startedImpaledAnim) Roar();
-        
         Impaled();
         break;
     case NullwardenState::ROAR:
-        if (!changedDirection)
-        {
+        if (!changedDirection && (previousState != NullwardenState::ATTACK || previousState != NullwardenState::IDLE)) {
             direction = -direction;
             changedDirection = true;
         }
         if (currentAnimation != &roarAnim) {
             roarAnim.Reset();
             currentAnimation = &roarAnim;
-            startedImpaledAnim = false;
         }
         Roar();
+
         if (currentAnimation->HasFinished()) {
             currentState = NullwardenState::ATTACK;
         }
@@ -151,32 +149,37 @@ bool Nullwarden::PostUpdate() {
 bool Nullwarden::CleanUp() {
     return Enemy::CleanUp();
 }
-
 void Nullwarden::OnCollision(PhysBody* physA, PhysBody* physB)
 {
     switch (physB->ctype)
     {
     case ColliderType::ATTACK:
         if (!crystalBroken && currentState == NullwardenState::IMPALED) {
-
             Engine::GetInstance().render->StartCameraShake(0.2f, 3);
-            currentState = NullwardenState::ROAR;
-            break;
+            changedDirection = false;
+            TriggerRoar();
         }
-        if (currentState == NullwardenState::ATTACK) {
-            Roar();
-
+        else if (currentState == NullwardenState::ATTACK) {
+            changedDirection = true;
+            TriggerRoar();
         }
-        else if(crystalBroken && currentState == NullwardenState::IMPALED){
+        else if (crystalBroken && currentState == NullwardenState::IMPALED) {
             currentState = NullwardenState::DEATH;
             pbody->body->GetFixtureList()->SetSensor(true);
         }
         break;
+
     case ColliderType::PLAYER:
-        if (currentState == NullwardenState::ATTACK) Roar();
+        if (currentState == NullwardenState::ATTACK) {
+            changedDirection = true;
+            TriggerRoar();
+        }
         break;
+
     case ColliderType::WALL:
-        if (currentState == NullwardenState::CHARGE) currentState = NullwardenState::IMPALED;
+        if (currentState == NullwardenState::CHARGE) {
+            currentState = NullwardenState::IMPALED;
+        }
         break;
     }
 }
@@ -291,7 +294,7 @@ void Nullwarden::Roar() {
         else if (falloff > 1.0f) falloff = 1.0f;
 
         float pushDir = (dx > 0.0f) ? 1.0f : -1.0f;
-        float pushStrength = 35.0f * falloff;
+        float pushStrength = 30.0f * falloff;
 
         b2Vec2 push = b2Vec2(pushDir * pushStrength, 0);
         player->pbody->body->SetAngularVelocity(0);
@@ -409,6 +412,11 @@ void Nullwarden::UpdateColliderSizeToCurrentAnimation() {
     fixtureDef.filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_ATTACK | CATEGORY_PLAYER_DAMAGE;
 
     pbody->body->CreateFixture(&fixtureDef);
+}
+void Nullwarden::TriggerRoar() {
+    if (currentState == NullwardenState::ROAR || currentState == NullwardenState::DEATH) return;
+    currentState = NullwardenState::ROAR;
+    roarAnim.Reset(); 
 }
 
 

@@ -40,6 +40,7 @@ public:
     void ChangeImpaledAnim();
     void UpdateDraw();
     void UpdateColliderSizeToCurrentAnimation();
+    void TriggerRoar();
 public:
 
     NullwardenState currentState = NullwardenState::IDLE;

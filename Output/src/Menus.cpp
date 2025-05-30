@@ -235,32 +235,41 @@ void Menus::MainMenu(float dt) {
 }
 void Menus::NewGame() {
     isSaved = 0;
+
+    // Cargar documento XML
     pugi::xml_document config;
     config.load_file(CONFIG_FILE.c_str());
+
     auto saveData = config.child("config").child("scene").child("save_data");
 
-    saveData.child("player").attribute("x") = 180;
-    saveData.child("player").attribute("y") = 50;
-    saveData.child("scene").attribute("actualScene") = 0;
+    auto playerNode = saveData.child("player");
+    playerNode.attribute("x") = 1152;
+    playerNode.attribute("y") = 970;
+    playerNode.attribute("lives") = 2;
+    playerNode.attribute("maxlives") = 3;
+
+    auto abilitiesNode = saveData.child("abilities");
+    abilitiesNode.attribute("jump") = false;
+    abilitiesNode.attribute("doublejump") = false;
+    abilitiesNode.attribute("dash") = false;
+    abilitiesNode.attribute("glide") = false;
+    abilitiesNode.attribute("walljump") = false;
+    abilitiesNode.attribute("hook") = false;
+    abilitiesNode.attribute("push") = false;
+
+    auto sceneNode = saveData.child("scene");
+    if (sceneNode) {
+        sceneNode.attribute("actualScene") = 1;
+    }
     saveData.attribute("isSaved") = isSaved;
 
     config.save_file(CONFIG_FILE.c_str());
-    pugi::xml_node sceneNode = saveData.child("scene");
-    if (sceneNode) {
-        sceneNode.attribute("actualScene") = 0;
-    }
-    if (saveData) {
-        saveData.attribute("isSaved") = Engine::GetInstance().menus->isSaved;
-    }
-    config.save_file("config.xml");
 
-    Engine::GetInstance().scene.get()->SaveGameXML();
-
-    Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 2.0f, 1.0f); 
-
+    Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 2.0f, 1.0f);
 
     StartTransition(false, MenusState::GAME);
 }
+
 void Menus::Pause(float dt) {
     if (inTransition) return;
 

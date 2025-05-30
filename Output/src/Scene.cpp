@@ -35,7 +35,6 @@ Scene::Scene() : Module()
 Scene::~Scene()
 {}
 
-// Called before render is available
 bool Scene::Awake()
 {
 	LOG("Loading Scene");
@@ -49,7 +48,6 @@ bool Scene::Awake()
 	return ret;
 }
 
-// Called before the first frame
 bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
@@ -59,13 +57,11 @@ bool Scene::Start()
 	return true;
 }
 
-// Called each loop iteration
 bool Scene::PreUpdate()
 {
 	return true;
 }
 
-// Called each loop iteration
 bool Scene::Update(float dt)
 {
 	if (Engine::GetInstance().menus->currentState != MenusState::GAME)
@@ -80,7 +76,6 @@ bool Scene::Update(float dt)
 
 	Engine::GetInstance().render.get()->UpdateCamera(player->GetPosition(), player->GetMovementDirection(), 0.05);
 	
-	//L03 TODO 3: Make the camera movement independent of framerate
 	float camSpeed = 1;
 
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)

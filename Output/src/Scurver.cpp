@@ -91,6 +91,8 @@ bool Scurver::Update(float dt) {
 
         pbody->body->SetLinearVelocity(b2Vec2_zero);
         pbody->body->SetAngularVelocity(0);
+        pbody->body->GetFixtureList()->SetSensor(true);
+        pbody->body->SetGravityScale(0);
         break;
     }
     return Enemy::Update(dt);

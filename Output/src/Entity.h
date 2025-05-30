@@ -19,6 +19,7 @@ enum class EntityType
 	PANGOLIN,
 	LIEBRE,
 	ARDILLA,
+	BICHOPALO,
 	THUMPOD,
 	SCURVER,
 	SPEAR,

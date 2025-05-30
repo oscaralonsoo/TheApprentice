@@ -944,6 +944,26 @@
 						<frame x="0" y="0" w="336" h="164" />
 					</idle>
 				</castor>
+				<bichopalo w="360" h="202" texture="Assets/NPC/Bichopalo.png">
+					<idle loop="true" speed="0.4">
+						<frame x="0" y="0" w="360" h="202" />
+						<frame x="360" y="0" w="360" h="202" />
+						<frame x="720" y="0" w="360" h="202" />
+						<frame x="1080" y="0" w="360" h="202" />
+						<frame x="1440" y="0" w="360" h="202" />
+						<frame x="1800" y="0" w="360" h="202" />
+						<frame x="2160" y="0" w="360" h="202" />
+						<frame x="2520" y="0" w="360" h="202" />
+						<frame x="2880" y="0" w="360" h="202" />
+						<frame x="3240" y="0" w="360" h="202" />
+						<frame x="3600" y="0" w="360" h="202" />
+						<frame x="3960" y="0" w="360" h="202" />
+						<frame x="4320" y="0" w="360" h="202" />
+						<frame x="4680" y="0" w="360" h="202" />
+						<frame x="5040" y="0" w="360" h="202" />
+						<frame x="5400" y="0" w="360" h="202" />
+					</idle>
+				</bichopalo>
 				<liebre w="180" h="180" texture="Assets/NPC/liebre.png">
 					<idle loop="true" speed="0.2">
 						<frame x="0" y="0" w="180" h="180" />
@@ -1086,7 +1106,7 @@
 		<save_data isSaved="1">
 			<player x="1202" y="1020" w="44" h="54" lives="3" />
 			<abilities jump="false" doublejump="false" dash="false" />
-			<scene actualScene="0" />
+			<scene actualScene="69" />
 			<enemies />
 		</save_data>
 	</scene>

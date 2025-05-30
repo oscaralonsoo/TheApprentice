@@ -204,6 +204,8 @@ void Menus::MainMenu(float dt) {
             int sceneIndex = Engine::GetInstance().scene->nextScene; 
 
             switch (sceneIndex) {
+            case 69:
+                Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/palo.wav", 2.0f, 1.0f);
             case 1:
                 Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 2.0f, 1.0f);
                 break;
@@ -253,7 +255,7 @@ void Menus::NewGame() {
 
     Engine::GetInstance().scene.get()->SaveGameXML();
 
-    Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 2.0f, 1.0f); 
+    Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/palo.wav", 2.0f, 1.0f);
 
 
     StartTransition(false, MenusState::GAME);

@@ -202,6 +202,7 @@
     <ClCompile Include="src\PressureDoor.cpp" />
     <ClCompile Include="src\PressurePlate.cpp" />
     <ClCompile Include="src\PressureSystemController.cpp" />
+    <ClCompile Include="src\RainParticle.cpp" />
     <ClCompile Include="src\Shyver.cpp" />
     <ClCompile Include="src\Stalactite.cpp" />
     <ClCompile Include="src\TheApprentice.cpp" />
@@ -286,6 +287,7 @@
     <ClInclude Include="src\PressurePlate.h" />
     <ClInclude Include="src\PressureSystemController.h" />
     <ClInclude Include="src\PushableBox.h" />
+    <ClInclude Include="src\RainParticle.h" />
     <ClInclude Include="src\Render.h" />
     <ClInclude Include="src\RespawnSystem.h" />
     <ClInclude Include="src\Scene.h" />

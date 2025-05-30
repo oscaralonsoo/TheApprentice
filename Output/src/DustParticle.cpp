@@ -6,7 +6,7 @@
 #include <cmath>
 
 DustParticle::DustParticle(int variant)
-    : Entity(EntityType::DUST_PARTICLE), state(DustParticleState::SPAWNING), variant(variant)
+    : Entity(EntityType::PARTICLE), state(DustParticleState::SPAWNING), variant(variant)
 {
     velocity = { 0.0f, 0.0f };
 }

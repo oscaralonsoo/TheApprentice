@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "Window.h"
 #include "FireflyParticle.h"
+#include "RainParticle.h"
 #include "Render.h"
 #include "Log.h"
 #include "Scene.h"
@@ -184,6 +185,30 @@ void ParticleManager::SpawnFireflyParticles()
 	}
 }
 
+void ParticleManager::SpawnRainParticles() {
+	if (rand() % 100 < 7)
+	{
+		Vector2D camPos = Vector2D(
+			Engine::GetInstance().render->camera.x * -1,
+			Engine::GetInstance().render->camera.y * -1
+		);
+
+		int windowWidth, windowHeight;
+		SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &windowWidth, &windowHeight);
+		Vector2D camSize = { static_cast<float>(windowWidth), static_cast<float>(windowHeight) };
+
+		RainParticle* particle = new RainParticle();
+		particles.push_back(particle);
+		particle->Start();
+
+		float spawnX = camPos.x + static_cast<float>(rand() % windowWidth);
+		float spawnY = camPos.y - 20.0f;
+		particle->SetPosition({ (float)spawnX, (float)spawnY });
+
+
+	}
+}
+
 void ParticleManager::SetParticlesByMap(int scene) {
 
 	switch (scene) {
@@ -196,6 +221,7 @@ void ParticleManager::SetParticlesByMap(int scene) {
 	case 21:
 	case 22:
 	case 23:
+		SpawnRainParticles();
 		SpawnFireflyParticles();
 		break;
 	default:

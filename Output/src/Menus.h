@@ -32,6 +32,7 @@ struct ButtonInfo {
         unhoveredTexturePath(unhoveredPath), hoveredTexturePath(hoveredPath) {}
 };
 
+
 class Menus : public Module {
 public:
     Menus();
@@ -40,7 +41,6 @@ public:
     bool Awake() override;
     bool Start() override;
     void LoadConfig();
-    void SaveConfig();
     void LoadButtonTextures(pugi::xml_document& doc);
     void LoadCheckboxTextures(pugi::xml_document& doc);
     void LoadCheckboxTexture(pugi::xml_node node, SDL_Texture*& texture);
@@ -58,6 +58,7 @@ public:
     void ApplyTransitionEffect();
     void StartTransition(bool fast, MenusState newState);
     void Transition(float dt);
+    void SyncSlidersWithVolumes();
     void CreateButtons();
     std::vector<std::string> GetButtonNamesForCurrentState() const;
     void Intro(float dt);
@@ -115,6 +116,8 @@ public:
     int fxVolumeSliderX = SLIDER_MIN;
     int masterVolumeSliderX = SLIDER_MAX;
 
+
+
 private:
     const std::string CONFIG_FILE = "config.xml";
     const std::string ART_FILE = "art.xml";
@@ -128,7 +131,6 @@ private:
     const int BUTTON_WIDTH = 200;
     const int BUTTON_HEIGHT = 15;
     const int BUTTON_SPACING = 50;
-
 
 
     std::unordered_map<std::string, SDL_Texture*> backgroundTextures;

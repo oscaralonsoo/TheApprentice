@@ -7,6 +7,11 @@
 	<render>
 		<vsync value="true" />
 	</render>
+	<audio>
+		<master value="0.5" />
+		<music value="0.5" />
+		<sfx value="0.5" />
+	</audio>
 	<window>
 		<resolution width="1280" height="720" scale="1" />
 		<fullscreen value="false" />
@@ -1089,7 +1094,7 @@
 			</abilities>
 		</animations>
 		<save_data isSaved="1">
-			<player x="3974" y="1766" w="44" h="54" lives="3" />
+			<player x="3955" y="1766" w="44" h="54" lives="3" />
 			<abilities jump="false" doublejump="false" dash="false" />
 			<scene actualScene="21" />
 			<enemies />

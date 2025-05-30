@@ -13,7 +13,13 @@
 #include "MenuParticle.h"
 #include "ParticleManager.h"
 
-
+template<typename T>
+T Clamp(T value, T min, T max)
+{
+    if (value < min) return min;
+    if (value > max) return max;
+    return value;
+}
 
 Menus::Menus() : currentState(MenusState::INTRO), transitionAlpha(0.0f), inTransition(false), fadingIn(false), nextState(MenusState::NONE),
 fastTransition(false), menuBackground(nullptr), pauseBackground(nullptr) {}
@@ -373,11 +379,9 @@ void Menus::AdjustVolume(int& sliderX, int minX, int maxX) {
     bool moveRight = input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT ||
         input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT;
 
-    // Soporte para mando
     if (controller && SDL_GameControllerGetAttached(controller)) {
         Sint16 axisX = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTX);
-        const Sint16 DEADZONE = 8000;  // evita falsos positivos
-
+        const Sint16 DEADZONE = 8000;  
         if (axisX < -DEADZONE && !dpadLeftHeld) {
             moveLeft = true;
             dpadLeftHeld = true;
@@ -401,7 +405,6 @@ void Menus::AdjustVolume(int& sliderX, int minX, int maxX) {
             dpadRightHeld = true;
         }
     }
-
     if (moveLeft) {
         sliderX -= VOLUME_ADJUSTMENT_STEP;
         sliderX = std::max(sliderX, minX);
@@ -411,24 +414,36 @@ void Menus::AdjustVolume(int& sliderX, int minX, int maxX) {
         sliderX += VOLUME_ADJUSTMENT_STEP;
         sliderX = std::min(sliderX, maxX);
     }
-
     UpdateVolume(sliderX, minX, maxX);
 }
-
 void Menus::UpdateVolume(int sliderX, int minX, int maxX) {
-    float volume = (float)(sliderX - minX) / (maxX - minX);
-    volume = (volume < 0.0f) ? 0.0f : (volume > 1.0f) ? 1.0f : volume;
-    int sdlVolume = static_cast<int>(volume * MIX_MAX_VOLUME);
+    int squareWidth = 20; 
+    int minXreal = minX + squareWidth / 2;
+    int maxXreal = maxX - squareWidth / 2;
+
+    float volume = (float)(sliderX - minXreal) / (maxXreal - minXreal);
+    volume = Clamp(volume, 0.0f, 1.0f);
+
+    auto& audio = *Engine::GetInstance().audio;
+
     if (selectedButton == 2) {
-        Mix_VolumeMusic(sdlVolume);
+        audio.musicVolume = volume;
     }
     else if (selectedButton == 3) {
-        Mix_Volume(-1, sdlVolume);
+        audio.sfxVolume = volume;
     }
     else if (selectedButton == 4) {
-        Mix_Volume(-1, sdlVolume);
-        Mix_VolumeMusic(sdlVolume);
+        audio.masterVolume = volume;
     }
+
+    int finalMusicVolume = static_cast<int>(audio.musicVolume * audio.masterVolume * MIX_MAX_VOLUME);
+    int finalSfxVolume = static_cast<int>(audio.sfxVolume * audio.masterVolume * MIX_MAX_VOLUME);
+
+    Mix_VolumeMusic(finalMusicVolume);
+    Mix_Volume(-1, finalSfxVolume);
+
+    LOG("musicVolume: %.2f | masterVolume: %.2f | final: %d",
+        audio.musicVolume, audio.masterVolume, finalMusicVolume);
 }
 void Menus::Credits() {
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
@@ -482,6 +497,21 @@ void Menus::Transition(float dt) {
         }
     }
 }
+void Menus::SyncSlidersWithVolumes() {
+    int minX = (width / 2) + 50;
+    int maxX = minX + 420;
+
+    auto CalcSliderX = [&](float volume, bool isSelected) -> int {
+        int squareWidth = isSelected ? 25 : 20;
+        int minXreal = minX + squareWidth / 2;
+        int maxXreal = maxX - squareWidth / 2;
+        return minXreal + static_cast<int>(volume * (maxXreal - minXreal));
+        };
+
+    musicVolumeSliderX = CalcSliderX(Engine::GetInstance().audio->musicVolume, selectedButton == 2);
+    fxVolumeSliderX = CalcSliderX(Engine::GetInstance().audio->sfxVolume, selectedButton == 3);
+    masterVolumeSliderX = CalcSliderX(Engine::GetInstance().audio->masterVolume, selectedButton == 4);
+}
 void Menus::CreateButtons() {
     buttons.clear();
     std::vector<std::string> names = GetButtonNamesForCurrentState();
@@ -491,6 +521,9 @@ void Menus::CreateButtons() {
 
     int buttonWidth = static_cast<int>(BUTTON_WIDTH * scale);
     int buttonHeight = static_cast<int>(BUTTON_HEIGHT * scale);
+    if (currentState == MenusState::SETTINGS) {
+        SyncSlidersWithVolumes();
+    }
     int spacing = static_cast<int>(BUTTON_SPACING * scale);
     int totalHeight = names.size() * (buttonHeight + spacing) - spacing;
 

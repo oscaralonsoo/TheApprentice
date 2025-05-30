@@ -73,10 +73,10 @@ bool Checkpoint::Update(float dt)
             currentAnimation = &savingAnim;
             Player* player = Engine::GetInstance().scene->GetPlayer();
             player->GetMechanics()->GetMovementHandler()->SetCantMove(false);
+            Engine::GetInstance().scene->SaveGameXML();
         }
         if (savingAnim.HasFinished()) {
             state = CheckpointState::SAVED;
-            Engine::GetInstance().scene->SaveGameXML();
         }
         break;
     case CheckpointState::SAVED:

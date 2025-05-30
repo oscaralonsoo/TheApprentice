@@ -1,16 +1,34 @@
 #include "PlayerAnimation.h"
 #include "Engine.h"
 #include "Render.h"
+#include "Log.h"
 
 PlayerAnimation::PlayerAnimation() : currentAnimation(nullptr) {}
 
 void PlayerAnimation::LoadAnimations(const pugi::xml_node& parameters, SDL_Texture* texture) {
     this->texture = texture;
+
     for (pugi::xml_node anim = parameters.first_child(); anim; anim = anim.next_sibling()) {
         std::string animName = anim.name();
         animations[animName].LoadAnimations(anim);
     }
-    currentAnimation = &animations["idle"];
+
+    if (animations.empty()) {
+        LOG("❌ No se cargaron animaciones.");
+        currentAnimation = nullptr;
+        return;
+    }
+
+    auto it = animations.find("idle");
+    if (it != animations.end()) {
+        currentAnimation = &it->second;
+        currentState = "idle";
+    }
+    else {
+        LOG("⚠ Animación 'idle' no encontrada. Asignando la primera animación cargada.");
+        currentAnimation = &animations.begin()->second;
+        currentState = animations.begin()->first;
+    }
 }
 
 void PlayerAnimation::Update(const std::string& state, int x, int y, bool visible, bool flip)
@@ -91,4 +109,48 @@ std::string PlayerAnimation::GetCurrentState() const {
 
 int PlayerAnimation::GetLoopCount() const {
     return currentAnimation ? currentAnimation->GetLoopCount() : 0;
+}
+
+void PlayerAnimation::SetStateIfHigherPriority(const std::string& newState) {
+    if (newState == currentState) return;
+
+    auto newPriority = GetPriorityForState(newState);
+    auto currentPriority = GetPriorityForState(currentState);
+
+    if (static_cast<int>(newPriority) >= static_cast<int>(currentPriority) ||
+        (currentAnimation && currentAnimation->HasFinished())) {
+
+        currentAnimation = &animations[newState];
+        currentState = newState;
+
+        if (!currentAnimation->IsLoop()) {
+            currentAnimation->Reset();
+        }
+
+        if (player) {
+            player->SetState(newState); //  ACTUALIZA EL STATE DEL PLAYER
+        }
+    }
+}
+
+AnimationStatePriority PlayerAnimation::GetPriorityForState(const std::string& state) const {
+    if (state == "idle") return AnimationStatePriority::IDLE;
+    if (state == "run_right") return AnimationStatePriority::RUN_RIGHT;
+    if (state == "fall") return AnimationStatePriority::FALL;
+    if (state == "jump") return AnimationStatePriority::JUMP;
+    if (state == "glide") return AnimationStatePriority::GLIDE;
+    if (state == "wall_slide") return AnimationStatePriority::WALL_SLIDE;
+    if (state == "doublejump") return AnimationStatePriority::DOUBLEJUMP;
+    if (state == "walljump") return AnimationStatePriority::WALLJUMP;
+    if (state == "dash") return AnimationStatePriority::DASH;
+    if (state == "attack") return AnimationStatePriority::ATTACK;
+    if (state == "eat") return AnimationStatePriority::EAT;
+    if (state == "hit") return AnimationStatePriority::HIT;
+    if (state == "die") return AnimationStatePriority::DIE;
+
+    return AnimationStatePriority::IDLE;
+}
+
+void PlayerAnimation::SetPlayer(Player* p) {
+    player = p;
 }

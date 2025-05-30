@@ -219,16 +219,6 @@ void MovementHandler::UpdateAnimation() {
     if (player->GetState() == "die") return;
     if (dashMechanic.IsDashing()) return;
 
-    if (jumpMechanic.wallJumpActive) {
-        player->SetState("walljump");
-        return;
-    }
-
-    if (jumpMechanic.IsJumping()) {
-        player->SetState("jump");
-        return;
-    }
-
     if (!attackMechanic.IsAttacking() &&
         !dashMechanic.IsDashing() &&
         !jumpMechanic.IsJumping() &&
@@ -238,10 +228,10 @@ void MovementHandler::UpdateAnimation() {
     {
         if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT ||
             Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-            player->SetState("run_right");
+            player->GetAnimation()->SetStateIfHigherPriority("run_right");
         }
         else {
-            player->SetState("idle");
+            player->GetAnimation()->SetStateIfHigherPriority("idle");
         }
     }
 }

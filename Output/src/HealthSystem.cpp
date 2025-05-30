@@ -39,12 +39,12 @@ void HealthSystem::TakeDamage() {
 
     if (lives == 0 && !isDying) {
         isDying = true;
-        player->SetState("die");
+        player->GetAnimation()->SetStateIfHigherPriority("die");
         deathTimer.Start();
         Engine::GetInstance().scene->isDead = true;
     }
     else {
-        player->SetState("hit");
+        player->GetAnimation()->SetStateIfHigherPriority("hit");
         hitTimer.Start();
         isInHitAnim = true;
     }
@@ -58,12 +58,12 @@ void HealthSystem::HandleSpikeDamage() {
 
     if (lives <= 0 && !isDying) {
         isDying = true;
-        player->SetState("die");
+        player->GetAnimation()->SetStateIfHigherPriority("die");
         deathTimer.Start();
         Engine::GetInstance().scene->isDead = true;
     }
     else {
-        player->SetState("hit");
+        player->GetAnimation()->SetStateIfHigherPriority("hit");
         hitTimer.Start();
         isInHitAnim = true;
     }

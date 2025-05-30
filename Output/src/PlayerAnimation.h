@@ -5,8 +5,27 @@
 #include <string>
 #include "Animation.h"
 #include "pugixml.hpp"
+#include "Player.h"
+
+enum class AnimationStatePriority {
+    RUN_RIGHT = 0,
+    IDLE = 1,
+    FALL = 2,
+    JUMP = 3,
+    GLIDE = 4,
+    WALL_SLIDE = 5,
+    DOUBLEJUMP = 6,
+    WALLJUMP = 7,
+    DASH = 8,
+    ATTACK = 9,
+    EAT = 10,
+    HIT = 11,
+    DIE = 12
+};
 
 struct SDL_Texture;
+
+class Player;
 
 class PlayerAnimation {
 public:
@@ -17,12 +36,16 @@ public:
     bool HasFinished() const;
     std::string GetCurrentState() const;
     int GetLoopCount() const;
+    void SetStateIfHigherPriority(const std::string& newState);
+    AnimationStatePriority GetPriorityForState(const std::string& state) const;
+    void SetPlayer(Player* p);
 
 private:
     SDL_Texture* texture = NULL;
     std::unordered_map<std::string, Animation> animations;
     Animation* currentAnimation;
     std::string currentState = "idle";
+    Player* player = nullptr;
 };
 
 #endif // PLAYER_ANIMATION_H

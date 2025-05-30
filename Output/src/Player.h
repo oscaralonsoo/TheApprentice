@@ -9,6 +9,8 @@
 
 struct SDL_Texture;
 
+class PlayerAnimation;
+
 class Player : public Entity
 {
 public:
@@ -39,7 +41,7 @@ public:
 	int GetMovementDirection() const;
 
 	PlayerMechanics* GetMechanics() { return &mechanics; }
-	PlayerAnimation* GetAnimation() { return &animation; }
+	PlayerAnimation* GetAnimation() { return animation; }
 
 	int GetTextureWidth() const;
 
@@ -51,8 +53,6 @@ private:
 
 	SDL_Texture* texture = nullptr;
 	int texW, texH;
-
-	PlayerAnimation animation;
 	std::string state = "idle";
 
 	pugi::xml_node parameters;
@@ -61,4 +61,6 @@ private:
 	PlayerMechanics mechanics;
 
 	bool initialized = false;
+
+	PlayerAnimation* animation = nullptr;
 };

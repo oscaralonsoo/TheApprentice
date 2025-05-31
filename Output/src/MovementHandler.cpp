@@ -227,11 +227,12 @@ void MovementHandler::UpdateAnimation() {
         !isWallSliding)
     {
         if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT ||
-            Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+            Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+        {
             player->GetAnimation()->SetStateIfHigherPriority("run_right");
         }
-        else {
-            player->GetAnimation()->SetStateIfHigherPriority("idle");
+        else if (player->GetAnimation()->GetCurrentState() == "run_right") {
+            player->GetAnimation()->ForceSetState("idle");
         }
     }
 }
@@ -319,7 +320,8 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::DESTRUCTIBLE_WALL:
         if (!wallSlideCooldownActive) {
             float playerX = player->GetPosition().getX();
-            float wallX = physB->body->GetPosition().x * PIXELS_PER_METER; 
+            float wallX = physB->body->GetPosition().x * PIXELS_PER_METER;
+            player->GetMechanics()->GetJumpMechanic()->ForceEndHoldJump();
         }
         break;
     case ColliderType::DOWN_CAMERA:

@@ -145,6 +145,7 @@ AnimationStatePriority PlayerAnimation::GetPriorityForState(const std::string& s
     if (state == "dash") return AnimationStatePriority::DASH;
     if (state == "attack") return AnimationStatePriority::ATTACK;
     if (state == "eat") return AnimationStatePriority::EAT;
+    if (state == "landing_stun") return AnimationStatePriority::LANDING_STUN; // 👈 NUEVO
     if (state == "hit") return AnimationStatePriority::HIT;
     if (state == "die") return AnimationStatePriority::DIE;
 
@@ -153,4 +154,15 @@ AnimationStatePriority PlayerAnimation::GetPriorityForState(const std::string& s
 
 void PlayerAnimation::SetPlayer(Player* p) {
     player = p;
+}
+
+void PlayerAnimation::ForceSetState(const std::string& newState) {
+    currentAnimation = &animations[newState];
+    currentState = newState;
+    if (!currentAnimation->IsLoop()) {
+        currentAnimation->Reset();
+    }
+    if (player) {
+        player->SetState(newState);
+    }
 }

@@ -15,6 +15,7 @@ void DashMechanic::Update(float dt) {
 
     if (!canDash && dashCooldownTimer.ReadSec() >= dashCooldownTime) {
         canDash = true;
+        player->GetAnimation()->ForceSetState("idle");
     }
 
     bool dashPressed = false;

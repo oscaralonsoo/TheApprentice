@@ -419,8 +419,7 @@
 						<frame x="225" y="225" w="225" h="225" />
 						<frame x="0" y="225" w="225" h="225" />
 					</disappear>
-					<dead loop="false" speed="0.2">
-					</dead>
+					<dead loop="false" speed="0.2" />
 				</enemy>
 				<enemy type="Mireborn" w="120" h="120" texture="Assets/Enemies/mireborn.png">
 					<idle loop="true" speed="0.1">

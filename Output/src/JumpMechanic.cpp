@@ -209,3 +209,11 @@ void JumpMechanic::EnableGlide(bool enable) {
 void JumpMechanic::EnableWallJump(bool enable) {
     wallJumpUnlocked = enable;
 }
+
+void JumpMechanic::ForceEndHoldJump() {
+    if (isJumping) {
+        isJumping = false;
+        jumpInterrupted = true;
+        LOG("Salto sostenido interrumpido por wall slide");
+    }
+}

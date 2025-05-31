@@ -78,7 +78,6 @@ bool Thumpod::Update(float dt) {
         INT_MAX,
         INT_MAX,
         (direction < 0) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL,
-        SDL_FLIP_NONE,
         scale
     );
     currentAnimation->Update();

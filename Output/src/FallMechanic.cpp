@@ -12,7 +12,7 @@ void FallMechanic::Update(float dt) {
     if (isStunned) {
         if (stunTimer.ReadMSec() >= stunDuration) {
             isStunned = false;
-            player->GetAnimation()->SetStateIfHigherPriority("idle");
+            player->GetAnimation()->ForceSetState("idle");
         }
         else {
             player->pbody->body->SetLinearVelocity(b2Vec2_zero);

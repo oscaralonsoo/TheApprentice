@@ -189,7 +189,8 @@ void Scene::ChangeScene(int nextScene)
 	LOG("Cambiando a escena: %d", nextScene);
 	Engine::GetInstance().map->CleanUp(); 	// CleanUp of the previous Map
 	if (hookManager) {
-		hookManager->ClearHooks(); // lo implementamos abajo
+		hookManager->ClearHooks();
+		SetActiveHook(nullptr);
 	}
 
 	Engine::GetInstance().entityManager.get()->DestroyAllEntities();

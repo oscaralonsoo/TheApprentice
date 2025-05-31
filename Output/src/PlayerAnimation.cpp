@@ -71,13 +71,16 @@ void PlayerAnimation::Update(const std::string& state, int x, int y, bool visibl
         drawY = y - 15; // desplaza 10 píxeles a la izquierda para el sprite
     }
     if (state == "attack") {  // no está flippeado -> mirando a la derecha
-        drawY = y - 10; // desplaza 10 píxeles a la izquierda para el sprite
+        drawY = y - 20; // desplaza 10 píxeles a la izquierda para el sprite
     }
     if (state == "eat") {  // no está flippeado -> mirando a la derecha
         drawY = y - 10; // desplaza 10 píxeles a la izquierda para el sprite
     }
     if (state == "hit") {  // no está flippeado -> mirando a la derecha
         drawY = y - 10; // desplaza 10 píxeles a la izquierda para el sprite
+    }
+    if (state == "landing_stun") {  // no está flippeado -> mirando a la derecha
+        drawY = y + 18; // desplaza 10 píxeles a la izquierda para el sprite
     }
 
     Engine::GetInstance().render->DrawTexture(
@@ -148,6 +151,7 @@ AnimationStatePriority PlayerAnimation::GetPriorityForState(const std::string& s
     if (state == "landing_stun") return AnimationStatePriority::LANDING_STUN; // 👈 NUEVO
     if (state == "hit") return AnimationStatePriority::HIT;
     if (state == "die") return AnimationStatePriority::DIE;
+    if (state == "liana") return AnimationStatePriority::LIANA;
 
     return AnimationStatePriority::IDLE;
 }

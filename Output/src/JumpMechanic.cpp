@@ -21,6 +21,11 @@ void JumpMechanic::Update(float dt) {
 void JumpMechanic::HandleJumpInput(float dt) {
     if (!jumpUnlocked) return;
 
+    if (player->GetMechanics()->GetMovementHandler()->IsDashUnlocked() &&
+        player->GetMechanics()->GetMovementHandler()->GetDashMechanic().IsDashing()) {
+        return;
+    }
+
     // Entrada teclado
     std::shared_ptr<Input> input = Engine::GetInstance().input;
     bool spaceNow = input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT || input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN;
@@ -48,22 +53,7 @@ void JumpMechanic::HandleJumpInput(float dt) {
 
     // Iniciar salto
     if (jumpDown) {
-        if (jumpCount == 0 && player->GetMechanics()->IsOnGround()) {
-            jumpHoldTimer.Start();
-            isJumping = true;
-            jumpCount = 1;
-            player->GetMechanics()->SetIsOnGround(false);
-            player->GetAnimation()->SetStateIfHigherPriority("jump");
-            jumpInterrupted = false;
-
-            jumpCooldownTimer.Start();
-            jumpCooldownActive = true;
-
-            // Impulso inicial para garantizar altura m�nima
-            b2Vec2 impulse(0, -minJumpForce);
-            player->pbody->body->ApplyForceToCenter(impulse, true);
-        }
-        else if (wallJumpUnlocked && player->GetMechanics()->IsWallSliding()) {
+        if (wallJumpUnlocked && player->GetMechanics()->IsWallSliding()) {
             isJumping = true;
             wallJumpActive = true;
             jumpCount = 1;
@@ -89,6 +79,21 @@ void JumpMechanic::HandleJumpInput(float dt) {
             wallJumpLockActive = true;
             wallJumpLockTimer.Start();
         }
+        if (jumpCount == 0 && player->GetMechanics()->IsOnGround()) {
+            jumpHoldTimer.Start();
+            isJumping = true;
+            jumpCount = 1;
+            player->GetMechanics()->SetIsOnGround(false);
+            player->GetAnimation()->SetStateIfHigherPriority("jump");
+            jumpInterrupted = false;
+
+            jumpCooldownTimer.Start();
+            jumpCooldownActive = true;
+
+            // Impulso inicial para garantizar altura m�nima
+            b2Vec2 impulse(0, -minJumpForce);
+            player->pbody->body->ApplyForceToCenter(impulse, true);
+        }
         else if (doubleJumpUnlocked && jumpCount < maxJumpCount) {
             jumpHoldTimer.Start();
             isJumping = true;
@@ -107,6 +112,7 @@ void JumpMechanic::HandleJumpInput(float dt) {
             b2Vec2 impulse(0, -minJumpForce);
             player->pbody->body->ApplyForceToCenter(impulse, true);
         }
+
     }
 
     if (isJumping && jumpHoldTimer.ReadMSec() > 0 && jumpRepeat) {

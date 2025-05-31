@@ -52,7 +52,6 @@ void HealthSystem::TakeDamage() {
 void HealthSystem::HandleSpikeDamage() {
     if (lives > 0) {
         lives--;
-        player->GetMechanics()->GetInvulnerabilitySystem()->StartInvulnerability();
     }
 
     if (lives <= 0 && !isDying) {

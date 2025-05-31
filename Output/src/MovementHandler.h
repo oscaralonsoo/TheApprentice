@@ -50,6 +50,7 @@ public:
     void EnableGlide(bool enable);
     bool IsGlideUnlocked() const { return jumpMechanic.IsGlideUnlocked(); }
     WallSlideMechanic* GetWallSlideMechanic() { return &wallSlideMechanic; }
+    DashMechanic& GetDashMechanic() { return dashMechanic; }
     void EnableWallJump(bool enable);
     bool IsWallJumpUnlocked() const;
 

@@ -61,4 +61,8 @@ private:
     bool isOnGround = false;
     bool isWallSliding = false;
     bool isTouchingWall = false;
+
+    bool canSpikeDamage = true;
+    Timer spikeDamageTimer;
+    float spikeDamageTime = 1.0f;
 };

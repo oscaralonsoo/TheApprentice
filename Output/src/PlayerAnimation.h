@@ -10,18 +10,19 @@
 enum class AnimationStatePriority {
     IDLE = 0,
     RUN_RIGHT = 1,
-    FALL = 2,
-    JUMP = 3,
-    WALL_SLIDE = 4,
-    DOUBLEJUMP = 5,
-    WALLJUMP = 6,
-    DASH = 7,
-    GLIDE = 8,
-    ATTACK = 9,
-    EAT = 10,
-    LANDING_STUN = 11,
-    HIT = 12,
-    DIE = 13
+    LIANA = 2,
+    FALL = 3,
+    JUMP = 4,
+    WALL_SLIDE = 5,
+    DOUBLEJUMP = 6,
+    WALLJUMP = 7,
+    DASH = 8,
+    GLIDE = 9,
+    ATTACK = 10,
+    EAT = 11,
+    LANDING_STUN = 12,
+    HIT = 13,
+    DIE = 14
 };
 
 struct SDL_Texture;

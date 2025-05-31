@@ -129,11 +129,13 @@ bool Stalactite::CleanUp() {
 void Stalactite::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype)
     {
+    case ColliderType::PLATFORM:
     case ColliderType::ATTACK:
     case ColliderType::PLAYER:
     case ColliderType::WALL:
     case ColliderType::DOOR:
     case ColliderType::ENEMY:
+    case ColliderType::BOX:
         if (state == StalactiteState::FALLING) {
             state = StalactiteState::SPLASHED;
         }

@@ -35,6 +35,16 @@
 			<Map_666 path="Assets/Maps/" name="Map666.tmx" />
 		</maps>
 		<animations>
+			<loadingScreen w="100" h="100" texture=" loadScreen.png">
+				<loading loop="true" speed="0.15">
+					<frame x="0" y="0" w="100" h="100" />
+					<frame x="100" y="0" w="100" h="100" />
+					<frame x="200" y="0" w="100" h="100" />
+					<frame x="300" y="0" w="100" h="100" />
+					<frame x="400" y="0" w="100" h="100" />
+					<frame x="500" y="0" w="100" h="100" />
+				</loading>
+			</loadingScreen>
 			<player w="100" h="100" texture="Assets/Slime/slime.png">
 				<idle loop="true" speed="0.15">
 					<frame x="0" y="0" w="100" h="100" />
@@ -1163,10 +1173,10 @@
 				<ability type="Dash" w="124" h="124" texture="Assets/Textures/Abilities/jump.png" />
 			</abilities>
 		</animations>
-		<save_data isSaved="1">
-			<player x="3920" y="1766" w="44" h="54" lives="3" maxlives="3" />
+		<save_data isSaved="0">
+			<player x="1152" y="970" w="44" h="54" lives="2" maxlives="3" />
 			<abilities jump="false" doublejump="false" dash="false" />
-			<scene actualScene="21" />
+			<scene actualScene="1" />
 			<enemies />
 		</save_data>
 	</scene>

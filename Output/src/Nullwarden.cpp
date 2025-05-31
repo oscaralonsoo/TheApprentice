@@ -247,12 +247,10 @@ void Nullwarden::Attack() {
             spearAttackTimer.Start();
         }
     }
-
     if (spearAttackTimer.ReadMSec() >= spearAttackMs) {
 
         currentState = NullwardenState::CHARGE;
         changedDirection = false;
-        
     }
 }
 void Nullwarden::Impaled() {
@@ -429,7 +427,6 @@ float Nullwarden::GetDifficultyMultiplier() const {
     case CrystalState::CRACKED: return 1.4f;
     case CrystalState::SHATTERED: return 1.8f;
     }
-   
 }
 float Nullwarden::GetAttackSpeed() const{
     if (crystalBroken) return 0.22f;
@@ -438,7 +435,6 @@ float Nullwarden::GetAttackSpeed() const{
     case CrystalState::CRACKED: return 0.16f;
     case CrystalState::SHATTERED: return 0.19f;
     }
-   
 }
 
 

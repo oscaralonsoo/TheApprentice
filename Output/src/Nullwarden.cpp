@@ -86,7 +86,7 @@ bool Nullwarden::Update(float dt) {
         if (beforeChargeTimer.ReadMSec() >= beforeChargeMs)
         {
             startedImpaledAnim = false;
-            pbody->body->SetLinearVelocity(b2Vec2(direction * 12.0f, 0.0f));
+            pbody->body->SetLinearVelocity(b2Vec2(direction * 12.0f * GetDifficultyMultiplier(), 0.0f));
         }
 
         break;
@@ -229,9 +229,11 @@ void Nullwarden::SpawnVerticalSpears() {
 }
 
 void Nullwarden::Attack() {
+    
     if (!attackAnimDone) {
         attackAnim.Reset();
         currentAnimation = &attackAnim;
+        attackAnim.speed = GetAttackSpeed();
         attackAnimDone = true;
     }
     if (!currentAnimation->HasFinished()) {
@@ -259,7 +261,6 @@ void Nullwarden::Impaled() {
 
     if (!startedImpaledAnim)
         ChangeImpaledAnim();
-
     else {
         if (impaledTimer.ReadMSec() >= impaledMs) {
             currentState = NullwardenState::ROAR;
@@ -352,6 +353,7 @@ void Nullwarden::ChangeImpaledAnim() {
         break;
     }
 }
+
 void Nullwarden::UpdateDraw() {
     drawY = (int)position.getY();
     drawX = (int)position.getX();
@@ -413,10 +415,28 @@ void Nullwarden::UpdateColliderSizeToCurrentAnimation() {
 
     pbody->body->CreateFixture(&fixtureDef);
 }
+
 void Nullwarden::TriggerRoar() {
     if (currentState == NullwardenState::ROAR || currentState == NullwardenState::DEATH) return;
     currentState = NullwardenState::ROAR;
     roarAnim.Reset(); 
+}
+
+float Nullwarden::GetDifficultyMultiplier() const {
+    switch (crystal->currentState) {
+    case CrystalState::PRISTINE: return 1.0f;
+    case CrystalState::CRACKED: return 1.4f;
+    case CrystalState::SHATTERED: return 1.8f;
+    case CrystalState::BROKEN: return 2.2f;
+    }
+}
+float Nullwarden::GetAttackSpeed() const{
+    switch (crystal->currentState) {
+    case CrystalState::PRISTINE: return 0.15f;
+    case CrystalState::CRACKED: return 0.18f;
+    case CrystalState::SHATTERED: return 0.21f;
+    case CrystalState::BROKEN: return 0.25f;
+    }
 }
 
 

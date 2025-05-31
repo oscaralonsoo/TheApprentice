@@ -53,7 +53,7 @@ void JumpMechanic::HandleJumpInput(float dt) {
             isJumping = true;
             jumpCount = 1;
             player->GetMechanics()->SetIsOnGround(false);
-            player->SetState("jump");
+            player->GetAnimation()->SetStateIfHigherPriority("jump");
             jumpInterrupted = false;
 
             jumpCooldownTimer.Start();
@@ -68,7 +68,7 @@ void JumpMechanic::HandleJumpInput(float dt) {
             wallJumpActive = true;
             jumpCount = 1;
 
-            player->SetState("walljump");
+            player->GetAnimation()->SetStateIfHigherPriority("walljump");
             player->GetMechanics()->SetIsWallSliding(false);
             player->GetMechanics()->SetIsTouchingWall(false);
 
@@ -94,7 +94,7 @@ void JumpMechanic::HandleJumpInput(float dt) {
             isJumping = true;
             jumpInterrupted = false;
             jumpCount = 2;
-            player->SetState("doublejump");
+            player->GetAnimation()->SetStateIfHigherPriority("doublejump");
 
             jumpCooldownTimer.Start();
             jumpCooldownActive = true;
@@ -156,7 +156,7 @@ void JumpMechanic::HandleJumpInput(float dt) {
         if (!isGliding) {
             isGliding = true;
             player->pbody->body->SetGravityScale(glideGravityScale);
-            player->SetState("glide");
+            player->GetAnimation()->SetStateIfHigherPriority("glide");
 
             b2Vec2 vel = player->pbody->body->GetLinearVelocity();
             vel.y = 0.0f;
@@ -167,6 +167,10 @@ void JumpMechanic::HandleJumpInput(float dt) {
     else if (isGliding && (!jumpRepeat || player->GetMechanics()->IsOnGround())) {
         isGliding = false;
         player->pbody->body->SetGravityScale(2.0f);
+
+        if (!player->GetMechanics()->IsOnGround() && !player->GetMechanics()->IsWallSliding()) {
+            player->GetAnimation()->SetStateIfHigherPriority("fall");
+        }
     }
 }
 

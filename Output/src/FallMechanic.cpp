@@ -12,11 +12,11 @@ void FallMechanic::Update(float dt) {
     if (isStunned) {
         if (stunTimer.ReadMSec() >= stunDuration) {
             isStunned = false;
-            player->SetState("idle");
+            player->GetAnimation()->SetStateIfHigherPriority("idle");
         }
         else {
             player->pbody->body->SetLinearVelocity(b2Vec2_zero);
-            player->SetState("landing_stun");
+            player->GetAnimation()->SetStateIfHigherPriority("landing_stun");
         }
         return;
     }
@@ -28,7 +28,7 @@ void FallMechanic::Update(float dt) {
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
     if (velocity.y > 0.1f && !isFalling) {
         isFalling = true;
-        player->SetState("fall");
+        player->GetAnimation()->SetStateIfHigherPriority("fall");
     }
 
     CheckFallStart();

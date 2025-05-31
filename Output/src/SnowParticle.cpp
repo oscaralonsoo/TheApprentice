@@ -1,46 +1,53 @@
-#include "RainParticle.h"
+#include "SnowParticle.h"
 #include "Engine.h"
 #include "Scene.h"
 #include "ParticleManager.h"
 #include "Textures.h"
 #include <cmath>
 
-RainParticle::RainParticle()
+SnowParticle::SnowParticle()
     : Entity(EntityType::PARTICLE)
 {
     velocity = { 0.0f, 0.0f };
 }
 
-RainParticle::~RainParticle() {
+SnowParticle::~SnowParticle() {
 }
 
-bool RainParticle::Awake() {
+bool SnowParticle::Awake() {
     return true;
 }
 
-bool RainParticle::Start() {
+bool SnowParticle::Start() {
     pugi::xml_document loadFile;
     pugi::xml_parse_result result = loadFile.load_file("config.xml");
-    pugi::xml_node rainNode = loadFile.child("config").child("scene").child("animations").child("particles").child("rain");
+    pugi::xml_node snowNode = loadFile.child("config").child("scene").child("animations").child("particles").child("snow");
 
-
-    texture = Engine::GetInstance().textures->Load(rainNode.attribute("texture").as_string());
-    idleAnim.LoadAnimations(rainNode.child("idle"));
+    texture = Engine::GetInstance().textures->Load(snowNode.attribute("texture").as_string());
+    idleAnim.LoadAnimations(snowNode.child("idle"));
 
     scale = 0.2f + static_cast<float>(rand()) / RAND_MAX * (0.7f - 0.2f);
 
-    texW = rainNode.attribute("w").as_int() * scale;
-    texH = rainNode.attribute("h").as_int() * scale;
+    texW = snowNode.attribute("w").as_int() * scale;
+    texH = snowNode.attribute("h").as_int() * scale;
 
-    velocity.y = 14.0f + static_cast<float>(rand()) / RAND_MAX * (19.0f - 14.0f);
+    velocity.y = 0.8f + static_cast<float>(rand()) / RAND_MAX * (2.0f - 0.8f);
+
+    oscillationAmplitude = 8.0f + static_cast<float>(rand()) / RAND_MAX * (8.0f - 8.0f);
+    oscillationFrequency = 2.0f * M_PI * (0.1f + static_cast<float>(rand()) / RAND_MAX * (0.4f - 0.1f));
+
+    phaseOffset = static_cast<float>(rand()) / RAND_MAX * 2.0f * M_PI;
 
     currentAnimation = &idleAnim;
 
     return true;
 }
 
-bool RainParticle::Update(float dt) {
-    position.setX(position.getX() + velocity.x);
+bool SnowParticle::Update(float dt) {
+    time += dt / 1000.0f;
+    float offsetX = oscillationAmplitude * sinf(oscillationFrequency * time + phaseOffset);
+
+    position.setX(baseX + offsetX);
     position.setY(position.getY() + velocity.y);
 
     Engine::GetInstance().render->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, SDL_FLIP_NONE, scale);
@@ -50,7 +57,7 @@ bool RainParticle::Update(float dt) {
     return true;
 }
 
-bool RainParticle::PostUpdate() {
+bool SnowParticle::PostUpdate() {
     Vector2D camPos = {
         Engine::GetInstance().render->camera.x * -1.0f,
         Engine::GetInstance().render->camera.y * -1.0f
@@ -68,11 +75,12 @@ bool RainParticle::PostUpdate() {
     return true;
 }
 
-bool RainParticle::CleanUp() {
+bool SnowParticle::CleanUp() {
     return true;
 }
 
-void RainParticle::SetPosition(Vector2D pos) {
+void SnowParticle::SetPosition(Vector2D pos) {
     position.setX(pos.getX());
     position.setY(pos.getY());
+    baseX = pos.getX();
 }

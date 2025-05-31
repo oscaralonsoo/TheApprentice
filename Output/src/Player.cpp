@@ -26,6 +26,7 @@ bool Player::Awake() {
 }
 
 bool Player::Start() {
+	animation = new PlayerAnimation();
 	if (initialized) {
 		return true;
 	}
@@ -35,7 +36,8 @@ bool Player::Start() {
 	texW = parameters.attribute("w").as_int();
 	texH = parameters.attribute("h").as_int();
 
-	animation.LoadAnimations(parameters, texture);
+	animation->LoadAnimations(parameters, texture);
+	animation->SetPlayer(this);
 
     // Create the body at the same position, and ensure it's centered
 	pbody = Engine::GetInstance().physics.get()->CreateRectangle(
@@ -89,7 +91,7 @@ bool Player::Update(float dt) {
 		enemySensor->body->SetTransform(mainPos, 0);
 	}
 	
-	animation.Update(state, position.getX(), position.getY() - 5, mechanics.IsVisible(), flip);
+	animation->Update(state, position.getX(), position.getY() - 5, mechanics.IsVisible(), flip);
 	mechanics.Update(dt);
 
 	b2Transform pbodyPos = pbody->body->GetTransform();

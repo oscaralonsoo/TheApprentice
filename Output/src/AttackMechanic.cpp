@@ -71,7 +71,7 @@ void AttackMechanic::StartAttack() {
 
     player->GetMechanics()->GetInvulnerabilitySystem()->StartInvulnerability();
 
-    player->SetState("attack");
+    player->GetAnimation()->SetStateIfHigherPriority("attack");
 }
 
 void AttackMechanic::UpdateAttackSensor() {

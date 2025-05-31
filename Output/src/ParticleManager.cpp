@@ -6,6 +6,7 @@
 #include "Window.h"
 #include "FireflyParticle.h"
 #include "RainParticle.h"
+#include "SnowParticle.h"
 #include "Render.h"
 #include "Log.h"
 #include "Scene.h"
@@ -186,6 +187,8 @@ void ParticleManager::SpawnFireflyParticles()
 }
 
 void ParticleManager::SpawnRainParticles() {
+	const int xOffset = 500;
+
 	if (rand() % 100 < 25)
 	{
 		Vector2D camPos = Vector2D(
@@ -195,29 +198,52 @@ void ParticleManager::SpawnRainParticles() {
 
 		int windowWidth, windowHeight;
 		SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &windowWidth, &windowHeight);
-		Vector2D camSize = { static_cast<float>(windowWidth), static_cast<float>(windowHeight) };
 
 		RainParticle* particle = new RainParticle();
 		particles.push_back(particle);
 		particle->Start();
 
-		float spawnX = camPos.x + static_cast<float>(rand() % windowWidth);
+		float spawnX = camPos.x - xOffset + static_cast<float>(rand() % (windowWidth + 2 * xOffset));
 		float spawnY = camPos.y - 20.0f;
-		particle->SetPosition({ (float)spawnX, (float)spawnY });
 
-
+		particle->SetPosition({ spawnX, spawnY });
 	}
 }
+
+void ParticleManager::SpawnSnowParticles() {
+	const int xOffset = 500;
+
+	if (rand() % 100 < 80)
+	{
+		Vector2D camPos = Vector2D(
+			Engine::GetInstance().render->camera.x * -1,
+			Engine::GetInstance().render->camera.y * -1
+		);
+
+		int windowWidth, windowHeight;
+		SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &windowWidth, &windowHeight);
+
+		SnowParticle* particle = new SnowParticle();
+		particles.push_back(particle);
+		particle->Start();
+
+		float spawnX = camPos.x - xOffset + static_cast<float>(rand() % (windowWidth + 2 * xOffset));
+		float spawnY = camPos.y - 20.0f;
+
+		particle->SetPosition({ spawnX, spawnY });
+	}
+}
+
+
 
 void ParticleManager::SetParticlesByMap(int scene) {
 
 	switch (scene) {
 	case 0:
+	case 666:
 		SpawnDustParticles(DustParticleVariant::CRYSTAL_CAVE);
 		break;
 	case 1:
-		SpawnRainParticles();
-
 		SpawnDustParticles(DustParticleVariant::CAVE);
 		break;
 	case 21:
@@ -225,6 +251,12 @@ void ParticleManager::SetParticlesByMap(int scene) {
 	case 23:
 		SpawnRainParticles();
 		SpawnFireflyParticles();
+		break;
+	case 31:
+	case 41:
+	case 42:
+	case 43:
+		SpawnSnowParticles();
 		break;
 	default:
 		SpawnDustParticles(DustParticleVariant::CAVE);

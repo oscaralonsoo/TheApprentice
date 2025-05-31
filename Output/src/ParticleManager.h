@@ -40,6 +40,7 @@ public:
 	void SpawnDustParticles(DustParticleVariant variant);
 	void SpawnFireflyParticles();
 	void SpawnRainParticles();
+	void SpawnSnowParticles();
 
 	void SetParticlesByMap(int scene);
 

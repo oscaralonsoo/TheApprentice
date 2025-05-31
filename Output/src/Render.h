@@ -43,8 +43,8 @@ public:
 	float GetCameraZoom() const;
 
 	void DashCameraImpulse(int direction, int intensity);
-	void StartCameraShake(int durationSec, int intensity);
-	void ToggleCameraLock();
+	void StartCameraShake(float durationSec, int intensity);
+	void ToggleCameraLock(float fovFactor = 1.0f);
 	void SetCameraPosition(int x, int y);
 	int GetExtraCameraOffsetY() const;
 	void SetExtraCameraOffsetY(int offset);
@@ -71,7 +71,7 @@ public:
 	//Camera Shake
 	Timer shakeTimer;
 	bool isShaking = false;
-	int shakeDurationSec = 0;
+	float shakeDurationSec = 0;
 	int shakeIntensity = 0;
 	int shakeOffsetX = 0;
 	int shakeOffsetY = 0;
@@ -92,4 +92,7 @@ public:
 
 	float cameraVerticalOffsetFactor = 0.45f; // valor base
 	int extraCameraOffsetY = 0;
+	int extraCameraOffsetX = 0;
+
+	float currentFovFactor = 1.0f;
 };

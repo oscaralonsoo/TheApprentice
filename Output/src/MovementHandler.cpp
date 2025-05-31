@@ -321,7 +321,6 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (!wallSlideCooldownActive) {
             float playerX = player->GetPosition().getX();
             float wallX = physB->body->GetPosition().x * PIXELS_PER_METER;
-            player->GetMechanics()->GetJumpMechanic()->ForceEndHoldJump();
         }
         break;
     case ColliderType::DOWN_CAMERA:

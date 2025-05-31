@@ -212,11 +212,11 @@ void Nullwarden::SpawnHorizontalSpears() {
     }
 }
 void Nullwarden::SpawnVerticalSpears() {
-    float baseY = position.getY() + 400.0f;
+    float baseY = position.getY() + 550.0f;
     float spearX = position.getX() + ((direction > 0) ? -50.0f : texW + 50.0f) + (spawnedVerticalSpears * verticalSpearGap * (direction > 0 ? -1 : 1));
 
     Engine::GetInstance().entityManager->AddEntity(
-        new NullwardenSpear(spearX, baseY, 10.0f, b2Vec2(0.0f, -1.0f))
+        new NullwardenSpear(spearX, baseY, 10.0f * GetDifficultyMultiplier(), b2Vec2(0.0f, -1.0f))
     );
 
     if (spawnedVerticalSpears >= maxVerticalSpears)
@@ -423,20 +423,22 @@ void Nullwarden::TriggerRoar() {
 }
 
 float Nullwarden::GetDifficultyMultiplier() const {
+    if (crystalBroken) return 2.2f;
     switch (crystal->currentState) {
     case CrystalState::PRISTINE: return 1.0f;
     case CrystalState::CRACKED: return 1.4f;
     case CrystalState::SHATTERED: return 1.8f;
-    case CrystalState::BROKEN: return 2.2f;
     }
+   
 }
 float Nullwarden::GetAttackSpeed() const{
+    if (crystalBroken) return 0.22f;
     switch (crystal->currentState) {
-    case CrystalState::PRISTINE: return 0.15f;
-    case CrystalState::CRACKED: return 0.18f;
-    case CrystalState::SHATTERED: return 0.21f;
-    case CrystalState::BROKEN: return 0.25f;
+    case CrystalState::PRISTINE: return 0.13f;
+    case CrystalState::CRACKED: return 0.16f;
+    case CrystalState::SHATTERED: return 0.19f;
     }
+   
 }
 
 

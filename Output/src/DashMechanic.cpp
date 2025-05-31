@@ -15,6 +15,7 @@ void DashMechanic::Update(float dt) {
 
     if (!canDash && dashCooldownTimer.ReadSec() >= dashCooldownTime) {
         canDash = true;
+        player->GetAnimation()->ForceSetState("idle");
     }
 
     bool dashPressed = false;
@@ -66,7 +67,7 @@ void DashMechanic::StartDash() {
     }
 
     Engine::GetInstance().render->DashCameraImpulse(dashDirection, 100);
-    player->SetState("dash");
+    player->GetAnimation()->SetStateIfHigherPriority("dash");
 }
 
 void DashMechanic::ApplyDashMovement() {

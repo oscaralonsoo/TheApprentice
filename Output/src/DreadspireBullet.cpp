@@ -31,8 +31,8 @@ DreadspireBullet::DreadspireBullet(float x, float y, float speed, b2Vec2 directi
         fixture->SetSensor(false);
 
         b2Filter filter;
-        filter.categoryBits = CATEGORY_ENEMY;
-        filter.maskBits = CATEGORY_WALL | CATEGORY_PLAYER_DAMAGE;
+        filter.categoryBits = CATEGORY_PROJECTILE;
+        filter.maskBits = CATEGORY_WALL | CATEGORY_PLAYER_DAMAGE | CATEGORY_PLATFORM;
         fixture->SetFilterData(filter);
     }
 
@@ -81,8 +81,17 @@ void DreadspireBullet::OnCollision(PhysBody* physA, PhysBody* physB)
 {
     switch (physB->ctype)
     {
-    default:
+    case ColliderType::ATTACK:
+    case ColliderType::PLATFORM:
+    case ColliderType::WALL:
+    case ColliderType::WALL_SLIDE:
+    case ColliderType::DESTRUCTIBLE_WALL:
+    case ColliderType::SPIKE:
+    case ColliderType::BOX:
+    case ColliderType::PLAYER:
         Engine::GetInstance().entityManager->DestroyEntity(this);
+        break;
+    default:
         break;
     }
 }

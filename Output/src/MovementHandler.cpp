@@ -154,6 +154,10 @@ void MovementHandler::Update(float dt) {
         SetHookUnlocked(true);
         LOG("Hook habilitado");
     }
+    // Activa el modo cámara fija y ve más mundo (FOV ampliado)
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_0) == KEY_DOWN)
+        Engine::GetInstance().render->ToggleCameraLock(0.5f);
+
 
 
     UpdateAnimation();
@@ -219,16 +223,6 @@ void MovementHandler::UpdateAnimation() {
     if (player->GetState() == "die") return;
     if (dashMechanic.IsDashing()) return;
 
-    if (jumpMechanic.wallJumpActive) {
-        player->SetState("walljump");
-        return;
-    }
-
-    if (jumpMechanic.IsJumping()) {
-        player->SetState("jump");
-        return;
-    }
-
     if (!attackMechanic.IsAttacking() &&
         !dashMechanic.IsDashing() &&
         !jumpMechanic.IsJumping() &&
@@ -237,11 +231,12 @@ void MovementHandler::UpdateAnimation() {
         !isWallSliding)
     {
         if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT ||
-            Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-            player->SetState("run_right");
+            Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+        {
+            player->GetAnimation()->SetStateIfHigherPriority("run_right");
         }
-        else {
-            player->SetState("idle");
+        else if (player->GetAnimation()->GetCurrentState() == "run_right") {
+            player->GetAnimation()->ForceSetState("idle");
         }
     }
 }
@@ -306,8 +301,8 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
         {
             jumpMechanic.OnLanding();
             fallMechanic.OnLanding();
+            player->GetMechanics()->SetIsOnGround(true); 
         }
-
         break;
     case ColliderType::WALL_SLIDE:
         if (player->GetMechanics()->IsOnGround()) {
@@ -329,7 +324,7 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::DESTRUCTIBLE_WALL:
         if (!wallSlideCooldownActive) {
             float playerX = player->GetPosition().getX();
-            float wallX = physB->body->GetPosition().x * PIXELS_PER_METER; 
+            float wallX = physB->body->GetPosition().x * PIXELS_PER_METER;
         }
         break;
     case ColliderType::DOWN_CAMERA:
@@ -364,7 +359,6 @@ void MovementHandler::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     case ColliderType::BOX:
         boxCooldownTimer.Start();
         boxCooldownActive = true;
-        player->GetMechanics()->SetIsOnGround(false);
         break;
 
     case ColliderType::WALL_SLIDE:

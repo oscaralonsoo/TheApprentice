@@ -7,6 +7,7 @@ enum class ShyverState {
     IDLE,
     INVISIBLE,
     APPEAR,
+    WAIT,
     STUNNED,
     DISAPPEAR,
     ATTACK,
@@ -27,7 +28,7 @@ public:
     bool CleanUp() override;
     void OnCollision(PhysBody* physA, PhysBody* physB);
 
-    void Appear();
+    void Wait();
     void Attack();
     void Stun();
     void Disappear();
@@ -40,13 +41,18 @@ private:
     Animation idleAnim;
     Animation invisibleAnim;
     Animation stunAnim;
+    Animation waitAnim;
     Animation disappearAnim;
     Animation appearAnim;
     Animation attackAnim;
     Animation deathAnim;
 
-    const float appearDuration = 2000.0f;
-    Timer appearTimer;
+    const float waitDuration = 2000.0f;
+    Timer waitTimer;
+    const float invisibleDuration = 2000.0f;
+    Timer invisibleTimer;
+    const float stunDuration = 2000.0f;
+    Timer stunTimer;
 
     float attackStartX = 0.0f;
     bool attackInProgress = false;

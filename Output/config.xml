@@ -24,12 +24,14 @@
 			<Map_0 path="Assets/Maps/" name="Map0.tmx" />
 			<Map_1 path="Assets/Maps/" name="Map1.tmx" />
 			<Map_12 path="Assets/Maps/" name="Map12.tmx" />
+			<Map_13 path="Assets/Maps/" name="Map13.tmx" />
 			<Map_21 path="Assets/Maps/" name="Map21.tmx" />
 			<Map_22 path="Assets/Maps/" name="Map22.tmx" />
 			<Map_23 path="Assets/Maps/" name="Map23.tmx" />
 			<Map_31 path="Assets/Maps/" name="Map31.tmx" />
 			<Map_41 path="Assets/Maps/" name="Map41.tmx" />
 			<Map_42 path="Assets/Maps/" name="Map42.tmx" />
+			<Map_43 path="Assets/Maps/" name="Map43.tmx" />
 			<Map_666 path="Assets/Maps/" name="Map666.tmx" />
 		</maps>
 		<animations>
@@ -58,14 +60,6 @@
 					<frame x="200" y="200" w="100" h="100" />
 					<frame x="300" y="200" w="100" h="100" />
 				</wall_slide>
-				<attack loop="false" speed="0.12">
-					<frame x="0" y="320" w="112" h="100" />
-					<frame x="112" y="320" w="112" h="100" />
-					<frame x="224" y="320" w="112" h="100" />
-					<frame x="336" y="320" w="112" h="100" />
-					<frame x="448" y="320" w="112" h="100" />
-					<frame x="560" y="320" w="112" h="100" />
-				</attack>
 				<eat loop="false" speed="0.15">
 					<frame x="0" y="420" w="112" h="112" />
 					<frame x="112" y="420" w="112" h="112" />
@@ -78,6 +72,18 @@
 					<frame x="896" y="420" w="112" h="112" />
 					<frame x="1008" y="420" w="112" h="112" />
 				</eat>
+				<attack loop="false" speed="0.15">
+					<frame x="0" y="420" w="112" h="112" />
+					<frame x="112" y="420" w="112" h="112" />
+					<frame x="224" y="420" w="112" h="112" />
+					<frame x="336" y="420" w="112" h="112" />
+					<frame x="448" y="420" w="112" h="112" />
+					<frame x="560" y="420" w="112" h="112" />
+					<frame x="672" y="420" w="112" h="112" />
+					<frame x="784" y="420" w="112" h="112" />
+					<frame x="896" y="420" w="112" h="112" />
+					<frame x="1008" y="420" w="112" h="112" />
+				</attack>
 				<hit loop="false" speed="0.17">
 					<frame x="0" y="516" w="112" h="120" />
 					<frame x="112" y="516" w="112" h="120" />
@@ -358,12 +364,71 @@
 						<frame x="500" y="300" w="100" h="100" />
 					</dead>
 				</enemy>
-				<enemy type="Shyver" w="64" h="64" texture="Assets/Enemies/test.png">
-					<idle loop="true" speed="0.2">
-						<frame x="0" y="0" w="64" h="64" />
+				<enemy type="Shyver" w="225" h="225" texture="Assets/Enemies/shyver.png">
+					<idle loop="true" speed="0.12">
+						<frame x="0" y="0" w="225" h="225" />
+						<frame x="225" y="0" w="225" h="225" />
+						<frame x="450" y="0" w="225" h="225" />
+						<frame x="675" y="0" w="225" h="225" />
+						<frame x="900" y="0" w="225" h="225" />
+						<frame x="1125" y="0" w="225" h="225" />
+						<frame x="1350" y="0" w="225" h="225" />
+						<frame x="1575" y="0" w="225" h="225" />
 					</idle>
+					<appear loop="false" speed="0.2">
+						<frame x="0" y="225" w="225" h="225" />
+						<frame x="225" y="225" w="225" h="225" />
+						<frame x="450" y="225" w="225" h="225" />
+						<frame x="675" y="225" w="225" h="225" />
+						<frame x="900" y="225" w="225" h="225" />
+						<frame x="1125" y="225" w="225" h="225" />
+						<frame x="1350" y="225" w="225" h="225" />
+						<frame x="1575" y="225" w="225" h="225" />
+						<frame x="1800" y="225" w="225" h="225" />
+						<frame x="2025" y="225" w="225" h="225" />
+					</appear>
+					<wait loop="true" speed="0.2">
+						<frame x="0" y="450" w="225" h="225" />
+						<frame x="225" y="450" w="225" h="225" />
+						<frame x="450" y="450" w="225" h="225" />
+						<frame x="675" y="450" w="225" h="225" />
+						<frame x="900" y="450" w="225" h="225" />
+						<frame x="1125" y="450" w="225" h="225" />
+						<frame x="1350" y="450" w="225" h="225" />
+						<frame x="1575" y="450 " w="225" h="225" />
+						<frame x="1800" y="450 " w="225" h="225" />
+					</wait>
+					<attack loop="false" speed="0.15">
+						<frame x="0" y="675" w="225" h="225" />
+						<frame x="225" y="675" w="450" h="225" />
+						<frame x="675" y="675" w="450" h="225" />
+						<frame x="1125" y="675" w="675" h="225" />
+						<frame x="1800" y="675" w="900" h="225" />
+						<frame x="2700" y="675" w="1125" h="225" />
+						<frame x="3825 " y="675" w="1125" h="225" />
+					</attack>
+					<stun loop="true" speed="0.2">
+						<frame x="0" y="0" w="225" h="225" />
+					</stun>
+					<invisible loop="false" speed="0">
+						<frame x="0" y="0" w="10" h="10" />
+					</invisible>
+					<disappear loop="false" speed="0.2">
+						<frame x="2025" y="225" w="225" h="225" />
+						<frame x="1800" y="225" w="225" h="225" />
+						<frame x="1575" y="225" w="225" h="225" />
+						<frame x="1350" y="225" w="225" h="225" />
+						<frame x="1125" y="225" w="225" h="225" />
+						<frame x="900" y="225" w="225" h="225" />
+						<frame x="675" y="225" w="225" h="225" />
+						<frame x="450" y="225" w="225" h="225" />
+						<frame x="225" y="225" w="225" h="225" />
+						<frame x="0" y="225" w="225" h="225" />
+					</disappear>
 					<dead loop="false" speed="0.2">
-						<frame x="0" y="64" w="64" h="64" />
+						<frame x="0" y="64" w="1125" h="225" />
+						<frame x="0" y="64" w="1125" h="225" />
+						<frame x="0" y="64" w="1125" h="225" />
 					</dead>
 				</enemy>
 				<enemy type="Mireborn" w="120" h="120" texture="Assets/Enemies/mireborn.png">
@@ -925,6 +990,11 @@
 						<frame x="0" y="0" w="20" h="20" />
 					</idle>
 				</rain>
+				<snow w="20" h="20" texture="Assets/Particles/snow.png">
+					<idle loop="false" speed="0.2">
+						<frame x="20" y="0" w="20" h="20" />
+					</idle>
+				</snow>
 				<firefly w="20" h="20" texture="Assets/Particles/firefly.png">
 					<spawn loop="false" speed="0.13">
 						<frame x="0" y="0" w="20" h="20" />
@@ -1093,10 +1163,10 @@
 				<ability type="Dash" w="124" h="124" texture="Assets/Textures/Abilities/jump.png" />
 			</abilities>
 		</animations>
-		<save_data isSaved="0">
-			<player x="1152" y="970" w="44" h="54" lives="2" maxlives="3" />
-			<abilities jump="false" doublejump="false" dash="false" />
-			<scene actualScene="1" />
+		<save_data isSaved="1">
+			<player x="1317" y="3174" w="44" h="54" lives="1" maxlives="3" />
+			<abilities jump="true" doublejump="false" dash="true" />
+			<scene actualScene="22" />
 			<enemies />
 		</save_data>
 	</scene>

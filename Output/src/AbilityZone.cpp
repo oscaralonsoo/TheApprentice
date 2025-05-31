@@ -166,7 +166,7 @@ bool AbilityZone::Update(float dt)
 			}
 
 			if (confirmPressed) {
-				player->SetState("eat");
+				player->GetAnimation()->SetStateIfHigherPriority("eat"); 
 
 				Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
 				player->GetMechanics()->GetMovementHandler()->SetCantMove(true);

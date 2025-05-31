@@ -22,9 +22,6 @@ private:
 
     Animation idleAnim;
 
-    Vector2D position;
-    int width;
-    int height;
     float speed;
     b2Vec2 direction;
 

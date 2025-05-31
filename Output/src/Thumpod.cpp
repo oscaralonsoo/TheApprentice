@@ -60,7 +60,6 @@ bool Thumpod::Update(float dt) {
         break;
     }
 
-
     ResetPath();
 
     steps = 0;
@@ -79,6 +78,7 @@ bool Thumpod::Update(float dt) {
         INT_MAX,
         INT_MAX,
         (direction < 0) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL,
+        SDL_FLIP_NONE,
         scale
     );
     currentAnimation->Update();
@@ -97,10 +97,8 @@ bool Thumpod::Update(float dt) {
 bool Thumpod::PostUpdate() {
     if (currentState == ThumpodState::DEAD && currentAnimation->HasFinished())
         Engine::GetInstance().entityManager->DestroyEntity(this);
-
     return true;
 }
-
 bool Thumpod::CleanUp() {
     return Enemy::CleanUp();
 }

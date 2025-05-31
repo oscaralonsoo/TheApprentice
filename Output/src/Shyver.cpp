@@ -32,6 +32,7 @@ bool Shyver::Start() {
             appearAnim.LoadAnimations(enemyNode.child("appear"));
             attackAnim.LoadAnimations(enemyNode.child("attack"));
             stunAnim.LoadAnimations(enemyNode.child("stun"));
+            waitAnim.LoadAnimations(enemyNode.child("wait"));
             deathAnim.LoadAnimations(enemyNode.child("death"));
             invisibleAnim.LoadAnimations(enemyNode.child("invisible"));
         }
@@ -49,42 +50,54 @@ bool Shyver::Update(float dt) {
     switch (currentState)
     {
     case ShyverState::IDLE:
-
-        if (!walkSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundWalkId, 1.0f, 0);
-            walkSoundPlayed = true;
-        }
         if (currentAnimation != &idleAnim) currentAnimation = &idleAnim;
         currentState = ShyverState::APPEAR;
-        SetPosition(Engine::GetInstance().scene.get()->GetPlayerPosition());
-
         break;
     case ShyverState::APPEAR:
         if (currentAnimation != &appearAnim) {
             currentAnimation = &appearAnim;
-            appearTimer.Start();
+            currentAnimation->Reset();
         }
-
-        Appear();
-
-        if (appearTimer.ReadMSec() >= appearDuration) {
-            currentState = ShyverState::ATTACK;
+        Wait();
+        if (currentAnimation->HasFinished()) currentState = ShyverState::WAIT;
+        break;
+    case ShyverState::WAIT:
+        if (currentAnimation != &idleAnim) {
+            currentAnimation = &idleAnim;
+            waitTimer.Start();
         }
+        Wait();
+        if (waitTimer.ReadMSec() >= waitDuration && currentAnimation->currentFrame >= currentAnimation->totalFrames - 1) currentState = ShyverState::ATTACK;
         break;
     case ShyverState::ATTACK:
-        if (currentAnimation != &attackAnim) currentAnimation = &attackAnim;
+        if (currentAnimation != &attackAnim) {
+            currentAnimation = &attackAnim;
+            currentAnimation->Reset();
+        }
         Attack();
         break;
     case ShyverState::STUNNED:
-        if (currentAnimation != &stunAnim) currentAnimation = &stunAnim;
+        if (currentAnimation != &stunAnim) {
+            currentAnimation = &stunAnim;
+            stunTimer.Start();
+        }
         Stun();
+        if (stunTimer.ReadMSec() >= stunDuration) currentState = ShyverState::DISAPPEAR;
         break;
     case ShyverState::DISAPPEAR:
-        if (currentAnimation != &disappearAnim) currentAnimation = &disappearAnim;
+        if (currentAnimation != &disappearAnim) {
+            currentAnimation = &disappearAnim;
+            currentAnimation->Reset();
+        }
         Disappear();
+        if (currentAnimation->HasFinished()) currentState = ShyverState::INVISIBLE;
         break;
     case ShyverState::INVISIBLE:
-        if (currentAnimation != &invisibleAnim) currentAnimation = &invisibleAnim;
+        if (currentAnimation != &invisibleAnim) {
+            currentAnimation = &invisibleAnim;
+            direction = -direction;
+            invisibleTimer.Start();
+        }
         Invisible();
         break;
     case ShyverState::DEATH:
@@ -101,6 +114,7 @@ bool Shyver::Update(float dt) {
         break;
     }
 
+    direction = -direction;
     return Enemy::Update(dt);
 }
 
@@ -110,6 +124,7 @@ bool Shyver::PostUpdate() {
     if (currentState == ShyverState::DEATH && currentAnimation->HasFinished()) {
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
     }
+    direction = -direction;
 
     return true;
 }
@@ -118,25 +133,31 @@ bool Shyver::CleanUp() {
     return Enemy::CleanUp();
 }
 
-void Shyver::Appear() {
+void Shyver::Wait() {
     static float delayedPlayerX = 0.0f;
     static float delayedPlayerY = 0.0f;
 
     Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
 
-    // Aplicamos el delay con interpolación lineal (0.02f es el factor de suavizado)
-    delayedPlayerX += (playerPos.x - delayedPlayerX) * 0.02f;
-    delayedPlayerY += (playerPos.y - delayedPlayerY) * 0.02f;
+    delayedPlayerX += (playerPos.x - delayedPlayerX) * 0.1f;
+    delayedPlayerY += (playerPos.y - delayedPlayerY) * 0.1f;
 
-    // Offset relativo al jugador
-    Vector2D playerOffset = Vector2D(delayedPlayerX + 200.0f, delayedPlayerY - 50.0f);
+    Vector2D playerOffset;
+
+    if (direction > 0)
+    {
+        playerOffset = Vector2D(delayedPlayerX - 400.0f, delayedPlayerY - 200.0f);
+    }
+    else {
+        playerOffset = Vector2D(delayedPlayerX + 200.0f, delayedPlayerY - 200.0f);
+    }
     SetPosition(playerOffset);
 }
 
 void Shyver::Attack() {
     const float maxDistance = 650.0f;
-    const float maxSpeed = 20.0f;
-    const float minSpeed = 7.0f;
+    const float maxSpeed = 23.0f;
+    const float minSpeed = 5.0f;
 
     if (!attackInProgress) {
         attackStartX = GetPosition().x;
@@ -158,6 +179,7 @@ void Shyver::Attack() {
 }
 
 void Shyver::Stun() {
+    pbody->body->SetLinearVelocity(b2Vec2_zero);
 
 }
 
@@ -170,7 +192,9 @@ void Shyver::Death() {
 }
 
 void Shyver::Invisible() {
-
+    Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
+    
+    if (invisibleTimer.ReadMSec() >= invisibleDuration) currentState = ShyverState::APPEAR;
 }
 
 void Shyver::OnCollision(PhysBody* physA, PhysBody* physB)
@@ -178,7 +202,8 @@ void Shyver::OnCollision(PhysBody* physA, PhysBody* physB)
     switch (physB->ctype)
     {
     case ColliderType::ATTACK:
-        currentState = ShyverState::DEATH;
+        if (currentState == ShyverState::STUNNED) currentState = ShyverState::DEATH;
+        
         break;
     }
 }

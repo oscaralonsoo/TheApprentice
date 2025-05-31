@@ -3,6 +3,8 @@
 #include "Module.h"
 #include "SDL2/SDL_mixer.h"
 #include <list>
+#include "pugixml.hpp"
+#include "pugiconfig.hpp"
 
 #define DEFAULT_MUSIC_FADE_TIME 2.0f
 
@@ -46,13 +48,19 @@ public:
 
 	Mix_Chunk* GetFx(int id) const;
 
+	bool Save(pugi::xml_node& config) ;
+	bool Load(pugi::xml_node& config) ;
+
+	float GetFinalFxVolume(int id) const;
+	float GetFinalMusicVolume() const;
+
+	float masterVolume = 0.5f;
+	float musicVolume = 0.5f;
+	float sfxVolume = 0.5f;
 private:
 
 	_Mix_Music* music;
 	std::list<Mix_Chunk*> fx;
-	float masterVolume = 1.0f;
-	float musicVolume = 1.0f;
-	float sfxVolume = 1.0f;
 
 	std::list<float> fxVolumes;
 };

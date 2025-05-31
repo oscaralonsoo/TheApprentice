@@ -129,6 +129,13 @@ bool Engine::Start() {
 
     LOG("Timer App Start(): %f", timer.ReadMSec());
 
+    SDL_Surface* icon = IMG_Load("Assets/Icono/iconTheApprentice.png");
+
+    if (icon != nullptr) {
+        SDL_SetWindowIcon(window->window, icon);
+        SDL_FreeSurface(icon);
+    }
+
     return result;
 }
 

@@ -235,6 +235,24 @@ void Scene::ChangeScene(int nextScene)
 			}
 
 			Engine::GetInstance().entityManager->Start();
+			if (player) {
+				// Asegura que los parámetros estén actualizados
+				pugi::xml_node playerParams = configParameters.child("animations").child("player");
+				player->SetParameters(playerParams);
+
+				// Recarga la textura manualmente
+				SDL_Texture* newTexture = Engine::GetInstance().textures->Load(playerParams.attribute("texture").as_string());
+
+				// Recarga las animaciones con una NUEVA instancia de PlayerAnimation
+				PlayerAnimation* anim = new PlayerAnimation();
+				anim->SetPlayer(player);
+				anim->LoadAnimations(playerParams, newTexture);
+				player->SetAnimation(anim);
+
+				// Asegura estado inicial
+				player->SetState("idle");
+				player->GetAnimation()->ForceSetState("idle");
+			}
 		}
 	}
 }

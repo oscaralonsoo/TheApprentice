@@ -49,6 +49,11 @@ public:
 	PhysBody* pbody;
 	PhysBody* enemySensor = nullptr;
 
+	void SetAnimation(PlayerAnimation* anim) {
+		if (animation) delete animation;
+		animation = anim;
+	}
+
 private:
 
 	SDL_Texture* texture = nullptr;

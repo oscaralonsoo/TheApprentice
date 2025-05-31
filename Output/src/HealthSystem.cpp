@@ -45,6 +45,7 @@ void HealthSystem::TakeDamage() {
         player->GetAnimation()->SetStateIfHigherPriority("hit");
         hitTimer.Start();
         isInHitAnim = true;
+        Engine::GetInstance().render->StartCameraShake(0.5f, 1);
     }
 }
 

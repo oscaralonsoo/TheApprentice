@@ -167,6 +167,10 @@ void JumpMechanic::HandleJumpInput(float dt) {
     else if (isGliding && (!jumpRepeat || player->GetMechanics()->IsOnGround())) {
         isGliding = false;
         player->pbody->body->SetGravityScale(2.0f);
+
+        if (!player->GetMechanics()->IsOnGround() && !player->GetMechanics()->IsWallSliding()) {
+            player->GetAnimation()->SetStateIfHigherPriority("fall");
+        }
     }
 }
 

@@ -71,7 +71,7 @@ void PlayerAnimation::Update(const std::string& state, int x, int y, bool visibl
         drawY = y - 15; // desplaza 10 píxeles a la izquierda para el sprite
     }
     if (state == "attack") {  // no está flippeado -> mirando a la derecha
-        drawY = y - 5; // desplaza 10 píxeles a la izquierda para el sprite
+        drawY = y - 10; // desplaza 10 píxeles a la izquierda para el sprite
     }
     if (state == "eat") {  // no está flippeado -> mirando a la derecha
         drawY = y - 10; // desplaza 10 píxeles a la izquierda para el sprite

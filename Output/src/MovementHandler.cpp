@@ -154,6 +154,10 @@ void MovementHandler::Update(float dt) {
         SetHookUnlocked(true);
         LOG("Hook habilitado");
     }
+    // Activa el modo cámara fija y ve más mundo (FOV ampliado)
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_0) == KEY_DOWN)
+        Engine::GetInstance().render->ToggleCameraLock(0.5f);
+
 
 
     UpdateAnimation();
@@ -297,8 +301,8 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
         {
             jumpMechanic.OnLanding();
             fallMechanic.OnLanding();
+            player->GetMechanics()->SetIsOnGround(true); 
         }
-
         break;
     case ColliderType::WALL_SLIDE:
         if (player->GetMechanics()->IsOnGround()) {
@@ -355,7 +359,6 @@ void MovementHandler::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     case ColliderType::BOX:
         boxCooldownTimer.Start();
         boxCooldownActive = true;
-        player->GetMechanics()->SetIsOnGround(false);
         break;
 
     case ColliderType::WALL_SLIDE:

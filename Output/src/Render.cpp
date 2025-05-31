@@ -257,7 +257,20 @@ bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uin
 void Render::UpdateCamera(const Vector2D& /*unused*/, int movementDirection, float smoothing)
 {
 	if (cameraLocked)
-		return;
+	{
+		float scale = Engine::GetInstance().window->GetScale();
+		mapWidthPx = Engine::GetInstance().map->GetMapWidth();
+		mapHeightPx = Engine::GetInstance().map->GetMapHeight();
+
+		camera.w = static_cast<int>(Engine::GetInstance().window->width * scale * currentFovFactor);
+		camera.h = static_cast<int>(Engine::GetInstance().window->height * scale * currentFovFactor);
+
+		int centerX = mapWidthPx / 2;
+		int centerY = mapHeightPx / 2;
+
+		camera.x = -static_cast<int>(centerX * scale - camera.w / 2);
+		camera.y = -static_cast<int>(centerY * scale - camera.h / 2);
+	}
 
 	if (cameraZoom != targetCameraZoom)
 		cameraZoom += (targetCameraZoom - cameraZoom) * cameraZoomSmoothing;
@@ -345,10 +358,14 @@ void Render::UpdateCamera(const Vector2D& /*unused*/, int movementDirection, flo
 		shakeOffsetY = 0;
 	}
 
-	camera.x += shakeOffsetX;
-	camera.y += shakeOffsetY;
+	float escala = Engine::GetInstance().window->GetScale() * cameraZoom;
+	extraCameraOffsetX = static_cast<int>(shakeOffsetX * escala);
+	extraCameraOffsetY = static_cast<int>(shakeOffsetY * escala);
 
-	// Límites del mapa
+	camera.x += extraCameraOffsetX;
+	camera.y += extraCameraOffsetY;
+
+	// Límites del mapa (después del shake)
 	if (camera.x > 0) camera.x = 0;
 	if (camera.y > 0) camera.y = 0;
 	if (camera.x < -(mapWidthPx - camera.w)) camera.x = -(mapWidthPx - camera.w);
@@ -413,7 +430,7 @@ void Render::DashCameraImpulse(int direction, int intensity)
 	cameraImpulseX = -direction * intensity;
 }
 
-void Render::StartCameraShake(int durationSec, int intensity)
+void Render::StartCameraShake(float durationSec, int intensity)
 {
 	isShaking = true;
 	shakeDurationSec = durationSec;
@@ -421,20 +438,13 @@ void Render::StartCameraShake(int durationSec, int intensity)
 	shakeTimer.Start();
 }
 
-void Render::ToggleCameraLock()
+void Render::ToggleCameraLock(float fovFactor)
 {
+
 	cameraLocked = !cameraLocked;
-
-	if (cameraLocked)
-	{
-		// Centrar la cámara en el centro del mapa (o donde prefieras)
-		mapWidthPx = Engine::GetInstance().map->GetMapWidth();
-		mapHeightPx = Engine::GetInstance().map->GetMapHeight();
-
-		camera.x = -(mapWidthPx / 2 - camera.w / 2);
-		camera.y = -(mapHeightPx / 2 - camera.h / 2);
-	}
+	currentFovFactor = fovFactor;
 }
+
 float Render::EaseInOut(float current, float target, float t)
 {
 	float delta = target - current;

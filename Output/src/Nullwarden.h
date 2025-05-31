@@ -40,6 +40,9 @@ public:
     void ChangeImpaledAnim();
     void UpdateDraw();
     void UpdateColliderSizeToCurrentAnimation();
+    void TriggerRoar();
+    float GetDifficultyMultiplier() const;
+    float GetAttackSpeed() const;
 public:
 
     NullwardenState currentState = NullwardenState::IDLE;
@@ -64,7 +67,7 @@ public:
     bool startedImpaledAnim = false;
     int direction = 1;
 private:
-  
+
     int drawY = 0;
     int drawX = 0;
     Animation* previousAnimation = nullptr;

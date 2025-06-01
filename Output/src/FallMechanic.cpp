@@ -12,7 +12,7 @@ void FallMechanic::Update(float dt) {
     if (isStunned) {
         if (stunTimer.ReadMSec() >= stunDuration) {
             isStunned = false;
-            player->GetAnimation()->SetStateIfHigherPriority("idle");
+            player->GetAnimation()->ForceSetState("idle");
         }
         else {
             player->pbody->body->SetLinearVelocity(b2Vec2_zero);
@@ -43,11 +43,7 @@ void FallMechanic::CheckLanding() {
         if (verticalVelocity > fallStunThreshold) {
             isStunned = true;
             stunTimer.Start();
-            player->SetState("landing_stun");
             Engine::GetInstance().render->StartCameraShake(0.2f, 2);
-        }
-        else {
-            player->SetState("landing");
         }
     }
 }
@@ -58,7 +54,6 @@ void FallMechanic::CheckFallStart() {
     if (velocity.y > 0.1f && !isFalling) {
 
         isFalling = true;
-        player->SetState("fall");
     }
 }
 
@@ -71,11 +66,10 @@ void FallMechanic::OnLanding() {
         if (verticalVelocity > fallStunThreshold) {
             isStunned = true;
             stunTimer.Start();
-            player->SetState("landing_stun");
             Engine::GetInstance().render->StartCameraShake(0.2f, 2);
         }
         else {
-            player->SetState("landing");
+            player->GetAnimation()->ForceSetState("idle");
         }
     }
 }

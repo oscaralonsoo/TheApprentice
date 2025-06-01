@@ -39,6 +39,11 @@ bool PushableBox::Update(float dt)
 {
     Player* player = Engine::GetInstance().scene->GetPlayer();
 
+    
+    if (transitionToPush && player->GetAnimation()->GetCurrentState() == "transition" && player->GetAnimation()->HasFinished()) {
+        player->GetAnimation()->SetStateIfHigherPriority("push");
+        transitionToPush = false;
+    }
     if (!player->GetMechanics()->CanPush() && isPlayerPushing) {
         pbody->body->SetType(b2_kinematicBody);
         pbody->body->SetLinearVelocity({ 0, 0 });
@@ -57,6 +62,17 @@ bool PushableBox::Update(float dt)
         }
     }
 
+    // DETECCI�N DE FINAL DE EMPUJE
+    if (wasPlayerPushingLastFrame && !isPlayerPushing) {
+        // El jugador ha dejado de empujar: resetear animaci�n
+        player->GetAnimation()->ForceSetState("idle");
+        transitionToPush = false;
+    }
+
+    // Actualizamos flag del �ltimo frame
+    wasPlayerPushingLastFrame = isPlayerPushing;
+
+    // Posici�n y render
     b2Transform pbodyPos = pbody->body->GetTransform();
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - width / 2);
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - height / 2);

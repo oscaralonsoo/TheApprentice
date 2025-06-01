@@ -47,4 +47,6 @@ private:
     int stuckFrameCounter = 0;
     const int stuckFrameLimit = 5;  // Número de frames sin moverse antes de cancelar el dash
 
+    bool transitionToDash = false;
+
 };

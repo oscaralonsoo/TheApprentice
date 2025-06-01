@@ -18,14 +18,16 @@ void HealthSystem::Update(float dt) {
         player->GetMechanics()->GetMovementHandler()->SetCantMove(false);
     }
 
-    if (isInHitAnim && hitTimer.ReadMSec() >= hitAnimDuration) {
+    if (isInHitAnim && player->GetAnimation()->GetCurrentState() == "hit" && player->GetAnimation()->HasFinished()) {
         isInHitAnim = false;
     }
 
-    if (isDying && deathTimer.ReadMSec() >= deathAnimDuration) {
+    if (isDying && player->GetAnimation()->GetCurrentState() == "die" && player->GetAnimation()->HasFinished()) {
         isDying = false;
-
         lives = maxlives;
+        if (Engine::GetInstance().render->cameraLocked) {
+            Engine::GetInstance().render->ToggleCameraLock();
+        }
     }
 }
 
@@ -38,12 +40,10 @@ void HealthSystem::TakeDamage() {
     if (lives == 0 && !isDying) {
         isDying = true;
         player->GetAnimation()->SetStateIfHigherPriority("die");
-        deathTimer.Start();
-        Engine::GetInstance().scene->isDead = true; 
+        Engine::GetInstance().scene->isDead = true;
     }
     else {
         player->GetAnimation()->SetStateIfHigherPriority("hit");
-        hitTimer.Start();
         isInHitAnim = true;
         Engine::GetInstance().render->StartCameraShake(0.5f, 1);
     }
@@ -52,7 +52,6 @@ void HealthSystem::TakeDamage() {
 void HealthSystem::HandleSpikeDamage() {
     if (lives > 0) {
         lives--;
-        player->GetMechanics()->GetInvulnerabilitySystem()->StartInvulnerability();
     }
 
     if (lives <= 0 && !isDying) {

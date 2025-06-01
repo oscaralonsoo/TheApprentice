@@ -20,6 +20,11 @@ void PlayerMechanics::Update(float dt) {
     invulnerabilitySystem.Update(dt);
     godModeSystem.Update(dt);
     respawnSystem.Update(dt);
+
+    if (!canSpikeDamage && spikeDamageTimer.ReadMSec() == spikeDamageTime)
+    {
+        canSpikeDamage = true;  
+    }
 }
 
 void PlayerMechanics::PostUpdate() {
@@ -45,7 +50,7 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     }
     case ColliderType::SPIKE:
-        if (!godModeSystem.IsEnabled() && !invulnerabilitySystem.IsInvulnerable()) {
+        if (!godModeSystem.IsEnabled() && canSpikeDamage) {
             healthSystem.HandleSpikeDamage();
             respawnSystem.ForceRespawn();
         }
@@ -57,6 +62,12 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 void PlayerMechanics::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     movementHandler.OnCollisionEnd(physA, physB);
+    switch (physB->ctype) {
+    case ColliderType::SPIKE:
+        canSpikeDamage = false;
+        spikeDamageTimer.Start();
+        break;
+    }
 }
 
 void PlayerMechanics::EnableJump(bool enable) {

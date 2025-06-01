@@ -51,6 +51,8 @@ void MovementHandler::Update(float dt) {
     if (fallMechanic.IsStunned()) return;
 
     if (isOnLiana) {
+        player->GetAnimation()->ForceSetState("liana");
+
         b2Vec2 velocity(0.0f, 0.0f);
 
         // --------- Mando ---------
@@ -222,6 +224,11 @@ void MovementHandler::UpdateAnimation() {
     if (player->GetMechanics()->GetHealthSystem()->IsInHitAnim()) return;
     if (player->GetState() == "die") return;
     if (dashMechanic.IsDashing()) return;
+
+    std::string state = player->GetAnimation()->GetCurrentState();
+    if (state == "walljump" || state == "transition" || state == "glide" || state == "doublejump" || state == "jump") {
+        return;
+    }
 
     if (!attackMechanic.IsAttacking() &&
         !dashMechanic.IsDashing() &&

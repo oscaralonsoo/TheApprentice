@@ -36,6 +36,7 @@ void PlayerAnimation::Update(const std::string& state, int x, int y, bool visibl
     int drawX = x;
     int drawY = y;
 
+    // Cambiar de animación si se pide otro estado
     if (state != currentState && animations.find(state) != animations.end()) {
         currentAnimation = &animations[state];
 
@@ -48,51 +49,39 @@ void PlayerAnimation::Update(const std::string& state, int x, int y, bool visibl
 
     bool adjustedFlip = flip;
 
-    // Si es la animaci�n de wall_slide, invertimos el flip
-    if (state == "wall_slide") {
-        adjustedFlip = !flip;
-    
-    }
+    // Ajustes visuales según el estado
+    if (state == "wall_slide") adjustedFlip = !flip;
+    if (state == "push") adjustedFlip = !flip;
 
-    if (state == "push") {
-        adjustedFlip = !flip;
-    }
+    if (state == "push" && adjustedFlip) drawX = x - 80;
+    else if (state == "push") drawX = x - 10;
+    if (state == "push") drawY = y - 10;
+    if (state == "run_right") drawY = y - 19;
+    if (state == "idle") drawY = y - 4;
+    if (state == "attack") drawY = y - 20;
+    if (state == "eat") drawY = y - 10;
+    if (state == "hit") drawY = y - 10;
+    if (state == "landing_stun") drawY = y + 18;
+    if (state == "landing") drawY = y + 5;
+    if (state == "transition") drawY = y - 100;
+    if (state == "transition") drawX = x - 50;
 
-    if (state == "push" && adjustedFlip) {  // no está flippeado -> mirando a la derecha
-        drawX = x - 80; // desplaza 10 píxeles a la izquierda para el sprite
-    }
-    else if (state == "push" && !adjustedFlip) {  // no está flippeado -> mirando a la derecha
-        drawX = x - 10; // desplaza 10 píxeles a la izquierda para el sprite
-    }
-    if (state == "push") {  // no está flippeado -> mirando a la derecha
-        drawY = y - 10; // desplaza 10 píxeles a la izquierda para el sprite
-    }
-    if (state == "run_right") {  // no está flippeado -> mirando a la derecha
-        drawY = y - 15; // desplaza 10 píxeles a la izquierda para el sprite
-    }
-    if (state == "attack") {  // no está flippeado -> mirando a la derecha
-        drawY = y - 10; // desplaza 10 píxeles a la izquierda para el sprite
-    }
-    if (state == "eat") {  // no está flippeado -> mirando a la derecha
-        drawY = y - 10; // desplaza 10 píxeles a la izquierda para el sprite
-    }
-    if (state == "hit") {  // no está flippeado -> mirando a la derecha
-        drawY = y - 10; // desplaza 10 píxeles a la izquierda para el sprite
-    }
+    // Dibujar la animación actual
+    if (currentAnimation) {
+        Engine::GetInstance().render->DrawTexture(
+            texture,
+            drawX,
+            drawY,
+            &currentAnimation->GetCurrentFrame(),
+            1.0f,
+            0.0,
+            INT_MAX,
+            INT_MAX,
+            adjustedFlip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE
+        );
 
-    Engine::GetInstance().render->DrawTexture(
-        texture,
-        drawX,
-        drawY,
-        &GetCurrentFrame(),
-        1.0f,
-        0.0,
-        INT_MAX,
-        INT_MAX,
-        adjustedFlip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE
-    );
-
-    currentAnimation->Update();
+        currentAnimation->Update();
+    }
 }
 
 const SDL_Rect& PlayerAnimation::GetCurrentFrame() const {
@@ -145,9 +134,13 @@ AnimationStatePriority PlayerAnimation::GetPriorityForState(const std::string& s
     if (state == "dash") return AnimationStatePriority::DASH;
     if (state == "attack") return AnimationStatePriority::ATTACK;
     if (state == "eat") return AnimationStatePriority::EAT;
-    if (state == "landing_stun") return AnimationStatePriority::LANDING_STUN; // 👈 NUEVO
+    if (state == "landing_stun") return AnimationStatePriority::LANDING_STUN;
     if (state == "hit") return AnimationStatePriority::HIT;
     if (state == "die") return AnimationStatePriority::DIE;
+    if (state == "liana") return AnimationStatePriority::LIANA;
+    if (state == "landing") return AnimationStatePriority::LANDING;
+    if (state == "transition") return AnimationStatePriority::TRANSITION;
+    if (state == "push") return AnimationStatePriority::PUSH;
 
     return AnimationStatePriority::IDLE;
 }

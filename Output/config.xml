@@ -73,16 +73,12 @@
 					<frame x="1008" y="420" w="112" h="112" />
 				</eat>
 				<attack loop="false" speed="0.15">
-					<frame x="0" y="420" w="112" h="112" />
-					<frame x="112" y="420" w="112" h="112" />
-					<frame x="224" y="420" w="112" h="112" />
-					<frame x="336" y="420" w="112" h="112" />
-					<frame x="448" y="420" w="112" h="112" />
-					<frame x="560" y="420" w="112" h="112" />
-					<frame x="672" y="420" w="112" h="112" />
-					<frame x="784" y="420" w="112" h="112" />
-					<frame x="896" y="420" w="112" h="112" />
-					<frame x="1008" y="420" w="112" h="112" />
+					<frame x="0" y="308" w="112" h="112" />
+					<frame x="112" y="308" w="112" h="112" />
+					<frame x="224" y="308" w="112" h="112" />
+					<frame x="336" y="308" w="112" h="112" />
+					<frame x="448" y="308" w="112" h="112" />
+					<frame x="560" y="308" w="112" h="112" />
 				</attack>
 				<hit loop="false" speed="0.17">
 					<frame x="0" y="516" w="112" h="120" />
@@ -112,6 +108,10 @@
 					<frame x="600" y="853" w="100" h="100" />
 					<frame x="700" y="853" w="100" h="100" />
 					<frame x="800" y="853" w="100" h="100" />
+					<frame x="900" y="853" w="100" h="100" />
+					<frame x="1000" y="853" w="100" h="100" />
+					<frame x="1100" y="853" w="100" h="100" />
+					<frame x="1200" y="853" w="100" h="100" />
 				</landing_stun>
 				<landing loop="false" speed="0.17">
 					<frame x="0" y="953" w="100" h="100" />
@@ -125,49 +125,61 @@
 					<frame x="300" y="1053" w="100" h="100" />
 					<frame x="400" y="1053" w="100" h="100" />
 				</die>
-				<dash loop="true" speed="0.3">
-					<frame x="0" y="1153" w="130" h="100" />
-					<frame x="130" y="1153" w="130" h="100" />
-					<frame x="260" y="1153" w="130" h="100" />
-					<frame x="390" y="1153" w="130" h="100" />
-					<frame x="520" y="1153" w="130" h="100" />
-					<frame x="650" y="1153" w="130" h="100" />
+				<dash loop="false" speed="0.3">
+					<frame x="0" y="1153" w="225" h="70" />
+					<frame x="225" y="1153" w="225" h="70" />
+					<frame x="450" y="1153" w="225" h="70" />
+					<frame x="675" y="1153" w="225" h="70" />
+					<frame x="900" y="1153" w="225" h="70" />
 				</dash>
 				<hook loop="false" speed="0.15">
-					<frame x="0" y="1303" w="100" h="100" />
-					<frame x="100" y="1303" w="100" h="100" />
-					<frame x="200" y="1303" w="100" h="100" />
-					<frame x="300" y="1303" w="100" h="100" />
-					<frame x="400" y="1303" w="100" h="100" />
-					<frame x="500" y="1303" w="100" h="100" />
-					<frame x="600" y="1303" w="100" h="100" />
-					<frame x="700" y="1303" w="100" h="100" />
+					<frame x="0" y="1223" w="120" h="100" />
+					<frame x="120" y="1223" w="120" h="100" />
+					<frame x="240" y="1223" w="120" h="100" />
+					<frame x="360" y="1223" w="120" h="100" />
+					<frame x="480" y="1223" w="120" h="100" />
+					<frame x="600" y="1223" w="120" h="100" />
+					<frame x="720" y="1223" w="120" h="100" />
+					<frame x="840" y="1223" w="120" h="100" />
 				</hook>
 				<push loop="true" speed="0.15">
-					<frame x="0" y="1383" w="184" h="100" />
-					<frame x="186" y="1383" w="186" h="100" />
-					<frame x="372" y="1383" w="186" h="100" />
-					<frame x="558" y="1383" w="186" h="100" />
-					<frame x="744" y="1383" w="186" h="100" />
-					<frame x="930" y="1383" w="186" h="100" />
+					<frame x="0" y="1323" w="184" h="100" />
+					<frame x="186" y="1323" w="186" h="100" />
+					<frame x="372" y="1323" w="186" h="100" />
+					<frame x="558" y="1323" w="186" h="100" />
+					<frame x="744" y="1323" w="186" h="100" />
+					<frame x="930" y="1323" w="186" h="100" />
 				</push>
 				<doublejump loop="false" speed="0.15">
-					<frame x="0" y="1483" w="100" h="100" />
-					<frame x="100" y="1483" w="100" h="100" />
-					<frame x="200" y="1483" w="100" h="100" />
-					<frame x="300" y="1483" w="100" h="100" />
+					<frame x="0" y="1423" w="150" h="120" />
+					<frame x="150" y="1423" w="150" h="120" />
+					<frame x="300" y="1423" w="150" h="120" />
+					<frame x="450" y="1423" w="150" h="120" />
 				</doublejump>
 				<walljump loop="false" speed="0.15">
-					<frame x="0" y="1593" w="100" h="100" />
-					<frame x="100" y="1593" w="100" h="100" />
-					<frame x="200" y="1593" w="100" h="100" />
-					<frame x="300" y="1593" w="100" h="100" />
+					<frame x="0" y="1543" w="100" h="100" />
+					<frame x="100" y="1543" w="100" h="100" />
+					<frame x="200" y="1543" w="100" h="100" />
+					<frame x="300" y="1543" w="100" h="100" />
 				</walljump>
 				<glide loop="false" speed="0.15">
-					<frame x="0" y="1693" w="100" h="90" />
-					<frame x="100" y="1693" w="100" h="90" />
-					<frame x="200" y="1693" w="100" h="90" />
+					<frame x="0" y="1673" w="140" h="120" />
+					<frame x="140" y="1673" w="140" h="120" />
+					<frame x="280" y="1673" w="140" h="120" />
 				</glide>
+				<liana loop="true" speed="0.15">
+					<frame x="0" y="1813" w="85" h="120" />
+					<frame x="85" y="1813" w="85" h="120" />
+					<frame x="170" y="1813" w="85" h="120" />
+					<frame x="255" y="1813" w="85" h="120" />
+				</liana>
+				<transition loop="false" speed="0.5">
+					<frame x="0" y="1933" w="200" h="200" />
+					<frame x="200" y="1933" w="200" h="200" />
+					<frame x="400" y="1933" w="200" h="200" />
+					<frame x="600" y="1933" w="200" h="200" />
+					<frame x="800" y="1933" w="200" h="200" />
+				</transition>
 			</player>
 			<enemies>
 				<enemy type="Bloodrusher" w="220" h="220" texture="Assets/Enemies/bloodrusher.png">
@@ -1163,10 +1175,10 @@
 				<ability type="Dash" w="124" h="124" texture="Assets/Textures/Abilities/jump.png" />
 			</abilities>
 		</animations>
-		<save_data isSaved="1">
-			<player x="1317" y="3174" w="44" h="54" lives="1" maxlives="3" />
-			<abilities jump="true" doublejump="false" dash="true" />
-			<scene actualScene="22" />
+		<save_data isSaved="0">
+			<player x="1152" y="970" w="44" h="54" lives="2" maxlives="3" />
+			<abilities jump="false" doublejump="false" dash="false" />
+			<scene actualScene="1" />
 			<enemies />
 		</save_data>
 	</scene>

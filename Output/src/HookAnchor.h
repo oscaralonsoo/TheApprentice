@@ -47,4 +47,7 @@ private:
     float cancelDistanceThreshold = 30.0f;
     bool hookUsed = false;
     bool wasOnGroundAtHookStart = false;
+    SDL_Texture* highlightTexture = nullptr;
+
+    bool transitionToHook = false;
 };

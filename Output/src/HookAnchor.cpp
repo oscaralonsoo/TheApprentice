@@ -5,6 +5,7 @@
 #include "Physics.h"
 #include "Log.h"
 #include "Scene.h"
+#include "Player.h"
 
 HookAnchor::HookAnchor() : Entity(EntityType::HOOK_ANCHOR) {}
 
@@ -33,22 +34,32 @@ bool HookAnchor::Start()
     sensor->ctype = ColliderType::HOOK_SENSOR;
     sensor->listener = this;
 
+    highlightTexture = Engine::GetInstance().textures->Load("Assets/Props/gancho_seleccionado.png");
 
     return true;
 }
 
 bool HookAnchor::Update(float dt)
 {
+    Player* player = Engine::GetInstance().scene->GetPlayer();
+
+    if (player->GetAnimation()->GetCurrentState() == "transition" &&
+        player->GetAnimation()->HasFinished() && transitionToHook) {
+        player->GetAnimation()->SetStateIfHigherPriority("hook");
+        transitionToHook = false;
+    }
+
     if (texture)
         Engine::GetInstance().render->DrawTexture(texture, position.getX(), position.getY());
 
     if (isHooking)
     {
-        Player* player = Engine::GetInstance().scene->GetPlayer();
         if (player && player->pbody && player->pbody->body)
         {
-            if (player->GetState() != "hook")  
-                player->SetState("hook");
+            if (player->GetState() != "hook") {
+                player->GetAnimation()->SetStateIfHigherPriority("transition");
+                transitionToHook = true;
+            }
             b2Vec2 playerPos = player->pbody->body->GetPosition();
             b2Vec2 hookPos = pbody->body->GetPosition();
 
@@ -90,7 +101,6 @@ bool HookAnchor::Update(float dt)
 
     // Dibujar un recuadro sobre el gancho si es el activo
     Scene* scene = Engine::GetInstance().scene.get();
-    Player* player = scene->GetPlayer();
     if (!player || !player->GetMechanics()->GetMovementHandler()->IsHookUnlocked())
         return true; // No dibuja el marco si no está desbloqueado
 
@@ -99,14 +109,10 @@ bool HookAnchor::Update(float dt)
     {
         int borderX = position.getX();
         int borderY = position.getY();
-        int borderW = width;
-        int borderH = height;
 
-        // Dibuja los 4 lados del recuadro
-        Engine::GetInstance().render->DrawLine(borderX, borderY, borderX + borderW, borderY, 255, 255, 0, 255); // Top
-        Engine::GetInstance().render->DrawLine(borderX, borderY, borderX, borderY + borderH, 255, 255, 0, 255); // Left
-        Engine::GetInstance().render->DrawLine(borderX + borderW, borderY, borderX + borderW, borderY + borderH, 255, 255, 0, 255); // Right
-        Engine::GetInstance().render->DrawLine(borderX, borderY + borderH, borderX + borderW, borderY + borderH, 255, 255, 0, 255); // Bottom
+        if (highlightTexture) {
+            Engine::GetInstance().render->DrawTexture(highlightTexture, borderX, borderY);
+        }
     }
 
     return true;
@@ -124,6 +130,11 @@ bool HookAnchor::CleanUp()
     {
         Engine::GetInstance().physics->DeletePhysBody(sensor);
         sensor = nullptr;
+    }
+
+    if (highlightTexture) {
+        SDL_DestroyTexture(highlightTexture);
+        highlightTexture = nullptr;
     }
 
     return true;

@@ -16,10 +16,36 @@ void JumpMechanic::Update(float dt) {
     if (wallJumpLockActive && wallJumpLockTimer.ReadMSec() >= wallJumpLockDuration) {
         wallJumpLockActive = false;
     }
+    // Transición hacia "jump" después de terminar "transition"
+    if (player->GetAnimation()->GetCurrentState() == "transition" &&
+        player->GetAnimation()->HasFinished() && transitionToJump) {
+        player->GetAnimation()->SetStateIfHigherPriority("jump");
+        transitionToJump = false;
+    }
+    if (player->GetAnimation()->GetCurrentState() == "transition" &&
+        player->GetAnimation()->HasFinished() && transitionToDoubleJump) {
+        player->GetAnimation()->SetStateIfHigherPriority("doublejump");
+        transitionToDoubleJump = false;
+    }
+    if (player->GetAnimation()->GetCurrentState() == "transition" &&
+        player->GetAnimation()->HasFinished() && transitionToWallJump) {
+        player->GetAnimation()->SetStateIfHigherPriority("walljump");
+        transitionToWallJump = false;
+    }
+    if (player->GetAnimation()->GetCurrentState() == "transition" &&
+        player->GetAnimation()->HasFinished() && transitionToGlide) {
+        player->GetAnimation()->SetStateIfHigherPriority("glide");
+        transitionToGlide = false;
+    }
 }
 
 void JumpMechanic::HandleJumpInput(float dt) {
     if (!jumpUnlocked) return;
+
+    if (player->GetMechanics()->GetMovementHandler()->IsDashUnlocked() &&
+        player->GetMechanics()->GetMovementHandler()->GetDashMechanic().IsDashing()) {
+        return;
+    }
 
     // Entrada teclado
     std::shared_ptr<Input> input = Engine::GetInstance().input;
@@ -48,27 +74,13 @@ void JumpMechanic::HandleJumpInput(float dt) {
 
     // Iniciar salto
     if (jumpDown) {
-        if (jumpCount == 0 && player->GetMechanics()->IsOnGround()) {
-            jumpHoldTimer.Start();
-            isJumping = true;
-            jumpCount = 1;
-            player->GetMechanics()->SetIsOnGround(false);
-            player->GetAnimation()->SetStateIfHigherPriority("jump");
-            jumpInterrupted = false;
-
-            jumpCooldownTimer.Start();
-            jumpCooldownActive = true;
-
-            // Impulso inicial para garantizar altura m�nima
-            b2Vec2 impulse(0, -minJumpForce);
-            player->pbody->body->ApplyForceToCenter(impulse, true);
-        }
-        else if (wallJumpUnlocked && player->GetMechanics()->IsWallSliding()) {
+        if (wallJumpUnlocked && player->GetMechanics()->IsWallSliding()) {
             isJumping = true;
             wallJumpActive = true;
             jumpCount = 1;
 
-            player->GetAnimation()->SetStateIfHigherPriority("walljump");
+            player->GetAnimation()->SetStateIfHigherPriority("transition");
+            transitionToWallJump = true;
             player->GetMechanics()->SetIsWallSliding(false);
             player->GetMechanics()->SetIsTouchingWall(false);
 
@@ -89,13 +101,29 @@ void JumpMechanic::HandleJumpInput(float dt) {
             wallJumpLockActive = true;
             wallJumpLockTimer.Start();
         }
+        if (jumpCount == 0 && player->GetMechanics()->IsOnGround()) {
+            jumpHoldTimer.Start();
+            isJumping = true;
+            jumpCount = 1;
+            player->GetMechanics()->SetIsOnGround(false);
+            player->GetAnimation()->SetStateIfHigherPriority("transition");
+            transitionToJump = true;
+            jumpInterrupted = false;
+
+            jumpCooldownTimer.Start();
+            jumpCooldownActive = true;
+
+            // Impulso inicial para garantizar altura m�nima
+            b2Vec2 impulse(0, -minJumpForce);
+            player->pbody->body->ApplyForceToCenter(impulse, true);
+        }
         else if (doubleJumpUnlocked && jumpCount < maxJumpCount) {
             jumpHoldTimer.Start();
             isJumping = true;
             jumpInterrupted = false;
             jumpCount = 2;
-            player->GetAnimation()->SetStateIfHigherPriority("doublejump");
-
+            player->GetAnimation()->SetStateIfHigherPriority("transition");
+            transitionToDoubleJump = true;
             jumpCooldownTimer.Start();
             jumpCooldownActive = true;
 
@@ -107,6 +135,7 @@ void JumpMechanic::HandleJumpInput(float dt) {
             b2Vec2 impulse(0, -minJumpForce);
             player->pbody->body->ApplyForceToCenter(impulse, true);
         }
+
     }
 
     if (isJumping && jumpHoldTimer.ReadMSec() > 0 && jumpRepeat) {
@@ -156,7 +185,8 @@ void JumpMechanic::HandleJumpInput(float dt) {
         if (!isGliding) {
             isGliding = true;
             player->pbody->body->SetGravityScale(glideGravityScale);
-            player->GetAnimation()->SetStateIfHigherPriority("glide");
+            player->GetAnimation()->SetStateIfHigherPriority("transition");
+            transitionToGlide = true;
 
             b2Vec2 vel = player->pbody->body->GetLinearVelocity();
             vel.y = 0.0f;

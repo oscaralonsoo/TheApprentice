@@ -50,8 +50,6 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
             respawnSystem.ForceRespawn();
         }
         break;
-
-        break;
     default:
         break;
     }

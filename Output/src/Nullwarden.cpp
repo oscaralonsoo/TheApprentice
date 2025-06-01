@@ -55,7 +55,6 @@ bool Nullwarden::Start() {
     drawY = (int)position.getY();
     drawX = (int)position.getX();
     currentAnimation = &idleAnim;
-
     direction = -1;
     return true;
 }

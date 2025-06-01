@@ -85,7 +85,7 @@ bool Nullwarden::Update(float dt) {
         if (beforeChargeTimer.ReadMSec() >= beforeChargeMs)
         {
             startedImpaledAnim = false;
-            pbody->body->SetLinearVelocity(b2Vec2(direction * 12.0f * GetDifficultyMultiplier(), 0.0f));
+            pbody->body->SetLinearVelocity(b2Vec2(direction * 12.0f * GetCharheDifficultyMultiplier(), 0.0f));
         }
 
         break;
@@ -141,6 +141,7 @@ bool Nullwarden::PostUpdate() {
 
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         Engine::GetInstance().pressureSystem->OpenDoor(2);
+
     }
     return true;
 }
@@ -255,7 +256,7 @@ void Nullwarden::Attack() {
 void Nullwarden::Impaled() {
     pbody->body->SetLinearVelocity(b2Vec2_zero);
     pbody->body->SetAngularVelocity(0);
-
+    Engine::GetInstance().render->StartCameraShake(0.2f , 3);
     if (!startedImpaledAnim)
         ChangeImpaledAnim();
     else {
@@ -281,7 +282,7 @@ void Nullwarden::Roar() {
     float dy = playerY - nullwardenY;
 
     float distanceSquared = dx * dx + dy * dy;
-    const float roarRadius = 2000.0f;
+    const float roarRadius = 2300.0f;
     const float roarRadiusSquared = roarRadius * roarRadius;
 
     if (distanceSquared <= roarRadiusSquared) {
@@ -420,7 +421,7 @@ void Nullwarden::TriggerRoar() {
 }
 
 float Nullwarden::GetDifficultyMultiplier() const {
-    if (crystalBroken) return 2.2f;
+    if (crystalBroken) return 2.0f;
     switch (crystal->currentState) {
     case CrystalState::PRISTINE: return 1.0f;
     case CrystalState::CRACKED: return 1.4f;
@@ -428,11 +429,20 @@ float Nullwarden::GetDifficultyMultiplier() const {
     }
 }
 float Nullwarden::GetAttackSpeed() const{
-    if (crystalBroken) return 0.22f;
+    if (crystalBroken) return 0.19f;
     switch (crystal->currentState) {
     case CrystalState::PRISTINE: return 0.13f;
-    case CrystalState::CRACKED: return 0.16f;
-    case CrystalState::SHATTERED: return 0.19f;
+    case CrystalState::CRACKED: return 0.15f;
+    case CrystalState::SHATTERED: return 0.17f;
+    }
+}
+
+float Nullwarden::GetCharheDifficultyMultiplier() const {
+    if (crystalBroken) return 1.5f;
+    switch (crystal->currentState) {
+    case CrystalState::PRISTINE: return 1.0f;
+    case CrystalState::CRACKED: return 1.2f;
+    case CrystalState::SHATTERED: return 1.4f;
     }
 }
 

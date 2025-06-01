@@ -43,6 +43,7 @@ public:
     void TriggerRoar();
     float GetDifficultyMultiplier() const;
     float GetAttackSpeed() const;
+    float GetCharheDifficultyMultiplier() const;
 public:
 
     NullwardenState currentState = NullwardenState::IDLE;
@@ -77,14 +78,14 @@ private:
     bool attackAnimDone = false;
     const float spearIntervalMs = 2000.0f;
     Timer spearIntervalTimer;
-    const float spearAttackMs = 15000.0f;
+    const float spearAttackMs = 11000.0f;
     Timer spearAttackTimer;
     const float impaledMs = 10000.0f;
     Timer beforeChargeTimer;
     const float beforeChargeMs = 1100.0f;
     Timer impaledTimer;
     Timer verticalSpearTimer;
-    const float verticalSpearIntervalMs = 300.0f;
+    const float verticalSpearIntervalMs = 250.0f;
     int spawnedVerticalSpears = 0;
     const int maxVerticalSpears = 8;
     const float verticalSpearGap = 200.0f;

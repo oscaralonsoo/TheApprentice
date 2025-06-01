@@ -65,7 +65,7 @@ bool DustParticle::Update(float dt) {
         break;
     }
 
-    // Actualizar posición con la velocidad
+    // Actualizar posiciï¿½n con la velocidad
     position.setX(position.getX() + velocity.x);
     position.setY(position.getY() + velocity.y);
 

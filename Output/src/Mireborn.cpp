@@ -112,6 +112,8 @@ bool Mireborn::CleanUp() {
 }
 
 void Mireborn::OnCollision(PhysBody* physA, PhysBody* physB) {
+    Enemy::OnCollision(physA, physB);
+
     switch (physB->ctype) {
     case ColliderType::BOX:
     case ColliderType::PLATFORM:

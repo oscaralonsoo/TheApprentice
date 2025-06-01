@@ -20,7 +20,7 @@ public:
     bool Update(float dt) override;
     bool PostUpdate() override;
     bool CleanUp() override;
-    void OnCollision(PhysBody* physA, PhysBody* physB);
+    void OnCollision(PhysBody* physA, PhysBody* physB) override;
 
     void Walk();
 

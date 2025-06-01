@@ -103,6 +103,8 @@ bool Thumpod::CleanUp() {
 }
 
 void Thumpod::OnCollision(PhysBody* physA, PhysBody* physB) {
+    Enemy::OnCollision(physA, physB);
+
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
     case ColliderType::WALL:

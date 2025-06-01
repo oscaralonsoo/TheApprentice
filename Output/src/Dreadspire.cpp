@@ -76,6 +76,8 @@ bool Dreadspire::CleanUp() {
     return Enemy::CleanUp();
 }
 void Dreadspire::OnCollision(PhysBody* physA, PhysBody* physB) {
+    Enemy::OnCollision(physA, physB);
+
     switch (physB->ctype) {
     case ColliderType::ATTACK:
         currentState = DreadspireState::DEAD;

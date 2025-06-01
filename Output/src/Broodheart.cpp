@@ -112,6 +112,8 @@ bool Broodheart::CleanUp() {
 }
 
 void Broodheart::OnCollision(PhysBody* physA, PhysBody* physB) {
+    Enemy::OnCollision(physA, physB);
+
     switch (physB->ctype) {
     case ColliderType::PLAYER:
     case ColliderType::ATTACK:

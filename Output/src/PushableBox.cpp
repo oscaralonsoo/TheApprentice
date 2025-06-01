@@ -17,7 +17,7 @@ bool PushableBox::Start()
 {
     pbody = Engine::GetInstance().physics->CreateRectangle((int)position.getX() + width / 2, (int)position.getY() + height / 2, width, height, DYNAMIC, 0, 0,
         CATEGORY_BOX,
-        CATEGORY_PLAYER | CATEGORY_PLATFORM | CATEGORY_BOX | CATEGORY_ENEMY
+        CATEGORY_PLAYER | CATEGORY_PLATFORM | CATEGORY_BOX | CATEGORY_ENEMY | CATEGORY_DOOR
     );
     pbody->listener = this;
 

@@ -41,7 +41,7 @@ bool PressureDoor::Start()
         0,
         0,
         CATEGORY_DOOR,
-        CATEGORY_PLAYER
+        CATEGORY_PLAYER | CATEGORY_BOX | CATEGORY_ENEMY
     );
 
     pbody->listener = this;

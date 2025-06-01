@@ -3,11 +3,12 @@
 	<textures>
 		<UI>
 			<help>
-				<Jump path="Assets/Textures/UI/Help" name="Jump.png"/>
-				<Listen path="Assets/Textures/UI/Help" name="Listen.png"/>
+				<Jump path="Assets/Textures/UI/Help" name="jump.png"/>
+				<Listen path="Assets/Textures/UI/Help" name="listen.png"/>
 				<Attack path="Assets/Textures/UI/Help" name="Attack.png"/>
-				<Left path="Assets/Textures/UI/Help" name="Left.png"/>
-				<Right path="Assets/Textures/UI/Help" name="Right.png"/>
+				<Move path="Assets/Textures/UI/Help" name="move.png"/>
+				<Save path="Assets/Textures/UI/Help" name="save.png"/>
+				<Climb path="Assets/Textures/UI/Help" name="climb.png"/>
 			</help>
 			<menu>
 				<backgrounds>
@@ -40,6 +41,9 @@
 					<checkbox path="Assets/Textures/UI/Buttons/" name="checkbox.png"/>
 					<fill path="Assets/Textures/UI/Buttons/" name="fill.png"/>
 				</checkbox>
+				<slider>
+					<sliderBox path="Assets/Textures/UI/Buttons/" name="sliderBox.png"/>
+				</slider>
 			</menu>
 			<game>
 				<lifes w="32" h="32" texture="Assets/Slime/vida_slime.png">

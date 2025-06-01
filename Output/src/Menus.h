@@ -138,6 +138,7 @@ private:
     std::unordered_map<std::string, SDL_Texture*> loadedAbilityTextures;
     SDL_Texture* checkboxTexture = nullptr;
     SDL_Texture* fillTexture = nullptr;
+    SDL_Texture* sliderTexture = nullptr;
 
     std::unordered_map<MenusState, int> previousSelectedButton; 
 

@@ -51,6 +51,12 @@ void Menus::LoadTextures() {
         LoadCheckboxTextures(doc);
         LoadAbilityTextures(doc);
     }
+    // Cargar la textura del slider
+    pugi::xml_node sliderNode = doc.child("art").child("textures").child("UI").child("menu").child("slider").child("sliderBox");
+    if (sliderNode) {
+        std::string path = std::string(sliderNode.attribute("path").value()) + sliderNode.attribute("name").value();
+        sliderTexture = Engine::GetInstance().render->LoadTexture(path.c_str());
+    }
     lifeTexture = Engine::GetInstance().textures->Load("Assets/Slime/vida_slime.png");
 }
 void Menus::LoadAbilityTextures(pugi::xml_document& doc) {
@@ -640,29 +646,44 @@ void Menus::DrawSliders() {
     DrawSlider((width / 2) + 50, (height / 2)+100, fxVolumeSliderX, selectedButton == 3, "FX Volume");
     DrawSlider((width / 2) + 50, (height / 2)+200, masterVolumeSliderX, selectedButton == 4, "Master Volume");
 }
-
 void Menus::DrawSlider(int minX, int y, int& sliderX, bool isSelected, const std::string& label) {
-    // Dibuja el fondo del slider
-    Engine::GetInstance().render->DrawRectangle({ minX, y, 420, 19 }, 200, 200, 200, 255, true, false);
+    auto& render = Engine::GetInstance().render;
+    int cameraX = render->camera.x;
+    int cameraY = render->camera.y;
+
+    const int sliderWidth = 420;
 
     int squareWidth = isSelected ? 25 : 20;
     int squareHeight = isSelected ? 45 : 35;
-    int squareColor = isSelected ? 255 : 150;
+    int halfSquare = squareWidth / 2;
 
-    // Limitar el valor de sliderX dentro de los l�mites del slider
-    sliderX = std::max(minX + squareWidth / 2, std::min(sliderX, minX + 420 - squareWidth / 2));
+    // Limitar el valor de sliderX dentro del rango visible
+    sliderX = Clamp(sliderX, minX + halfSquare, minX + sliderWidth - halfSquare);
 
-    // Calcula la posici�n del cuadrado del slider para centrarlo
-    int squareX = sliderX - (squareWidth / 2);
-    int squareY = y - (squareHeight - 19) / 2; 
-    Engine::GetInstance().render->DrawRectangle({ squareX, squareY, squareWidth, squareHeight },
-        squareColor, squareColor, squareColor, 255, true, false);
+    render->DrawRectangle({ minX, y, sliderWidth, 19 }, 200, 200, 200, 255, true, false);
 
-    // Calcular la posici�n del texto a la izquierda del slider
-    int textWidth = Engine::GetInstance().render->GetTextWidth(label, 45);
-    int textX = minX - textWidth - 50; 
-    Engine::GetInstance().render->DrawText(label.c_str(), textX, y - 20, WHITE, 45);
+    // ✅ Thumb (con cámara)
+    int squareX = sliderX - halfSquare - cameraX;
+    int squareY = y - (squareHeight / 2) - cameraY;
+
+    if (sliderTexture) {
+        SDL_Rect srcRect = { 0, 0, squareWidth, squareHeight };
+        render->DrawTexture(sliderTexture, squareX, squareY+7, &srcRect);
+    }
+    else {
+        SDL_Rect fallback = { squareX, squareY, squareWidth, squareHeight };
+        render->DrawRectangle(fallback, 100, 100, 100, 255, true, true);
+    }
+
+    // ✅ Texto (sin cámara, como antes)
+    int textWidth = render->GetTextWidth(label, 45);
+    int textX = minX - textWidth - 50;
+    int textY = y - 20;
+    render->DrawText(label.c_str(), textX, textY, WHITE, 45);
 }
+
+
+
 void Menus::DrawPlayerLives() {
     if (currentState != MenusState::GAME) return;
     if (!lifeTexture) return;

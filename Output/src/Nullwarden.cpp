@@ -179,6 +179,7 @@ void Nullwarden::OnCollision(PhysBody* physA, PhysBody* physB)
     case ColliderType::WALL:
         if (currentState == NullwardenState::CHARGE) {
             currentState = NullwardenState::IMPALED;
+            Engine::GetInstance().render->StartCameraShake(0.2f, 3);
         }
         break;
     }
@@ -256,7 +257,7 @@ void Nullwarden::Attack() {
 void Nullwarden::Impaled() {
     pbody->body->SetLinearVelocity(b2Vec2_zero);
     pbody->body->SetAngularVelocity(0);
-    Engine::GetInstance().render->StartCameraShake(0.2f , 3);
+
     if (!startedImpaledAnim)
         ChangeImpaledAnim();
     else {

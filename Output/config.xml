@@ -173,6 +173,13 @@
 					<frame x="170" y="1813" w="85" h="120" />
 					<frame x="255" y="1813" w="85" h="120" />
 				</liana>
+				<transition loop="false" speed="0.5">
+					<frame x="0" y="1933" w="200" h="200" />
+					<frame x="200" y="1933" w="200" h="200" />
+					<frame x="400" y="1933" w="200" h="200" />
+					<frame x="600" y="1933" w="200" h="200" />
+					<frame x="800" y="1933" w="200" h="200" />
+				</transition>
 			</player>
 			<enemies>
 				<enemy type="Bloodrusher" w="220" h="220" texture="Assets/Enemies/bloodrusher.png">

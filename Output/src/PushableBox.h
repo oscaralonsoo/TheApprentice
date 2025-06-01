@@ -37,4 +37,6 @@ protected:
 
     bool isPlayerPushing = false;
     bool isEnemyPushing = false;
+
+    bool transitionToPush = false;
 };

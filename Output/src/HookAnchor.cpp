@@ -5,6 +5,7 @@
 #include "Physics.h"
 #include "Log.h"
 #include "Scene.h"
+#include "Player.h"
 
 HookAnchor::HookAnchor() : Entity(EntityType::HOOK_ANCHOR) {}
 
@@ -40,16 +41,25 @@ bool HookAnchor::Start()
 
 bool HookAnchor::Update(float dt)
 {
+    Player* player = Engine::GetInstance().scene->GetPlayer();
+
+    if (player->GetAnimation()->GetCurrentState() == "transition" &&
+        player->GetAnimation()->HasFinished() && transitionToHook) {
+        player->GetAnimation()->SetStateIfHigherPriority("hook");
+        transitionToHook = false;
+    }
+
     if (texture)
         Engine::GetInstance().render->DrawTexture(texture, position.getX(), position.getY());
 
     if (isHooking)
     {
-        Player* player = Engine::GetInstance().scene->GetPlayer();
         if (player && player->pbody && player->pbody->body)
         {
-            if (player->GetState() != "hook")  
-                player->SetState("hook");
+            if (player->GetState() != "hook") {
+                player->GetAnimation()->SetStateIfHigherPriority("transition");
+                transitionToHook = true;
+            }
             b2Vec2 playerPos = player->pbody->body->GetPosition();
             b2Vec2 hookPos = pbody->body->GetPosition();
 
@@ -91,7 +101,6 @@ bool HookAnchor::Update(float dt)
 
     // Dibujar un recuadro sobre el gancho si es el activo
     Scene* scene = Engine::GetInstance().scene.get();
-    Player* player = scene->GetPlayer();
     if (!player || !player->GetMechanics()->GetMovementHandler()->IsHookUnlocked())
         return true; // No dibuja el marco si no está desbloqueado
 

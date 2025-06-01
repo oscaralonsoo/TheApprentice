@@ -48,4 +48,6 @@ private:
     bool hookUsed = false;
     bool wasOnGroundAtHookStart = false;
     SDL_Texture* highlightTexture = nullptr;
+
+    bool transitionToHook = false;
 };

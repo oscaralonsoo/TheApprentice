@@ -67,6 +67,11 @@ bool Bloodrusher::Update(float dt) {
     if (!pathfinding->HasFoundPlayer()) {
         currentState = BloodrusherState::IDLE;
     }
+    if (isDead == true)
+    {
+        Dead();
+        return Enemy::Update(dt);
+    }
     switch (currentState)
     {
     case BloodrusherState::IDLE:
@@ -92,7 +97,7 @@ bool Bloodrusher::Update(float dt) {
 }
 
 bool Bloodrusher::PostUpdate() {
-    if (currentState == BloodrusherState::DEAD && currentAnimation->HasFinished()) {
+    if (isDead && currentAnimation->HasFinished()) {
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
     }
 
@@ -211,6 +216,7 @@ void Bloodrusher::OnCollision(PhysBody* physA, PhysBody* physB)
     {
     case ColliderType::DESTRUCTIBLE_WALL:
         currentState = BloodrusherState::DEAD;
+        isDead = true;
         break;
     }
 }

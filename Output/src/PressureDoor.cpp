@@ -38,6 +38,8 @@ bool PressureDoor::Start()
         (int)position.getY() + height / 2,
         width, height,
         STATIC,
+        0,
+        0,
         CATEGORY_DOOR,
         CATEGORY_PLAYER
     );
@@ -117,10 +119,10 @@ void PressureDoor::RenderTexture()
     if (isHorizontal) {
         angle = 90.0f;
         x -= width / 2;
-        y -= height + 25;
+        y -= height + 30;
     }
     else {
-        x -= width + 25;
+        x -= width + 30;
         y -= height / 2;
     }
 

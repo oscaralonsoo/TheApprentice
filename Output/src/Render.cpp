@@ -269,6 +269,7 @@ void Render::UpdateCamera(const Vector2D& /*unused*/, int movementDirection, flo
 		int centerY = mapHeightPx / 2;
 
 		camera.x = (centerX - camera.w / 2);
+		camera.y = (centerY - camera.h / 2);
 	}
 
 	if (cameraZoom != targetCameraZoom)

@@ -39,19 +39,22 @@ bool PushableBox::Update(float dt)
 {
     Player* player = Engine::GetInstance().scene->GetPlayer();
 
-    if (player->GetMechanics()->CanPush() && isPlayerPushing) {
-        pbody->body->SetType(b2_dynamicBody);
-        if (fabs(pbody->body->GetLinearVelocity().x) > 0.01f)
-        {
-            player->SetState("push");
-        }
-    }
-    else if (isEnemyPushing) {
-        pbody->body->SetType(b2_dynamicBody);
-    }
-    else {
+    if (!player->GetMechanics()->CanPush() && isPlayerPushing) {
         pbody->body->SetType(b2_kinematicBody);
         pbody->body->SetLinearVelocity({ 0, 0 });
+    }
+    else {
+        pbody->body->SetType(b2_dynamicBody);
+        if (!isPlayerPushing && !isEnemyPushing) {
+            pbody->body->SetLinearVelocity({ 0, pbody->body->GetLinearVelocity().y });
+        }
+        if (player->GetMechanics()->CanPush() && isPlayerPushing) {
+
+            if (fabs(pbody->body->GetLinearVelocity().x) > 0.01f)
+            {
+                player->SetState("push");
+            }
+        }
     }
 
     b2Transform pbodyPos = pbody->body->GetTransform();
@@ -102,10 +105,13 @@ void PushableBox::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
     if (physB->ctype == ColliderType::PLAYER)
     {
         isPlayerPushing = false;
+        pbody->body->SetLinearVelocity({ 0, pbody->body->GetLinearVelocity().y });
+
     }
     if (physB->ctype == ColliderType::ENEMY)
     {
         isEnemyPushing = false;
+        pbody->body->SetLinearVelocity({ 0, pbody->body->GetLinearVelocity().y });
     }
 
 }

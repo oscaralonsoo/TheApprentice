@@ -40,7 +40,7 @@ bool PressurePlate::Start()
         width, height,
         DYNAMIC,
         CATEGORY_PRESSURE_PLATE,
-        CATEGORY_PLATFORM | CATEGORY_BOX
+        CATEGORY_PLATFORM | CATEGORY_BOX | CATEGORY_PLAYER
     );
 
     pbody->ctype = ColliderType::PRESSURE_PLATE;
@@ -84,17 +84,15 @@ bool PressurePlate::CleanUp()
 
 void PressurePlate::OnCollision(PhysBody* physA, PhysBody* physB)
 {
-    if (physB->ctype == ColliderType::PLAYER || physB->ctype == ColliderType::BOX)
+    if (physB->ctype == ColliderType::BOX)
     {
-        {
-            state = PressurePlateState::ENABLED;
-            SetActive(true);
-        }
+        state = PressurePlateState::ENABLED;
+        SetActive(true);   
     }
 }
 
 void PressurePlate::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
-    if (physB->ctype == ColliderType::PLAYER || physB->ctype == ColliderType::BOX) {
+    if (physB->ctype == ColliderType::BOX) {
         state = PressurePlateState::DISABLED;
         SetActive(false);
     }

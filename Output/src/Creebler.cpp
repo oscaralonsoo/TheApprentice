@@ -38,7 +38,7 @@ bool Creebler::Start() {
 
     soundWalkId = Engine::GetInstance().audio->LoadFx("Assets/Audio/fx/creebler_walk.ogg", 1.0f);
     soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/fx/monster_death.ogg", 1.0f);
-
+    maxSteps = 0;
     return Enemy::Start();
 }
 

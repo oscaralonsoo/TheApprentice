@@ -38,18 +38,17 @@ bool PressureDoor::Start()
         (int)position.getY() + height / 2,
         width, height,
         STATIC,
-        CATEGORY_PLATFORM,
+        CATEGORY_DOOR,
         CATEGORY_PLAYER
     );
 
-    pbody->ctype = ColliderType::PLATFORM;
     pbody->listener = this;
+    pbody->ctype = ColliderType::BOX;
     pbody->body->SetGravityScale(0);
 
     if (width > height) isHorizontal = true;
 
-    currentAnimation = &idleAnim;
-
+    currentAnimation = &disabledAnim;
     CheckStartState();
 
     return true;
@@ -76,7 +75,6 @@ bool PressureDoor::Update(float dt)
         if (currentAnimation != &enabledAnim) {
             currentAnimation = &enabledAnim;
             currentAnimation->Reset();
-            pbody->body->GetFixtureList()->SetSensor(false);
             Vector2D positionWorld = Engine::GetInstance().map->WorldToMap(position.x, position.y);
             Engine::GetInstance().map.get()->SetNavigationTileRegion(positionWorld.x, positionWorld.y, width / 64, height / 64, 1);
         }
@@ -85,6 +83,10 @@ bool PressureDoor::Update(float dt)
         break;
     case PressureDoorState::IDLE:
         if (currentAnimation != &idleAnim) currentAnimation = &idleAnim;
+        if (isOverlappingSomething == 0)
+        {
+            pbody->body->GetFixtureList()->SetSensor(false);
+        }
         if (isOpen) state = PressureDoorState::DISABLE;
         break;
     }
@@ -138,21 +140,38 @@ void PressureDoor::SetOpen(bool value) {
     isOpen = value;
     if (value)
         state = PressureDoorState::DISABLE;
-    else
-        state = PressureDoorState::ENABLE;
-
-    if (pbody && pbody->body && pbody->body->GetFixtureList())
-        pbody->body->GetFixtureList()->SetSensor(value);
+    else {
+        if (state != PressureDoorState::IDLE) state = PressureDoorState::ENABLE;
+    }
 }
 void PressureDoor::CheckStartState() {
     
     if (shouldBeOpen) {
         SetOpen(true);
         state = PressureDoorState::DISABLE;
-                pbody->body->GetFixtureList()->SetSensor(true);
+        pbody->body->GetFixtureList()->SetSensor(true);
     }
     else {
         state = PressureDoorState::ENABLE;
 
+    }
+}
+
+void PressureDoor::OnCollision(PhysBody* physA, PhysBody* physB)
+{
+    switch (physB->ctype)
+    {
+    default:
+        isOverlappingSomething++;
+        break;
+    }
+}
+
+void PressureDoor::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
+    switch (physB->ctype)
+    {
+    default:
+        isOverlappingSomething--;
+        break;
     }
 }

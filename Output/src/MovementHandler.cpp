@@ -225,6 +225,11 @@ void MovementHandler::UpdateAnimation() {
     if (player->GetState() == "die") return;
     if (dashMechanic.IsDashing()) return;
 
+    std::string state = player->GetAnimation()->GetCurrentState();
+    if (state == "walljump" || state == "transition" || state == "glide" || state == "doublejump" || state == "jump") {
+        return;
+    }
+
     if (!attackMechanic.IsAttacking() &&
         !dashMechanic.IsDashing() &&
         !jumpMechanic.IsJumping() &&

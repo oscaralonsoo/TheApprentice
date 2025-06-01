@@ -39,4 +39,6 @@ protected:
     bool isEnemyPushing = false;
 
     bool transitionToPush = false;
+    // En la cabecera (PushableBox.h)
+    bool wasPlayerPushingLastFrame = false;
 };

@@ -39,16 +39,21 @@ bool PushableBox::Update(float dt)
 {
     Player* player = Engine::GetInstance().scene->GetPlayer();
 
-    if (player->GetAnimation()->GetCurrentState() == "transition" &&
-        player->GetAnimation()->HasFinished() && transitionToPush) {
+    // TRANSICIÓN a push desde transición
+    if (transitionToPush &&
+        player->GetAnimation()->GetCurrentState() == "transition" &&
+        player->GetAnimation()->HasFinished()) {
         player->GetAnimation()->SetStateIfHigherPriority("push");
         transitionToPush = false;
     }
 
     if (player->GetMechanics()->CanPush() && isPlayerPushing) {
         pbody->body->SetType(b2_dynamicBody);
-        if (fabs(pbody->body->GetLinearVelocity().x) > 0.01f)
-        {
+
+        if (fabs(pbody->body->GetLinearVelocity().x) > 0.01f &&
+            player->GetAnimation()->GetCurrentState() != "push" &&
+            player->GetAnimation()->GetCurrentState() != "transition") {
+
             player->GetAnimation()->SetStateIfHigherPriority("transition");
             transitionToPush = true;
         }
@@ -61,6 +66,17 @@ bool PushableBox::Update(float dt)
         pbody->body->SetLinearVelocity({ 0, 0 });
     }
 
+    // DETECCIÓN DE FINAL DE EMPUJE
+    if (wasPlayerPushingLastFrame && !isPlayerPushing) {
+        // El jugador ha dejado de empujar: resetear animación
+        player->GetAnimation()->ForceSetState("idle");
+        transitionToPush = false;
+    }
+
+    // Actualizamos flag del último frame
+    wasPlayerPushingLastFrame = isPlayerPushing;
+
+    // Posición y render
     b2Transform pbodyPos = pbody->body->GetTransform();
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - width / 2);
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - height / 2);

@@ -39,11 +39,18 @@ bool PushableBox::Update(float dt)
 {
     Player* player = Engine::GetInstance().scene->GetPlayer();
 
+    if (player->GetAnimation()->GetCurrentState() == "transition" &&
+        player->GetAnimation()->HasFinished() && transitionToPush) {
+        player->GetAnimation()->SetStateIfHigherPriority("push");
+        transitionToPush = false;
+    }
+
     if (player->GetMechanics()->CanPush() && isPlayerPushing) {
         pbody->body->SetType(b2_dynamicBody);
         if (fabs(pbody->body->GetLinearVelocity().x) > 0.01f)
         {
-            player->SetState("push");
+            player->GetAnimation()->SetStateIfHigherPriority("transition");
+            transitionToPush = true;
         }
     }
     else if (isEnemyPushing) {

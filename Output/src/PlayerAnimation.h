@@ -10,18 +10,22 @@
 enum class AnimationStatePriority {
     IDLE = 0,
     RUN_RIGHT = 1,
-    FALL = 2,
-    JUMP = 3,
-    WALL_SLIDE = 4,
-    DOUBLEJUMP = 5,
-    WALLJUMP = 6,
-    DASH = 7,
-    GLIDE = 8,
-    ATTACK = 9,
-    EAT = 10,
-    LANDING_STUN = 11,
-    HIT = 12,
-    DIE = 13
+    LANDING = 2,
+    LIANA = 3,
+    FALL = 4,
+    JUMP = 5,
+    WALL_SLIDE = 6,
+    DOUBLEJUMP = 7,
+    WALLJUMP = 8,
+    DASH = 9,
+    GLIDE = 10,
+    PUSH = 11,
+    ATTACK = 12,
+    EAT = 13,
+    LANDING_STUN = 14,
+    HIT = 15,
+    DIE = 16,
+    TRANSITION = 17
 };
 
 struct SDL_Texture;
@@ -41,6 +45,7 @@ public:
     AnimationStatePriority GetPriorityForState(const std::string& state) const;
     void SetPlayer(Player* p);
     void ForceSetState(const std::string& newState);
+
 
 private:
     SDL_Texture* texture = NULL;

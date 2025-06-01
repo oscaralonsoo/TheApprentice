@@ -78,4 +78,9 @@ private:
 
     float wallJumpHorizontalImpulse = 10.0f;
     float wallJumpVerticalImpulse = 13.0f;
+
+    bool transitionToJump = false;
+    bool transitionToDoubleJump = false;
+    bool transitionToWallJump = false;
+    bool transitionToGlide = false;
 };

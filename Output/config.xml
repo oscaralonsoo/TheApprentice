@@ -1041,9 +1041,18 @@
 				</firefly>
 			</particles>
 			<npcs>
-				<castor w="336" h="164" texture="Assets/NPC/castor.png">
-					<idle loop="true" speed="0.2">
-						<frame x="0" y="0" w="336" h="164" />
+				<castor w="326" h="164" texture="Assets/NPC/castor.png">
+					<idle loop="true" speed="0.14">
+						<frame x="0" y="0" w="326" h="164" />
+						<frame x="326" y="0" w="326" h="164" />
+						<frame x="652" y="0" w="326" h="164" />
+						<frame x="978" y="0" w="326" h="164" />
+						<frame x="1304" y="0" w="326" h="164" />
+						<frame x="1630" y="0" w="326" h="164" />
+						<frame x="1956" y="0" w="326" h="164" />
+						<frame x="2282" y="0" w="326" h="164" />
+						<frame x="2608" y="0" w="326" h="164" />
+						<frame x="2934" y="0" w="326" h="164" />
 					</idle>
 				</castor>
 				<liebre w="180" h="180" texture="Assets/NPC/liebre.png">

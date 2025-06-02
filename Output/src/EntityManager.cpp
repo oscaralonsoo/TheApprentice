@@ -260,8 +260,8 @@ bool EntityManager::Update(float dt)
 	Vector2D camSizeWorld = { static_cast<float>(windowWidth), static_cast<float>(windowHeight) };
 	Vector2D camSizeTile = Engine::GetInstance().map->WorldToMap(camSizeWorld.x, camSizeWorld.y);
 
-	constexpr int OFFSET_X = 8;
-	constexpr int OFFSET_Y = 8;
+	constexpr int OFFSET_X = 11;
+	constexpr int OFFSET_Y = 11;
 
 	if (Engine::GetInstance().menus->currentState != MenusState::GAME || Engine::GetInstance().menus->isPaused)
 		return true;

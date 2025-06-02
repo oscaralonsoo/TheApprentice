@@ -54,6 +54,8 @@ public:
 		animation = anim;
 	}
 
+	bool IsTouchingPlatform() const;
+
 private:
 
 	SDL_Texture* texture = nullptr;

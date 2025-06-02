@@ -98,6 +98,13 @@ void MovementHandler::Update(float dt) {
         return;
     }
 
+    if (player->IsTouchingPlatform() && canJump) {
+        if (landingCooldownTimer.ReadMSec() >= landingCooldownDuration) {
+            player->GetMechanics()->GetJumpMechanic()->OnLanding();
+            landingCooldownTimer.Start();
+        }
+    }
+
     HandleMovementInput();
     HandleTimers();
     HandleWallSlide();
@@ -159,8 +166,6 @@ void MovementHandler::Update(float dt) {
     // Activa el modo cámara fija y ve más mundo (FOV ampliado)
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_0) == KEY_DOWN)
         Engine::GetInstance().render->ToggleCameraLock(0.5f);
-
-
 
     UpdateAnimation();
 
@@ -290,7 +295,6 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
     {
         lastPlatformCollider = physB;
         if (!jumpCooldownActive) {
-            jumpMechanic.OnLanding();
             fallMechanic.OnLanding();
 
             HookAnchor* hook = Engine::GetInstance().scene->GetActiveHook();

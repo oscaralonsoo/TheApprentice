@@ -205,7 +205,6 @@ void Menus::MainMenu(float dt) {
         case 0: NewGame(); break;
         case 1: if (isSaved != 0) {
             Engine::GetInstance().scene.get()->LoadGameXML();
-            Engine::GetInstance().scene->isLoading = true;
 
             int sceneIndex = Engine::GetInstance().scene->nextScene; 
 

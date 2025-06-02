@@ -78,6 +78,7 @@ void JumpMechanic::HandleJumpInput(float dt) {
             isJumping = true;
             wallJumpActive = true;
             jumpCount = 1;
+            player->GetMechanics()->GetMovementHandler()->canJump = false;
 
             player->GetAnimation()->SetStateIfHigherPriority("transition");
             transitionToWallJump = true;
@@ -214,9 +215,6 @@ void JumpMechanic::EnableDoubleJump(bool enable) {
 }
 
 void JumpMechanic::OnLanding() {
-    LOG("[JumpMechanic] OnLanding() llamado");
-    LOG("Reset jumpCount a 0");
-
     isJumping = false;
     jumpCount = 0;
     player->GetMechanics()->SetIsOnGround(true);

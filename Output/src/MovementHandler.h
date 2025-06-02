@@ -57,6 +57,8 @@ public:
     bool wallSlideFlip = false;
     bool disableAbilities = false;
 
+    bool canJump = true;
+
     void StartWallSlideCooldown();
 
     void EnablePush(bool enable);
@@ -120,4 +122,10 @@ private:
     PhysBody* lastPlatformCollider = nullptr;
 
     bool canPushBoxes = false;
+
+    bool wasTouchingPlatform = false;
+
+    Timer landingCooldownTimer;
+    const float landingCooldownDuration = 100.0f;
+
 };

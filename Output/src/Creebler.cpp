@@ -96,8 +96,17 @@ void Creebler::Walk() {
 
     MapLayer* layer = Engine::GetInstance().map.get()->GetNavigationLayer();
 
-    if (layer->Get(frontX, posMap.y) || !layer->Get(frontX, frontY))
-        direction *= -1;
+    if (navigationId)
+    {
+        if ((layer->Get(frontX, posMap.y) == navigationId) || !layer->Get(frontX, frontY))
+            direction *= -1;
+    }
+    else {
+        if ((layer->Get(frontX, posMap.y)) || !layer->Get(frontX, frontY))
+            direction *= -1;
+    }
+
+
 }
 
 void Creebler::OnCollision(PhysBody* physA, PhysBody* physB)

@@ -35,6 +35,7 @@ public:
 		texH = parameters.attribute("h").as_int();
 		type = parameters.attribute("type").as_string();
 		gravity = parameters.attribute("gravity").as_bool();
+		navigationId = parameters.attribute("navigationId").as_int();
 	}
 
 	void SetPosition(Vector2D pos);
@@ -64,7 +65,6 @@ public:
 
 protected:
 	Pathfinding* pathfinding;
-
 	SDL_Texture* texture;
 
 	bool gravity;
@@ -79,4 +79,6 @@ protected:
 	const char* texturePath;
 
 	int direction = -1;
+
+	int navigationId;
 };

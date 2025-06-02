@@ -32,6 +32,8 @@ public:
 
     void CloseDoor(int id);
 
+    void ResetTriggers();
+
     std::vector<PressurePlate*> plates;
     std::vector<PressureDoor*> doors;
 

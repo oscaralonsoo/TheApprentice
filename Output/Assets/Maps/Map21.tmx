@@ -85013,8 +85013,8 @@
    <tile/>
    <tile gid="166"/>
    <tile gid="167"/>
-   <tile gid="168"/>
-   <tile/>
+   <tile gid="121"/>
+   <tile gid="122"/>
    <tile/>
    <tile/>
    <tile/>
@@ -103305,7 +103305,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="69" name="Navigation" width="171" height="67">
+ <layer id="69" name="Navigation" width="171" height="67" visible="0">
   <properties>
    <property name="Navigation" type="bool" value="true"/>
   </properties>
@@ -115034,8 +115034,8 @@
   <object id="4510" x="1216" y="2176" height="64"/>
   <object id="4520" x="1408" y="1796.5" height="59.5"/>
   <object id="4521" x="1280" y="1798" height="58"/>
-  <object id="4523" x="1024" y="1728" height="64"/>
-  <object id="4524" x="832" y="1792" width="192"/>
+  <object id="4523" x="1088" y="1728" height="64"/>
+  <object id="4524" x="832" y="1792" width="256"/>
   <object id="4525" x="832" y="1728" height="64"/>
   <object id="4527" x="576" y="1728" height="128"/>
   <object id="4529" x="1408" y="1856" height="64"/>
@@ -115206,7 +115206,7 @@
   <object id="4486" x="1664" y="1792" width="256"/>
   <object id="4461" x="2368" y="1792" width="256"/>
   <object id="4517" x="256" y="1728" width="320"/>
-  <object id="4518" x="832" y="1728" width="192"/>
+  <object id="4518" x="832" y="1728" width="256"/>
   <object id="4519" x="1280" y="1792" width="128"/>
   <object id="4539" x="1600" y="2368" width="256"/>
   <object id="4540" x="128" y="2368" width="1344"/>
@@ -115279,7 +115279,7 @@
   <object id="4173" name="Scurver" x="9088" y="2496" width="64" height="64"/>
   <object id="4208" name="Creebler" x="5120" y="1344" width="64" height="64"/>
   <object id="4550" name="Creebler" x="1984" y="1792" width="64" height="64"/>
-  <object id="4566" name="Creebler" x="768" y="1792" width="64" height="64"/>
+  <object id="4566" name="Hypnoviper" x="896" y="1664" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="66" name="HelpZone">
   <object id="4638" name="Climb" x="4928" y="3840" width="320" height="192"/>

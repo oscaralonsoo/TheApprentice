@@ -460,6 +460,9 @@ void Menus::Credits() {
 void Menus::UpdateVideoPlayer() {
     if (videoPlayer) {
         bool videoFinished = !videoPlayer->Update();
+
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) videoFinished = true;
+        
         if (videoFinished) {
             videoPlayer->CleanUp();
             videoPlayer = nullptr;

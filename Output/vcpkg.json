@@ -6,6 +6,14 @@
     "sdl2-image",
     "sdl2-mixer",
     "sdl2-ttf",
-    "tracy"
+    "tracy",
+    {
+      "name": "ffmpeg",
+      "features": [
+        "avcodec",
+        "avformat",
+        "swscale"
+      ]
+    }
   ]
 }

@@ -35,6 +35,16 @@
 			<Map_666 path="Assets/Maps/" name="Map666.tmx" />
 		</maps>
 		<animations>
+			<loadingScreen w="100" h="100" texture=" loadScreen.png">
+				<loading loop="true" speed="0.15">
+					<frame x="0" y="0" w="100" h="100" />
+					<frame x="100" y="0" w="100" h="100" />
+					<frame x="200" y="0" w="100" h="100" />
+					<frame x="300" y="0" w="100" h="100" />
+					<frame x="400" y="0" w="100" h="100" />
+					<frame x="500" y="0" w="100" h="100" />
+				</loading>
+			</loadingScreen>
 			<player w="100" h="100" texture="Assets/Slime/slime.png">
 				<idle loop="true" speed="0.15">
 					<frame x="0" y="0" w="100" h="100" />

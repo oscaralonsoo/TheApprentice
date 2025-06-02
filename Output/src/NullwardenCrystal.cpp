@@ -11,21 +11,21 @@
 NullwardenCrystal::NullwardenCrystal(float x, float y, float speed, b2Vec2 dir, Nullwarden* owner, b2Vec2 offset)
     : Entity(EntityType::CRYSTAL), direction(dir), nullwarden(owner), relativeOffset(offset)
 {
-    width = 80;
-    height = 80;
+    width = 96;
+    height = 96;
 
-    pbody = Engine::GetInstance().physics->CreateCircle(x, y, width/2, bodyType::DYNAMIC);
+    pbody = Engine::GetInstance().physics->CreateCircle(x, y, width / 2, bodyType::DYNAMIC);
     pbody->ctype = ColliderType::ENEMY;
     pbody->listener = this;
 
     pbody->body->SetGravityScale(0.0f);
 
     if (b2Fixture* fixture = pbody->body->GetFixtureList()) {
-        fixture->SetSensor(false);
+        fixture->SetSensor(true);
 
         b2Filter filter;
         filter.categoryBits = CATEGORY_ENEMY;
-        filter.maskBits = CATEGORY_WALL |CATEGORY_ATTACK;
+        filter.maskBits = CATEGORY_ATTACK;
         fixture->SetFilterData(filter);
     }
 
@@ -105,10 +105,8 @@ bool NullwardenCrystal::Update(float dt) {
             nullwarden->currentState = NullwardenState::ROAR;
         }
     }
-
     return true;
 }
-
 
 bool NullwardenCrystal::PostUpdate() {
     if (currentState == CrystalState::BROKEN && currentAnimation->HasFinished())

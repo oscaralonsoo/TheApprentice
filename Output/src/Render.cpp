@@ -372,9 +372,10 @@ void Render::UpdateCamera(const Vector2D& /*unused*/, int movementDirection, flo
 	if (camera.y < -(mapHeightPx - camera.h)) camera.y = -(mapHeightPx - camera.h);
 }
 
+bool Render::DrawText(const char* text, int posx, int posy, SDL_Color color, int fontSize, bool useGaramond) const {
+	const char* fontPath = useGaramond ? "Assets/Fonts/EBGaramond-Regular.ttf" : "Assets/Fonts/The-Apprentice-F1.ttf";
 
-bool Render::DrawText(const char* text, int posx, int posy, SDL_Color color, int fontSize) const {
-	TTF_Font* customFont = TTF_OpenFont("Assets/Fonts/The-Apprentice-F1.ttf", fontSize);
+	TTF_Font* customFont = TTF_OpenFont(fontPath, fontSize);
 	if (!customFont) {
 		LOG("Failed to load font: %s", TTF_GetError());
 		return false;
@@ -405,6 +406,7 @@ bool Render::DrawText(const char* text, int posx, int posy, SDL_Color color, int
 	TTF_CloseFont(customFont);
 	return true;
 }
+
 
 int Render::GetTextWidth(const std::string& text, int fontSize) {
 	int w = 0;

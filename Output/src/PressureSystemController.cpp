@@ -38,11 +38,14 @@ void PressureSystemController::UpdateSystem()
         {
             bool allInvisiblesActive = (activeInvisiblePlates[door->id] == totalInvisiblePlates[door->id]);
 
-            if (allInvisiblesActive && !door->triggeredOnce)
+            if (!door->triggeredOnce)
             {
-                door->SetOpen(!door->shouldBeOpen);
-                door->triggeredOnce = true;
-                door->shouldBeOpen = !door->shouldBeOpen;
+                if (allInvisiblesActive)
+                {
+                    door->SetOpen(!door->shouldBeOpen);
+                    door->shouldBeOpen = !door->shouldBeOpen;
+                    door->triggeredOnce = true;
+                }
             }
             continue;
         }
@@ -88,5 +91,12 @@ void PressureSystemController::CloseDoor(int id)
             door->SetOpen(false);
             break;
         }
+    }
+}
+void PressureSystemController::ResetTriggers()
+{
+    for (auto* door : doors)
+    {
+        door->triggeredOnce = false;
     }
 }

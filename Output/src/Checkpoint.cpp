@@ -133,7 +133,7 @@ void Checkpoint::OnCollisionEnd(PhysBody* physA, PhysBody* physB){
 void Checkpoint::CheckSave() {
     bool saveRequested = false;
 
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT) {
         saveRequested = true;
     }
 

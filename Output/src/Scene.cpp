@@ -233,6 +233,8 @@ void Scene::ChangeScene(int nextScene)
 			case 69:
 				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/palo.wav", 2.0f, 1.0f);
 				break;
+			case 666:
+				break;
 			}
 
 			Engine::GetInstance().entityManager->Start();

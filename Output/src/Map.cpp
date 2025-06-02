@@ -659,7 +659,6 @@ bool Map::Load(std::string path, std::string fileName)
                     std::string enemyName = objectNode.attribute("name").as_string();
                     int x = objectNode.attribute("x").as_int();
                     int y = objectNode.attribute("y").as_int();
-
                     int width, height;
                     GetEnemyDimensionsFromConfig(enemyName, width, height);
 
@@ -679,8 +678,17 @@ bool Map::Load(std::string path, std::string fileName)
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BLOODRUSHER);
                     else if (enemyName == "Hypnoviper")
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::HYPNOVIPER);
-                    else if (enemyName == "Creebler")
+                    else if (enemyName == "Creebler") {
+                        for (pugi::xml_node propertyNode = objectNode.child("properties").child("property"); propertyNode != NULL; propertyNode = propertyNode.next_sibling("property"))
+                        {
+                            std::string propertyName = propertyNode.attribute("name").as_string();
+
+                            if (propertyName == "navigationId")
+                                enemyNode.append_attribute("navigationId") = propertyNode.attribute("value").as_int();
+
+                        }
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CREEBLER);
+                    }
                     else if (enemyName == "Scurver") {
                         enemyNode.append_attribute("gravity") = true;
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::SCURVER);
@@ -726,6 +734,7 @@ bool Map::Load(std::string path, std::string fileName)
                     else if (enemyName == "DungBeetle") {
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::DUNGBEETLE);
                     }
+
                     if (enemy != nullptr)
                     {
                         enemy->SetParameters(enemyNode);

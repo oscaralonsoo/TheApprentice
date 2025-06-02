@@ -24,7 +24,6 @@ public:
 
     void Walk();
 
-
 private:
     CreeblerState currentState = CreeblerState::WALKING;
 

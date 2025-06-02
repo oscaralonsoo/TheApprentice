@@ -57,10 +57,16 @@ public:
     bool wallSlideFlip = false;
     bool disableAbilities = false;
 
+    bool canJump = true;
+
     void StartWallSlideCooldown();
 
     void EnablePush(bool enable);
     bool CanPush() const;
+
+    bool pendingLandingCheck = false;
+    Timer pendingLandingTimer;
+    float pendingLandingTimeout = 500.0f;
 
 private:
     void HandleMovementInput();
@@ -120,4 +126,6 @@ private:
     PhysBody* lastPlatformCollider = nullptr;
 
     bool canPushBoxes = false;
+
+    bool wasTouchingPlatform = false;
 };

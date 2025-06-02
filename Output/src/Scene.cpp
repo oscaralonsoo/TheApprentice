@@ -16,6 +16,7 @@
 #include "Menus.h"
 #include "PlayerMechanics.h"
 #include "Checkpoint.h"
+#include "JumpMechanic.h"
 
 template <typename T>
 T Clamp(T value, T min, T max)
@@ -210,11 +211,6 @@ void Scene::ChangeScene(int nextScene)
 			{
 				player->pbody->body->SetLinearVelocity(b2Vec2(0, 0)); 
 				player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, (newPosition.y)/ PIXELS_PER_METER), 0);
-
-
-				LOG("Posici�n tras cambio de escena: X=%.2f Y=%.2f", newPosition.x, newPosition.y);
-				LOG("isOnGround tras cambio de escena: %d", player->GetMechanics()->IsOnGround());
-				LOG("jumpCount tras cambio de escena: %d", player->GetMechanics()->GetJumpMechanic()->IsJumpUnlocked());
 			}
 
 			switch (nextScene) {
@@ -255,6 +251,8 @@ void Scene::ChangeScene(int nextScene)
 				// Asegura estado inicial
 				player->SetState("idle");
 				player->GetAnimation()->ForceSetState("idle");
+
+				player->GetMechanics()->GetMovementHandler()->pendingLandingCheck = true;
 			}
 		}
 	}

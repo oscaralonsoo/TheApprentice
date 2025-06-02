@@ -209,7 +209,7 @@ void Scene::ChangeScene(int nextScene)
 			if (!isLoading)
 			{
 				player->pbody->body->SetLinearVelocity(b2Vec2(0, 0)); 
-				player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, (newPosition.y - 200)/ PIXELS_PER_METER), 0);
+				player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, (newPosition.y)/ PIXELS_PER_METER), 0);
 
 
 				LOG("Posici�n tras cambio de escena: X=%.2f Y=%.2f", newPosition.x, newPosition.y);

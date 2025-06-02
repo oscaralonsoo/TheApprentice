@@ -54,8 +54,8 @@ Engine::Engine() {
     AddModule(std::static_pointer_cast<Module>(audio));
     // L08: TODO 2: Add Physics module
     AddModule(std::static_pointer_cast<Module>(physics));
-    AddModule(std::static_pointer_cast<Module>(scene));
     AddModule(std::static_pointer_cast<Module>(map));
+    AddModule(std::static_pointer_cast<Module>(scene));
     AddModule(std::static_pointer_cast<Module>(entityManager));
     AddModule(std::static_pointer_cast<Module>(particleManager));
     AddModule(std::static_pointer_cast<Module>(dialogueManager));

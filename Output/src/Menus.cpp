@@ -212,7 +212,7 @@ void Menus::MainMenu(float dt) {
         case 1: if (isSaved != 0) {
             Engine::GetInstance().scene.get()->LoadGameXML();
             Engine::GetInstance().scene->isLoading = true;
-
+            StartTransition(false, MenusState::GAME);
             int sceneIndex = Engine::GetInstance().scene->nextScene; 
 
             switch (sceneIndex) {
@@ -235,8 +235,6 @@ void Menus::MainMenu(float dt) {
                 Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 2.0f, 1.0f); 
                 break;
             }
-
-            StartTransition(false, MenusState::GAME);
         }
               break;
         case 2: inConfig = true; StartTransition(true, MenusState::SETTINGS); break;
@@ -247,7 +245,6 @@ void Menus::MainMenu(float dt) {
 }
 void Menus::NewGame() {
     isSaved = 0;
-
     // Cargar documento XML
     pugi::xml_document config;
     config.load_file(CONFIG_FILE.c_str());

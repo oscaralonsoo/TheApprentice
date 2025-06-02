@@ -249,6 +249,8 @@ void Scene::ChangeScene(int nextScene)
 				// Asegura estado inicial
 				player->SetState("idle");
 				player->GetAnimation()->ForceSetState("idle");
+
+				player->GetMechanics()->GetMovementHandler()->pendingLandingCheck = true;
 			}
 		}
 	}

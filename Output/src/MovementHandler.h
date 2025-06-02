@@ -64,6 +64,10 @@ public:
     void EnablePush(bool enable);
     bool CanPush() const;
 
+    bool pendingLandingCheck = false;
+    Timer pendingLandingTimer;
+    float pendingLandingTimeout = 500.0f;
+
 private:
     void HandleMovementInput();
     void UpdateAnimation();
@@ -124,8 +128,4 @@ private:
     bool canPushBoxes = false;
 
     bool wasTouchingPlatform = false;
-
-    Timer landingCooldownTimer;
-    const float landingCooldownDuration = 100.0f;
-
 };

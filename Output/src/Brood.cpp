@@ -23,7 +23,8 @@ bool Brood::Awake() {
 
 bool Brood::Start() {
   
-    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), texW / 2, bodyType::DYNAMIC);
+    width = 64;
+    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX()-width/2, (int)position.getY()-width/2, width/2, bodyType::DYNAMIC);
 
     pugi::xml_document loadFile;
     pugi::xml_parse_result result = loadFile.load_file("config.xml");
@@ -37,6 +38,7 @@ bool Brood::Start() {
 
             flyingAnim.LoadAnimations(enemyNode.child("flying"));
             deathAnim.LoadAnimations(enemyNode.child("death"));
+
 
             currentAnimation = &flyingAnim;
             break;
@@ -65,6 +67,9 @@ bool Brood::Start() {
     return true;
 }
 bool Brood::Update(float dt) {
+    playerPos = Engine::GetInstance().scene->GetPlayerPosition();
+    if (playerPos.x < position.x) direction = -1;
+    else direction = 1;
     UpdateChaseState(dt);
 
     switch (currentState)
@@ -81,16 +86,32 @@ bool Brood::Update(float dt) {
         break;
 
     case BroodState::DEAD:
+        currentAnimation = &deathAnim;
+        break;
+    }
+    b2Transform pbodyPos = pbody->body->GetTransform();
+    position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - width / 2);
+    position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - height / 2);
+    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() - 32, &currentAnimation->GetCurrentFrame(),
+        1.0f,
+        0.0,
+        INT_MAX,
+        INT_MAX,
+        (direction < 0) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL,
+        scale
+    );
+    currentAnimation->Update();
+    return true;
+}
+
+bool Brood::PostUpdate() {
+    if (currentState == BroodState::DEAD && currentAnimation->HasFinished())
+    {
         if (broodHeart) {
             broodHeart->OnBroodDeath(this);
         }
-        break;
+        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
     }
-
-    return Enemy::Update(dt);
-}
-
-bool Brood::PostUpdate(float dt) {
     return true;
 }
 bool Brood::CleanUp() {
@@ -98,17 +119,20 @@ bool Brood::CleanUp() {
 }
 
 void Brood::OnCollision(PhysBody* physA, PhysBody* physB) {
+    if (currentState == BroodState::DEAD) return;
+
     Enemy::OnCollision(physA, physB);
 
     switch (physB->ctype) {
     case ColliderType::PLAYER:
         break;
     case ColliderType::ATTACK:
-        currentState = BroodState::DEAD; 
+        currentState = BroodState::DEAD;
         currentAnimation = &deathAnim;
         break;
     }
 }
+
 void Brood::Chase(float dt) {
     timePassed += dt;
 
@@ -127,25 +151,25 @@ void Brood::Chase(float dt) {
 
     //Smooth redirection
     float steeringSmoothness = 0.030f;
-    direction.x = (1.0f - steeringSmoothness) * direction.x + steeringSmoothness * desiredDirection.x;
-    direction.y = (1.0f - steeringSmoothness) * direction.y + steeringSmoothness * desiredDirection.y;
+    nextDirection.x = (1.0f - steeringSmoothness) * nextDirection.x + steeringSmoothness * desiredDirection.x;
+    nextDirection.y = (1.0f - steeringSmoothness) * nextDirection.y + steeringSmoothness * desiredDirection.y;
 
-    float dirLen = sqrt(direction.x * direction.x + direction.y * direction.y);
+    float dirLen = sqrt(nextDirection.x * nextDirection.x + nextDirection.y * nextDirection.y);
     if (dirLen != 0) {
-        direction.x /= dirLen;
-        direction.y /= dirLen;
+        nextDirection.x /= dirLen;
+        nextDirection.y /= dirLen;
     }
 
     // Base Movement
     float speed = 0.25f;
-    broodPos.x += direction.x * speed * dt;
-    broodPos.y += direction.y * speed * dt;
+    broodPos.x += nextDirection.x * speed * dt;
+    broodPos.y += nextDirection.y * speed * dt;
 
     // Ondulation
     float waveAmplitude = 3.0;
     float waveFrequency = 0.003f;
 
-    Vector2D perp = { -direction.y, direction.x };
+    Vector2D perp = { -nextDirection.y, nextDirection.x };
     float wave = sin(timePassed * waveFrequency + waveOffset) * waveAmplitude;
     broodPos.x += perp.x * wave;
     broodPos.y += perp.y * wave;
@@ -179,8 +203,6 @@ void Brood::UpdateChaseState(float dt)
         }
     }
 }
-
-
 
 void Brood::SetParent(Broodheart* parent) {
     broodHeart = parent;

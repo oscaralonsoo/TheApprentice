@@ -173,6 +173,8 @@ void Scurver::Slide(float dt) {
 
 void Scurver::OnCollision(PhysBody* physA, PhysBody* physB)
 {
+    Enemy::OnCollision(physA, physB);
+
     switch (physB->ctype)
     {
     case ColliderType::ATTACK:

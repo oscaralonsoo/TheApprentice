@@ -57,4 +57,5 @@ private:
     bool slideSoundPlayed = false;
     bool deadSoundPlayed = false;
 
+    bool isDead = false;
 };

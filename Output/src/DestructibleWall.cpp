@@ -79,7 +79,7 @@ void DestructibleWall::OnCollision(PhysBody* physA, PhysBody* physB)
         if (otherEntity != nullptr)
         {
             Bloodrusher* bloodrusher = dynamic_cast<Bloodrusher*>(otherEntity);
-            if (bloodrusher && bloodrusher->GetCurrentState() == BloodrusherState::ATTACKING)
+            if (bloodrusher && bloodrusher->GetCurrentState() == BloodrusherState::ATTACKING || bloodrusher->GetCurrentState() == BloodrusherState::DEAD)
             {
                 LOG("Bloodrusher en estampida rompió la pared. Cambiando a SLIDING.");
                 destroyed = true;

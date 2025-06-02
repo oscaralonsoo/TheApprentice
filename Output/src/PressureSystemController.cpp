@@ -40,7 +40,7 @@ void PressureSystemController::UpdateSystem()
 
             if (allInvisiblesActive && !door->triggeredOnce)
             {
-                door->SetOpen(true);
+                door->SetOpen(!door->shouldBeOpen);
                 door->triggeredOnce = true;
                 door->shouldBeOpen = !door->shouldBeOpen;
             }

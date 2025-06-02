@@ -98,6 +98,8 @@ bool Brood::CleanUp() {
 }
 
 void Brood::OnCollision(PhysBody* physA, PhysBody* physB) {
+    Enemy::OnCollision(physA, physB);
+
     switch (physB->ctype) {
     case ColliderType::PLAYER:
         break;

@@ -17,7 +17,7 @@ bool PushableBox::Start()
 {
     pbody = Engine::GetInstance().physics->CreateRectangle((int)position.getX() + width / 2, (int)position.getY() + height / 2, width, height, DYNAMIC, 0, 0,
         CATEGORY_BOX,
-        CATEGORY_PLAYER | CATEGORY_PLATFORM | CATEGORY_BOX | CATEGORY_ENEMY
+        CATEGORY_PLAYER | CATEGORY_PLATFORM | CATEGORY_BOX | CATEGORY_ENEMY | CATEGORY_DOOR
     );
     pbody->listener = this;
 
@@ -39,44 +39,40 @@ bool PushableBox::Update(float dt)
 {
     Player* player = Engine::GetInstance().scene->GetPlayer();
 
-    // TRANSICIÓN a push desde transición
-    if (transitionToPush &&
-        player->GetAnimation()->GetCurrentState() == "transition" &&
-        player->GetAnimation()->HasFinished()) {
+    
+    if (transitionToPush && player->GetAnimation()->GetCurrentState() == "transition" && player->GetAnimation()->HasFinished()) {
         player->GetAnimation()->SetStateIfHigherPriority("push");
         transitionToPush = false;
     }
-
-    if (player->GetMechanics()->CanPush() && isPlayerPushing) {
-        pbody->body->SetType(b2_dynamicBody);
-
-        if (fabs(pbody->body->GetLinearVelocity().x) > 0.01f &&
-            player->GetAnimation()->GetCurrentState() != "push" &&
-            player->GetAnimation()->GetCurrentState() != "transition") {
-
-            player->GetAnimation()->SetStateIfHigherPriority("transition");
-            transitionToPush = true;
-        }
-    }
-    else if (isEnemyPushing) {
-        pbody->body->SetType(b2_dynamicBody);
-    }
-    else {
+    if (!player->GetMechanics()->CanPush() && isPlayerPushing) {
         pbody->body->SetType(b2_kinematicBody);
         pbody->body->SetLinearVelocity({ 0, 0 });
     }
+    else {
+        pbody->body->SetType(b2_dynamicBody);
+        if (!isPlayerPushing && !isEnemyPushing) {
+            pbody->body->SetLinearVelocity({ 0, pbody->body->GetLinearVelocity().y });
+        }
+        if (player->GetMechanics()->CanPush() && isPlayerPushing) {
 
-    // DETECCIÓN DE FINAL DE EMPUJE
+            if (fabs(pbody->body->GetLinearVelocity().x) > 0.01f)
+            {
+                player->SetState("push");
+            }
+        }
+    }
+
+    // DETECCIï¿½N DE FINAL DE EMPUJE
     if (wasPlayerPushingLastFrame && !isPlayerPushing) {
-        // El jugador ha dejado de empujar: resetear animación
+        // El jugador ha dejado de empujar: resetear animaciï¿½n
         player->GetAnimation()->ForceSetState("idle");
         transitionToPush = false;
     }
 
-    // Actualizamos flag del último frame
+    // Actualizamos flag del ï¿½ltimo frame
     wasPlayerPushingLastFrame = isPlayerPushing;
 
-    // Posición y render
+    // Posiciï¿½n y render
     b2Transform pbodyPos = pbody->body->GetTransform();
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - width / 2);
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - height / 2);
@@ -125,10 +121,13 @@ void PushableBox::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
     if (physB->ctype == ColliderType::PLAYER)
     {
         isPlayerPushing = false;
+        pbody->body->SetLinearVelocity({ 0, pbody->body->GetLinearVelocity().y });
+
     }
     if (physB->ctype == ColliderType::ENEMY)
     {
         isEnemyPushing = false;
+        pbody->body->SetLinearVelocity({ 0, pbody->body->GetLinearVelocity().y });
     }
 
 }

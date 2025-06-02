@@ -30,6 +30,9 @@ public:
 
     void SetOpen(bool isOpen);
 
+    void OnCollision(PhysBody* physA, PhysBody* physB);
+    void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
+
     void CheckStartState();
 
 public:
@@ -39,6 +42,7 @@ public:
     bool isOpen;
     bool shouldBeOpen;
     bool triggeredOnce = false;
+    int isOverlappingSomething = 0;
     PressureDoorState state = PressureDoorState::IDLE;
 private:
     PhysBody* pbody;

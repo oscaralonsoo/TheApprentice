@@ -126,7 +126,10 @@ void Enemy::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
 	{
 	case ColliderType::ATTACK:
-		Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+		b2Fixture* fixture = pbody->body->GetFixtureList();
+		b2Filter filter = fixture->GetFilterData();
+		filter.maskBits &= ~CATEGORY_PLAYER_DAMAGE;
+		fixture->SetFilterData(filter);
 		break;
 	}
 }

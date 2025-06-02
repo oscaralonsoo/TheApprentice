@@ -105,6 +105,8 @@ bool Noctilume::CleanUp() {
 }
 
 void Noctilume::OnCollision(PhysBody* physA, PhysBody* physB) {
+    Enemy::OnCollision(physA, physB);
+
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
         if (currentState == NoctilumeState::ATTACK && isDiving) {

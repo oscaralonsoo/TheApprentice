@@ -199,6 +199,8 @@ void Shyver::Invisible() {
 
 void Shyver::OnCollision(PhysBody* physA, PhysBody* physB)
 {
+    Enemy::OnCollision(physA, physB);
+
     switch (physB->ctype)
     {
     case ColliderType::ATTACK:

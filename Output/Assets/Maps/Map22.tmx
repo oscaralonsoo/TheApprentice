@@ -79,6 +79,9 @@
  <tileset firstgid="14905" name="lianas" tilewidth="64" tileheight="64" tilecount="225" columns="15">
   <image source="../Props/lianas.png" width="1000" height="1000"/>
  </tileset>
+ <tileset firstgid="15130" name="gancho_araña" tilewidth="64" tileheight="64" tilecount="18" columns="9">
+  <image source="../Props/gancho_araña.png" width="576" height="190"/>
+ </tileset>
  <group id="70" name="Background">
   <properties>
    <property name="Draw" type="bool" value="true"/>
@@ -109141,7 +109144,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="15137"/>
    <tile/>
    <tile/>
    <tile/>
@@ -111813,7 +111816,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="15137"/>
    <tile/>
    <tile/>
    <tile/>
@@ -112105,7 +112108,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="15137"/>
    <tile/>
    <tile/>
    <tile/>
@@ -112310,7 +112313,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="15137"/>
    <tile/>
    <tile/>
    <tile/>
@@ -138253,7 +138256,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="70" name="Navigation" width="155" height="99" visible="0">
+ <layer id="70" name="Navigation" width="155" height="99">
   <properties>
    <property name="Navigation" type="bool" value="true"/>
   </properties>

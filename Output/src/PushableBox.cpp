@@ -17,7 +17,7 @@ bool PushableBox::Start()
 {
     pbody = Engine::GetInstance().physics->CreateRectangle((int)position.getX() + width / 2, (int)position.getY() + height / 2, width, height, DYNAMIC, 0, 0,
         CATEGORY_BOX,
-        CATEGORY_PLAYER | CATEGORY_PLATFORM | CATEGORY_BOX | CATEGORY_ENEMY | CATEGORY_DOOR
+        CATEGORY_PLAYER | CATEGORY_PLATFORM | CATEGORY_BOX | CATEGORY_ENEMY | CATEGORY_DOOR | CATEGORY_SPIKE
     );
     pbody->listener = this;
 
@@ -31,6 +31,8 @@ bool PushableBox::Start()
 
     std::string path = "Assets/Props/box" + std::to_string(rand() % 3) + ".png";
     texture = Engine::GetInstance().textures->Load(path.c_str());
+
+    initPos = position;
 
     return true;
 }
@@ -72,6 +74,12 @@ bool PushableBox::Update(float dt)
     // Actualizamos flag del �ltimo frame
     wasPlayerPushingLastFrame = isPlayerPushing;
 
+    if (hasTouchedSpike)
+    {
+        hasTouchedSpike = false; 
+        SetPosition(initPos);
+    }
+
     // Posici�n y render
     b2Transform pbodyPos = pbody->body->GetTransform();
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - width / 2);
@@ -112,6 +120,10 @@ void PushableBox::OnCollision(PhysBody* physA, PhysBody* physB)
     if (physB->ctype == ColliderType::ENEMY)
     {
         isEnemyPushing = true;
+    }
+    if (physB->ctype == ColliderType::SPIKE)
+    {
+        hasTouchedSpike = true;
     }
 
 }

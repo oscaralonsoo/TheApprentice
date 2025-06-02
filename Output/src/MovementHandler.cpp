@@ -297,7 +297,6 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
             if (hook) {
                 hook->ResetHook();
                 Engine::GetInstance().scene->GetHookManager()->RegisterHook(hook);
-                LOG("Gancho reactivado tras aterrizar");
             }
 
         }

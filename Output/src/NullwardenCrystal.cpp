@@ -11,8 +11,8 @@
 NullwardenCrystal::NullwardenCrystal(float x, float y, float speed, b2Vec2 dir, Nullwarden* owner, b2Vec2 offset)
     : Entity(EntityType::CRYSTAL), direction(dir), nullwarden(owner), relativeOffset(offset)
 {
-    width = 80;
-    height = 80;
+    width = 96;
+    height = 96;
 
     pbody = Engine::GetInstance().physics->CreateCircle(x, y, width / 2, bodyType::DYNAMIC);
     pbody->ctype = ColliderType::ENEMY;

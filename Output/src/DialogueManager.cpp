@@ -145,7 +145,7 @@ void DialogueManager::RenderDialogue(int dialogueId) {
     int dialogueX = boxX + marginX;
     int dialogueY = speakerY + lineSpacing;
 
-    Engine::GetInstance().render->DrawText(event.speaker.c_str(), speakerX + 90, speakerY - 22, { 255, 255, 255, 255 }, speakerFontSize);
+    Engine::GetInstance().render->DrawText(event.speaker.c_str(), speakerX + 90, speakerY - 22, { 255, 255, 255, 255 }, speakerFontSize, false);
 
 	const std::vector<std::string>& lines = event.wrappedLines[currentLineIndex];
 
@@ -163,7 +163,7 @@ void DialogueManager::RenderDialogue(int dialogueId) {
 	for (const std::string& l : lines) {
 		int charsInLine = std::min((int)l.length(), charsToDisplay - displayedChars);
 		std::string textToDisplay = l.substr(0, charsInLine);
-		Engine::GetInstance().render->DrawText(textToDisplay.c_str(), dialogueX, dialogueY, { 255, 255, 255, 255 }, dialogueFontSize);
+		Engine::GetInstance().render->DrawText(textToDisplay.c_str(), dialogueX, dialogueY, { 255, 255, 255, 255 }, dialogueFontSize, false);
 		dialogueY += lineSpacing;
 		displayedChars += charsInLine;
 

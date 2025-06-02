@@ -538,7 +538,8 @@ void Menus::CreateButtons() {
         startY = (height - totalHeight) / 2 - static_cast<int>(20 * scale); 
     }
     else if (currentState == MenusState::SETTINGS) {
-        startY = (height - totalHeight) / 2 + static_cast<int>(40 * scale); 
+        startY = (height - totalHeight) / 2 + static_cast<int>(40 * scale) + 25; 
+        startX = (width - buttonWidth) / 2 - 100;
         spacing = static_cast<int>(BUTTON_SPACING * scale * 1.5f); 
     }
     else {
@@ -632,20 +633,24 @@ void Menus::DrawCheckBox(const ButtonInfo& button, bool isSelected) {
         SDL_RenderCopy(Engine::GetInstance().render->renderer, fillTexture, nullptr, &dstRect);
     }
 
-    int textOffsetX = -100;
+    int textOffsetX = -150;
     int textOffsetY = -100;
     int textX = button.bounds.x + textOffsetX;
     int textY = button.bounds.y + (button.bounds.h / 2) - 10 + textOffsetY;
 
-    Engine::GetInstance().render->DrawText(button.text.c_str(), textX, textY, WHITE, 45);
+    Engine::GetInstance().render->DrawText(button.text.c_str(), textX, textY, WHITE, 45, true);
     DrawSliders();
 }
 
 void Menus::DrawSliders() {
-    DrawSlider((width/2) + 50, (height/2), musicVolumeSliderX, selectedButton == 2, "Music Volume");
-    DrawSlider((width / 2) + 50, (height / 2)+100, fxVolumeSliderX, selectedButton == 3, "FX Volume");
-    DrawSlider((width / 2) + 50, (height / 2)+200, masterVolumeSliderX, selectedButton == 4, "Master Volume");
+    const int startY = (height / 2) + 100;
+    const int spacing = 125;
+
+    DrawSlider((width / 2) + 50, startY + spacing * 0, musicVolumeSliderX, selectedButton == 2, "Music Volume");
+    DrawSlider((width / 2) + 50, startY + spacing * 1, fxVolumeSliderX, selectedButton == 3, "FX Volume");
+    DrawSlider((width / 2) + 50, startY + spacing * 2, masterVolumeSliderX, selectedButton == 4, "Master Volume");
 }
+
 void Menus::DrawSlider(int minX, int y, int& sliderX, bool isSelected, const std::string& label) {
     auto& render = Engine::GetInstance().render;
     int cameraX = render->camera.x;
@@ -657,12 +662,10 @@ void Menus::DrawSlider(int minX, int y, int& sliderX, bool isSelected, const std
     int squareHeight = isSelected ? 45 : 35;
     int halfSquare = squareWidth / 2;
 
-    // Limitar el valor de sliderX dentro del rango visible
     sliderX = Clamp(sliderX, minX + halfSquare, minX + sliderWidth - halfSquare);
 
     render->DrawRectangle({ minX, y, sliderWidth, 19 }, 200, 200, 200, 255, true, false);
 
-    // ✅ Thumb (con cámara)
     int squareX = sliderX - halfSquare - cameraX;
     int squareY = y - (squareHeight / 2) - cameraY;
 
@@ -674,15 +677,11 @@ void Menus::DrawSlider(int minX, int y, int& sliderX, bool isSelected, const std
         SDL_Rect fallback = { squareX, squareY, squareWidth, squareHeight };
         render->DrawRectangle(fallback, 100, 100, 100, 255, true, true);
     }
-
-    // ✅ Texto (sin cámara, como antes)
     int textWidth = render->GetTextWidth(label, 45);
-    int textX = minX - textWidth - 50;
+    int textX = minX - 455;
     int textY = y - 20;
-    render->DrawText(label.c_str(), textX, textY, WHITE, 45);
+    render->DrawText(label.c_str(), textX, textY, WHITE, 45, true);
 }
-
-
 
 void Menus::DrawPlayerLives() {
     if (currentState != MenusState::GAME) return;

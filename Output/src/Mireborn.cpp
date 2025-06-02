@@ -43,9 +43,9 @@ bool Mireborn::Start() {
                                 1.0f;
     maxSteps = 15;
 
-    soundWalkId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/mireborn_walk.ogg", 1.0f);
-    soundDivideId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/mireborn_divide.ogg", 1.0f);
-    soundDeathId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/monster_death.ogg", 1.0f);
+    soundWalkId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Mireborn/mireborn_walk.ogg", 1.0f);
+    soundDivideId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Mireborn/mireborn_divide.ogg", 1.0f);
+    soundDeathId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Mireborn/mireborn_death.ogg", 1.0f);
 
     return Enemy::Start();
 }
@@ -61,8 +61,11 @@ bool Mireborn::Update(float dt) {
         break;
     case MirebornState::WALKING:
         if (!walkSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundWalkId, 1.0f, 0);
-            walkSoundPlayed = true;
+            walkSoundTimer -= dt;
+            if (walkSoundTimer <= 0.0f) {
+                Engine::GetInstance().audio->PlayFx(soundWalkId, 1.0f, 0);
+                walkSoundTimer = walkSoundInterval;
+            }
         }
         divideSoundPlayed = false;
         deathSoundPlayed = false;

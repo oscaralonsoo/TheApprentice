@@ -46,9 +46,10 @@ bool Noctilume::Start() {
     smoothedPosition = position;
     maxSteps = 12;
 
-    soundChasingId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/noctilume_walk.ogg", 1.0f);
-    soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/monster_death.ogg", 1.0f);
-
+    soundAttackId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Noctilume/noctilume_attack.ogg", 1.0f);
+    soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Noctilume/noctilume_death.ogg", 1.0f);
+    soundCrashId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Noctilume/noctilume_crash.ogg", 1.0f);
+    soundWalkId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Noctilume/noctilume_walk.ogg", 1.0f);
 
     return Enemy::Start();
 }
@@ -64,21 +65,42 @@ bool Noctilume::Update(float dt) {
     switch (currentState) {
     case NoctilumeState::IDLE: Idle(dt); break;
     case NoctilumeState::CHASING: 
-        if (!chasingSoundPlayed) {
-            //Engine::GetInstance().audio->PlayFx(soundChasingId, 1.0f, 0);
-            chasingSoundPlayed = true;
+        walkSoundTimer -= dt;
+        if (walkSoundTimer <= 0.0f) {
+            Engine::GetInstance().audio->PlayFx(soundWalkId, 1.0f, 0);
+            walkSoundTimer = walkSoundInterval;
         }
         deadSoundPlayed = false;
+        crashSoundPlayed = false;
+        attackSoundPlayed = false;
         Chasing(dt); break;
     case NoctilumeState::PRE_ATTACK: PreAttack(dt); break;
-    case NoctilumeState::ATTACK: Attack(dt); break;
-    case NoctilumeState::CRASH: Crash(dt); break;
+    case NoctilumeState::ATTACK:
+        if (!attackSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundAttackId, 1.0f, 0);
+            attackSoundPlayed = true;
+        }
+        deadSoundPlayed = false;
+        crashSoundPlayed = false;
+        walkSoundPlayed = false;
+        Attack(dt); break;
+    case NoctilumeState::CRASH:
+        if (!crashSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundCrashId, 1.0f, 0);
+            crashSoundPlayed = true;
+        }
+        deadSoundPlayed = false;
+        attackSoundPlayed = false;
+        walkSoundPlayed = false;
+        Crash(dt); break;
     case NoctilumeState::DEAD: 
         if (!deadSoundPlayed) {
-            //Engine::GetInstance().audio->PlayFx(soundDeadId, 1.0f, 0);
+            Engine::GetInstance().audio->PlayFx(soundDeadId, 1.0f, 0);
             deadSoundPlayed = true;
         }
-        chasingSoundPlayed = false;
+        attackSoundPlayed = false;
+        crashSoundPlayed = false;
+        walkSoundPlayed = false;
         
         Die(); break;
     }

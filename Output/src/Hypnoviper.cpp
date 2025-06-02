@@ -7,7 +7,7 @@
 #include "Audio.h"
 
 
-Hypnoviper::Hypnoviper() : Enemy(EntityType::HYPNOVIPER) {
+Hypnoviper::Hypnoviper() : Enemy(EntityType::HYPNOVIPER)  {
 }
 
 Hypnoviper::~Hypnoviper() {
@@ -54,8 +54,8 @@ bool Hypnoviper::Start() {
 
     currentAnimation = &sleepAnim;
 
-    soundSleepId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/hypnoviper_sleep.ogg", 1.0f);
-    soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/monster_death.ogg", 1.0f);
+    soundSleepId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Hypnoviper/hypnoviper_sleep.ogg", 1.0f);
+    soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Hypnoviper/hypnoviper_death.ogg", 1.0f);
 
     return true;
 }
@@ -66,8 +66,11 @@ bool Hypnoviper::Update(float dt) {
     {
     case HypnoviperState::SLEEPING:
         if (!sleepSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundSleepId, 1.0f, 0);
-            sleepSoundPlayed = true;
+            sleepSoundTimer -= dt;
+            if (sleepSoundTimer <= 0.0f) {
+                Engine::GetInstance().audio->PlayFx(soundSleepId, 1.0f, 0);
+                sleepSoundTimer = sleepSoundInterval;
+            }
         }
         deadSoundPlayed = false;
 

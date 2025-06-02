@@ -36,8 +36,8 @@ bool Scurver::Start() {
     currentAnimation = &attackAnim;
     maxSteps = 15;
 
-    soundWalkId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/scruver_walk.ogg", 1.0f);
-    soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/monster_death.ogg", 1.0f);
+    soundWalkId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Scruver/scruver_walk.ogg", 1.0f);
+    soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Scruver/scruver_death.ogg", 1.0f);
 
     return Enemy::Start();
 }
@@ -69,17 +69,19 @@ bool Scurver::Update(float dt) {
 
         break;
     case ScurverState::ATTACK:
-        if (!walkSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundWalkId, 1.0f, 0);
-            walkSoundPlayed = true;
-        }
         if (currentAnimation != &attackAnim) currentAnimation = &attackAnim;
         currentAnimation->SetPaused(false);
-
         Attack(dt);
         break;
     case ScurverState::SLIDE:
         if (currentAnimation != &attackAnim) currentAnimation = &attackAnim;
+
+        walkSoundTimer -= dt;
+        if (walkSoundTimer <= 0.0f) {
+            Engine::GetInstance().audio->PlayFx(soundWalkId, 1.0f, 0);
+            walkSoundTimer = walkSoundInterval;
+        }
+
         Slide(dt);
         break;
     case ScurverState::DEAD:

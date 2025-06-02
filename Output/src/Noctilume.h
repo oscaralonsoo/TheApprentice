@@ -85,9 +85,16 @@ private:
     // Crash
     float crashTimer = 0.0f;
 
-    int soundChasingId = 0;
+    int soundAttackId = 0;
     int soundDeadId = 0;
+    int soundWalkId = 0;
+    int soundCrashId = 0;
 
-    bool chasingSoundPlayed = false;
+    bool attackSoundPlayed = false;
     bool deadSoundPlayed = false;
+    bool crashSoundPlayed = false;
+    bool walkSoundPlayed = false;
+
+    float walkSoundTimer = 0.0f;
+    const float walkSoundInterval = 0.5f;
 };

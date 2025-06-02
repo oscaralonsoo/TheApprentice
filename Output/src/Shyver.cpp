@@ -40,7 +40,10 @@ bool Shyver::Start() {
 
     currentAnimation = &attackAnim;
     maxSteps = 15;
-    soundWalkId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/shyver_walk.ogg", 1.0f);
+    soundWalkId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Shyver/shyver_walk.ogg", 1.0f);
+    soundDashId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Shyver/shyver_dash.ogg", 1.0f);
+    soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Shyver/shyver_death.ogg", 1.0f);
+    soundAppearId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Shyver/shyver_appear.ogg", 1.0f);
 
 
     return Enemy::Start();
@@ -58,6 +61,13 @@ bool Shyver::Update(float dt) {
             currentAnimation = &appearAnim;
             currentAnimation->Reset();
         }
+        if (!appearSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundAppearId, 1.0f, 0);
+            appearSoundPlayed = true;
+        }
+        walkSoundPlayed = false;
+        dashSoundPlayed = false;
+        deadSoundPlayed = false;
         Wait();
         if (currentAnimation->HasFinished()) currentState = ShyverState::WAIT;
         break;
@@ -74,6 +84,13 @@ bool Shyver::Update(float dt) {
             currentAnimation = &attackAnim;
             currentAnimation->Reset();
         }
+        if (!dashSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundDashId, 1.0f, 0);
+            dashSoundPlayed = true;
+        }
+        walkSoundPlayed = false;
+        deadSoundPlayed = false;
+        appearSoundPlayed = false;
         Attack();
         break;
     case ShyverState::STUNNED:
@@ -89,6 +106,13 @@ bool Shyver::Update(float dt) {
             currentAnimation = &disappearAnim;
             currentAnimation->Reset();
         }
+        if (!appearSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundAppearId, 1.0f, 0);
+            appearSoundPlayed = true;
+        }
+        walkSoundPlayed = false;
+        dashSoundPlayed = false;
+        deadSoundPlayed = false;
         Disappear();
         if (currentAnimation->HasFinished()) currentState = ShyverState::INVISIBLE;
         break;
@@ -106,7 +130,8 @@ bool Shyver::Update(float dt) {
             deadSoundPlayed = true;
         }
         walkSoundPlayed = false;
-
+        dashSoundPlayed = false;
+        appearSoundPlayed = false;
         if (currentAnimation != &deathAnim) currentAnimation = &deathAnim;
 
         pbody->body->SetLinearVelocity(b2Vec2_zero);

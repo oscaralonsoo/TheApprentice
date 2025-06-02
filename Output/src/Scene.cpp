@@ -52,7 +52,7 @@ bool Scene::Awake()
 bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
-	nextScene = 1;
+	nextScene = 99;
 	Engine::GetInstance().map->Load("Assets/Maps/", "Map" + std::to_string(nextScene) + ".tmx");
 
 	return true;
@@ -229,7 +229,11 @@ void Scene::ChangeScene(int nextScene)
 			case 69:
 				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/palo.wav", 2.0f, 1.0f);
 				break;
+			case 99:
+				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/nullwarden_music.ogg", 2.0f, 1.0f);
+				break;
 			case 666:
+				Engine::GetInstance().audio->PlayMusic("Assets/Audio/Music/stick.ogg", 2.0f, 1.0f);
 				break;
 			}
 

@@ -205,3 +205,24 @@ int Player::GetMovementDirection() const {
 int Player::GetTextureWidth() const {
 	return texW; 
 }
+
+bool Player::IsTouchingPlatform() const {
+	for (b2ContactEdge* edge = pbody->body->GetContactList(); edge; edge = edge->next) {
+		b2Contact* contact = edge->contact;
+		if (contact->IsTouching()) {			
+			if (contact->GetFixtureA()->GetFilterData().maskBits & CATEGORY_PLAYER)
+			{
+				if (contact->GetFixtureB()->GetFilterData().maskBits & CATEGORY_PLATFORM) {
+					return true;
+				}
+			}
+			else
+			{
+				if (contact->GetFixtureA()->GetFilterData().maskBits & CATEGORY_PLATFORM) {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}

@@ -34,7 +34,8 @@ protected:
     PhysBody* pbody = nullptr;
     SDL_Texture* texture = nullptr;
     pugi::xml_node parameters;
-
+    Vector2D initPos;
+    bool hasTouchedSpike = false;
     bool isPlayerPushing = false;
     bool isEnemyPushing = false;
 

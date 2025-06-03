@@ -51,7 +51,7 @@ bool NPC::Update(float dt)
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - width / 2);
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - height / 2);
 
-	if (type.c_str() == "Bichopalo");
+	if (type.c_str() == "BichoPalo");
 	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + width/2 - texW/2, (int)position.getY() + height - texH, &currentAnimation->GetCurrentFrame());
 	currentAnimation->Update();
 

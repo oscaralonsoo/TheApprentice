@@ -170,6 +170,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::ARDILLA:
 		entity = new NPC(EntityType::ARDILLA);
 		break;
+	case EntityType::ARDILLA_LIANA:
+		entity = new NPC(EntityType::ARDILLA_LIANA);
+		break;
 	case EntityType::BICHOPALO:
 		entity = new NPC(EntityType::BICHOPALO);
 		break;

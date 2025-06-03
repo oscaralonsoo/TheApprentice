@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="110" height="89" tilewidth="64" tileheight="64" infinite="0" nextlayerid="71" nextobjectid="5004">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="110" height="89" tilewidth="64" tileheight="64" infinite="0" nextlayerid="71" nextobjectid="5018">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -88299,7 +88299,6 @@
   <object id="4185" x="5888" y="3648" height="704"/>
   <object id="4186" x="5632" y="3776" height="768"/>
   <object id="4187" x="5632" y="4544" width="1344"/>
-  <object id="4231" x="2624" y="3776" height="768"/>
   <object id="4232" x="2624" y="3776" width="3008"/>
   <object id="4254" x="1408" y="3584" width="768"/>
   <object id="4258" x="2624" y="3584" width="960"/>
@@ -88323,8 +88322,6 @@
   <object id="4404" x="3200" y="4160" height="192"/>
   <object id="4405" x="2624" y="4544" width="384"/>
   <object id="4413" x="2560" y="2752" width="192"/>
-  <object id="4432" x="2496" y="768" height="1088"/>
-  <object id="4433" x="2880" y="1088" height="704"/>
   <object id="4436" x="5376" y="192" height="1216"/>
   <object id="4535" x="1920" y="2752" width="448"/>
   <object id="4566" x="1984" y="320" width="192"/>
@@ -88378,10 +88375,8 @@
   <object id="4684" x="4928" y="4928" height="128"/>
   <object id="4711" x="3584" y="3520" height="64"/>
   <object id="4368" x="1344" y="3776" width="960"/>
-  <object id="4715" x="2304" y="3392" height="192"/>
   <object id="4716" x="2048" y="3392" width="256"/>
   <object id="4718" x="2112" y="3072" width="256"/>
-  <object id="4724" x="2624" y="3392" height="192"/>
   <object id="4725" x="2624" y="3392" width="256"/>
   <object id="4727" x="2560" y="3072" width="256"/>
   <object id="4737" x="3456" y="1472" width="256"/>
@@ -88402,13 +88397,10 @@
   <object id="4779" x="2176" y="320" height="128"/>
   <object id="4780" x="2176" y="448" width="896"/>
   <object id="4781" x="3072" y="448" height="192"/>
-  <object id="4230" x="2304" y="3776" height="832"/>
   <object id="4783" x="1728" y="4608" width="576"/>
   <object id="4784" x="2048" y="4800" height="128"/>
   <object id="4785" x="2048" y="4928" width="128"/>
   <object id="4786" x="2176" y="4928" height="64"/>
-  <object id="4542" x="2368" y="2752" height="320"/>
-  <object id="4543" x="2560" y="2752" height="320"/>
   <object id="4800" x="5248" y="192" width="128"/>
   <object id="4801" x="5248" y="64" height="128"/>
   <object id="4802" x="5120" y="64" width="128"/>
@@ -88524,6 +88516,14 @@
   <object id="4996" x="4800" y="768" height="64"/>
   <object id="4997" x="4928" y="832" height="64"/>
   <object id="4998" x="4992" y="448" height="192"/>
+  <object id="5009" x="2368" y="2752" height="320"/>
+  <object id="5010" x="2560" y="2752" height="320"/>
+  <object id="5012" x="2496" y="768" height="1088"/>
+  <object id="5013" x="2880" y="1088" height="704"/>
+  <object id="5014" x="2304" y="3392" height="192"/>
+  <object id="5015" x="2624" y="3392" height="192"/>
+  <object id="5016" x="2304" y="3776" height="832"/>
+  <object id="5017" x="2624" y="3776" height="768"/>
  </objectgroup>
  <objectgroup id="60" name="Enemies">
   <object id="4398" name="Dreadspire" x="4160" y="4160" width="64" height="64"/>

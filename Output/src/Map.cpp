@@ -679,14 +679,16 @@ bool Map::Load(std::string path, std::string fileName)
                     else if (enemyName == "Hypnoviper")
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::HYPNOVIPER);
                     else if (enemyName == "Creebler") {
-                        for (pugi::xml_node propertyNode = objectNode.child("properties").child("property"); propertyNode != NULL; propertyNode = propertyNode.next_sibling("property"))
-                        {
+                        for (pugi::xml_node propertyNode = objectNode.child("properties").child("property"); propertyNode != NULL; propertyNode = propertyNode.next_sibling("property")) {
                             std::string propertyName = propertyNode.attribute("name").as_string();
 
                             if (propertyName == "navigationId")
                                 enemyNode.append_attribute("navigationId") = propertyNode.attribute("value").as_int();
 
+                            else if (propertyName == "navigationLayer")
+                                enemyNode.append_attribute("navigationLayer") = propertyNode.attribute("value").as_string();
                         }
+
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CREEBLER);
                     }
                     else if (enemyName == "Scurver") {
@@ -930,6 +932,17 @@ MapLayer* Map::GetNavigationLayer() {
         }
     }
 
+    return nullptr;
+}
+
+MapLayer* Map::GetNavigationLayerByName(const std::string& name) {
+    for (const auto& layer : mapData.layers) {
+        if (layer->name == name &&
+            layer->properties.GetProperty("Navigation") != nullptr &&
+            layer->properties.GetProperty("Navigation")->value) {
+            return layer;
+        }
+    }
     return nullptr;
 }
 

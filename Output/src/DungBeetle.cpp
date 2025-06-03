@@ -62,6 +62,8 @@ bool DungBeetle::Start() {
     }
 
     maxSteps = 15;
+    firstBallTimer = 0.0f;
+    firstBallLaunched = false;
 
     return Enemy::Start();
 }
@@ -69,6 +71,16 @@ bool DungBeetle::Start() {
 bool DungBeetle::Update(float dt) {
 
     playerPos = Engine::GetInstance().scene->GetPlayerPosition();
+    if (!firstBallLaunched) {
+        firstBallTimer += dt;
+        if (firstBallTimer >= 3000.0f) {
+            currentState = DungBeetleState::ANGRY;
+            firstBallLaunched = true;
+            ballsThrown = 0;
+            lastPuzzleState = -1;
+            currentStatePuzzle = 0;
+        }
+    }
 
     CheckState(dt);
     CollisionNavigationLayer();
@@ -138,12 +150,14 @@ void DungBeetle::Idle()
     angryAnim.Reset();
     currentStatePuzzle = CheckPuzzleState();
 
-    if (currentStatePuzzle != lastPuzzleState && ballsThrown <= 2)
-    {
+    if (currentStatePuzzle != lastPuzzleState && ballsThrown <= 2) {
         currentState = DungBeetleState::ANGRY;
     }
     else if (ballsThrown < 2) {
         hasThrown = false;
+    }
+    else if (currentStatePuzzle == 2 && ballsThrown == 2 && !hasLaunched) {
+        currentState = DungBeetleState::BALLMODE;
     }
 
     lastPuzzleState = currentStatePuzzle;
@@ -154,18 +168,14 @@ void DungBeetle::Angry()
 {
     throwingAnim.Reset();
     currentAnimation = &angryAnim;
+
     if (currentAnimation->HasFinished())
     {
-        if (CheckPuzzleState() == 1 && ballsThrown == 0) {
+        if ((CheckPuzzleState() == 0 && ballsThrown == 0) ||
+            (CheckPuzzleState() == 1 && ballsThrown == 1)) {
             currentState = DungBeetleState::THROW;
         }
-
-        else if (CheckPuzzleState() == 2 && ballsThrown < 2) {
-            currentState = DungBeetleState::THROW;
-            hasThrown = false;
-        }
-        else if (CheckPuzzleState() == 3 && !hasLaunched && ballsThrown == 2)
-        {
+        else if (CheckPuzzleState() == 2 && ballsThrown == 2 && !hasLaunched) {
             currentState = DungBeetleState::BALLMODE;
         }
         else {
@@ -230,6 +240,7 @@ void DungBeetle::ChangeBodyType() {
     isDynamic = true;
 }
 int DungBeetle::CheckPuzzleState() {
+
     int PuzzlesDone = Engine::GetInstance().pressureSystem.get()->GetActivePlatesCount(3);
     return PuzzlesDone;
 }

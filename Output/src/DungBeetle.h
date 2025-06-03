@@ -44,7 +44,8 @@ private:
     bool hasThrown = false;
     bool isDynamic = false;
     bool hasLaunched = false;
-
+    float firstBallTimer = 0.0f;
+    bool firstBallLaunched = false;
     int ballsThrown = 0;
     int currentStatePuzzle = 0;
     int lastPuzzleState = 0;

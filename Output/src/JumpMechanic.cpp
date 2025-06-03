@@ -214,9 +214,6 @@ void JumpMechanic::EnableDoubleJump(bool enable) {
 }
 
 void JumpMechanic::OnLanding() {
-    LOG("[JumpMechanic] OnLanding() llamado");
-    LOG("Reset jumpCount a 0");
-
     isJumping = false;
     jumpCount = 0;
     player->GetMechanics()->SetIsOnGround(true);

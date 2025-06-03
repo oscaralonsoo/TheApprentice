@@ -8,6 +8,7 @@
 #include "Entity.h"
 #include "Log.h"
 #include "Audio.h"
+#include <algorithm>
 
 constexpr int MAX_BROODS = 4;
 constexpr int BROODS_PER_SPAWN = 1;
@@ -62,8 +63,8 @@ bool Broodheart::Start() {
         fixture->SetFilterData(filter);
     }
 
-    soundSpawnId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/broodheart_spawn.ogg", 1.0f);
-    soundDeathId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/monster_death.ogg", 1.0f);
+    soundSpawnId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Broodheart/broodheart_spawn.ogg", 1.0f);
+    soundDeathId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Broodheart/broodheart_death.ogg", 1.0f);
 
     return true;
 }
@@ -120,7 +121,7 @@ void Broodheart::OnCollision(PhysBody* physA, PhysBody* physB) {
         isBroken = true;
         currentAnimation = &deathAnim;
         if (!deathSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundSpawnId, 1.0f, 0);
+            Engine::GetInstance().audio->PlayFx(soundDeathId, 1.0f, 0);
             deathSoundPlayed = true;
         }
 

@@ -21,7 +21,7 @@ Player::Player() : Entity(EntityType::PLAYER)
 Player::~Player() {}
 
 bool Player::Awake() {
-	position = Vector2D(1152, 970);
+	position = Vector2D(922, 1056);
 	return true;
 }
 
@@ -204,4 +204,25 @@ int Player::GetMovementDirection() const {
 
 int Player::GetTextureWidth() const {
 	return texW; 
+}
+
+bool Player::IsTouchingPlatform() const {
+	for (b2ContactEdge* edge = pbody->body->GetContactList(); edge; edge = edge->next) {
+		b2Contact* contact = edge->contact;
+		if (contact->IsTouching()) {			
+			if (contact->GetFixtureA()->GetFilterData().maskBits & CATEGORY_PLAYER)
+			{
+				if (contact->GetFixtureB()->GetFilterData().maskBits & CATEGORY_PLATFORM) {
+					return true;
+				}
+			}
+			else
+			{
+				if (contact->GetFixtureA()->GetFilterData().maskBits & CATEGORY_PLATFORM) {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
 }

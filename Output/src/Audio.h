@@ -31,7 +31,6 @@ public:
 	// Play a previously loaded WAV
 	bool PlayFx(int fxId, float relativeVolume, int repeat);
 
-
 	// Control de volumen
 	void SetMasterVolume(float volume);    // 0.0f - 1.0f
 	void SetMusicVolume(float volume);     // 0.0f - 1.0f

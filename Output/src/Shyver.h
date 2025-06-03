@@ -59,7 +59,11 @@ private:
 
     int soundWalkId = 0;
     int soundDeadId = 0;
+    int soundDashId = 0;
+    int soundAppearId = 0;
 
     bool walkSoundPlayed = false;
     bool deadSoundPlayed = false;
+    bool dashSoundPlayed = false;
+    bool appearSoundPlayed = false;
 };

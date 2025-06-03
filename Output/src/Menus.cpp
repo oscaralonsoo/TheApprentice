@@ -235,6 +235,12 @@ void Menus::MainMenu(float dt) {
             case 46:
                 Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/snowforest_music.ogg", 2.0f, 1.0f);
                 break;
+            case 99:
+                Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/nullwarden_music.ogg", 2.0f, 1.0f);
+                break;
+            case 666:
+                Engine::GetInstance().audio->PlayMusic("Assets/Audio/Music/stick.ogg", 2.0f, 1.0f);
+                break;
             default:
                 Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 2.0f, 1.0f); 
                 break;
@@ -460,6 +466,9 @@ void Menus::Credits() {
 void Menus::UpdateVideoPlayer() {
     if (videoPlayer) {
         bool videoFinished = !videoPlayer->Update();
+
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) videoFinished = true;
+        
         if (videoFinished) {
             videoPlayer->CleanUp();
             videoPlayer = nullptr;

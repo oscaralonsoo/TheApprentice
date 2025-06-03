@@ -36,8 +36,8 @@ bool Creebler::Start() {
 
     currentAnimation = &walkAnim;
 
-    soundWalkId = Engine::GetInstance().audio->LoadFx("Assets/Audio/fx/creebler_walk.ogg", 1.0f);
-    soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/fx/monster_death.ogg", 1.0f);
+    soundWalkId = Engine::GetInstance().audio->LoadFx("Assets/Audio/fx/Creebler/creebler_walk.ogg", 1.0f);
+    soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/fx/Creebler/creebler_death.ogg", 1.0f);
     maxSteps = 0;
     return Enemy::Start();
 }
@@ -46,14 +46,16 @@ bool Creebler::Update(float dt) {
     switch (currentState)
     {
     case CreeblerState::WALKING:
-        if (!walkSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundWalkId, 1.0f, 0);
-            walkSoundPlayed = true;
-        }
-        deadSoundPlayed = false;
-
         if (currentAnimation != &walkAnim) currentAnimation = &walkAnim;
         Walk();
+
+        walkSoundTimer -= dt;
+        if (walkSoundTimer <= 0.0f) {
+            Engine::GetInstance().audio->PlayFx(soundWalkId, 1.0f, 0);
+            walkSoundTimer = walkSoundInterval;  
+        }
+
+        deadSoundPlayed = false;
         break;
     case CreeblerState::DEAD:
         if (!deadSoundPlayed) {

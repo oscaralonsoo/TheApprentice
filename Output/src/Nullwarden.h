@@ -90,4 +90,10 @@ private:
     const int maxVerticalSpears = 8;
     const float verticalSpearGap = 200.0f;
 
+
+    int soundWalkId = 0;
+    int soundDeadId = 0;
+
+    bool walkSoundPlayed = false;
+    bool deadSoundPlayed = false;
 };

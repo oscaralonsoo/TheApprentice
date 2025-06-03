@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="33" height="17" tilewidth="64" tileheight="64" infinite="0" nextlayerid="78" nextobjectid="1396">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="33" height="17" tilewidth="64" tileheight="64" infinite="0" nextlayerid="78" nextobjectid="1396">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -56,6 +56,9 @@
  </tileset>
  <tileset firstgid="7785" name="SecretCave_Fog2" tilewidth="64" tileheight="64" tilecount="480" columns="30">
   <image source="../Environment/SecretCave_Fog2.png" width="1920" height="1080"/>
+ </tileset>
+ <tileset firstgid="8265" name="altar" tilewidth="64" tileheight="64" tilecount="225" columns="15">
+  <image source="../Props/altar.png" width="1000" height="1000"/>
  </tileset>
  <layer id="44" name="Background" width="33" height="17" parallaxx="0" parallaxy="0">
   <properties>
@@ -4882,13 +4885,13 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="8400"/>
+   <tile gid="8401"/>
+   <tile gid="8402"/>
+   <tile gid="8403"/>
+   <tile gid="8404"/>
+   <tile gid="8405"/>
+   <tile gid="8406"/>
    <tile/>
    <tile/>
    <tile/>
@@ -4915,13 +4918,13 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="8415"/>
+   <tile gid="8416"/>
+   <tile gid="8417"/>
+   <tile gid="8418"/>
+   <tile gid="8419"/>
+   <tile gid="8420"/>
+   <tile gid="8421"/>
    <tile/>
    <tile/>
    <tile/>
@@ -4948,13 +4951,13 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="8430"/>
+   <tile gid="8431"/>
+   <tile gid="8432"/>
+   <tile gid="8433"/>
+   <tile gid="8434"/>
+   <tile gid="8435"/>
+   <tile gid="8436"/>
    <tile/>
    <tile/>
    <tile/>
@@ -4981,13 +4984,13 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="8445"/>
+   <tile gid="8446"/>
+   <tile gid="8447"/>
+   <tile gid="8448"/>
+   <tile gid="8449"/>
+   <tile gid="8450"/>
+   <tile gid="8451"/>
    <tile/>
    <tile/>
    <tile/>
@@ -5014,13 +5017,13 @@
    <tile gid="4192"/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="8460"/>
+   <tile gid="8461"/>
+   <tile gid="8462"/>
+   <tile gid="8463"/>
+   <tile gid="8464"/>
+   <tile gid="8465"/>
+   <tile gid="8466"/>
    <tile/>
    <tile gid="4194"/>
    <tile gid="4195"/>
@@ -5047,13 +5050,13 @@
    <tile gid="4222"/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile gid="4232"/>
-   <tile gid="4233"/>
-   <tile gid="4234"/>
-   <tile gid="4235"/>
-   <tile/>
+   <tile gid="8475"/>
+   <tile gid="8476"/>
+   <tile gid="8477"/>
+   <tile gid="8478"/>
+   <tile gid="8479"/>
+   <tile gid="8480"/>
+   <tile gid="8481"/>
    <tile/>
    <tile gid="4224"/>
    <tile gid="4225"/>

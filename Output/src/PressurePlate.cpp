@@ -83,17 +83,37 @@ bool PressurePlate::CleanUp()
 }
 
 void PressurePlate::OnCollision(PhysBody* physA, PhysBody* physB) {
-    if (physB->ctype == ColliderType::BOX || physB->ctype == ColliderType::PLAYER)
-    {
-        state = PressurePlateState::ENABLED;
-        SetActive(true);   
+
+    if (isInvisible) {
+        if (physB->ctype == ColliderType::PLAYER)
+        {
+            state = PressurePlateState::ENABLED;
+            SetActive(true);
+        }
+    }
+    else {
+        if (physB->ctype == ColliderType::BOX)
+        {
+            state = PressurePlateState::ENABLED;
+            SetActive(true);
+        }
     }
 }
 
 void PressurePlate::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
-    if (physB->ctype == ColliderType::BOX || physB->ctype == ColliderType::PLAYER) {
-        state = PressurePlateState::DISABLED;
-        SetActive(false);
+    if (isInvisible) {
+        if (physB->ctype == ColliderType::PLAYER)
+        {
+            state = PressurePlateState::DISABLED;
+            SetActive(false);
+        }
+    }
+    else {
+        if (physB->ctype == ColliderType::BOX)
+        {
+            state = PressurePlateState::DISABLED;
+            SetActive(false);
+        }
     }
 }
 

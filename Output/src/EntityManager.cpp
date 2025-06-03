@@ -167,6 +167,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::PANGOLIN:
 		entity = new NPC(EntityType::PANGOLIN);
 		break;
+	case EntityType::CARACOL:
+		entity = new NPC(EntityType::CARACOL);
+		break;
 	case EntityType::ARDILLA:
 		entity = new NPC(EntityType::ARDILLA);
 		break;

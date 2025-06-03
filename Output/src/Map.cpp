@@ -778,6 +778,8 @@ bool Map::Load(std::string path, std::string fileName)
                         npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ARDILLA);
                     else if (npcName == "ArdillaLiana")
                         npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ARDILLA_LIANA);
+                    else if (npcName == "Caracol")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CARACOL);
                     else if (npcName == "BichoPalo")
                         npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BICHOPALO);
 

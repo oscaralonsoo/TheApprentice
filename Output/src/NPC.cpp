@@ -3,6 +3,8 @@
 #include "Module.h"
 #include "NPC.h"
 #include "Textures.h"
+#include "Map.h"
+#include "EntityManager.h"
 #include "DialogueManager.h"
 #include "Animation.h"
 #include "SDL2/SDL.h"
@@ -19,7 +21,7 @@ bool NPC::Awake() {
 }
 
 bool NPC::Start() {
-	pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + width/2, (int)position.getY()+height/2, width, height, bodyType::STATIC, CATEGORY_NPC, CATEGORY_PLAYER);
+	pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + width/2, (int)position.getY()+height/2, width, height, bodyType::DYNAMIC, CATEGORY_NPC, CATEGORY_PLAYER);
 
 	pbody->ctype = ColliderType::NPC;
 
@@ -46,13 +48,42 @@ bool NPC::Start() {
 
 bool NPC::Update(float dt)
 {
+	if (type == "caracol")
+	{
+		if (!hitWall)
+		{
+			pbody->body->SetLinearVelocity(b2Vec2(-0.3f, pbody->body->GetLinearVelocity().y));
+
+			Vector2D posMap = Engine::GetInstance().map.get()->WorldToMap(position.getX() + texW / 2, position.getY() + texH / 2);
+			int frontX = posMap.x;
+
+			MapLayer* layer = Engine::GetInstance().map.get()->GetNavigationLayer();
+
+			if (layer->Get(frontX + 1, posMap.y))
+			{
+				hitWall = true;
+				pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+			}
+		}
+		else
+		{
+			alpha -= 4.0f;
+			if (alpha < 0.0f) alpha = 0.0f;
+		}
+	}
 	
 	b2Transform pbodyPos = pbody->body->GetTransform();
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - width / 2);
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - height / 2);
 
-	if (type.c_str() == "BichoPalo");
+	//if (type == "bichopalo");
 	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + width/2 - texW/2, (int)position.getY() + height - texH, &currentAnimation->GetCurrentFrame());
+
+	if (type == "caracol") {
+		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + width / 2 - texW / 2, (int)position.getY() + height - texH, &currentAnimation->GetCurrentFrame(), 
+			1.0f, 0.0, 0, 0, SDL_FLIP_NONE, 0, alpha/255.0f);
+	}
+	
 	currentAnimation->Update();
 
 	return true;
@@ -60,6 +91,8 @@ bool NPC::Update(float dt)
 
 bool NPC::PostUpdate()
 {
+	if (alpha <= 0) Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+	
 	return true;
 }
 
@@ -86,7 +119,9 @@ void NPC::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:
-		Engine::GetInstance().dialogueManager.get()->SetDialogueAvailable(dialogueId, Vector2D(GetPosition().x - texW/2, GetPosition().y - texH), true);
+		if (type != "caracol") {
+			Engine::GetInstance().dialogueManager.get()->SetDialogueAvailable(dialogueId, Vector2D(GetPosition().x - texW / 2, GetPosition().y - texH), true);
+		}
 		break;
 	}
 }
@@ -96,7 +131,9 @@ void NPC::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
 	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:
-		Engine::GetInstance().dialogueManager.get()->SetDialogueAvailable(dialogueId, Vector2D(GetPosition().x - texW / 2, GetPosition().y - texH), false);
+		if (type != "caracol") {
+			Engine::GetInstance().dialogueManager.get()->SetDialogueAvailable(dialogueId, Vector2D(GetPosition().x - texW / 2, GetPosition().y - texH), false);
+		}
 		break;
 	}
 		

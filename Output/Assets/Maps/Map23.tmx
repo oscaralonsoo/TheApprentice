@@ -113504,9 +113504,9 @@
    <tile gid="14640"/>
    <tile gid="14640"/>
    <tile gid="2147498341"/>
-   <tile gid="14656"/>
-   <tile gid="14656"/>
    <tile gid="14657"/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -144850,7 +144850,7 @@
     <property name="id" type="int" value="0"/>
    </properties>
   </object>
-  <object id="5354" name="Door" x="5696" y="6080" width="64" height="192">
+  <object id="5354" name="Door" x="5568" y="6080" width="64" height="192">
    <properties>
     <property name="id" type="int" value="0"/>
    </properties>
@@ -145160,8 +145160,8 @@
   <object id="5501" x="5312" y="5888" height="64"/>
   <object id="5502" x="5312" y="5952" width="256"/>
   <object id="5503" x="5568" y="5952" height="64"/>
-  <object id="5505" x="5568" y="6016" width="192"/>
-  <object id="5510" x="5760" y="6016" height="64"/>
+  <object id="5505" x="5568" y="6016" width="64"/>
+  <object id="5510" x="5632" y="6016" height="64"/>
   <object id="5517" x="5056" y="6336" width="128"/>
   <object id="5520" x="5184" y="6400" width="384"/>
   <object id="5522" x="5568" y="6272" width="1408"/>
@@ -145430,7 +145430,7 @@
   <object id="5491" x="4672" y="6912" height="64"/>
   <object id="5496" x="4736" y="6080" width="128"/>
   <object id="5497" x="4864" y="6016" height="64"/>
-  <object id="5511" x="5184" y="6080" width="576"/>
+  <object id="5511" x="5184" y="6080" width="448"/>
   <object id="5512" x="5184" y="6016" height="64"/>
   <object id="5513" x="4864" y="6016" width="320"/>
  </objectgroup>
@@ -145455,7 +145455,7 @@
   <object id="5257" name="Creebler" x="3584" y="4736" width="64" height="64"/>
   <object id="5342" name="Scurver" x="3968" y="6272" width="64" height="64"/>
   <object id="5359" name="Thumpod" x="2624" y="3840" width="64" height="64"/>
-  <object id="5439" name="Dreadspire" x="3296" y="6334.67" width="64" height="64">
+  <object id="5439" name="Dreadspire" x="3328" y="6336" width="64" height="64">
    <properties>
     <property name="rotationAngle" type="int" value="90"/>
    </properties>

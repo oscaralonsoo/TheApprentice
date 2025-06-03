@@ -36,6 +36,8 @@ public:
 		type = parameters.attribute("type").as_string();
 		gravity = parameters.attribute("gravity").as_bool();
 		navigationId = parameters.attribute("navigationId").as_int();
+		if (parameters.attribute("navigationLayer"))
+			navigationLayerName = parameters.attribute("navigationLayer").as_string();
 	}
 
 	void SetPosition(Vector2D pos);
@@ -81,4 +83,6 @@ protected:
 	int direction = -1;
 
 	int navigationId;
+
+	std::string navigationLayerName;
 };

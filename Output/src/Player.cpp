@@ -100,13 +100,13 @@ bool Player::Update(float dt) {
 
 	// Teclas de debug / efectos visuales
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN) {
-		mechanics.EnableJump(true);
+		mechanics.GetHealthSystem()->AddLife();
 	}
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) {
-		mechanics.EnableDoubleJump(true);
+		mechanics.GetHealthSystem()->AddMaxLife();
 	}
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) {
-		mechanics.EnableDash(true);
+		mechanics.GetHealthSystem()->TakeDamage();
 	}
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) {
 		mechanics.ToggleGodMode();

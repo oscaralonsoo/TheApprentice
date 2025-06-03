@@ -9,11 +9,12 @@
 #include "GuiControl.h"
 #include "GuiManager.h"
 #include "MenuParticle.h"
+#include "VideoPlayer.h"
 #include <unordered_map> 
 #include <SDL2/SDL_gamecontroller.h>
 
 enum class MenusState {
-    NONE, INTRO, MAINMENU, GAME, PAUSE, SETTINGS, CREDITS, DEAD, GAMEOVER, EXIT, ABILITIES
+    NONE, INTRO, MAINMENU, GAME, PAUSE, SETTINGS, CREDITS, DEAD, GAMEOVER, EXIT, ABILITIES, PLAYING_VIDEO
 };
 
 struct ButtonInfo {
@@ -73,6 +74,7 @@ public:
     void AdjustVolume(int& sliderX, int minX, int maxX);
     void UpdateVolume(int sliderX, int minX, int maxX);
     void Credits();
+    void UpdateVideoPlayer();
     void CreateButton(const std::string& name, int startX, int startY, int buttonWidth, int buttonHeight, int index);
     void DrawButtons();
     void DrawCheckBox(const ButtonInfo& button, bool isSelected);
@@ -176,4 +178,6 @@ private:
     bool dpadRightHeld = false;
 
     std::vector<MenuParticle*> menuParticles;
+
+    VideoPlayer* videoPlayer = nullptr;
 };

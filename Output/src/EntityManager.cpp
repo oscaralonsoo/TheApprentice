@@ -164,11 +164,23 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::LIEBRE:
 		entity = new NPC(EntityType::LIEBRE);
 		break;
+	case EntityType::CARTA:
+		entity = new NPC(EntityType::CARTA);
+		break;
 	case EntityType::PANGOLIN:
 		entity = new NPC(EntityType::PANGOLIN);
 		break;
+	case EntityType::CARACOL:
+		entity = new NPC(EntityType::CARACOL);
+		break;
 	case EntityType::ARDILLA:
 		entity = new NPC(EntityType::ARDILLA);
+		break;
+	case EntityType::CARACOL_MAIL:
+		entity = new NPC(EntityType::CARACOL_MAIL);
+		break;
+	case EntityType::ARDILLA_LIANA:
+		entity = new NPC(EntityType::ARDILLA_LIANA);
 		break;
 	case EntityType::BICHOPALO:
 		entity = new NPC(EntityType::BICHOPALO);

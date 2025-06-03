@@ -132,6 +132,9 @@ bool Menus::PostUpdate() {
         DestroyAllParticles();
     }
     if (inTransition) ApplyTransitionEffect();
+
+    if (currentState == MenusState::PLAYING_VIDEO) UpdateVideoPlayer();
+
     return !isExit;
 
 }
@@ -178,6 +181,7 @@ void Menus::CheckCurrentState(float dt) {
     case MenusState::PAUSE: Pause(dt); break;
     case MenusState::SETTINGS: Settings(); break;
     case MenusState::CREDITS: Credits(); break;
+    case MenusState::PLAYING_VIDEO: break;
     case MenusState::EXIT: isExit = true; break;
     }
 }
@@ -224,7 +228,12 @@ void Menus::MainMenu(float dt) {
 }
 void Menus::NewGame() {
     isSaved = 0;
-    // Cargar documento XML
+    
+    videoPlayer = new VideoPlayer();
+    videoPlayer->Load("Assets/Cinematica/cinematica.mp4", Engine::GetInstance().render->renderer);
+    videoPlayer->Play();
+    StartTransition(false, MenusState::PLAYING_VIDEO);
+
     pugi::xml_document config;
     config.load_file(CONFIG_FILE.c_str());
 
@@ -252,10 +261,6 @@ void Menus::NewGame() {
     saveData.attribute("isSaved") = isSaved;
 
     config.save_file(CONFIG_FILE.c_str());
-
-    Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 2.0f, 1.0f);
-
-    StartTransition(false, MenusState::GAME);
 }
 
 void Menus::Pause(float dt) {
@@ -429,6 +434,21 @@ void Menus::Credits() {
         nextState = (previousState == MenusState::PAUSE) ? MenusState::PAUSE : previousState;
         inCredits = false;
         StartTransition(true, nextState);
+    }
+}
+void Menus::UpdateVideoPlayer() {
+    if (videoPlayer) {
+        bool videoFinished = !videoPlayer->Update();
+
+        if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) videoFinished = true;
+        
+        if (videoFinished) {
+            videoPlayer->CleanUp();
+            videoPlayer = nullptr;
+
+            Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 2.0f, 1.0f);
+            StartTransition(false, MenusState::GAME);
+        }
     }
 }
 void Menus::StartTransition(bool fast, MenusState newState) {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="180" height="63" tilewidth="64" tileheight="64" infinite="0" nextlayerid="72" nextobjectid="4882">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="180" height="63" tilewidth="64" tileheight="64" infinite="0" nextlayerid="72" nextobjectid="4901">
  <tileset firstgid="1" name="Fondo_cueva" tilewidth="64" tileheight="64" tilecount="480" columns="30">
   <image source="../Environment/Fondo_cueva.png" width="1920" height="1080"/>
  </tileset>
@@ -146,6 +146,9 @@
  </tileset>
  <tileset firstgid="43407" name="tiles_manglar" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_manglar.png" width="640" height="640"/>
+ </tileset>
+ <tileset firstgid="43507" name="gancho_araña" tilewidth="64" tileheight="64" tilecount="18" columns="9">
+  <image source="../Props/gancho_araña.png" width="576" height="190"/>
  </tileset>
  <layer id="44" name="Background" width="180" height="63" parallaxx="0" parallaxy="0">
   <properties>
@@ -82598,7 +82601,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="43514"/>
    <tile/>
    <tile/>
    <tile/>
@@ -83960,7 +83963,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="43512"/>
    <tile/>
    <tile/>
    <tile gid="41106"/>
@@ -86829,7 +86832,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="43514"/>
    <tile/>
    <tile/>
    <tile/>
@@ -88245,7 +88248,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="43408"/>
+   <tile gid="43512"/>
    <tile/>
    <tile/>
    <tile/>
@@ -88253,13 +88256,13 @@
    <tile gid="1073783013"/>
    <tile/>
    <tile/>
-   <tile gid="43408"/>
+   <tile gid="43512"/>
    <tile/>
    <tile/>
    <tile gid="1073783013"/>
    <tile/>
    <tile/>
-   <tile gid="43408"/>
+   <tile gid="43512"/>
    <tile/>
    <tile/>
    <tile/>
@@ -88416,7 +88419,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="43408"/>
+   <tile gid="43512"/>
    <tile gid="41191"/>
    <tile gid="41192"/>
    <tile gid="1073783023"/>
@@ -88780,7 +88783,7 @@
    <tile/>
    <tile/>
    <tile gid="2147524837"/>
-   <tile gid="1610656144"/>
+   <tile gid="1610656248"/>
    <tile/>
    <tile/>
    <tile/>
@@ -89324,7 +89327,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="2684397968"/>
+   <tile gid="2684398072"/>
    <tile gid="41181"/>
    <tile gid="41182"/>
    <tile gid="41183"/>
@@ -113700,7 +113703,7 @@
   <object id="4059" name="Box" x="1152" y="2880" width="64" height="64"/>
   <object id="4139" name="Box" x="3200" y="2944" width="64" height="64"/>
   <object id="4174" name="Geyser" x="3776" y="2560" width="128" height="64"/>
-  <object id="4381" name="LifePlantMax" x="2688" y="3072" width="64" height="64"/>
+  <object id="4381" name="LifePlantMax" x="2624" y="3072" width="64" height="64"/>
   <object id="4569" name="Box" x="8384" y="1088" width="64" height="64"/>
   <object id="4649" name="LifePlantMax" x="8640" y="1728" width="192" height="192"/>
  </objectgroup>
@@ -113904,6 +113907,25 @@
   <object id="4874" x="5952" y="1088" width="128"/>
   <object id="4875" x="6144" y="832" width="576"/>
   <object id="4876" x="6080" y="896" width="64"/>
+  <object id="4882" x="1792" y="960" width="320"/>
+  <object id="4883" x="1792" y="896" height="64"/>
+  <object id="4884" x="1280" y="896" width="512"/>
+  <object id="4885" x="1280" y="896" height="64"/>
+  <object id="4886" x="1216" y="960" width="64"/>
+  <object id="4887" x="1216" y="960" height="64"/>
+  <object id="4888" x="1088" y="1024" width="128"/>
+  <object id="4889" x="1088" y="1024" height="128"/>
+  <object id="4890" x="896" y="1152" width="192"/>
+  <object id="4891" x="896" y="1152" height="64"/>
+  <object id="4892" x="768" y="1216" width="128"/>
+  <object id="4893" x="768" y="1216" height="64"/>
+  <object id="4894" x="704" y="1280" width="64"/>
+  <object id="4895" x="704" y="1280" height="64"/>
+  <object id="4896" x="448" y="1344" width="256"/>
+  <object id="4897" x="448" y="1344" height="64"/>
+  <object id="4898" x="192" y="1408" width="256"/>
+  <object id="4899" x="192" y="1408" height="64"/>
+  <object id="4900" x="0" y="1472" width="192"/>
  </objectgroup>
  <objectgroup id="70" name="Zones">
   <object id="4368" name="HiddenZone" x="384" y="1152" width="1600" height="832"/>

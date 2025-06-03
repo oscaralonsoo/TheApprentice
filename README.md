@@ -38,6 +38,10 @@ The game includes debug tools for testing purposes:
 | F1      | Show / Hide Colliders               |
 | F2      | Show / Hide Pathfinding             |
 | F3      | Toggle God Mode                     |
+| F4      | Gain 1 live                         |
+| F5      | Gain 1 max live                     |
+| F6      | Lose 1 live                         |
+| F8      | Choose map                          |
 | F9      | Save Game                           |
 | F10     | Load Game                           |
 

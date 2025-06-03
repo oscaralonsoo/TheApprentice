@@ -44,7 +44,7 @@ bool Noctilume::Start() {
 
     originalPosition = position;
     smoothedPosition = position;
-    maxSteps = 12;
+    maxSteps = 20;
 
     soundAttackId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Noctilume/noctilume_attack.ogg", 1.0f);
     soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Noctilume/noctilume_death.ogg", 1.0f);

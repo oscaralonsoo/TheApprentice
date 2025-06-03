@@ -12,6 +12,7 @@ public:
     ~DungBeetleBall();
 
     bool Update(float dt) override;
+    bool PostUpdate();
     bool CleanUp() override;
     void OnCollision(PhysBody* physA, PhysBody* physB);
 
@@ -26,6 +27,7 @@ public:
 public:
     Animation* currentAnimation = nullptr;
     Animation destroyAnim;
+    bool destroyBall = false;
 private:
     SDL_Texture* texture = nullptr;
     PhysBody* pbody = nullptr;

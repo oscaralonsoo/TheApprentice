@@ -88,30 +88,24 @@ bool DungBeetle::Update(float dt) {
 }
 bool DungBeetle::PostUpdate() {
     if (currentState == DungBeetleState::HIT && currentAnimation == &deathAnim && currentAnimation->HasFinished()) {
-        pbody->body->GetFixtureList()->SetSensor(true);
-
-        for (auto it = dungBalls.begin(); it != dungBalls.end(); ) {
-            DungBeetleBall* ball = *it;
-            ball->currentAnimation = &ball->destroyAnim;
-            if (ball->currentAnimation == &ball->destroyAnim && ball->currentAnimation->HasFinished())
-            {
-                Engine::GetInstance().physics->DeletePhysBody(pbody);
-                it = dungBalls.erase(it);
-            }
-            else {
-           
-                ++it;
+            pbody->body->GetFixtureList()->SetSensor(true);
+        for (auto ball : dungBalls) {
+            if (ball->currentAnimation != &ball->destroyAnim) {
+                ball->currentAnimation = &ball->destroyAnim;
+                ball->destroyAnim.Reset();
             }
         }
 
         Engine::GetInstance().pressureSystem->OpenDoor(2);
         Engine::GetInstance().entityManager->DestroyEntity(this);
     }
+
     return true;
 }
 
 bool DungBeetle::CleanUp() {
-    return Enemy::CleanUp();
+    Engine::GetInstance().physics->DeletePhysBody(pbody);
+    return true;
 }
 void DungBeetle::OnCollision(PhysBody* physA, PhysBody* physB) {
 
@@ -313,8 +307,8 @@ void DungBeetle::CollisionNavigationLayer()
 
     b2Vec2 pos = pbody->body->GetPosition();
     Vector2D projected = Engine::GetInstance().map->WorldToMap(
-        METERS_TO_PIXELS(pos.x + vel.x * 2.0f),
-        METERS_TO_PIXELS(pos.y + vel.y * 2.0f)
+        METERS_TO_PIXELS(pos.x + vel.x),
+        METERS_TO_PIXELS(pos.y + vel.y)
     );
 
     if (projected != currentTileMap)

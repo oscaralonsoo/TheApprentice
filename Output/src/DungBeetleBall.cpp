@@ -38,7 +38,6 @@ DungBeetleBall::DungBeetleBall(float x, float y, float speed, b2Vec2 direction)
 
         pbody->body->SetLinearDamping(0.0f);
         pbody->body->SetAngularDamping(0.0f);
-        pbody->body->SetBullet(true);
     }
 
     pbody->body->SetLinearVelocity(b2Vec2(direction.x * speed, direction.y * speed));
@@ -46,7 +45,14 @@ DungBeetleBall::DungBeetleBall(float x, float y, float speed, b2Vec2 direction)
     currentAnimation = &idleAnim;
 }
 
-DungBeetleBall::~DungBeetleBall() {}
+DungBeetleBall::~DungBeetleBall() {
+    if (pbody) {
+        Engine::GetInstance().entityManager->DestroyEntity(this);
+        pbody = nullptr;
+    }
+    delete currentAnimation;
+    currentAnimation = nullptr;
+}
 
 bool DungBeetleBall::Update(float dt)
 {
@@ -84,11 +90,22 @@ bool DungBeetleBall::Update(float dt)
     previousPosition = currentPos;
     CollisionNavigationLayer();
 
+    return true;
+}
+bool DungBeetleBall::PostUpdate() {
+    if (currentAnimation == &destroyAnim) {
+        pbody->body->GetFixtureList()->SetSensor(true);
+        if (destroyAnim.HasFinished()) {
+            Engine::GetInstance().entityManager->DestroyEntity(this);
+        }
+    }
 
     return true;
 }
+
 bool DungBeetleBall::CleanUp()
 {
+    Engine::GetInstance().physics->DeletePhysBody(pbody);
     return true;
 }
 void DungBeetleBall::OnCollision(PhysBody* physA, PhysBody* physB)
@@ -172,4 +189,6 @@ void DungBeetleBall::CollisionNavigationLayer() {
 }
 bool DungBeetleBall::IsDestroyed() const {
     return currentAnimation == &destroyAnim && currentAnimation->HasFinished();
+    {
+    }
 }

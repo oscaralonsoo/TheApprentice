@@ -1235,6 +1235,16 @@
 						<frame x="128" y="0" w="128" h="128" />
 					</idle>
 				</caracol>
+				<caracolmail w="90" h="61" texture="Assets/NPC/mail.png">
+					<idle loop="false" speed="0">
+						<frame x="0" y="0" w="90" h="61" />
+					</idle>
+				</caracolmail>
+				<carta w="85" h="41" texture="Assets/NPC/carta.png">
+					<idle loop="false" speed="0">
+						<frame x="0" y="0" w="85" h="41" />
+					</idle>
+				</carta>
 			</npcs>
 			<abilities>
 				<ability type="Jump" w="144" h="144" texture="Assets/Props/huevosrana.png" />

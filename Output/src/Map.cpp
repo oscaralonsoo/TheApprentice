@@ -776,6 +776,10 @@ bool Map::Load(std::string path, std::string fileName)
                         npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PANGOLIN);
                     else if (npcName == "Ardilla")
                         npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ARDILLA);
+                    else if (npcName == "CaracolMail")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CARACOL_MAIL);
+                    else if (npcName == "Carta")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CARTA);
                     else if (npcName == "ArdillaLiana")
                         npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ARDILLA_LIANA);
                     else if (npcName == "Caracol")

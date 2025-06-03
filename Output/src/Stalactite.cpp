@@ -55,7 +55,7 @@ bool Stalactite::Start() {
     }
 
     triggerZone = { (int)position.getX() - 20, (int)position.getY() + texH, texW + 40, 800 };
-
+    pbody->body->GetFixtureList()->SetSensor(true);
     currentAnimation = &idleAnim;
 
     return true;
@@ -78,6 +78,7 @@ bool Stalactite::Update(float dt) {
         break;
 
     case StalactiteState::FALLING:
+        pbody->body->GetFixtureList()->SetSensor(false);
         currentAnimation = &fallAnim;
         if (velocity.y == 0.0f) {
             pbody->body->ApplyForceToCenter(b2Vec2(0, 0.1f), true);
@@ -129,9 +130,11 @@ bool Stalactite::CleanUp() {
 void Stalactite::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype)
     {
+    case ColliderType::PLAYER:
+            state = StalactiteState::SPLASHED;
+        break;
     case ColliderType::PLATFORM:
     case ColliderType::ATTACK:
-    case ColliderType::PLAYER:
     case ColliderType::WALL:
     case ColliderType::DOOR:
     case ColliderType::ENEMY:

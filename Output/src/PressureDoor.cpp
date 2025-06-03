@@ -80,6 +80,10 @@ bool PressureDoor::Update(float dt)
             Vector2D positionWorld = Engine::GetInstance().map->WorldToMap(position.x, position.y);
             Engine::GetInstance().map.get()->SetNavigationTileRegion(positionWorld.x, positionWorld.y, width / 64, height / 64, 1);
         }
+        if (!IsOverlapping())
+        {
+            pbody->body->GetFixtureList()->SetSensor(false);
+        }
         if (currentAnimation->HasFinished()) state = PressureDoorState::IDLE;
 
         break;

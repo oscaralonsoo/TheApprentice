@@ -70,8 +70,6 @@ void JumpMechanic::HandleJumpInput(float dt) {
         controllerHeldPreviously = controllerPressed;
     }
 
-    LOG("Intentando saltar. jumpDown=%d, jumpCount=%d, isOnGround=%d", jumpDown, jumpCount, player->GetMechanics()->IsOnGround());
-
     // Iniciar salto
     if (jumpDown) {
         if (wallJumpUnlocked && player->GetMechanics()->IsWallSliding()) {

@@ -96,7 +96,17 @@ void Creebler::Walk() {
     int frontX = posMap.x + direction;
     int frontY = posMap.y + 1;
 
-    MapLayer* layer = Engine::GetInstance().map.get()->GetNavigationLayer();
+    MapLayer* layer = nullptr;
+
+    if (!navigationLayerName.empty()) {
+        layer = Engine::GetInstance().map->GetNavigationLayerByName(navigationLayerName);
+    }
+    else {
+        layer = Engine::GetInstance().map->GetNavigationLayer();
+    }
+
+    if (!layer) return; // fallback de seguridad
+
 
     if (navigationId)
     {

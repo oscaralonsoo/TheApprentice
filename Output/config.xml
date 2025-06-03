@@ -1041,36 +1041,54 @@
 				</firefly>
 			</particles>
 			<npcs>
-				<castor w="336" h="164" texture="Assets/NPC/castor.png">
-					<idle loop="true" speed="0.2">
-						<frame x="0" y="0" w="336" h="164" />
+				<castor w="326" h="164" texture="Assets/NPC/castor.png">
+					<idle loop="true" speed="0.14">
+						<frame x="0" y="0" w="326" h="164" />
+						<frame x="326" y="0" w="326" h="164" />
+						<frame x="652" y="0" w="326" h="164" />
+						<frame x="978" y="0" w="326" h="164" />
+						<frame x="1304" y="0" w="326" h="164" />
+						<frame x="1630" y="0" w="326" h="164" />
+						<frame x="1956" y="0" w="326" h="164" />
+						<frame x="2282" y="0" w="326" h="164" />
+						<frame x="2608" y="0" w="326" h="164" />
+						<frame x="2934" y="0" w="326" h="164" />
 					</idle>
 				</castor>
-				<liebre w="180" h="180" texture="Assets/NPC/liebre.png">
+				<liebre w="180" h="191" texture="Assets/NPC/liebre.png">
 					<idle loop="true" speed="0.2">
-						<frame x="0" y="0" w="180" h="180" />
-						<frame x="180" y="0" w="180" h="180" />
-						<frame x="360" y="0" w="180" h="180" />
-						<frame x="540" y="0" w="180" h="180" />
-						<frame x="720" y="0" w="180" h="180" />
-						<frame x="900" y="0" w="180" h="180" />
-						<frame x="1080" y="0" w="180" h="180" />
-						<frame x="900" y="0" w="180" h="180" />
-						<frame x="720" y="0" w="180" h="180" />
-						<frame x="540" y="0" w="180" h="180" />
-						<frame x="360" y="0" w="180" h="180" />
-						<frame x="180" y="0" w="180" h="180" />
+						<frame x="0" y="0" w="180" h="191" />
+						<frame x="180" y="0" w="180" h="191" />
+						<frame x="360" y="0" w="180" h="191" />
+						<frame x="540" y="0" w="180" h="191" />
+						<frame x="720" y="0" w="180" h="191" />
+						<frame x="900" y="0" w="180" h="191" />
+						<frame x="1080" y="0" w="180" h="191" />
+						<frame x="0" y="191" w="180" h="191" />
+						<frame x="180" y="191" w="180" h="191" />
+						<frame x="360" y="191" w="180" h="191" />
+						<frame x="540" y="191" w="180" h="191" />
+						<frame x="720" y="191" w="180" h="191" />
+						<frame x="900" y="191" w="180" h="191" />
+						<frame x="1080" y="191" w="180" h="191" />
 					</idle>
 				</liebre>
-				<perdiz w="236" h="225" texture="Assets/NPC/perdiz.png">
+				<perdiz w="210" h="200" texture="Assets/NPC/perdiz.png">
 					<idle loop="true" speed="0.2">
-						<frame x="0" y="0" w="236" h="225" />
-						<frame x="236" y="0" w="236" h="225" />
-						<frame x="472" y="0" w="236" h="225" />
-						<frame x="708" y="0" w="236" h="225" />
-						<frame x="944" y="0" w="236" h="225" />
-						<frame x="1180" y="0" w="236" h="225" />
-						<frame x="1416" y="0" w="236" h="225" />
+						<frame x="0" y="0" w="210" h="200" />
+						<frame x="210" y="0" w="210" h="200" />
+						<frame x="420" y="0" w="210" h="200" />
+						<frame x="630" y="0" w="210" h="200" />
+						<frame x="840" y="0" w="210" h="200" />
+						<frame x="1050" y="0" w="210" h="200" />
+						<frame x="1260" y="0" w="210" h="200" />
+						<frame x="0" y="200" w="210" h="200" />
+						<frame x="210" y="200" w="210" h="200" />
+						<frame x="420" y="200" w="210" h="200" />
+						<frame x="630" y="200" w="210" h="200" />
+						<frame x="840" y="200" w="210" h="200" />
+						<frame x="1050" y="200" w="210" h="200" />
+						<frame x="1260" y="200" w="210" h="200" />
 					</idle>
 				</perdiz>
 				<pangolin w="512" h="512" texture="Assets/NPC/pangolin.png">
@@ -1128,7 +1146,7 @@
 					</idle>
 				</pangolin>
 				<ardilla w="256" h="256" texture="Assets/NPC/ardilla.png">
-					<idle loop="true" speed="0.2">
+					<idle loop="true" speed="0.23">
 						<frame x="0" y="0" w="256" h="256" />
 						<frame x="0" y="0" w="256" h="256" />
 						<frame x="0" y="0" w="256" h="256" />
@@ -1178,6 +1196,55 @@
 						<frame x="256" y="1024" w="256" h="256" />
 					</idle>
 				</ardilla>
+				<ardillaliana w="256" h="512" texture="Assets/NPC/ardillaLiana.png">
+					<idle loop="true" speed="0.15">
+						<frame x="0" y="0" w="256" h="512" />
+						<frame x="0" y="512" w="256" h="512" />
+						<frame x="256" y="512" w="256" h="512" />
+						<frame x="512" y="512" w="256" h="512" />
+						<frame x="768" y="512" w="256" h="512" />
+						<frame x="1024" y="512" w="256" h="512" />
+						<frame x="0" y="1024" w="256" h="512" />
+						<frame x="256" y="1024" w="256" h="512" />
+						<frame x="512" y="1024" w="256" h="512" />
+						<frame x="768" y="1024" w="256" h="512" />
+						<frame x="1024" y="1024" w="256" h="512" />
+						<frame x="0" y="1536" w="256" h="512" />
+						<frame x="256" y="1536" w="256" h="512" />
+						<frame x="512" y="1536" w="256" h="512" />
+						<frame x="768" y="1536" w="256" h="512" />
+						<frame x="1024" y="1536" w="256" h="512" />
+						<frame x="0" y="2048" w="256" h="512" />
+						<frame x="256" y="2048" w="256" h="512" />
+						<frame x="512" y="2048" w="256" h="512" />
+						<frame x="768" y="2048" w="256" h="512" />
+						<frame x="1024" y="2048" w="256" h="512" />
+					</idle>
+				</ardillaliana>
+				<caracol w="128" h="128" texture="Assets/NPC/caracol.png">
+					<idle loop="true" speed="0.13">
+						<frame x="0" y="0" w="128" h="128" />
+						<frame x="128" y="0" w="128" h="128" />
+						<frame x="256" y="0" w="128" h="128" />
+						<frame x="384" y="0" w="128" h="128" />
+						<frame x="512" y="0" w="128" h="128" />
+						<frame x="640" y="0" w="128" h="128" />
+						<frame x="512" y="0" w="128" h="128" />
+						<frame x="384" y="0" w="128" h="128" />
+						<frame x="256" y="0" w="128" h="128" />
+						<frame x="128" y="0" w="128" h="128" />
+					</idle>
+				</caracol>
+				<caracolmail w="90" h="61" texture="Assets/NPC/mail.png">
+					<idle loop="false" speed="0">
+						<frame x="0" y="0" w="90" h="61" />
+					</idle>
+				</caracolmail>
+				<carta w="85" h="41" texture="Assets/NPC/carta.png">
+					<idle loop="false" speed="0">
+						<frame x="0" y="0" w="85" h="41" />
+					</idle>
+				</carta>
 			</npcs>
 			<abilities>
 				<ability type="Jump" w="144" h="144" texture="Assets/Props/huevosrana.png" />

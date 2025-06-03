@@ -15,16 +15,16 @@ void GodModeSystem::Update(float dt) {
     b2Vec2 velocity = { 0.0f, 0.0f };
 
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
-        velocity.y = -8.0f;
+        velocity.y = -16.0f;
     }
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
-        velocity.y = 8.0f;
+        velocity.y = 16.0f;
     }
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-        velocity.x = -8.0f;
+        velocity.x = -16.0f;
     }
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-        velocity.x = 8.0f;
+        velocity.x = 16.0f;
     }
 
     player->pbody->body->SetGravityScale(0.0f);

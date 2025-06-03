@@ -560,15 +560,15 @@
 						<frame x="768" y="0" w="192" h="128" />
 						<frame x="960" y="0" w="192" h="128" />
 					</idle>
-					<shooting loop="true" speed="0.1">
-						<frame x="0" y="0" w="192" h="128" />
-						<frame x="192" y="0" w="192" h="128" />
-						<frame x="384" y="0" w="192" h="128" />
-						<frame x="576" y="0" w="192" h="128" />
-						<frame x="768" y="0" w="192" h="128" />
-						<frame x="960" y="0" w="192" h="128" />
+					<shooting loop="false" speed="0.15">
+						<frame x="0" y="128" w="192" h="128" />
+						<frame x="192" y="128" w="192" h="128" />
+						<frame x="384" y="128" w="192" h="128" />
+						<frame x="576" y="128" w="192" h="128" />
+						<frame x="768" y="128" w="192" h="128" />
+						<frame x="960" y="128" w="192" h="128" />
 					</shooting>
-					<die loop="false" speed="0.1">
+					<die loop="false" speed="0.15">
 						<frame x="0" y="256" w="192" h="128" />
 						<frame x="192" y="256" w="192" h="128" />
 						<frame x="384" y="256" w="192" h="128" />

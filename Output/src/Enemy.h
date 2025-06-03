@@ -61,7 +61,7 @@ public:
 	int steps = 0;
 	int maxSteps = 30;
 	PhysBody* pbody = nullptr;
-	bool upsiteDown = false;
+	int rotationAngle = 0;
 
 protected:
 	Pathfinding* pathfinding;

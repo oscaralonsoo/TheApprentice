@@ -66,14 +66,14 @@ bool Enemy::Update(float dt)
 
 	SDL_RendererFlip flip = SDL_FLIP_NONE;
 	if (direction > 0) flip = (SDL_RendererFlip)(flip | SDL_FLIP_HORIZONTAL);
-	if (upsiteDown)    flip = (SDL_RendererFlip)(flip | SDL_FLIP_VERTICAL);
+	if (rotationAngle == 180)    flip = (SDL_RendererFlip)(flip | SDL_FLIP_NONE);
 
 	Engine::GetInstance().render.get()->DrawTexture(texture,
 		(int)position.getX(),
 		(int)position.getY() - 15,
 		&currentAnimation->GetCurrentFrame(),
 		1.0f,
-		0.0,
+		(double)rotationAngle,
 		INT_MAX,
 		INT_MAX,
 		flip,

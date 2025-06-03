@@ -727,8 +727,8 @@ bool Map::Load(std::string path, std::string fileName)
                         {
                             std::string propertyName = propertyNode.attribute("name").as_string();
 
-                            if (propertyName == "upsiteDown")
-                                enemy->upsiteDown = propertyNode.attribute("value").as_bool();
+                            if (propertyName == "rotationAngle")
+                                enemy->rotationAngle = propertyNode.attribute("value").as_int();
                         }
                     }
                     else if (enemyName == "DungBeetle") {

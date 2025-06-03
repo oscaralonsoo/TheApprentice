@@ -46,10 +46,7 @@ DungBeetleBall::DungBeetleBall(float x, float y, float speed, b2Vec2 direction)
     currentAnimation = &idleAnim;
 }
 
-DungBeetleBall::~DungBeetleBall()
-{
-   
-}
+DungBeetleBall::~DungBeetleBall() {}
 
 bool DungBeetleBall::Update(float dt)
 {
@@ -90,15 +87,12 @@ bool DungBeetleBall::Update(float dt)
 
     return true;
 }
-
 bool DungBeetleBall::CleanUp()
 {
-    Engine::GetInstance().physics->DeletePhysBody(pbody);
     return true;
 }
 void DungBeetleBall::OnCollision(PhysBody* physA, PhysBody* physB)
 {
-
     switch (physB->ctype)
     {
     case ColliderType::ATTACK:

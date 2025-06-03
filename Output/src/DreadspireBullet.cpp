@@ -89,6 +89,8 @@ void DreadspireBullet::OnCollision(PhysBody* physA, PhysBody* physB)
     case ColliderType::SPIKE:
     case ColliderType::BOX:
     case ColliderType::PLAYER:
+    case ColliderType::ENEMY:
+    case ColliderType::PLAYER_DAMAGE:
         Engine::GetInstance().entityManager->DestroyEntity(this);
         break;
     default:

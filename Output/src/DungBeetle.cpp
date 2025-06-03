@@ -81,11 +81,13 @@ bool DungBeetle::PostUpdate() {
         for (auto it = dungBalls.begin(); it != dungBalls.end(); ) {
             DungBeetleBall* ball = *it;
             ball->currentAnimation = &ball->destroyAnim;
-            if (ball->IsDestroyed()) {
-                Engine::GetInstance().entityManager->DestroyEntity(ball);
+            if (ball->currentAnimation == &ball->destroyAnim && ball->currentAnimation->HasFinished())
+            {
+                Engine::GetInstance().physics->DeletePhysBody(pbody);
                 it = dungBalls.erase(it);
             }
             else {
+           
                 ++it;
             }
         }

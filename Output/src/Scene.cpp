@@ -215,7 +215,6 @@ void Scene::ChangeScene(int nextScene)
 				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 2.0f, 1.0f);
 				break;
 			case 21:
-				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/manglar_music.ogg", 2.0f, 1.0f);
 				break;
 			case 41:
 				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/snowforest_music.ogg", 2.0f, 1.0f);

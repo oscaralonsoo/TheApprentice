@@ -91,6 +91,7 @@ public:
     MenusState currentState = MenusState::INTRO;
     MenusState nextState = MenusState::NONE;
     MenusState previousState = MenusState::NONE;
+    bool loadSaveOnNextGame = false;
 
     bool isPaused = false;
     bool isExit = false;
@@ -102,6 +103,7 @@ public:
     bool drawingAbilityBackground = false;
     int isSaved = 0;
     int selectedButton = 0;
+    int sceneIndex = 0;
     std::vector<ButtonInfo> buttons;
     std::vector<std::string> buttonNames;
     std::string abilityName;

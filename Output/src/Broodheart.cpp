@@ -8,6 +8,7 @@
 #include "Entity.h"
 #include "Log.h"
 #include "Audio.h"
+#include <algorithm>
 
 constexpr int MAX_BROODS = 4;
 constexpr int BROODS_PER_SPAWN = 1;

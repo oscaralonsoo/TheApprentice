@@ -52,7 +52,7 @@ bool Scene::Awake()
 bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
-	nextScene = 99;
+	nextScene = 1;
 	Engine::GetInstance().map->Load("Assets/Maps/", "Map" + std::to_string(nextScene) + ".tmx");
 
 	return true;
@@ -65,20 +65,23 @@ bool Scene::PreUpdate()
 
 bool Scene::Update(float dt)
 {
-	if (Engine::GetInstance().menus->currentState != MenusState::GAME)
+	if (Engine::GetInstance().menus->currentState != MenusState::GAME || isLoading) {
 		return true;
+	}
 
 	if (pendingLoadAfterDeath) {
 		pendingLoadAfterDeath = false;
 		LoadGameXML();
 	}
 
+	// Actualizar la cámara y renderizar la nueva escena
+	Engine::GetInstance().render.get()->UpdateCamera(player->GetPosition(), player->GetMovementDirection(), 0.05);
+	VignetteChanges(dt);
+
+	// Realizar la transición entre escenas
 	UpdateTransition(dt);
 
-	Engine::GetInstance().render.get()->UpdateCamera(player->GetPosition(), player->GetMovementDirection(), 0.05);
-	
-	float camSpeed = 1;
-
+	// Manejar la lógica del juego
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
 		ChangeScene(nextScene + 1);
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
@@ -94,14 +97,15 @@ bool Scene::Update(float dt)
 		SaveGameXML();
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 		LoadGameXML();
-	VignetteChanges(dt);
+
 	return true;
 }
+
 
 // Called each loop iteration
 bool Scene::PostUpdate()
 {
-	bool ret = true;
+	if (isLoading) return true;
 
 	if (transitioning) {
 		SDL_SetRenderDrawBlendMode(Engine::GetInstance().render->renderer, SDL_BLENDMODE_BLEND);
@@ -127,7 +131,7 @@ bool Scene::PostUpdate()
 		pendingLoadAfterDeath = true;
 		isChangingScene = true;
 	}
-	return ret;
+	return true;
 }
 
 // Called before quitting
@@ -188,7 +192,7 @@ void Scene::UpdateTransition(float dt)
 void Scene::ChangeScene(int nextScene)
 {
 	LOG("Cambiando a escena: %d", nextScene);
-	Engine::GetInstance().map->CleanUp(); 	// CleanUp of the previous Map
+	Engine::GetInstance().map->CleanUp();  // CleanUp of the previous Map
 	if (hookManager) {
 		hookManager->ClearHooks();
 		SetActiveHook(nullptr);
@@ -206,13 +210,6 @@ void Scene::ChangeScene(int nextScene)
 
 		if (!path.empty() && !name.empty()) {
 			Engine::GetInstance().map->Load(path, name);
-
-			if (!isLoading)
-			{
-				player->pbody->body->SetLinearVelocity(b2Vec2(0, 0)); 
-				player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, (newPosition.y)/ PIXELS_PER_METER), 0);
-			}
-
 			switch (nextScene) {
 			case 0:
 				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 2.0f, 1.0f);
@@ -243,10 +240,9 @@ void Scene::ChangeScene(int nextScene)
 				pugi::xml_node playerParams = configParameters.child("animations").child("player");
 				player->SetParameters(playerParams);
 
-				// Recarga la textura manualmente
+
 				SDL_Texture* newTexture = Engine::GetInstance().textures->Load(playerParams.attribute("texture").as_string());
 
-				// Recarga las animaciones con una NUEVA instancia de PlayerAnimation
 				PlayerAnimation* anim = new PlayerAnimation();
 				anim->SetPlayer(player);
 				anim->LoadAnimations(playerParams, newTexture);
@@ -257,6 +253,9 @@ void Scene::ChangeScene(int nextScene)
 				player->GetAnimation()->ForceSetState("idle");
 
 				player->GetMechanics()->GetMovementHandler()->pendingLandingCheck = true;
+
+				player->pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+				player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, (newPosition.y) / PIXELS_PER_METER), 0);
 			}
 		}
 	}
@@ -367,10 +366,7 @@ void Scene::LoadGameXML() {
 		if (sceneNode) {
 			int savedScene = sceneNode.attribute("actualScene").as_int();
 			nextScene = savedScene;
-			if (!pendingLoadWithTransition) {
-				pendingLoadWithTransition = true;
-				StartTransition(savedScene);
-			}
+			ChangeScene(savedScene);
 		}
 		// Cargar configuración de audio
 		pugi::xml_node audioNode = config.child("config").child("audio");
@@ -385,6 +381,7 @@ void Scene::LoadGameXML() {
 		}
 		isChangingScene = false;
 	}
+	isLoading = false;
 }
 void Scene::Vignette(int size, float strength, SDL_Color color)
 {

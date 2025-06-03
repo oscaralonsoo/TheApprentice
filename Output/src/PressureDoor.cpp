@@ -80,12 +80,16 @@ bool PressureDoor::Update(float dt)
             Vector2D positionWorld = Engine::GetInstance().map->WorldToMap(position.x, position.y);
             Engine::GetInstance().map.get()->SetNavigationTileRegion(positionWorld.x, positionWorld.y, width / 64, height / 64, 1);
         }
+        if (!IsOverlapping())
+        {
+            pbody->body->GetFixtureList()->SetSensor(false);
+        }
         if (currentAnimation->HasFinished()) state = PressureDoorState::IDLE;
 
         break;
     case PressureDoorState::IDLE:
         if (currentAnimation != &idleAnim) currentAnimation = &idleAnim;
-        if (isOverlappingSomething == 0)
+        if (!IsOverlapping())
         {
             pbody->body->GetFixtureList()->SetSensor(false);
         }
@@ -161,19 +165,17 @@ void PressureDoor::CheckStartState() {
 
 void PressureDoor::OnCollision(PhysBody* physA, PhysBody* physB)
 {
-    switch (physB->ctype)
-    {
-    default:
-        isOverlappingSomething++;
-        break;
-    }
 }
 
 void PressureDoor::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
-    switch (physB->ctype)
-    {
-    default:
-        isOverlappingSomething--;
-        break;
+}
+
+bool PressureDoor::IsOverlapping() {
+    for (b2ContactEdge* edge = pbody->body->GetContactList(); edge; edge = edge->next) {
+        b2Contact* contact = edge->contact;
+        if (contact->IsTouching()) {
+            return true;
+        }
     }
+    return false;
 }

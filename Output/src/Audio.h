@@ -45,6 +45,8 @@ public:
 
 	int PlayFxReturnChannel(int fxId, float relativeVolume, int repeat);
 
+	void StopMusic();
+
 	Mix_Chunk* GetFx(int id) const;
 
 	bool Save(pugi::xml_node& config) ;

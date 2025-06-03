@@ -20,7 +20,7 @@ public:
     bool Awake() override;
     bool Start() override;
     bool Update(float dt) override;
-    bool PostUpdate(float dt);
+    bool PostUpdate();
     bool CleanUp() override;
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
 
@@ -37,7 +37,7 @@ public:
 private:
     bool isDead = false;
     Broodheart* broodHeart = nullptr;
-
+    Vector2D playerPos;
     Vector2D initialPosition;   
     float returnSpeed = 0.1f;   
     bool returningToHeart = false;
@@ -46,7 +46,8 @@ private:
     float distanceToPlayer = 0.0f;
     const float detectRange = 1280.0f;
     float returningSpeed = 0.2f;
-    Vector2D direction = { 0, 0 };
+    int direction = 1;
+    Vector2D nextDirection = { 0, 0 };
 
     BroodState currentState = BroodState::IDLE;
 

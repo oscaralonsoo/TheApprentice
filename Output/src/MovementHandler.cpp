@@ -156,7 +156,9 @@ void MovementHandler::Update(float dt) {
         SetHookUnlocked(true);
         LOG("Hook habilitado");
     }
-    // Activa el modo cámara fija y ve más mundo (FOV ampliado)
+    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_8) == KEY_DOWN) {
+        Engine::GetInstance().render.get()->ToggleCameraLock();
+    }
 
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
         player->GetMechanics()->GetMovementHandler()->pendingLandingCheck = false;
@@ -293,6 +295,7 @@ void MovementHandler::SetCanAttack(bool canAttack) {
 
 void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
+    case ColliderType::DOOR:
     case ColliderType::PLATFORM:
     {
         lastPlatformCollider = physB;
@@ -342,6 +345,7 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::DOWN_CAMERA:
         if (!downCameraCooldownActive) {
+            LOG("DOWN_CAMERA collision detected, moviendo cámara abajo");
             Engine::GetInstance().render->SetExtraCameraOffsetY(- 100); // o el valor que necesites
         }
         break;
@@ -387,6 +391,7 @@ void MovementHandler::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     case ColliderType::DESTRUCTIBLE_WALL:
         break;
     case ColliderType::DOWN_CAMERA:
+        LOG("DOWN_CAMERA collision ended, reseteando offset cámara");
         Engine::GetInstance().render->SetExtraCameraOffsetY(0);
         downCameraCooldownTimer.Start();
         downCameraCooldownActive = true;

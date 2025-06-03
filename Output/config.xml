@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+ÑÑ<?xml version="1.0"?>
 <config>
 	<engine>
 		<title>TheApprentice</title>
@@ -490,45 +490,65 @@
 						<frame x="840" y="240" w="120" h="120" />
 					</death>
 				</enemy>
-				<enemy type="Broodheart" w="220" h="144" texture="Assets/Enemies/broodheart.png">
-					<idle loop="true" speed="0.075">
-						<frame x="0" y="0" w="220" h="144" />
-						<frame x="250" y="0" w="220" h="144" />
-						<frame x="501" y="0" w="220" h="144" />
-						<frame x="0" y="144" w="220" h="144" />
-						<frame x="501" y="0" w="220" h="144" />
-						<frame x="250" y="0" w="220" h="144" />
+				<enemy type="Broodheart" w="240" h="160" texture="Assets/Enemies/broodheart.png">
+					<idle loop="true" speed="0.15">
+						<frame x="0" y="0" w="240" h="160" />
+						<frame x="240" y="0" w="240" h="160" />
+						<frame x="480" y="0" w="240" h="160" />
+						<frame x="0" y="160" w="240" h="160" />
+						<frame x="240" y="160" w="240" h="160" />
+						<frame x="480" y="160" w="240" h="160" />
+						<frame x="240" y="160" w="240" h="160" />
+						<frame x="0" y="160" w="240" h="160" />
+						<frame x="480" y="0" w="240" h="160" />
+						<frame x="240" y="0" w="240" h="160" />
 					</idle>
 					<spawn loop="false" speed="0.1">
-						<frame x="0" y="0" w="220" h="144" />
-						<frame x="250" y="0" w="220" h="144" />
-						<frame x="501" y="0" w="220" h="144" />
-						<frame x="0" y="144" w="220" h="144" />
-						<frame x="252" y="144" w="220" h="144" />
-						<frame x="502" y="144" w="220" h="144" />
-						<frame x="0" y="288" w="220" h="144" />
-						<frame x="250" y="288" w="220" h="144" />
+						<frame x="0" y="0" w="240" h="160" />
+						<frame x="240" y="0" w="240" h="160" />
+						<frame x="480" y="0" w="240" h="160" />
+						<frame x="0" y="160" w="240" h="160" />
+						<frame x="240" y="160" w="240" h="160" />
+						<frame x="480" y="160" w="240" h="160" />
+						<frame x="0" y="320" w="240" h="160" />
+						<frame x="240" y="320" w="240" h="160" />
+						<frame x="480" y="320" w="240" h="160" />
+						<frame x="240" y="320" w="240" h="160" />
+						<frame x="0" y="320" w="240" h="160" />
+						<frame x="480" y="160" w="240" h="160" />
+						<frame x="240" y="160" w="240" h="160" />
+						<frame x="0" y="160" w="240" h="160" />
+						<frame x="480" y="0" w="240" h="160" />
+						<frame x="240" y="0" w="240" h="160" />
 					</spawn>
 					<death>
-						<frame x="0" y="0" w="220" h="144" />
-						<frame x="0" y="0" w="220" h="144" />
-						<frame x="0" y="0" w="220" h="144" />
-						<frame x="0" y="0" w="220" h="144" />
+						<frame x="0" y="480" w="240" h="160" />
+						<frame x="240" y="480" w="240" h="160" />
+						<frame x="480" y="480" w="240" h="160" />
+						<frame x="720" y="480" w="240" h="160" />
+						<frame x="960" y="480" w="240" h="160" />
 					</death>
 				</enemy>
-				<enemy type="Brood" w="32" h="32" texture="Assets/Enemies/brood.png">
+				<enemy type="Brood" w="64" h="64" texture="Assets/Enemies/brood.png">
+					<spawn loop="true" speed="0.1">
+						<frame x="0" y="64" w="64" h="64" />
+						<frame x="64" y="64" w="64" h="64" />
+						<frame x="128" y="64" w="64" h="64" />
+						<frame x="192" y="64" w="64" h="64" />
+					</spawn>
 					<flying loop="true" speed="0.1">
-						<frame x="0" y="0" w="32" h="32" />
-						<frame x="0" y="0" w="32" h="32" />
-						<frame x="0" y="0" w="32" h="32" />
-						<frame x="0" y="0" w="32" h="32" />
-						<frame x="0" y="0" w="32" h="32" />
+						<frame x="0" y="0" w="64" h="64" />
+						<frame x="64" y="0" w="64" h="64" />
+						<frame x="128" y="0" w="64" h="64" />
+						<frame x="192" y="0" w="64" h="64" />
+						<frame x="256" y="0" w="64" h="64" />
+						<frame x="320" y="0" w="64" h="64" />
 					</flying>
-					<death loop="false" speed="0.1">
-						<frame x="0" y="0" w="32" h="32" />
-						<frame x="0" y="0" w="32" h="32" />
-						<frame x="0" y="0" w="32" h="32" />
-						<frame x="0" y="0" w="32" h="32" />
+					<death loop="false" speed="0.05">
+						<frame x="0" y="256" w="64" h="64" />
+						<frame x="64" y="256" w="64" h="64" />
+						<frame x="128" y="256" w="64" h="64" />
+						<frame x="192" y="256" w="64" h="64" />
 					</death>
 				</enemy>
 				<enemy type="Dreadspire" w="192" h="128" texture="Assets/Enemies/dreadspire.png">
@@ -540,15 +560,15 @@
 						<frame x="768" y="0" w="192" h="128" />
 						<frame x="960" y="0" w="192" h="128" />
 					</idle>
-					<shooting loop="true" speed="0.1">
-						<frame x="0" y="0" w="192" h="128" />
-						<frame x="192" y="0" w="192" h="128" />
-						<frame x="384" y="0" w="192" h="128" />
-						<frame x="576" y="0" w="192" h="128" />
-						<frame x="768" y="0" w="192" h="128" />
-						<frame x="960" y="0" w="192" h="128" />
+					<shooting loop="false" speed="0.15">
+						<frame x="0" y="128" w="192" h="128" />
+						<frame x="192" y="128" w="192" h="128" />
+						<frame x="384" y="128" w="192" h="128" />
+						<frame x="576" y="128" w="192" h="128" />
+						<frame x="768" y="128" w="192" h="128" />
+						<frame x="960" y="128" w="192" h="128" />
 					</shooting>
-					<die loop="false" speed="0.1">
+					<die loop="false" speed="0.15">
 						<frame x="0" y="256" w="192" h="128" />
 						<frame x="192" y="256" w="192" h="128" />
 						<frame x="384" y="256" w="192" h="128" />
@@ -1055,6 +1075,26 @@
 						<frame x="2934" y="0" w="326" h="164" />
 					</idle>
 				</castor>
+				<bichopalo w="384" h="215" texture="Assets/NPC/Bichopalo.png">
+					<idle loop="true" speed="0.4">
+						<frame x="0" y="0" w="384" h="215" />
+						<frame x="384" y="0" w="384" h="215" />
+						<frame x="768" y="0" w="384" h="215" />
+						<frame x="1152" y="0" w="384" h="215" />
+						<frame x="1536" y="0" w="384" h="215" />
+						<frame x="1920" y="0" w="384" h="215" />
+						<frame x="2304" y="0" w="384" h="215" />
+						<frame x="2688" y="0" w="384" h="215" />
+						<frame x="3072" y="0" w="384" h="215" />
+						<frame x="3456" y="0" w="384" h="215" />
+						<frame x="3840" y="0" w="384" h="215" />
+						<frame x="4224" y="0" w="384" h="215" />
+						<frame x="4608" y="0" w="384" h="215" />
+						<frame x="4992" y="0" w="384" h="215" />
+						<frame x="5376" y="0" w="384" h="215" />
+						<frame x="5760" y="0" w="384" h="215" />
+					</idle>
+				</bichopalo>
 				<liebre w="180" h="191" texture="Assets/NPC/liebre.png">
 					<idle loop="true" speed="0.2">
 						<frame x="0" y="0" w="180" h="191" />
@@ -1252,10 +1292,10 @@
 				<ability type="Dash" w="124" h="124" texture="Assets/Textures/Abilities/jump.png" />
 			</abilities>
 		</animations>
-		<save_data isSaved="0">
-			<player x="1152" y="970" w="44" h="54" lives="2" maxlives="3" />
+		<save_data isSaved="1">
+			<player x="3929" y="1766" w="44" h="54" lives="3" maxlives="3" />
 			<abilities jump="false" doublejump="false" dash="false" />
-			<scene actualScene="1" />
+			<scene actualScene="21" />
 			<enemies />
 		</save_data>
 	</scene>

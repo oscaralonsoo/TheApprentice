@@ -42,7 +42,7 @@ bool DungBeetle::Start() {
         }
     }
 
-    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texW / 2, (int)position.getY() + texH / 1.5, texW/ 1.5, texH/1.5, bodyType::STATIC);
+    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texW / 2, (int)position.getY() + texH / 1.5, texW / 1.5, texH / 1.5, bodyType::STATIC);
 
     if (pbody && pbody->body) {
         b2Fixture* fixture = pbody->body->GetFixtureList();
@@ -74,22 +74,24 @@ bool DungBeetle::Update(float dt) {
     CollisionNavigationLayer();
     return Enemy::Update(dt);
 }
-
 bool DungBeetle::PostUpdate() {
-    if (currentState == DungBeetleState::HIT && currentAnimation->HasFinished()) {
+    if (currentState == DungBeetleState::HIT && currentAnimation == &deathAnim && currentAnimation->HasFinished()) {
         pbody->body->GetFixtureList()->SetSensor(true);
-        for (DungBeetleBall* ball : dungBalls) {
-            if (ball) {
-                ball->currentAnimation = &ball->destroyAnim;
-                {
-                    if (ball->currentAnimation->HasFinished())
-                    {
-                        Engine::GetInstance().entityManager->DestroyEntity(ball);
-                    }
-                }
+
+        for (auto it = dungBalls.begin(); it != dungBalls.end(); ) {
+            DungBeetleBall* ball = *it;
+            ball->currentAnimation = &ball->destroyAnim;
+            if (ball->currentAnimation == &ball->destroyAnim && ball->currentAnimation->HasFinished())
+            {
+                Engine::GetInstance().physics->DeletePhysBody(pbody);
+                it = dungBalls.erase(it);
+            }
+            else {
+           
+                ++it;
             }
         }
-        dungBalls.clear(); 
+
         Engine::GetInstance().pressureSystem->OpenDoor(2);
         Engine::GetInstance().entityManager->DestroyEntity(this);
     }
@@ -141,7 +143,7 @@ void DungBeetle::Idle()
         currentState = DungBeetleState::ANGRY;
     }
     else if (ballsThrown < 2) {
-        hasThrown = false; 
+        hasThrown = false;
     }
 
     lastPuzzleState = currentStatePuzzle;
@@ -158,11 +160,11 @@ void DungBeetle::Angry()
             currentState = DungBeetleState::THROW;
         }
 
-        else if (CheckPuzzleState() == 2 && ballsThrown <2 ) {
+        else if (CheckPuzzleState() == 2 && ballsThrown < 2) {
             currentState = DungBeetleState::THROW;
             hasThrown = false;
         }
-        else if (CheckPuzzleState() == 3 && !hasLaunched)
+        else if (CheckPuzzleState() == 3 && !hasLaunched && ballsThrown == 2)
         {
             currentState = DungBeetleState::BALLMODE;
         }
@@ -178,7 +180,7 @@ void DungBeetle::Throw(float dt)
     if (currentAnimation->HasFinished())
     {
         if (!hasThrown && ballsThrown < 2) {
-            b2Vec2 dir((direction < 0 )? -1.0f:1.0f, 1.0f);
+            b2Vec2 dir((direction < 0) ? -1.0f : 1.0f, 1.0f);
 
             float spawnX = METERS_TO_PIXELS(pbody->body->GetPosition().x);
             float spawnY = METERS_TO_PIXELS(pbody->body->GetPosition().y) + 50.0f;
@@ -199,7 +201,7 @@ void DungBeetle::BallMode()
     {
         ChangeBodyType();
         currentAnimation = &ballModeAnim;
-        time = 0.0f; 
+        time = 0.0f;
     }
 
     if (currentAnimation->HasFinished())
@@ -208,7 +210,7 @@ void DungBeetle::BallMode()
         {
             currentAnimation = &ballAnim;
 
-            b2Vec2 dir(0.0f, 1.0f);
+            b2Vec2 dir(direction < 0 ? 1.0f : -1.0f, 1.0f);
             pbody->body->SetLinearVelocity(ballModeSpeed * dir);
 
             hasLaunched = true;
@@ -224,30 +226,49 @@ void DungBeetle::Hit() {
     currentAnimation = &deathAnim;
 }
 void DungBeetle::ChangeBodyType() {
-        pbody->body->SetType(b2_dynamicBody);
-        isDynamic = true;
+    pbody->body->SetType(b2_dynamicBody);
+    isDynamic = true;
 }
 int DungBeetle::CheckPuzzleState() {
-    int PuzzlesDone = Engine::GetInstance().pressureSystem.get()->GetActivePlatesCount(1);
-    return PuzzlesDone; 
+    int PuzzlesDone = Engine::GetInstance().pressureSystem.get()->GetActivePlatesCount(3);
+    return PuzzlesDone;
 }
 void DungBeetle::Bounce()
 {
     b2Vec2 velocity = pbody->body->GetLinearVelocity();
+    if (velocity.LengthSquared() < 0.01f) return;
+    velocity.Normalize();
 
-    if (velocity.Length() > 0) {
-        velocity.Normalize();
+    Vector2D mapPos = Engine::GetInstance().map->WorldToMap(
+        METERS_TO_PIXELS(pbody->body->GetPosition().x),
+        METERS_TO_PIXELS(pbody->body->GetPosition().y)
+    );
 
-        float randomAngle = ((rand() % 100) / 100.0f - 0.5f) * M_PI / 2.0f;
-        float angle = atan2(velocity.y, velocity.x) + randomAngle;
+    MapLayer* layer = Engine::GetInstance().map->GetNavigationLayer();
+    b2Vec2 normal(0.0f, 0.0f);
 
-        b2Vec2 newVelocity(cosf(angle), sinf(angle));
-        newVelocity *= ballModeSpeed;
-        pbody->body->SetLinearVelocity(-newVelocity);
+    if (velocity.x < 0 && layer->Get(mapPos.x - 1, mapPos.y)) normal.Set(1, 0);
+    else if (velocity.x > 0 && layer->Get(mapPos.x + 1, mapPos.y)) normal.Set(-1, 0);
+    if (velocity.y < 0 && layer->Get(mapPos.x, mapPos.y - 1)) normal.Set(0, 1);
+    else if (velocity.y > 0 && layer->Get(mapPos.x, mapPos.y + 1)) normal.Set(0, -1);
+
+    b2Vec2 finalVel;
+
+    if (normal.LengthSquared() > 0.0f)
+    {
+        b2Vec2 reflected = velocity - 2.0f * b2Dot(velocity, normal) * normal;
+        float angle = atan2(reflected.y, reflected.x) + (((rand() % 100) / 100.0f - 0.5f) * 0.2f);
+        finalVel.Set(cosf(angle), sinf(angle));
+        finalVel *= ballModeSpeed;
+        if (finalVel.LengthSquared() < 0.01f)
+            finalVel = ballModeSpeed * normal;
+    }
+    else
+    {
+        finalVel = -ballModeSpeed * velocity;
     }
 
-    pbody->body->SetAngularVelocity(0.0f);
-
+    pbody->body->SetLinearVelocity(finalVel);
     pbody->body->SetAngularVelocity(0.0f);
 }
 void DungBeetle::ChangeColliderRadius(float newRadius, bool isSensor)
@@ -274,24 +295,26 @@ void DungBeetle::ChangeColliderRadius(float newRadius, bool isSensor)
 
     pbody->body->CreateFixture(&fixtureDef);
 }
-void DungBeetle::CollisionNavigationLayer() {
-    Vector2D posMap = Engine::GetInstance().map.get()->WorldToMap(position.getX() + texW / 2, position.getY() + texH / 2);
+void DungBeetle::CollisionNavigationLayer()
+{
+    b2Vec2 vel = pbody->body->GetLinearVelocity();
+    if (vel.LengthSquared() < 0.01f) return;
 
-    MapLayer* layer = Engine::GetInstance().map.get()->GetNavigationLayer();
+    b2Vec2 pos = pbody->body->GetPosition();
+    Vector2D projected = Engine::GetInstance().map->WorldToMap(
+        METERS_TO_PIXELS(pos.x + vel.x * 2.0f),
+        METERS_TO_PIXELS(pos.y + vel.y * 2.0f)
+    );
 
-    if (currentTileMap != posMap)
+    if (projected != currentTileMap)
     {
-        if (layer->Get(posMap.x, posMap.y))
+        if (Engine::GetInstance().map->GetNavigationLayer()->Get(projected.x, projected.y))
             Bounce();
-
-        currentTileMap = posMap;
+        currentTileMap = projected;
     }
-
 }
 
 void DungBeetle::AssignBalls(DungBeetleBall* ball)
 {
     dungBalls.push_back(ball);
 }
-
-

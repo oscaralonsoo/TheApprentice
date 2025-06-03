@@ -1,6 +1,7 @@
 #include "Audio.h"
 #include "Log.h"
-
+#include "Engine.h"
+#include "Scene.h"
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_mixer.h"
 
@@ -240,4 +241,13 @@ int Audio::PlayFxReturnChannel(int id, float relativeVolume, int repeat)
 	Mix_VolumeChunk(*fxIt, finalVolume);
 
 	return Mix_PlayChannel(-1, *fxIt, repeat);
+}
+void Audio::StopMusic()
+{
+	if (!active || music == nullptr)
+		return;
+
+	Mix_HaltMusic();
+	Mix_FreeMusic(music);
+	music = nullptr;
 }

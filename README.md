@@ -38,6 +38,10 @@ The game includes debug tools for testing purposes:
 | F1      | Show / Hide Colliders               |
 | F2      | Show / Hide Pathfinding             |
 | F3      | Toggle God Mode                     |
+| F4      | Gain 1 live                         |
+| F5      | Gain 1 max live                     |
+| F6      | Lose 1 live                         |
+| F8      | Choose map                          |
 | F9      | Save Game                           |
 | F10     | Load Game                           |
 
@@ -61,4 +65,3 @@ When God Mode is active (`F3`), player movement is modified for free navigation 
 | 5   | Wall Jump         | Enables jumping off walls                |
 | 6   | Push              | Enables pushing objects                  |
 | 7   | Hook              | Unlocks the grappling hook ability       |
- 

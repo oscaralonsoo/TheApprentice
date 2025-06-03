@@ -20,15 +20,15 @@ public:
     void Bounce();
 
     void CollisionNavigationLayer();
+
+    bool IsDestroyed() const;
+
 public:
     Animation* currentAnimation = nullptr;
     Animation destroyAnim;
 private:
-    PhysBody* pbody = nullptr;
     SDL_Texture* texture = nullptr;
-
-
-
+    PhysBody* pbody = nullptr;
     Animation idleAnim;
     float timeStuck = 0.0f;
     b2Vec2 previousPosition;

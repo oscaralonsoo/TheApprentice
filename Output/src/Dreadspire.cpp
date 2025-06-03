@@ -35,12 +35,46 @@ bool Dreadspire::Start() {
         }
     }
 
-    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texW / 2, (int)position.getY() + texH / 2, 64, 100 , bodyType::DYNAMIC, 20, -3);
-  
+    int offsetY = -3; // Valor por defecto
+    int offsetX = -20;
+    switch (rotationAngle) {
+    case 90:
+        offsetY = -15;
+        break;
+    case 180:
+        offsetY = 25;
+        break;
+    case 270:
+        offsetY = 45;
+        offsetX = 15;
+        break;
+    case 0 :
+        offsetY = -3;
+        offsetX = 20;
+        break;
+    }
+
+    // Crear el cuerpo con dimensiones correctas
+    pbody = Engine::GetInstance().physics.get()->CreateRectangle(
+        (int)position.getX() + texW / 2,
+        (int)position.getY() + texH / 2,
+        64,
+        100,
+        bodyType::DYNAMIC,
+        offsetX,
+        offsetY
+    );
+
+    // Establecer la rotación física del cuerpo
+    float radians = DEGTORAD * rotationAngle;
+    b2Vec2 center = pbody->body->GetPosition(); // centro actual
+    pbody->body->SetTransform(center, radians);
+
     maxSteps = 25;
 
     return Enemy::Start();
 }
+
 
 bool Dreadspire::Update(float dt) {
     pbody->body->SetLinearVelocity(b2Vec2(0, 0));
@@ -60,9 +94,8 @@ bool Dreadspire::Update(float dt) {
     }
 
     ChangeBodyType();
-        SDL_Rect frame = currentAnimation->GetCurrentFrame();
 
-    return Enemy::Update(dt);
+        return Enemy::Update(dt);
 }
 
 
@@ -98,75 +131,62 @@ void Dreadspire::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 void Dreadspire::Idle(float dt) {
     currentAnimation = &idleAnim;
 }
-
 void Dreadspire::Shoot(float dt)
 {
     currentAnimation = &shootingAnim;
 
-    static float fireCooldown = 0;
-    fireCooldown -= dt;
+    if (currentAnimation->HasFinished()) {
+        b2Vec2 toPlayer = b2Vec2(playerPos.x - position.x, playerPos.y - position.y);
+        baseAngle = atan2(toPlayer.y, toPlayer.x);
 
-    if (fireCooldown > 0) return;
+        float centerX = METERS_TO_PIXELS(pbody->body->GetPosition().x);
+        float centerY = METERS_TO_PIXELS(pbody->body->GetPosition().y);
 
-    if (bulletsShot == 0 && bulletShootTimer <= 0.0f) {
-        bulletShootTimer = 0.001f; 
-    }
+        float spread = M_PI / 4; 
+        float angles[3] = { -spread, 0.0f, spread };
 
-    if (bulletShootTimer > 0.0f) {
-        bulletShootTimer += dt;
-        if (bulletsShot == 0) {
-            b2Vec2 toPlayer = b2Vec2(playerPos.x - position.x, playerPos.y - position.y);
-            baseAngle = atan2(toPlayer.y, toPlayer.x);
-        }
-        if (bulletsShot < 3 && bulletShootTimer >= (200 * (bulletsShot + 1))) {
-         
-            float shootingAngle = baseAngle + angles[bulletsShot];
+        float extendedSpawnOffset = spawnOffset; 
+
+        for (int i = 0; i < 3; ++i) {
+            float shootingAngle = baseAngle + angles[i];
             b2Vec2 dir = b2Vec2(cos(shootingAngle), sin(shootingAngle));
 
-
-            float centerX = METERS_TO_PIXELS(pbody->body->GetPosition().x);
-            float centerY = METERS_TO_PIXELS(pbody->body->GetPosition().y);
-
-            float offsetX = centerX + dir.x * spawnOffset;
-            float offsetY = centerY + dir.y * spawnOffset;
+            float offsetX = centerX + dir.x * extendedSpawnOffset;
+            float offsetY = centerY + dir.y * extendedSpawnOffset;
 
             auto bullet = new DreadspireBullet(offsetX, offsetY, 12.0f, dir);
             Engine::GetInstance().entityManager->AddEntity(bullet);
-
-            bulletsShot++;
         }
 
-        if (bulletsShot >= 3) {
-            bulletShootTimer = 0.0f;
-            bulletsShot = 0;
-            fireCooldown = 2500.0f;
-
-            if (currentAnimation->HasFinished()) {
-                currentState = DreadspireState::RECHARGING;
-            }
-        }
+        currentAnimation->Reset();
+        rechargeTimer = 0.0f;
+        currentState = DreadspireState::RECHARGING;
     }
 }
-
 
 void Dreadspire::Recharge(float dt)
 {
     currentAnimation = &idleAnim;
+
+    rechargeTimer += dt;
+    if (rechargeTimer >= rechargeCooldown) {
+        rechargeTimer = 0.0f;
+        currentState = DreadspireState::SHOOTING;
+    }
 }
 
 void Dreadspire::CheckState() {
-    if(currentState == DreadspireState::DEAD)
+    if (currentState == DreadspireState::DEAD || currentState == DreadspireState::RECHARGING)
         return;
 
     if (pathfinding->HasFoundPlayer()) {
         currentState = DreadspireState::SHOOTING;
     }
     else {
-        if (currentState != DreadspireState::IDLE) {
-            currentState = DreadspireState::IDLE;
-        }
+        currentState = DreadspireState::IDLE;
     }
 }
+
 
 void Dreadspire::ChangeBodyType() {
     if (shouldBecomeStatic && pbody && pbody->body) {

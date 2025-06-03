@@ -77,7 +77,6 @@ public:
 	bool saveGameZone = false;
 	bool saving = false;
 	int nextScene = 0;
-
 	//Vignette
 	int vignetteSize = 300;
 	float vignetteStrength = 0.8f;
@@ -100,6 +99,12 @@ public:
 	SDL_Color originalVignetteColor;
 	float vignetteLerpProgress = 0.0f;
 	SDL_Color vignetteTargetColor;
+
+
+	float blackScreenTimer = 0.0f;
+	const float blackScreenDelay = 500.0f;
+	bool waitingBlackScreen = false;
+
 private:
 	SDL_Texture* img;
 	//L03: TODO 3b: Declare a Player attribute
@@ -119,9 +124,6 @@ private:
 	SDL_Rect top, bottom, left, right;
 
 
-	float blackScreenTimer = 0.0f;
-	const float blackScreenDelay = 500.0f; 
-	bool waitingBlackScreen = false;
 
 	//Renderer
 	SDL_Renderer* renderer;

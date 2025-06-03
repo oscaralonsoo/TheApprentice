@@ -45,7 +45,7 @@ bool Broodheart::Start() {
             break;
         }
     }
-    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW / 3, bodyType::DYNAMIC);
+    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW / 2, texH/2, bodyType::DYNAMIC);
 
 
     pbody->ctype = ColliderType::ENEMY;
@@ -176,8 +176,5 @@ void Broodheart::Spawn() {
 
 void Broodheart::OnBroodDeath(Brood* brood) {
     broodsAlive.remove(brood);
-    if (brood->deathAnim.HasFinished())
-    {
-        Engine::GetInstance().entityManager.get()->DestroyEntity(brood);
-    }
+
 }

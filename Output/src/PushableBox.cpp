@@ -21,7 +21,7 @@ bool PushableBox::Start()
     );
     pbody->listener = this;
 
-    pbody->body->SetGravityScale(5.0f);
+    pbody->body->SetGravityScale(1.0f);
     pbody->body->GetFixtureList()->SetFriction(0.0f);
     pbody->body->GetFixtureList()->SetDensity(4.0f);  
     pbody->body->ResetMassData();

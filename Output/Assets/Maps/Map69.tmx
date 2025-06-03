@@ -64,7 +64,7 @@
   <image source="../Props/tiles_manglar.png" width="640" height="640"/>
  </tileset>
  <tileset firstgid="8845" name="habitat_bichopalo" tilewidth="64" tileheight="64" tilecount="480" columns="30">
-  <image source="../../../../habitat_bichopalo.png" width="1920" height="1080"/>
+  <image source="../Environment/habitat_bichopalo.png" width="1920" height="1080"/>
  </tileset>
  <layer id="44" name="Background" width="33" height="17" parallaxx="0" parallaxy="0">
   <properties>
@@ -432,8 +432,8 @@
    <tile gid="9172"/>
    <tile gid="9173"/>
    <tile gid="9174"/>
-   <tile gid="8492"/>
-   <tile gid="8492"/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile gid="9175"/>
    <tile gid="9176"/>
@@ -465,8 +465,8 @@
    <tile gid="9202"/>
    <tile gid="9203"/>
    <tile gid="9204"/>
-   <tile gid="9234"/>
-   <tile gid="9234"/>
+   <tile gid="9204"/>
+   <tile gid="9204"/>
    <tile/>
    <tile gid="9205"/>
    <tile gid="9206"/>
@@ -498,8 +498,8 @@
    <tile gid="9232"/>
    <tile gid="9233"/>
    <tile gid="9234"/>
-   <tile gid="8552"/>
-   <tile gid="8552"/>
+   <tile gid="9204"/>
+   <tile gid="9204"/>
    <tile/>
    <tile gid="9235"/>
    <tile gid="9236"/>

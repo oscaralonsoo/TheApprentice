@@ -295,6 +295,7 @@ void MovementHandler::SetCanAttack(bool canAttack) {
 
 void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
+    case ColliderType::DOOR:
     case ColliderType::PLATFORM:
     {
         lastPlatformCollider = physB;

@@ -16,7 +16,7 @@ DungBeetleBall::DungBeetleBall(float x, float y, float speed, b2Vec2 direction)
             width = node.attribute("w").as_int();
             height = node.attribute("h").as_int();
             idleAnim.LoadAnimations(node.child("idle"));
-            destroyAnim.LoadAnimations(node.child("destroyed"));;
+            destroyAnim.LoadAnimations(node.child("destroyed"));
         }
     }
 

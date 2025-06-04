@@ -112,7 +112,12 @@ void DashMechanic::CancelDash() {
     // Evitar reenganche inmediato al wall slide
     player->GetMechanics()->GetMovementHandler()->StartWallSlideCooldown();
 
-    player->GetAnimation()->SetStateIfHigherPriority("idle");
+    if (!player->GetMechanics()->IsOnGround()) {
+        player->GetAnimation()->ForceSetState("fall");
+    }
+    else {
+        player->GetAnimation()->ForceSetState("idle");
+    }
 
 }
 

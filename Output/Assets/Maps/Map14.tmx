@@ -33204,6 +33204,7 @@
  <layer id="23" name="Platforms" width="94" height="44" parallaxx="0" parallaxy="0">
   <properties>
    <property name="Draw" type="bool" value="true"/>
+   <property name="Forward" type="bool" value="true"/>
   </properties>
   <data>
    <tile gid="12"/>
@@ -41490,6 +41491,7 @@
  <layer id="54" name="Forward_Layer" width="94" height="44" parallaxx="0" parallaxy="0">
   <properties>
    <property name="Draw" type="bool" value="true"/>
+   <property name="Forward" type="bool" value="true"/>
   </properties>
   <data>
    <tile/>

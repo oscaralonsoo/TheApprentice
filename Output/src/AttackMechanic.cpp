@@ -4,9 +4,12 @@
 #include "Input.h"
 #include "Physics.h"
 #include "InvulnerabilitySystem.h"
+#include "Audio.h"
 
 void AttackMechanic::Init(Player* player) {
     this->player = player;
+
+    soundAttackId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Slime/slime_attack.ogg", 1.0f);
 }
 
 void AttackMechanic::Update(float dt) {
@@ -17,6 +20,11 @@ void AttackMechanic::Update(float dt) {
 
         // Teclado (J)
         if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
+
+            if (!attackSoundPlayed) {
+                Engine::GetInstance().audio->PlayFx(soundAttackId, 1.0f, 0);
+                attackSoundPlayed = true;
+            }
             attackPressed = true;
         }
 
@@ -26,6 +34,11 @@ void AttackMechanic::Update(float dt) {
 
             if (xPressed && !attackHeldPreviously) {
                 attackPressed = true;
+
+                if (!attackSoundPlayed) {
+                    Engine::GetInstance().audio->PlayFx(soundAttackId, 1.0f, 0);
+                    attackSoundPlayed = true;
+                }
             }
 
             attackHeldPreviously = xPressed;
@@ -91,6 +104,7 @@ void AttackMechanic::DestroyAttackSensor() {
     if (attackSensor) {
         Engine::GetInstance().physics->DeletePhysBody(attackSensor);
         attackSensor = nullptr;
+        attackSoundPlayed = false;
     }
 
     isAttacking = false;

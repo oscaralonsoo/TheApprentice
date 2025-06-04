@@ -57,8 +57,6 @@ public:
     bool wallSlideFlip = false;
     bool disableAbilities = false;
 
-    bool canJump = true;
-
     void StartWallSlideCooldown();
 
     void EnablePush(bool enable);

@@ -283,27 +283,24 @@ bool AbilityZone::PostUpdate() {
 
 bool AbilityZone::CleanUp()
 {
-
-
 	if (tensionActive) {
 		tensionActive = false;
-
 		if (!previousMusic.empty()) {
 			Engine::GetInstance().audio->StopMusic();
 			Engine::GetInstance().audio->PlayMusic(previousMusic.c_str(), 1.0f, 1.0f);
 
 		}
 	}
-
-
 	Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
 	return true;
 }
-
 void AbilityZone::VignetteChange(float dt)
 {
 	Player* player = Engine::GetInstance().scene->GetPlayer();
 	PlayerMechanics* mechanics = player->GetMechanics();
+
+	int opresivoMin = 300;
+	int opresivoMax = 1000;
 
 	float zoneStartX = position.getX();
 	float zoneEndX = zoneStartX + texW;
@@ -311,16 +308,44 @@ void AbilityZone::VignetteChange(float dt)
 
 	float progress = (playerX - zoneStartX) / (zoneEndX - zoneStartX);
 	progress = clamp(progress, 0.0f, 1.0f);
-	progress = 1.0f - powf(1.0f - progress, 4.0f);
+	progress = 1.0f - powf(1.0f - progress, 12.0f);
 
-	newVignetteSize = minVignetteSize + static_cast<int>((maxVignetteSize - minVignetteSize) * progress);
+	newVignetteSize = opresivoMin + static_cast<int>((opresivoMax - opresivoMin) * progress);
 
-	// A�adir efecto de vibraci�n
-	if (progress > 0.95f) {
-		float offset = sinf(dt * vibrateSpeed) * vibrateAmplitude;
-		newVignetteSize += static_cast<int>(offset);
+	float minBPM = 0.02f;
+	float maxBPM = 0.07f;
+	float bpm = minBPM + (maxBPM - minBPM) * progress;
+	float beatPeriod = 60.0f / bpm;
+
+	vignetteHeartbeatTimer += dt;
+	float t = fmod(vignetteHeartbeatTimer, beatPeriod) / beatPeriod;
+
+	float heartbeatValue = 0.0f;
+
+	if (t < 0.14f) {
+		float latido1 = sinf(3.14159f * t / 0.14f);
+		heartbeatValue = powf(latido1, 3.5f);
 	}
-	// Aplicar tama�o
+
+	else if (t >= 0.18f && t < 0.27f) {
+		float t2 = (t - 0.18f) / 0.09f;
+		float latido2 = sinf(3.14159f * t2);
+		heartbeatValue = 0.7f * powf(latido2, 3.5f); 
+	}
+
+	else {
+		heartbeatValue = 0.0f;
+	}
+
+	float heartbeatStrength = 0.0f;
+	if (progress > 0.55f) {
+		heartbeatStrength = (progress - 0.55f) / 0.45f;
+		heartbeatStrength = clamp(heartbeatStrength, 0.0f, 1.0f);
+	}
+
+	int heartbeatAmplitude = 110 + int(220 * heartbeatStrength);
+	newVignetteSize += int(heartbeatValue * heartbeatAmplitude * heartbeatStrength);
+
 	mechanics->GetHealthSystem()->SetVignetteSize(newVignetteSize);
 }
 
@@ -346,8 +371,6 @@ void AbilityZone::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 		if (!tensionActive) {
 			tensionActive = true;
-
-			
 			previousMusic = Engine::GetInstance().audio->GetCurrentMusic();
 			LOG("AbilityZone: Música anterior guardada: %s", previousMusic.c_str());
 
@@ -378,6 +401,13 @@ void AbilityZone::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 	PlayerMechanics* mechanics = player->GetMechanics();
 	switch (physB->ctype) {
 	case ColliderType::PLAYER:
+		if (tensionActive) {
+			tensionActive = false;
+			if (!previousMusic.empty()) {
+				Engine::GetInstance().audio->StopMusic();
+				Engine::GetInstance().audio->PlayMusic(previousMusic.c_str(), 1.0f, 1.0f);
+			}
+		}
 		playerInside = false;
 		player->GetMechanics()->GetMovementHandler()->SetCanAttack(true);
 		playerInsideJump = false;

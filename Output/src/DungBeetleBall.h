@@ -39,7 +39,6 @@ private:
 
     Vector2D currentTileMap;
 
-
     int soundBounceId = 0;
     bool bounceSoundPlayed = false;
 };

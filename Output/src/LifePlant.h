@@ -42,5 +42,5 @@ private:
 	LifePlantStates state = LifePlantStates::AVAILABLE;
 
 	int soundInteractId = 0;
-	bool interactSoundPlayed = false;
+	int eatSound = 0;
 };

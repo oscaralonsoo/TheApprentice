@@ -31,10 +31,12 @@ bool Shyver::Start() {
             disappearAnim.LoadAnimations(enemyNode.child("disappear"));
             appearAnim.LoadAnimations(enemyNode.child("appear"));
             attackAnim.LoadAnimations(enemyNode.child("attack"));
+            preattackAnim.LoadAnimations(enemyNode.child("preAttack"));
             stunAnim.LoadAnimations(enemyNode.child("stun"));
             waitAnim.LoadAnimations(enemyNode.child("wait"));
             deathAnim.LoadAnimations(enemyNode.child("death"));
             invisibleAnim.LoadAnimations(enemyNode.child("invisible"));
+            waveAnim.LoadAnimations(enemyNode.child("wave"));
         }
     }
 
@@ -77,7 +79,21 @@ bool Shyver::Update(float dt) {
             waitTimer.Start();
         }
         Wait();
-        if (waitTimer.ReadMSec() >= waitDuration && currentAnimation->currentFrame >= currentAnimation->totalFrames - 1) currentState = ShyverState::ATTACK;
+        if (waitTimer.ReadMSec() >= waitDuration && currentAnimation->currentFrame >= currentAnimation->totalFrames - 1) {
+            currentState = ShyverState::PRE_ATTACK; 
+        }
+        break;
+
+    case ShyverState::PRE_ATTACK:
+        if (currentAnimation != &preattackAnim) {
+            currentAnimation = &preattackAnim;
+            currentAnimation->Reset();
+        }
+
+        if (currentAnimation->HasFinished()) {
+            attackInProgress = false; 
+            currentState = ShyverState::ATTACK;
+        }
         break;
     case ShyverState::ATTACK:
         if (currentAnimation != &attackAnim) {
@@ -145,12 +161,36 @@ bool Shyver::Update(float dt) {
 
 
 bool Shyver::PostUpdate() {
-    Enemy::PostUpdate();
+    if (printWave)
+    {
+        if (waveAnim.HasFinished())
+        {
+            waveAnim.Reset();
+        }
+        SDL_RendererFlip flip = SDL_FLIP_NONE;
+        if (direction > 0) flip = (SDL_RendererFlip)(flip | SDL_FLIP_HORIZONTAL);
+        if (rotationAngle == 180) flip = (SDL_RendererFlip)(flip | SDL_FLIP_NONE);
+
+        secondAnimation = &waveAnim;
+        Engine::GetInstance().render.get()->DrawTexture(texture,
+            (int)waveAnimStartPos.getX()-200,
+            (int)waveAnimStartPos.getY()-300,
+            &secondAnimation->GetCurrentFrame(),
+            1.0f,
+            (double)rotationAngle,
+            INT_MAX,
+            INT_MAX,
+            flip,
+            scale
+        );
+        secondAnimation->Update();
+    }
+
     if (currentState == ShyverState::DEATH && currentAnimation->HasFinished()) {
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
     }
     direction = -direction;
-
+    Enemy::PostUpdate();
     return true;
 }
 
@@ -191,11 +231,15 @@ void Shyver::Attack() {
 
     float distanceMoved = std::abs(GetPosition().x - attackStartX);
     float t = distanceMoved / maxDistance;
-
     float speed = minSpeed + (maxSpeed - minSpeed) * std::sin(t * M_PI);
-
-    pbody->body->SetLinearVelocity(b2Vec2(direction * speed, 0));
-
+    if (attackAnim.currentFrame > 3.0f)
+    {
+        if (!printWave) {
+            waveAnimStartPos = GetPosition();
+        }
+        printWave = true;
+        pbody->body->SetLinearVelocity(b2Vec2(direction * speed, 0));
+    }
     if (distanceMoved >= maxDistance) {
         currentState = ShyverState::STUNNED;
         pbody->body->SetLinearVelocity(b2Vec2_zero);
@@ -204,6 +248,7 @@ void Shyver::Attack() {
 }
 
 void Shyver::Stun() {
+    printWave = false;
     pbody->body->SetLinearVelocity(b2Vec2_zero);
 
 }

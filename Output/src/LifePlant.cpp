@@ -49,7 +49,7 @@ bool LifePlant::Start() {
     pbody->body->SetGravityScale(0);
 
     currentAnimation = &availableAnim;
-
+    eatSound = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Props/plant_eat.ogg", 1.0f);
     soundInteractId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Props/lifeplant_active.ogg", 1.0f);
 
     return true;
@@ -62,12 +62,6 @@ bool LifePlant::Update(float dt) {
 
         break;
     case LifePlantStates::CONSUMED:
-
-        if (!interactSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundInteractId, 0.5f, 0);
-            interactSoundPlayed = true;
-        }
-
         if (currentAnimation != &consumedAnim) currentAnimation = &consumedAnim;
         break;
     }
@@ -97,6 +91,8 @@ void LifePlant::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::ATTACK:
         if (state == LifePlantStates::AVAILABLE)
         {
+            Engine::GetInstance().audio->PlayFx(eatSound, 0.7f, 0);
+            Engine::GetInstance().audio->PlayFx(soundInteractId, 0.6f, 0);
             state = LifePlantStates::CONSUMED;
             Engine::GetInstance().scene->GetPlayer()->GetMechanics()->GetHealthSystem()->AddLife();
             Engine::GetInstance().scene->TriggerVignetteFlash();

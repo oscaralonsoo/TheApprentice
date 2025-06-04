@@ -40,7 +40,6 @@ private:
 	Animation consumedAnim;
 	PlayerMechanics mechanics;
 	LifePlantMaxStates state = LifePlantMaxStates::AVAILABLE;
-
+	int eatSound = 0;
 	int soundInteractId = 0;
-	bool interactSoundPlayed = false;
 };

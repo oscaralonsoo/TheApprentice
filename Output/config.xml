@@ -9,8 +9,8 @@
 	</render>
 	<audio>
 		<master value="0.5" />
-		<music value="0.337500006" />
-		<sfx value="0.882499993" />
+		<music value="0" />
+		<sfx value="1" />
 	</audio>
 	<window>
 		<resolution width="1280" height="720" scale="1" />
@@ -443,7 +443,20 @@
 						<frame x="2320" y="510" w="464" h="168" />
 					</attack>
 					<stun loop="true" speed="0.2">
-						<frame x="0" y="704" w="208" h="168" />
+						<frame x="0" y="704" w="169" h="169" />
+						<frame x="169" y="704" w="208" h="168" />
+						<frame x="338" y="704" w="208" h="168" />
+						<frame x="507" y="704" w="208" h="168" />
+						<frame x="676" y="704" w="208" h="168" />
+						<frame x="845" y="704" w="208" h="168" />
+						<frame x="1014" y="704" w="208" h="168" />
+						<frame x="1183" y="704" w="208" h="168" />
+						<frame x="1014" y="704" w="208" h="168" />
+						<frame x="845" y="704" w="208" h="168" />
+						<frame x="676" y="704" w="208" h="168" />
+						<frame x="507" y="704" w="208" h="168" />
+						<frame x="338" y="704" w="208" h="168" />
+						<frame x="169" y="704" w="208" h="168" />
 					</stun>
 					<invisible loop="false" speed="0">
 						<frame x="1840" y="0" w="166" h="168" />
@@ -472,11 +485,11 @@
 						<frame x="672" y="840" w="166" h="168" />
 					</death>
 					<wave loop="false" speed="0.125">
-						<frame x="0" y="1024" w="224" h="465" />
-						<frame x="192" y="1024" w="224" h="465" />
-						<frame x="960" y="1024" w="336" h="465" />
-						<frame x="1616" y="1024" w="368" h="465" />
-						<frame x="2352" y="1024" w="449" h="465" />
+						<frame x="0" y="1028" w="423" h="423" />
+						<frame x="423" y="1028" w="423" h="423" />
+						<frame x="848" y="1028" w="423" h="423" />
+						<frame x="1269" y="1028" w="423" h="423" />
+						<frame x="1692" y="1028" w="423" h="423" />
 					</wave>
 				</enemy>
 				<enemy type="Mireborn" w="120" h="120" texture="Assets/Enemies/mireborn.png">
@@ -1335,8 +1348,8 @@
 			</abilities>
 		</animations>
 		<save_data isSaved="1">
-			<player x="3949" y="1766" w="44" h="54" lives="3" maxlives="3" />
-			<abilities jump="true" doublejump="true" dash="true" />
+			<player x="3580" y="4070" w="44" h="54" lives="3" maxlives="3" />
+			<abilities jump="false" doublejump="false" dash="false" />
 			<scene actualScene="21" />
 			<enemies />
 		</save_data>

@@ -188,7 +188,8 @@ void Scene::UpdateTransition(float dt)
 void Scene::ChangeScene(int nextScene)
 {
 	LOG("Cambiando a escena: %d", nextScene);
-	Engine::GetInstance().map->CleanUp();  // CleanUp of the previous Map
+	Engine::GetInstance().map->CleanUp();
+	Engine::GetInstance().audio->StopMusic();
 	if (hookManager) {
 		hookManager->ClearHooks();
 		SetActiveHook(nullptr);

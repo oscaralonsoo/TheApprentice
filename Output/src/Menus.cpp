@@ -213,10 +213,9 @@ void Menus::MainMenu(float dt) {
     }
 
     if (buttonPressed) {
-                    if (Engine::GetInstance().scene->soundUI2Id > 0)
-                Engine::GetInstance().audio->PlayFx(Engine::GetInstance().scene->soundUI2Id, 1.0f, 0);
+       if (Engine::GetInstance().scene->soundUI2Id > 0) { Engine::GetInstance().audio->PlayFx(Engine::GetInstance().scene->soundUI2Id, 1.0f, 0); }
         switch (selectedButton) {
-        case 0: NewGame(); break;
+        case 0:  Engine::GetInstance().audio->StopMusic(); NewGame();  break;
         case 1:
             if (isSaved != 0) {
                 Engine::GetInstance().scene->LoadGameXML();
@@ -295,10 +294,12 @@ void Menus::Pause(float dt) {
         switch (selectedButton) {
         case 0: isPaused = false; StartTransition(true, MenusState::GAME); break;
         case 1: inConfig = true; StartTransition(true, MenusState::SETTINGS); break;
-        case 2: currentState = MenusState::EXIT; break;
+        case 2: StartTransition(true, MenusState::MAINMENU); Engine::GetInstance().audio->StopMusic(); Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/mainmenu_music.ogg", 2.0f, 1.0f);  break;
+        case 3: currentState = MenusState::EXIT; break;
         }
     }
 }
+
 
 void Menus::Settings() {
     bool escapePressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN;
@@ -347,13 +348,13 @@ void Menus::HandleVolumeSliders() {
     int minX = (width / 2) + 50;
     int maxX = minX + 420;
 
-    if (selectedButton == 2) {
+    if (selectedButton == 1) {
         AdjustVolume(musicVolumeSliderX, minX, maxX);
     }
-    else if (selectedButton == 3) {
+    else if (selectedButton == 2) {
         AdjustVolume(fxVolumeSliderX, minX, maxX);
     }
-    else if (selectedButton == 4) {
+    else if (selectedButton == 3) {
         AdjustVolume(masterVolumeSliderX, minX, maxX);
     }
 }
@@ -413,13 +414,13 @@ void Menus::UpdateVolume(int sliderX, int minX, int maxX) {
 
     auto& audio = *Engine::GetInstance().audio;
 
-    if (selectedButton == 2) {
+    if (selectedButton == 1) {
         audio.musicVolume = volume;
     }
-    else if (selectedButton == 3) {
+    else if (selectedButton == 2) {
         audio.sfxVolume = volume;
     }
-    else if (selectedButton == 4) {
+    else if (selectedButton == 3) {
         audio.masterVolume = volume;
     }
 
@@ -522,9 +523,9 @@ void Menus::SyncSlidersWithVolumes() {
         return minXreal + static_cast<int>(volume * (maxXreal - minXreal));
         };
 
-    musicVolumeSliderX = CalcSliderX(Engine::GetInstance().audio->musicVolume, selectedButton == 2);
-    fxVolumeSliderX = CalcSliderX(Engine::GetInstance().audio->sfxVolume, selectedButton == 3);
-    masterVolumeSliderX = CalcSliderX(Engine::GetInstance().audio->masterVolume, selectedButton == 4);
+    musicVolumeSliderX = CalcSliderX(Engine::GetInstance().audio->musicVolume, selectedButton == 1);
+    fxVolumeSliderX = CalcSliderX(Engine::GetInstance().audio->sfxVolume, selectedButton == 2);
+    masterVolumeSliderX = CalcSliderX(Engine::GetInstance().audio->masterVolume, selectedButton == 3);
 }
 void Menus::CreateButtons() {
     buttons.clear();
@@ -565,7 +566,7 @@ void Menus::CreateButtons() {
 std::vector<std::string> Menus::GetButtonNamesForCurrentState() const {
     switch (currentState) {
     case MenusState::MAINMENU: return { "newGame", "continue", "settings", "credits", "exit" };
-    case MenusState::PAUSE: return { "continue", "settings", "exit" };
+    case MenusState::PAUSE: return { "continue", "settings", "backToMenu", "exit" };
     case MenusState::SETTINGS: return { "Vsync", "Music Volume", "FX Volume", "Master Volume" };
     default: return {};
     }
@@ -575,7 +576,13 @@ void Menus::CreateButton(const std::string& name, int startX, int startY, int bu
     std::string unhovered = name + "_unhovered.png";
     std::string hovered = name + "_hovered.png";
 
-    SDL_Rect bounds = { startX, startY, buttonWidth, buttonHeight };
+    int customOffsetX = 0;
+    // Aplica un offset solo a BackToMenu para centrarlo mejor
+    if (currentState == MenusState::PAUSE && name == "backToMenu") {
+        customOffsetX = -21; 
+    }
+
+    SDL_Rect bounds = { startX + customOffsetX, startY, buttonWidth, buttonHeight };
     bool isCheckBox = (currentState == MenusState::SETTINGS && index == 0);
     buttons.emplace_back(name, bounds, index, isCheckBox, unhovered, hovered);
 
@@ -584,6 +591,7 @@ void Menus::CreateButton(const std::string& name, int startX, int startY, int bu
         buttons.back().hoveredTexture = buttonTextures[hovered];
     }
 }
+
 void Menus::DrawAbilities() {
     if (drawingAbilityBackground == true) return;
     SDL_Texture* abilityTexture = nullptr;
@@ -657,9 +665,9 @@ void Menus::DrawSliders() {
     const int startY = (height / 2) + 100;
     const int spacing = 125;
 
-    DrawSlider((width / 2) + 50, startY + spacing * 0, musicVolumeSliderX, selectedButton == 2, "Music Volume");
-    DrawSlider((width / 2) + 50, startY + spacing * 1, fxVolumeSliderX, selectedButton == 3, "FX Volume");
-    DrawSlider((width / 2) + 50, startY + spacing * 2, masterVolumeSliderX, selectedButton == 4, "Master Volume");
+    DrawSlider((width / 2) + 50, startY + spacing * 0, musicVolumeSliderX, selectedButton == 1, "Music Volume");
+    DrawSlider((width / 2) + 50, startY + spacing * 1, fxVolumeSliderX, selectedButton == 2, "FX Volume");
+    DrawSlider((width / 2) + 50, startY + spacing * 2, masterVolumeSliderX, selectedButton == 3, "Master Volume");
 }
 
 void Menus::DrawSlider(int minX, int y, int& sliderX, bool isSelected, const std::string& label) {

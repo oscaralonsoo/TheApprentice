@@ -69,6 +69,28 @@ bool Player::Start() {
 
 	pbody->body->SetGravityScale(2.0f);
 
+	positionArray = {
+	Vector2D(1461, 753),
+	Vector2D(1082, 908),
+	Vector2D(760, 3826),
+	Vector2D(3402, 4020),
+	Vector2D(3392, 6080),
+	Vector2D(128, 620),
+	Vector2D(1334, 2020),
+	Vector2D(276, 2824),
+	Vector2D(7038, 446),
+	Vector2D(4372, 1150),
+	Vector2D(10430, 4089),
+	Vector2D(10242, 4144),
+	Vector2D(1510, 732),
+	Vector2D(449, 932),
+	Vector2D(446, 928),
+	};
+
+	intArray = {0, 1, 12, 21, 22, 23, 31, 41, 42, 43, 51, 52, 69, 99, 6666};
+
+	currentIndex = 1;
+
 	return true;
 }
 
@@ -117,6 +139,30 @@ bool Player::Update(float dt) {
 			pbody->body->SetGravityScale(2.0f);
 		}
 	}
+	// Cambio de escena con F8 (avanzar)
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN) {
+		if (currentIndex + 1 < intArray.size()) {
+			currentIndex++;
+			int nextScene = intArray[currentIndex];
+			Vector2D pos = positionArray[currentIndex];
+
+			Engine::GetInstance().scene->newPosition = pos;
+			Engine::GetInstance().scene->StartTransition(nextScene);
+		}
+	}
+
+	// Cambio de escena con F7 (retroceder)
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN) {
+		if (currentIndex - 1 >= 0) {
+			currentIndex--;
+			int nextScene = intArray[currentIndex];
+			Vector2D pos = positionArray[currentIndex];
+
+			Engine::GetInstance().scene->newPosition = pos;
+			Engine::GetInstance().scene->StartTransition(nextScene);
+		}
+	}
+
 
 	if (enemySensor && enemySensor->body) {
 		b2Vec2 mainPos = pbody->body->GetPosition();

@@ -51,7 +51,7 @@ bool Scene::Awake()
 
 bool Scene::Start()
 {
-	nextScene = 6666;
+	nextScene = 1;
 	Engine::GetInstance().map->Load("Assets/Maps/", "Map" + std::to_string(nextScene) + ".tmx");
 
 	return true;
@@ -80,18 +80,6 @@ bool Scene::Update(float dt)
 	// Realizar la transición entre escenas
 	UpdateTransition(dt);
 
-	// Manejar la lógica del juego
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
-		ChangeScene(nextScene + 1);
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
-		if (nextScene == 0)
-		{
-			ChangeScene(nextScene);
-			player->SetPosition(Vector2D(1950, 650));
-		}
-		else {
-			ChangeScene(nextScene - 1);
-		}
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
 		SaveGameXML();
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)

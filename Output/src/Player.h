@@ -70,4 +70,8 @@ private:
 	bool initialized = false;
 
 	PlayerAnimation* animation = nullptr;
+
+	std::vector<Vector2D> positionArray;
+	std::vector<int> intArray;
+	int currentIndex = 1;
 };

@@ -41,10 +41,13 @@ bool DialogueManager::Start() {
 
 bool DialogueManager::PostUpdate() {
 	SDL_GameController* controller = Engine::GetInstance().scene->GetPlayer()->GetMechanics()->GetMovementHandler()->GetController();
-	bool l1Pressed = false;
+	bool l1PressedNow = false;
+	bool l1JustPressed = false;
 
 	if (controller && SDL_GameControllerGetAttached(controller)) {
-		l1Pressed = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == 1;
+		l1PressedNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == 1;
+		l1JustPressed = (l1PressedNow && !prevL1State);
+		prevL1State = l1PressedNow;
 	}
 
 	if (dialogueAvailable && !dialogueStarted) {
@@ -52,7 +55,8 @@ bool DialogueManager::PostUpdate() {
 
 		bool interactKeyPressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_E) == KEY_DOWN;
 
-		if (interactKeyPressed || l1Pressed) {
+		if (interactKeyPressed || l1JustPressed) {
+			SetPlayerMovement(true);
 			dialogueStarted = true;
 			currentLineIndex = 0;
 			ResetTyping();
@@ -62,7 +66,7 @@ bool DialogueManager::PostUpdate() {
 	if (dialogueStarted && activeDialogueId != -1) {
 		bool nextKeyPressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN;
 
-		if (nextKeyPressed || l1Pressed) {
+		if (nextKeyPressed || l1JustPressed) {
 			if (!typingFinished) {
 				forceTypingFinish = true;
 			}
@@ -117,6 +121,7 @@ void DialogueManager::RenderDialogue(int dialogueId) {
     const DialogueEvent& event = it->second;
 
     if (event.wrappedLines.empty() || currentLineIndex >= event.wrappedLines.size()) {
+		SetPlayerMovement(false);
         dialogueStarted = false;
         currentLineIndex = 0;
         return;
@@ -124,19 +129,19 @@ void DialogueManager::RenderDialogue(int dialogueId) {
 
     SDL_Rect camera = Engine::GetInstance().render->camera;
 
-    int boxWidth = windowWidth * 0.8f;
+    int boxWidth = windowWidth * 0.87f;
     int boxHeight = windowHeight * 0.2f;
     int boxX = (windowWidth - boxWidth) / 2;
-    int boxY = windowHeight - boxHeight - (windowHeight * 0.05f);
+    int boxY = windowHeight - boxHeight - (windowHeight * 0.12f);
 
     SDL_Rect dialogueBox = { -camera.x + boxX, -camera.y + boxY, boxWidth, boxHeight };
 	Engine::GetInstance().render->DrawTexture(dialogueTexture, dialogueBox.x, dialogueBox.y);
 
     int marginX = boxWidth * 0.05f;
     int marginTop = boxHeight * 0.15f;
-    int lineSpacing = boxHeight * 0.2f;
+    int lineSpacing = boxHeight * 0.21f;
 
-    int speakerFontSize = boxHeight * 0.21f;
+    int speakerFontSize = boxHeight * 0.3f;
     int dialogueFontSize = boxHeight * 0.15f;
 
     int speakerX = boxX + marginX;
@@ -145,7 +150,7 @@ void DialogueManager::RenderDialogue(int dialogueId) {
     int dialogueX = boxX + marginX;
     int dialogueY = speakerY + lineSpacing;
 
-    Engine::GetInstance().render->DrawText(event.speaker.c_str(), speakerX + 90, speakerY - 22, { 255, 255, 255, 255 }, speakerFontSize, false);
+    Engine::GetInstance().render->DrawText(event.speaker.c_str(), speakerX + 185, speakerY, { 255, 255, 255, 255 }, speakerFontSize, false);
 
 	const std::vector<std::string>& lines = event.wrappedLines[currentLineIndex];
 
@@ -163,7 +168,7 @@ void DialogueManager::RenderDialogue(int dialogueId) {
 	for (const std::string& l : lines) {
 		int charsInLine = std::min((int)l.length(), charsToDisplay - displayedChars);
 		std::string textToDisplay = l.substr(0, charsInLine);
-		Engine::GetInstance().render->DrawText(textToDisplay.c_str(), dialogueX, dialogueY, { 255, 255, 255, 255 }, dialogueFontSize, false);
+		Engine::GetInstance().render->DrawText(textToDisplay.c_str(), dialogueX, dialogueY + 50, { 255, 255, 255, 255 }, dialogueFontSize, false);
 		dialogueY += lineSpacing;
 		displayedChars += charsInLine;
 
@@ -179,8 +184,7 @@ void DialogueManager::WrapLines(int dialogueId, int boxWidth, int dialogueFontSi
 	auto& event = dialogueMap[dialogueId];
 	event.wrappedLines.clear();
 
-	int marginX = boxWidth * 0.05f;
-	int maxLineWidth = boxWidth - 2 * marginX;
+	int maxLineWidth = boxWidth - boxWidth * 0.02;
 
 	for (const std::string& line : event.lines) {
 		std::istringstream words(line);
@@ -221,7 +225,7 @@ void DialogueManager::SetDialogueAvailable(int dialogueId, Vector2D npcPos, bool
 }
 
 void DialogueManager::ShowInteractionPrompt() {
-	Engine::GetInstance().render.get()->DrawTexture(listenTexture, promptPos.x, promptPos.y + 105);
+	Engine::GetInstance().render.get()->DrawTexture(listenTexture, promptPos.x - 295/2, promptPos.y);
 }
 
 void DialogueManager::ResetTyping() {
@@ -229,4 +233,13 @@ void DialogueManager::ResetTyping() {
 	currentCharIndex = 0;
 	typingFinished = false;
 	forceTypingFinish = false;
+}
+
+void DialogueManager::SetPlayerMovement(bool isMoving) {
+	Player* player = Engine::GetInstance().scene.get()->GetPlayer();
+	player->GetMechanics()->GetMovementHandler()->SetCantMove(isMoving);
+	player->GetMechanics()->GetJumpMechanic()->Enable(!isMoving);
+	//player->GetMechanics()->GetMovementHandler()->EnableJump(isMoving);
+	//player->GetMechanics()->GetMovementHandler()->EnableDoubleJump(isMoving);
+	//player->GetMechanics()->GetMovementHandler()->EnableDash(isMoving);
 }

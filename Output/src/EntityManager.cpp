@@ -158,6 +158,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::CASTOR:
 		entity = new NPC(EntityType::CASTOR);
 		break;
+	case EntityType::INVISIBLE:
+		entity = new NPC(EntityType::INVISIBLE);
+		break;
 	case EntityType::PERDIZ:
 		entity = new NPC(EntityType::PERDIZ);
 		break;
@@ -298,8 +301,15 @@ bool EntityManager::Update(float dt)
 
 		entity->SetPhysicsActive(isInCamera);
 
-		if (isInCamera)
+		if (Engine::GetInstance().scene.get()->nextScene != 6666)
+		{
+			if (isInCamera)
+				ret = entity->Update(dt);
+		}
+		else {
 			ret = entity->Update(dt);
+		}
+
 
 
 	}

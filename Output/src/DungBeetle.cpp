@@ -52,7 +52,6 @@ bool DungBeetle::Start() {
 
         pbody->body->SetLinearDamping(0.0f);
         pbody->body->SetAngularDamping(0.0f);
-        pbody->body->SetBullet(true);
         b2Filter filter;
         filter.categoryBits = CATEGORY_ENEMY;
         filter.maskBits = CATEGORY_WALL | CATEGORY_PLAYER | CATEGORY_PLATFORM | CATEGORY_ATTACK;
@@ -242,8 +241,8 @@ void DungBeetle::Bounce()
 {
     b2Vec2 velocity = pbody->body->GetLinearVelocity();
     if (velocity.LengthSquared() < 0.01f) return;
-    velocity.Normalize();
 
+    velocity.Normalize();
     Vector2D mapPos = Engine::GetInstance().map->WorldToMap(
         METERS_TO_PIXELS(pbody->body->GetPosition().x),
         METERS_TO_PIXELS(pbody->body->GetPosition().y)
@@ -252,19 +251,23 @@ void DungBeetle::Bounce()
     MapLayer* layer = Engine::GetInstance().map->GetNavigationLayer();
     b2Vec2 normal(0.0f, 0.0f);
 
-    if (velocity.x < 0 && layer->Get(mapPos.x - 1, mapPos.y)) normal.Set(1, 0);
-    else if (velocity.x > 0 && layer->Get(mapPos.x + 1, mapPos.y)) normal.Set(-1, 0);
-    if (velocity.y < 0 && layer->Get(mapPos.x, mapPos.y - 1)) normal.Set(0, 1);
-    else if (velocity.y > 0 && layer->Get(mapPos.x, mapPos.y + 1)) normal.Set(0, -1);
+    if (velocity.x < 0 && layer->Get(mapPos.x - 1, mapPos.y)) normal += b2Vec2(1, 0);
+    else if (velocity.x > 0 && layer->Get(mapPos.x + 1, mapPos.y)) normal += b2Vec2(-1, 0);
+    if (velocity.y < 0 && layer->Get(mapPos.x, mapPos.y - 1)) normal += b2Vec2(0, 1);
+    else if (velocity.y > 0 && layer->Get(mapPos.x, mapPos.y + 1)) normal += b2Vec2(0, -1);
 
     b2Vec2 finalVel;
 
     if (normal.LengthSquared() > 0.0f)
     {
+        normal.Normalize();
         b2Vec2 reflected = velocity - 2.0f * b2Dot(velocity, normal) * normal;
-        float angle = atan2(reflected.y, reflected.x) + (((rand() % 100) / 100.0f - 0.5f) * 0.2f);
+
+        float angle = atan2(reflected.y, reflected.x);
+        angle += (((rand() % 100) / 100.0f - 0.5f) * 0.2f); // random ±0.1 radians
         finalVel.Set(cosf(angle), sinf(angle));
         finalVel *= ballModeSpeed;
+
         if (finalVel.LengthSquared() < 0.01f)
             finalVel = ballModeSpeed * normal;
     }

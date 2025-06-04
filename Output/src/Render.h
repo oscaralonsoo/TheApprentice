@@ -95,4 +95,6 @@ public:
 	int extraCameraOffsetX = 0;
 
 	float currentFovFactor = 1.0f;
+
+	bool downCameraActivated = false;
 };

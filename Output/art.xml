@@ -51,6 +51,11 @@
 						<frame x="0" y="0" w="32" h="32" />
 					</idle>
 				</lifes>
+				<offlifes w="32" h="32" texture="Assets/Slime/off_vida.png">
+					<idle loop="true" speed="0.1">
+						<frame x="0" y="0" w="32" h="32" />
+					</idle>
+				</offlifes>
 			</game>
 		</UI>
 	</textures>

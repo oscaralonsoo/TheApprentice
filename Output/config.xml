@@ -165,17 +165,17 @@
 					<frame x="744" y="1323" w="186" h="100" />
 					<frame x="930" y="1323" w="186" h="100" />
 				</push>
-				<doublejump loop="false" speed="0.15">
+				<doublejump loop="true" speed="0.15">
 					<frame x="0" y="1423" w="150" h="120" />
 					<frame x="150" y="1423" w="150" h="120" />
 					<frame x="300" y="1423" w="150" h="120" />
 					<frame x="450" y="1423" w="150" h="120" />
 				</doublejump>
 				<walljump loop="false" speed="0.15">
-					<frame x="0" y="1543" w="100" h="100" />
-					<frame x="100" y="1543" w="100" h="100" />
-					<frame x="200" y="1543" w="100" h="100" />
-					<frame x="300" y="1543" w="100" h="100" />
+					<frame x="0" y="1555" w="122" h="110" />
+					<frame x="122" y="1555" w="122" h="110" />
+					<frame x="244" y="1555" w="122" h="110" />
+					<frame x="366" y="1555" w="122" h="110" />
 				</walljump>
 				<glide loop="false" speed="0.15">
 					<frame x="0" y="1673" w="140" h="120" />
@@ -188,7 +188,7 @@
 					<frame x="170" y="1813" w="85" h="120" />
 					<frame x="255" y="1813" w="85" h="120" />
 				</liana>
-				<transition loop="false" speed="0.5">
+				<transition loop="false" speed="0.3">
 					<frame x="0" y="1933" w="200" h="200" />
 					<frame x="200" y="1933" w="200" h="200" />
 					<frame x="400" y="1933" w="200" h="200" />
@@ -974,11 +974,19 @@
 					</idle>
 				</destructible_wall>
 				<life_plant w="256" h="256" texture="Assets/Props/lifePlant.png">
-					<available loop="true" speed="0.12">
+					<available loop="true" speed="0.06">
 						<frame x="0" y="0" w="256" h="256" />
 						<frame x="256" y="0" w="256" h="256" />
 					</available>
-					<consumed loop="false" speed="0">
+					<consumed loop="false" speed="0.2">
+						<frame x="0" y="512" w="256" h="256" />
+						<frame x="256" y="512" w="256" h="256" />
+						<frame x="512" y="512" w="256" h="256" />
+						<frame x="768" y="512" w="256" h="256" />
+						<frame x="0" y="768" w="256" h="256" />
+						<frame x="256" y="768" w="256" h="256" />
+						<frame x="512" y="768" w="256" h="256" />
+						<frame x="768" y="768" w="256" h="256" />
 						<frame x="0" y="256" w="256" h="256" />
 					</consumed>
 				</life_plant>
@@ -993,7 +1001,15 @@
 						<frame x="512" y="256" w="256" h="256" />
 						<frame x="768" y="256" w="256" h="256" />
 					</available>
-					<consumed loop="false" speed="0">
+					<consumed loop="false" speed="0.2">
+						<frame x="0" y="768" w="256" h="256" />
+						<frame x="256" y="768" w="256" h="256" />
+						<frame x="512" y="768" w="256" h="256" />
+						<frame x="768" y="768" w="256" h="256" />
+						<frame x="0" y="1024" w="256" h="256" />
+						<frame x="256" y="1024" w="256" h="256" />
+						<frame x="512" y="1024" w="256" h="256" />
+						<frame x="768" y="1024" w="256" h="256" />
 						<frame x="0" y="512" w="256" h="256" />
 					</consumed>
 				</life_plant_max>

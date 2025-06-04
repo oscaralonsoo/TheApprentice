@@ -28,7 +28,7 @@ void FallMechanic::Update(float dt) {
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
     if (velocity.y > 0.1f && !isFalling) {
         isFalling = true;
-        player->GetAnimation()->SetStateIfHigherPriority("fall");
+        player->GetAnimation()->ForceSetState("fall");
     }
 
     CheckFallStart();
@@ -68,7 +68,8 @@ void FallMechanic::OnLanding() {
             stunTimer.Start();
             Engine::GetInstance().render->StartCameraShake(0.2f, 2);
         }
-        else {
+        if (!player->GetMechanics()->GetMovementHandler()->GetAttackMechanic().IsAttacking())
+        {
             player->GetAnimation()->ForceSetState("idle");
         }
     }

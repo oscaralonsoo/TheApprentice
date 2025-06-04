@@ -31,6 +31,7 @@ public:
 	void LoadDialogues();
 	void SetDialogueAvailable(int dialogueId, Vector2D npcPos, bool active);
 	void ShowInteractionPrompt();
+	void SetPlayerMovement(bool isMoving);
 	void WrapLines(int dialogueId, int boxWidth, int dialogueFontSize);
 	void ResetTyping();
 
@@ -53,4 +54,5 @@ private:
 	Timer typingTimer;
 	bool typingFinished = false;
 	bool forceTypingFinish = false;
+	bool prevL1State = false;
 };

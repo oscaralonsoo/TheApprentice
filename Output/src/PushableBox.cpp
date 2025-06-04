@@ -40,9 +40,8 @@ bool PushableBox::Start()
 bool PushableBox::Update(float dt)
 {
     Player* player = Engine::GetInstance().scene->GetPlayer();
-
-    
-    if (transitionToPush && player->GetAnimation()->GetCurrentState() == "transition" && player->GetAnimation()->HasFinished()) {
+    if (transitionToPush) {
+        player->GetAnimation()->SetOverlayState("transition");
         player->GetAnimation()->SetStateIfHigherPriority("push");
         transitionToPush = false;
     }
@@ -57,9 +56,8 @@ bool PushableBox::Update(float dt)
         }
         if (player->GetMechanics()->CanPush() && isPlayerPushing) {
 
-            if (fabs(pbody->body->GetLinearVelocity().x) > 0.01f)
-            {
-                player->SetState("push");
+            if (fabs(pbody->body->GetLinearVelocity().x) > 0.01f && !transitionToPush && !wasPlayerPushingLastFrame) {
+                transitionToPush = true;
             }
         }
     }

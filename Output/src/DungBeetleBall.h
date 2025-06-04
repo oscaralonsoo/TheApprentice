@@ -22,8 +22,6 @@ public:
 
     void CollisionNavigationLayer();
 
-    bool IsDestroyed() const;
-
 public:
     Animation* currentAnimation = nullptr;
     Animation destroyAnim;
@@ -34,9 +32,6 @@ private:
     Animation idleAnim;
     float timeStuck = 0.0f;
     b2Vec2 previousPosition;
-    Vector2D position;
-    int width;
-    int height;
     float speed;
     b2Vec2 direction;
 

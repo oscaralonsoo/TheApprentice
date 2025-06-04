@@ -41,54 +41,23 @@ DungBeetleBall::DungBeetleBall(float x, float y, float speed, b2Vec2 direction)
     }
 
     pbody->body->SetLinearVelocity(b2Vec2(direction.x * speed, direction.y * speed));
-    time = 0.0f;
+
     currentAnimation = &idleAnim;
 }
 
 DungBeetleBall::~DungBeetleBall() {
-    if (pbody) {
-        Engine::GetInstance().entityManager->DestroyEntity(this);
-        pbody = nullptr;
-    }
-    delete currentAnimation;
-    currentAnimation = nullptr;
+
 }
 
 bool DungBeetleBall::Update(float dt)
 {
+    CollisionNavigationLayer();
+
     b2Transform pbodyPos = pbody->body->GetTransform();
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - width / 2);
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - height / 2);
     Engine::GetInstance().render->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
     currentAnimation->Update();
-
-    b2Vec2 currentPos = pbody->body->GetPosition();
-
-    if (b2DistanceSquared(previousPosition, currentPos) < 0.01f * 0.01f)
-    {
-        timeStuck += dt;
-        if (timeStuck > 1000.0f)
-        {
-            b2Vec2 randomDir((rand() % 100 - 50) / 100.0f, (rand() % 100 - 50) / 100.0f);
-            randomDir.Normalize();
-            pbody->body->ApplyLinearImpulse(0.5f * randomDir, pbody->body->GetWorldCenter(), true);
-            timeStuck = 0.0f;
-        }
-    }
-    else
-        timeStuck = 0.0f;
-
-    pbody->body->SetAngularVelocity(0.0f);
-
-    b2Vec2 velocity = pbody->body->GetLinearVelocity();
-    if (fabs(velocity.Length() - speed) > 0.1f)
-    {
-        velocity.Normalize();
-        velocity *= speed;
-        pbody->body->SetLinearVelocity(velocity);
-    }
-    previousPosition = currentPos;
-    CollisionNavigationLayer();
 
     return true;
 }
@@ -190,10 +159,5 @@ void DungBeetleBall::CollisionNavigationLayer() {
         if (Engine::GetInstance().map->GetNavigationLayer()->Get(projected.x, projected.y))
             Bounce();
         currentTileMap = projected;
-    }
-}
-bool DungBeetleBall::IsDestroyed() const {
-    return currentAnimation == &destroyAnim && currentAnimation->HasFinished();
-    {
     }
 }

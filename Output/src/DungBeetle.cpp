@@ -52,7 +52,6 @@ bool DungBeetle::Start() {
 
         pbody->body->SetLinearDamping(0.0f);
         pbody->body->SetAngularDamping(0.0f);
-        pbody->body->SetBullet(true);
         b2Filter filter;
         filter.categoryBits = CATEGORY_ENEMY;
         filter.maskBits = CATEGORY_WALL | CATEGORY_PLAYER | CATEGORY_PLATFORM | CATEGORY_ATTACK;

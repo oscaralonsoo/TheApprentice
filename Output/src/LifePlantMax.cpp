@@ -50,7 +50,7 @@ bool LifePlantMax::Start() {
 
     currentAnimation = &availableAnim;
 
-    soundInteractId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Props/lifeplant_active.ogg", 1.0f);
+    soundInteractId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Props/lifeplantmax_active.ogg", 1.0f);
 
     return true;
 }

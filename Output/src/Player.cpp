@@ -73,10 +73,11 @@ bool Player::Start() {
 	Vector2D(1461, 753),
 	Vector2D(1082, 908),
 	Vector2D(760, 3826),
+	Vector2D(448, 1856),
 	Vector2D(3402, 4020),
 	Vector2D(3392, 6080),
 	Vector2D(128, 620),
-	Vector2D(1334, 2020),
+	Vector2D(1152, 1088),
 	Vector2D(276, 2824),
 	Vector2D(7038, 446),
 	Vector2D(4372, 1150),
@@ -87,7 +88,7 @@ bool Player::Start() {
 	Vector2D(446, 928),
 	};
 
-	intArray = {0, 1, 12, 21, 22, 23, 31, 41, 42, 43, 51, 52, 69, 99, 6666};
+	intArray = {0, 1, 12, 14, 21, 22, 23, 31, 41, 42, 43, 51, 52, 69, 99, 6666};
 
 	currentIndex = 1;
 

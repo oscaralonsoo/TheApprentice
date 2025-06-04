@@ -48,5 +48,5 @@ public:
 	std::list<Entity*> particles;
 
 	PhysBody* pbody;
-
+	int lastScene = -1;
 };

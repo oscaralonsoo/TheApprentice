@@ -85,6 +85,17 @@ void JumpMechanic::HandleJumpInput(float dt) {
             b2Vec2 impulse(0, -minJumpForce);
             player->pbody->body->ApplyForceToCenter(impulse, true);
         }
+        else if (glideUnlocked && jumpCount == 2 && !player->GetMechanics()->IsOnGround() && !player->GetMechanics()->IsWallSliding()) {
+            jumpCount = 3;
+            isGliding = true;
+            player->pbody->body->SetGravityScale(glideGravityScale);
+            player->GetAnimation()->SetOverlayState("transition");
+            player->GetAnimation()->SetStateIfHigherPriority("glide");
+
+            b2Vec2 vel = player->pbody->body->GetLinearVelocity();
+            vel.y = 0.0f;
+            player->pbody->body->SetLinearVelocity(vel);
+        }
         if (jumpCount == 0 && wallJumpUnlocked && player->GetMechanics()->IsWallSliding()) {
             isJumping = true;
             wallJumpActive = true;
@@ -154,8 +165,16 @@ void JumpMechanic::HandleJumpInput(float dt) {
     }
 
     // Planeo (solo despu�s del doble salto y tras terminar el impulso)
-    if (jumpCount == 2 && !isJumping &&
-        glideUnlocked && jumpRepeat &&
+    if (jumpDown && jumpCount == 2 && !isJumping &&
+        glideUnlocked &&
+        !player->GetMechanics()->IsOnGround() &&
+        !player->GetMechanics()->IsWallSliding()) {
+
+        glideInputArmed = true; // Estamos listos para iniciar planeo si se mantiene pulsado
+    }
+
+    // Activar el planeo solo si está armado y se mantiene pulsado
+    if (glideInputArmed && jumpRepeat &&
         !player->GetMechanics()->IsOnGround() &&
         !player->GetMechanics()->IsWallSliding()) {
 
@@ -169,15 +188,15 @@ void JumpMechanic::HandleJumpInput(float dt) {
             vel.y = 0.0f;
             player->pbody->body->SetLinearVelocity(vel);
         }
-
     }
-    else if (isGliding && (!jumpRepeat || player->GetMechanics()->IsOnGround())) {
+    else if (isGliding && (!jumpRepeat || player->GetMechanics()->IsOnGround() || jumpCount < 3)) {
         isGliding = false;
         player->pbody->body->SetGravityScale(2.0f);
 
         if (!player->GetMechanics()->IsOnGround() && !player->GetMechanics()->IsWallSliding()) {
-            player->GetAnimation()->SetStateIfHigherPriority("fall");
+            player->GetAnimation()->ForceSetState("fall");
         }
+        glideInputArmed = false; // Resetear el estado
     }
 }
 
@@ -198,6 +217,7 @@ void JumpMechanic::OnLanding() {
     isGliding = false;
     player->pbody->body->SetGravityScale(2.0f);
     wallJumpActive = false;
+    glideInputArmed = false;
 }
 
 void JumpMechanic::OnLeaveGround() {

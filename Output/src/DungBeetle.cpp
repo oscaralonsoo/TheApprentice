@@ -64,13 +64,12 @@ bool DungBeetle::Start() {
     maxSteps = 15;
     firstBallTimer = 0.0f;
     firstBallLaunched = false;
-
+    searchAttackId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/DungBeetle/dungbeetle_search.ogg", 1.0f);
     soundAttackId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/DungBeetle/dungbeetle_attack.ogg", 1.0f);
     soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/DungBeetle/dungbeetle_death.ogg", 1.0f);
     soundBounceId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/DungBeetle/dungbeetle_bounce.ogg", 1.0f);
+    angryId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/DungBeetle/dungbeetle_angry.ogg", 1.0f);
     
-
-
     return Enemy::Start();
 }
 
@@ -87,7 +86,6 @@ bool DungBeetle::Update(float dt) {
             currentStatePuzzle = 0;
         }
     }
-
     CheckState(dt);
     CollisionNavigationLayer();
     return Enemy::Update(dt);
@@ -136,7 +134,8 @@ void DungBeetle::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 void DungBeetle::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
-    case ColliderType::PLAYER:
+    default:
+        bounceSoundPlayed = false;
         break;
     }
 }
@@ -165,7 +164,6 @@ void DungBeetle::Idle()
     else if (currentStatePuzzle == 2 && ballsThrown == 2 && !hasLaunched) {
         currentState = DungBeetleState::BALLMODE;
     }
-
     lastPuzzleState = currentStatePuzzle;
 }
 
@@ -174,9 +172,13 @@ void DungBeetle::Angry()
 {
     throwingAnim.Reset();
     currentAnimation = &angryAnim;
-
+    if (!angrySoundPlayed) {
+        Engine::GetInstance().audio->PlayFx(angryId, 1.0f, 0);
+        angrySoundPlayed = true;
+    }
     if (currentAnimation->HasFinished())
     {
+        angrySoundPlayed = false;
         if ((CheckPuzzleState() == 0 && ballsThrown == 0) ||
             (CheckPuzzleState() == 1 && ballsThrown == 1)) {
             currentState = DungBeetleState::THROW;
@@ -193,13 +195,16 @@ void DungBeetle::Angry()
 void DungBeetle::Throw(float dt)
 {
     currentAnimation = &throwingAnim;
+    if (!searchSoundPlayed) {
+        Engine::GetInstance().audio->PlayFx(searchAttackId, 1.0f, 0);
+        searchSoundPlayed = true;
+    }
     if (currentAnimation->HasFinished())
     {
-            Engine::GetInstance().audio->PlayFx(soundAttackId, 1.0f, 0);
-
+      
         if (!hasThrown && ballsThrown < 2) {
             b2Vec2 dir((direction < 0) ? -1.0f : 1.0f, 1.0f);
-
+            Engine::GetInstance().audio->PlayFx(soundAttackId, 1.0f, 0);
             float spawnX = METERS_TO_PIXELS(pbody->body->GetPosition().x);
             float spawnY = METERS_TO_PIXELS(pbody->body->GetPosition().y) + 50.0f;
             DungBeetleBall* ball = new DungBeetleBall(spawnX, spawnY, throwSpeed, dir);
@@ -207,9 +212,8 @@ void DungBeetle::Throw(float dt)
             AssignBalls(ball);
             ballsThrown++;
             hasThrown = true;
+            searchSoundPlayed = false;
         }
-
-
         lastPuzzleState = currentStatePuzzle;
         currentState = DungBeetleState::IDLE;
     }
@@ -228,13 +232,11 @@ void DungBeetle::BallMode()
         if (!hasLaunched)
         {
             currentAnimation = &ballAnim;
-
+            Engine::GetInstance().audio->PlayFx(soundAttackId, 1.0f, 0);
             b2Vec2 dir(direction < 0 ? 1.0f : -1.0f, 1.0f);
-            pbody->body->SetLinearVelocity(ballModeSpeed * dir);
-
-            hasLaunched = true;
-
             ChangeColliderRadius(70.0f, true);
+            pbody->body->SetLinearVelocity(ballModeSpeed * dir);
+            hasLaunched = true;
         }
     }
 }
@@ -256,6 +258,10 @@ int DungBeetle::CheckPuzzleState() {
 }
 void DungBeetle::Bounce()
 {
+    if (!bounceSoundPlayed) {
+        Engine::GetInstance().audio->PlayFx(soundBounceId, 1.0f, 0);
+        bounceSoundPlayed = true;
+    }
     b2Vec2 velocity = pbody->body->GetLinearVelocity();
     if (velocity.LengthSquared() < 0.01f) return;
 

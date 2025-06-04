@@ -97,8 +97,8 @@ void DungBeetleBall::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
     case ColliderType::ATTACK:
     case ColliderType::PLATFORM:
     case ColliderType::WALL:
-        break;
     case ColliderType::PLAYER:
+        bounceSoundPlayed = false;
         break;
     }
 }

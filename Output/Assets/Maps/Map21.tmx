@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="171" height="67" tilewidth="64" tileheight="64" infinite="0" nextlayerid="72" nextobjectid="4646">
- <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
-  <image source="../Props/tiles_cave.png" width="640" height="640"/>
- </tileset>
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="171" height="67" tilewidth="64" tileheight="64" infinite="0" nextlayerid="72" nextobjectid="4646">
  <tileset firstgid="101" name="Mangrove_background" tilewidth="64" tileheight="64" tilecount="480" columns="30">
   <image source="../Environment/Mangrove_background.png" width="1920" height="1080"/>
  </tileset>
@@ -98,6 +95,9 @@
  </tileset>
  <tileset firstgid="18060" name="Plantas_v2" tilewidth="64" tileheight="64" tilecount="24" columns="12">
   <image source="../Props/Plantas_v2.png" width="768" height="128"/>
+ </tileset>
+ <tileset firstgid="1" name="tiles_cave2" tilewidth="64" tileheight="64" tilecount="100" columns="10">
+  <image source="../Props/tiles_cave2.png" width="640" height="640"/>
  </tileset>
  <group id="70" name="Background" offsetx="96" offsety="-32">
   <properties>
@@ -27207,7 +27207,7 @@
    <tile gid="15848"/>
    <tile gid="15849"/>
    <tile gid="15850"/>
-   <tile gid="15851"/>
+   <tile/>
    <tile gid="15852"/>
    <tile gid="15853"/>
    <tile gid="15854"/>
@@ -50135,7 +50135,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="5098"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -73063,7 +73063,7 @@
    <tile gid="10019"/>
    <tile gid="10020"/>
    <tile gid="10021"/>
-   <tile gid="10022"/>
+   <tile/>
    <tile gid="10023"/>
    <tile gid="10024"/>
    <tile gid="10025"/>
@@ -82883,7 +82883,7 @@
    <tile gid="17986"/>
    <tile gid="17986"/>
    <tile gid="17971"/>
-   <tile gid="17996"/>
+   <tile gid="17997"/>
    <tile gid="18006"/>
    <tile gid="18007"/>
    <tile/>
@@ -83596,7 +83596,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="17985"/>
+   <tile gid="18038"/>
    <tile gid="17977"/>
    <tile gid="17978"/>
    <tile/>
@@ -83767,7 +83767,7 @@
    <tile/>
    <tile gid="17965"/>
    <tile gid="17966"/>
-   <tile gid="17985"/>
+   <tile gid="17973"/>
    <tile gid="17987"/>
    <tile/>
    <tile/>
@@ -85462,7 +85462,7 @@
    <tile gid="18007"/>
    <tile gid="17995"/>
    <tile gid="17973"/>
-   <tile gid="17986"/>
+   <tile gid="17991"/>
    <tile gid="17976"/>
    <tile gid="17976"/>
    <tile gid="17976"/>
@@ -85659,13 +85659,13 @@
    <tile gid="17986"/>
    <tile gid="17986"/>
    <tile gid="17986"/>
-   <tile gid="17986"/>
+   <tile gid="17981"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="17996"/>
+   <tile gid="17995"/>
    <tile gid="17996"/>
    <tile gid="17996"/>
    <tile gid="17996"/>
@@ -85870,7 +85870,7 @@
    <tile gid="17986"/>
    <tile gid="17986"/>
    <tile gid="17986"/>
-   <tile gid="17986"/>
+   <tile gid="17981"/>
    <tile/>
    <tile/>
    <tile/>
@@ -86748,7 +86748,7 @@
    <tile gid="17986"/>
    <tile gid="17986"/>
    <tile gid="17986"/>
-   <tile gid="17986"/>
+   <tile gid="17981"/>
    <tile gid="17966"/>
    <tile gid="17966"/>
    <tile gid="17966"/>
@@ -86889,10 +86889,10 @@
    <tile gid="17983"/>
    <tile gid="17986"/>
    <tile gid="17986"/>
-   <tile gid="17986"/>
+   <tile gid="17987"/>
    <tile gid="15283"/>
    <tile gid="15284"/>
-   <tile gid="17986"/>
+   <tile gid="17983"/>
    <tile gid="17986"/>
    <tile gid="17986"/>
    <tile gid="17986"/>
@@ -87060,10 +87060,10 @@
    <tile gid="17993"/>
    <tile gid="17986"/>
    <tile gid="17986"/>
-   <tile gid="17986"/>
-   <tile gid="17986"/>
-   <tile gid="17986"/>
-   <tile gid="17986"/>
+   <tile gid="17991"/>
+   <tile gid="2684372543"/>
+   <tile gid="2684372543"/>
+   <tile gid="17993"/>
    <tile gid="17986"/>
    <tile gid="17986"/>
    <tile gid="17986"/>
@@ -94515,7 +94515,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="2684372267"/>
+   <tile/>
    <tile gid="17104"/>
    <tile gid="17105"/>
    <tile gid="17074"/>
@@ -94686,7 +94686,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="2684372268"/>
+   <tile/>
    <tile gid="17134"/>
    <tile gid="17135"/>
    <tile gid="17104"/>
@@ -94857,7 +94857,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="2684372269"/>
+   <tile/>
    <tile gid="17164"/>
    <tile gid="17165"/>
    <tile gid="17134"/>
@@ -115016,15 +115016,15 @@
   <object id="4527" x="576" y="1728" height="128"/>
   <object id="4529" x="1408" y="1856" height="64"/>
   <object id="4530" x="1408" y="1920" width="256"/>
-  <object id="4541" x="1472" y="2368" height="128"/>
+  <object id="4541" x="1472" y="2373.33" height="122.667"/>
   <object id="4542" x="1472" y="2496" width="128"/>
-  <object id="4543" x="1600" y="2368" height="128"/>
-  <object id="4544" x="1856" y="2368" height="128"/>
+  <object id="4543" x="1600" y="2374.67" height="121.333"/>
+  <object id="4544" x="1856" y="2377.33" height="118.667"/>
   <object id="4545" x="1856" y="2496" width="128"/>
-  <object id="4546" x="1984" y="2368" height="128"/>
-  <object id="4558" x="2240" y="2368" height="128"/>
+  <object id="4546" x="1984" y="2374.67" height="121.333"/>
+  <object id="4558" x="2240" y="2374.67" height="121.333"/>
   <object id="4559" x="2240" y="2496" width="128"/>
-  <object id="4560" x="2368" y="2368" height="128"/>
+  <object id="4560" x="2368" y="2372" height="124"/>
   <object id="4565" x="2624" y="1856" height="64"/>
   <object id="4570" x="2368" y="2240" width="320"/>
   <object id="4579" x="2048" y="1536" height="192"/>

@@ -176,12 +176,6 @@ void HookAnchor::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
         if (scene && scene->GetHookManager())
         {
             scene->GetHookManager()->UnregisterHook(this);
-
-            // Desactiva el gancho si este era el activo
-            if (scene->GetActiveHook() == this)
-            {
-                scene->SetActiveHook(nullptr);
-            }
         }
     }
 }

@@ -54,4 +54,7 @@ private:
     bool isDying = false;
     Timer deathTimer;
     float deathAnimDuration = 1000.0f; // Ajusta según tu animación
+
+    int soundDamageId = 0;
+    int soundDeadId = 0;
 };

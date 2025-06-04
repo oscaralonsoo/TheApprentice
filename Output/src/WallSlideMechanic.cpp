@@ -2,9 +2,12 @@
 #include "Player.h"
 #include "Engine.h"
 #include "Physics.h"
+#include "Audio.h"
 
 void WallSlideMechanic::Init(Player* player) {
     this->player = player;
+
+    soundWalkId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Slime/slime_walk.ogg", 1.0f);
 }
 
 void WallSlideMechanic::Update(float dt) {
@@ -22,6 +25,7 @@ void WallSlideMechanic::Update(float dt) {
 
 void WallSlideMechanic::StartWallSlide() {
     if (!isWallSliding) {
+        Engine::GetInstance().audio->PlayFx(soundWalkId, 1.0f, 0);
         isWallSliding = true;
         player->SetState("wall_slide");
 

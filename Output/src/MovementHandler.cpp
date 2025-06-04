@@ -8,6 +8,8 @@
 #include "EntityManager.h"
 #include "HookAnchor.h"
 #include "Scene.h"
+#include "Audio.h"
+#include <cmath>
 
 
 void MovementHandler::Init(Player* player) {
@@ -45,6 +47,8 @@ void MovementHandler::Init(Player* player) {
             }
         }
     }
+
+    soundWalkId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Slime/slime_walk.ogg", 1.0f);
 }
 
 void MovementHandler::Update(float dt) {
@@ -125,6 +129,15 @@ void MovementHandler::Update(float dt) {
 
         if (hookDown) {
             Engine::GetInstance().scene->GetHookManager()->TryUseClosestHook();
+        }
+    }
+
+    if (isMoving && isLanding)
+    {
+        Uint32 currentTime = SDL_GetTicks();
+        if (currentTime - lastWalkSoundTime >= walkSoundInterval) {
+            Engine::GetInstance().audio->PlayFx(soundWalkId, 1.0f, 0);
+            lastWalkSoundTime = currentTime;
         }
     }
 
@@ -225,13 +238,16 @@ void MovementHandler::HandleMovementInput() {
             if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
                 movementDirection = -1;
                 velocity.x = movementDirection * speed;
+                isMoving = true;
             }
             else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
                 movementDirection = 1;
                 velocity.x = movementDirection * speed;
+                isMoving = true;
             }
             else {
                 velocity.x = 0.0f;
+                isMoving = false;
             }
         }
     }
@@ -311,6 +327,7 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
     {
         lastPlatformCollider = physB;
         if (!jumpCooldownActive) {
+            isLanding = true;
             fallMechanic.OnLanding();
             jumpMechanic.OnLanding();
 
@@ -377,6 +394,7 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
 void MovementHandler::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
+        isLanding = false;
         jumpCooldownTimer.Start();
         jumpCooldownActive = true;
         player->GetMechanics()->SetIsOnGround(false);

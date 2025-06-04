@@ -4,9 +4,13 @@
 #include "Render.h"
 #include "Scene.h"
 #include "Physics.h"
+#include "Audio.h"
 
 void HealthSystem::Init(Player* player) {
     this->player = player;
+
+    soundDamageId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Slime/slime_damage.ogg", 1.0f);
+    soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Slime/slime_dead.ogg", 1.0f);
 }
 
 void HealthSystem::Update(float dt) {
@@ -32,12 +36,14 @@ void HealthSystem::Update(float dt) {
 }
 
 void HealthSystem::TakeDamage() {
+    Engine::GetInstance().audio->PlayFx(soundDamageId, 1.0f, 0);
     lives--;
     if (lives < 0) lives = 0;
 
     Engine::GetInstance().render->StartCameraShake(0.5, 1);
 
     if (lives == 0 && !isDying) {
+        Engine::GetInstance().audio->PlayFx(soundDeadId, 1.0f, 0);
         isDying = true;
         player->GetAnimation()->SetStateIfHigherPriority("die");
         Engine::GetInstance().scene->isDead = true;

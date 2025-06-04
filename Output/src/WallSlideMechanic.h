@@ -25,4 +25,5 @@ private:
     float wallSlideCooldownTime = 3000.0f; // tiempo de enfriamiento para volver a engancharse
     bool wallSlideCooldownActive = false;
 
+    int soundWalkId = 0;
 };

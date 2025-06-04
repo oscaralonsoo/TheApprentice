@@ -26,4 +26,6 @@ private:
     float fallStunThreshold = 34.0f; // velocidad Y para stun
 
     bool isStunned = false;
+
+    int soundStunId = 0;
 };

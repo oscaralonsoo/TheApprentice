@@ -213,10 +213,9 @@ void Menus::MainMenu(float dt) {
     }
 
     if (buttonPressed) {
-                    if (Engine::GetInstance().scene->soundUI2Id > 0)
-                Engine::GetInstance().audio->PlayFx(Engine::GetInstance().scene->soundUI2Id, 1.0f, 0);
+       if (Engine::GetInstance().scene->soundUI2Id > 0) { Engine::GetInstance().audio->PlayFx(Engine::GetInstance().scene->soundUI2Id, 1.0f, 0); }
         switch (selectedButton) {
-        case 0: NewGame();  Engine::GetInstance().audio->StopMusic(); break;
+        case 0:  Engine::GetInstance().audio->StopMusic(); NewGame();  break;
         case 1:
             if (isSaved != 0) {
                 Engine::GetInstance().scene->LoadGameXML();
@@ -415,13 +414,13 @@ void Menus::UpdateVolume(int sliderX, int minX, int maxX) {
 
     auto& audio = *Engine::GetInstance().audio;
 
-    if (selectedButton == 2) {
+    if (selectedButton == 1) {
         audio.musicVolume = volume;
     }
-    else if (selectedButton == 3) {
+    else if (selectedButton == 2) {
         audio.sfxVolume = volume;
     }
-    else if (selectedButton == 4) {
+    else if (selectedButton == 3) {
         audio.masterVolume = volume;
     }
 
@@ -524,9 +523,9 @@ void Menus::SyncSlidersWithVolumes() {
         return minXreal + static_cast<int>(volume * (maxXreal - minXreal));
         };
 
-    musicVolumeSliderX = CalcSliderX(Engine::GetInstance().audio->musicVolume, selectedButton == 2);
-    fxVolumeSliderX = CalcSliderX(Engine::GetInstance().audio->sfxVolume, selectedButton == 3);
-    masterVolumeSliderX = CalcSliderX(Engine::GetInstance().audio->masterVolume, selectedButton == 4);
+    musicVolumeSliderX = CalcSliderX(Engine::GetInstance().audio->musicVolume, selectedButton == 1);
+    fxVolumeSliderX = CalcSliderX(Engine::GetInstance().audio->sfxVolume, selectedButton == 2);
+    masterVolumeSliderX = CalcSliderX(Engine::GetInstance().audio->masterVolume, selectedButton == 3);
 }
 void Menus::CreateButtons() {
     buttons.clear();
@@ -659,9 +658,9 @@ void Menus::DrawSliders() {
     const int startY = (height / 2) + 100;
     const int spacing = 125;
 
-    DrawSlider((width / 2) + 50, startY + spacing * 0, musicVolumeSliderX, selectedButton == 2, "Music Volume");
-    DrawSlider((width / 2) + 50, startY + spacing * 1, fxVolumeSliderX, selectedButton == 3, "FX Volume");
-    DrawSlider((width / 2) + 50, startY + spacing * 2, masterVolumeSliderX, selectedButton == 4, "Master Volume");
+    DrawSlider((width / 2) + 50, startY + spacing * 0, musicVolumeSliderX, selectedButton == 1, "Music Volume");
+    DrawSlider((width / 2) + 50, startY + spacing * 1, fxVolumeSliderX, selectedButton == 2, "FX Volume");
+    DrawSlider((width / 2) + 50, startY + spacing * 2, masterVolumeSliderX, selectedButton == 3, "Master Volume");
 }
 
 void Menus::DrawSlider(int minX, int y, int& sliderX, bool isSelected, const std::string& label) {

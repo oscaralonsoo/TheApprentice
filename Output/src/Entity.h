@@ -17,6 +17,7 @@ enum class EntityType
 	CARTA,
 	BROODHEART,
 	PERDIZ,
+	INVISIBLE,
 	PANGOLIN,
 	LIEBRE,
 	ARDILLA,

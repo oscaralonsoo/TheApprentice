@@ -158,6 +158,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::CASTOR:
 		entity = new NPC(EntityType::CASTOR);
 		break;
+	case EntityType::INVISIBLE:
+		entity = new NPC(EntityType::INVISIBLE);
+		break;
 	case EntityType::PERDIZ:
 		entity = new NPC(EntityType::PERDIZ);
 		break;

@@ -7,6 +7,7 @@
 #include "Textures.h"
 #include "Player.h"
 #include "PressureSystemController.h"
+#include "Audio.h"
 
 Nullwarden::Nullwarden() : Enemy(EntityType::NULLWARDEN) {
 }
@@ -20,6 +21,14 @@ bool Nullwarden::Awake() {
 
 bool Nullwarden::Start() {
     pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX(),(int)position.getY(), texW, texH , bodyType::DYNAMIC, CATEGORY_ENEMY, CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_ATTACK | CATEGORY_PLAYER_DAMAGE);
+
+    soundAttackId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Nullwarden/nullwarden_attack.ogg", 1.0f);
+    soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Nullwarden/nullwarden_death.ogg", 1.0f);
+    soundImpaledId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Nullwarden/nullwarden_impaled.ogg", 1.0f);
+    soundRoarId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Nullwarden/nullwarden_roar.ogg", 1.0f);
+    soundThrowId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Nullwarden/nullwarden_throw.ogg", 1.0f);
+    soundHitId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Nullwarden/nullwarden_hit1.ogg", 1.0f);
+
 
     //Assign collider type
     pbody->ctype = ColliderType::ENEMY;
@@ -57,6 +66,8 @@ bool Nullwarden::Start() {
     currentAnimation = &idleAnim;
     direction = -1;
     return true;
+
+
 }
 
 bool Nullwarden::Update(float dt) {
@@ -73,10 +84,33 @@ bool Nullwarden::Update(float dt) {
         if (currentAnimation != &idleAnim) currentAnimation = &idleAnim;
         currentState = NullwardenState::ATTACK;
         break;
-    case NullwardenState::ATTACK:
+    case NullwardenState::ATTACK: 
+        throwSoundTimer -= dt;
+        if (throwSoundTimer <= 0.0f) {
+            Engine::GetInstance().audio->PlayFx(soundThrowId, 1.0f, 0);
+            throwSoundTimer = throwSoundInterval;
+        }
+        deadSoundPlayed = false;
+        attackSoundPlayed = false;
+        impaledSoundPlayed = false;
+        roarSoundPlayed = false;
+        hitSoundPlayed = false;
+
         Attack();
         break;
     case NullwardenState::CHARGE:
+
+
+        if (!attackSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundAttackId, 1.0f, 0);
+            attackSoundPlayed = true;
+        }
+        deadSoundPlayed = false;
+        impaledSoundPlayed = false;
+        roarSoundPlayed = false;
+        throwSoundPlayed = false;
+        hitSoundPlayed = false;
+
         if (currentAnimation != &chargeAnim)
         {
             beforeChargeTimer.Start();
@@ -90,10 +124,34 @@ bool Nullwarden::Update(float dt) {
 
         break;
     case NullwardenState::IMPALED:
+
+
+        if (!impaledSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundImpaledId, 1.0f, 0);
+            impaledSoundPlayed = true;
+        }
+        deadSoundPlayed = false;
+        attackSoundPlayed = false;
+        roarSoundPlayed = false;
+        throwSoundPlayed = false;
+        hitSoundPlayed = false;
+
         if (!startedImpaledAnim) Roar();
+
         Impaled();
         break;
     case NullwardenState::ROAR:
+
+        if (!roarSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundRoarId, 1.0f, 0);
+            roarSoundPlayed = true;
+        }
+        deadSoundPlayed = false;
+        attackSoundPlayed = false;
+        impaledSoundPlayed = false;
+        throwSoundPlayed = false;
+        hitSoundPlayed = false;
+
         if (!changedDirection && (previousState != NullwardenState::ATTACK || previousState != NullwardenState::IDLE)) {
             direction = -direction;
             changedDirection = true;
@@ -110,9 +168,28 @@ bool Nullwarden::Update(float dt) {
         break;
 
     case NullwardenState::DEATH:
-        if (currentAnimation != &hitAnim) { currentAnimation = &hitAnim; }
+        if (currentAnimation != &hitAnim) { currentAnimation = &hitAnim;
+        if (!hitSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundHitId, 1.0f, 0);
+            hitSoundPlayed = true;
+        }
+        deadSoundPlayed = false;
+        attackSoundPlayed = false;
+        impaledSoundPlayed = false;
+        roarSoundPlayed = false;
+        throwSoundPlayed = false;
+        }
 
         if (currentAnimation != &deathAnim && currentAnimation->HasFinished()) currentAnimation = &deathAnim;
+        if (!deadSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundDeadId, 1.0f, 0);
+            deadSoundPlayed = true;
+        }
+        attackSoundPlayed = false;
+        impaledSoundPlayed = false;
+        roarSoundPlayed = false;
+        throwSoundPlayed = false;
+        hitSoundPlayed = false;
         break;
     }
     if (currentAnimation != previousAnimation) {
@@ -213,6 +290,7 @@ void Nullwarden::SpawnHorizontalSpears() {
     }
 }
 void Nullwarden::SpawnVerticalSpears() {
+
     float baseY = position.getY() + 550.0f;
     float spearX = position.getX() + ((direction > 0) ? -50.0f : texW + 50.0f) + (spawnedVerticalSpears * verticalSpearGap * (direction > 0 ? -1 : 1));
 
@@ -227,6 +305,15 @@ void Nullwarden::SpawnVerticalSpears() {
     else {
         spawnedVerticalSpears++;
     }
+    if (!throwSoundPlayed) {
+        Engine::GetInstance().audio->PlayFx(soundThrowId, 1.0f, 0);
+        throwSoundPlayed = true;
+    }
+    deadSoundPlayed = false;
+    attackSoundPlayed = false;
+    impaledSoundPlayed = false;
+    roarSoundPlayed = false;
+    hitSoundPlayed = false;
 }
 
 void Nullwarden::Attack() {

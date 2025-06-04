@@ -9,6 +9,7 @@
 #include "HookAnchor.h"
 #include "Scene.h"
 
+
 void MovementHandler::Init(Player* player) {
     this->player = player;
 

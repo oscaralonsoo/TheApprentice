@@ -83,4 +83,8 @@ private:
     bool transitionToDoubleJump = false;
     bool transitionToWallJump = false;
     bool transitionToGlide = false;
+
+    int soundJumpId = 0;
+
+    bool jumpSoundPlayed = false;
 };

@@ -96,5 +96,5 @@ private:
     bool walkSoundPlayed = false;
 
     float walkSoundTimer = 0.0f;
-    const float walkSoundInterval = 0.5f;
+    const float walkSoundInterval = 800.0f;
 };

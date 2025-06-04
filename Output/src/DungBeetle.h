@@ -64,4 +64,17 @@ private:
     Animation deathAnim;
 
     std::vector<DungBeetleBall*> dungBalls;
+
+    int soundAttackId = 0;
+    int soundDeadId = 0;
+    int soundBounceId = 0;
+
+    bool attackSoundPlayed = false;
+    bool deadSoundPlayed = false;
+    bool bounceSoundPlayed = false;
+  
+
+
+    float attackSoundTimer = 0.0f;
+    const float attackSoundInterval = 800.0f;
 };

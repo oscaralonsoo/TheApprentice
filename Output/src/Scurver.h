@@ -45,5 +45,5 @@ private:
     bool deadSoundPlayed = false;
 
     float walkSoundTimer = 0.0f;
-    const float walkSoundInterval = 0.5f;
+    const float walkSoundInterval = 400.0f;
 };

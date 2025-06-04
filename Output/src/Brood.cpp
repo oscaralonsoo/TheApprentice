@@ -7,6 +7,7 @@
 #include "Entity.h"
 #include "EntityManager.h"
 #include "Log.h"
+#include "Audio.h"
 #include <cmath>
 
 Brood::Brood() : Enemy(EntityType::BROOD)
@@ -64,6 +65,8 @@ bool Brood::Start() {
     initialPosition = position;
     maxSteps = 20;
  
+    soundDeathId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Broodheart/broodheart_death.ogg", 1.0f);
+
     return true;
 }
 bool Brood::Update(float dt) {
@@ -87,6 +90,11 @@ bool Brood::Update(float dt) {
 
     case BroodState::DEAD:
         currentAnimation = &deathAnim;
+        if (!deadSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundDeathId, 1.0f, 0);
+            deadSoundPlayed = true;
+        }
+
         break;
     }
     b2Transform pbodyPos = pbody->body->GetTransform();

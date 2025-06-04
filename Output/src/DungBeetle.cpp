@@ -11,6 +11,7 @@
 #include "Log.h"
 #include <cmath>
 #include "DungBeetleBall.h"
+#include "Audio.h"
 
 DungBeetle::DungBeetle() : Enemy(EntityType::DUNGBEETLE) {}
 
@@ -64,6 +65,12 @@ bool DungBeetle::Start() {
     firstBallTimer = 0.0f;
     firstBallLaunched = false;
 
+    soundAttackId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/DungBeetle/dungbeetle_attack.ogg", 1.0f);
+    soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/DungBeetle/dungbeetle_death.ogg", 1.0f);
+    soundBounceId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/DungBeetle/dungbeetle_bounce.ogg", 1.0f);
+    
+
+
     return Enemy::Start();
 }
 
@@ -116,6 +123,12 @@ void DungBeetle::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLAYER:
         if (currentState == DungBeetleState::BALLMODE) {
             Bounce();
+            if (!bounceSoundPlayed) {
+                Engine::GetInstance().audio->PlayFx(soundBounceId, 1.0f, 0);
+                bounceSoundPlayed = true;
+            }
+            deadSoundPlayed = false;
+            attackSoundPlayed = false;
         }
         break;
     }
@@ -182,6 +195,8 @@ void DungBeetle::Throw(float dt)
     currentAnimation = &throwingAnim;
     if (currentAnimation->HasFinished())
     {
+            Engine::GetInstance().audio->PlayFx(soundAttackId, 1.0f, 0);
+
         if (!hasThrown && ballsThrown < 2) {
             b2Vec2 dir((direction < 0) ? -1.0f : 1.0f, 1.0f);
 
@@ -193,6 +208,7 @@ void DungBeetle::Throw(float dt)
             ballsThrown++;
             hasThrown = true;
         }
+
 
         lastPuzzleState = currentStatePuzzle;
         currentState = DungBeetleState::IDLE;
@@ -227,6 +243,7 @@ void DungBeetle::Hit() {
     pbody->body->SetLinearVelocity(b2Vec2_zero);
     pbody->body->SetAngularVelocity(0);
     currentAnimation = &deathAnim;
+    Engine::GetInstance().audio->PlayFx(soundDeadId, 1.0f, 0);
 }
 void DungBeetle::ChangeBodyType() {
     pbody->body->SetType(b2_dynamicBody);

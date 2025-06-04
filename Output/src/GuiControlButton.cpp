@@ -7,6 +7,8 @@
 #include "Input.h"
 #include "Menus.h"
 
+
+
 GuiControlButton::GuiControlButton(int id, SDL_Rect bounds, const char* text) : GuiControl(GuiControlType::BUTTON, id)
 {
 	this->bounds = bounds;
@@ -14,6 +16,7 @@ GuiControlButton::GuiControlButton(int id, SDL_Rect bounds, const char* text) : 
 
 	canClick = true;
 	drawBasic = false;
+
 }
 GuiControlButton::~GuiControlButton()
 {
@@ -79,9 +82,13 @@ void GuiControlButton::ButtonNavigation() {
 
         if (moveDown) {
             menus->selectedButton = (menus->selectedButton + 1) % menus->buttons.size();
+            if (Engine::GetInstance().scene->soundUI1Id > 0)
+                Engine::GetInstance().audio->PlayFx(Engine::GetInstance().scene->soundUI1Id, 1.0f, 0);
         }
         if (moveUp) {
             menus->selectedButton = (menus->selectedButton - 1 + menus->buttons.size()) % menus->buttons.size();
+            if (Engine::GetInstance().scene->soundUI1Id > 0)
+                Engine::GetInstance().audio->PlayFx(Engine::GetInstance().scene->soundUI1Id, 1.0f, 0);
         }
     }
 }

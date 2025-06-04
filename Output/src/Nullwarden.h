@@ -91,9 +91,20 @@ private:
     const float verticalSpearGap = 200.0f;
 
 
-    int soundWalkId = 0;
+    int soundAttackId = 0;
     int soundDeadId = 0;
+    int soundImpaledId = 0;
+    int soundRoarId = 0;
+    int soundThrowId = 0;
+    int soundHitId = 0;
 
-    bool walkSoundPlayed = false;
+    bool attackSoundPlayed = false;
     bool deadSoundPlayed = false;
+    bool impaledSoundPlayed = false;
+    bool roarSoundPlayed = false;
+    bool throwSoundPlayed = false;
+    bool hitSoundPlayed = false;
+
+    float throwSoundTimer = 0.0f;
+    const float throwSoundInterval = 2400.0f;
 };

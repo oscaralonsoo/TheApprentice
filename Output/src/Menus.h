@@ -88,6 +88,7 @@ public:
     bool ContinueLoadingScreen();
     void DrawSlider(int minX, int y, int& sliderX, bool isSelected, const std::string& label);
     void DrawPlayerLives();
+    void PlayStateMusic(MenusState state);
 
 public:
     MenusState currentState = MenusState::INTRO;

@@ -107,6 +107,11 @@ public:
 	const float blackScreenDelay = 500.0f;
 	bool waitingBlackScreen = false;
 
+	int soundUI1Id = 0;
+	int soundUI2Id = 0;
+	bool ui1SoundPlayed = false;
+	bool ui2SoundPlayed = false;
+
 private:
 	SDL_Texture* img;
 	//L03: TODO 3b: Declare a Player attribute

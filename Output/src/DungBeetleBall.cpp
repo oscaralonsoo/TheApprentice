@@ -2,6 +2,7 @@
 #include "Engine.h"
 #include "EntityManager.h"
 #include "Scene.h"
+#include "Audio.h"
 DungBeetleBall::DungBeetleBall(float x, float y, float speed, b2Vec2 direction)
     : Entity(EntityType::BALL), direction(direction), speed(speed)
 {
@@ -43,6 +44,8 @@ DungBeetleBall::DungBeetleBall(float x, float y, float speed, b2Vec2 direction)
     pbody->body->SetLinearVelocity(b2Vec2(direction.x * speed, direction.y * speed));
 
     currentAnimation = &idleAnim;
+
+    soundBounceId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/DungBeetle/dungbeetle_bounce.ogg", 1.0f);
 }
 
 DungBeetleBall::~DungBeetleBall() {
@@ -84,7 +87,6 @@ void DungBeetleBall::OnCollision(PhysBody* physA, PhysBody* physB)
     case ColliderType::ATTACK:
     case ColliderType::PLAYER:
         Bounce();
-        break;
     }
 }
 
@@ -102,6 +104,11 @@ void DungBeetleBall::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
 }
 void DungBeetleBall::Bounce()
 {
+    if (!bounceSoundPlayed) {
+        Engine::GetInstance().audio->PlayFx(soundBounceId, 1.0f, 0);
+        bounceSoundPlayed = true;
+    }
+
     b2Vec2 velocity = pbody->body->GetLinearVelocity();
     if (velocity.LengthSquared() < 0.01f) return;
 

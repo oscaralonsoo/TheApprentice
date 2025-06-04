@@ -50,6 +50,8 @@ bool LifePlantMax::Start() {
 
     currentAnimation = &availableAnim;
 
+    soundInteractId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Props/lifeplant_active.ogg", 1.0f);
+
     return true;
 }
 
@@ -60,6 +62,12 @@ bool LifePlantMax::Update(float dt) {
 
         break;
     case LifePlantMaxStates::CONSUMED:
+
+        if (!interactSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundInteractId, 0.5f, 0);
+            interactSoundPlayed = true;
+        }
+
         if (currentAnimation != &consumedAnim) currentAnimation = &consumedAnim;
         break;
     }

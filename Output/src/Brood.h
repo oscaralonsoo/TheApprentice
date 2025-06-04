@@ -51,4 +51,6 @@ private:
 
     BroodState currentState = BroodState::IDLE;
 
+    int soundDeathId = 0;
+    bool deadSoundPlayed = false;
 };

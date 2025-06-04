@@ -4,10 +4,14 @@
 #include "Input.h"
 #include "Physics.h"
 #include "Log.h"
+#include "Audio.h"
 
 void JumpMechanic::Init(Player* player) {
     this->player = player;
+
+    soundJumpId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Slime/slime_jump.ogg", 1.0f);
 }
+
 
 void JumpMechanic::Update(float dt) {
     if (!jumpUnlocked) return;
@@ -37,6 +41,7 @@ void JumpMechanic::Update(float dt) {
         player->GetAnimation()->SetStateIfHigherPriority("glide");
         transitionToGlide = false;
     }
+
 }
 
 void JumpMechanic::HandleJumpInput(float dt) {
@@ -72,6 +77,14 @@ void JumpMechanic::HandleJumpInput(float dt) {
 
     // Iniciar salto
     if (jumpDown) {
+
+
+        //Sonido salto slime
+        if (!jumpSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundJumpId, 1.0f, 0);
+            jumpSoundPlayed = true;
+        }
+
         if (wallJumpUnlocked && player->GetMechanics()->IsWallSliding()) {
             isJumping = true;
             wallJumpActive = true;
@@ -89,6 +102,7 @@ void JumpMechanic::HandleJumpInput(float dt) {
 
             jumpCooldownTimer.Start();
             jumpCooldownActive = true;
+
 
             // Impulso fuerte
             player->pbody->body->SetLinearVelocity(b2Vec2_zero);

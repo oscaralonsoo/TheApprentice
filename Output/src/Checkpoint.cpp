@@ -159,6 +159,7 @@ void Checkpoint::CheckSave() {
     }
 
     if (saveRequested && insideCheckpoint) {
+        interactSoundPlayed = false;
         if (state == CheckpointState::UNSAVED) {
             state = CheckpointState::SAVING;
         }

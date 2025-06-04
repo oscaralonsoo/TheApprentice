@@ -211,12 +211,14 @@ void Scene::ChangeScene(int nextScene)
 				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 2.0f, 0.5f);
 				break;
 			case 21:
+			case 22:
+			case 23:
 				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/manglar_music.ogg", 2.0f, 0.5f);
 				break;
-			case 41:
-				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/snowforest_music.ogg", 2.0f, 0.5f);
-				break;
-			case 46:
+			case 31:
+			case 41: 
+			case 42:
+			case 43:
 				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/snowforest_music.ogg", 2.0f, 0.5f);
 				break;
 			case 69:
@@ -225,8 +227,8 @@ void Scene::ChangeScene(int nextScene)
 			case 99:
 				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/nullwarden_music.ogg", 2.0f, 0.5f);
 				break;
-			case 666:
-				Engine::GetInstance().audio->PlayMusic("Assets/Audio/Music/stick.ogg", 2.0f, 0.5f);
+			case 6666:
+				Engine::GetInstance().audio->PlayMusic("Assets/Audio/Music/dungbeetle_music.ogg", 2.0f, 0.5f);
 				break;
 			}
 

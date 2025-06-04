@@ -65,6 +65,8 @@ void PlayerAnimation::Update(const std::string& state, int x, int y, bool visibl
     if (state == "landing") drawY = y + 5;
     if (state == "transition") drawY = y - 100;
     if (state == "transition") drawX = x - 50;
+    if (state == "dash") drawY = y + 15;
+    if (state == "dash") drawX = x - 70;
 
     // Dibujar la animación actual
     if (currentAnimation) {

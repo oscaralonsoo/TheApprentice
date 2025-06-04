@@ -54,4 +54,5 @@ private:
 	Timer typingTimer;
 	bool typingFinished = false;
 	bool forceTypingFinish = false;
+	bool prevL1State = false;
 };

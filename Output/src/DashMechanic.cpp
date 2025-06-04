@@ -107,6 +107,8 @@ void DashMechanic::CancelDash() {
 
     // Evitar reenganche inmediato al wall slide
     player->GetMechanics()->GetMovementHandler()->StartWallSlideCooldown();
+
+    player->GetAnimation()->SetStateIfHigherPriority("idle");
 }
 
 void DashMechanic::OnWallCollision() {

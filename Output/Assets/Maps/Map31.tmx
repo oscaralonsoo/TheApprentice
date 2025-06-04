@@ -135,9 +135,7 @@
  <tileset firstgid="40781" name="Boss_SnowyTree_Background" tilewidth="64" tileheight="64" tilecount="480" columns="30">
   <image source="../Environment/Boss_SnowyTree_Background.png" width="1920" height="1080"/>
  </tileset>
- <tileset firstgid="41261" name="tiles nieve" tilewidth="64" tileheight="64" tilecount="100" columns="10">
-  <image source="../Props/tiles nieve.png" width="640" height="640"/>
- </tileset>
+ <tileset firstgid="41261" source="../Props/tiles nieve2.tsx"/>
  <tileset firstgid="41361" name="spike3" tilewidth="64" tileheight="64" tilecount="4" columns="2">
   <image source="../Props/spike3.png" width="128" height="128"/>
  </tileset>

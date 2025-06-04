@@ -33,6 +33,8 @@ bool Creebler::Start() {
             deathAnim.LoadAnimations(enemyNode.child("death"));
         }
     }
+    b2FixtureDef fixtureDef;
+    fixtureDef.isSensor = true;
 
     currentAnimation = &walkAnim;
 

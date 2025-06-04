@@ -221,7 +221,7 @@ void DialogueManager::SetDialogueAvailable(int dialogueId, Vector2D npcPos, bool
 }
 
 void DialogueManager::ShowInteractionPrompt() {
-	Engine::GetInstance().render.get()->DrawTexture(listenTexture, promptPos.x, promptPos.y + 105);
+	Engine::GetInstance().render.get()->DrawTexture(listenTexture, promptPos.x - 295/2, promptPos.y);
 }
 
 void DialogueManager::ResetTyping() {

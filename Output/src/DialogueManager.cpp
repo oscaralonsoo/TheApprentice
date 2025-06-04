@@ -41,10 +41,13 @@ bool DialogueManager::Start() {
 
 bool DialogueManager::PostUpdate() {
 	SDL_GameController* controller = Engine::GetInstance().scene->GetPlayer()->GetMechanics()->GetMovementHandler()->GetController();
-	bool l1Pressed = false;
+	bool l1PressedNow = false;
+	bool l1JustPressed = false;
 
 	if (controller && SDL_GameControllerGetAttached(controller)) {
-		l1Pressed = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == 1;
+		l1PressedNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == 1;
+		l1JustPressed = (l1PressedNow && !prevL1State);
+		prevL1State = l1PressedNow;
 	}
 
 	if (dialogueAvailable && !dialogueStarted) {
@@ -52,7 +55,7 @@ bool DialogueManager::PostUpdate() {
 
 		bool interactKeyPressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_E) == KEY_DOWN;
 
-		if (interactKeyPressed || l1Pressed) {
+		if (interactKeyPressed || l1JustPressed) {
 			SetPlayerMovement(true);
 			dialogueStarted = true;
 			currentLineIndex = 0;
@@ -63,7 +66,7 @@ bool DialogueManager::PostUpdate() {
 	if (dialogueStarted && activeDialogueId != -1) {
 		bool nextKeyPressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN;
 
-		if (nextKeyPressed || l1Pressed) {
+		if (nextKeyPressed || l1JustPressed) {
 			if (!typingFinished) {
 				forceTypingFinish = true;
 			}

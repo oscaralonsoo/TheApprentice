@@ -160,7 +160,17 @@ void MovementHandler::Update(float dt) {
         Engine::GetInstance().render.get()->ToggleCameraLock();
     }
 
-    if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+    static bool prevAState = false;
+
+    if (controller && SDL_GameControllerGetAttached(controller)) {
+        aPressedNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A);
+        aJustPressed = (aPressedNow && !prevAState);
+        prevAState = aPressedNow;
+    }
+
+    bool spaceJustPressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN;
+
+    if (spaceJustPressed || aJustPressed) {
         player->GetMechanics()->GetMovementHandler()->pendingLandingCheck = false;
     }
 

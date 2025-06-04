@@ -4,9 +4,11 @@
 #include "Input.h"
 #include "Physics.h"
 #include "Log.h"
+#include "Audio.h"
 
 void JumpMechanic::Init(Player* player) {
     this->player = player;
+    soundJumpId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Slime/slime_jump.ogg", 1.0f);
 }
 
 void JumpMechanic::Update(float dt) {
@@ -54,6 +56,10 @@ void JumpMechanic::HandleJumpInput(float dt) {
         if (jumpCount == 0 && player->GetMechanics()->IsOnGround()) {
             jumpHoldTimer.Start();
             isJumping = true;
+            if (!jumpSoundPlayed) {
+                Engine::GetInstance().audio->PlayFx(soundJumpId, 1.0f, 0);
+                jumpSoundPlayed = true;
+            }
             jumpCount = 1;
             player->GetMechanics()->SetIsOnGround(false);
             player->GetAnimation()->SetOverlayState("transition");
@@ -74,6 +80,7 @@ void JumpMechanic::HandleJumpInput(float dt) {
             jumpCount = 2;
             player->GetAnimation()->SetOverlayState("transition");
             player->GetAnimation()->SetStateIfHigherPriority("doublejump");
+            Engine::GetInstance().audio->PlayFx(soundJumpId, 1.0f, 0);
             jumpCooldownTimer.Start();
             jumpCooldownActive = true;
 
@@ -218,6 +225,7 @@ void JumpMechanic::OnLanding() {
     player->pbody->body->SetGravityScale(2.0f);
     wallJumpActive = false;
     glideInputArmed = false;
+    jumpSoundPlayed = false;
 }
 
 void JumpMechanic::OnLeaveGround() {

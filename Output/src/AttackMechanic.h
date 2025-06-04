@@ -34,4 +34,8 @@ private:
     bool attackHeldPreviously = false;
 
     int attackDirection = 1;
+
+    int soundAttackId = 0;
+
+    bool attackSoundPlayed = false;
 };

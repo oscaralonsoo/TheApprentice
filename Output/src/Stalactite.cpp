@@ -139,6 +139,7 @@ void Stalactite::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::DOOR:
     case ColliderType::ENEMY:
     case ColliderType::BOX:
+    case ColliderType::SPIKE:
         if (state == StalactiteState::FALLING) {
             state = StalactiteState::SPLASHED;
         }

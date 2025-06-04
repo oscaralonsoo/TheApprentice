@@ -4,9 +4,12 @@
 #include "Input.h"
 #include "Physics.h"
 #include "Render.h"
+#include "Audio.h"
 
 void DashMechanic::Init(Player* player) {
     this->player = player;
+
+    soundDashId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Slime/slime_dash.ogg", 1.0f);
 }
 
 void DashMechanic::Update(float dt) {
@@ -50,6 +53,7 @@ void DashMechanic::StartDash() {
     isDashing = true;
     canDash = false;
     dashCooldownTimer.Start();
+    Engine::GetInstance().audio->PlayFx(soundDashId, 1.0f, 0);
 
     dashStartPosition = player->GetPosition();
     lastPosition = dashStartPosition;  // Inicializar control de atasco
@@ -109,6 +113,7 @@ void DashMechanic::CancelDash() {
     player->GetMechanics()->GetMovementHandler()->StartWallSlideCooldown();
 
     player->GetAnimation()->SetStateIfHigherPriority("idle");
+
 }
 
 void DashMechanic::OnWallCollision() {

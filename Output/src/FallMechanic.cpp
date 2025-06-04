@@ -3,9 +3,12 @@
 #include "Engine.h"
 #include "Physics.h"
 #include "Render.h"
+#include "Audio.h"
 
 void FallMechanic::Init(Player* player) {
     this->player = player;
+
+    soundStunId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Slime/slime_stun.ogg", 1.0f);
 }
 
 void FallMechanic::Update(float dt) {
@@ -65,6 +68,7 @@ void FallMechanic::OnLanding() {
 
         if (verticalVelocity > fallStunThreshold) {
             isStunned = true;
+            Engine::GetInstance().audio->PlayFx(soundStunId, 1.0f, 0);
             stunTimer.Start();
             Engine::GetInstance().render->StartCameraShake(0.2f, 2);
         }

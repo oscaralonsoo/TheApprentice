@@ -131,10 +131,14 @@ private:
     bool aJustPressed = false;
 
     int soundWalkId = 0;
+    int soundClimbId = 0;
     
     bool isLanding = false;
     bool isMoving = false;
 
     Uint32 lastWalkSoundTime = 0;
     const Uint32 walkSoundInterval = 500;
+
+    Uint32 lastClimbSoundTime = 0;
+    const Uint32 climbSoundInterval = 500;
 };

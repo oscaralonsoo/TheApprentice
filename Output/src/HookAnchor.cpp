@@ -6,6 +6,7 @@
 #include "Log.h"
 #include "Scene.h"
 #include "Player.h"
+#include "Audio.h"
 
 HookAnchor::HookAnchor() : Entity(EntityType::HOOK_ANCHOR) {}
 
@@ -35,6 +36,8 @@ bool HookAnchor::Start()
     sensor->listener = this;
 
     highlightTexture = Engine::GetInstance().textures->Load("Assets/Props/gancho_seleccionado.png");
+
+    soundSpiderId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Slime/slime_spiderweb.ogg", 1.0f);
 
     return true;
 }
@@ -252,6 +255,7 @@ void HookAnchor::Use()
         player->GetMechanics()->GetMovementHandler()->SetCantMove(true);
         player->pbody->body->SetGravityScale(0.0f);
 
+        Engine::GetInstance().audio->PlayFx(soundSpiderId, 1.0f, 0);
         isHooking = true;
         hookTimer.Start();
 

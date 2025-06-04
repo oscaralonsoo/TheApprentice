@@ -169,6 +169,7 @@ private:
 
 
     SDL_Texture* lifeTexture = nullptr;
+    SDL_Texture* offLifeTexture = nullptr;
     int lifeW = 32;
     int lifeH = 32;
 

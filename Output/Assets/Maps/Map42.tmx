@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="117" height="75" tilewidth="64" tileheight="64" infinite="0" nextlayerid="77" nextobjectid="5381">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="117" height="75" tilewidth="64" tileheight="64" infinite="0" nextlayerid="77" nextobjectid="5384">
  <tileset firstgid="1" name="rocas1" tilewidth="64" tileheight="64" tilecount="480" columns="30">
   <image source="../Environment/rocas1.png" width="1920" height="1080"/>
  </tileset>
@@ -70415,7 +70415,7 @@
    <tile gid="39742"/>
   </data>
  </layer>
- <layer id="76" name="Navigation" width="117" height="75" visible="0">
+ <layer id="76" name="Navigation" width="117" height="75">
   <properties>
    <property name="Navigation" type="bool" value="true"/>
   </properties>
@@ -75773,11 +75773,11 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="38639"/>
+   <tile gid="38639"/>
+   <tile gid="38639"/>
+   <tile gid="38639"/>
+   <tile gid="38639"/>
    <tile gid="38639"/>
    <tile gid="38639"/>
    <tile/>
@@ -88221,6 +88221,7 @@
   <object id="5377" x="4736" y="2112" width="64"/>
   <object id="5379" x="4672" y="4736" width="704"/>
   <object id="5380" x="4736" y="4032" width="64"/>
+  <object id="5381" x="5632" y="2880" width="320"/>
  </objectgroup>
  <objectgroup id="71" name="PressureSystem">
   <object id="4900" name="Plate" x="64" y="4288" width="64" height="64">
@@ -88514,6 +88515,8 @@
   <object id="5353" x="192" y="3264" height="64"/>
   <object id="5354" x="128" y="3328" height="64"/>
   <object id="5356" x="2624" y="3008" height="64"/>
+  <object id="5382" x="5632" y="2880" height="64"/>
+  <object id="5383" x="5632" y="2944" width="320"/>
  </objectgroup>
  <objectgroup id="61" name="Props">
   <object id="4899" name="Box" x="192" y="4297" width="55" height="55"/>

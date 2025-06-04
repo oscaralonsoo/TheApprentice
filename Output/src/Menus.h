@@ -68,7 +68,6 @@ public:
     void Pause(float dt);
     void Settings();
     void HandleSettingsSelection();
-    void ToggleFullScreen();
     void ToggleVSync();
     void HandleVolumeSliders();
     void AdjustVolume(int& sliderX, int minX, int maxX);

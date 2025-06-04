@@ -65,6 +65,8 @@ void PlayerAnimation::Update(const std::string& state, int x, int y, bool visibl
     if (state == "landing") drawY = y + 5;
     if (state == "transition") drawY = y - 100;
     if (state == "transition") drawX = x - 50;
+    if (state == "dash") drawY = y + 15;
+    if (state == "dash") drawX = x - 70;
 
     // Dibujar la animación actual
     if (currentAnimation) {
@@ -81,6 +83,29 @@ void PlayerAnimation::Update(const std::string& state, int x, int y, bool visibl
         );
 
         currentAnimation->Update();
+
+        if (overlayActive && overlayAnimation) {
+            int overlayOffsetX = 0, overlayOffsetY = 0;
+            GetAnimationOffset(overlayState, overlayOffsetX, overlayOffsetY);
+
+            Engine::GetInstance().render->DrawTexture(
+                texture,
+                drawX + overlayOffsetX,
+                drawY + overlayOffsetY + 20,
+                &overlayAnimation->GetCurrentFrame(),
+                1.0f,
+                0.0,
+                INT_MAX,
+                INT_MAX,
+                adjustedFlip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE
+            );
+
+            overlayAnimation->Update();
+
+            if (overlayAnimation->HasFinished()) {
+                ClearOverlayState();
+            }
+        }
     }
 }
 
@@ -157,5 +182,55 @@ void PlayerAnimation::ForceSetState(const std::string& newState) {
     }
     if (player) {
         player->SetState(newState);
+    }
+}
+
+void PlayerAnimation::SetOverlayState(const std::string& state) {
+    if (animations.find(state) != animations.end()) {
+        overlayAnimation = &animations[state];
+        overlayState = state;
+        overlayAnimation->Reset();
+        overlayActive = true;
+    }
+}
+
+void PlayerAnimation::ClearOverlayState() {
+    overlayAnimation = nullptr;
+    overlayState = "";
+    overlayActive = false;
+}
+
+void PlayerAnimation::GetAnimationOffset(const std::string& state, int& offsetX, int& offsetY) const {
+    offsetX = 0;
+    offsetY = 0;
+
+    if (state == "push") {
+        offsetX = -10;
+        offsetY = -10;
+    }
+    else if (state == "push" && currentState == "push") {
+        offsetX = -80;
+    }
+    else if (state == "run_right") {
+        offsetY = -19;
+    }
+    else if (state == "idle") {
+        offsetY = -4;
+    }
+    else if (state == "attack") {
+        offsetY = -20;
+    }
+    else if (state == "eat" || state == "hit") {
+        offsetY = -10;
+    }
+    else if (state == "landing_stun") {
+        offsetY = +18;
+    }
+    else if (state == "landing") {
+        offsetY = +5;
+    }
+    else if (state == "transition") {
+        offsetX = -50;
+        offsetY = -100;
     }
 }

@@ -129,5 +129,6 @@ private:
 
     bool wasTouchingPlatform = false;
 
-
+    bool aPressedNow = false;
+    bool aJustPressed = false;
 };

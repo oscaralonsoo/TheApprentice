@@ -258,17 +258,7 @@ void Render::UpdateCamera(const Vector2D& /*unused*/, int movementDirection, flo
 {
 	if (cameraLocked)
 	{
-		mapWidthPx = Engine::GetInstance().map->GetMapWidth();
-		mapHeightPx = Engine::GetInstance().map->GetMapHeight();
-
-		camera.w = static_cast<int>(Engine::GetInstance().window->width * currentFovFactor);
-		camera.h = static_cast<int>(Engine::GetInstance().window->height * currentFovFactor);
-
-		int centerX = mapWidthPx / 2;
-		int centerY = mapHeightPx / 2;
-
-		camera.x = (centerX - camera.w / 2);
-		camera.y = (centerY - camera.h / 2);
+		return;
 	}
 
 	if (cameraZoom != targetCameraZoom)
@@ -361,9 +351,16 @@ void Render::UpdateCamera(const Vector2D& /*unused*/, int movementDirection, flo
 	extraCameraOffsetY = static_cast<int>(shakeOffsetY * escala);
 
 	camera.x += extraCameraOffsetX;
-	camera.y += static_cast<int>((targetCamY - camera.y) * dynamicSmoothing) + extraCameraOffsetY;
+	if (downCameraActivated)
+	{
+		camera.y += static_cast<int>((targetCamY - camera.y) * dynamicSmoothing) - 10;
 
-	// Límites del mapa (después del shake)
+	}
+	else
+	{
+		camera.y += static_cast<int>((targetCamY - camera.y) * dynamicSmoothing);
+	}
+
 	if (camera.x > 0) camera.x = 0;
 	if (camera.y > 0) camera.y = 0;
 	if (camera.x < -(mapWidthPx - camera.w)) camera.x = -(mapWidthPx - camera.w);
@@ -440,9 +437,26 @@ void Render::StartCameraShake(float durationSec, int intensity)
 
 void Render::ToggleCameraLock(float fovFactor)
 {
-
 	cameraLocked = !cameraLocked;
 	currentFovFactor = fovFactor;
+
+	if (cameraLocked)
+	{
+		mapWidthPx = Engine::GetInstance().map->GetMapWidth();
+		mapHeightPx = Engine::GetInstance().map->GetMapHeight();
+
+		float windowScale = Engine::GetInstance().window->GetScale();
+		cameraZoom = targetCameraZoom = 1.0f;  // Opcional: asegurarte de que zoom no está causando desajuste
+
+		camera.w = static_cast<int>(Engine::GetInstance().window->width * currentFovFactor);
+		camera.h = static_cast<int>(Engine::GetInstance().window->height * currentFovFactor);
+
+		int centerX = mapWidthPx / 2;
+		int centerY = mapHeightPx / 2;
+
+		camera.x = -centerX + camera.w / 2 + 250;
+		camera.y = -centerY + camera.h / 2;
+	}
 }
 
 float Render::EaseInOut(float current, float target, float t)

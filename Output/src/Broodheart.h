@@ -29,7 +29,7 @@ private:
     bool playerInRange = false;
     float lastDeltaTime = 0.0f;
     PhysBody* physBody = nullptr;
-
+    bool isBroken = false;
     Animation idleAnim;
     Animation spawnAnim;
     Animation deathAnim;
@@ -40,7 +40,6 @@ private:
     bool shouldSpawn = false;
     const float spawnRadius = 100.0f;
     std::list<Brood*> broodsAlive;
-    bool isBroken = false;
 
     bool spawnSoundPlayed = false;
     bool deathSoundPlayed = false;

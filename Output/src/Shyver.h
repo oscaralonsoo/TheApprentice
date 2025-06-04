@@ -5,12 +5,13 @@
 
 enum class ShyverState {
     IDLE,
-    INVISIBLE,
     APPEAR,
     WAIT,
+    PRE_ATTACK,
+    ATTACK,
     STUNNED,
     DISAPPEAR,
-    ATTACK,
+    INVISIBLE,
     DEATH
 };
 
@@ -45,7 +46,11 @@ private:
     Animation disappearAnim;
     Animation appearAnim;
     Animation attackAnim;
+    Animation preattackAnim;
     Animation deathAnim;
+    Animation waveAnim;
+
+    Animation* secondAnimation= nullptr;
 
     const float waitDuration = 2000.0f;
     Timer waitTimer;
@@ -54,6 +59,8 @@ private:
     const float stunDuration = 2000.0f;
     Timer stunTimer;
 
+    Vector2D waveAnimStartPos;
+
     float attackStartX = 0.0f;
     bool attackInProgress = false;
 
@@ -61,7 +68,7 @@ private:
     int soundDeadId = 0;
     int soundDashId = 0;
     int soundAppearId = 0;
-
+    bool printWave = false;
     bool walkSoundPlayed = false;
     bool deadSoundPlayed = false;
     bool dashSoundPlayed = false;

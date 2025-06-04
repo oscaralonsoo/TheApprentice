@@ -35,13 +35,14 @@ public:
 
     bool wallJumpActive = false;
 
+    int jumpCount = 0;
+
 private:
     Player* player = nullptr;
 
     bool jumpUnlocked = false;
     bool doubleJumpUnlocked = false;
 
-    int jumpCount = 0;
     const int maxJumpCount = 2;
 
     bool isJumping = false;
@@ -67,7 +68,7 @@ private:
 
     bool glideUnlocked = false;
     bool isGliding = false;
-    float glideGravityScale = 0.5f; // Puedes ajustar este valor
+    float glideGravityScale = 0.1f; // Puedes ajustar este valor
 
     // Wall jump
     bool wallJumpUnlocked = false;
@@ -79,12 +80,5 @@ private:
     float wallJumpHorizontalImpulse = 10.0f;
     float wallJumpVerticalImpulse = 13.0f;
 
-    bool transitionToJump = false;
-    bool transitionToDoubleJump = false;
-    bool transitionToWallJump = false;
-    bool transitionToGlide = false;
-
-    int soundJumpId = 0;
-
-    bool jumpSoundPlayed = false;
+    bool glideInputArmed = false;
 };

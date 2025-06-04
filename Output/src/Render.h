@@ -96,6 +96,5 @@ public:
 
 	float currentFovFactor = 1.0f;
 
-	int baseCameraX = 0;
-	int baseCameraY = 0;
+	bool downCameraActivated = false;
 };

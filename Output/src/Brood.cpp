@@ -113,7 +113,7 @@ bool Brood::Update(float dt) {
 }
 
 bool Brood::PostUpdate() {
-    if (currentState == BroodState::DEAD && currentAnimation->HasFinished())
+    if (currentState == BroodState::DEAD && currentAnimation->HasFinished() && currentAnimation == &deathAnim)
     {
         if (broodHeart) {
             broodHeart->OnBroodDeath(this);

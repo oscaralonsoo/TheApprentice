@@ -13,12 +13,6 @@ void DashMechanic::Update(float dt) {
     if (!dashUnlocked)
         return;
 
-    if (player->GetAnimation()->GetCurrentState() == "transition" &&
-        player->GetAnimation()->HasFinished() && transitionToDash) {
-        player->GetAnimation()->SetStateIfHigherPriority("dash");
-        transitionToDash = false;
-    }
-
     if (!canDash && dashCooldownTimer.ReadSec() >= dashCooldownTime) {
         canDash = true;
         player->GetAnimation()->ForceSetState("idle");
@@ -73,8 +67,8 @@ void DashMechanic::StartDash() {
     }
 
     Engine::GetInstance().render->DashCameraImpulse(dashDirection, 100);
-    player->GetAnimation()->SetStateIfHigherPriority("transition");
-    transitionToDash = true;
+    player->GetAnimation()->SetOverlayState("transition");
+    player->GetAnimation()->SetStateIfHigherPriority("dash");
 }
 
 void DashMechanic::ApplyDashMovement() {
@@ -113,6 +107,8 @@ void DashMechanic::CancelDash() {
 
     // Evitar reenganche inmediato al wall slide
     player->GetMechanics()->GetMovementHandler()->StartWallSlideCooldown();
+
+    player->GetAnimation()->SetStateIfHigherPriority("idle");
 }
 
 void DashMechanic::OnWallCollision() {

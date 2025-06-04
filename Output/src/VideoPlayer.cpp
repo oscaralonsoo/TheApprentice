@@ -118,7 +118,7 @@ bool VideoPlayer::Update() {
 
             av_packet_unref(&packet);
 
-            SDL_Delay(1000 / 30);  // Aproximadamente 30 FPS
+            SDL_Delay(1000 / 26);  // Aproximadamente 30 FPS
             return true;  // Frame renderizado, seguimos reproduciendo
         }
         av_packet_unref(&packet);

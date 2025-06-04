@@ -51,4 +51,10 @@ private:
 
     bool playerInside = false;
     bool hasPushed = false;
+
+    int soundInteractId = 0;
+    bool interactSoundPlayed = false;
+
+    float interactSoundTimer = 0.0f;
+    const float interactSoundInterval = 1000.0f;
 };

@@ -56,6 +56,9 @@ bool Scene::Start()
 
 	slimeLoading = Engine::GetInstance().textures->Load("Assets/Slime/slimeLoading.png");
 
+	soundUI1Id = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/UI/UIButton1.ogg", 1.0f);
+	soundUI2Id = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/UI/UIButton2.ogg", 1.0f);
+
 	return true;
 }
 
@@ -205,25 +208,27 @@ void Scene::ChangeScene(int nextScene)
 			Engine::GetInstance().map->Load(path, name);
 			switch (nextScene) {
 			case 0:
-				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 2.0f, 1.0f);
+				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 2.0f, 0.5f);
 				break;
 			case 21:
-				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/manglar_music.ogg", 2.0f, 1.0f);
+			case 22:
+			case 23:
+				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/manglar_music.ogg", 2.0f, 0.5f);
 				break;
-			case 41:
-				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/snowforest_music.ogg", 2.0f, 1.0f);
-				break;
-			case 46:
-				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/snowforest_music.ogg", 2.0f, 1.0f);
+			case 31:
+			case 41: 
+			case 42:
+			case 43:
+				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/snowforest_music.ogg", 2.0f, 0.5f);
 				break;
 			case 69:
-				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/palo.wav", 2.0f, 1.0f);
+				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/stick.ogg", 2.0f, 0.5f);
 				break;
 			case 99:
-				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/nullwarden_music.ogg", 2.0f, 1.0f);
+				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/nullwarden_music.ogg", 2.0f, 0.5f);
 				break;
-			case 666:
-				Engine::GetInstance().audio->PlayMusic("Assets/Audio/Music/stick.ogg", 2.0f, 1.0f);
+			case 6666:
+				Engine::GetInstance().audio->PlayMusic("Assets/Audio/Music/dungbeetle_music.ogg", 2.0f, 0.5f);
 				break;
 			}
 

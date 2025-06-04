@@ -16,6 +16,7 @@ public:
 	bool Update(float dt);
 
 	void ButtonNavigation();
+	bool Start();
 
 
 
@@ -27,5 +28,3 @@ private:
 	bool dpadDownHeld = false;
 	bool aHeld = false;
 };
-
-#pragma once

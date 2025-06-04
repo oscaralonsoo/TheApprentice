@@ -9,8 +9,8 @@
 	</render>
 	<audio>
 		<master value="0.5" />
-		<music value="0.5" />
-		<sfx value="0.5" />
+		<music value="0.337500006" />
+		<sfx value="0.882499993" />
 	</audio>
 	<window>
 		<resolution width="1280" height="720" scale="1" />
@@ -1334,10 +1334,10 @@
 				<ability type="Dash" w="124" h="124" texture="Assets/Textures/Abilities/jump.png" />
 			</abilities>
 		</animations>
-		<save_data isSaved="0">
-			<player x="1152" y="970" w="44" h="54" lives="2" maxlives="3" />
-			<abilities jump="false" doublejump="false" dash="false" />
-			<scene actualScene="1" />
+		<save_data isSaved="1">
+			<player x="3949" y="1766" w="44" h="54" lives="3" maxlives="3" />
+			<abilities jump="true" doublejump="true" dash="true" />
+			<scene actualScene="21" />
 			<enemies />
 		</save_data>
 	</scene>

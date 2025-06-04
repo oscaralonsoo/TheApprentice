@@ -58,6 +58,9 @@ bool Checkpoint::Start()
     Engine::GetInstance().physics->listToDelete.push_back(pbody);
 
     currentAnimation = &unsavedAnim;
+
+    soundInteractId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Props/checkpoint_activation.ogg", 1.0f);
+
     return true;
 }
 
@@ -69,6 +72,12 @@ bool Checkpoint::Update(float dt)
         if (currentAnimation != &unsavedAnim) currentAnimation = &unsavedAnim;
         break;
     case CheckpointState::SAVING:
+
+        if (!interactSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundInteractId, 0.5f, 0);
+            interactSoundPlayed = true;
+        }
+
         if (currentAnimation != &savingAnim)  {
             currentAnimation = &savingAnim;
             Player* player = Engine::GetInstance().scene->GetPlayer();

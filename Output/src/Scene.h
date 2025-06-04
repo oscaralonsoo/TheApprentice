@@ -87,6 +87,8 @@ public:
 
 	PlayerMechanics* mechanics = nullptr;
 
+	SDL_Texture* slimeLoading = nullptr;
+
 	float heartbeatTimer = 0.0f;
 	float heartbeatInterval = 2000.0f;
 	bool heartbeatGrowing = false;

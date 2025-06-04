@@ -54,6 +54,8 @@ bool Scene::Start()
 	nextScene = 1;
 	Engine::GetInstance().map->Load("Assets/Maps/", "Map" + std::to_string(nextScene) + ".tmx");
 
+	slimeLoading = Engine::GetInstance().textures->Load("Assets/Slime/slimeLoading.png");
+
 	return true;
 }
 
@@ -119,12 +121,18 @@ bool Scene::PostUpdate()
 		else if (fadingIn) {
 			alpha = static_cast<Uint8>(transitionAlpha * 255);
 		}
-
+		
 		SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, 0, 0, 0, alpha);
 		SDL_RenderFillRect(Engine::GetInstance().render->renderer, nullptr);
+
+		SDL_Rect section = { 0, 0, 96, 59 };
+		int windowWidth, windowHeight;
+		SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &windowWidth, &windowHeight);
+		Engine::GetInstance().render->DrawTexture(slimeLoading, 180, windowHeight - 120, &section, 0.0f, 0, INT_MAX, INT_MAX, SDL_FLIP_NONE, 1, 1);
 	}
 
 	Vignette(player->GetMechanics()->GetHealthSystem()->GetVignetteSize(), 0.8f, vignetteColor);
+
 	if (isDead && !isChangingScene) { 
 		isDead = false;
 		pendingLoadAfterDeath = true;

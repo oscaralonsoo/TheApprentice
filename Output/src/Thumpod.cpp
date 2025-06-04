@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "EntityManager.h"
 #include "Textures.h"
+#include "Audio.h"
 
 Thumpod::Thumpod() : Enemy(EntityType::THUMPOD) {
     direction = 1.0f;
@@ -39,6 +40,10 @@ bool Thumpod::Start() {
 
     pbody = Engine::GetInstance().physics->CreatePolygon((int)position.getX(), (int)position.getY(), shape, bodyType::DYNAMIC);
     maxSteps = 15;
+
+    soundJumpId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Thumpod/thumpod_jump.ogg", 1.0f);
+    soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Thumpod/thumpod_death.ogg", 1.0f);
+
     return Enemy::Start();
 }
 
@@ -52,10 +57,20 @@ bool Thumpod::Update(float dt) {
         break;
 
     case ThumpodState::ATTACK:
+
+        if (!jumpSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundJumpId, 1.0f, 0);
+            jumpSoundPlayed = true;
+        }
+
         Attack(dt);
         break;
 
     case ThumpodState::DEAD:
+        if (!deadSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundDeadId, 1.0f, 0);
+            deadSoundPlayed = true;
+        }
         Die();
         break;
     }
@@ -156,6 +171,7 @@ void Thumpod::Attack(float dt) {
     TryStartJump(mass);
     TryChangeToFallingState(mass);
     TryFinishAttackDown(dt);
+
 }
 
 void Thumpod::TryStartJump(float mass) {
@@ -184,6 +200,7 @@ void Thumpod::TryFinishAttackDown(float dt) {
         if (attackDownTimer >= minAttackDownTime && currentAnimation && currentAnimation->HasFinished()) {
             pbody->body->SetLinearVelocity({ 0, 0 });
             ResetAttackState();
+                jumpSoundPlayed = false;
             currentState = ThumpodState::IDLE;
         }
     }

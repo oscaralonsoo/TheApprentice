@@ -59,4 +59,10 @@ private:
     bool canPlayAttackDownAnim = false;
     bool hasLanded = false;
     bool isPlayingAttackDown = false;
+
+    int soundJumpId = 0;
+    int soundDeadId = 0;
+
+    bool jumpSoundPlayed = false;
+    bool deadSoundPlayed = false;
 };

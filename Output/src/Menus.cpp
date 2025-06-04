@@ -331,13 +331,8 @@ void Menus::Settings() {
 
 void Menus::HandleSettingsSelection() {
     switch (selectedButton) {
-    case 0: ToggleFullScreen(); break;
-    case 1: ToggleVSync(); break;
+    case 0: ToggleVSync(); break;
     }
-}
-void Menus::ToggleFullScreen() {
-    isFullScreen = !isFullScreen;
-    Engine::GetInstance().window->SetFullScreen(isFullScreen);
 }
 void Menus::ToggleVSync() {
     isVSync = !isVSync;
@@ -551,7 +546,7 @@ std::vector<std::string> Menus::GetButtonNamesForCurrentState() const {
     switch (currentState) {
     case MenusState::MAINMENU: return { "newGame", "continue", "settings", "credits", "exit" };
     case MenusState::PAUSE: return { "continue", "settings", "exit" };
-    case MenusState::SETTINGS: return { "Full Screen", "Vsync", "Music Volume", "FX Volume", "Master Volume" };
+    case MenusState::SETTINGS: return { "Vsync", "Music Volume", "FX Volume", "Master Volume" };
     default: return {};
     }
 }
@@ -561,7 +556,7 @@ void Menus::CreateButton(const std::string& name, int startX, int startY, int bu
     std::string hovered = name + "_hovered.png";
 
     SDL_Rect bounds = { startX, startY, buttonWidth, buttonHeight };
-    bool isCheckBox = (currentState == MenusState::SETTINGS && (index == 0 || index == 1));
+    bool isCheckBox = (currentState == MenusState::SETTINGS && index == 0);
     buttons.emplace_back(name, bounds, index, isCheckBox, unhovered, hovered);
 
     if (!isCheckBox) {
@@ -625,7 +620,7 @@ void Menus::DrawCheckBox(const ButtonInfo& button, bool isSelected) {
     SDL_Rect dstRect = { x, y, size, size };
     SDL_RenderCopy(Engine::GetInstance().render->renderer, checkboxTexture, nullptr, &dstRect);
 
-    if ((button.text == "Full Screen" && isFullScreen) || (button.text == "Vsync" && isVSync)) {
+    if (button.text == "Vsync" && isVSync) {
         SDL_RenderCopy(Engine::GetInstance().render->renderer, fillTexture, nullptr, &dstRect);
     }
 

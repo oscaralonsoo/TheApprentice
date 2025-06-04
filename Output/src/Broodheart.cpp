@@ -41,13 +41,13 @@ bool Broodheart::Start() {
             idleAnim.LoadAnimations(node.child("idle"));
             spawnAnim.LoadAnimations(node.child("spawn"));
             deathAnim.LoadAnimations(node.child("death"));
-            currentAnimation = &idleAnim;
+     
             break;
         }
     }
     pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW / 2, texH/2, bodyType::DYNAMIC);
 
-
+    currentAnimation = &idleAnim;
     pbody->ctype = ColliderType::ENEMY;
     if (!gravity) pbody->body->SetGravityScale(0);
     pbody->listener = this;
@@ -86,16 +86,13 @@ bool Broodheart::Update(float dt) {
             spawnSoundPlayed = false;
         }
     }
-
     return Enemy::Update(dt);
 }
 
 bool Broodheart::PostUpdate() {
-
-    if (isBroken && currentAnimation->HasFinished()) {
-        pbody->body->GetFixtureList()->SetSensor(true);
+    if (isBroken && currentAnimation == &deathAnim && currentAnimation->HasFinished()) {
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
-        return true; 
+        return true;
     }
     if (shouldSpawn) {
         Spawn();
@@ -118,13 +115,15 @@ void Broodheart::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLAYER:
     case ColliderType::ATTACK:
-        isBroken = true;
-        currentAnimation = &deathAnim;
-        if (!deathSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundDeathId, 1.0f, 0);
-            deathSoundPlayed = true;
+        if (!isBroken) {
+            isBroken = true;
+            currentAnimation = &deathAnim;
+            pbody->body->GetFixtureList()->SetSensor(true);
+            if (!deathSoundPlayed) {
+                Engine::GetInstance().audio->PlayFx(soundDeathId, 1.0f, 0);
+                deathSoundPlayed = true;
+            }
         }
-
         break;
     }
 }

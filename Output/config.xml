@@ -5,7 +5,7 @@
 		<maxFrameDuration value="16" />
 	</engine>
 	<render>
-		<vsync value="true" />
+		<vsync value="false" />
 	</render>
 	<audio>
 		<master value="0.5" />
@@ -547,7 +547,7 @@
 						<frame x="480" y="0" w="240" h="160" />
 						<frame x="240" y="0" w="240" h="160" />
 					</spawn>
-					<death>
+					<death loop="false" speed="0.1">
 						<frame x="0" y="480" w="240" h="160" />
 						<frame x="240" y="480" w="240" h="160" />
 						<frame x="480" y="480" w="240" h="160" />

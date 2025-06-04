@@ -57,11 +57,15 @@ public:
 
 	float masterVolume = 0.5f;
 	float musicVolume = 0.5f;
-	float sfxVolume = 0.5f;
+	float sfxVolume = 1.0f;
+
+	const std::string& GetCurrentMusic() const { return currentMusicPath; }
 private:
 
 	_Mix_Music* music;
 	std::list<Mix_Chunk*> fx;
 
 	std::list<float> fxVolumes;
+
+	std::string currentMusicPath;
 };

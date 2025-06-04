@@ -283,6 +283,19 @@ bool AbilityZone::PostUpdate() {
 
 bool AbilityZone::CleanUp()
 {
+
+
+	if (tensionActive) {
+		tensionActive = false;
+
+		if (!previousMusic.empty()) {
+			Engine::GetInstance().audio->StopMusic();
+			Engine::GetInstance().audio->PlayMusic(previousMusic.c_str(), 1.0f, 1.0f);
+
+		}
+	}
+
+
 	Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
 	return true;
 }
@@ -330,6 +343,18 @@ void AbilityZone::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype) {
 	case ColliderType::PLAYER:
 		playerInside = true;
+
+		if (!tensionActive) {
+			tensionActive = true;
+
+			
+			previousMusic = Engine::GetInstance().audio->GetCurrentMusic();
+			LOG("AbilityZone: Música anterior guardada: %s", previousMusic.c_str());
+
+			Engine::GetInstance().audio->StopMusic();
+			Engine::GetInstance().audio->PlayMusic("Assets/Audio/Fx/tension.ogg", 1.0f, 1.0f);
+		}
+
 		player->GetMechanics()->GetMovementHandler()->SetCanAttack(false);
 		Engine::GetInstance().scene->previousVignetteSize = mechanics->GetHealthSystem()->GetVignetteSize();
 		player->GetMechanics()->GetMovementHandler()->disableAbilities = true;

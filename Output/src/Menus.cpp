@@ -58,6 +58,7 @@ void Menus::LoadTextures() {
         sliderTexture = Engine::GetInstance().render->LoadTexture(path.c_str());
     }
     lifeTexture = Engine::GetInstance().textures->Load("Assets/Slime/vida_slime.png");
+    offLifeTexture = Engine::GetInstance().textures->Load("Assets/Slime/off_vida.png");
 }
 void Menus::LoadAbilityTextures(pugi::xml_document& doc) {
     for (pugi::xml_node ability = doc.child("art").child("textures").child("UI").child("menu").child("backgrounds").child("jump"); ability; ability = ability.next_sibling()) {
@@ -687,6 +688,7 @@ void Menus::DrawPlayerLives() {
     if (!player) return;
 
     int lives = player->GetMechanics()->GetHealthSystem()->GetLives();
+    int maxLives = player->GetMechanics()->GetHealthSystem()->GetMaxLives();
 
     const int marginLeft = 100;
     const int marginTop = 60;
@@ -699,6 +701,13 @@ void Menus::DrawPlayerLives() {
         int y = marginTop;
         SDL_Rect section = { 0, 0, lifeW, lifeH };
         Engine::GetInstance().render->DrawTexture(lifeTexture, x, y, &section, 0.0f);
+    }
+
+    for (int i = lives; i < maxLives; ++i) {
+        int x = marginLeft + i * (lifeW + spacing);
+        int y = marginTop;
+        SDL_Rect section = { 0, 0, lifeW, lifeH };
+        Engine::GetInstance().render->DrawTexture(offLifeTexture, x, y, &section, 0.0f);
     }
 }
 bool Menus::ContinueLoadingScreen()

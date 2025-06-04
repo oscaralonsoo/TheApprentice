@@ -824,7 +824,7 @@
 					<idle loop="true" speed="0.15">
 						<frame x="0" y="0" w="128" h="128" />
 					</idle>
-					<destroyed loop="false" speed="0.15">
+					<destroyed loop="false" speed="0.1">
 						<frame x="0" y="128" w="128" h="128" />
 						<frame x="128" y="128" w="128" h="128" />
 						<frame x="128" y="128" w="128" h="128" />
@@ -953,11 +953,19 @@
 					</idle>
 				</destructible_wall>
 				<life_plant w="256" h="256" texture="Assets/Props/lifePlant.png">
-					<available loop="true" speed="0.12">
+					<available loop="true" speed="0.06">
 						<frame x="0" y="0" w="256" h="256" />
 						<frame x="256" y="0" w="256" h="256" />
 					</available>
-					<consumed loop="false" speed="0">
+					<consumed loop="false" speed="0.2">
+						<frame x="0" y="512" w="256" h="256" />
+						<frame x="256" y="512" w="256" h="256" />
+						<frame x="512" y="512" w="256" h="256" />
+						<frame x="768" y="512" w="256" h="256" />
+						<frame x="0" y="768" w="256" h="256" />
+						<frame x="256" y="768" w="256" h="256" />
+						<frame x="512" y="768" w="256" h="256" />
+						<frame x="768" y="768" w="256" h="256" />
 						<frame x="0" y="256" w="256" h="256" />
 					</consumed>
 				</life_plant>
@@ -972,7 +980,15 @@
 						<frame x="512" y="256" w="256" h="256" />
 						<frame x="768" y="256" w="256" h="256" />
 					</available>
-					<consumed loop="false" speed="0">
+					<consumed loop="false" speed="0.2">
+						<frame x="0" y="768" w="256" h="256" />
+						<frame x="256" y="768" w="256" h="256" />
+						<frame x="512" y="768" w="256" h="256" />
+						<frame x="768" y="768" w="256" h="256" />
+						<frame x="0" y="1024" w="256" h="256" />
+						<frame x="256" y="1024" w="256" h="256" />
+						<frame x="512" y="1024" w="256" h="256" />
+						<frame x="768" y="1024" w="256" h="256" />
 						<frame x="0" y="512" w="256" h="256" />
 					</consumed>
 				</life_plant_max>

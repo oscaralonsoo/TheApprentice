@@ -120,7 +120,7 @@ void NPC::OnCollision(PhysBody* physA, PhysBody* physB) {
 	{
 	case ColliderType::PLAYER:
 		if (type != "caracol") {
-			Engine::GetInstance().dialogueManager.get()->SetDialogueAvailable(dialogueId, Vector2D(GetPosition().x - texW / 2, GetPosition().y - texH), true);
+			Engine::GetInstance().dialogueManager.get()->SetDialogueAvailable(dialogueId, Vector2D(position.getX() + width / 2, position.getY()), true);
 		}
 		break;
 	}
@@ -132,7 +132,7 @@ void NPC::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
 	{
 	case ColliderType::PLAYER:
 		if (type != "caracol") {
-			Engine::GetInstance().dialogueManager.get()->SetDialogueAvailable(dialogueId, Vector2D(GetPosition().x - texW / 2, GetPosition().y - texH), false);
+			Engine::GetInstance().dialogueManager.get()->SetDialogueAvailable(dialogueId, Vector2D(position.getX() + width / 2, position.getY()), false);
 		}
 		break;
 	}

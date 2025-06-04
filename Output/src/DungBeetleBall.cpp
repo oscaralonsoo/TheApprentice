@@ -38,57 +38,43 @@ DungBeetleBall::DungBeetleBall(float x, float y, float speed, b2Vec2 direction)
 
         pbody->body->SetLinearDamping(0.0f);
         pbody->body->SetAngularDamping(0.0f);
-        pbody->body->SetBullet(true);
     }
 
     pbody->body->SetLinearVelocity(b2Vec2(direction.x * speed, direction.y * speed));
-    time = 0.0f;
+
     currentAnimation = &idleAnim;
 }
 
-DungBeetleBall::~DungBeetleBall() {}
+DungBeetleBall::~DungBeetleBall() {
+
+}
 
 bool DungBeetleBall::Update(float dt)
 {
+    CollisionNavigationLayer();
+
     b2Transform pbodyPos = pbody->body->GetTransform();
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - width / 2);
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - height / 2);
     Engine::GetInstance().render->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
     currentAnimation->Update();
 
-    b2Vec2 currentPos = pbody->body->GetPosition();
-
-    if (b2DistanceSquared(previousPosition, currentPos) < 0.01f * 0.01f)
-    {
-        timeStuck += dt;
-        if (timeStuck > 1000.0f)
-        {
-            b2Vec2 randomDir((rand() % 100 - 50) / 100.0f, (rand() % 100 - 50) / 100.0f);
-            randomDir.Normalize();
-            pbody->body->ApplyLinearImpulse(0.5f * randomDir, pbody->body->GetWorldCenter(), true);
-            timeStuck = 0.0f;
+    return true;
+}
+bool DungBeetleBall::PostUpdate() {
+    if (currentAnimation == &destroyAnim) {
+        pbody->body->GetFixtureList()->SetSensor(true);
+        if (destroyAnim.HasFinished()) {
+            Engine::GetInstance().entityManager->DestroyEntity(this);
         }
     }
-    else
-        timeStuck = 0.0f;
-
-    pbody->body->SetAngularVelocity(0.0f);
-
-    b2Vec2 velocity = pbody->body->GetLinearVelocity();
-    if (fabs(velocity.Length() - speed) > 0.1f)
-    {
-        velocity.Normalize();
-        velocity *= speed;
-        pbody->body->SetLinearVelocity(velocity);
-    }
-    previousPosition = currentPos;
-    CollisionNavigationLayer();
-
 
     return true;
 }
+
 bool DungBeetleBall::CleanUp()
 {
+    Engine::GetInstance().physics->DeletePhysBody(pbody);
     return true;
 }
 void DungBeetleBall::OnCollision(PhysBody* physA, PhysBody* physB)
@@ -118,8 +104,8 @@ void DungBeetleBall::Bounce()
 {
     b2Vec2 velocity = pbody->body->GetLinearVelocity();
     if (velocity.LengthSquared() < 0.01f) return;
-    velocity.Normalize();
 
+    velocity.Normalize();
     Vector2D mapPos = Engine::GetInstance().map->WorldToMap(
         METERS_TO_PIXELS(pbody->body->GetPosition().x),
         METERS_TO_PIXELS(pbody->body->GetPosition().y)
@@ -128,19 +114,23 @@ void DungBeetleBall::Bounce()
     MapLayer* layer = Engine::GetInstance().map->GetNavigationLayer();
     b2Vec2 normal(0.0f, 0.0f);
 
-    if (velocity.x < 0 && layer->Get(mapPos.x - 1, mapPos.y)) normal.Set(1, 0);
-    else if (velocity.x > 0 && layer->Get(mapPos.x + 1, mapPos.y)) normal.Set(-1, 0);
-    if (velocity.y < 0 && layer->Get(mapPos.x, mapPos.y - 1)) normal.Set(0, 1);
-    else if (velocity.y > 0 && layer->Get(mapPos.x, mapPos.y + 1)) normal.Set(0, -1);
+    if (velocity.x < 0 && layer->Get(mapPos.x - 1, mapPos.y)) normal += b2Vec2(1, 0);
+    else if (velocity.x > 0 && layer->Get(mapPos.x + 1, mapPos.y)) normal += b2Vec2(-1, 0);
+    if (velocity.y < 0 && layer->Get(mapPos.x, mapPos.y - 1)) normal += b2Vec2(0, 1);
+    else if (velocity.y > 0 && layer->Get(mapPos.x, mapPos.y + 1)) normal += b2Vec2(0, -1);
 
     b2Vec2 finalVel;
 
     if (normal.LengthSquared() > 0.0f)
     {
+        normal.Normalize();
         b2Vec2 reflected = velocity - 2.0f * b2Dot(velocity, normal) * normal;
-        float angle = atan2(reflected.y, reflected.x) + (((rand() % 100) / 100.0f - 0.5f) * 0.2f);
+
+        float angle = atan2(reflected.y, reflected.x);
+        angle += (((rand() % 100) / 100.0f - 0.5f) * 0.2f); // random ±0.1 radians
         finalVel.Set(cosf(angle), sinf(angle));
         finalVel *= speed;
+
         if (finalVel.LengthSquared() < 0.01f)
             finalVel = speed * normal;
     }
@@ -152,6 +142,7 @@ void DungBeetleBall::Bounce()
     pbody->body->SetLinearVelocity(finalVel);
     pbody->body->SetAngularVelocity(0.0f);
 }
+
 
 void DungBeetleBall::CollisionNavigationLayer() {
     b2Vec2 vel = pbody->body->GetLinearVelocity();
@@ -169,7 +160,4 @@ void DungBeetleBall::CollisionNavigationLayer() {
             Bounce();
         currentTileMap = projected;
     }
-}
-bool DungBeetleBall::IsDestroyed() const {
-    return currentAnimation == &destroyAnim && currentAnimation->HasFinished();
 }

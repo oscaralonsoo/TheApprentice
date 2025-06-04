@@ -12,6 +12,7 @@ public:
     ~DungBeetleBall();
 
     bool Update(float dt) override;
+    bool PostUpdate();
     bool CleanUp() override;
     void OnCollision(PhysBody* physA, PhysBody* physB);
 
@@ -21,20 +22,16 @@ public:
 
     void CollisionNavigationLayer();
 
-    bool IsDestroyed() const;
-
 public:
     Animation* currentAnimation = nullptr;
     Animation destroyAnim;
+    bool destroyBall = false;
 private:
     SDL_Texture* texture = nullptr;
     PhysBody* pbody = nullptr;
     Animation idleAnim;
     float timeStuck = 0.0f;
     b2Vec2 previousPosition;
-    Vector2D position;
-    int width;
-    int height;
     float speed;
     b2Vec2 direction;
 

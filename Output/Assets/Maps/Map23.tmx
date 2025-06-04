@@ -144875,19 +144875,18 @@
     <property name="TargetScene" type="int" value="22"/>
    </properties>
   </object>
-  <object id="4205" name="Mpa31" x="8128" y="1664" width="64" height="384">
+  <object id="4205" name="Mapa31" x="8128" y="1664" width="64" height="384">
    <properties>
-    <property name="PlayerPosX" type="int" value="1418"/>
-    <property name="PlayerPosY" type="int" value="2048"/>
+    <property name="PlayerPosX" type="int" value="1152"/>
+    <property name="PlayerPosY" type="int" value="1088"/>
     <property name="TargetScene" type="int" value="31"/>
-    <property name="Temporal debido a espera de cambios " type="int" value="0"/>
    </properties>
   </object>
-  <object id="4206" name="Map31" x="6208" y="4096" width="64" height="320">
+  <object id="4206" name="Map14" x="6208" y="4096" width="64" height="320">
    <properties>
-    <property name="PlayerPosX" type="int" value="1240"/>
-    <property name="PlayerPosY" type="int" value="572"/>
-    <property name="TargetScene" type="int" value="31"/>
+    <property name="PlayerPosX" type="int" value="256"/>
+    <property name="PlayerPosY" type="int" value="2816"/>
+    <property name="TargetScene" type="int" value="41"/>
    </properties>
   </object>
   <object id="4207" name="Map14" x="6720" y="5888" width="64" height="384">
@@ -144899,7 +144898,7 @@
   </object>
  </objectgroup>
  <objectgroup id="71" name="DownCamera">
-  <object id="5535" name="Camera" x="3712" y="5120" width="1344" height="384"/>
+  <object id="5535" name="Camera" x="3712" y="4928" width="1344" height="640"/>
   <object id="5538" name="Camera" x="3264" y="5824" width="768" height="1216"/>
   <object id="5539" x="4224" y="2752" width="448" height="1536"/>
  </objectgroup>

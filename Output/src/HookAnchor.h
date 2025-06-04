@@ -50,4 +50,6 @@ private:
     SDL_Texture* highlightTexture = nullptr;
 
     bool transitionToHook = false;
+
+    int soundSpiderId = 0;
 };

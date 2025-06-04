@@ -58,7 +58,7 @@ bool Checkpoint::Start()
     Engine::GetInstance().physics->listToDelete.push_back(pbody);
 
     currentAnimation = &unsavedAnim;
-
+    growId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Props/checkpoint_grow.ogg", 1.0f);
     soundInteractId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Props/checkpoint_activation.ogg", 1.0f);
 
     return true;
@@ -74,7 +74,8 @@ bool Checkpoint::Update(float dt)
     case CheckpointState::SAVING:
 
         if (!interactSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundInteractId, 0.5f, 0);
+            Engine::GetInstance().audio->PlayFx(growId, 0.9f, 0);
+            Engine::GetInstance().audio->PlayFx(soundInteractId, 0.7f, 0);
             interactSoundPlayed = true;
         }
 
@@ -158,11 +159,14 @@ void Checkpoint::CheckSave() {
     }
 
     if (saveRequested && insideCheckpoint) {
+        interactSoundPlayed = false;
         if (state == CheckpointState::UNSAVED) {
             state = CheckpointState::SAVING;
         }
         else if (state == CheckpointState::SAVED) {
+            Engine::GetInstance().audio->PlayFx(soundInteractId, 0.7f, 0);
             Engine::GetInstance().scene->SaveGameXML();
+
         }
         player->GetMechanics()->GetMovementHandler()->SetCantMove(true);
         b2Vec2 stopVelocity(0.0f, 0.0f);

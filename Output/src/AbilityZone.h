@@ -73,11 +73,11 @@ private:
 	int abilitySpriteW = 0;
 	int abilitySpriteH = 0;
 	bool markedForDeletion = false;
-
-	int minVignetteSize = 300;
-	int maxVignetteSize = 900;
-	float vibrateAmplitude = 400.0f;
-	float vibrateSpeed = 30.0f;
+	float vignetteHeartbeatTimer = 0.0f;
+	int minVignetteSize = 60;   
+	int maxVignetteSize = 800;  
+	float vibrateAmplitude = 1200.0f;
+	float vibrateSpeed = 0.05f;
 	int newVignetteSize = 0;
 	SDL_Color normalVignetteColor = { 0, 0, 0, 255 };
 	bool xHeld = false;

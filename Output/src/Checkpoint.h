@@ -54,7 +54,7 @@ private:
     bool isSaving = false;
     bool insideCheckpoint = false;
     bool yHeld = false;
-
+    int growId = 0;
     int soundInteractId = 0;
 	bool interactSoundPlayed = false;
 };

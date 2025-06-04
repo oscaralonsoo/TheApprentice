@@ -188,7 +188,8 @@ void Scene::UpdateTransition(float dt)
 void Scene::ChangeScene(int nextScene)
 {
 	LOG("Cambiando a escena: %d", nextScene);
-	Engine::GetInstance().map->CleanUp();  // CleanUp of the previous Map
+	Engine::GetInstance().map->CleanUp();
+	Engine::GetInstance().audio->StopMusic();
 	if (hookManager) {
 		hookManager->ClearHooks();
 		SetActiveHook(nullptr);
@@ -220,6 +221,10 @@ void Scene::ChangeScene(int nextScene)
 			case 42:
 			case 43:
 				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/snowforest_music.ogg", 0.0f, 0.5f);
+				break;
+			case 51:
+			case 52:
+				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/shadowforest_music.ogg", 0.0f, 0.5f);
 				break;
 			case 69:
 				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/stick.ogg", 0.0f, 0.5f);

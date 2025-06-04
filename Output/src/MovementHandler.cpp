@@ -49,6 +49,7 @@ void MovementHandler::Init(Player* player) {
     }
 
     soundWalkId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Slime/slime_walk.ogg", 1.0f);
+    soundClimbId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Slime/slime_climbing.ogg", 1.0f);
 }
 
 void MovementHandler::Update(float dt) {
@@ -57,6 +58,11 @@ void MovementHandler::Update(float dt) {
 
     if (isOnLiana) {
         player->GetAnimation()->ForceSetState("liana");
+        Uint32 currentTime = SDL_GetTicks();
+        if (currentTime - lastClimbSoundTime >= climbSoundInterval) {
+            Engine::GetInstance().audio->PlayFx(soundClimbId, 1.0f, 0);
+            lastClimbSoundTime = currentTime;
+        }
 
         b2Vec2 velocity(0.0f, 0.0f);
 

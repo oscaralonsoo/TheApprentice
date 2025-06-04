@@ -68,10 +68,14 @@ private:
     int soundAttackId = 0;
     int soundDeadId = 0;
     int soundBounceId = 0;
-
+    int searchAttackId = 0;
+    int angryId = 0;
+    bool angrySoundPlayed = false;
     bool attackSoundPlayed = false;
     bool deadSoundPlayed = false;
     bool bounceSoundPlayed = false;
+    bool searchSoundPlayed = false;
+
   
 
 

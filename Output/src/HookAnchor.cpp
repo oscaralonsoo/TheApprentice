@@ -53,7 +53,7 @@ bool HookAnchor::Update(float dt)
         {
             if (player->GetState() != "hook") {
                 player->GetAnimation()->SetOverlayState("transition");
-                player->GetAnimation()->SetStateIfHigherPriority("hook");
+                player->GetAnimation()->ForceSetState("hook");
             }
             b2Vec2 playerPos = player->pbody->body->GetPosition();
             b2Vec2 hookPos = pbody->body->GetPosition();
@@ -188,6 +188,7 @@ void HookAnchor::EndHook()
         player->GetMechanics()->GetMovementHandler()->SetCantMove(false);
         player->pbody->body->SetGravityScale(2.0f);
         player->pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+        player->GetAnimation()->ForceSetState("fall");
     }
 
     isHooking = false;
@@ -224,12 +225,21 @@ void HookAnchor::Use()
     Player* player = Engine::GetInstance().scene->GetPlayer();
     Engine::GetInstance().scene->SetActiveHook(this);
 
+    IHookable* current = Engine::GetInstance().scene->GetActiveHook();
+    if (current && current != this) {
+        static_cast<HookAnchor*>(current)->EndHook();
+    }
+
+    Engine::GetInstance().scene->SetActiveHook(this);
+
+
     if (player && player->pbody && player->pbody->body)
     {
         Player* player = Engine::GetInstance().scene->GetPlayer();
         wasOnGroundAtHookStart = player->GetMechanics()->IsOnGround(); // Guarda el estado del suelo
 
         hookUsed = true;
+        Engine::GetInstance().scene->GetHookManager()->MarkHookAsUsed(this);
 
         b2Vec2 playerPos = player->pbody->body->GetPosition();
         b2Vec2 hookPos = pbody->body->GetPosition();

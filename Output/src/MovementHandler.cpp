@@ -314,11 +314,7 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
             fallMechanic.OnLanding();
             jumpMechanic.OnLanding();
 
-            HookAnchor* hook = Engine::GetInstance().scene->GetActiveHook();
-            if (hook) {
-                hook->ResetHook();
-                Engine::GetInstance().scene->GetHookManager()->RegisterHook(hook);
-            }
+            Engine::GetInstance().scene->GetHookManager()->ResetUsedHooks();
 
         }
         break;

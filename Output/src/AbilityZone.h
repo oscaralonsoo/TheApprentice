@@ -91,4 +91,9 @@ private:
 	SDL_Texture* glideSprite = nullptr;
 	SDL_Texture* pushSprite = nullptr;
 	SDL_Texture* wallJumpSprite = nullptr;
+
+	bool tensionActive = false;
+	std::string previousMusic = "";
+
+	bool readyToDestroy = false;
 };

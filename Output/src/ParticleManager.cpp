@@ -103,7 +103,15 @@ bool ParticleManager::Update(float dt)
 	if (Engine::GetInstance().menus->currentState != MenusState::GAME || Engine::GetInstance().menus->isPaused)
 		return true;
 
-	SetParticlesByMap(Engine::GetInstance().scene->nextScene);
+	int currentScene = Engine::GetInstance().scene->nextScene;
+
+	if (currentScene != lastScene)
+	{
+		DestroyAllParticles();
+		lastScene = currentScene;
+	}
+
+	SetParticlesByMap(currentScene);
 
 	for (auto particle : particles)
 	{
@@ -113,6 +121,7 @@ bool ParticleManager::Update(float dt)
 
 	return true;
 }
+
 
 
 bool ParticleManager::PostUpdate()

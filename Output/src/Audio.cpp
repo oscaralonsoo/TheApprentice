@@ -104,6 +104,8 @@ bool Audio::PlayMusic(const char* path, float fadeTime, float customVolume)
 {
 	if (!active) return false;
 
+	currentMusicPath = path;
+
 	if (music != NULL) {
 		if (fadeTime > 0.0f)
 			Mix_FadeOutMusic(int(fadeTime * 1000.0f));

@@ -41,7 +41,7 @@ bool Shyver::Start() {
     }
 
     currentAnimation = &attackAnim;
-    maxSteps = 15;
+    maxSteps = 5;
     soundWalkId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Shyver/shyver_walk.ogg", 1.0f);
     soundDashId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Shyver/shyver_dash.ogg", 1.0f);
     soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Shyver/shyver_death.ogg", 1.0f);
@@ -56,6 +56,7 @@ bool Shyver::Update(float dt) {
     {
     case ShyverState::IDLE:
         if (currentAnimation != &idleAnim) currentAnimation = &idleAnim;
+        if(pathfinding->HasFoundPlayer())
         currentState = ShyverState::APPEAR;
         break;
     case ShyverState::APPEAR:
@@ -163,10 +164,6 @@ bool Shyver::Update(float dt) {
 bool Shyver::PostUpdate() {
     if (printWave)
     {
-        if (waveAnim.HasFinished())
-        {
-            waveAnim.Reset();
-        }
         SDL_RendererFlip flip = SDL_FLIP_NONE;
         if (direction > 0) flip = (SDL_RendererFlip)(flip | SDL_FLIP_HORIZONTAL);
         if (rotationAngle == 180) flip = (SDL_RendererFlip)(flip | SDL_FLIP_NONE);
@@ -174,7 +171,7 @@ bool Shyver::PostUpdate() {
         secondAnimation = &waveAnim;
         Engine::GetInstance().render.get()->DrawTexture(texture,
             (int)waveAnimStartPos.getX()-200,
-            (int)waveAnimStartPos.getY()-300,
+            (int)waveAnimStartPos.getY()-275,
             &secondAnimation->GetCurrentFrame(),
             1.0f,
             (double)rotationAngle,
@@ -236,6 +233,7 @@ void Shyver::Attack() {
     {
         if (!printWave) {
             waveAnimStartPos = GetPosition();
+            waveAnim.Reset();
         }
         printWave = true;
         pbody->body->SetLinearVelocity(b2Vec2(direction * speed, 0));

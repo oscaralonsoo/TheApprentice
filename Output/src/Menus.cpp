@@ -213,7 +213,7 @@ void Menus::MainMenu(float dt) {
 
     if (buttonPressed) {
         switch (selectedButton) {
-        case 0: NewGame(); break;
+        case 0: NewGame();  Engine::GetInstance().audio->StopMusic(); break;
         case 1:
             if (isSaved != 0) {
                 Engine::GetInstance().scene->LoadGameXML();
@@ -291,10 +291,12 @@ void Menus::Pause(float dt) {
         switch (selectedButton) {
         case 0: isPaused = false; StartTransition(true, MenusState::GAME); break;
         case 1: inConfig = true; StartTransition(true, MenusState::SETTINGS); break;
-        case 2: currentState = MenusState::EXIT; break;
+        case 2: StartTransition(true, MenusState::MAINMENU); Engine::GetInstance().audio->StopMusic(); Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/mainmenu_music.ogg", 2.0f, 1.0f);  break;
+        case 3: currentState = MenusState::EXIT; break;
         }
     }
 }
+
 
 void Menus::Settings() {
     bool escapePressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN;
@@ -343,13 +345,13 @@ void Menus::HandleVolumeSliders() {
     int minX = (width / 2) + 50;
     int maxX = minX + 420;
 
-    if (selectedButton == 2) {
+    if (selectedButton == 1) {
         AdjustVolume(musicVolumeSliderX, minX, maxX);
     }
-    else if (selectedButton == 3) {
+    else if (selectedButton == 2) {
         AdjustVolume(fxVolumeSliderX, minX, maxX);
     }
-    else if (selectedButton == 4) {
+    else if (selectedButton == 3) {
         AdjustVolume(masterVolumeSliderX, minX, maxX);
     }
 }
@@ -546,7 +548,7 @@ void Menus::CreateButtons() {
 std::vector<std::string> Menus::GetButtonNamesForCurrentState() const {
     switch (currentState) {
     case MenusState::MAINMENU: return { "newGame", "continue", "settings", "credits", "exit" };
-    case MenusState::PAUSE: return { "continue", "settings", "exit" };
+    case MenusState::PAUSE: return { "continue", "settings", "backToMenu", "exit" };
     case MenusState::SETTINGS: return { "Vsync", "Music Volume", "FX Volume", "Master Volume" };
     default: return {};
     }

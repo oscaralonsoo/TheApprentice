@@ -576,7 +576,13 @@ void Menus::CreateButton(const std::string& name, int startX, int startY, int bu
     std::string unhovered = name + "_unhovered.png";
     std::string hovered = name + "_hovered.png";
 
-    SDL_Rect bounds = { startX, startY, buttonWidth, buttonHeight };
+    int customOffsetX = 0;
+    // Aplica un offset solo a BackToMenu para centrarlo mejor
+    if (currentState == MenusState::PAUSE && name == "backToMenu") {
+        customOffsetX = -21; 
+    }
+
+    SDL_Rect bounds = { startX + customOffsetX, startY, buttonWidth, buttonHeight };
     bool isCheckBox = (currentState == MenusState::SETTINGS && index == 0);
     buttons.emplace_back(name, bounds, index, isCheckBox, unhovered, hovered);
 
@@ -585,6 +591,7 @@ void Menus::CreateButton(const std::string& name, int startX, int startY, int bu
         buttons.back().hoveredTexture = buttonTextures[hovered];
     }
 }
+
 void Menus::DrawAbilities() {
     if (drawingAbilityBackground == true) return;
     SDL_Texture* abilityTexture = nullptr;

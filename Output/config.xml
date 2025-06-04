@@ -172,10 +172,10 @@
 					<frame x="450" y="1423" w="150" h="120" />
 				</doublejump>
 				<walljump loop="false" speed="0.15">
-					<frame x="0" y="1543" w="100" h="100" />
-					<frame x="100" y="1543" w="100" h="100" />
-					<frame x="200" y="1543" w="100" h="100" />
-					<frame x="300" y="1543" w="100" h="100" />
+					<frame x="0" y="1555" w="122" h="110" />
+					<frame x="122" y="1555" w="122" h="110" />
+					<frame x="244" y="1555" w="122" h="110" />
+					<frame x="366" y="1555" w="122" h="110" />
 				</walljump>
 				<glide loop="false" speed="0.15">
 					<frame x="0" y="1673" w="140" h="120" />
@@ -188,7 +188,7 @@
 					<frame x="170" y="1813" w="85" h="120" />
 					<frame x="255" y="1813" w="85" h="120" />
 				</liana>
-				<transition loop="false" speed="0.5">
+				<transition loop="false" speed="0.3">
 					<frame x="0" y="1933" w="200" h="200" />
 					<frame x="200" y="1933" w="200" h="200" />
 					<frame x="400" y="1933" w="200" h="200" />

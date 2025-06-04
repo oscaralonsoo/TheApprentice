@@ -333,6 +333,7 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
 
             int dir = (movementDirection != 0) ? movementDirection : 1;
             player->GetMechanics()->GetWallSlideMechanic()->OnTouchWall(dir);
+            jumpMechanic.jumpCount = 0;
         }
         break;
 
@@ -346,7 +347,7 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::DOWN_CAMERA:
         if (!downCameraCooldownActive) {
             LOG("DOWN_CAMERA collision detected, moviendo cámara abajo");
-            Engine::GetInstance().render->SetExtraCameraOffsetY(- 100); // o el valor que necesites
+            Engine::GetInstance().render->downCameraActivated = true; // o el valor que necesites
         }
         break;
     case ColliderType::LIANA:
@@ -379,20 +380,22 @@ void MovementHandler::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         break;
 
     case ColliderType::WALL_SLIDE:
+    {
         isWallSliding = false;
         player->GetMechanics()->SetIsWallSliding(false);
         wallSlideCooldownTimer.Start();
         wallSlideCooldownActive = true;
         player->pbody->body->SetGravityScale(2.0f); // Volver a gravedad normal
-        player->SetState("fall");
-        break;
+        player->GetAnimation()->SetStateIfHigherPriority("fall");
 
+        break;
+    }
     case ColliderType::WALL:
     case ColliderType::DESTRUCTIBLE_WALL:
         break;
     case ColliderType::DOWN_CAMERA:
         LOG("DOWN_CAMERA collision ended, reseteando offset cámara");
-        Engine::GetInstance().render->SetExtraCameraOffsetY(0);
+        Engine::GetInstance().render->downCameraActivated = false;
         downCameraCooldownTimer.Start();
         downCameraCooldownActive = true;
         break;
@@ -403,6 +406,11 @@ void MovementHandler::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         disableAbilities = false; // Habilitar salto y dash otra vez
         lianaCooldownTimer.Start();
         lianaCooldownActive = true;
+        if (player->IsTouchingPlatform()) {
+            fallMechanic.OnLanding();
+            jumpMechanic.OnLanding();
+            player->SetState("idle"); // o lo que corresponda si se mueve
+        }
         break;
     default:
         break;

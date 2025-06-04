@@ -235,6 +235,7 @@ void DialogueManager::ResetTyping() {
 void DialogueManager::SetPlayerMovement(bool isMoving) {
 	Player* player = Engine::GetInstance().scene.get()->GetPlayer();
 	player->GetMechanics()->GetMovementHandler()->SetCantMove(isMoving);
+	player->GetMechanics()->GetJumpMechanic()->Enable(!isMoving);
 	//player->GetMechanics()->GetMovementHandler()->EnableJump(isMoving);
 	//player->GetMechanics()->GetMovementHandler()->EnableDoubleJump(isMoving);
 	//player->GetMechanics()->GetMovementHandler()->EnableDash(isMoving);

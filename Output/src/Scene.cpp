@@ -75,8 +75,6 @@ bool Scene::Update(float dt)
 		LoadGameXML();
 	}
 
-	// Actualizar la cámara y renderizar la nueva escena
-	Engine::GetInstance().render.get()->UpdateCamera(player->GetPosition(), player->GetMovementDirection(), 0.05);
 	VignetteChanges(dt);
 
 	// Realizar la transición entre escenas

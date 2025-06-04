@@ -43,11 +43,6 @@ bool HookAnchor::Update(float dt)
 {
     Player* player = Engine::GetInstance().scene->GetPlayer();
 
-    if (player->GetAnimation()->GetCurrentState() == "transition" &&
-        player->GetAnimation()->HasFinished() && transitionToHook) {
-        player->GetAnimation()->SetStateIfHigherPriority("hook");
-        transitionToHook = false;
-    }
 
     if (texture)
         Engine::GetInstance().render->DrawTexture(texture, position.getX(), position.getY());
@@ -57,8 +52,8 @@ bool HookAnchor::Update(float dt)
         if (player && player->pbody && player->pbody->body)
         {
             if (player->GetState() != "hook") {
-                player->GetAnimation()->SetStateIfHigherPriority("transition");
-                transitionToHook = true;
+                player->GetAnimation()->SetOverlayState("transition");
+                player->GetAnimation()->SetStateIfHigherPriority("hook");
             }
             b2Vec2 playerPos = player->pbody->body->GetPosition();
             b2Vec2 hookPos = pbody->body->GetPosition();

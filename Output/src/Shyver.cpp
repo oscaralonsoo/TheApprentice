@@ -70,6 +70,7 @@ bool Shyver::Update(float dt) {
         walkSoundPlayed = false;
         dashSoundPlayed = false;
         deadSoundPlayed = false;
+        appearSoundPlayed = false;
         Wait();
         if (currentAnimation->HasFinished()) currentState = ShyverState::WAIT;
         break;

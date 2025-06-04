@@ -347,7 +347,7 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::DOWN_CAMERA:
         if (!downCameraCooldownActive) {
             LOG("DOWN_CAMERA collision detected, moviendo cámara abajo");
-            Engine::GetInstance().render->SetExtraCameraOffsetY(- 100); // o el valor que necesites
+            Engine::GetInstance().render->downCameraActivated = true; // o el valor que necesites
         }
         break;
     case ColliderType::LIANA:
@@ -395,7 +395,7 @@ void MovementHandler::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::DOWN_CAMERA:
         LOG("DOWN_CAMERA collision ended, reseteando offset cámara");
-        Engine::GetInstance().render->SetExtraCameraOffsetY(0);
+        Engine::GetInstance().render->downCameraActivated = false;
         downCameraCooldownTimer.Start();
         downCameraCooldownActive = true;
         break;

@@ -68,7 +68,8 @@ void FallMechanic::OnLanding() {
             stunTimer.Start();
             Engine::GetInstance().render->StartCameraShake(0.2f, 2);
         }
-        else {
+        if (!player->GetMechanics()->GetMovementHandler()->GetAttackMechanic().IsAttacking())
+        {
             player->GetAnimation()->ForceSetState("idle");
         }
     }

@@ -51,7 +51,7 @@ bool Scene::Awake()
 
 bool Scene::Start()
 {
-	nextScene = 1;
+	nextScene = 6666;
 	Engine::GetInstance().map->Load("Assets/Maps/", "Map" + std::to_string(nextScene) + ".tmx");
 
 	slimeLoading = Engine::GetInstance().textures->Load("Assets/Slime/slimeLoading.png");
@@ -75,8 +75,6 @@ bool Scene::Update(float dt)
 		LoadGameXML();
 	}
 
-	// Actualizar la cámara y renderizar la nueva escena
-	Engine::GetInstance().render.get()->UpdateCamera(player->GetPosition(), player->GetMovementDirection(), 0.05);
 	VignetteChanges(dt);
 
 	// Realizar la transición entre escenas

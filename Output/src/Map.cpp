@@ -25,6 +25,8 @@
 #include "HokableBox.h"
 #include "Geyser.h"
 #include "Stalactite.h"
+#include "Player.h"
+#include "Scene.h"
 
 Map::Map() : Module(), mapLoaded(false)
 {
@@ -49,6 +51,15 @@ bool Map::Start() {
 
 bool Map::Update(float dt)
 {
+    Scene* scene = Engine::GetInstance().scene.get();
+    if (scene) {
+        Player* player = scene->GetPlayer();
+        if (player) {
+            int movementDir = player->GetMechanics()->GetMovementHandler()->GetMovementDirection();
+            Engine::GetInstance().render->UpdateCamera(player->GetPosition(), movementDir, 0.05f); // o el smoothing deseado
+        }
+    }
+
     if (mapLoaded) {
         DrawMapLayers(false); // solo capas que NO son Forward
     }

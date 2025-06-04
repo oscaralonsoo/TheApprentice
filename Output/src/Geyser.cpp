@@ -52,6 +52,9 @@ bool Geyser::Start()
     currentAnimation = &disabledAnim;
 
     geyserTimer.Start();
+
+    soundInteractId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Props/geiser_sound.ogg", 1.0f);
+
     return true;
 }
 
@@ -67,13 +70,22 @@ bool Geyser::Update(float dt)
         break;
 
     case GeyserState::ENABLED:
+
+        interactSoundTimer -= dt;
+        if (interactSoundTimer <= 0.0f) {
+            Engine::GetInstance().audio->PlayFx(soundInteractId, 1.0f, 0);
+            interactSoundTimer = interactSoundInterval;
+        }
+
         if (currentAnimation != &enabledAnim) {
             currentAnimation = &enabledAnim;
+
             currentAnimation->Reset();
         }
 
         if (playerInside && !hasPushed)
         {
+
             Player* player = Engine::GetInstance().scene.get()->GetPlayer();
             player->pbody->body->SetLinearVelocity(b2Vec2_zero);
             player->pbody->body->ApplyLinearImpulse(b2Vec2(0.0f, -23.0f), player->pbody->body->GetWorldCenter(), true);

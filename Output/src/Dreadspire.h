@@ -48,4 +48,12 @@ private:
     Animation idleAnim;
     Animation shootingAnim;
     Animation dieAnim;
+
+    int soundAttackId = 0;
+    int soundDeadId = 0;
+    int soundRechargeId = 0;
+
+    bool attackSoundPlayed = false;
+    bool deadSoundPlayed = false;
+    bool rechargeSoundPlayed = false;
 };

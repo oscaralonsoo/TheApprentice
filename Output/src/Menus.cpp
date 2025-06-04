@@ -12,6 +12,7 @@
 #include "Audio.h"
 #include "MenuParticle.h"
 #include "ParticleManager.h"
+#include "GuiControlButton.h"
 
 template<typename T>
 T Clamp(T value, T min, T max)
@@ -198,7 +199,7 @@ void Menus::MainMenu(float dt) {
     static bool menuMusicStarted = false;
 
     if (!menuMusicStarted) {
-        Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/mainmenu_music.ogg", 2.0f, 1.0f); 
+        Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/mainmenu_music.ogg", 2.0f, 0.5f); 
         menuMusicStarted = true;
     }
     bool buttonPressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN;
@@ -212,6 +213,8 @@ void Menus::MainMenu(float dt) {
     }
 
     if (buttonPressed) {
+                    if (Engine::GetInstance().scene->soundUI2Id > 0)
+                Engine::GetInstance().audio->PlayFx(Engine::GetInstance().scene->soundUI2Id, 1.0f, 0);
         switch (selectedButton) {
         case 0: NewGame();  Engine::GetInstance().audio->StopMusic(); break;
         case 1:
@@ -233,6 +236,7 @@ void Menus::NewGame() {
     videoPlayer = new VideoPlayer();
     videoPlayer->Load("Assets/Cinematica/cinematica.mp4", Engine::GetInstance().render->renderer);
     videoPlayer->Play();
+    Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cinematic_music.ogg", 2.0f, 0.5f);
     StartTransition(false, MenusState::PLAYING_VIDEO);
 
     pugi::xml_document config;
@@ -428,11 +432,26 @@ void Menus::UpdateVolume(int sliderX, int minX, int maxX) {
     Mix_Volume(-1, finalSfxVolume);
 }
 void Menus::Credits() {
+    
+    static bool creditMusicStarted = false;
+
+    if (!creditMusicStarted) {
+        Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/credit_music.ogg", 2.0f, 0.5f);
+        creditMusicStarted = true;
+    }
+
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
         nextState = (previousState == MenusState::PAUSE) ? MenusState::PAUSE : previousState;
         inCredits = false;
+        creditMusicStarted = false;
+
+    if (nextState == MenusState::MAINMENU || nextState == MenusState::PAUSE) {
+            Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/mainmenu_music.ogg", 2.0f, 0.5f);
+    }
+ 
         StartTransition(true, nextState);
     }
+
 }
 void Menus::UpdateVideoPlayer() {
     if (videoPlayer) {
@@ -444,7 +463,7 @@ void Menus::UpdateVideoPlayer() {
             videoPlayer->CleanUp();
             videoPlayer = nullptr;
 
-            Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 2.0f, 1.0f);
+            Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 2.0f, 0.5f);
             StartTransition(false, MenusState::GAME);
         }
     }

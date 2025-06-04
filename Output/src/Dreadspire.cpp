@@ -7,7 +7,9 @@
 #include "Textures.h"
 #include "Entity.h"
 #include "Log.h"
+#include "Audio.h"
 #include <cmath>
+
 
 Dreadspire::Dreadspire() : Enemy(EntityType::DREADSPIRE) {}
 
@@ -63,6 +65,7 @@ bool Dreadspire::Start() {
         bodyType::DYNAMIC,
         offsetX,
         offsetY
+
     );
 
     // Establecer la rotación física del cuerpo
@@ -72,6 +75,9 @@ bool Dreadspire::Start() {
 
     maxSteps = 25;
 
+    soundAttackId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Dreadspire/dreadspire_recharge.ogg", 1.0f);
+    soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Dreadspire/dreadspire_death.ogg", 1.0f);
+    soundRechargeId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Dreadspire/dreadspire_attack.ogg", 1.0f);
     return Enemy::Start();
 }
 
@@ -88,9 +94,31 @@ bool Dreadspire::Update(float dt) {
 
     switch (currentState) {
     case DreadspireState::IDLE: Idle(dt); break;
-    case DreadspireState::RECHARGING: Recharge(dt); break;
-    case DreadspireState::SHOOTING: Shoot(dt); break;
-    case DreadspireState::DEAD: currentAnimation = &dieAnim; break;
+    case DreadspireState::RECHARGING: Recharge(dt);
+        if (!rechargeSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundRechargeId, 1.0f, 0);
+            rechargeSoundPlayed = true;
+        }
+        deadSoundPlayed = false;
+        attackSoundPlayed = false;
+        
+        break;
+    case DreadspireState::SHOOTING: Shoot(dt);
+        if (!attackSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundAttackId, 10.0f, 0);
+            attackSoundPlayed = true;
+        }
+        deadSoundPlayed = false;
+        rechargeSoundPlayed = false;
+        break;
+    case DreadspireState::DEAD: currentAnimation = &dieAnim; 
+        if (!deadSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundDeadId, 10.0f, 0);
+            deadSoundPlayed = true;
+        }
+        attackSoundPlayed = false;
+        rechargeSoundPlayed = false;
+        break;
     }
 
     ChangeBodyType();

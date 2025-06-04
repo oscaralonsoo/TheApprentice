@@ -28,7 +28,7 @@ void FallMechanic::Update(float dt) {
     b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
     if (velocity.y > 0.1f && !isFalling) {
         isFalling = true;
-        player->GetAnimation()->SetStateIfHigherPriority("fall");
+        player->GetAnimation()->ForceSetState("fall");
     }
 
     CheckFallStart();

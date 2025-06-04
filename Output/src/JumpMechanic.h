@@ -35,13 +35,14 @@ public:
 
     bool wallJumpActive = false;
 
+    int jumpCount = 0;
+
 private:
     Player* player = nullptr;
 
     bool jumpUnlocked = false;
     bool doubleJumpUnlocked = false;
 
-    int jumpCount = 0;
     const int maxJumpCount = 2;
 
     bool isJumping = false;

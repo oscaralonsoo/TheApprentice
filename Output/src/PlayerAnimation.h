@@ -9,12 +9,12 @@
 
 enum class AnimationStatePriority {
     IDLE = 0,
-    RUN_RIGHT = 1,
-    LANDING = 2,
-    LIANA = 3,
-    FALL = 4,
-    JUMP = 5,
-    WALL_SLIDE = 6,
+    WALL_SLIDE = 1,
+    FALL = 2,
+    RUN_RIGHT = 3,
+    LANDING = 4,
+    LIANA = 5,
+    JUMP = 6,
     DOUBLEJUMP = 7,
     WALLJUMP = 8,
     DASH = 9,
@@ -45,7 +45,9 @@ public:
     AnimationStatePriority GetPriorityForState(const std::string& state) const;
     void SetPlayer(Player* p);
     void ForceSetState(const std::string& newState);
-
+    void SetOverlayState(const std::string& state);
+    void ClearOverlayState();
+    void GetAnimationOffset(const std::string& state, int& offsetX, int& offsetY) const;
 
 private:
     SDL_Texture* texture = NULL;
@@ -53,6 +55,9 @@ private:
     Animation* currentAnimation;
     std::string currentState = "idle";
     Player* player = nullptr;
+    Animation* overlayAnimation = nullptr;
+    std::string overlayState = "";
+    bool overlayActive = false;
 };
 
 #endif // PLAYER_ANIMATION_H

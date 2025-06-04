@@ -81,4 +81,7 @@ private:
     float wallJumpVerticalImpulse = 13.0f;
 
     bool glideInputArmed = false;
+
+    int soundJumpId = 0;
+    bool jumpSoundPlayed = false;
 };

@@ -49,4 +49,5 @@ private:
 
     bool transitionToDash = false;
 
+    int soundDashId = 0;
 };

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="163" height="84" tilewidth="64" tileheight="64" infinite="0" nextlayerid="72" nextobjectid="6293">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="163" height="84" tilewidth="64" tileheight="64" infinite="0" nextlayerid="72" nextobjectid="6294">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -132755,9 +132755,9 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="26833"/>
-   <tile gid="26834"/>
-   <tile gid="26835"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile gid="26837"/>
    <tile gid="26838"/>
@@ -132918,9 +132918,9 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="26863"/>
-   <tile gid="26864"/>
-   <tile gid="26865"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile gid="26867"/>
    <tile gid="26868"/>
@@ -133081,9 +133081,9 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="26893"/>
-   <tile gid="26894"/>
-   <tile gid="26895"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile gid="26897"/>
    <tile gid="26898"/>
@@ -151493,6 +151493,11 @@
    </properties>
   </object>
   <object id="4884" name="Ardilla" x="4865.33" y="638.667" width="316" height="184"/>
+  <object id="6293" name="Carta" x="2944" y="3584" width="192" height="192">
+   <properties>
+    <property name="dialogueId" type="int" value="16"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="60" name="Enemies">
   <object id="4435" name="Dreadspire" x="1216" y="2048" width="64" height="64"/>

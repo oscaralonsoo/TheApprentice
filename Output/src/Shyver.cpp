@@ -158,6 +158,10 @@ bool Shyver::Update(float dt) {
     }
 
     direction = -direction;
+    if (currentAnimation != previousAnimation) {
+        UpdateColliderSizeToCurrentAnimation();
+        previousAnimation = currentAnimation;
+    }
     return Enemy::Update(dt);
 }
 
@@ -275,4 +279,50 @@ void Shyver::OnCollision(PhysBody* physA, PhysBody* physB)
         break;
     }
 }
+
+void Shyver::UpdateColliderSizeToCurrentAnimation() {
+    if (!pbody || !pbody->body) return;
+
+    // Borra el fixture actual
+    b2Fixture* fixture = pbody->body->GetFixtureList();
+    if (fixture) {
+        pbody->body->DestroyFixture(fixture);
+    }
+
+
+    float colliderRadius = 0.0f;
+
+    if (currentAnimation == &attackAnim) {
+        colliderRadius = texH / 2.0f; 
+    }
+    else if (currentAnimation == &idleAnim) {
+        colliderRadius = texH / 3.0f; 
+    }
+    else if (currentAnimation == &stunAnim) {
+        colliderRadius = texH / 2.5f;
+    }
+    else if (currentAnimation == &appearAnim || currentAnimation == &disappearAnim) {
+        colliderRadius = texH / 4.0f;
+    }
+    else if (currentAnimation == &deathAnim) {
+        colliderRadius = texH / 3.5f;
+    }
+    else {
+        colliderRadius = texH / 3.0f;
+    }
+
+    b2CircleShape shape;
+    shape.m_p.Set(0, 0);
+    shape.m_radius = PIXEL_TO_METERS(colliderRadius);
+
+    b2FixtureDef fixtureDef;
+    fixtureDef.shape = &shape;
+    fixtureDef.density = 1.0f;
+    fixtureDef.friction = 0.3f;
+    fixtureDef.filter.categoryBits = CATEGORY_ENEMY;
+    fixtureDef.filter.maskBits = CATEGORY_PLAYER | CATEGORY_ATTACK | CATEGORY_PLATFORM | CATEGORY_WALL;
+
+    pbody->body->CreateFixture(&fixtureDef);
+}
+
 

@@ -59,7 +59,7 @@ bool Thumpod::Update(float dt) {
     case ThumpodState::ATTACK:
 
         if (!jumpSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundJumpId, 1.0f, 0);
+            Engine::GetInstance().audio->PlayFx(soundJumpId, 0.5f, 0);
             jumpSoundPlayed = true;
         }
 
@@ -68,7 +68,7 @@ bool Thumpod::Update(float dt) {
 
     case ThumpodState::DEAD:
         if (!deadSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundDeadId, 1.0f, 0);
+            Engine::GetInstance().audio->PlayFx(soundDeadId, 0.5f, 0);
             deadSoundPlayed = true;
         }
         Die();

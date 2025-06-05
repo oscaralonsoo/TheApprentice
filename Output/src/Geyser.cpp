@@ -73,7 +73,7 @@ bool Geyser::Update(float dt)
 
         interactSoundTimer -= dt;
         if (interactSoundTimer <= 0.0f) {
-            Engine::GetInstance().audio->PlayFx(soundInteractId, 1.0f, 0);
+            Engine::GetInstance().audio->PlayFx(soundInteractId, 0.5f, 0);
             interactSoundTimer = interactSoundInterval;
         }
 

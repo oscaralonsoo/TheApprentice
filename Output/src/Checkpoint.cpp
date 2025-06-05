@@ -74,8 +74,8 @@ bool Checkpoint::Update(float dt)
     case CheckpointState::SAVING:
 
         if (!interactSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(growId, 0.9f, 0);
-            Engine::GetInstance().audio->PlayFx(soundInteractId, 0.7f, 0);
+            Engine::GetInstance().audio->PlayFx(growId, 0.4f, 0);
+            Engine::GetInstance().audio->PlayFx(soundInteractId, 0.2f, 0);
             interactSoundPlayed = true;
         }
 
@@ -164,7 +164,7 @@ void Checkpoint::CheckSave() {
             state = CheckpointState::SAVING;
         }
         else if (state == CheckpointState::SAVED) {
-            Engine::GetInstance().audio->PlayFx(soundInteractId, 0.7f, 0);
+            Engine::GetInstance().audio->PlayFx(soundInteractId, 0.2f, 0);
             Engine::GetInstance().scene->SaveGameXML();
 
         }

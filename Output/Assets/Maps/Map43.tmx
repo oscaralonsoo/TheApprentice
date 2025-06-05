@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="78" height="81" tilewidth="64" tileheight="64" infinite="0" nextlayerid="78" nextobjectid="5719">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="78" height="81" tilewidth="64" tileheight="64" infinite="0" nextlayerid="78" nextobjectid="5720">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -69804,7 +69804,7 @@
   <properties>
    <property name="Doors" type="bool" value="true"/>
   </properties>
-  <object id="4826" name="Map12" x="1088" y="4032" width="64" height="192">
+  <object id="4826" name="Map13" x="1088" y="4032" width="64" height="192">
    <properties>
     <property name="PlayerPosX" type="int" value="6784"/>
     <property name="PlayerPosY" type="int" value="4288"/>
@@ -69825,10 +69825,10 @@
     <property name="TargetScene" type="int" value="6666"/>
    </properties>
   </object>
-  <object id="5446" name="Map13" x="1664" y="2624" width="64" height="256">
+  <object id="5446" name="Map14" x="1664" y="2624" width="64" height="256">
    <properties>
-    <property name="PlayerPosX" type="int" value="0"/>
-    <property name="PlayerPosY" type="int" value="0"/>
+    <property name="PlayerPosX" type="int" value="5376"/>
+    <property name="PlayerPosY" type="int" value="1152"/>
     <property name="TargetScene" type="int" value="14"/>
    </properties>
   </object>

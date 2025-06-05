@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="180" height="63" tilewidth="64" tileheight="64" infinite="0" nextlayerid="73" nextobjectid="4930">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="180" height="63" tilewidth="64" tileheight="64" infinite="0" nextlayerid="73" nextobjectid="4937">
  <tileset firstgid="1" name="Fondo_cueva" tilewidth="64" tileheight="64" tilecount="480" columns="30">
   <image source="../Environment/Fondo_cueva.png" width="1920" height="1080"/>
  </tileset>
@@ -82419,8 +82419,8 @@
    <tile gid="44426"/>
    <tile gid="44426"/>
    <tile gid="44426"/>
-   <tile gid="44426"/>
-   <tile gid="44428"/>
+   <tile gid="44418"/>
+   <tile gid="44437"/>
    <tile/>
    <tile/>
    <tile/>
@@ -82599,8 +82599,9 @@
    <tile gid="44426"/>
    <tile gid="44426"/>
    <tile gid="44426"/>
-   <tile gid="44426"/>
-   <tile gid="44428"/>
+   <tile gid="44427"/>
+   <tile gid="2684395633"/>
+   <tile gid="2684395631"/>
    <tile/>
    <tile/>
    <tile/>
@@ -82609,8 +82610,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile gid="43314"/>
+   <tile gid="43323"/>
    <tile/>
    <tile/>
    <tile/>
@@ -82779,9 +82779,9 @@
    <tile gid="44426"/>
    <tile gid="44426"/>
    <tile gid="44426"/>
-   <tile gid="44426"/>
-   <tile gid="44428"/>
-   <tile/>
+   <tile gid="44438"/>
+   <tile gid="2684395634"/>
+   <tile gid="2684395632"/>
    <tile/>
    <tile/>
    <tile/>
@@ -83694,8 +83694,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="44430"/>
-   <tile gid="44426"/>
+   <tile gid="44435"/>
+   <tile gid="44420"/>
    <tile gid="44426"/>
    <tile gid="44426"/>
    <tile gid="44427"/>
@@ -83873,9 +83873,9 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="44415"/>
-   <tile gid="44440"/>
-   <tile gid="44426"/>
+   <tile gid="41071"/>
+   <tile gid="41072"/>
+   <tile gid="44430"/>
    <tile gid="44426"/>
    <tile gid="44426"/>
    <tile gid="44427"/>
@@ -84053,9 +84053,9 @@
    <tile gid="1610657169"/>
    <tile gid="1610657169"/>
    <tile gid="2147528113"/>
-   <tile gid="44440"/>
-   <tile gid="44426"/>
-   <tile gid="44426"/>
+   <tile gid="41073"/>
+   <tile gid="41074"/>
+   <tile gid="44430"/>
    <tile gid="44426"/>
    <tile gid="44426"/>
    <tile gid="44438"/>
@@ -84234,8 +84234,8 @@
    <tile/>
    <tile gid="44435"/>
    <tile gid="44420"/>
-   <tile gid="44426"/>
-   <tile gid="44426"/>
+   <tile gid="44438"/>
+   <tile gid="44440"/>
    <tile gid="44426"/>
    <tile gid="44426"/>
    <tile gid="44426"/>
@@ -85506,7 +85506,7 @@
    <tile gid="44426"/>
    <tile gid="44426"/>
    <tile gid="44426"/>
-   <tile gid="44436"/>
+   <tile gid="44426"/>
    <tile gid="44436"/>
    <tile gid="44436"/>
    <tile gid="44436"/>
@@ -124987,8 +124987,6 @@
   <object id="4559" x="8192" y="1600" height="64"/>
   <object id="4560" x="8512" y="1600" height="64"/>
   <object id="4561" x="8576" y="1600" height="64"/>
-  <object id="4580" x="8256" y="1536" height="64"/>
-  <object id="4581" x="8448" y="1536" height="64"/>
   <object id="4601" x="8128" y="1216" height="64"/>
   <object id="4602" x="8192" y="1216" height="64"/>
   <object id="4603" x="8512" y="1216" height="64"/>
@@ -124996,11 +124994,8 @@
   <object id="4623" x="9344" y="832" height="64"/>
   <object id="4624" x="9280" y="1088" height="64"/>
   <object id="4625" x="9024" y="832" height="128"/>
-  <object id="4626" x="8704" y="1152" height="64"/>
-  <object id="4627" x="8896" y="1152" height="64"/>
   <object id="4628" x="8960" y="1216" height="64"/>
-  <object id="4629" x="9024" y="1280" height="192"/>
-  <object id="4630" x="8960" y="1472" height="64"/>
+  <object id="4629" x="9024" y="1280" height="256"/>
   <object id="4639" x="8640" y="832" height="128"/>
   <object id="4640" x="8960" y="832" height="128"/>
   <object id="4644" x="8896" y="1856" height="64"/>
@@ -125028,10 +125023,10 @@
     <property name="TargetScene" type="int" value="31"/>
    </properties>
   </object>
-  <object id="4761" x="10176" y="2112" width="64" height="448">
+  <object id="4761" x="7296" y="2112" width="64" height="448">
    <properties>
     <property name="PlayerPosX" type="int" value="17664"/>
-    <property name="PlayerPosY" type="int" value="4544"/>
+    <property name="PlayerPosY" type="int" value="448"/>
     <property name="TargetScene" type="int" value="42"/>
    </properties>
   </object>
@@ -125071,7 +125066,7 @@
     <property name="dialogueld" type="int" value="24"/>
    </properties>
   </object>
-  <object id="4879" name="Perdiz" x="9602" y="1536" width="508" height="190">
+  <object id="4879" name="Invisible" x="9536" y="1536" width="512" height="192">
    <properties>
     <property name="dialogueld" type="int" value="42"/>
    </properties>
@@ -125183,7 +125178,7 @@
   <object id="4605" x="8512" y="1280" width="64"/>
   <object id="4606" x="8192" y="1216" width="320"/>
   <object id="4607" x="8512" y="1472" width="64"/>
-  <object id="4608" x="8576" y="1536" width="384"/>
+  <object id="4608" x="8576" y="1536" width="448"/>
   <object id="4610" x="8960" y="1280" width="64"/>
   <object id="4611" x="8576" y="1216" width="128"/>
   <object id="4613" x="8896" y="1216" width="64"/>
@@ -125192,7 +125187,6 @@
   <object id="4616" x="9344" y="896" width="320"/>
   <object id="4617" x="9024" y="832" width="320"/>
   <object id="4618" x="8960" y="960" width="64"/>
-  <object id="4633" x="8960" y="1472" width="64"/>
   <object id="4634" x="8640" y="832" width="320"/>
   <object id="4635" x="8576" y="960" width="64"/>
   <object id="4645" x="8896" y="1856" width="64"/>
@@ -125281,6 +125275,8 @@
   <object id="4039" name="Spikes" x="1088" y="3712" width="1536" height="64"/>
   <object id="4083" name="Spikes" x="2240" y="2698" width="704" height="64"/>
   <object id="4800" name="Spikes" x="5504" y="2304" width="960" height="64"/>
+  <object id="4935" x="8964.67" y="1478.67" width="59.3333" height="57.3333"/>
+  <object id="4936" x="8192" y="1024" width="52" height="128"/>
  </objectgroup>
  <objectgroup id="66" name="PressureSystem">
   <object id="4138" name="Plate" x="3264" y="3008" width="64" height="64">
@@ -125407,7 +125403,6 @@
   <object id="4734" x="8512" y="1472" height="64"/>
   <object id="4735" x="8576" y="1472" height="64"/>
   <object id="4736" x="7808" y="1472" height="64"/>
-  <object id="4737" x="8960" y="1472" height="64"/>
   <object id="4738" x="6848" y="1600" height="64"/>
   <object id="4739" x="6912" y="1664" height="64"/>
   <object id="4740" x="7168" y="1728" height="64"/>
@@ -125474,9 +125469,13 @@
   <object id="4928" x="2304" y="3072" width="448"/>
   <object id="4116" x="640" y="3136" width="384"/>
   <object id="4118" x="1024" y="3200" width="128"/>
+  <object id="4930" x="8256" y="1536" height="64"/>
+  <object id="4931" x="8448" y="1536" height="64"/>
+  <object id="4933" x="8704" y="1152" height="64"/>
+  <object id="4934" x="8896" y="1152" height="64"/>
  </objectgroup>
  <objectgroup id="61" name="Abilities">
-  <object id="3908" name="DoubleJump" x="9600" y="1536" width="512" height="192"/>
+  <object id="3908" name="DoubleJump" x="9664" y="1536" width="384" height="192"/>
  </objectgroup>
  <objectgroup id="60" name="Enemies">
   <object id="4220" name="Scurver" x="2624" y="1856" width="64" height="64"/>

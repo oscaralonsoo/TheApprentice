@@ -29,6 +29,8 @@ public:
     bool CleanUp() override;
     void OnCollision(PhysBody* physA, PhysBody* physB);
 
+    void UpdateColliderSizeToCurrentAnimation();
+
     void Wait();
     void Attack();
     void Stun();
@@ -39,6 +41,7 @@ public:
 private:
     ShyverState currentState = ShyverState::IDLE;
 
+    Animation* previousAnimation = nullptr;
     Animation idleAnim;
     Animation invisibleAnim;
     Animation stunAnim;

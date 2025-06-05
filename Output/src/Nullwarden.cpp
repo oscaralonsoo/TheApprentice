@@ -153,6 +153,7 @@ bool Nullwarden::Update(float dt) {
             Engine::GetInstance().audio->PlayFx(soundRoarId, 0.8f, 0);
             roarSoundPlayed = true;
         }
+
         break;
     }
     if (currentAnimation != previousAnimation) {
@@ -179,6 +180,7 @@ bool Nullwarden::Update(float dt) {
 bool Nullwarden::PostUpdate() {
     if (currentState == NullwardenState::DEATH && currentAnimation == &deathAnim && currentAnimation->HasFinished()) {
         Engine::GetInstance().audio->PlayFx(soundDeadId, 1.0f, 0);
+        Engine::GetInstance().render->ToggleCameraLock();
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         Engine::GetInstance().pressureSystem->OpenDoor(2);
 

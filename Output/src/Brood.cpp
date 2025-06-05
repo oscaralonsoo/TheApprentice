@@ -60,7 +60,7 @@ bool Brood::Start() {
         fixture->SetSensor(true);
         b2Filter filter;
         filter.categoryBits = CATEGORY_BROOD;
-        filter.maskBits = CATEGORY_PLAYER | CATEGORY_PLAYER_DAMAGE;
+        filter.maskBits = CATEGORY_PLAYER | CATEGORY_PLAYER_DAMAGE | CATEGORY_ATTACK;
         fixture->SetFilterData(filter);
     }
     initialPosition = position;

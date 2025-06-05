@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="141" height="112" tilewidth="64" tileheight="64" infinite="0" nextlayerid="71" nextobjectid="6053">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="141" height="112" tilewidth="64" tileheight="64" infinite="0" nextlayerid="71" nextobjectid="6053">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -121024,7 +121024,7 @@
    <tile gid="5887"/>
    <tile gid="5887"/>
    <tile gid="5988"/>
-   <tile gid="33848"/>
+   <tile gid="2684388408"/>
    <tile/>
    <tile/>
    <tile/>
@@ -174690,7 +174690,7 @@
   <object id="6027" x="3008" y="3520" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="67" name="NPC">
-  <object id="6007" name="ArdillaLiana" x="6016" y="4800" width="320" height="320">
+  <object id="6007" name="ArdillaLiana" x="6080" y="4800" width="320" height="320">
    <properties>
     <property name="dialogueId" type="int" value="34"/>
    </properties>

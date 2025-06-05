@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="141" height="112" tilewidth="64" tileheight="64" infinite="0" nextlayerid="71" nextobjectid="6054">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="141" height="112" tilewidth="64" tileheight="64" infinite="0" nextlayerid="71" nextobjectid="6056">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -122675,11 +122675,11 @@
    <tile gid="6071"/>
    <tile gid="6072"/>
    <tile gid="3221231543"/>
-   <tile gid="5876"/>
-   <tile gid="5877"/>
    <tile gid="5878"/>
    <tile gid="33847"/>
    <tile gid="33848"/>
+   <tile gid="33847"/>
+   <tile gid="5876"/>
    <tile gid="33847"/>
    <tile gid="33848"/>
    <tile gid="33847"/>
@@ -122817,10 +122817,10 @@
    <tile gid="1610618807"/>
    <tile gid="1610618817"/>
    <tile gid="5894"/>
-   <tile gid="5887"/>
-   <tile gid="5892"/>
    <tile gid="5939"/>
    <tile gid="5939"/>
+   <tile gid="5939"/>
+   <tile gid="5894"/>
    <tile gid="5939"/>
    <tile gid="5939"/>
    <tile gid="5939"/>
@@ -174193,10 +174193,11 @@
   <object id="5941" x="5760" y="5184" width="128"/>
   <object id="5942" x="5504" y="5184" width="128"/>
   <object id="5943" x="5184" y="5184" width="192"/>
-  <object id="5944" x="5120" y="5376" width="192"/>
+  <object id="5944" x="5120" y="5376" width="64"/>
   <object id="5945" x="5632" y="5376" width="128"/>
   <object id="5946" x="5888" y="5376" width="128"/>
   <object id="5997" x="6016" y="5184" width="64"/>
+  <object id="6054" x="5376" y="5376" width="64"/>
  </objectgroup>
  <objectgroup id="58" name="Wall">
   <object id="5063" x="3200" y="5120" width="64"/>
@@ -174577,14 +174578,14 @@
   <object id="5962" x="6016" y="4992" height="128"/>
   <object id="5963" x="5760" y="5184" height="64"/>
   <object id="5964" x="5632" y="5184" height="64"/>
-  <object id="5965" x="5312" y="5376" height="64"/>
+  <object id="5965" x="5440" y="5376" height="64"/>
   <object id="5966" x="5632" y="5376" height="64"/>
   <object id="5967" x="5760" y="5376" height="64"/>
   <object id="5968" x="5888" y="5376" height="64"/>
   <object id="5969" x="6016" y="5376" height="128"/>
   <object id="5972" x="5120" y="5504" width="896"/>
   <object id="5973" x="5760" y="5440" width="128"/>
-  <object id="5974" x="5312" y="5440" width="320"/>
+  <object id="5974" x="5440" y="5440" width="192"/>
   <object id="5975" x="5632" y="5248" width="128"/>
   <object id="5976" x="5376" y="5248" width="128"/>
   <object id="5977" x="5376" y="5056" width="192"/>
@@ -174682,12 +174683,13 @@
   <object id="5983" x="5376" y="5189.33" width="128" height="58.6667"/>
   <object id="5999" x="5376" y="5189.33" width="128" height="58.6667"/>
   <object id="5986" x="5760" y="5384" width="128" height="56"/>
-  <object id="5987" x="5312" y="5384" width="320" height="56"/>
+  <object id="5987" x="5440" y="5384" width="192" height="56"/>
   <object id="6004" x="5888" y="5191" width="128" height="57.3333"/>
   <object id="6014" x="1472" y="2048" width="128" height="128"/>
   <object id="6025" x="2560" y="3968" width="64" height="64"/>
   <object id="6026" x="2560" y="3776" width="64" height="64"/>
   <object id="6027" x="3008" y="3520" width="64" height="64"/>
+  <object id="6055" x="5184" y="5376" width="192" height="56"/>
  </objectgroup>
  <objectgroup id="67" name="NPC">
   <object id="6007" name="ArdillaLiana" x="6080" y="4800" width="320" height="320">
@@ -174793,9 +174795,7 @@
   <object id="4713" x="2688" y="2624" width="64" height="64"/>
   <object id="4723" x="6272" y="2944" width="64" height="64"/>
   <object id="5396" x="5120" y="1728" width="64" height="64"/>
-  <object id="6005" name="Hook" x="5184" y="5312" width="64" height="64"/>
   <object id="6028" x="2752" y="1792" width="64" height="64"/>
-  <object id="6053" name="Hook" x="5696" y="5312" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="62" name="Habilities"/>
 </map>

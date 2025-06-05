@@ -22,7 +22,7 @@ void AttackMechanic::Update(float dt) {
         if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
 
             if (!attackSoundPlayed) {
-                Engine::GetInstance().audio->PlayFx(soundAttackId, 1.0f, 0);
+                Engine::GetInstance().audio->PlayFx(soundAttackId, 0.5f, 0);
                 attackSoundPlayed = true;
             }
             attackPressed = true;
@@ -36,7 +36,7 @@ void AttackMechanic::Update(float dt) {
                 attackPressed = true;
 
                 if (!attackSoundPlayed) {
-                    Engine::GetInstance().audio->PlayFx(soundAttackId, 1.0f, 0);
+                    Engine::GetInstance().audio->PlayFx(soundAttackId, 0.5f, 0);
                     attackSoundPlayed = true;
                 }
             }

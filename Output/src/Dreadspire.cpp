@@ -96,7 +96,7 @@ bool Dreadspire::Update(float dt) {
     case DreadspireState::IDLE: Idle(dt); break;
     case DreadspireState::RECHARGING: Recharge(dt);
         if (!rechargeSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundRechargeId, 1.0f, 0);
+            Engine::GetInstance().audio->PlayFx(soundRechargeId, 0.5f, 0);
             rechargeSoundPlayed = true;
         }
         deadSoundPlayed = false;
@@ -105,7 +105,7 @@ bool Dreadspire::Update(float dt) {
         break;
     case DreadspireState::SHOOTING: Shoot(dt);
         if (!attackSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundAttackId, 10.0f, 0);
+            Engine::GetInstance().audio->PlayFx(soundAttackId, 0.5f, 0);
             attackSoundPlayed = true;
         }
         deadSoundPlayed = false;
@@ -113,7 +113,7 @@ bool Dreadspire::Update(float dt) {
         break;
     case DreadspireState::DEAD: currentAnimation = &dieAnim; 
         if (!deadSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundDeadId, 10.0f, 0);
+            Engine::GetInstance().audio->PlayFx(soundDeadId, 0.5f, 0);
             deadSoundPlayed = true;
         }
         attackSoundPlayed = false;

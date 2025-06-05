@@ -63,7 +63,7 @@ bool Mireborn::Update(float dt) {
         if (!walkSoundPlayed) {
             walkSoundTimer -= dt;
             if (walkSoundTimer <= 0.0f) {
-                Engine::GetInstance().audio->PlayFx(soundWalkId, 1.0f, 0);
+                Engine::GetInstance().audio->PlayFx(soundWalkId, 0.5f, 0);
                 walkSoundTimer = walkSoundInterval;
             }
         }
@@ -75,7 +75,7 @@ bool Mireborn::Update(float dt) {
     case MirebornState::DIVIDING:
 
         if (!divideSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundDivideId, 1.0f, 0);
+            Engine::GetInstance().audio->PlayFx(soundDivideId, 0.5f, 0);
             divideSoundPlayed = true;
         }
         walkSoundPlayed = false;
@@ -87,7 +87,7 @@ bool Mireborn::Update(float dt) {
     case MirebornState::DEATH:
 
         if (!deathSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundDeathId, 1.0f, 0);
+            Engine::GetInstance().audio->PlayFx(soundDeathId, 0.5f, 0);
             deathSoundPlayed = true;
         }
         walkSoundPlayed = false;

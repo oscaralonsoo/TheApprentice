@@ -78,7 +78,7 @@ bool Broodheart::Update(float dt) {
 
     if (shouldSpawn == false && currentAnimation == &spawnAnim) {
         if (!spawnSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundSpawnId, 1.0f, 0);
+            Engine::GetInstance().audio->PlayFx(soundSpawnId, 0.5f, 0);
             spawnSoundPlayed = true;
         }
         if (spawnAnim.HasFinished()) {
@@ -114,13 +114,14 @@ void Broodheart::OnCollision(PhysBody* physA, PhysBody* physB) {
 
     switch (physB->ctype) {
     case ColliderType::PLAYER:
+        break;
     case ColliderType::ATTACK:
         if (!isBroken) {
             isBroken = true;
             currentAnimation = &deathAnim;
             pbody->body->GetFixtureList()->SetSensor(true);
             if (!deathSoundPlayed) {
-                Engine::GetInstance().audio->PlayFx(soundDeathId, 1.0f, 0);
+                Engine::GetInstance().audio->PlayFx(soundDeathId, 0.5f, 0);
                 deathSoundPlayed = true;
             }
         }

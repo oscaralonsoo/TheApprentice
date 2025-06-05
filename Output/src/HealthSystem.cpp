@@ -42,7 +42,7 @@ void HealthSystem::TakeDamage() {
 
     Engine::GetInstance().render->StartCameraShake(0.5, 1);
 
-    if (lives == 0 && !isDying) {
+    if (lives <= 0 && !isDying) {
         Engine::GetInstance().audio->PlayFx(soundDeadId, 1.0f, 0);
         isDying = true;
         player->GetAnimation()->SetStateIfHigherPriority("die");
@@ -64,6 +64,7 @@ void HealthSystem::HandleSpikeDamage() {
         isDying = true;
         player->GetAnimation()->SetStateIfHigherPriority("die");
         deathTimer.Start();
+        // TODO JAVI --- SOLO HACE ESTOC CUANDO DEAD ANIM HA ACABADO
         Engine::GetInstance().scene->isDead = true;
     }
     else {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="141" height="112" tilewidth="64" tileheight="64" infinite="0" nextlayerid="71" nextobjectid="6047">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="141" height="112" tilewidth="64" tileheight="64" infinite="0" nextlayerid="71" nextobjectid="6053">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -113040,8 +113040,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="31543"/>
-   <tile gid="31544"/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile gid="5886"/>
    <tile gid="6072"/>
@@ -113181,8 +113181,8 @@
    <tile gid="5867"/>
    <tile gid="5867"/>
    <tile gid="5868"/>
-   <tile gid="31555"/>
-   <tile gid="31556"/>
+   <tile/>
+   <tile/>
    <tile gid="5876"/>
    <tile gid="5894"/>
    <tile gid="6072"/>
@@ -144074,9 +144074,9 @@
    <tile gid="28681"/>
    <tile gid="28682"/>
    <tile gid="28683"/>
-   <tile gid="28684"/>
-   <tile gid="28685"/>
-   <tile gid="28686"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="28687"/>
    <tile gid="28688"/>
    <tile gid="28689"/>
@@ -144213,12 +144213,12 @@
    <tile/>
    <tile gid="28710"/>
    <tile gid="28711"/>
-   <tile gid="28712"/>
-   <tile gid="28713"/>
-   <tile gid="28714"/>
-   <tile gid="28715"/>
-   <tile gid="28716"/>
-   <tile gid="28717"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="28718"/>
    <tile gid="28719"/>
    <tile gid="28720"/>
@@ -144353,14 +144353,14 @@
    <tile/>
    <tile/>
    <tile gid="28740"/>
-   <tile gid="28741"/>
-   <tile gid="28742"/>
-   <tile gid="28743"/>
-   <tile gid="28744"/>
-   <tile gid="28745"/>
-   <tile gid="28746"/>
-   <tile gid="28747"/>
-   <tile gid="28748"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="28749"/>
    <tile gid="28750"/>
    <tile/>
@@ -144494,15 +144494,15 @@
    <tile/>
    <tile/>
    <tile gid="28770"/>
-   <tile gid="28771"/>
-   <tile gid="28772"/>
-   <tile gid="28773"/>
-   <tile gid="28774"/>
-   <tile gid="28775"/>
-   <tile gid="28776"/>
-   <tile gid="28777"/>
-   <tile gid="28778"/>
-   <tile gid="28779"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="28780"/>
    <tile/>
    <tile/>
@@ -144636,13 +144636,13 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="28802"/>
-   <tile gid="28803"/>
-   <tile gid="28804"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="28805"/>
-   <tile gid="28806"/>
-   <tile gid="28807"/>
-   <tile gid="28808"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -144777,12 +144777,12 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="28832"/>
-   <tile gid="28833"/>
+   <tile/>
+   <tile/>
    <tile gid="28834"/>
    <tile gid="28835"/>
-   <tile gid="28836"/>
-   <tile gid="28837"/>
+   <tile/>
+   <tile/>
    <tile gid="28838"/>
    <tile/>
    <tile/>
@@ -144919,11 +144919,11 @@
    <tile/>
    <tile/>
    <tile gid="28862"/>
-   <tile gid="28863"/>
+   <tile/>
    <tile gid="28864"/>
    <tile gid="28865"/>
    <tile gid="28866"/>
-   <tile gid="28867"/>
+   <tile/>
    <tile gid="28868"/>
    <tile/>
    <tile/>
@@ -174034,11 +174034,6 @@
     <property name="TargetScene" type="int" value="52"/>
    </properties>
   </object>
-  <object id="5995" x="5632" y="4800" width="64" height="192">
-   <properties>
-    <property name="groupId" type="int" value="6"/>
-   </properties>
-  </object>
  </objectgroup>
  <objectgroup id="26" name="Collisions">
   <object id="4085" x="2880" y="5952" width="320"/>
@@ -174695,9 +174690,29 @@
   <object id="6027" x="3008" y="3520" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="67" name="NPC">
-  <object id="6007" name="ArdillaLiana" x="6144" y="4800" width="192" height="320">
+  <object id="6007" name="ArdillaLiana" x="6016" y="4800" width="320" height="320">
    <properties>
     <property name="dialogueId" type="int" value="34"/>
+   </properties>
+  </object>
+  <object id="6047" name="Carta" x="2048" y="960" width="192" height="192">
+   <properties>
+    <property name="dialoqueId" type="int" value="15"/>
+   </properties>
+  </object>
+  <object id="6050" name="CaracolMail" x="5184" y="4864" width="128" height="128">
+   <properties>
+    <property name="dialoqueId" type="int" value="61"/>
+   </properties>
+  </object>
+  <object id="6051" name="CaracolMail" x="5120" y="5632" width="128" height="128">
+   <properties>
+    <property name="dialoqueId" type="int" value="63"/>
+   </properties>
+  </object>
+  <object id="6052" name="CaracolMail" x="5696" y="5632" width="128" height="128">
+   <properties>
+    <property name="dialoqueId" type="int" value="62"/>
    </properties>
   </object>
  </objectgroup>
@@ -174759,7 +174774,6 @@
   <object id="5405" name="LifePlant" x="5056" y="2624" width="64" height="64"/>
   <object id="4697" name="Box" x="3008" y="2688" width="62" height="62"/>
   <object id="5927" name="Checkpoint" x="3584" y="4480" width="384" height="320"/>
-  <object id="5996" name="Box" x="5952" y="4928" width="62" height="62"/>
  </objectgroup>
  <objectgroup id="69" name="PressureSystem">
   <object id="4690" name="Door" x="3520" y="5184" width="64" height="192">
@@ -174770,11 +174784,6 @@
   <object id="5696" name="Plate" x="2624" y="4160" width="64" height="64">
    <properties>
     <property name="groupId" type="int" value="3"/>
-   </properties>
-  </object>
-  <object id="5994" name="Plate" x="6016" y="5120" width="64" height="64">
-   <properties>
-    <property name="groupId" type="int" value="6"/>
    </properties>
   </object>
  </objectgroup>

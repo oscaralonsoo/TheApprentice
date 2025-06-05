@@ -263,6 +263,8 @@ void Scene::ChangeScene(int nextScene)
 
 				player->pbody->body->SetLinearVelocity(b2Vec2(0, 0));
 				player->pbody->body->SetTransform(b2Vec2(newPosition.x / PIXELS_PER_METER, (newPosition.y) / PIXELS_PER_METER), 0);
+
+				player->GetMechanics()->GetMovementHandler()->SetIsOnLiana(false);
 			}
 		}
 	}

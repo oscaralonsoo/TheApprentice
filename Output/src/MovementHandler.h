@@ -66,6 +66,8 @@ public:
     Timer pendingLandingTimer;
     float pendingLandingTimeout = 500.0f;
 
+    void SetIsOnLiana(bool value) { isOnLiana = value; }
+
 private:
     void HandleMovementInput();
     void UpdateAnimation();

@@ -435,7 +435,7 @@ void Menus::Credits() {
     static bool creditMusicStarted = false;
 
     if (!creditMusicStarted) {
-        Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/credit_music.ogg", 2.0f, 0.5f);
+        Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/credit_music.ogg", 0.0f, 0.5f);
         creditMusicStarted = true;
     }
 
@@ -445,7 +445,7 @@ void Menus::Credits() {
         creditMusicStarted = false;
 
     if (nextState == MenusState::MAINMENU || nextState == MenusState::PAUSE) {
-            Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/mainmenu_music.ogg", 2.0f, 0.5f);
+            Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/mainmenu_music.ogg", 0.0f, 0.5f);
     }
  
         StartTransition(true, nextState);
@@ -462,7 +462,7 @@ void Menus::UpdateVideoPlayer() {
             videoPlayer->CleanUp();
             videoPlayer = nullptr;
 
-            Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 2.0f, 0.5f);
+            Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 1.0f, 0.5f);
             StartTransition(false, MenusState::GAME);
         }
     }

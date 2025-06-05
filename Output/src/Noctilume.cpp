@@ -51,6 +51,7 @@ bool Noctilume::Start() {
     soundCrashId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Noctilume/noctilume_crash.ogg", 1.0f);
     soundWalkId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Noctilume/noctilume_walk.ogg", 1.0f);
 
+    pbody->body->GetFixtureList()->SetSensor(true);
     return Enemy::Start();
 }
 
@@ -76,6 +77,7 @@ bool Noctilume::Update(float dt) {
         Chasing(dt); break;
     case NoctilumeState::PRE_ATTACK: PreAttack(dt); break;
     case NoctilumeState::ATTACK:
+
         if (!attackSoundPlayed) {
             Engine::GetInstance().audio->PlayFx(soundAttackId, 1.0f, 0);
             attackSoundPlayed = true;
@@ -149,6 +151,7 @@ void Noctilume::OnCollision(PhysBody* physA, PhysBody* physB) {
 }
 
 void Noctilume::Idle(float dt) {
+
     currentAnimation = &flyingAnim;
     timePassed += dt;
 
@@ -218,7 +221,7 @@ void Noctilume::PreAttack(float dt) {
 
 void Noctilume::Attack(float dt) {
     currentAnimation = &attackAnim;
-
+    pbody->body->GetFixtureList()->SetSensor(false);
     if (isDiving) {
         position = position + diveDirection * attackSpeed * dt * 100.0f;
     }
@@ -244,6 +247,7 @@ void Noctilume::Crash(float dt) {
     crashTimer += dt;
 
     if (crashTimer >= 3000.0f) {
+        pbody->body->GetFixtureList()->SetSensor(true);
         currentState = pathfinding->HasFoundPlayer() ? NoctilumeState::CHASING : NoctilumeState::IDLE;
         crashTimer = 0.0f;
     }

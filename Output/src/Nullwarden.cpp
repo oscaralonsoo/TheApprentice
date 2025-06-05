@@ -65,6 +65,8 @@ bool Nullwarden::Start() {
     drawX = (int)position.getX();
     currentAnimation = &idleAnim;
     direction = -1;
+
+    Engine::GetInstance().render->ToggleCameraLock();
     return true;
 
 }

@@ -1,12 +1,6 @@
 {
   "dependencies": [
     "box2d",
-    "pugixml",
-    "sdl2",
-    "sdl2-image",
-    "sdl2-mixer",
-    "sdl2-ttf",
-    "tracy",
     {
       "name": "ffmpeg",
       "features": [
@@ -14,6 +8,12 @@
         "avformat",
         "swscale"
       ]
-    }
+    },
+    "pugixml",
+    "sdl2",
+    "sdl2-image",
+    "sdl2-mixer",
+    "sdl2-ttf",
+    "tracy"
   ]
 }

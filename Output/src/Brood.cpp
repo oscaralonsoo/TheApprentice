@@ -133,12 +133,6 @@ void Brood::OnCollision(PhysBody* physA, PhysBody* physB) {
 
     switch (physB->ctype) {
     case ColliderType::PLAYER:
-        if (!touchingPlayer) {
-            if (!Engine::GetInstance().scene->GetPlayer()->GetMechanics()->IsGodMode()) {
-                touchingPlayer = true;
-                Engine::GetInstance().scene->GetPlayer()->GetMechanics()->GetHealthSystem()->TakeDamage();
-            }
-        }
         break;
     case ColliderType::ATTACK:
         currentState = BroodState::DEAD;

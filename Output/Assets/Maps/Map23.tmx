@@ -161768,10 +161768,10 @@
   </object>
   <object id="5543" name="Caracol" x="1536" y="1344" width="64" height="128"/>
  </objectgroup>
- <objectgroup id="57" name="WallSlide" offsetx="1.5" offsety="45">
+ <objectgroup id="57" name="WallSlide">
   <object id="3368" x="3392" y="1344" height="512"/>
-  <object id="3843" x="5246.5" y="-45" width="1.5" height="128"/>
-  <object id="3845" x="5440" y="83" height="128"/>
+  <object id="3843" x="5246.5" y="0" width="1.5" height="128"/>
+  <object id="3845" x="5440" y="144.333" height="114.333"/>
   <object id="3847" x="5632" y="256" height="64"/>
   <object id="3849" x="5696" y="320" height="128"/>
   <object id="3851" x="6016" y="448" height="64"/>
@@ -161783,19 +161783,19 @@
   <object id="3865" x="7040" y="1344" height="320"/>
   <object id="4571" x="5760" y="5376" width="64"/>
   <object id="4595" x="5696" y="4416" height="64"/>
-  <object id="4910" x="1600" y="467" height="192"/>
-  <object id="4911" x="1920" y="467" height="512"/>
-  <object id="4912" x="2304" y="851" height="320"/>
-  <object id="4913" x="2496" y="851" height="192"/>
-  <object id="4914" x="2624" y="403" height="640"/>
-  <object id="4915" x="2496" y="339" height="320"/>
-  <object id="4916" x="1280" y="723" height="320"/>
-  <object id="4917" x="958.5" y="659" width="1.5" height="256"/>
-  <object id="5361" x="5376" y="2451" height="256"/>
-  <object id="5366" x="5632" y="2323" height="256"/>
-  <object id="5370" x="6464" y="2323" height="256"/>
-  <object id="5373" x="6656" y="2323" height="256"/>
-  <object id="5376" x="7424" y="2323" height="192"/>
+  <object id="4910" x="1600" y="512" height="192"/>
+  <object id="4911" x="1920" y="512" height="512"/>
+  <object id="4912" x="2304" y="896" height="320"/>
+  <object id="4913" x="2496" y="896" height="192"/>
+  <object id="4914" x="2624" y="448" height="640"/>
+  <object id="4915" x="2496" y="384" height="320"/>
+  <object id="4916" x="1280" y="768" height="320"/>
+  <object id="4917" x="958.5" y="704" width="1.5" height="256"/>
+  <object id="5361" x="5376" y="2496" height="256"/>
+  <object id="5366" x="5632" y="2368" height="256"/>
+  <object id="5370" x="6464" y="2368" height="256"/>
+  <object id="5373" x="6656" y="2368" height="256"/>
+  <object id="5376" x="7424" y="2368" height="192"/>
   <object id="5521" x="5696" y="6272" height="128"/>
  </objectgroup>
  <objectgroup id="63" name="Spikes">
@@ -161818,12 +161818,14 @@
  <objectgroup id="64" name="PressureSystem">
   <object id="5343" name="Plate" x="4672" y="6272" width="64" height="64">
    <properties>
-    <property name="id" type="int" value="0"/>
+    <property name="id" type="int" value="13"/>
+    <property name="isInvisible" type="bool" value="false"/>
    </properties>
   </object>
   <object id="5354" name="Door" x="5696" y="6080" width="64" height="192">
    <properties>
-    <property name="id" type="int" value="0"/>
+    <property name="id" type="int" value="13"/>
+    <property name="isOpen" type="bool" value="false"/>
    </properties>
   </object>
  </objectgroup>
@@ -161838,7 +161840,7 @@
     <property name="TargetScene" type="int" value="22"/>
    </properties>
   </object>
-  <object id="4204" name="Map22" x="1344" y="4480" width="64" height="320">
+  <object id="4204" name="Map22" x="1344" y="4480" height="320">
    <properties>
     <property name="PlayerPosX" type="int" value="9408"/>
     <property name="PlayerPosY" type="int" value="6080"/>
@@ -161939,9 +161941,9 @@
   <object id="4853" x="2624" y="448" width="64"/>
   <object id="4854" x="2688" y="384" width="192"/>
   <object id="4855" x="2880" y="320" width="64"/>
-  <object id="4856" x="2890" y="128" width="54"/>
-  <object id="4857" x="2616.67" y="64" width="272"/>
-  <object id="4858" x="2496" y="127.333" width="117.333" height="0.666667"/>
+  <object id="4856" x="2880" y="128" width="64"/>
+  <object id="4857" x="2624" y="64" width="256"/>
+  <object id="4858" x="2496" y="127.333" width="128" height="0.666667"/>
   <object id="4859" x="2432" y="256" width="64"/>
   <object id="4860" x="2432" y="384" width="64"/>
   <object id="4869" x="960" y="960" width="64"/>
@@ -162210,8 +162212,8 @@
   <object id="4849" x="3008" y="832" height="192"/>
   <object id="4861" x="2432" y="256" height="128"/>
   <object id="4862" x="2496" y="128" height="128"/>
-  <object id="4863" x="2614.67" y="64" height="64"/>
-  <object id="4864" x="2890" y="64" height="64"/>
+  <object id="4863" x="2623.67" y="64" height="64"/>
+  <object id="4864" x="2880" y="64" width="2" height="64"/>
   <object id="4865" x="2944" y="128" height="192"/>
   <object id="4866" x="2880" y="320" height="64"/>
   <object id="4867" x="2688" y="384" height="64"/>

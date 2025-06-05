@@ -368,7 +368,7 @@ void AbilityZone::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype) {
 	case ColliderType::PLAYER:
 		playerInside = true;
-		player->GetMechanics()->GetMovementHandler()->GetDashMechanic().CancelDash();
+
 		if (!tensionActive) {
 			tensionActive = true;
 			previousMusic = Engine::GetInstance().audio->GetCurrentMusic();

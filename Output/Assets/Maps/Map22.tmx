@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="155" height="99" tilewidth="64" tileheight="64" infinite="0" nextlayerid="73" nextobjectid="4587">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="155" height="99" tilewidth="64" tileheight="64" infinite="0" nextlayerid="73" nextobjectid="4587">
  <tileset firstgid="1" name="PropMala1" tilewidth="64" tileheight="64" tilecount="4" columns="2">
   <image source="../Props/PropMala1.png" width="128" height="128"/>
  </tileset>
@@ -169044,7 +169044,7 @@
  <objectgroup id="62" name="Liana">
   <object id="4091" x="7872" y="3904" width="64" height="512"/>
   <object id="4111" x="7552" y="2944" width="64" height="512"/>
-  <object id="4155" x="1536" y="2368" width="64" height="640"/>
+  <object id="4155" x="1536" y="2333" width="64" height="675"/>
   <object id="4164" x="1408" y="1088" width="64" height="384"/>
   <object id="4275" x="6336" y="6016" width="64" height="320"/>
   <object id="4391" x="8128" y="3328" width="64" height="448"/>
@@ -169079,7 +169079,7 @@
   <object id="3975" x="3776" y="5888" height="128"/>
   <object id="3980" x="6144" y="5952" height="64"/>
   <object id="3981" x="6592" y="5952" height="64"/>
-  <object id="3982" x="6144" y="6016" width="448"/>
+  <object id="3982" x="6144" y="5980" width="448" height="36"/>
   <object id="3995" x="5120" y="5312" height="64"/>
   <object id="3996" x="4736" y="5312" height="64"/>
   <object id="3997" x="4736" y="5376" width="384"/>
@@ -169095,7 +169095,7 @@
   <object id="4018" x="8128" y="4544" height="64"/>
   <object id="4019" x="7680" y="4608" width="448"/>
   <object id="4083" x="3392" y="4542.73" height="65.2727"/>
-  <object id="4094" x="7808" y="3904" width="192"/>
+  <object id="4094" x="7808" y="3870.5" width="192" height="33.5"/>
   <object id="4095" x="8000" y="3840" height="64"/>
   <object id="4096" x="7808" y="3840" height="64"/>
   <object id="4098" x="8192" y="4160" width="512"/>
@@ -169267,13 +169267,13 @@
   <object id="1467" x="832" y="1664" width="192"/>
   <object id="1469" x="1024" y="1472" width="192"/>
   <object id="1471" x="1216" y="1280" width="192"/>
-  <object id="1473" x="1408" y="1088" width="192"/>
+  <object id="1473" x="1408" y="1024" width="192" height="64"/>
   <object id="1475" x="1600" y="896" width="192"/>
   <object id="1489" x="2048" y="576" height="128"/>
   <object id="1490" x="2048" y="576" width="320"/>
   <object id="1492" x="2368" y="448" width="448"/>
   <object id="1494" x="2816" y="320" width="320"/>
-  <object id="1496" x="3136" y="256" width="1344"/>
+  <object id="1496" x="3136" y="192" width="1344" height="64"/>
   <object id="1507" x="4480" y="256" width="64"/>
   <object id="1509" x="4736" y="128" width="896"/>
   <object id="1517" x="4992" y="768" width="1472"/>
@@ -169292,7 +169292,6 @@
   <object id="2910" x="7680" y="4544" width="448"/>
   <object id="2937" x="1600" y="2368" width="1984"/>
   <object id="2947" x="7552" y="1920" width="448"/>
-  <object id="2951" x="3456" y="0" width="1024"/>
   <object id="2952" x="3648" y="2048" width="64"/>
   <object id="2954" x="3584" y="2112" width="64"/>
   <object id="2969" x="6720" y="6144" width="896"/>
@@ -169372,9 +169371,9 @@
   <object id="4295" x="7040" y="4544" width="320"/>
   <object id="4296" x="7040" y="4608" width="320"/>
   <object id="4304" x="8640" y="3584" width="64"/>
-  <object id="4305" x="8448" y="3520" width="192"/>
+  <object id="4305" x="8448" y="3456" width="192" height="64"/>
   <object id="4306" x="8320" y="3456" width="128"/>
-  <object id="4307" x="8064" y="3328" width="256"/>
+  <object id="4307" x="8064" y="3264" width="256" height="64"/>
   <object id="4308" x="8000" y="3264" width="64"/>
   <object id="4317" x="9024" y="5888" width="64"/>
   <object id="4319" x="2880" y="5248" width="256"/>
@@ -169382,7 +169381,7 @@
   <object id="4325" x="7808" y="3136" width="64"/>
   <object id="4328" x="4800" y="3072" width="896"/>
   <object id="4329" x="5696" y="3008" width="1024"/>
-  <object id="4330" x="6720" y="2944" width="960"/>
+  <object id="4330" x="6720" y="2899.33" width="960" height="44.6667"/>
   <object id="4340" x="7808" y="3072" width="256"/>
   <object id="4343" x="8064" y="3008" width="64"/>
   <object id="4346" x="8064" y="2880" width="64"/>

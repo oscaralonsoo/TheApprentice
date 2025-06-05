@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="141" height="112" tilewidth="64" tileheight="64" infinite="0" nextlayerid="71" nextobjectid="6056">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="141" height="112" tilewidth="64" tileheight="64" infinite="0" nextlayerid="71" nextobjectid="6056">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -174242,7 +174242,7 @@
   <object id="5512" x="4288" y="3776" height="64"/>
   <object id="5198" x="4224" y="3520" width="64"/>
   <object id="5099" x="4288" y="3392" width="64"/>
-  <object id="5104" x="4352" y="3328" width="448"/>
+  <object id="5104" x="4352" y="3281" width="448" height="47"/>
   <object id="5105" x="4800" y="3328" height="64"/>
   <object id="5106" x="4800" y="3392" width="128"/>
   <object id="5107" x="4928" y="3392" height="64"/>
@@ -174356,7 +174356,7 @@
   <object id="4196" x="3392" y="1856" height="64"/>
   <object id="4197" x="3200" y="1920" width="192"/>
   <object id="4204" x="3200" y="1920" height="64"/>
-  <object id="5383" x="3392" y="1856" width="192"/>
+  <object id="5383" x="3392" y="1813.58" width="192" height="42.4242"/>
   <object id="5588" x="3072" y="1984" width="128"/>
   <object id="5589" x="3072" y="1984" height="256"/>
   <object id="4209" x="3136" y="2368" width="64"/>
@@ -174438,7 +174438,7 @@
   <object id="5419" x="4544" y="1600" height="128"/>
   <object id="5420" x="4544" y="1600" width="128"/>
   <object id="5421" x="4672" y="1536" height="64"/>
-  <object id="5422" x="4672" y="1536" width="576"/>
+  <object id="5422" x="4672" y="1469.33" width="576" height="66.6667"/>
   <object id="5423" x="5248" y="1536" height="64"/>
   <object id="5424" x="5248" y="1600" width="64"/>
   <object id="5425" x="5312" y="1600" height="64"/>
@@ -174699,7 +174699,7 @@
   </object>
   <object id="6047" name="Carta" x="2048" y="960" width="192" height="192">
    <properties>
-    <property name="dialoqueId" type="int" value="15"/>
+    <property name="dialogueId" type="int" value="15"/>
    </properties>
   </object>
   <object id="6050" name="CaracolMail" x="5184" y="4864" width="128" height="128">

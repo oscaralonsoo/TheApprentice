@@ -214,6 +214,7 @@ void DialogueManager::WrapLines(int dialogueId, int boxWidth, int dialogueFontSi
 
 void DialogueManager::SetDialogueAvailable(int dialogueId, Vector2D npcPos, bool active) {
 	dialogueAvailable = active;
+	SetPlayerMovement(false);
 	dialogueStarted = false;
 	activeDialogueId = active ? dialogueId : -1;
 	promptPos = npcPos;

@@ -24,6 +24,8 @@ public:
     bool CleanUp() override;
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
 
+    void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
+
     // Brood Methods
     void Chase(float dt);
     void UpdateChaseState(float dt);
@@ -48,7 +50,7 @@ private:
     float returningSpeed = 0.2f;
     int direction = 1;
     Vector2D nextDirection = { 0, 0 };
-
+    bool touchingPlayer = false;
     BroodState currentState = BroodState::IDLE;
 
     int soundDeathId = 0;

@@ -57,9 +57,10 @@ bool Brood::Start() {
 
     b2Fixture* fixture = pbody->body->GetFixtureList();
     if (fixture) {
+        fixture->SetSensor(true);
         b2Filter filter;
         filter.categoryBits = CATEGORY_BROOD;
-        filter.maskBits = CATEGORY_ATTACK | CATEGORY_PLAYER_DAMAGE;
+        filter.maskBits = CATEGORY_PLAYER | CATEGORY_PLAYER_DAMAGE;
         fixture->SetFilterData(filter);
     }
     initialPosition = position;
@@ -128,16 +129,26 @@ bool Brood::CleanUp() {
 
 void Brood::OnCollision(PhysBody* physA, PhysBody* physB) {
     if (currentState == BroodState::DEAD) return;
-
     Enemy::OnCollision(physA, physB);
 
     switch (physB->ctype) {
     case ColliderType::PLAYER:
+        if (!touchingPlayer) {
+            if (!Engine::GetInstance().scene->GetPlayer()->GetMechanics()->IsGodMode()) {
+                touchingPlayer = true;
+                Engine::GetInstance().scene->GetPlayer()->GetMechanics()->GetHealthSystem()->TakeDamage();
+            }
+        }
         break;
     case ColliderType::ATTACK:
         currentState = BroodState::DEAD;
         currentAnimation = &deathAnim;
         break;
+    }
+}
+void Brood::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
+    if (physB->ctype == ColliderType::PLAYER) {
+        touchingPlayer = false;
     }
 }
 

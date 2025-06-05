@@ -51,7 +51,7 @@ bool Scene::Awake()
 
 bool Scene::Start()
 {
-	nextScene = 1;
+	nextScene = 666;
 	Engine::GetInstance().map->Load("Assets/Maps/", "Map" + std::to_string(nextScene) + ".tmx");
 
 	slimeLoading = Engine::GetInstance().textures->Load("Assets/Slime/slimeLoading.png");

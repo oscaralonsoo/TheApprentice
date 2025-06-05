@@ -230,15 +230,12 @@ void Shyver::Attack() {
     float distanceMoved = std::abs(GetPosition().x - attackStartX);
     float t = distanceMoved / maxDistance;
     float speed = minSpeed + (maxSpeed - minSpeed) * std::sin(t * M_PI);
-    if (attackAnim.currentFrame > 3.0f)
-    {
         if (!printWave) {
             waveAnimStartPos = GetPosition();
             waveAnim.Reset();
         }
         printWave = true;
         pbody->body->SetLinearVelocity(b2Vec2(direction * speed, 0));
-    }
     if (distanceMoved >= maxDistance) {
         currentState = ShyverState::STUNNED;
         pbody->body->SetLinearVelocity(b2Vec2_zero);

@@ -312,8 +312,8 @@ void AbilityZone::VignetteChange(float dt)
 
 	newVignetteSize = opresivoMin + static_cast<int>((opresivoMax - opresivoMin) * progress);
 
-	float minBPM = 0.02f;
-	float maxBPM = 0.07f;
+	float minBPM = 0.01f;
+	float maxBPM = 0.05f;
 	float bpm = minBPM + (maxBPM - minBPM) * progress;
 	float beatPeriod = 60.0f / bpm;
 

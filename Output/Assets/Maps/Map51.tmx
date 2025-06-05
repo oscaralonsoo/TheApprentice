@@ -174019,14 +174019,14 @@
   <properties>
    <property name="Doors" type="bool" value="true"/>
   </properties>
-  <object id="4594" name="Map22" x="8512" y="4416" width="64" height="383.5">
+  <object id="4594" name="Map22" x="8320" y="4224" width="64" height="575.5">
    <properties>
-    <property name="PlayerPosX" type="int" value="2312"/>
-    <property name="PlayerPosY" type="int" value="836"/>
+    <property name="PlayerPosX" type="int" value="5250"/>
+    <property name="PlayerPosY" type="int" value="256"/>
     <property name="TargetScene" type="int" value="22"/>
    </properties>
   </object>
-  <object id="5139" name="Map52" x="5504" y="4502" width="640" height="64">
+  <object id="5139" name="Map52" x="5444" y="4406" width="640" height="64">
    <properties>
     <property name="PlayerPosX" type="int" value="6030"/>
     <property name="PlayerPosY" type="int" value="4165"/>
@@ -174763,7 +174763,7 @@
   <object id="5996" name="Box" x="5952" y="4928" width="62" height="62"/>
  </objectgroup>
  <objectgroup id="69" name="PressureSystem">
-  <object id="4690" name="Door" x="3520" y="5184" width="64" height="64">
+  <object id="4690" name="Door" x="3520" y="5184" width="64" height="192">
    <properties>
     <property name="groupId" type="int" value="3"/>
    </properties>

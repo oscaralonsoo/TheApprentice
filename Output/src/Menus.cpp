@@ -247,7 +247,7 @@ void Menus::NewGame() {
     playerNode.attribute("x") = 1152;
     playerNode.attribute("y") = 970;
     playerNode.attribute("lives") = 2;
-    playerNode.attribute("maxlives") = 3;
+    playerNode.attribute("maxlives") = 2;
 
     auto abilitiesNode = saveData.child("abilities");
     abilitiesNode.attribute("jump") = false;

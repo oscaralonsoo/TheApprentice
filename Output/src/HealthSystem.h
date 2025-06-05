@@ -38,8 +38,8 @@ private:
 private:
     Player* player = nullptr;
 
-    int lives = 3;
-    int maxlives = 3;
+    int lives = 2;
+    int maxlives = 2;
     float vignetteSize = 300.0f;
 
     Timer knockbackTimer;

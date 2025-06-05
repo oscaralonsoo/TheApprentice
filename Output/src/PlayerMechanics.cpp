@@ -50,9 +50,11 @@ void PlayerMechanics::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     }
     case ColliderType::SPIKE:
-        if (!godModeSystem.IsEnabled() && canSpikeDamage) {
+        if (!godModeSystem.IsEnabled()) {
             healthSystem.HandleSpikeDamage();
             respawnSystem.ForceRespawn();
+            canSpikeDamage = false;
+            spikeDamageTimer.Start();
         }
         break;
     default:

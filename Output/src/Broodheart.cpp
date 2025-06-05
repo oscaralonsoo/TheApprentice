@@ -114,6 +114,7 @@ void Broodheart::OnCollision(PhysBody* physA, PhysBody* physB) {
 
     switch (physB->ctype) {
     case ColliderType::PLAYER:
+        break;
     case ColliderType::ATTACK:
         if (!isBroken) {
             isBroken = true;

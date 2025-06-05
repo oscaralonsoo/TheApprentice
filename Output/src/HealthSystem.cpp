@@ -64,6 +64,7 @@ void HealthSystem::HandleSpikeDamage() {
         isDying = true;
         player->GetAnimation()->SetStateIfHigherPriority("die");
         deathTimer.Start();
+        // TODO JAVI --- SOLO HACE ESTOC CUANDO DEAD ANIM HA ACABADO
         Engine::GetInstance().scene->isDead = true;
     }
     else {

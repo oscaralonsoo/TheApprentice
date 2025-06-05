@@ -45865,7 +45865,7 @@
   <object id="4326" name="HiddenZone" x="1728" y="192" width="448" height="576"/>
   <object id="4327" name="HiddenZone" x="4032" y="1280" width="768" height="576"/>
  </objectgroup>
- <objectgroup id="66" name="Lianas">
+ <objectgroup id="66" name="Liana">
   <object id="4254" x="3840" y="1472" width="64" height="640"/>
   <object id="4266" x="2560" y="256" width="64" height="640"/>
   <object id="4334" x="3520" y="192" width="64" height="768"/>
@@ -45877,7 +45877,7 @@
  <objectgroup id="64" name="NPC">
   <object id="3866" name="Ardilla" x="512" y="768" width="320" height="320">
    <properties>
-    <property name="dialogueld" type="int" value="33"/>
+    <property name="dialogueId" type="int" value="33"/>
    </properties>
   </object>
  </objectgroup>

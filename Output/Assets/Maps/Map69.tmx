@@ -4623,6 +4623,7 @@
  <layer id="69" name="Lights" width="33" height="17">
   <properties>
    <property name="Draw" type="bool" value="true"/>
+   <property name="Forward" type="bool" value="true"/>
   </properties>
   <data>
    <tile gid="536880856"/>

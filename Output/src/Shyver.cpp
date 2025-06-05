@@ -65,7 +65,7 @@ bool Shyver::Update(float dt) {
             currentAnimation->Reset();
         }
         if (!appearSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundAppearId, 1.0f, 0);
+            Engine::GetInstance().audio->PlayFx(soundAppearId, 0.5f, 0);
             appearSoundPlayed = true;
         }
         walkSoundPlayed = false;
@@ -103,7 +103,7 @@ bool Shyver::Update(float dt) {
             currentAnimation->Reset();
         }
         if (!dashSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundDashId, 1.0f, 0);
+            Engine::GetInstance().audio->PlayFx(soundDashId, 0.5f, 0);
             dashSoundPlayed = true;
         }
         walkSoundPlayed = false;
@@ -125,7 +125,7 @@ bool Shyver::Update(float dt) {
             currentAnimation->Reset();
         }
         if (!appearSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundAppearId, 1.0f, 0);
+            Engine::GetInstance().audio->PlayFx(soundAppearId, 0.5f, 0);
             appearSoundPlayed = true;
         }
         walkSoundPlayed = false;
@@ -144,7 +144,7 @@ bool Shyver::Update(float dt) {
         break;
     case ShyverState::DEATH:
         if (!deadSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundDeadId, 1.0f, 0);
+            Engine::GetInstance().audio->PlayFx(soundDeadId, 0.5f, 0);
             deadSoundPlayed = true;
         }
         walkSoundPlayed = false;

@@ -218,7 +218,6 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 	case ColliderType::ABILITY_ZONE:
 		break;
 	default:
-		mechanics.OnCollision(physA, physB);
 		break;
 	}
 }

@@ -157,3 +157,17 @@ void HookManager::ClearHooks()
 {
     hooksInRange.clear(); // limpia el set o lista de hooks registrados
 }
+
+void HookManager::MarkHookAsUsed(IHookable* hook) {
+    if (std::find(usedHooks.begin(), usedHooks.end(), hook) == usedHooks.end()) {
+        usedHooks.push_back(hook);
+    }
+}
+
+void HookManager::ResetUsedHooks() {
+    for (IHookable* hook : usedHooks) {
+        hook->ResetHook();
+        RegisterHook(hook);
+    }
+    usedHooks.clear();
+}

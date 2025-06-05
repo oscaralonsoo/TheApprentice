@@ -78,7 +78,7 @@ bool Scurver::Update(float dt) {
 
         walkSoundTimer -= dt;
         if (walkSoundTimer <= 0.0f) {
-            Engine::GetInstance().audio->PlayFx(soundWalkId, 1.0f, 0);
+            Engine::GetInstance().audio->PlayFx(soundWalkId, 0.5f, 0);
             walkSoundTimer = walkSoundInterval;
         }
 
@@ -86,7 +86,7 @@ bool Scurver::Update(float dt) {
         break;
     case ScurverState::DEAD:
         if (!deadSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundDeadId, 1.0f, 0);
+            Engine::GetInstance().audio->PlayFx(soundDeadId, 0.5f, 0);
             deadSoundPlayed = true;
         }
         if (currentAnimation != &deadAnim) currentAnimation = &deadAnim;

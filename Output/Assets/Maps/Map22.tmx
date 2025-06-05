@@ -168999,7 +168999,7 @@
     <property name="TargetScene" type="int" value="23"/>
    </properties>
   </object>
-  <object id="4559" x="2688" y="576" width="64" height="320">
+  <object id="4559" name="Map51" x="3456" y="256" width="64" height="1024" rotation="270">
    <properties>
     <property name="PlayerPosX" type="int" value="12552"/>
     <property name="PlayerPosY" type="int" value="6980"/>
@@ -169025,7 +169025,7 @@
   <object id="4086" name="Hook" x="2688" y="2240" width="384" height="128"/>
  </objectgroup>
  <objectgroup id="69" name="NPC">
-  <object id="4456" name="Liebre" x="2816" y="4288" width="512" height="320">
+  <object id="4456" name="Liebre" x="3712" y="4416" width="320" height="192">
    <properties>
     <property name="dialogueId" type="int" value="21"/>
    </properties>

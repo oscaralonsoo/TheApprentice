@@ -135,7 +135,7 @@ public:
     void GetAbilityDimensionsFromConfig(const std::string& enemyName, int& width, int& height);
     // L09: TODO 6: Load a group of properties 
     bool LoadProperties(pugi::xml_node& node, Properties& properties);
-
+    bool IsPlatformTile(int tileX, int tileY) const;
     int GetWidth() {
         return mapData.width;
     }
@@ -151,7 +151,7 @@ public:
     int GetTileHeight() {
         return mapData.tileHeight;
     }
-
+    int GetHeightPixels() const { return mapData.height * mapData.tileHeight; }
     int GetMapWidth() const { return mapData.width * mapData.tileWidth; }
     int GetMapHeight() const { return mapData.height * mapData.tileHeight; }
 

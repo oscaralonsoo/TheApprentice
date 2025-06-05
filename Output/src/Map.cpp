@@ -945,6 +945,18 @@ bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
     return ret;
 }
 
+bool Map::IsPlatformTile(int tileX, int tileY) const {
+    for (const auto& layer : mapData.layers) {
+        if (layer->name == "Platforms") {
+            uint32_t gid = layer->Get(tileX, tileY);
+            if (gid != 0) return true;
+            else return false;
+        }
+    }
+    return false;
+}
+
+
 MapLayer* Map::GetNavigationLayer() {
     for (const auto& layer : mapData.layers) {
         if (layer->properties.GetProperty("Navigation") != NULL &&

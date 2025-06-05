@@ -35,7 +35,12 @@ bool Stalactite::Start() {
     texW = node.attribute("w").as_int();
     texH = node.attribute("h").as_int();
 
-    pbody = Engine::GetInstance().physics->CreateRectangle( position.getX() + texW / 2, position.getY() + texH / 2, texW, texH,bodyType::DYNAMIC );
+    pbody = Engine::GetInstance().physics->CreateRectangle(
+        position.getX() + texW / 2,
+        position.getY() + texH / 2,
+        texW, texH,
+        bodyType::DYNAMIC
+    );
 
     if (pbody) {
         pbody->ctype = ColliderType::ENEMY;
@@ -54,7 +59,37 @@ bool Stalactite::Start() {
         }
     }
 
-    triggerZone = { (int)position.getX() - 20, (int)position.getY() + texH, texW + 40, 800 };
+    int startX = (int)position.getX();
+    int width = texW;
+    int baseY = (int)position.getY() + texH;
+    int bottomY = baseY;
+    int tileW = Engine::GetInstance().map->GetTileWidth();
+    int tileH = Engine::GetInstance().map->GetTileHeight();
+    bool found = false;
+
+    for (int y = baseY; y < Engine::GetInstance().map->GetHeightPixels(); y += tileH) {
+        int midX = startX + width / 2;
+        auto mapPos = Engine::GetInstance().map->WorldToMap(midX, y);
+        int tileX = mapPos.x;
+        int tileY = mapPos.y;
+
+        if (Engine::GetInstance().map->IsPlatformTile(tileX, tileY)) {
+            bottomY = y;
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        bottomY = Engine::GetInstance().map->GetHeightPixels();
+    }
+
+    triggerZone = {
+        startX - 20,
+        baseY,
+        width + 40,
+        bottomY - baseY
+    };
+
     pbody->body->GetFixtureList()->SetSensor(true);
     currentAnimation = &idleAnim;
 

@@ -92,7 +92,7 @@ bool Brood::Update(float dt) {
     case BroodState::DEAD:
         currentAnimation = &deathAnim;
         if (!deadSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundDeathId, 1.0f, 0);
+            Engine::GetInstance().audio->PlayFx(soundDeathId, 0.5f, 0);
             deadSoundPlayed = true;
         }
 

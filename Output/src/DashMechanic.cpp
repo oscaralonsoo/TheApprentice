@@ -53,7 +53,7 @@ void DashMechanic::StartDash() {
     isDashing = true;
     canDash = false;
     dashCooldownTimer.Start();
-    Engine::GetInstance().audio->PlayFx(soundDashId, 1.0f, 0);
+    Engine::GetInstance().audio->PlayFx(soundDashId, 0.5f, 0);
 
     dashStartPosition = player->GetPosition();
     lastPosition = dashStartPosition;  // Inicializar control de atasco

@@ -134,7 +134,7 @@ void Bloodrusher::Idle() {
 
 void Bloodrusher::Attack(float dt) {
     if (!moveSoundPlayed) {
-        Engine::GetInstance().audio->PlayFx(soundMoveId, 1.0f, 0);
+        Engine::GetInstance().audio->PlayFx(soundMoveId, 0.5f, 0);
         moveSoundPlayed = true;
     }
     if (pathfinding->pathTiles.empty()) {
@@ -169,7 +169,7 @@ void Bloodrusher::Slide(float dt) {
     b2Vec2 currentVelocity = pbody->body->GetLinearVelocity();
 
     if (!slideSoundPlayed) {
-        Engine::GetInstance().audio->PlayFx(soundSlideId, 1.0f, 0);
+        Engine::GetInstance().audio->PlayFx(soundSlideId, 0.5f, 0);
         slideSoundPlayed = true;
     }
 
@@ -204,7 +204,7 @@ void Bloodrusher::Dead() {
     pbody->body->SetAngularVelocity(0);
 
     if (!deadSoundPlayed) {
-        Engine::GetInstance().audio->PlayFx(soundDeadId, 1.0f, 0);
+        Engine::GetInstance().audio->PlayFx(soundDeadId, 0.5f, 0);
         deadSoundPlayed = true;
     }
 

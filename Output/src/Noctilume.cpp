@@ -67,7 +67,7 @@ bool Noctilume::Update(float dt) {
     case NoctilumeState::CHASING: 
         walkSoundTimer -= dt;
         if (walkSoundTimer <= 0.0f) {
-            Engine::GetInstance().audio->PlayFx(soundWalkId, 1.0f, 0);
+            Engine::GetInstance().audio->PlayFx(soundWalkId, 0.5f, 0);
             walkSoundTimer = walkSoundInterval;
         }
         deadSoundPlayed = false;
@@ -77,7 +77,7 @@ bool Noctilume::Update(float dt) {
     case NoctilumeState::PRE_ATTACK: PreAttack(dt); break;
     case NoctilumeState::ATTACK:
         if (!attackSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundAttackId, 1.0f, 0);
+            Engine::GetInstance().audio->PlayFx(soundAttackId, 0.5f, 0);
             attackSoundPlayed = true;
         }
         deadSoundPlayed = false;
@@ -86,7 +86,7 @@ bool Noctilume::Update(float dt) {
         Attack(dt); break;
     case NoctilumeState::CRASH:
         if (!crashSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundCrashId, 1.0f, 0);
+            Engine::GetInstance().audio->PlayFx(soundCrashId, 0.5f, 0);
             crashSoundPlayed = true;
         }
         deadSoundPlayed = false;
@@ -95,7 +95,7 @@ bool Noctilume::Update(float dt) {
         Crash(dt); break;
     case NoctilumeState::DEAD: 
         if (!deadSoundPlayed) {
-            Engine::GetInstance().audio->PlayFx(soundDeadId, 1.0f, 0);
+            Engine::GetInstance().audio->PlayFx(soundDeadId, 0.5f, 0);
             deadSoundPlayed = true;
         }
         attackSoundPlayed = false;

@@ -92,8 +92,8 @@ void LifePlantMax::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::ATTACK:
         if (state == LifePlantMaxStates::AVAILABLE)
         {
-            Engine::GetInstance().audio->PlayFx(eatSound, 0.7f, 0);
-            Engine::GetInstance().audio->PlayFx(soundInteractId, 0.6f, 0);
+            Engine::GetInstance().audio->PlayFx(eatSound, 0.2f, 0);
+            Engine::GetInstance().audio->PlayFx(soundInteractId, 0.1f, 0);
             state = LifePlantMaxStates::CONSUMED;
             Engine::GetInstance().scene->GetPlayer()->GetMechanics()->GetHealthSystem()->AddMaxLife();
             Engine::GetInstance().scene->TriggerVignetteFlash();

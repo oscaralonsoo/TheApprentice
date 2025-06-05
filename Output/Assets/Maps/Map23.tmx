@@ -159269,7 +159269,11 @@
   </data>
  </layer>
  <objectgroup id="66" name="NPC">
-  <object id="5410" name="Liebre" x="832" y="2048" width="576" height="384"/>
+  <object id="5410" name="Liebre" x="896" y="2112" width="320" height="320">
+   <properties>
+    <property name="dialogueId" type="int" value="22"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="57" name="WallSlide">
   <object id="3368" x="3264" y="1344" height="512"/>
@@ -159355,7 +159359,7 @@
     <property name="TargetScene" type="int" value="31"/>
    </properties>
   </object>
-  <object id="4206" name="Map14" x="6208" y="4096" width="64" height="320">
+  <object id="4206" name="Map41" x="6208" y="4096" width="64" height="320">
    <properties>
     <property name="PlayerPosX" type="int" value="256"/>
     <property name="PlayerPosY" type="int" value="2816"/>

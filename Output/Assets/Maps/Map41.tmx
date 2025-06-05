@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="180" height="63" tilewidth="64" tileheight="64" infinite="0" nextlayerid="73" nextobjectid="4929">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="180" height="63" tilewidth="64" tileheight="64" infinite="0" nextlayerid="73" nextobjectid="4930">
  <tileset firstgid="1" name="Fondo_cueva" tilewidth="64" tileheight="64" tilecount="480" columns="30">
   <image source="../Environment/Fondo_cueva.png" width="1920" height="1080"/>
  </tileset>
@@ -125060,7 +125060,7 @@
   <object id="4059" name="Box" x="1152" y="2880" width="64" height="64"/>
   <object id="4139" name="Box" x="3200" y="2952.67" width="53.3333" height="55.3333"/>
   <object id="4174" name="Geyser" x="3776" y="2560" width="128" height="64"/>
-  <object id="4381" name="LifePlantMax" x="2624" y="3072" width="64" height="64"/>
+  <object id="4381" name="LifePlantMax" x="2688" y="3072" width="64" height="64"/>
   <object id="4569" name="Box" x="8384" y="1088" width="64" height="64"/>
   <object id="4649" name="LifePlantMax" x="8640" y="1728" width="192" height="192"/>
   <object id="4912" name="Geyser" x="2880" y="2624" width="128" height="64"/>
@@ -125100,8 +125100,6 @@
   <object id="4071" x="2048" y="2688" width="192"/>
   <object id="4085" x="2240" y="2880" width="640"/>
   <object id="4113" x="2624" y="3264" width="256"/>
-  <object id="4116" x="640" y="3136" width="384"/>
-  <object id="4118" x="1024" y="3200" width="128"/>
   <object id="4127" x="2944" y="3136" width="128"/>
   <object id="4128" x="3136" y="3008" width="128"/>
   <object id="4131" x="3072" y="3072" width="64"/>
@@ -125474,6 +125472,8 @@
   <object id="4926" x="1216" y="3072" width="640"/>
   <object id="4927" x="1920" y="3072" width="320"/>
   <object id="4928" x="2304" y="3072" width="448"/>
+  <object id="4116" x="640" y="3136" width="384"/>
+  <object id="4118" x="1024" y="3200" width="128"/>
  </objectgroup>
  <objectgroup id="61" name="Abilities">
   <object id="3908" name="DoubleJump" x="9600" y="1536" width="512" height="192"/>

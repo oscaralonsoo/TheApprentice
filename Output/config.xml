@@ -158,7 +158,7 @@
 					<frame x="840" y="1223" w="120" h="100" />
 				</hook>
 				<push loop="true" speed="0.15">
-					<frame x="0" y="1323" w="184" h="100" />
+					<frame x="0" y="1323" w="186" h="100" />
 					<frame x="186" y="1323" w="186" h="100" />
 					<frame x="372" y="1323" w="186" h="100" />
 					<frame x="558" y="1323" w="186" h="100" />
@@ -1347,10 +1347,10 @@
 				<ability type="Dash" w="124" h="124" texture="Assets/Textures/Abilities/jump.png" />
 			</abilities>
 		</animations>
-		<save_data isSaved="1">
-			<player x="3580" y="4070" w="44" h="54" lives="3" maxlives="3" />
+		<save_data isSaved="0">
+			<player x="1152" y="970" w="44" h="54" lives="2" maxlives="3" />
 			<abilities jump="false" doublejump="false" dash="false" />
-			<scene actualScene="21" />
+			<scene actualScene="1" />
 			<enemies />
 		</save_data>
 	</scene>

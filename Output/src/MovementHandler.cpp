@@ -332,60 +332,51 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLATFORM:
     {
         lastPlatformCollider = physB;
-        if (!jumpCooldownActive) {
-            isLanding = true;
-            fallMechanic.OnLanding();
-            jumpMechanic.OnLanding();
+        isLanding = true;
+        fallMechanic.OnLanding();
+        jumpMechanic.OnLanding();
 
-            Engine::GetInstance().scene->GetHookManager()->ResetUsedHooks();
+        Engine::GetInstance().scene->GetHookManager()->ResetUsedHooks();
 
-        }
         break;
     }
     case ColliderType::BOX:
-        if (!boxCooldownActive)
-        {
             jumpMechanic.OnLanding();
             fallMechanic.OnLanding();
             player->GetMechanics()->SetIsOnGround(true); 
-        }
         break;
     case ColliderType::WALL_SLIDE:
+    {
         if (player->GetMechanics()->IsOnGround()) {
             break;
         }
-        if (!wallSlideCooldownActive) {
-            wallSlideFlip = movementDirection < 0;
-            isWallSliding = true;
-            player->GetMechanics()->SetIsWallSliding(true);
-            isJumping = false;
-            OnWallCollision();
+        wallSlideFlip = movementDirection < 0;
+        isWallSliding = true;
+        player->GetMechanics()->SetIsWallSliding(true);
+        isJumping = false;
+        OnWallCollision();
 
-            int dir = (movementDirection != 0) ? movementDirection : 1;
-            player->GetMechanics()->GetWallSlideMechanic()->OnTouchWall(dir);
-            jumpMechanic.jumpCount = 0;
-        }
+        int dir = (movementDirection != 0) ? movementDirection : 1;
+        player->GetMechanics()->GetWallSlideMechanic()->OnTouchWall(dir);
+        jumpMechanic.jumpCount = 0;
+    }
         break;
 
     case ColliderType::WALL:
     case ColliderType::DESTRUCTIBLE_WALL:
-        if (!wallSlideCooldownActive) {
-            float playerX = player->GetPosition().getX();
-            float wallX = physB->body->GetPosition().x * PIXELS_PER_METER;
-        }
+    {
+        float playerX = player->GetPosition().getX();
+        float wallX = physB->body->GetPosition().x * PIXELS_PER_METER;
+    }
         break;
     case ColliderType::DOWN_CAMERA:
-        if (!downCameraCooldownActive) {
             LOG("DOWN_CAMERA collision detected, moviendo cámara abajo");
             Engine::GetInstance().render->downCameraActivated = true; // o el valor que necesites
-        }
         break;
     case ColliderType::LIANA:
-        if (!lianaCooldownActive) {
             isOnLiana = true;
             lianaCenterX = METERS_TO_PIXELS(physB->body->GetPosition().x); // Guardar en PIXELES
             disableAbilities = true; // Bloquear salto y dash
-        }
         break;
     case ColliderType::SPIKE:
         if (lastPlatformCollider != nullptr) {

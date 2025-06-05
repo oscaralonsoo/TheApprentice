@@ -82,8 +82,6 @@ void AttackMechanic::StartAttack() {
     attackDirection = player->GetMechanics()->GetMovementDirection();
     attackFlip = (attackDirection < 0);
 
-    player->GetMechanics()->GetInvulnerabilitySystem()->StartInvulnerability();
-
     player->GetAnimation()->ForceSetState("attack");
 }
 

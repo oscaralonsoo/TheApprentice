@@ -48922,7 +48922,7 @@
    <tile gid="43423"/>
    <tile gid="43423"/>
    <tile gid="43423"/>
-   <tile gid="43418"/>
+   <tile gid="43424"/>
    <tile/>
    <tile/>
    <tile/>
@@ -49039,11 +49039,11 @@
    <tile gid="43423"/>
    <tile gid="43423"/>
    <tile gid="43423"/>
-   <tile gid="43408"/>
-   <tile gid="43433"/>
-   <tile gid="43434"/>
-   <tile/>
-   <tile/>
+   <tile gid="43423"/>
+   <tile gid="43423"/>
+   <tile gid="43424"/>
+   <tile gid="43403"/>
+   <tile gid="43404"/>
    <tile/>
    <tile/>
    <tile/>
@@ -49157,12 +49157,12 @@
    <tile gid="43423"/>
    <tile gid="43423"/>
    <tile gid="43423"/>
-   <tile gid="43408"/>
-   <tile gid="43434"/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="43423"/>
+   <tile gid="43423"/>
+   <tile gid="43423"/>
+   <tile gid="43428"/>
+   <tile gid="43413"/>
+   <tile gid="43414"/>
    <tile/>
    <tile/>
    <tile/>
@@ -49277,11 +49277,11 @@
    <tile gid="43423"/>
    <tile gid="43408"/>
    <tile gid="43434"/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="43433"/>
+   <tile gid="43433"/>
+   <tile gid="43433"/>
+   <tile gid="43433"/>
+   <tile gid="43434"/>
    <tile/>
    <tile/>
    <tile/>
@@ -72603,7 +72603,7 @@
   <object id="4737" x="6336" y="2688" width="64"/>
  </objectgroup>
  <objectgroup id="61" name="Props">
-  <object id="3676" name="Box" x="1222.67" y="1614" width="49.3333" height="50"/>
+  <object id="3676" name="Box" x="980.67" y="1608" width="49.3333" height="50"/>
   <object id="3704" name="LifePlantMax" x="192" y="1919.33" width="64" height="64"/>
   <object id="3799" name="Box" x="1792" y="1088" width="64" height="64"/>
   <object id="4016" name="Geyser" x="2880" y="2112" width="128" height="64"/>
@@ -72626,7 +72626,7 @@
     <property name="groupId" type="int" value="3"/>
    </properties>
   </object>
-  <object id="3690" name="Door" x="1088" y="1472" width="64" height="192">
+  <object id="3690" name="Door" x="896" y="1664" width="192" height="64">
    <properties>
     <property name="groupId" type="int" value="2"/>
    </properties>
@@ -72675,7 +72675,6 @@
   <object id="4251" name="Door" x="6272" y="2816" width="64" height="192"/>
  </objectgroup>
  <objectgroup id="60" name="Enemies">
-  <object id="3691" name="Scurver" x="1408" y="1600" width="64" height="64"/>
   <object id="3692" name="Scurver" x="1337.33" y="1790.67" width="64" height="64"/>
   <object id="3700" name="Bloodrusher" x="2304" y="1920" width="64" height="64"/>
   <object id="3809" name="Bloodrusher" x="4352" y="1216" width="64" height="64"/>

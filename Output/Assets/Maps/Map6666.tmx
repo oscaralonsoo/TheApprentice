@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="43" height="21" tilewidth="64" tileheight="64" infinite="0" nextlayerid="89" nextobjectid="1814">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="43" height="21" tilewidth="64" tileheight="64" infinite="0" nextlayerid="89" nextobjectid="1848">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -11917,29 +11917,21 @@
  <objectgroup id="26" name="Collisions">
   <object id="1402" x="384" y="1216" width="1344"/>
   <object id="1600" x="0" y="1024" width="384"/>
-  <object id="1601" x="0" y="832" width="384"/>
-  <object id="1614" x="1152" y="192" width="320"/>
   <object id="1618" x="1984" y="320" width="326.059"/>
   <object id="1626" x="1984" y="323.333" height="60.6667"/>
   <object id="1627" x="1856" y="384" width="128"/>
   <object id="1628" x="1856" y="322.667" height="61.3333"/>
   <object id="1629" x="1664" y="320" width="192"/>
-  <object id="1640" x="2310.06" y="322.502" height="61.4889"/>
-  <object id="1643" x="2368" y="192" height="128"/>
   <object id="1648" x="1536" y="640" width="192"/>
   <object id="1651" x="1728" y="642.75" height="61.25"/>
   <object id="1652" x="1728" y="704" width="128"/>
   <object id="1653" x="1856" y="642" height="62"/>
   <object id="1655" x="1856" y="640" width="256"/>
   <object id="1661" x="2191" y="1152" width="285.667"/>
-  <object id="1662" x="2191" y="1157.33" height="122.667"/>
-  <object id="1664" x="2106" y="1159.67" height="121.667"/>
   <object id="1674" x="1728" y="1152" width="377"/>
   <object id="1676" x="2563" y="1023.67" height="256"/>
-  <object id="1677" x="2432" y="1024" width="128"/>
   <object id="1684" x="1984" y="896" width="192"/>
   <object id="1687" x="1728" y="1152" height="64"/>
-  <object id="1691" x="1600" y="896" height="128"/>
   <object id="1694" x="1600" y="896" width="192"/>
   <object id="1695" x="1792" y="896" height="64"/>
   <object id="1696" x="1792" y="960" width="192"/>
@@ -11949,28 +11941,17 @@
   <object id="1720" x="192" y="640" width="320"/>
   <object id="1724" x="704" y="640" width="256"/>
   <object id="1751" x="384" y="1024" width="576"/>
-  <object id="1616" x="1536" y="192" height="448"/>
-  <object id="1630" x="1664" y="320" height="192"/>
-  <object id="1656" x="2112" y="640" height="128"/>
-  <object id="1690" x="1472" y="768" height="256"/>
-  <object id="1706" x="2176" y="512" height="384"/>
-  <object id="1592" x="320" y="192" height="320"/>
-  <object id="1713" x="448" y="324.667" height="251.333"/>
-  <object id="1725" x="960" y="640" height="192"/>
-  <object id="1757" x="1152" y="576" height="512"/>
   <object id="1775" x="896" y="128" width="768"/>
-  <object id="1790" x="192" y="512" width="128"/>
-  <object id="1791" x="192" y="512" height="128"/>
   <object id="1794" x="1088" y="0" width="576"/>
-  <object id="1795" x="2478" y="1158.33" width="4.54747e-13" height="122"/>
   <object id="1796" x="2483.67" y="1280" width="78.6667"/>
   <object id="1797" x="2112" y="1280" width="64"/>
   <object id="1801" x="1920" y="128" width="384"/>
   <object id="1804" x="1920" y="0" height="128"/>
   <object id="1805" x="2304" y="0" height="128"/>
+  <object id="1818" x="2112" y="640" height="128"/>
+  <object id="1828" x="2432" y="1024" width="128"/>
  </objectgroup>
  <objectgroup id="85" name="Wall">
-  <object id="1499" x="384" y="1088" height="128"/>
   <object id="1763" x="320" y="192" width="256"/>
   <object id="1764" x="576" y="128" height="64"/>
   <object id="1765" x="576" y="128" width="192"/>
@@ -11996,6 +11977,16 @@
   <object id="1788" x="1024" y="320" width="64"/>
   <object id="1792" x="896" y="0" height="128"/>
   <object id="1793" x="1664" y="0" height="128"/>
+  <object id="1821" x="2176" y="512" height="384"/>
+  <object id="1824" x="2112" y="1152" height="128"/>
+  <object id="1825" x="2176" y="1152" height="128"/>
+  <object id="1826" x="2496" y="1152" height="128"/>
+  <object id="1831" x="0" y="832" width="384"/>
+  <object id="1833" x="2304" y="320" height="64"/>
+  <object id="1834" x="2368" y="192" height="128"/>
+  <object id="1836" x="1152" y="192" width="320"/>
+  <object id="1837" x="192" y="512" width="128"/>
+  <object id="1838" x="192" y="512" height="128"/>
  </objectgroup>
  <objectgroup id="84" name="Spikes">
   <object id="1666" name="Spikes" x="1856" y="329.333" width="128" height="54.6667"/>
@@ -12118,6 +12109,14 @@
   <object id="1672" x="1408" y="512" height="512"/>
   <object id="1755" x="1216" y="512" height="576"/>
   <object id="1593" x="2432" y="320" height="704"/>
+  <object id="1814" x="448" y="320" height="256"/>
+  <object id="1815" x="320" y="192" height="320"/>
+  <object id="1842" x="1152" y="576" height="512"/>
+  <object id="1843" x="960" y="640" height="192"/>
+  <object id="1844" x="1600" y="896" height="128"/>
+  <object id="1845" x="1472" y="768" height="256"/>
+  <object id="1846" x="1664" y="320" height="192"/>
+  <object id="1847" x="1536" y="192" height="448"/>
  </objectgroup>
  <objectgroup id="83" name="Props">
   <object id="1747" name="Box" x="832" y="264" width="56" height="56"/>
@@ -12125,7 +12124,7 @@
   <object id="1798" name="Box" x="2177.35" y="259.667" width="50.6301" height="51.3333"/>
   <object id="1810" name="Box" x="2048" y="64" width="54.6667" height="54.6667"/>
  </objectgroup>
- <objectgroup id="58" name="Wall">
+ <objectgroup id="58" name="Wall" visible="0">
   <object id="1709" x="768" y="323.5" height="124.5"/>
   <object id="1710" x="576" y="448" width="192"/>
   <object id="1711" x="576" y="326" height="122"/>

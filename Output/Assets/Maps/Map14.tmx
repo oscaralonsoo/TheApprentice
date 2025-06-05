@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="94" height="44" tilewidth="64" tileheight="64" infinite="0" nextlayerid="70" nextobjectid="4353">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="94" height="44" tilewidth="64" tileheight="64" infinite="0" nextlayerid="70" nextobjectid="4353">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -45854,7 +45854,7 @@
  </objectgroup>
  <objectgroup id="60" name="Enemies">
   <object id="3772" name="Broodheart" x="4416" y="1472" width="64" height="64"/>
-  <object id="3773" name="Broodheart" x="1920" y="576" width="64" height="64"/>
+  <object id="3773" name="Broodheart" x="1920" y="512" width="64" height="64"/>
   <object id="3774" name="Creebler" x="4032" y="576" width="64" height="64"/>
   <object id="4106" name="Mireborn" x="2304" y="1600" width="64" height="64"/>
   <object id="4325" name="Creebler" x="3008" y="576" width="64" height="64"/>

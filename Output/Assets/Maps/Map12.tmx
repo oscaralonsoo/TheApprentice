@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="110" height="89" tilewidth="64" tileheight="64" infinite="0" nextlayerid="72" nextobjectid="5004">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="110" height="89" tilewidth="64" tileheight="64" infinite="0" nextlayerid="72" nextobjectid="5007">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -98091,8 +98091,8 @@
   </properties>
   <object id="4144" name="Map21" x="448" y="3455" width="384" height="64">
    <properties>
-    <property name="PlayerPosX" type="int" value="7808"/>
-    <property name="PlayerPosY" type="int" value="3264"/>
+    <property name="PlayerPosX" type="int" value="7815"/>
+    <property name="PlayerPosY" type="int" value="3181"/>
     <property name="TargetScene" type="int" value="21"/>
    </properties>
   </object>

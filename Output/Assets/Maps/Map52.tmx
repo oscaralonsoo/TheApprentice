@@ -150869,8 +150869,8 @@
   </properties>
   <object id="5155" name="Map51" x="5760" y="4736" width="256" height="64">
    <properties>
-    <property name="PlayerPosX" type="int" value="5638"/>
-    <property name="PlayerPosY" type="int" value="1813"/>
+    <property name="PlayerPosX" type="int" value="5700"/>
+    <property name="PlayerPosY" type="int" value="1490"/>
     <property name="TargetScene" type="int" value="51"/>
    </properties>
   </object>
@@ -150879,8 +150879,8 @@
   <object id="5160" x="6016" y="4736" height="64"/>
   <object id="5412" name="99" x="3456" y="1024" width="256" height="64" rotation="90">
    <properties>
-    <property name="PlayerPosX" type="int" value="104"/>
-    <property name="PlayerPosY" type="int" value="929"/>
+    <property name="PlayerPosX" type="int" value="80"/>
+    <property name="PlayerPosY" type="int" value="900"/>
     <property name="TargetScene" type="int" value="99"/>
    </properties>
   </object>
@@ -151010,7 +151010,7 @@
   <object id="5883" x="3712" y="4096" width="320"/>
   <object id="5884" x="3712" y="4032" height="64"/>
   <object id="5897" x="3584" y="3904" width="64"/>
-  <object id="5920" x="3200" y="1280" width="256"/>
+  <object id="5920" x="3200" y="1280" width="448"/>
   <object id="6022" x="7936" y="1664" height="64"/>
   <object id="6100" x="2944" y="2112" width="64"/>
   <object id="6102" x="3008" y="2048" width="128"/>
@@ -151550,27 +151550,27 @@
   <object id="4784" name="Box" x="3456" y="2048" width="60" height="64"/>
   <object id="5888" name="Stalactite" x="4992" y="3648" width="64" height="64">
    <properties>
-    <property name="variant" type="int" value="2"/>
+    <property name="variant" type="int" value="1"/>
    </properties>
   </object>
   <object id="5893" name="Stalactite" x="5184" y="3456" width="64" height="64">
    <properties>
-    <property name="variant" type="int" value="2"/>
+    <property name="variant" type="int" value="0"/>
    </properties>
   </object>
   <object id="5894" name="Stalactite" x="4800" y="3520" width="64" height="64">
    <properties>
-    <property name="variant" type="int" value="2"/>
+    <property name="variant" type="int" value="0"/>
    </properties>
   </object>
   <object id="5993" name="Stalactite" x="2176" y="3136" width="64" height="64">
    <properties>
-    <property name="variant" type="int" value="2"/>
+    <property name="variant" type="int" value="1"/>
    </properties>
   </object>
   <object id="5994" name="Stalactite" x="2368" y="3136" width="64" height="64">
    <properties>
-    <property name="variant" type="int" value="2"/>
+    <property name="variant" type="int" value="1"/>
    </properties>
   </object>
   <object id="6112" name="Box" x="2816" y="3712" width="64" height="64"/>

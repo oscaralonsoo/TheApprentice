@@ -70121,8 +70121,8 @@
    <tile gid="39657"/>
    <tile gid="39657"/>
    <tile gid="39742"/>
-   <tile gid="39734"/>
-   <tile gid="39753"/>
+   <tile gid="39742"/>
+   <tile gid="39743"/>
    <tile/>
    <tile/>
    <tile/>
@@ -70244,8 +70244,8 @@
    <tile gid="39657"/>
    <tile gid="39657"/>
    <tile gid="39657"/>
-   <tile/>
-   <tile/>
+   <tile gid="39742"/>
+   <tile gid="39743"/>
    <tile/>
    <tile/>
    <tile/>
@@ -70367,8 +70367,8 @@
    <tile gid="39657"/>
    <tile gid="39657"/>
    <tile gid="39657"/>
-   <tile/>
-   <tile/>
+   <tile gid="39742"/>
+   <tile gid="39743"/>
    <tile/>
    <tile/>
    <tile/>
@@ -70490,8 +70490,8 @@
    <tile gid="39657"/>
    <tile gid="39657"/>
    <tile gid="39657"/>
-   <tile/>
-   <tile/>
+   <tile gid="39742"/>
+   <tile gid="39743"/>
    <tile/>
    <tile/>
    <tile/>
@@ -70613,9 +70613,9 @@
    <tile gid="39657"/>
    <tile gid="39657"/>
    <tile gid="39742"/>
+   <tile gid="39742"/>
    <tile gid="39754"/>
-   <tile gid="1610652484"/>
-   <tile gid="1610652484"/>
+   <tile gid="39732"/>
    <tile gid="1610652484"/>
    <tile gid="39732"/>
    <tile gid="39732"/>
@@ -88462,9 +88462,9 @@
    <tile/>
    <tile gid="1610652631"/>
    <tile gid="1610652661"/>
-   <tile gid="1610652691"/>
-   <tile gid="1610652721"/>
-   <tile gid="1610652751"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="1610652781"/>
    <tile gid="1610652811"/>
    <tile gid="1610652841"/>
@@ -88583,14 +88583,14 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="1610652630"/>
+   <tile/>
    <tile gid="1610652660"/>
-   <tile gid="1610652690"/>
-   <tile gid="1610652720"/>
-   <tile gid="1610652750"/>
-   <tile gid="1610652780"/>
-   <tile gid="1610652810"/>
-   <tile gid="1610652840"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="1610652870"/>
    <tile/>
    <tile/>
@@ -88706,14 +88706,14 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="1610652629"/>
-   <tile gid="1610652659"/>
-   <tile gid="1610652689"/>
-   <tile gid="1610652719"/>
-   <tile gid="1610652749"/>
-   <tile gid="1610652779"/>
-   <tile gid="1610652809"/>
-   <tile gid="1610652839"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="1610652869"/>
    <tile/>
    <tile/>
@@ -88829,13 +88829,13 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="1610652628"/>
-   <tile gid="1610652658"/>
-   <tile gid="1610652688"/>
-   <tile gid="1610652718"/>
-   <tile gid="1610652748"/>
-   <tile gid="1610652778"/>
-   <tile gid="1610652808"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="1610652838"/>
    <tile gid="1610652868"/>
    <tile/>
@@ -88953,12 +88953,12 @@
    <tile/>
    <tile/>
    <tile gid="1610652627"/>
-   <tile gid="1610652657"/>
-   <tile gid="1610652687"/>
-   <tile gid="1610652717"/>
-   <tile gid="1610652747"/>
-   <tile gid="1610652777"/>
-   <tile gid="1610652807"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="1610652837"/>
    <tile gid="1610652867"/>
    <tile/>
@@ -89077,12 +89077,12 @@
    <tile/>
    <tile gid="1610652626"/>
    <tile gid="1610652656"/>
-   <tile gid="1610652686"/>
-   <tile gid="1610652716"/>
-   <tile gid="1610652746"/>
-   <tile gid="1610652776"/>
-   <tile gid="1610652806"/>
-   <tile gid="1610652836"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="1610652866"/>
    <tile/>
    <tile/>
@@ -101786,7 +101786,7 @@
     <property name="TargetScene" type="int" value="41"/>
    </properties>
   </object>
-  <object id="4994" name="Map 43" x="256" y="3776" width="64" height="256">
+  <object id="4994" name="Map 43" x="256" y="3776" height="256">
    <properties>
     <property name="PlayerPosX" type="int" value="4487"/>
     <property name="PlayerPosY" type="int" value="3904"/>
@@ -101795,15 +101795,15 @@
   </object>
   <object id="5064" name="Map 43" x="384" y="192" width="64" height="1088">
    <properties>
-    <property name="PlayerPosX" type="int" value="4416"/>
-    <property name="PlayerPosY" type="int" value="1216"/>
+    <property name="PlayerPosX" type="int" value="4350"/>
+    <property name="PlayerPosY" type="int" value="1150"/>
     <property name="TargetScene" type="int" value="43"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup id="26" name="Collisions">
   <object id="3418" x="384" y="1280" width="320"/>
-  <object id="3612" x="2496" y="3008" width="512"/>
+  <object id="3612" x="2624" y="3008" width="384"/>
   <object id="3741" x="384" y="1472" width="320"/>
   <object id="4126" x="7104" y="1152" width="320"/>
   <object id="4131" x="6848" y="1344" width="128"/>
@@ -101945,7 +101945,6 @@
   <object id="5144" x="5056" y="3584" width="192"/>
   <object id="5289" x="5248" y="1536" width="128"/>
   <object id="5290" x="5184" y="1472" width="64"/>
-  <object id="5311" x="2496" y="2816" width="128"/>
   <object id="5312" x="2624" y="2752" width="128"/>
   <object id="5313" x="2752" y="2688" width="192"/>
   <object id="5314" x="2944" y="2624" width="192"/>
@@ -101962,12 +101961,12 @@
  <objectgroup id="71" name="PressureSystem">
   <object id="4900" name="Plate" x="448" y="4288" width="64" height="64">
    <properties>
-    <property name="groupId" type="int" value="0"/>
+    <property name="groupId" type="int" value="11"/>
    </properties>
   </object>
   <object id="4995" name="Door" x="384" y="3776" width="64" height="256">
    <properties>
-    <property name="groupId" type="int" value="0"/>
+    <property name="groupId" type="int" value="11"/>
    </properties>
   </object>
   <object id="5101" name="Door" x="4736" y="3072" width="192" height="64">
@@ -102060,7 +102059,7 @@
   <object id="4631" x="5568" y="4352" height="64"/>
   <object id="4632" x="5568" y="4416" width="192"/>
   <object id="4633" x="5760" y="4352" height="64"/>
-  <object id="4814" x="6144" y="192" width="1408"/>
+  <object id="4814" x="6144" y="192" width="1664"/>
   <object id="4859" x="448" y="4352" width="3136"/>
   <object id="4860" x="4032" y="2560" height="696"/>
   <object id="4862" x="2496" y="3264" width="448"/>
@@ -102229,7 +102228,7 @@
   <object id="5318" x="2944" y="2624" height="64"/>
   <object id="5319" x="2752" y="2688" height="64"/>
   <object id="5320" x="2624" y="2752" height="64"/>
-  <object id="5322" x="2496" y="2816" height="192"/>
+  <object id="5322" x="2624" y="2816" height="192"/>
   <object id="5323" x="2304" y="3392" height="64"/>
   <object id="5324" x="2368" y="3328" height="64"/>
   <object id="5325" x="2496" y="3264" height="64"/>

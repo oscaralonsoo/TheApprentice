@@ -161769,8 +161769,8 @@
  </objectgroup>
  <objectgroup id="57" name="WallSlide" offsetx="1.5" offsety="45">
   <object id="3368" x="3392" y="1344" height="512"/>
-  <object id="3843" x="5248" y="0" height="128"/>
-  <object id="3845" x="5440" y="128" height="128"/>
+  <object id="3843" x="5246.5" y="-45" width="1.5" height="128"/>
+  <object id="3845" x="5440" y="83" height="128"/>
   <object id="3847" x="5632" y="256" height="64"/>
   <object id="3849" x="5696" y="320" height="128"/>
   <object id="3851" x="6016" y="448" height="64"/>
@@ -161782,19 +161782,19 @@
   <object id="3865" x="7040" y="1344" height="320"/>
   <object id="4571" x="5760" y="5376" width="64"/>
   <object id="4595" x="5696" y="4416" height="64"/>
-  <object id="4910" x="1600" y="512" height="192"/>
-  <object id="4911" x="1920" y="512" height="512"/>
-  <object id="4912" x="2304" y="896" height="320"/>
-  <object id="4913" x="2496" y="896" height="192"/>
-  <object id="4914" x="2624" y="448" height="640"/>
-  <object id="4915" x="2496" y="384" height="320"/>
-  <object id="4916" x="1280" y="768" height="320"/>
-  <object id="4917" x="960" y="704" height="256"/>
-  <object id="5361" x="5376" y="2496" height="256"/>
-  <object id="5366" x="5632" y="2368" height="256"/>
-  <object id="5370" x="6464" y="2368" height="256"/>
-  <object id="5373" x="6656" y="2368" height="256"/>
-  <object id="5376" x="7424" y="2368" height="192"/>
+  <object id="4910" x="1600" y="467" height="192"/>
+  <object id="4911" x="1920" y="467" height="512"/>
+  <object id="4912" x="2304" y="851" height="320"/>
+  <object id="4913" x="2496" y="851" height="192"/>
+  <object id="4914" x="2624" y="403" height="640"/>
+  <object id="4915" x="2496" y="339" height="320"/>
+  <object id="4916" x="1280" y="723" height="320"/>
+  <object id="4917" x="958.5" y="659" width="1.5" height="256"/>
+  <object id="5361" x="5376" y="2451" height="256"/>
+  <object id="5366" x="5632" y="2323" height="256"/>
+  <object id="5370" x="6464" y="2323" height="256"/>
+  <object id="5373" x="6656" y="2323" height="256"/>
+  <object id="5376" x="7424" y="2323" height="192"/>
   <object id="5521" x="5696" y="6272" height="128"/>
  </objectgroup>
  <objectgroup id="63" name="Spikes">
@@ -161846,8 +161846,8 @@
   </object>
   <object id="4205" name="Mapa31" x="8256" y="1664" width="64" height="384">
    <properties>
-    <property name="PlayerPosX" type="int" value="1152"/>
-    <property name="PlayerPosY" type="int" value="1088"/>
+    <property name="PlayerPosX" type="int" value="1150"/>
+    <property name="PlayerPosY" type="int" value="1024"/>
     <property name="TargetScene" type="int" value="31"/>
    </properties>
   </object>
@@ -161861,7 +161861,7 @@
   <object id="4207" name="Map14" x="6848" y="5888" width="64" height="384">
    <properties>
     <property name="PlayerPosX" type="int" value="512"/>
-    <property name="PlayerPosY" type="int" value="1856"/>
+    <property name="PlayerPosY" type="int" value="1850"/>
     <property name="TargetScene" type="int" value="14"/>
    </properties>
   </object>

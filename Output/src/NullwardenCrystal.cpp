@@ -44,7 +44,6 @@ NullwardenCrystal::NullwardenCrystal(float x, float y, float speed, b2Vec2 dir, 
             breakAnim.LoadAnimations(node.child("break"));
         }
     }
-
     currentAnimation = &pristineAnim;
 }
 
@@ -60,32 +59,65 @@ bool NullwardenCrystal::Update(float dt) {
     if (nullwarden && nullwarden->pbody) {
         b2Vec2 nullPos = nullwarden->pbody->body->GetPosition();
 
-        float nullX = METERS_TO_PIXELS(nullPos.x);
-        float nullY = METERS_TO_PIXELS(nullPos.y);
+        if (nullwarden->currentState == NullwardenState::IMPALED) {
 
-        float offsetX = METERS_TO_PIXELS(nullwarden->pbody->body->GetFixtureList()->GetShape()->m_radius) + width / 2;
+            if (!usingRectCollider) {
+                b2Fixture* fixture = pbody->body->GetFixtureList();
+                while (fixture) {
+                    b2Fixture* next = fixture->GetNext();
+                    pbody->body->DestroyFixture(fixture);
+                    fixture = next;
+                }
 
-        //TODO AJUSTAR CRISTAL
-        if (nullwarden->direction < 0 && nullwarden->currentState == NullwardenState::IMPALED) {
-            pbody->body->GetFixtureList()->SetSensor(false);
-            relativeOffset = b2Vec2(3, -1.6f);
-            pbody->body->SetTransform(b2Vec2(nullPos.x + relativeOffset.x, nullPos.y + relativeOffset.y), 0.0f);
+                SDL_Rect nwRect = nullwarden->currentAnimation->GetCurrentFrame();
+                float rectWidth = PIXEL_TO_METERS(nwRect.w);
+                float rectHeight = PIXEL_TO_METERS(nwRect.h);
+
+                b2PolygonShape boxShape;
+                boxShape.SetAsBox(rectWidth / 2.0f, rectHeight / 2.0f);
+
+                b2FixtureDef fixtureDef;
+                fixtureDef.shape = &boxShape;
+                fixtureDef.isSensor = false; 
+                fixtureDef.filter.categoryBits = CATEGORY_ENEMY;
+                fixtureDef.filter.maskBits = CATEGORY_ATTACK;
+
+                pbody->body->CreateFixture(&fixtureDef);
+
+                usingRectCollider = true;
+            }
+
+            pbody->body->SetTransform(nullwarden->pbody->body->GetPosition(), 0.0f);
             pbody->body->SetLinearVelocity(b2Vec2_zero);
             pbody->body->SetAngularVelocity(0);
-            direction = b2Vec2(1, 0);
-        }
-        else if (nullwarden->direction > 0 && nullwarden->currentState == NullwardenState::IMPALED) {
-            pbody->body->GetFixtureList()->SetSensor(false);
-            relativeOffset = b2Vec2(-3, -1.6f);
-            pbody->body->SetTransform(b2Vec2(nullPos.x + relativeOffset.x, nullPos.y + relativeOffset.y), 0.0f);
-            pbody->body->SetLinearVelocity(b2Vec2_zero);
-            pbody->body->SetAngularVelocity(0);
-            direction = b2Vec2(-1, -0);
         }
         else {
-            pbody->body->GetFixtureList()->SetSensor(true);
+            if (usingRectCollider) {
+                b2Fixture* fixture = pbody->body->GetFixtureList();
+                while (fixture) {
+                    b2Fixture* next = fixture->GetNext();
+                    pbody->body->DestroyFixture(fixture);
+                    fixture = next;
+                }
+                b2CircleShape circShape;
+                circShape.m_radius = PIXEL_TO_METERS(width / 2);
+
+                b2FixtureDef fixtureDef;
+                fixtureDef.shape = &circShape;
+                fixtureDef.isSensor = true;
+                fixtureDef.filter.categoryBits = CATEGORY_ENEMY;
+                fixtureDef.filter.maskBits = CATEGORY_ATTACK;
+
+                pbody->body->CreateFixture(&fixtureDef);
+
+                usingRectCollider = false;
+            }
+
             relativeOffset = b2Vec2(0, 4);
-            pbody->body->SetTransform(b2Vec2(nullPos.x + relativeOffset.x, nullPos.y + relativeOffset.y), 0.0f);
+            pbody->body->SetTransform(
+                b2Vec2(nullPos.x + relativeOffset.x, nullPos.y + relativeOffset.y),
+                0.0f
+            );
             direction = b2Vec2(0, 0);
         }
     }
@@ -99,7 +131,6 @@ bool NullwardenCrystal::Update(float dt) {
     SDL_RendererFlip flip = (direction.x < 0) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
     float angle = 0.0f;
 
-    // Animación de ruptura
     if (currentState == CrystalState::BROKEN) {
         if (nullwarden) {
             nullwarden->currentState = NullwardenState::ROAR;
@@ -107,6 +138,7 @@ bool NullwardenCrystal::Update(float dt) {
     }
     return true;
 }
+
 
 bool NullwardenCrystal::PostUpdate() {
     if (currentState == CrystalState::BROKEN && currentAnimation->HasFinished())

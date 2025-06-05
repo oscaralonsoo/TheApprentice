@@ -27,6 +27,7 @@ public:
     void UpdateCrystalState();
 
 public:
+    bool usingRectCollider = false;
     int hits = 0;
     bool delayRoar = false;
     Timer roarDelayTimer;

@@ -388,6 +388,7 @@ void Scene::LoadGameXML() {
 		}
 		isChangingScene = false;
 	}
+	player->GetMechanics()->GetHealthSystem()->SetIsDying(false);
 	isLoading = false;
 }
 void Scene::Vignette(int size, float strength, SDL_Color color)

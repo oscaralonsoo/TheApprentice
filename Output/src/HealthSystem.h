@@ -31,6 +31,8 @@ public:
 
     bool IsDying() const { return isDying; }
 
+    void SetIsDying(bool dying) { isDying = dying; }
+
 private:
     void UpdateVignette();
     void CheckDeath();

@@ -162,13 +162,13 @@ void Checkpoint::CheckSave() {
         interactSoundPlayed = false;
         if (state == CheckpointState::UNSAVED) {
             state = CheckpointState::SAVING;
+            player->GetMechanics()->GetMovementHandler()->SetCantMove(true);
         }
         else if (state == CheckpointState::SAVED) {
             Engine::GetInstance().audio->PlayFx(soundInteractId, 0.2f, 0);
             Engine::GetInstance().scene->SaveGameXML();
 
         }
-        player->GetMechanics()->GetMovementHandler()->SetCantMove(true);
         b2Vec2 stopVelocity(0.0f, 0.0f);
         player->pbody->body->SetLinearVelocity(stopVelocity);
     }

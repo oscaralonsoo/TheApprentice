@@ -76,7 +76,7 @@ bool AbilityZone::Start() {
 	pbody->listener = this;
 
 	jumpSprite = Engine::GetInstance().textures->Load("Assets/Props/huevosrana.png");
-	doubleJumpSprite = Engine::GetInstance().textures->Load("textures/doublejump_icon.png");
+	doubleJumpSprite = Engine::GetInstance().textures->Load("Assets/Props/DoubleJump_Icon.png");
 	dashSprite = Engine::GetInstance().textures->Load("Assets/Props/Dash_Icon.png");
 	hookSprite = Engine::GetInstance().textures->Load("Assets/Props/araña.png");
 	glideSprite = Engine::GetInstance().textures->Load("Assets/Props/Glide_Icon.png");
@@ -230,8 +230,8 @@ bool AbilityZone::Update(float dt)
 		drawn = true;
 	}
 	else if (type == "DoubleJump" && doubleJumpSprite) {
-		int drawX = position.getX() + texW - abilitySpriteW - 100;
-		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 + 20;
+		int drawX = position.getX() + texW - abilitySpriteW - 120;
+		int drawY = position.getY() + texH / 2 - abilitySpriteH / 2 - 20;
 		Engine::GetInstance().render->DrawTexture(doubleJumpSprite, drawX, drawY);
 		drawn = true;
 	}

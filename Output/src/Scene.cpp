@@ -209,6 +209,10 @@ void Scene::ChangeScene(int nextScene)
 			Engine::GetInstance().map->Load(path, name);
 			switch (nextScene) {
 			case 0:
+			case 1:
+			case 12:
+			case 13:
+			case 14:
 				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 0.0f, 0.5f);
 				break;
 			case 21:

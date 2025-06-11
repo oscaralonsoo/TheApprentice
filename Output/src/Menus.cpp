@@ -182,6 +182,7 @@ void Menus::CheckCurrentState(float dt) {
     case MenusState::GAME: break;
     case MenusState::PAUSE: Pause(dt); break;
     case MenusState::SETTINGS: Settings(); break;
+    case MenusState::CONTROLS: Controls(dt); break;
     case MenusState::CREDITS: Credits(); break;
     case MenusState::PLAYING_VIDEO: break;
     case MenusState::EXIT: isExit = true; break;
@@ -294,12 +295,31 @@ void Menus::Pause(float dt) {
         switch (selectedButton) {
         case 0: isPaused = false; StartTransition(true, MenusState::GAME); break;
         case 1: inConfig = true; StartTransition(true, MenusState::SETTINGS); break;
-        case 2: StartTransition(true, MenusState::MAINMENU); Engine::GetInstance().audio->StopMusic(); Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/mainmenu_music.ogg", 2.0f, 1.0f);  break;
-        case 3: currentState = MenusState::EXIT; break;
+        case 2:  StartTransition(true, MenusState::CONTROLS);
+        case 3: StartTransition(true, MenusState::MAINMENU); Engine::GetInstance().audio->StopMusic(); Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/mainmenu_music.ogg", 2.0f, 1.0f);  break;
+        case 4: currentState = MenusState::EXIT; break;
         }
     }
 }
 
+void Menus::Controls(float dt)
+{ 
+    if (controller && SDL_GameControllerGetAttached(controller)) {
+        bool aNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A);
+        bool bNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_B);
+
+        if (bNow && !bHeld) {
+            nextState = (previousState == MenusState::PAUSE) ? MenusState::PAUSE : previousState;
+            StartTransition(true, nextState);
+        }
+    }
+    bool escapePressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN;
+    if (escapePressed) {
+        nextState = (previousState == MenusState::PAUSE) ? MenusState::PAUSE : previousState;
+        inConfig = false;
+        StartTransition(true, nextState);
+    }
+}
 
 void Menus::Settings() {
     bool escapePressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN;
@@ -566,7 +586,7 @@ void Menus::CreateButtons() {
 std::vector<std::string> Menus::GetButtonNamesForCurrentState() const {
     switch (currentState) {
     case MenusState::MAINMENU: return { "newGame", "continue", "settings", "credits", "exit" };
-    case MenusState::PAUSE: return { "continue", "settings", "backToMenu", "exit" };
+    case MenusState::PAUSE: return { "continue", "settings", "controls", "backToMenu", "exit" };
     case MenusState::SETTINGS: return { "Vsync", "Music Volume", "FX Volume", "Master Volume" };
     default: return {};
     }

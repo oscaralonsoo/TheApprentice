@@ -14,7 +14,7 @@
 #include <SDL2/SDL_gamecontroller.h>
 
 enum class MenusState {
-    NONE, INTRO, MAINMENU, GAME, PAUSE, SETTINGS, CREDITS, DEAD, GAMEOVER, EXIT, ABILITIES, PLAYING_VIDEO
+    NONE, INTRO, MAINMENU, GAME, PAUSE, SETTINGS,CONTROLS, CREDITS, DEAD, GAMEOVER, EXIT, ABILITIES, PLAYING_VIDEO
 };
 
 struct ButtonInfo {
@@ -66,6 +66,7 @@ public:
     void MainMenu(float dt);
     void NewGame();
     void Pause(float dt);
+    void Controls(float dt);
     void Settings();
     void HandleSettingsSelection();
     void ToggleVSync();

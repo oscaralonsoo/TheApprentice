@@ -158,6 +158,7 @@ std::string Menus::GetBackgroundKey() const {
     case MenusState::PAUSE: return "pause";
     case MenusState::SETTINGS: return "settings";
     case MenusState::CREDITS: return "credits";
+    case MenusState::CONTROLS: return "controls";
     case MenusState::ABILITIES: return "abilities";
     default: return "";
     }
@@ -295,7 +296,7 @@ void Menus::Pause(float dt) {
         switch (selectedButton) {
         case 0: isPaused = false; StartTransition(true, MenusState::GAME); break;
         case 1: inConfig = true; StartTransition(true, MenusState::SETTINGS); break;
-        case 2:  StartTransition(true, MenusState::CONTROLS);
+        case 2:  StartTransition(true, MenusState::CONTROLS); break;
         case 3: StartTransition(true, MenusState::MAINMENU); Engine::GetInstance().audio->StopMusic(); Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/mainmenu_music.ogg", 2.0f, 1.0f);  break;
         case 4: currentState = MenusState::EXIT; break;
         }
@@ -598,6 +599,10 @@ void Menus::CreateButton(const std::string& name, int startX, int startY, int bu
 
     int customOffsetX = 0;
     // Aplica un offset solo a BackToMenu para centrarlo mejor
+    if (currentState == MenusState::PAUSE && name == "controls") {
+        customOffsetX = +25
+            ;
+    }
     if (currentState == MenusState::PAUSE && name == "backToMenu") {
         customOffsetX = -21; 
     }

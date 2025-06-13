@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="180" height="63" tilewidth="64" tileheight="64" infinite="0" nextlayerid="73" nextobjectid="4940">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="180" height="63" tilewidth="64" tileheight="64" infinite="0" nextlayerid="73" nextobjectid="4941">
  <tileset firstgid="1" name="Fondo_cueva" tilewidth="64" tileheight="64" tilecount="480" columns="30">
   <image source="../Environment/Fondo_cueva.png" width="1920" height="1080"/>
  </tileset>
@@ -88256,8 +88256,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
    <tile gid="43323"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -125016,17 +125016,17 @@
   <properties>
    <property name="Doors" type="bool" value="true"/>
   </properties>
-  <object id="4760" x="6464" y="320" width="64" height="512">
+  <object id="4760" name="31" x="6464" y="320" width="64" height="512">
    <properties>
-    <property name="PlayerPosX" type="int" value="1950"/>
-    <property name="PlayerPosY" type="int" value="2368"/>
+    <property name="PlayerPosX" type="int" value="5300"/>
+    <property name="PlayerPosY" type="int" value="3300"/>
     <property name="TargetScene" type="int" value="31"/>
    </properties>
   </object>
-  <object id="4761" x="10176" y="2112" width="64" height="448">
+  <object id="4761" name="42" x="10176" y="2112" width="64" height="448">
    <properties>
-    <property name="PlayerPosX" type="int" value="7422"/>
-    <property name="PlayerPosY" type="int" value="444"/>
+    <property name="PlayerPosX" type="int" value="7350"/>
+    <property name="PlayerPosY" type="int" value="445"/>
     <property name="TargetScene" type="int" value="42"/>
    </properties>
   </object>
@@ -125042,7 +125042,7 @@
   <object id="4011" name="Hook" x="960" y="3136" width="64" height="64"/>
   <object id="4044" name="Hook" x="1216" y="3264" width="64" height="64"/>
   <object id="4045" name="Hook" x="1472" y="3456" width="64" height="64"/>
-  <object id="4046" name="Hook" x="1536" y="3072" width="64" height="64"/>
+  <object id="4046" name="Hook" x="1472" y="3072" width="64" height="64"/>
   <object id="4077" name="Hook" x="3072" y="2560" width="64" height="64"/>
   <object id="4096" name="Hook" x="2048" y="3072" width="64" height="64"/>
   <object id="4115" name="Hook" x="2432" y="3072" width="64" height="64"/>
@@ -125071,6 +125071,7 @@
     <property name="dialogueld" type="int" value="42"/>
    </properties>
   </object>
+  <object id="4940" name="Caracol" x="4032" y="1280" width="64" height="128"/>
  </objectgroup>
  <objectgroup id="69" name="DownCamera" visible="0">
   <object id="4022" x="256" y="2368" width="3072" height="1472"/>

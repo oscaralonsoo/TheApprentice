@@ -33,8 +33,8 @@ private:
     bool canDash = true;
 
     int dashDirection = 1;
-    float dashSpeed = 15.0f;
-    float maxDashDistance = 165.0f;
+    float dashSpeed = 17.0f;
+    float maxDashDistance = 250.0f;
 
     Vector2D dashStartPosition;
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="78" height="81" tilewidth="64" tileheight="64" infinite="0" nextlayerid="78" nextobjectid="5730">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="78" height="81" tilewidth="64" tileheight="64" infinite="0" nextlayerid="78" nextobjectid="5732">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -55332,9 +55332,9 @@
    <tile gid="1610654243"/>
    <tile gid="1610654273"/>
    <tile gid="1610654303"/>
-   <tile gid="1610654333"/>
-   <tile gid="1610654363"/>
-   <tile gid="1610654393"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="1610654423"/>
    <tile gid="1610654453"/>
    <tile gid="1610654483"/>
@@ -55410,10 +55410,10 @@
    <tile gid="1610654242"/>
    <tile gid="1610654272"/>
    <tile gid="1610654302"/>
-   <tile gid="1610654332"/>
-   <tile gid="1610654362"/>
-   <tile gid="1610654392"/>
-   <tile gid="1610654422"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="1610654452"/>
    <tile gid="1610654482"/>
    <tile gid="1610654512"/>
@@ -55488,10 +55488,10 @@
    <tile gid="1610654241"/>
    <tile gid="1610654271"/>
    <tile gid="1610654301"/>
-   <tile gid="1610654331"/>
-   <tile gid="1610654361"/>
-   <tile gid="1610654391"/>
-   <tile gid="1610654421"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="1610654451"/>
    <tile gid="1610654481"/>
    <tile gid="1610654511"/>
@@ -55559,17 +55559,17 @@
    <tile gid="41477"/>
    <tile gid="41478"/>
    <tile gid="41479"/>
-   <tile gid="41449"/>
-   <tile gid="41449"/>
-   <tile gid="41479"/>
-   <tile gid="41449"/>
+   <tile gid="1610654180"/>
+   <tile gid="1610654210"/>
    <tile gid="1610654240"/>
    <tile gid="1610654270"/>
    <tile gid="1610654300"/>
    <tile gid="1610654330"/>
    <tile gid="1610654360"/>
-   <tile gid="1610654390"/>
-   <tile gid="1610654420"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="1610654450"/>
    <tile gid="1610654480"/>
    <tile gid="1610654510"/>
@@ -55637,17 +55637,17 @@
    <tile gid="41477"/>
    <tile gid="41478"/>
    <tile gid="41479"/>
-   <tile gid="41479"/>
-   <tile gid="41449"/>
-   <tile gid="41479"/>
-   <tile gid="41449"/>
+   <tile gid="1610654179"/>
+   <tile gid="1610654209"/>
    <tile gid="1610654239"/>
    <tile gid="1610654269"/>
    <tile gid="1610654299"/>
    <tile gid="1610654329"/>
    <tile gid="1610654359"/>
-   <tile gid="1610654389"/>
-   <tile gid="1610654419"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="1610654449"/>
    <tile gid="1610654479"/>
    <tile gid="1610654509"/>
@@ -55715,17 +55715,17 @@
    <tile gid="41476"/>
    <tile gid="41477"/>
    <tile gid="41478"/>
-   <tile gid="41479"/>
-   <tile gid="41449"/>
-   <tile gid="41479"/>
-   <tile gid="41449"/>
+   <tile gid="1610654178"/>
+   <tile gid="1610654208"/>
    <tile gid="1610654238"/>
    <tile gid="1610654268"/>
    <tile gid="1610654298"/>
    <tile gid="1610654328"/>
    <tile gid="1610654358"/>
-   <tile gid="1610654388"/>
-   <tile gid="1610654418"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="1610654448"/>
    <tile gid="1610654478"/>
    <tile gid="1610654508"/>
@@ -55793,17 +55793,17 @@
    <tile gid="41476"/>
    <tile gid="41477"/>
    <tile gid="41478"/>
-   <tile gid="41479"/>
-   <tile gid="41449"/>
-   <tile gid="41479"/>
-   <tile gid="41449"/>
-   <tile gid="1610654239"/>
-   <tile gid="1610654269"/>
-   <tile gid="1610654299"/>
-   <tile gid="1610654329"/>
-   <tile gid="1610654359"/>
-   <tile gid="1610654389"/>
-   <tile gid="1610654419"/>
+   <tile gid="1610654177"/>
+   <tile gid="1610654207"/>
+   <tile gid="1610654237"/>
+   <tile gid="1610654267"/>
+   <tile gid="1610654297"/>
+   <tile gid="1610654327"/>
+   <tile gid="1610654357"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="1610654449"/>
    <tile gid="1610654479"/>
    <tile gid="1610654509"/>
@@ -55871,17 +55871,17 @@
    <tile gid="41476"/>
    <tile gid="41477"/>
    <tile gid="41478"/>
-   <tile gid="41479"/>
-   <tile gid="41449"/>
-   <tile gid="41479"/>
-   <tile gid="41449"/>
-   <tile gid="1610654238"/>
-   <tile gid="1610654268"/>
-   <tile gid="1610654298"/>
-   <tile gid="1610654328"/>
-   <tile gid="1610654358"/>
-   <tile gid="1610654388"/>
-   <tile gid="1610654418"/>
+   <tile gid="1610654176"/>
+   <tile gid="1610654206"/>
+   <tile gid="1610654236"/>
+   <tile gid="1610654266"/>
+   <tile gid="1610654296"/>
+   <tile gid="1610654326"/>
+   <tile gid="1610654356"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="1610654448"/>
    <tile gid="1610654478"/>
    <tile gid="1610654508"/>
@@ -55949,17 +55949,17 @@
    <tile gid="41476"/>
    <tile gid="41477"/>
    <tile gid="41478"/>
-   <tile gid="41479"/>
-   <tile gid="41449"/>
-   <tile gid="41478"/>
-   <tile gid="41479"/>
-   <tile gid="1610654239"/>
-   <tile gid="1610654269"/>
-   <tile gid="1610654299"/>
-   <tile gid="1610654329"/>
-   <tile gid="1610654359"/>
+   <tile gid="1610654175"/>
+   <tile gid="1610654205"/>
+   <tile gid="1610654235"/>
+   <tile gid="1610654265"/>
+   <tile gid="1610654295"/>
+   <tile gid="1610654325"/>
+   <tile gid="1610654355"/>
+   <tile/>
+   <tile/>
    <tile gid="1610654389"/>
-   <tile gid="1610654419"/>
+   <tile/>
    <tile gid="1610654449"/>
    <tile gid="1610654479"/>
    <tile gid="1610654509"/>
@@ -56033,11 +56033,11 @@
    <tile gid="1610654208"/>
    <tile gid="1610654238"/>
    <tile gid="1610654268"/>
-   <tile gid="1610654298"/>
-   <tile gid="1610654328"/>
-   <tile gid="1610654358"/>
-   <tile gid="1610654388"/>
-   <tile gid="1610654418"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="1610654448"/>
    <tile gid="1610654478"/>
    <tile gid="1610654508"/>
@@ -69808,10 +69808,10 @@
   <properties>
    <property name="Doors" type="bool" value="true"/>
   </properties>
-  <object id="4826" name="Map13" x="1088" y="4032" width="64" height="192">
+  <object id="4826" name="Map13" x="1024" y="4032" width="64" height="192">
    <properties>
-    <property name="PlayerPosX" type="int" value="6466"/>
-    <property name="PlayerPosY" type="int" value="4439"/>
+    <property name="PlayerPosX" type="int" value="6600"/>
+    <property name="PlayerPosY" type="int" value="4400"/>
     <property name="TargetScene" type="int" value="13"/>
    </properties>
   </object>
@@ -69822,24 +69822,24 @@
     <property name="TargetScene" type="int" value="42"/>
    </properties>
   </object>
-  <object id="5409" name="Map666" x="4544" y="2816" width="64" height="256">
+  <object id="5409" name="Map6666" x="4544" y="2816" width="64" height="256">
    <properties>
-    <property name="PlayerPosX" type="int" value="256"/>
-    <property name="PlayerPosY" type="int" value="960"/>
+    <property name="PlayerPosX" type="int" value="80"/>
+    <property name="PlayerPosY" type="int" value="900"/>
     <property name="TargetScene" type="int" value="6666"/>
    </properties>
   </object>
   <object id="5446" name="Map14" x="1664" y="2624" width="64" height="256">
    <properties>
-    <property name="PlayerPosX" type="int" value="5376"/>
-    <property name="PlayerPosY" type="int" value="1152"/>
+    <property name="PlayerPosX" type="int" value="5370"/>
+    <property name="PlayerPosY" type="int" value="1080"/>
     <property name="TargetScene" type="int" value="14"/>
    </properties>
   </object>
   <object id="5452" name="Map42" x="4536" y="3776" width="64" height="256">
    <properties>
-    <property name="PlayerPosX" type="int" value="326"/>
-    <property name="PlayerPosY" type="int" value="3904"/>
+    <property name="PlayerPosX" type="int" value="320"/>
+    <property name="PlayerPosY" type="int" value="3900"/>
     <property name="TargetScene" type="int" value="42"/>
    </properties>
   </object>
@@ -69898,7 +69898,17 @@
   </object>
  </objectgroup>
  <objectgroup id="70" name="NPC">
-  <object id="5311" name="Castor" x="512" y="1088" width="256" height="256"/>
+  <object id="5311" name="Castor" x="2176" y="2624" width="256" height="256">
+   <properties>
+    <property name="dialogueId" type="int" value="12"/>
+   </properties>
+  </object>
+  <object id="5730" name="Pangolin" x="384" y="1024" width="448" height="320">
+   <properties>
+    <property name="dialogueId" type="int" value="51"/>
+   </properties>
+  </object>
+  <object id="5731" name="Caracol" x="3392" y="4928" width="64" height="128"/>
  </objectgroup>
  <objectgroup id="58" name="Wall">
   <object id="5168" x="3264" y="3584" width="128"/>

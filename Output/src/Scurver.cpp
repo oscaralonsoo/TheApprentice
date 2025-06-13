@@ -38,7 +38,7 @@ bool Scurver::Start() {
 
     soundWalkId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Scruver/scruver_walk.ogg", 1.0f);
     soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Scruver/scruver_death.ogg", 1.0f);
-
+    pbody->body->SetGravityScale(5);
     return Enemy::Start();
 }
 

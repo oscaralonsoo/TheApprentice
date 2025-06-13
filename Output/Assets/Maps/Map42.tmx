@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="123" height="75" tilewidth="64" tileheight="64" infinite="0" nextlayerid="78" nextobjectid="5397">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="123" height="75" tilewidth="64" tileheight="64" infinite="0" nextlayerid="78" nextobjectid="5399">
  <tileset firstgid="1" name="rocas1" tilewidth="64" tileheight="64" tilecount="480" columns="30">
   <image source="../Environment/rocas1.png" width="1920" height="1080"/>
  </tileset>
@@ -69311,11 +69311,11 @@
    <tile gid="39664"/>
    <tile gid="39657"/>
    <tile gid="39658"/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="37627"/>
+   <tile gid="37628"/>
+   <tile gid="37627"/>
+   <tile gid="37628"/>
+   <tile gid="37627"/>
    <tile gid="39656"/>
    <tile gid="39657"/>
    <tile gid="39657"/>
@@ -69434,11 +69434,11 @@
    <tile gid="39657"/>
    <tile gid="39657"/>
    <tile gid="39658"/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="37629"/>
+   <tile gid="37630"/>
+   <tile gid="37629"/>
+   <tile gid="37630"/>
+   <tile gid="37629"/>
    <tile gid="39656"/>
    <tile gid="39657"/>
    <tile gid="39657"/>
@@ -70121,8 +70121,8 @@
    <tile gid="39657"/>
    <tile gid="39657"/>
    <tile gid="39742"/>
-   <tile gid="39734"/>
-   <tile gid="39753"/>
+   <tile gid="39742"/>
+   <tile gid="39743"/>
    <tile/>
    <tile/>
    <tile/>
@@ -70244,8 +70244,8 @@
    <tile gid="39657"/>
    <tile gid="39657"/>
    <tile gid="39657"/>
-   <tile/>
-   <tile/>
+   <tile gid="39742"/>
+   <tile gid="39743"/>
    <tile/>
    <tile/>
    <tile/>
@@ -70367,8 +70367,8 @@
    <tile gid="39657"/>
    <tile gid="39657"/>
    <tile gid="39657"/>
-   <tile/>
-   <tile/>
+   <tile gid="39742"/>
+   <tile gid="39743"/>
    <tile/>
    <tile/>
    <tile/>
@@ -70490,8 +70490,8 @@
    <tile gid="39657"/>
    <tile gid="39657"/>
    <tile gid="39657"/>
-   <tile/>
-   <tile/>
+   <tile gid="39742"/>
+   <tile gid="39743"/>
    <tile/>
    <tile/>
    <tile/>
@@ -70538,18 +70538,18 @@
    <tile gid="39657"/>
    <tile gid="39657"/>
    <tile gid="39744"/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="37627"/>
+   <tile gid="37628"/>
+   <tile gid="37627"/>
+   <tile gid="37628"/>
+   <tile gid="37627"/>
+   <tile gid="37628"/>
+   <tile gid="37627"/>
+   <tile gid="37628"/>
+   <tile gid="37627"/>
+   <tile gid="37628"/>
+   <tile gid="37627"/>
+   <tile gid="37628"/>
    <tile gid="39746"/>
    <tile gid="39754"/>
    <tile gid="39733"/>
@@ -70613,9 +70613,9 @@
    <tile gid="39657"/>
    <tile gid="39657"/>
    <tile gid="39742"/>
+   <tile gid="39742"/>
    <tile gid="39754"/>
-   <tile gid="1610652484"/>
-   <tile gid="1610652484"/>
+   <tile gid="39732"/>
    <tile gid="1610652484"/>
    <tile gid="39732"/>
    <tile gid="39732"/>
@@ -70661,18 +70661,18 @@
    <tile gid="39657"/>
    <tile gid="39657"/>
    <tile gid="39744"/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="37629"/>
+   <tile gid="37630"/>
+   <tile gid="37629"/>
+   <tile gid="37630"/>
+   <tile gid="37629"/>
+   <tile gid="37630"/>
+   <tile gid="37629"/>
+   <tile gid="37630"/>
+   <tile gid="37629"/>
+   <tile gid="37630"/>
+   <tile gid="37629"/>
+   <tile gid="37630"/>
    <tile gid="39746"/>
    <tile gid="39657"/>
    <tile gid="39754"/>
@@ -88462,9 +88462,9 @@
    <tile/>
    <tile gid="1610652631"/>
    <tile gid="1610652661"/>
-   <tile gid="1610652691"/>
-   <tile gid="1610652721"/>
-   <tile gid="1610652751"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="1610652781"/>
    <tile gid="1610652811"/>
    <tile gid="1610652841"/>
@@ -88583,14 +88583,14 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="1610652630"/>
+   <tile/>
    <tile gid="1610652660"/>
-   <tile gid="1610652690"/>
-   <tile gid="1610652720"/>
-   <tile gid="1610652750"/>
-   <tile gid="1610652780"/>
-   <tile gid="1610652810"/>
-   <tile gid="1610652840"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="1610652870"/>
    <tile/>
    <tile/>
@@ -88706,14 +88706,14 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="1610652629"/>
-   <tile gid="1610652659"/>
-   <tile gid="1610652689"/>
-   <tile gid="1610652719"/>
-   <tile gid="1610652749"/>
-   <tile gid="1610652779"/>
-   <tile gid="1610652809"/>
-   <tile gid="1610652839"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="1610652869"/>
    <tile/>
    <tile/>
@@ -88829,13 +88829,13 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="1610652628"/>
-   <tile gid="1610652658"/>
-   <tile gid="1610652688"/>
-   <tile gid="1610652718"/>
-   <tile gid="1610652748"/>
-   <tile gid="1610652778"/>
-   <tile gid="1610652808"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="1610652838"/>
    <tile gid="1610652868"/>
    <tile/>
@@ -88953,12 +88953,12 @@
    <tile/>
    <tile/>
    <tile gid="1610652627"/>
-   <tile gid="1610652657"/>
-   <tile gid="1610652687"/>
-   <tile gid="1610652717"/>
-   <tile gid="1610652747"/>
-   <tile gid="1610652777"/>
-   <tile gid="1610652807"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="1610652837"/>
    <tile gid="1610652867"/>
    <tile/>
@@ -89077,12 +89077,12 @@
    <tile/>
    <tile gid="1610652626"/>
    <tile gid="1610652656"/>
-   <tile gid="1610652686"/>
-   <tile gid="1610652716"/>
-   <tile gid="1610652746"/>
-   <tile gid="1610652776"/>
-   <tile gid="1610652806"/>
-   <tile gid="1610652836"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="1610652866"/>
    <tile/>
    <tile/>
@@ -101767,6 +101767,12 @@
   <object id="5367" x="4672" y="3136" width="64"/>
   <object id="5371" x="4736" y="2944" height="192"/>
   <object id="5372" x="4672" y="2944" width="64"/>
+  <object id="4878" x="1792" y="3584" height="448"/>
+  <object id="4879" x="2112" y="3392" height="448"/>
+  <object id="4868" x="448" y="3392" height="384"/>
+  <object id="4895" x="832" y="3520" height="320"/>
+  <object id="4856" x="4480" y="2368" height="1088"/>
+  <object id="4860" x="4032" y="2560" height="696"/>
  </objectgroup>
  <objectgroup id="68" name="Enemies">
   <object id="4782" name="Noctilume " x="5504" y="768" width="64" height="64"/>
@@ -101786,7 +101792,7 @@
     <property name="TargetScene" type="int" value="41"/>
    </properties>
   </object>
-  <object id="4994" name="Map 43" x="256" y="3776" width="64" height="256">
+  <object id="4994" name="Map 43" x="256" y="3776" height="256">
    <properties>
     <property name="PlayerPosX" type="int" value="4487"/>
     <property name="PlayerPosY" type="int" value="3904"/>
@@ -101795,15 +101801,15 @@
   </object>
   <object id="5064" name="Map 43" x="384" y="192" width="64" height="1088">
    <properties>
-    <property name="PlayerPosX" type="int" value="4416"/>
-    <property name="PlayerPosY" type="int" value="1216"/>
+    <property name="PlayerPosX" type="int" value="4350"/>
+    <property name="PlayerPosY" type="int" value="1150"/>
     <property name="TargetScene" type="int" value="43"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup id="26" name="Collisions">
   <object id="3418" x="384" y="1280" width="320"/>
-  <object id="3612" x="2496" y="3008" width="512"/>
+  <object id="3612" x="2624" y="3008" width="384"/>
   <object id="3741" x="384" y="1472" width="320"/>
   <object id="4126" x="7104" y="1152" width="320"/>
   <object id="4131" x="6848" y="1344" width="128"/>
@@ -101902,14 +101908,9 @@
   <object id="4316" x="3136" y="1600" width="64"/>
   <object id="4323" x="2752" y="1408" width="64"/>
   <object id="4362" x="3328" y="1728" width="64"/>
-  <object id="4856" x="4480" y="2368" height="1088"/>
   <object id="4864" x="448" y="4032" height="320"/>
-  <object id="4868" x="448" y="3392" height="384"/>
-  <object id="4878" x="1792" y="3584" height="448"/>
-  <object id="4879" x="2112" y="3392" height="448"/>
   <object id="4881" x="832" y="3520" width="768"/>
   <object id="4883" x="2240" y="3456" height="384"/>
-  <object id="4895" x="832" y="3520" height="320"/>
   <object id="4896" x="448" y="4288" width="3136"/>
   <object id="4902" x="3456" y="2176" width="832"/>
   <object id="4903" x="2752" y="3658.67" width="64" height="437.333"/>
@@ -101945,7 +101946,6 @@
   <object id="5144" x="5056" y="3584" width="192"/>
   <object id="5289" x="5248" y="1536" width="128"/>
   <object id="5290" x="5184" y="1472" width="64"/>
-  <object id="5311" x="2496" y="2816" width="128"/>
   <object id="5312" x="2624" y="2752" width="128"/>
   <object id="5313" x="2752" y="2688" width="192"/>
   <object id="5314" x="2944" y="2624" width="192"/>
@@ -101957,17 +101957,16 @@
   <object id="5377" x="5120" y="2112" width="64"/>
   <object id="5379" x="5056" y="4736" width="704"/>
   <object id="5380" x="5120" y="4032" width="64"/>
-  <object id="5381" x="6016" y="2880" width="320"/>
  </objectgroup>
  <objectgroup id="71" name="PressureSystem">
   <object id="4900" name="Plate" x="448" y="4288" width="64" height="64">
    <properties>
-    <property name="groupId" type="int" value="0"/>
+    <property name="groupId" type="int" value="11"/>
    </properties>
   </object>
   <object id="4995" name="Door" x="384" y="3776" width="64" height="256">
    <properties>
-    <property name="groupId" type="int" value="0"/>
+    <property name="groupId" type="int" value="11"/>
    </properties>
   </object>
   <object id="5101" name="Door" x="4736" y="3072" width="192" height="64">
@@ -101980,7 +101979,7 @@
     <property name="groupId" type="int" value="2"/>
    </properties>
   </object>
-  <object id="5103" name="Plate" x="6016" y="4480" width="64" height="64">
+  <object id="5103" name="Plate" x="6080" y="4480" width="64" height="64">
    <properties>
     <property name="groupId" type="int" value="2"/>
    </properties>
@@ -101995,7 +101994,14 @@
   <object id="4996" name="Down_camera" x="2240" y="3328" width="1856" height="512"/>
   <object id="4997" name="Down_camera" x="448" y="3328" width="896" height="448"/>
  </objectgroup>
- <objectgroup id="70" name="NPC"/>
+ <objectgroup id="70" name="NPC">
+  <object id="5397" name="Invisible" x="3008" y="2816" width="320" height="256">
+   <properties>
+    <property name="dialogueId" type="int" value="25"/>
+   </properties>
+  </object>
+  <object id="5398" name="Caracol" x="4480" y="1856" width="64" height="128"/>
+ </objectgroup>
  <objectgroup id="58" name="Wall">
   <object id="3441" x="384" y="1280" height="192"/>
   <object id="4581" x="6592" y="4160" width="64"/>
@@ -102060,9 +102066,8 @@
   <object id="4631" x="5568" y="4352" height="64"/>
   <object id="4632" x="5568" y="4416" width="192"/>
   <object id="4633" x="5760" y="4352" height="64"/>
-  <object id="4814" x="6144" y="192" width="1408"/>
+  <object id="4814" x="6144" y="192" width="1664"/>
   <object id="4859" x="448" y="4352" width="3136"/>
-  <object id="4860" x="4032" y="2560" height="696"/>
   <object id="4862" x="2496" y="3264" width="448"/>
   <object id="4882" x="2112" y="3840" width="128"/>
   <object id="4886" x="1408" y="4032" width="384"/>
@@ -102229,7 +102234,7 @@
   <object id="5318" x="2944" y="2624" height="64"/>
   <object id="5319" x="2752" y="2688" height="64"/>
   <object id="5320" x="2624" y="2752" height="64"/>
-  <object id="5322" x="2496" y="2816" height="192"/>
+  <object id="5322" x="2624" y="2816" height="192"/>
   <object id="5323" x="2304" y="3392" height="64"/>
   <object id="5324" x="2368" y="3328" height="64"/>
   <object id="5325" x="2496" y="3264" height="64"/>
@@ -102251,8 +102256,6 @@
   <object id="5353" x="576" y="3264" height="64"/>
   <object id="5354" x="512" y="3328" height="64"/>
   <object id="5356" x="3008" y="3008" height="64"/>
-  <object id="5382" x="6016" y="2880" height="64"/>
-  <object id="5383" x="6016" y="2944" width="320"/>
   <object id="5391" x="128" y="4032" width="320"/>
   <object id="5392" x="128" y="3776" width="320"/>
  </objectgroup>
@@ -102300,11 +102303,12 @@
     <property name="variant" type="int" value="3"/>
    </properties>
   </object>
+  <object id="5397" name="Geyser" x="4736" y="3328" width="128" height="64"/>
  </objectgroup>
  <objectgroup id="64" name="Spikes">
   <object id="4033" name="Spikes" x="704" y="1472" width="384" height="128"/>
   <object id="4234" name="Spikes" x="5376" y="1728" width="128" height="128"/>
-  <object id="4235" name="Spikes" x="5888" y="2304" width="192" height="128"/>
+  <object id="4235" name="Spikes" x="5760" y="2304" width="320" height="128"/>
   <object id="4254" name="Spikes" x="6080" y="1600" width="512" height="128"/>
   <object id="4430" name="Spikes" x="5568" y="2944" width="768" height="128"/>
   <object id="4865" name="Spikes" x="448" y="4160" width="3136" height="64"/>

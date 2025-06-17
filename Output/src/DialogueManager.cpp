@@ -214,7 +214,6 @@ void DialogueManager::WrapLines(int dialogueId, int boxWidth, int dialogueFontSi
 
 void DialogueManager::SetDialogueAvailable(int dialogueId, Vector2D npcPos, bool active) {
 	dialogueAvailable = active;
-	SetPlayerMovement(false);
 	dialogueStarted = false;
 	activeDialogueId = active ? dialogueId : -1;
 	promptPos = npcPos;
@@ -238,6 +237,7 @@ void DialogueManager::ResetTyping() {
 
 void DialogueManager::SetPlayerMovement(bool isMoving) {
 	Player* player = Engine::GetInstance().scene.get()->GetPlayer();
+	player->pbody->body->SetLinearVelocity(b2Vec2_zero);
 	player->GetMechanics()->GetMovementHandler()->SetCantMove(isMoving);
 	player->GetMechanics()->GetJumpMechanic()->Enable(!isMoving);
 	//player->GetMechanics()->GetMovementHandler()->EnableJump(isMoving);

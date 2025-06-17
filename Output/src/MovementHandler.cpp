@@ -329,6 +329,11 @@ void MovementHandler::SetCanAttack(bool canAttack) {
 void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::DOOR:
+        fallMechanic.OnLanding();
+        jumpMechanic.OnLanding();
+
+        Engine::GetInstance().scene->GetHookManager()->ResetUsedHooks();
+        break;
     case ColliderType::PLATFORM:
     {
         lastPlatformCollider = physB;
@@ -365,6 +370,7 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::WALL:
     case ColliderType::DESTRUCTIBLE_WALL:
     {
+        
         float playerX = player->GetPosition().getX();
         float wallX = physB->body->GetPosition().x * PIXELS_PER_METER;
     }
@@ -376,6 +382,8 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::LIANA:
             isOnLiana = true;
             lianaCenterX = METERS_TO_PIXELS(physB->body->GetPosition().x); // Guardar en PIXELES
+            dashMechanic.CancelDash();
+            player->pbody->body->SetLinearVelocity(b2Vec2_zero);
             disableAbilities = true; // Bloquear salto y dash
         break;
     case ColliderType::SPIKE:

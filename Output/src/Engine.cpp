@@ -14,6 +14,7 @@
 #include "ParticleManager.h"
 #include "PressureSystemController.h"
 #include "Map.h"
+#include "GameMap.h"
 #include "Physics.h"
 #include "GuiManager.h"
 #include "tracy/Tracy.hpp"
@@ -38,6 +39,7 @@ Engine::Engine() {
     audio = std::make_shared<Audio>();
     physics = std::make_shared<Physics>();
     map = std::make_shared<Map>();
+    gameMap = std::make_shared<GameMap>();
     entityManager = std::make_shared<EntityManager>();
     particleManager = std::make_shared<ParticleManager>();
     scene = std::make_shared<Scene>();
@@ -55,6 +57,7 @@ Engine::Engine() {
     // L08: TODO 2: Add Physics module
     AddModule(std::static_pointer_cast<Module>(physics));
     AddModule(std::static_pointer_cast<Module>(map));
+    AddModule(std::static_pointer_cast<Module>(gameMap));
     AddModule(std::static_pointer_cast<Module>(scene));
     AddModule(std::static_pointer_cast<Module>(entityManager));
     AddModule(std::static_pointer_cast<Module>(particleManager));

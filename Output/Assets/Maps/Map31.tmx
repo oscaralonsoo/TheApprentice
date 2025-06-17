@@ -72259,7 +72259,7 @@
    <tile/>
   </data>
  </layer>
- <objectgroup id="57" name="WallSlide">
+ <objectgroup id="57" name="WallSlide" visible="0">
   <object id="3388" x="2112" y="832" height="128"/>
   <object id="3649" x="3008" y="640" height="256"/>
   <object id="3671" x="2240" y="640" height="128"/>
@@ -72274,18 +72274,18 @@
   <object id="4011" x="3008" y="2176" height="128"/>
   <object id="4019" x="2816" y="1536" height="640"/>
  </objectgroup>
- <objectgroup id="64" name="HookAnchors">
+ <objectgroup id="64" name="HookAnchors" visible="0">
   <object id="4015" name="Hook" x="3136" y="1984" width="64" height="64"/>
   <object id="4639" name="Hook" x="1920" y="1728" width="64" height="64"/>
   <object id="4640" name="Hook" x="2048" y="1344" width="64" height="64"/>
   <object id="4704" name="Hook" x="1984" y="960" width="64" height="64"/>
   <object id="4741" x="6592" y="2560" width="64" height="64"/>
  </objectgroup>
- <objectgroup id="63" name="Spikes">
+ <objectgroup id="63" name="Spikes" visible="0">
   <object id="4738" x="6328.67" y="2631" width="64" height="56"/>
   <object id="4739" x="4928" y="3015" width="128" height="57"/>
  </objectgroup>
- <objectgroup id="25" name="Doors">
+ <objectgroup id="25" name="Doors" visible="0">
   <properties>
    <property name="Doors" type="bool" value="true"/>
   </properties>
@@ -72304,7 +72304,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="26" name="Collisions">
+ <objectgroup id="26" name="Collisions" visible="0">
   <object id="3167" x="320" y="1152" width="1472"/>
   <object id="3169" x="2112" y="1152" width="64"/>
   <object id="3245" x="5952" y="1472" width="64"/>
@@ -72367,10 +72367,10 @@
   <object id="4724" x="4288" y="1088" width="192"/>
   <object id="4740" x="6656" y="3008" width="192"/>
  </objectgroup>
- <objectgroup id="66" name="Liana">
+ <objectgroup id="66" name="Liana" visible="0">
   <object id="4658" x="3136" y="896" width="64" height="832"/>
  </objectgroup>
- <objectgroup id="58" name="Wall">
+ <objectgroup id="58" name="Wall" visible="0">
   <object id="3460" x="2560" y="960" height="64"/>
   <object id="3387" x="2176" y="768" height="64"/>
   <object id="3425" x="5952" y="1408" height="64"/>
@@ -72602,7 +72602,7 @@
   <object id="4736" x="6323.33" y="2624" height="64"/>
   <object id="4737" x="6336" y="2688" width="64"/>
  </objectgroup>
- <objectgroup id="61" name="Props">
+ <objectgroup id="61" name="Props" visible="0">
   <object id="3676" name="Box" x="980.67" y="1608" width="49.3333" height="50"/>
   <object id="3704" name="LifePlantMax" x="192" y="1919.33" width="64" height="64"/>
   <object id="3799" name="Box" x="1792" y="1088" width="64" height="64"/>
@@ -72617,10 +72617,10 @@
   <object id="4426" name="Box" x="1406.67" y="1791.33" width="64" height="63.9967"/>
   <object id="4427" name="Box" x="1236" y="1790.67" width="64" height="64"/>
  </objectgroup>
- <objectgroup id="70" name="Abilities">
+ <objectgroup id="70" name="Abilities" visible="0">
   <object id="4657" name="Push" x="6464" y="1536" width="384" height="128"/>
  </objectgroup>
- <objectgroup id="62" name="PressureSystem">
+ <objectgroup id="62" name="PressureSystem" visible="0">
   <object id="3685" name="Plate" x="2047.82" y="2113.45" width="64" height="64">
    <properties>
     <property name="groupId" type="int" value="3"/>
@@ -72674,7 +72674,7 @@
   <object id="4250" name="Plate" x="6208" y="2944" width="64" height="64"/>
   <object id="4251" name="Door" x="6272" y="2816" width="64" height="192"/>
  </objectgroup>
- <objectgroup id="60" name="Enemies">
+ <objectgroup id="60" name="Enemies" visible="0">
   <object id="3692" name="Scurver" x="1337.33" y="1790.67" width="64" height="64"/>
   <object id="3700" name="Bloodrusher" x="2304" y="1920" width="64" height="64"/>
   <object id="3809" name="Bloodrusher" x="4352" y="1216" width="64" height="64"/>
@@ -72685,12 +72685,12 @@
   <object id="4246" name="Dreadspire" x="5376" y="2560" width="64" height="64"/>
   <object id="4247" name="Dreadspire" x="5952" y="2944" width="64" height="64"/>
  </objectgroup>
- <objectgroup id="65" name="DestructibleWalls">
+ <objectgroup id="65" name="DestructibleWalls" visible="0">
   <object id="3702" name="DestructibleWall" x="512" y="1983.33" width="64" height="128"/>
   <object id="4422" name="DestructibleWall" x="3968" y="1280" width="64" height="128"/>
   <object id="4636" x="5568" y="1280" width="64" height="128"/>
  </objectgroup>
- <objectgroup id="73" name="NPC">
+ <objectgroup id="73" name="NPC" visible="0">
   <object id="4732" name="Ardilla" x="2688" y="576" width="320" height="320">
    <properties>
     <property name="dialogueId" type="int" value="32"/>

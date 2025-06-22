@@ -49,12 +49,7 @@ bool NPC::Start() {
 
 bool NPC::Update(float dt)
 {
-	Vector2D playerPos = Engine::GetInstance().scene->GetPlayer()->GetPosition();
-
 	SDL_RendererFlip flip = SDL_FLIP_NONE;
-	if (playerPos.getX() < position.getX()) {
-		flip = SDL_FLIP_HORIZONTAL;
-	}
 
 	if (type == "caracol")
 	{

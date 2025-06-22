@@ -1,6 +1,6 @@
 # The Apprentice
 
-**The Apprentice** is a 2D action-platformer featuring fast-paced movement, combat mechanics, and interactive dialogues.
+**The Apprentice** is a 2D metroidvania game where you control a slime capable of transforming into animals it has encountered throughout its journey. It features intricate puzzles, challenging enemies, and an expansive world to explore.
 
 ## Controls (Keyboard)
 
@@ -10,23 +10,22 @@
 | SPACE             | Jump                           |
 | SPACE (mid-air)   | Double Jump                    |
 | (Hold) SPACE      | Glide                         |
-| J                 | Attack / Interact              |
+| J                 | Attack / Eat              |
 | K                 | Dash                          |
-| E                 | Dialogue                      |
+| E                 | Listen / Save Game                     |
 | L                 | Hook                          |
-| W (at checkpoint) | Save Game                     |
 
 ## Controls (Gamepad)
 
 | Button / Stick    | Action                         |
 |-------------------|-------------------------------|
-| Left Joystick     | Move left / Move right / Up / Down |
+| Left Joystick     | Move left / Move right |
 | A                 | Jump / Double Jump / Glide (hold) |
 | X                 | Attack                        |
 | Y                 | Save Game                    |
 | R1                | Eat                          |
 | RT                | Dash                         |
-| L1                | Dialogue                     |
+| L1                | Listen                     |
 | LT                | Hook                         |
 
 ## Debug Mode
@@ -41,7 +40,8 @@ The game includes debug tools for testing purposes:
 | F4      | Gain 1 live                         |
 | F5      | Gain 1 max live                     |
 | F6      | Lose 1 live                         |
-| F8      | Choose map                          |
+| F7      | Previous map                        |
+| F8      | Next map                            |
 | F9      | Save Game                           |
 | F10     | Load Game                           |
 
@@ -66,3 +66,9 @@ When God Mode is active (`F3`), player movement is modified for free navigation 
 | 6   | Push              | Enables pushing objects                  |
 | 7   | Hook              | Unlocks the grappling hook ability       |
 
+## Screenshots
+![1](https://github.com/user-attachments/assets/7a936534-f2bb-4a0a-b8ba-a426841d0a96)
+![2](https://github.com/user-attachments/assets/a40ae31e-51fa-46c7-baa2-0fe8b2791406)
+![4](https://github.com/user-attachments/assets/b5d0b222-ed1a-4579-a0ec-220d338a6b46)
+![3](https://github.com/user-attachments/assets/d1348b9d-dce3-4362-8af0-acff57145363)
+![5](https://github.com/user-attachments/assets/4cf22c52-6cc7-410c-83c5-c5eb0e074910)

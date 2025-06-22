@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="132" height="59" tilewidth="64" tileheight="64" infinite="0" nextlayerid="81" nextobjectid="1429">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="132" height="59" tilewidth="64" tileheight="64" infinite="0" nextlayerid="81" nextobjectid="1431">
  <tileset firstgid="1" name="tiles_cave2" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave2.png" width="640" height="640"/>
  </tileset>
@@ -78378,6 +78378,7 @@
  <objectgroup id="73" name="HelpZone">
   <object id="1412" name="Attack" x="4032" y="2688" width="384" height="192"/>
   <object id="1413" name="Move" x="926" y="832" width="384" height="192"/>
+  <object id="1430" name="Attack" x="7296" y="2752" width="192" height="192"/>
  </objectgroup>
  <objectgroup id="61" name="DestructibleWalls"/>
  <objectgroup id="64" name="Props">

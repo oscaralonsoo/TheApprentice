@@ -177,7 +177,7 @@ void MovementHandler::Update(float dt) {
         LOG("Hook habilitado");
     }
     if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_8) == KEY_DOWN) {
-        Engine::GetInstance().render.get()->ToggleCameraLock();
+        //Engine::GetInstance().render.get()->ToggleCameraLock();
     }
 
     static bool prevAState = false;

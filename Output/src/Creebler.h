@@ -20,18 +20,24 @@ public:
     bool Update(float dt) override;
     bool PostUpdate() override;
     bool CleanUp() override;
-    void OnCollision(PhysBody* physA, PhysBody* physB);
+    void OnCollision(PhysBody* physA, PhysBody* physB) override;
 
     void Walk();
-
 
 private:
     CreeblerState currentState = CreeblerState::WALKING;
 
     Animation walkAnim;
-    Animation deadAnim;
+    Animation deathAnim;
 
     float speed = 2.0f;
 
-    Timer deathTimer;
+    int soundWalkId = 0;
+    int soundDeadId = 0;
+
+    bool walkSoundPlayed = false;
+    bool deadSoundPlayed = false;
+
+    float walkSoundTimer = 0.0f;     
+    const float walkSoundInterval = 3500.0f;
 };

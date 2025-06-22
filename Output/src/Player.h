@@ -9,6 +9,8 @@
 
 struct SDL_Texture;
 
+class PlayerAnimation;
+
 class Player : public Entity
 {
 public:
@@ -39,7 +41,7 @@ public:
 	int GetMovementDirection() const;
 
 	PlayerMechanics* GetMechanics() { return &mechanics; }
-
+	PlayerAnimation* GetAnimation() { return animation; }
 
 	int GetTextureWidth() const;
 
@@ -47,12 +49,17 @@ public:
 	PhysBody* pbody;
 	PhysBody* enemySensor = nullptr;
 
+	void SetAnimation(PlayerAnimation* anim) {
+		if (animation) delete animation;
+		animation = anim;
+	}
+
+	bool IsTouchingPlatform() const;
+
 private:
 
 	SDL_Texture* texture = nullptr;
 	int texW, texH;
-
-	PlayerAnimation animation;
 	std::string state = "idle";
 
 	pugi::xml_node parameters;
@@ -61,4 +68,10 @@ private:
 	PlayerMechanics mechanics;
 
 	bool initialized = false;
+
+	PlayerAnimation* animation = nullptr;
+
+	std::vector<Vector2D> positionArray;
+	std::vector<int> intArray;
+	int currentIndex = 1;
 };

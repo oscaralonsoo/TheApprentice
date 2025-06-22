@@ -38,6 +38,9 @@ private:
 	Animation* currentAnimation = nullptr;
 	Animation availableAnim;
 	Animation consumedAnim;
-
+	PlayerMechanics mechanics;
 	LifePlantStates state = LifePlantStates::AVAILABLE;
+
+	int soundInteractId = 0;
+	int eatSound = 0;
 };

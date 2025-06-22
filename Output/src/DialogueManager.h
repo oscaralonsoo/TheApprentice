@@ -3,6 +3,10 @@
 #include "Module.h"
 #include "Timer.h"
 #include <unordered_map>
+#include "Vector2D.h"
+
+
+struct SDL_Texture;
 
 struct DialogueEvent {
 	std::string speaker;
@@ -25,15 +29,21 @@ public:
 
 	void RenderDialogue(int id);
 	void LoadDialogues();
-	void SetDialogueAvailable(int dialogueId, bool active);
+	void SetDialogueAvailable(int dialogueId, Vector2D npcPos, bool active);
 	void ShowInteractionPrompt();
+	void SetPlayerMovement(bool isMoving);
 	void WrapLines(int dialogueId, int boxWidth, int dialogueFontSize);
 	void ResetTyping();
 
 private:
+	SDL_Texture* listenTexture;
+	SDL_Texture* dialogueTexture;
+
 	std::string dialoguesPath = "dialogues.xml";
 
 	std::unordered_map<int, DialogueEvent> dialogueMap;
+
+	Vector2D promptPos;
 
 	bool dialogueStarted = false;
 	bool dialogueAvailable = false;
@@ -44,4 +54,5 @@ private:
 	Timer typingTimer;
 	bool typingFinished = false;
 	bool forceTypingFinish = false;
+	bool prevL1State = false;
 };

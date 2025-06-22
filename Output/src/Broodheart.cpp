@@ -7,8 +7,10 @@
 #include "Textures.h"
 #include "Entity.h"
 #include "Log.h"
+#include "Audio.h"
+#include <algorithm>
 
-constexpr int MAX_BROODS = 6;
+constexpr int MAX_BROODS = 4;
 constexpr int BROODS_PER_SPAWN = 1;
 constexpr int MAX_SPAWN_ATTEMPTS = 10;
 constexpr float MIN_SPAWN_DISTANCE = 60.0f;
@@ -23,7 +25,8 @@ bool Broodheart::Awake() {
 }
 
 bool Broodheart::Start() {
-    spawnInterval = 4500.0f + static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2500.0f;
+
+    spawnInterval = 6500.0f + static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 4000.0f;
 
     pugi::xml_document configDoc;
     if (!configDoc.load_file("config.xml")) {
@@ -36,22 +39,34 @@ bool Broodheart::Start() {
         if (node.attribute("type").as_string() == typeName) {
             texture = Engine::GetInstance().textures->Load(node.attribute("texture").as_string());
             idleAnim.LoadAnimations(node.child("idle"));
-            currentAnimation = &idleAnim;
+            spawnAnim.LoadAnimations(node.child("spawn"));
+            deathAnim.LoadAnimations(node.child("death"));
+     
             break;
         }
     }
+    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW / 2, texH/2, bodyType::DYNAMIC);
 
-    // En Broodheart::Start(), después de crear el pbody
+    currentAnimation = &idleAnim;
+    pbody->ctype = ColliderType::ENEMY;
+    if (!gravity) pbody->body->SetGravityScale(0);
+    pbody->listener = this;
+
+    pathfinding = new Pathfinding();
+    ResetPath();
+
     b2Fixture* fixture = pbody->body->GetFixtureList();
     if (fixture) {
         b2Filter filter;
         filter.categoryBits = CATEGORY_ENEMY;
-        filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_PLAYER_DAMAGE | CATEGORY_ATTACK;
+        filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_ATTACK | CATEGORY_PLAYER_DAMAGE;
         fixture->SetFilterData(filter);
     }
 
+    soundSpawnId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Broodheart/broodheart_spawn.ogg", 1.0f);
+    soundDeathId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Broodheart/broodheart_death.ogg", 1.0f);
 
-    return Enemy::Start();
+    return true;
 }
 
 bool Broodheart::Update(float dt) {
@@ -60,15 +75,30 @@ bool Broodheart::Update(float dt) {
         shouldSpawn = true;
         spawnCooldown = 0.0f;
     }
+
+    if (shouldSpawn == false && currentAnimation == &spawnAnim) {
+        if (!spawnSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundSpawnId, 0.5f, 0);
+            spawnSoundPlayed = true;
+        }
+        if (spawnAnim.HasFinished()) {
+            currentAnimation = &idleAnim;
+            spawnSoundPlayed = false;
+        }
+    }
     return Enemy::Update(dt);
 }
 
 bool Broodheart::PostUpdate() {
+    if (isBroken && currentAnimation == &deathAnim && currentAnimation->HasFinished()) {
+        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+        return true;
+    }
     if (shouldSpawn) {
         Spawn();
         shouldSpawn = false;
     }
-    return Enemy::PostUpdate();
+    return true;
 }
 
 bool Broodheart::CleanUp() {
@@ -80,17 +110,27 @@ bool Broodheart::CleanUp() {
 }
 
 void Broodheart::OnCollision(PhysBody* physA, PhysBody* physB) {
+    Enemy::OnCollision(physA, physB);
+
     switch (physB->ctype) {
     case ColliderType::PLAYER:
+        break;
     case ColliderType::ATTACK:
-       
+        if (!isBroken) {
+            isBroken = true;
+            currentAnimation = &deathAnim;
+            pbody->body->GetFixtureList()->SetSensor(true);
+            if (!deathSoundPlayed) {
+                Engine::GetInstance().audio->PlayFx(soundDeathId, 0.5f, 0);
+                deathSoundPlayed = true;
+            }
+        }
         break;
     }
 }
-
 void Broodheart::Spawn() {
     if (broodsAlive.size() >= MAX_BROODS) return;
-
+    currentAnimation = &spawnAnim;
     std::vector<SDL_FPoint> newPositions;
 
     for (int i = 0; i < BROODS_PER_SPAWN && broodsAlive.size() < MAX_BROODS; ++i) {
@@ -129,11 +169,12 @@ void Broodheart::Spawn() {
         brood->Start();
         brood->SetParent(this);
 
+
         broodsAlive.push_back(brood);
     }
 }
 
 void Broodheart::OnBroodDeath(Brood* brood) {
     broodsAlive.remove(brood);
-    spawnCooldown = 0.0f;
+
 }

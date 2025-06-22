@@ -7,6 +7,7 @@
 enum class BroodState {
     IDLE,
     CHASING,
+    RETURNING,
     DEAD
 };
 
@@ -19,30 +20,39 @@ public:
     bool Awake() override;
     bool Start() override;
     bool Update(float dt) override;
+    bool PostUpdate();
     bool CleanUp() override;
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
 
+    void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
+
     // Brood Methods
     void Chase(float dt);
-
+    void UpdateChaseState(float dt);
     // Setters
-    void SetParent(Broodheart* p) { parent = p; }
+    void SetParent(Broodheart* parent);
 
+    void ReturnToInitial(float dt);
+
+    Animation flyingAnim;
+    Animation deathAnim;
 private:
-    Broodheart* parent = nullptr;
-
+    bool isDead = false;
+    Broodheart* broodHeart = nullptr;
+    Vector2D playerPos;
+    Vector2D initialPosition;   
+    float returnSpeed = 0.1f;   
+    bool returningToHeart = false;
     float timePassed = 0.0f;
-    float dirX = 0.0f;
-    float dirY = 0.0f;
-    float launchSpeed = 0.05f;
-    bool launched = false;
     float waveOffset = 0.0f;
-
-    Vector2D direction = { 0, 0 };
-    bool playerInRange = false;
-
+    float distanceToPlayer = 0.0f;
+    const float detectRange = 1280.0f;
+    float returningSpeed = 0.2f;
+    int direction = 1;
+    Vector2D nextDirection = { 0, 0 };
+    bool touchingPlayer = false;
     BroodState currentState = BroodState::IDLE;
 
-    PhysBody* physBody = nullptr;
-    Animation idleAnim;
+    int soundDeathId = 0;
+    bool deadSoundPlayed = false;
 };

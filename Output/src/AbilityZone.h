@@ -52,6 +52,8 @@ public:
 
 	virtual void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
+	void SetController(SDL_GameController* controller);
+
 	bool playerInside = false;
 	bool playerInsideJump = false;
 	bool playerInsideDoubleJump = false;
@@ -71,6 +73,27 @@ private:
 	int abilitySpriteW = 0;
 	int abilitySpriteH = 0;
 	bool markedForDeletion = false;
-
+	float vignetteHeartbeatTimer = 0.0f;
+	int minVignetteSize = 60;   
+	int maxVignetteSize = 800;  
+	float vibrateAmplitude = 1200.0f;
+	float vibrateSpeed = 0.05f;
+	int newVignetteSize = 0;
 	SDL_Color normalVignetteColor = { 0, 0, 0, 255 };
+	bool xHeld = false;
+	SDL_GameController* controller = nullptr;
+	bool waitingForEatAnimation = false;
+
+	SDL_Texture* jumpSprite = nullptr;
+	SDL_Texture* doubleJumpSprite = nullptr;
+	SDL_Texture* dashSprite = nullptr;
+	SDL_Texture* hookSprite = nullptr;
+	SDL_Texture* glideSprite = nullptr;
+	SDL_Texture* pushSprite = nullptr;
+	SDL_Texture* wallJumpSprite = nullptr;
+
+	bool tensionActive = false;
+	std::string previousMusic = "";
+
+	bool readyToDestroy = false;
 };

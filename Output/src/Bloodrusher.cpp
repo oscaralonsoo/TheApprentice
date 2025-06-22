@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "EntityManager.h"
 #include "Textures.h"
+#include "Audio.h"
 
 
 Bloodrusher::Bloodrusher() : Enemy(EntityType::BLOODRUSHER) {
@@ -17,7 +18,7 @@ bool Bloodrusher::Awake() {
 }
 
 bool Bloodrusher::Start() {
-    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texW / 2, (int)position.getY() + texH / 2, texW / 1.5, texH / 2, bodyType::DYNAMIC, 0, 27);
+    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texW / 2, (int)position.getY() + texH / 2, texW / 1.5, texH / 2, bodyType::DYNAMIC, 0, 32);
 
     pbody->ctype = ColliderType::ENEMY;
 
@@ -51,27 +52,40 @@ bool Bloodrusher::Start() {
         fixture->SetFilterData(filter);
     }
 
+    maxSteps = 15;
+
     currentAnimation = &idleAnim;
+
+    soundMoveId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/BloodRusher/bloodrusher_attack.ogg", 1.0f);
+    soundSlideId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/BloodRusher/bloodrusher_skid.ogg", 1.0f);
+    soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/BloodRusher/bloodrusher_death.ogg", 1.0f);
 
     return true;
 }
 
 bool Bloodrusher::Update(float dt) {
-    if (pathfinding->HasFoundPlayer()) {
-        if (currentState == BloodrusherState::IDLE) {
-            currentState = BloodrusherState::ATTACKING;
-        }
+    if (!pathfinding->HasFoundPlayer()) {
+        currentState = BloodrusherState::IDLE;
     }
-
+    if (isDead == true)
+    {
+        Dead();
+        return Enemy::Update(dt);
+    }
     switch (currentState)
     {
     case BloodrusherState::IDLE:
+        pbody->body->SetLinearVelocity(b2Vec2_zero);
+        pbody->body->SetAngularVelocity(0);
+
         Idle();
         break;
     case BloodrusherState::ATTACKING:
+        if (currentAnimation != &attackAnim) currentAnimation = &attackAnim;
         Attack(dt);
         break;
     case BloodrusherState::SLIDING:
+        if (currentAnimation != &slideAnim) currentAnimation = &slideAnim;
         Slide(dt);
         break;
     case BloodrusherState::DEAD:
@@ -83,8 +97,7 @@ bool Bloodrusher::Update(float dt) {
 }
 
 bool Bloodrusher::PostUpdate() {
-
-    if (currentState == BloodrusherState::DEAD && currentAnimation->HasFinished()) {
+    if (isDead && currentAnimation->HasFinished()) {
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
     }
 
@@ -97,20 +110,37 @@ bool Bloodrusher::CleanUp() {
 }
 
 void Bloodrusher::Idle() {
-    if (currentAnimation != &idleAnim) currentAnimation = &idleAnim;
+    if (pathfinding->HasFoundPlayer()) {
+        Vector2D nextTile = pathfinding->pathTiles.front();
+        Vector2D nextTileWorld = Engine::GetInstance().map.get()->MapToWorld(nextTile.getX(), nextTile.getY());
+
+        direction = (nextTileWorld.getX() > position.getX()) ? 1.0f :
+            (nextTileWorld.getX() < position.getX() ? -1.0f : direction);
+
+        if (IsGroundAhead()) {
+            currentState = BloodrusherState::ATTACKING;
+        }
+        else {
+            currentAnimation = &idleAnim;
+        }
+    }
+    else {
+        currentAnimation = &idleAnim;
+    }
+    moveSoundPlayed = false;
+    slideSoundPlayed = false;
+    deadSoundPlayed = false;
 }
 
-void Bloodrusher::Attack(float dt)
-{
-    if (currentAnimation != &attackAnim) currentAnimation = &attackAnim;
-
+void Bloodrusher::Attack(float dt) {
+    if (!moveSoundPlayed) {
+        Engine::GetInstance().audio->PlayFx(soundMoveId, 0.5f, 0);
+        moveSoundPlayed = true;
+    }
     if (pathfinding->pathTiles.empty()) {
-        // No hay camino, así que no hace nada o entra en un estado diferente
-        pbody->body->SetLinearVelocity(b2Vec2(0, 0)); // detenerse o comportamiento alternativo
+        pbody->body->SetLinearVelocity(b2Vec2(0, 0));
         return;
     }
-
-    b2Vec2 currentVelocity = pbody->body->GetLinearVelocity();
 
     Vector2D nextTile = pathfinding->pathTiles.front();
     Vector2D nextTileWorld = Engine::GetInstance().map.get()->MapToWorld(nextTile.getX(), nextTile.getY());
@@ -118,30 +148,43 @@ void Bloodrusher::Attack(float dt)
     direction = (nextTileWorld.getX() > position.getX()) ? 1.0f :
         (nextTileWorld.getX() < position.getX() ? -1.0f : 0.0f);
 
-    if (direction != previousDirection)
-    {
-        currentState = BloodrusherState::SLIDING;
-        timer.Start();
+    b2Vec2 currentVelocity = pbody->body->GetLinearVelocity();
 
-    }
+    static float exponentialFactor = 1.007f;
+    static float velocityBase = 0.15f;
+    static float maxSpeed = 15.0f;
+
+    if (direction != previousDirection) currentState = BloodrusherState::SLIDING;
 
     float exponentialVelocityIncrease = velocityBase * (pow(exponentialFactor, dt));
-
     currentVelocity.x += direction * exponentialVelocityIncrease;
 
     currentVelocity.x = fmin(fmax(currentVelocity.x, -maxSpeed), maxSpeed);
-
     pbody->body->SetLinearVelocity(currentVelocity);
 
     previousDirection = direction;
 }
 
 void Bloodrusher::Slide(float dt) {
-    if (currentAnimation != &slideAnim) currentAnimation = &slideAnim;
-
     b2Vec2 currentVelocity = pbody->body->GetLinearVelocity();
 
-    float frictionFactor = 0.97f;
+    if (!slideSoundPlayed) {
+        Engine::GetInstance().audio->PlayFx(soundSlideId, 0.5f, 0);
+        slideSoundPlayed = true;
+    }
+
+    if (IsGroundAhead()) {
+        timer.Start();
+    }
+
+    if (timer.ReadSec() > 0.5f) {
+        currentState = BloodrusherState::IDLE;
+        currentVelocity.x = 0.0f;
+        pbody->body->SetLinearVelocity(currentVelocity);
+        return;
+    }
+
+    float frictionFactor = 0.92f;
 
     if (fabs(currentVelocity.x) > 0.3f) {
         currentVelocity.x *= frictionFactor;
@@ -151,27 +194,52 @@ void Bloodrusher::Slide(float dt) {
         currentState = BloodrusherState::IDLE;
     }
 
-    // Aplicar la nueva velocidad al cuerpo
     pbody->body->SetLinearVelocity(currentVelocity);
 }
-
 
 void Bloodrusher::Dead() {
     if (currentAnimation != &deadAnim) currentAnimation = &deadAnim;
 
     pbody->body->SetLinearVelocity(b2Vec2_zero);
     pbody->body->SetAngularVelocity(0);
+
+    if (!deadSoundPlayed) {
+        Engine::GetInstance().audio->PlayFx(soundDeadId, 0.5f, 0);
+        deadSoundPlayed = true;
+    }
+
 }
 
 void Bloodrusher::OnCollision(PhysBody* physA, PhysBody* physB)
 {
     switch (physB->ctype)
     {
-    case ColliderType::WALL:
-        if (currentState == BloodrusherState::ATTACKING)
-        {
-            currentState = BloodrusherState::DEAD;
-        }
+    case ColliderType::DESTRUCTIBLE_WALL:
+        currentState = BloodrusherState::DEAD;
+        isDead = true;
         break;
     }
 }
+
+bool Bloodrusher::IsGroundAhead() {
+    Vector2D posMap = Engine::GetInstance().map.get()->WorldToMap(position.getX() + texW / 2, position.getY() + texH / 2);
+    MapLayer* layer = Engine::GetInstance().map.get()->GetNavigationLayer();
+
+    int frontY = posMap.y + 2;
+    int checkOffset = 3;
+
+    if (currentState == BloodrusherState::SLIDING) {
+        int frontLeftX = posMap.x - 1;
+        int frontRightX = posMap.x + 1;
+
+        bool groundLeft = layer->Get(frontLeftX, frontY);
+        bool groundRight = layer->Get(frontRightX, frontY);
+
+        return groundLeft && groundRight;
+    }
+    else {
+        int frontX = posMap.x + direction * checkOffset;
+        return layer->Get(frontX, frontY);
+    }
+}
+

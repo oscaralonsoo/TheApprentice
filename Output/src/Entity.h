@@ -8,22 +8,48 @@ enum class EntityType
 	PLAYER,
 	BLOODRUSHER,
 	CREEBLER,
+	PRESSURE_PLATE,
+	PRESSURE_DOOR,
 	MIREBORN,
 	CASTOR,
+	SHYVER,
 	HYPNOVIPER,
+	CARTA,
 	BROODHEART,
+	PERDIZ,
+	INVISIBLE,
+	PANGOLIN,
+	LIEBRE,
+	ARDILLA,
+	CARACOL_MAIL,
+	ARDILLA_LIANA,
+	CARACOL,
+	BICHOPALO,
 	THUMPOD,
 	SCURVER,
+	SPEAR,
+	CRYSTAL,
+	BULLET,
+	BALL,
 	LIFE_PLANT,
+	LIFE_PLANT_MAX,
+	CHECKPOINT,
+	HELP_ZONE,
 	BROOD,
 	NULLWARDEN,
 	NOCTILUME,
+	DREADSPIRE,
+	DUNGBEETLE,
 	CAVE_DROP,
 	ABILITY_ZONE,
 	HIDDEN_ZONE,
 	DESTRUCTIBLE_WALL,
 	PUSHABLE_BOX,
-	DUST_PARTICLE,
+	GEYSER,
+	PARTICLE,
+	HOOK_ANCHOR,
+	HOOKABLE_BOX,
+	STALACTITE,
 	UNKNOWN
 };
 
@@ -81,15 +107,20 @@ public:
 
 	virtual void OnCollisionEnd(PhysBody* physA, PhysBody* physB) {}
 
+	virtual void SetPhysicsActive(bool active) {}
+
 	// Nuevo método para obtener el tipo de entidad
 	EntityType GetType() const { return type; }
 
 
 public:
+	int width = 0;
+	int height = 0;
 	std::string name;
 	EntityType type;
 	bool active = true;
 
 	Vector2D position;
 	bool renderable = true;
+	bool toDelete = false;
 };

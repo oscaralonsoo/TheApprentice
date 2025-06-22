@@ -2,16 +2,29 @@
 <art>
 	<textures>
 		<UI>
+			<help>
+				<Jump path="Assets/Textures/UI/Help" name="Jump.png"/>
+				<Listen path="Assets/Textures/UI/Help" name="Listen.png"/>
+				<Attack path="Assets/Textures/UI/Help" name="Attack.png"/>
+				<Move path="Assets/Textures/UI/Help" name="Move.png"/>
+				<Save path="Assets/Textures/UI/Help" name="Save.png"/>
+				<Climb path="Assets/Textures/UI/Help" name="Climb.png"/>
+			</help>
 			<menu>
 				<backgrounds>
 					<intro path="Assets/Textures/UI/Backgrounds/" name="intro.png"/>
 					<main path="Assets/Textures/UI/Backgrounds/" name="mainMenu.png"/>
 					<pause path="Assets/Textures/UI/Backgrounds/" name="pauseMenu.png"/>
+					<controls path="Assets/Textures/UI/Backgrounds/" name="controlsMenu.png"/>
 					<settings path="Assets/Textures/UI/Backgrounds/" name="settingsMenu.png"/>
 					<credits path="Assets/Textures/UI/Backgrounds/" name="creditsMenu.png"/>
 					<jump path="Assets/Textures/UI/Abilities/" name="jumpAbility.png"/>
 					<doublejump path="Assets/Textures/UI/Abilities/" name="doubleJumpAbility.png"/>
 					<dash path="Assets/Textures/UI/Abilities/" name="dashAbility.png"/>
+					<hook path="Assets/Textures/UI/Abilities/" name ="hookAbility.png"/>
+					<walljump path="Assets/Textures/UI/Abilities/" name="wallJumpAbility.png"/>
+					<glide path="Assets/Textures/UI/Abilities/" name="glideAbility.png"/>
+					<push path="Assets/Textures/UI/Abilities/" name="pushAbility.png"/>
 				</backgrounds>
 				<buttons>
 					<button path="Assets/Textures/UI/Buttons/" name="newGame_unhovered.png"/>
@@ -20,15 +33,22 @@
 					<button path="Assets/Textures/UI/Buttons/" name="continue_hovered.png"/>
 					<button path="Assets/Textures/UI/Buttons/" name="settings_unhovered.png"/>
 					<button path="Assets/Textures/UI/Buttons/" name="settings_hovered.png"/>
+					<button path="Assets/Textures/UI/Buttons/" name="controls_unhovered.png"/>
+					<button path="Assets/Textures/UI/Buttons/" name="controls_hovered.png"/>
 					<button path="Assets/Textures/UI/Buttons/" name="credits_unhovered.png"/>
 					<button path="Assets/Textures/UI/Buttons/" name="credits_hovered.png"/>
 					<button path="Assets/Textures/UI/Buttons/" name="exit_unhovered.png"/>
 					<button path="Assets/Textures/UI/Buttons/" name="exit_hovered.png"/>
+					<button path="Assets/Textures/UI/Buttons/" name="backToMenu_unhovered.png"/>
+					<button path="Assets/Textures/UI/Buttons/" name="backToMenu_hovered.png"/>
 				</buttons>
 				<checkbox>
 					<checkbox path="Assets/Textures/UI/Buttons/" name="checkbox.png"/>
 					<fill path="Assets/Textures/UI/Buttons/" name="fill.png"/>
 				</checkbox>
+				<slider>
+					<sliderBox path="Assets/Textures/UI/Buttons/" name="sliderBox.png"/>
+				</slider>
 			</menu>
 			<game>
 				<lifes w="32" h="32" texture="Assets/Slime/vida_slime.png">
@@ -36,14 +56,16 @@
 						<frame x="0" y="0" w="32" h="32" />
 					</idle>
 				</lifes>
+				<offlifes w="32" h="32" texture="Assets/Slime/off_vida.png">
+					<idle loop="true" speed="0.1">
+						<frame x="0" y="0" w="32" h="32" />
+					</idle>
+				</offlifes>
 			</game>
 		</UI>
-		<entities>
-		
-		</entities>
 	</textures>
 	<animations>
-		<game_intro path=" " >
+		<game_intro path=" " loop="false">
 			<frame x="0" y="0" w="134" h="134" />
 			<frame x="0" y="0" w="134" h="134" />
 			<frame x="0" y="0" w="134" h="134" />
@@ -51,12 +73,4 @@
 			<frame x="0" y="0" w="134" h="134" />
 		</game_intro>
 	</animations>
-	<sounds>
-		<music>
-		
-		</music>
-		<fx>
-		
-		</fx>
-	</sounds>
 </art>

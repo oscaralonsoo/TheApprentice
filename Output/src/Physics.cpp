@@ -59,7 +59,7 @@ bool Physics::PreUpdate()
 			PhysBody* pb1 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData().pointer;
 			PhysBody* pb2 = (PhysBody*)c->GetFixtureB()->GetBody()->GetUserData().pointer;
 			
-			if (pb1 && pb2 && pb1->listener)
+			if (pb1 && pb2 && pb1->listener && !IsPendingToDelete(pb1) && !IsPendingToDelete(pb2))
 				pb1->listener->OnCollision(pb1, pb2);
 		}
 	}
@@ -139,41 +139,35 @@ PhysBody* Physics::CreateCircle(int x, int y, int radious, bodyType type)
 	// Return our PhysBody class
 	return pbody;
 }
-PhysBody* Physics::CreateCircleSensor(int x, int y, int radius, bodyType type)
+PhysBody* Physics::CreateCircleSensor(int x, int y, int radius, bodyType type, uint16 categoryBits, uint16 maskBits)
 {
-	// Create BODY at position x,y
 	b2BodyDef body;
 	if (type == DYNAMIC) body.type = b2_dynamicBody;
 	if (type == STATIC) body.type = b2_staticBody;
 	if (type == KINEMATIC) body.type = b2_kinematicBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
-	// Add BODY to the world
 	b2Body* b = world->CreateBody(&body);
 
-	// Create SHAPE
 	b2CircleShape circle;
 	circle.m_radius = PIXEL_TO_METERS(radius);
 
-	// Create FIXTURE
 	b2FixtureDef fixture;
 	fixture.shape = &circle;
-	fixture.density = 1.0f;
 	fixture.isSensor = true;
+	fixture.density = 1.0f;
+	fixture.filter.categoryBits = categoryBits;
+	fixture.filter.maskBits = maskBits;
 
 	b->SetFixedRotation(true);
-
-	// Add fixture to the BODY
 	b->CreateFixture(&fixture);
 
-	// Create our custom PhysBody class
 	PhysBody* pbody = new PhysBody();
 	pbody->body = b;
 	b->GetUserData().pointer = (uintptr_t)pbody;
 	pbody->width = radius;
 	pbody->height = radius;
 
-	// Return our PhysBody class
 	return pbody;
 }
 
@@ -206,6 +200,31 @@ PhysBody* Physics::CreateRectangleSensor(int x, int y, int width, int height, bo
 	b->GetUserData().pointer = (uintptr_t)pbody;
 	pbody->width = width;
 	pbody->height = height;
+
+	return pbody;
+}
+PhysBody* Physics::CreatePolygon(int x, int y, const std::vector<b2Vec2>& vertices, bodyType type)
+{
+	b2BodyDef bodyDef;
+	bodyDef.type = (type == DYNAMIC) ? b2_dynamicBody : (type == STATIC) ? b2_staticBody : b2_kinematicBody;
+	bodyDef.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	b2Body* body = world->CreateBody(&bodyDef);
+
+	b2PolygonShape shape;
+	shape.Set(&vertices[0], vertices.size());
+
+	b2FixtureDef fixtureDef;
+	fixtureDef.shape = &shape;
+	fixtureDef.density = 1.0f;
+
+	body->SetFixedRotation(true);
+	body->CreateFixture(&fixtureDef);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = body;
+	body->GetUserData().pointer = (uintptr_t)pbody;
+	pbody->width = 0;
+	pbody->height = 0;
 
 	return pbody;
 }
@@ -395,14 +414,14 @@ void Physics::BeginContact(b2Contact* contact)
 	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData().pointer;
 	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData().pointer;
 
-	if (physA && physA->listener != NULL) {
+	if (physA && physA->listener != NULL && !IsPendingToDelete(physA)) {
 		if (physB) // Ensure physB is also valid
 		{
 			physA->listener->OnCollision(physA, physB);
 		}
 	}
 
-	if (physB && physB->listener != NULL) {
+	if (physB && physB->listener != NULL && !IsPendingToDelete(physB)) {
 		if(physA) // Ensure physA is also valid
 		{
 			physB->listener->OnCollision(physB, physA);
@@ -512,3 +531,83 @@ int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& no
 
 	return ret;
 }
+void Physics::FlipPhysBody(PhysBody* body, bool horizontal, bool vertical)
+{
+	if (body == nullptr || body->body == nullptr)
+		return;
+
+	b2Body* b2body = body->body;
+
+	for (b2Fixture* f = b2body->GetFixtureList(); f != nullptr; f = f->GetNext())
+	{
+		b2Shape::Type type = f->GetType();
+		b2Shape* shape = f->GetShape();
+
+		switch (type)
+		{
+		case b2Shape::e_polygon:
+		{
+			b2PolygonShape* polygon = (b2PolygonShape*)shape;
+			b2Vec2 flippedVerts[b2_maxPolygonVertices];
+
+			for (int i = 0; i < polygon->m_count; ++i)
+			{
+				flippedVerts[i] = polygon->m_vertices[i];
+				if (horizontal)
+					flippedVerts[i].x *= -1;
+				if (vertical)
+					flippedVerts[i].y *= -1;
+			}
+
+			// Reemplazar fixture
+			b2FixtureDef fixtureDef;
+			fixtureDef.shape = nullptr;
+			fixtureDef.density = f->GetDensity();
+			fixtureDef.friction = f->GetFriction();
+			fixtureDef.restitution = f->GetRestitution();
+			fixtureDef.isSensor = f->IsSensor();
+			fixtureDef.filter = f->GetFilterData();
+
+			b2PolygonShape newShape;
+			newShape.Set(flippedVerts, polygon->m_count);
+			fixtureDef.shape = &newShape;
+
+			b2body->DestroyFixture(f);
+			b2body->CreateFixture(&fixtureDef);
+			break;
+		}
+		case b2Shape::e_circle:
+		{
+			// Para círculos, solo necesitamos reflejar el centro si no está centrado
+			b2CircleShape* circle = (b2CircleShape*)shape;
+			b2Vec2 pos = circle->m_p;
+
+			if (horizontal) pos.x *= -1;
+			if (vertical) pos.y *= -1;
+
+			b2CircleShape newCircle;
+			newCircle.m_radius = circle->m_radius;
+			newCircle.m_p = pos;
+
+			b2FixtureDef fixtureDef;
+			fixtureDef.shape = &newCircle;
+			f->GetFilterData(); // Mantener filtros
+			fixtureDef.density = f->GetDensity();
+			fixtureDef.friction = f->GetFriction();
+			fixtureDef.restitution = f->GetRestitution();
+			fixtureDef.isSensor = f->IsSensor();
+			fixtureDef.filter = f->GetFilterData();
+
+			b2body->DestroyFixture(f);
+			b2body->CreateFixture(&fixtureDef);
+			break;
+		}
+		default:
+			LOG("FlipPhysBody: Shape type not supported for flipping.");
+			break;
+		}
+	}
+
+	// También puedes invertir la escala visual si tienes sprites ligados
+}
+

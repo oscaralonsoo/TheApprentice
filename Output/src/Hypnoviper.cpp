@@ -4,9 +4,10 @@
 #include "Scene.h"
 #include "EntityManager.h"
 #include "Textures.h"
+#include "Audio.h"
 
 
-Hypnoviper::Hypnoviper() : Enemy(EntityType::HYPNOVIPER) {
+Hypnoviper::Hypnoviper() : Enemy(EntityType::HYPNOVIPER)  {
 }
 
 Hypnoviper::~Hypnoviper() {
@@ -21,7 +22,7 @@ bool Hypnoviper::Start() {
     pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX(), (int)position.getY(), texW / 1.3, texH / 1.2, bodyType::DYNAMIC, 130, 20);
 
     //Assign collider type
-    pbody->ctype = ColliderType::ENEMY;
+    pbody->ctype = ColliderType::PLATFORM;
 
     pbody->listener = this;
 
@@ -43,17 +44,18 @@ bool Hypnoviper::Start() {
         }
     }
 
-    // En Hypnoviper::Start(), después de crear el pbody
     b2Fixture* fixture = pbody->body->GetFixtureList();
     if (fixture) {
         b2Filter filter;
         filter.categoryBits = CATEGORY_ENEMY;
-        filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_PLAYER_DAMAGE | CATEGORY_ATTACK;
+        filter.maskBits = CATEGORY_PLATFORM | CATEGORY_WALL | CATEGORY_PLAYER | CATEGORY_ATTACK;
         fixture->SetFilterData(filter);
     }
 
-
     currentAnimation = &sleepAnim;
+
+    soundSleepId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Hypnoviper/hypnoviper_sleep.ogg", 1.0f);
+    soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Hypnoviper/hypnoviper_death.ogg", 1.0f);
 
     return true;
 }
@@ -63,6 +65,15 @@ bool Hypnoviper::Update(float dt) {
     switch (currentState)
     {
     case HypnoviperState::SLEEPING:
+        if (!sleepSoundPlayed) {
+            sleepSoundTimer -= dt;
+            if (sleepSoundTimer <= 0.0f) {
+                Engine::GetInstance().audio->PlayFx(soundSleepId, 0.5f, 0);
+                sleepSoundTimer = sleepSoundInterval;
+            }
+        }
+        deadSoundPlayed = false;
+
         if (currentAnimation != &sleepAnim) currentAnimation = &sleepAnim;
 
         break;
@@ -76,6 +87,12 @@ bool Hypnoviper::Update(float dt) {
 
         break;
     case HypnoviperState::DEAD:
+        if (!deadSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundDeadId, 0.5f, 0);
+            deadSoundPlayed = true;
+        }
+        sleepSoundPlayed = false;
+
         if (currentAnimation != &deadAnim) currentAnimation = &deadAnim;
         
         pbody->body->GetFixtureList()->SetSensor(true);
@@ -90,7 +107,6 @@ bool Hypnoviper::Update(float dt) {
 }
 
 bool Hypnoviper::PostUpdate() {
-    
     if (currentState == HypnoviperState::DEAD && currentAnimation->HasFinished()) {
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
     }

@@ -26,7 +26,12 @@ float Vector2D::magnitude() const {
     return std::sqrt(x * x + y * y);
 }
 
-Vector2D Vector2D::normalized() const {
+float Vector2D::Length() const
+{
+    return std::sqrt(x * x + y * y);
+}
+
+Vector2D Vector2D::Normalized() const {
     float mag = magnitude();
     return Vector2D(x / mag, y / mag);
 }

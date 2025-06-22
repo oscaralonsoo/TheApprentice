@@ -9,12 +9,24 @@
 #include "Enemy.h"
 #include "CaveDrop.h"
 #include "LifePlant.h"
+#include "LifePlantMax.h"
 #include "Engine.h"
 #include "EntityManager.h"
 #include "AbilityZone.h"
 #include "HiddenZone.h"
+#include "Dreadspire.h"
 #include "DestructibleWall.h"
 #include "PushableBox.h"
+#include "PressurePlate.h"
+#include "PressureDoor.h"
+#include "HelpZone.h"
+#include "Checkpoint.h"
+#include "HookAnchor.h"
+#include "HokableBox.h"
+#include "Geyser.h"
+#include "Stalactite.h"
+#include "Player.h"
+#include "Scene.h"
 
 Map::Map() : Module(), mapLoaded(false)
 {
@@ -39,6 +51,15 @@ bool Map::Start() {
 
 bool Map::Update(float dt)
 {
+    Scene* scene = Engine::GetInstance().scene.get();
+    if (scene) {
+        Player* player = scene->GetPlayer();
+        if (player) {
+            int movementDir = player->GetMechanics()->GetMovementHandler()->GetMovementDirection();
+            Engine::GetInstance().render->UpdateCamera(player->GetPosition(), movementDir, 0.05f); // o el smoothing deseado
+        }
+    }
+
     if (mapLoaded) {
         DrawMapLayers(false); // solo capas que NO son Forward
     }
@@ -64,8 +85,24 @@ void Map::DrawMapLayers(bool forwardOnly)
         if (mapLayer->properties.GetProperty("Draw") != NULL &&
             mapLayer->properties.GetProperty("Draw")->value == true) {
 
-            for (int i = 0; i < mapData.width; i++) {
-                for (int j = 0; j < mapData.height; j++) {
+            Vector2D camPos = Vector2D(Engine::GetInstance().render->camera.x * -1, Engine::GetInstance().render->camera.y * -1);
+            if (camPos.getX() < 0) camPos.setX(0);
+            if (camPos.getY() < 0) camPos.setY(0);
+            Vector2D camPosTile = WorldToMap(camPos.getX(), camPos.getY());
+
+            int windowWidth, windowHeight;
+            SDL_GetRendererOutputSize(Engine::GetInstance().render->renderer, &windowWidth, &windowHeight);
+
+            Vector2D camOffset = {5, 5};
+            Vector2D camSize = Vector2D(windowWidth, windowHeight);
+            Vector2D camSizeTile = WorldToMap(camSize.getX(), camSize.getY());
+
+            Vector2D limits = Vector2D(camPosTile.getX() + camSizeTile.getX() + camOffset.x, camPosTile.getY() + camSizeTile.getY() + camOffset.y);
+            if (limits.getX() > mapData.width) limits.setX(mapData.width);
+            if (limits.getY() > mapData.height) limits.setY(mapData.height);
+
+            for (int i = camPosTile.getX(); i < limits.getX(); i++) {
+                for (int j = camPosTile.getY(); j < limits.getY(); j++) {
 
                     uint32_t raw_gid = static_cast<uint32_t>(mapLayer->Get(i, j));
                     if (raw_gid != 0) {
@@ -131,7 +168,6 @@ void Map::DrawMapLayers(bool forwardOnly)
     }
 }
 
-
 // L09: TODO 2: Implement function to the Tileset based on a tile id
 TileSet* Map::GetTilesetFromTileId(uint32_t gid) const
 {
@@ -188,15 +224,10 @@ bool Map::Load(std::string path, std::string fileName)
         ret = false;
     }
     else {
-
-        // L06: TODO 3: Implement LoadMap to load the map properties
-        // retrieve the paremeters of the <map> node and store the into the mapData struct
         mapData.width = mapFileXML.child("map").attribute("width").as_int();
         mapData.height = mapFileXML.child("map").attribute("height").as_int();
         mapData.tileWidth = mapFileXML.child("map").attribute("tilewidth").as_int();
         mapData.tileHeight = mapFileXML.child("map").attribute("tileheight").as_int();
-
-        // L06: TODO 4: Implement the LoadTileSet function to load the tileset properties
 
         //Iterate the Tileset
         for (pugi::xml_node tilesetNode = mapFileXML.child("map").child("tileset"); tilesetNode != NULL; tilesetNode = tilesetNode.next_sibling("tileset"))
@@ -219,18 +250,14 @@ bool Map::Load(std::string path, std::string fileName)
             mapData.tilesets.push_back(tileSet);
         }
 
-        // L07: TODO 3: Iterate all layers in the TMX and load each of them
         for (pugi::xml_node layerNode = mapFileXML.child("map").child("layer"); layerNode != NULL; layerNode = layerNode.next_sibling("layer")) {
 
-            // L07: TODO 4: Implement the load of a single layer 
-            //Load the attributes and saved in a new MapLayer
             MapLayer* mapLayer = new MapLayer();
             mapLayer->id = layerNode.attribute("id").as_int();
             mapLayer->name = layerNode.attribute("name").as_string();
             mapLayer->width = layerNode.attribute("width").as_int();
             mapLayer->height = layerNode.attribute("height").as_int();
 
-            //L09: TODO 6 Call Load Layer Properties
             LoadProperties(layerNode, mapLayer->properties);
 
             //Iterate over all the tiles and assign the values in the data array
@@ -242,11 +269,7 @@ bool Map::Load(std::string path, std::string fileName)
             mapData.layers.push_back(mapLayer);
         }
 
-        // L08 TODO 3: Create colliders
-        // L08 TODO 7: Assign collider type
-        // Later you can create a function here to load and create the colliders from the map
-
-        // L08 TODO 3: Create colliders
+        // Create colliders
         for (pugi::xml_node objectGroupNode = mapFileXML.child("map").child("objectgroup"); objectGroupNode; objectGroupNode = objectGroupNode.next_sibling("objectgroup"))
         {
             std::string objectGroupName = objectGroupNode.attribute("name").as_string();
@@ -303,6 +326,53 @@ bool Map::Load(std::string path, std::string fileName)
                     LOG("Creating collider at x: %d, y: %d, width: %d, height: %d", x + (width / 2), y + (height / 2), width, height);
                 }
             }
+            else if (objectGroupName == "Liana") // Objects from layer Collisions
+            {
+                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
+                {
+                    int x = objectNode.attribute("x").as_int();
+                    int y = objectNode.attribute("y").as_int();
+                    int width = objectNode.attribute("width").as_int();
+                    int height = objectNode.attribute("height").as_int();
+
+                    PhysBody* lianaCollider = Engine::GetInstance().physics->CreateRectangleSensor(x + (width / 2), y + (height / 2), width, height, STATIC, CATEGORY_LIANA, CATEGORY_PLAYER);
+                    lianaCollider->ctype = ColliderType::LIANA;
+
+                    Engine::GetInstance().physics->listToDelete.push_back(lianaCollider);
+
+                    LOG("Creating collider at x: %d, y: %d, width: %d, height: %d", x + (width / 2), y + (height / 2), width, height);
+                }
+            }
+            else if (objectGroupName == "HookAnchors")
+            {
+                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
+                {
+                    int x = objectNode.attribute("x").as_int();
+                    int y = objectNode.attribute("y").as_int();
+                    int width = objectNode.attribute("width").as_int();
+                    int height = objectNode.attribute("height").as_int();
+                    std::string texturePath = objectNode.attribute("texture").as_string();
+
+                    pugi::xml_document tempDoc;
+                    pugi::xml_node node = tempDoc.append_child("hook_anchor");
+                    node.append_attribute("x") = x;
+                    node.append_attribute("y") = y;
+                    node.append_attribute("w") = width;
+                    node.append_attribute("h") = height;
+                    node.append_attribute("texture") = texturePath.c_str();
+
+                    HookAnchor* anchor = (HookAnchor*)Engine::GetInstance().entityManager->CreateEntity(EntityType::HOOK_ANCHOR);
+                    if (anchor != nullptr)
+                    {
+                        anchor->SetParameters(node);
+                        LOG("Created HookAnchor at x: %d, y: %d", x, y);
+                    }
+                    else
+                    {
+                        LOG("ERROR: No se pudo crear HookAnchor. Verifica que esté registrado en EntityManager.");
+                    }
+                }
+            }
             else if (objectGroupName == "Wall") // Objects from layer Collisions
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
@@ -320,6 +390,25 @@ bool Map::Load(std::string path, std::string fileName)
                     LOG("Creating collider at x: %d, y: %d, width: %d, height: %d", x + (width / 2), y + (height / 2), width, height);
                 }
             }
+            else if (objectGroupName == "HelpZone")
+            {
+                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
+                {
+                    std::string objectName = objectNode.attribute("name").as_string();
+                    int x = objectNode.attribute("x").as_int();
+                    int y = objectNode.attribute("y").as_int();
+                    int width = objectNode.attribute("width").as_int();
+                    int height = objectNode.attribute("height").as_int();
+
+                    HelpZone* helpZone = (HelpZone*)Engine::GetInstance().entityManager->CreateEntity(EntityType::HELP_ZONE);
+                    helpZone->position = Vector2D(x, y);
+                    helpZone->SetWidth(width);
+                    helpZone->SetHeight(height);
+                    helpZone->SetTextureName(objectName);
+
+                    LOG("Created HelpZone entity '%s' at x: %d, y: %d", objectName.c_str(), x, y);
+                }
+            }
             else if (layerName == "Doors")  // Objects from layer Doors
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode != NULL; objectNode = objectNode.next_sibling("object"))
@@ -329,7 +418,6 @@ bool Map::Load(std::string path, std::string fileName)
                     int width = objectNode.attribute("width").as_int();
                     int height = objectNode.attribute("height").as_int();
 
-                    // Create Door type Collider
                     PhysBody* doorCollider = Engine::GetInstance().physics->CreateRectangleSensor(x + (width / 2), y + (height / 2), width, height, STATIC, CATEGORY_DOOR, CATEGORY_PLAYER);
                     doorCollider->ctype = ColliderType::DOOR;
 
@@ -357,29 +445,7 @@ bool Map::Load(std::string path, std::string fileName)
 
                     Engine::GetInstance().physics->listToDelete.push_back(doorCollider);
 
-                    LOG("Creating Door at x: %d, y: %d, width: %d, height: %d", x + (width / 2), y + (height / 2), width, height);
-                }
-            }
-            else if (objectGroupName == "SaveGame") // Objects from layer SaveGame
-            {   
-                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
-                {
-                    int x = objectNode.attribute("x").as_int();
-                    int y = objectNode.attribute("y").as_int();
-                    int width = objectNode.attribute("width").as_int();
-                    int height = objectNode.attribute("height").as_int();
-
-                    PhysBody* saveGameCollider = Engine::GetInstance().physics->CreateRectangleSensor(
-                        x + (width / 2),
-                        y + (height / 2),
-                        width, height,
-                        STATIC,
-                        CATEGORY_SAVEGAME,      // Solo SaveGame
-                        CATEGORY_PLAYER          // Solo interactúa con el jugador
-                    );
-                    saveGameCollider->ctype = ColliderType::SAVEGAME;
-
-                    Engine::GetInstance().physics->listToDelete.push_back(saveGameCollider);
+                    LOG("Creating SceneDoor at x: %d, y: %d, width: %d, height: %d", x + (width / 2), y + (height / 2), width, height);
                 }
             }
             else if (objectGroupName == "DownCamera") // Objects from layer DownCamera
@@ -396,14 +462,14 @@ bool Map::Load(std::string path, std::string fileName)
                         y + (height / 2),
                         width, height,
                         STATIC,
-                        CATEGORY_DOWN_CAMERA,   // su categoría
-                        CATEGORY_PLAYER         // solo colisiona con el jugador
+                        CATEGORY_DOWN_CAMERA, 
+                        CATEGORY_PLAYER       
                     );
                     downCameraCollider->ctype = ColliderType::DOWN_CAMERA;
 
                     Engine::GetInstance().physics->listToDelete.push_back(downCameraCollider);
                 }
-                }
+            }
             else if (objectGroupName == "Abilities") //Abilities from object layer "Abilities"
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
@@ -425,22 +491,20 @@ bool Map::Load(std::string path, std::string fileName)
 
                     abilityNode.append_attribute("type") = abilityName.c_str();
                     abilityNode.append_attribute("x") = x + width / 2;
-                    abilityNode.append_attribute("y") = y ;
+                    abilityNode.append_attribute("y") = y;
                     abilityNode.append_attribute("w") = width;
                     abilityNode.append_attribute("h") = height;
 
                     AbilityZone* abilityZone = nullptr;
 
-                    if (abilityName == "Jump")
+                    if (abilityName == "Jump" || abilityName == "DoubleJump" || abilityName == "Dash" || abilityName == "Glide" || abilityName == "WallJump" || abilityName == "Hook" || abilityName == "Push")
                         abilityZone = (AbilityZone*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ABILITY_ZONE);
                     if (abilityZone != nullptr)
                     {
-                        printf("[Map] AbilityZone final size: type=%s, x=%d, y=%d, w=%d, h=%d\n",
-                            abilityName.c_str(), x, y, width, height);
-
                         abilityZone->SetParameters(abilityNode);
 
-                        LOG("Created enemy '%s' at x: %d, y: %d", abilityName.c_str(), x, y);
+                        printf("[Map] AbilityZone final size: type=%s, x=%d, y=%d, w=%d, h=%d\n",
+                            abilityName.c_str(), x, y, width, height);
                     }
                 }
             }
@@ -466,7 +530,7 @@ bool Map::Load(std::string path, std::string fileName)
                     wall->SetParameters(node);
                 }
             }
-            else if (objectGroupName == "PushableBoxes")
+            else if (objectGroupName == "HookableBoxes")
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
                 {
@@ -477,14 +541,14 @@ bool Map::Load(std::string path, std::string fileName)
                     std::string texturePath = objectNode.attribute("texture").as_string();
 
                     pugi::xml_document tempDoc;
-                    pugi::xml_node node = tempDoc.append_child("box");
+                    pugi::xml_node node = tempDoc.append_child("hookable_box");
                     node.append_attribute("x") = x;
                     node.append_attribute("y") = y;
                     node.append_attribute("w") = width;
                     node.append_attribute("h") = height;
                     node.append_attribute("texture") = texturePath.c_str();
 
-                    PushableBox* box = (PushableBox*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PUSHABLE_BOX);
+                    HookableBox* box = (HookableBox*)Engine::GetInstance().entityManager->CreateEntity(EntityType::HOOKABLE_BOX);
                     box->SetParameters(node);
                 }
             }
@@ -499,9 +563,19 @@ bool Map::Load(std::string path, std::string fileName)
                         int y = objectNode.attribute("y").as_int();
 
                         CaveDrop* caveDrop = (CaveDrop*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CAVE_DROP);
-                        caveDrop->position = Vector2D(x, y); 
+                        caveDrop->position = Vector2D(x, y);
 
                         LOG("Created CaveDrop at x: %d, y: %d", x, y);
+                    }
+                    else if (objectName == "Stalactite") {
+                        int x = objectNode.attribute("x").as_int();
+                        int y = objectNode.attribute("y").as_int();
+                        int stalactiteVariant = objectNode.child("properties").child("property").attribute("value").as_int();
+                        Stalactite* stalactite = (Stalactite*)Engine::GetInstance().entityManager->CreateEntity(EntityType::STALACTITE);
+                        stalactite->position = Vector2D(x, y);
+                        stalactite->variant = stalactiteVariant;
+
+                        LOG("Created Stalactite at x: %d, y: %d", x, y);
                     }
                     else if (objectName == "LifePlant") {
                         int x = objectNode.attribute("x").as_int();
@@ -511,6 +585,60 @@ bool Map::Load(std::string path, std::string fileName)
                         lifePlant->position = Vector2D(x, y);
 
                         LOG("Created LifePlant at x: %d, y: %d", x, y);
+                    }
+                    else if (objectName == "LifePlantMax") {
+                        int x = objectNode.attribute("x").as_int();
+                        int y = objectNode.attribute("y").as_int();
+
+                        LifePlantMax* lifePlantMax = (LifePlantMax*)Engine::GetInstance().entityManager->CreateEntity(EntityType::LIFE_PLANT_MAX);
+                        lifePlantMax->position = Vector2D(x, y);
+
+                        LOG("Created LifePlant at x: %d, y: %d", x, y);
+                    }
+                    else if (objectName == "Checkpoint")
+                    {
+                        int x = objectNode.attribute("x").as_int();
+                        int y = objectNode.attribute("y").as_int();
+                        int width = objectNode.attribute("width").as_int();
+                        int height = objectNode.attribute("height").as_int();
+
+                        Checkpoint* checkpoint = (Checkpoint*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CHECKPOINT);
+                        checkpoint->position = Vector2D(x, y);
+                        checkpoint->height = height;
+                        checkpoint->width = width;
+
+                        LOG("Created Checkpoint at x: %d, y: %d", x, y);
+                    }
+                    else if (objectName == "Geyser")
+                    {
+                        int x = objectNode.attribute("x").as_int();
+                        int y = objectNode.attribute("y").as_int();
+                        int width = objectNode.attribute("width").as_int();
+                        int height = objectNode.attribute("height").as_int();
+
+                        Geyser* geyser = (Geyser*)Engine::GetInstance().entityManager->CreateEntity(EntityType::GEYSER);
+                        geyser->position = Vector2D(x, y);
+                        geyser->height = height;
+                        geyser->width = width;
+
+                        LOG("Created Geyser at x: %d, y: %d", x, y);
+                    }
+                    else if (objectName == "Box")
+                    {
+                        int x = objectNode.attribute("x").as_int();
+                        int y = objectNode.attribute("y").as_int();
+                        int width = objectNode.attribute("width").as_int();
+                        int height = objectNode.attribute("height").as_int();
+
+                        pugi::xml_document tempDoc;
+                        pugi::xml_node node = tempDoc.append_child("box");
+                        node.append_attribute("x") = x;
+                        node.append_attribute("y") = y;
+                        node.append_attribute("w") = width;
+                        node.append_attribute("h") = height;
+
+                        PushableBox* box = (PushableBox*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PUSHABLE_BOX);
+                        box->SetParameters(node);
                     }
                 }
             }
@@ -530,7 +658,7 @@ bool Map::Load(std::string path, std::string fileName)
                         hiddenZone->position = Vector2D(x, y);
                         hiddenZone->SetWidth(w);
                         hiddenZone->SetHeight(h);
-                        
+
                         LOG("Created Hidden Zone at x: %d, y: %d", x, y);
                     }
                 }
@@ -542,7 +670,6 @@ bool Map::Load(std::string path, std::string fileName)
                     std::string enemyName = objectNode.attribute("name").as_string();
                     int x = objectNode.attribute("x").as_int();
                     int y = objectNode.attribute("y").as_int();
-
                     int width, height;
                     GetEnemyDimensionsFromConfig(enemyName, width, height);
 
@@ -562,25 +689,63 @@ bool Map::Load(std::string path, std::string fileName)
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BLOODRUSHER);
                     else if (enemyName == "Hypnoviper")
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::HYPNOVIPER);
-                    else if (enemyName == "Creebler")
+                    else if (enemyName == "Creebler") {
+                        for (pugi::xml_node propertyNode = objectNode.child("properties").child("property"); propertyNode != NULL; propertyNode = propertyNode.next_sibling("property")) {
+                            std::string propertyName = propertyNode.attribute("name").as_string();
+
+                            if (propertyName == "navigationId")
+                                enemyNode.append_attribute("navigationId") = propertyNode.attribute("value").as_int();
+
+                            else if (propertyName == "navigationLayer")
+                                enemyNode.append_attribute("navigationLayer") = propertyNode.attribute("value").as_string();
+                        }
+
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CREEBLER);
-                    else if (enemyName == "Scurver")
+                    }
+                    else if (enemyName == "Scurver") {
+                        enemyNode.append_attribute("gravity") = true;
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::SCURVER);
+                    }
+                    else if (enemyName == "Shyver") {
+                        enemyNode.append_attribute("gravity") = false;
+                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::SHYVER);
+                    }
+                    else if (enemyName == "Nullwarden")
+                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::NULLWARDEN);
                     else if (enemyName == "Thumpod")
+                    {
+                        enemyNode.append_attribute("gravity") = true;
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::THUMPOD);
+                    }
                     else if (enemyName == "Mireborn") {
+                        enemyNode.append_attribute("gravity") = true;
                         enemyNode.append_attribute("tier") = "Alpha";
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::MIREBORN);
                     }
-                    else if (enemyName == "Broodheart"){
+                    else if (enemyName == "Broodheart") {
                         enemyNode.append_attribute("gravity") = false;
-                    enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BROODHEART);
+                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BROODHEART);
                     }
-                    else if (enemyName == "Brood")
+                    else if (enemyName == "Brood") {
+                        enemyNode.append_attribute("gravity") = true;
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BROOD);
+                    }
                     else if (enemyName == "Noctilume") {
-                        enemyNode.append_attribute("gravity") = false;
+                        enemyNode.append_attribute("gravity") = true;
                         enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::NOCTILUME);
+                    }
+                    else if (enemyName == "Dreadspire") {
+                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::DREADSPIRE);
+                        for (pugi::xml_node propertyNode = objectNode.child("properties").child("property"); propertyNode != NULL; propertyNode = propertyNode.next_sibling("property"))
+                        {
+                            std::string propertyName = propertyNode.attribute("name").as_string();
+
+                            if (propertyName == "rotationAngle")
+                                enemy->rotationAngle = propertyNode.attribute("value").as_int();
+                        }
+                    }
+                    else if (enemyName == "DungBeetle") {
+                        enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::DUNGBEETLE);
                     }
 
                     if (enemy != nullptr)
@@ -616,8 +781,26 @@ bool Map::Load(std::string path, std::string fileName)
 
                     if (npcName == "Castor")
                         npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CASTOR);
-                    else if (npcName == "JavierGomez")
-                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CASTOR);
+                    else if (npcName == "Liebre")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::LIEBRE);
+                    else if (npcName == "Perdiz")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PERDIZ);
+                    else if (npcName == "Pangolin")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PANGOLIN);
+                    else if (npcName == "Ardilla")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ARDILLA);
+                    else if (npcName == "Invisible")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::INVISIBLE);
+                    else if (npcName == "CaracolMail")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CARACOL_MAIL);
+                    else if (npcName == "Carta")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CARTA);
+                    else if (npcName == "ArdillaLiana")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ARDILLA_LIANA);
+                    else if (npcName == "Caracol")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CARACOL);
+                    else if (npcName == "BichoPalo")
+                        npc = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BICHOPALO);
 
                     if (npc != nullptr)
                     {
@@ -625,6 +808,68 @@ bool Map::Load(std::string path, std::string fileName)
                         LOG("Created NPC '%s' at x: %d, y: %d", npcName.c_str(), x, y);
                     }
                 }
+            }
+            else if (objectGroupName == "PressureSystem")
+            {
+                std::vector<PressurePlate*> plates;
+                std::vector<PressureDoor*> doors;
+
+                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
+                {
+                    std::string objectName = objectNode.attribute("name").as_string();
+
+                    int x = objectNode.attribute("x").as_int();
+                    int y = objectNode.attribute("y").as_int();
+                    int w = objectNode.attribute("width").as_int();
+                    int h = objectNode.attribute("height").as_int();
+
+                    int id = 0;
+                    bool isInvisible = false; 
+                    bool isOpen = false;
+
+                    // Accede a las propiedades del objeto
+                    for (pugi::xml_node propertyNode = objectNode.child("properties").child("property"); propertyNode; propertyNode = propertyNode.next_sibling("property"))
+                    {
+                        std::string propertyName = propertyNode.attribute("name").as_string();
+                        if (propertyName == "groupId")
+                        {
+                            id = propertyNode.attribute("value").as_int();
+                        }
+                        else if (propertyName == "isInvisible")
+                        {
+                            isInvisible = propertyNode.attribute("value").as_bool();
+                        }
+                        else if (propertyName == "isOpen")
+                        {
+                            isOpen = propertyNode.attribute("value").as_bool();
+                        }
+                    }
+
+                    if (objectName == "Plate")
+                    {
+                        PressurePlate* plate = (PressurePlate*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PRESSURE_PLATE);
+                        plate->position = Vector2D(x, y);
+                        plate->isInvisible = isInvisible;
+                        plate->id = id;
+                        plates.push_back(plate);
+
+                        LOG("Created Plate at x: %d, y: %d", x, y);
+                    }
+                    else if (objectName == "Door")
+                    {
+                        PressureDoor* door = (PressureDoor*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PRESSURE_DOOR);
+                        door->position = Vector2D(x, y);
+                        door->width = w;
+                        door->height = h;
+                        door->id = id;
+                        door->shouldBeOpen = isOpen;
+                        doors.push_back(door);
+
+                        LOG("Created Door at x: %d, y: %d", x, y);
+                    }
+                }
+                Engine::GetInstance().pressureSystem->plates = plates;
+                Engine::GetInstance().pressureSystem->doors = doors;
             }
         }
         ret = true;
@@ -700,6 +945,18 @@ bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
     return ret;
 }
 
+bool Map::IsPlatformTile(int tileX, int tileY) const {
+    for (const auto& layer : mapData.layers) {
+        if (layer->name == "Platforms") {
+            uint32_t gid = layer->Get(tileX, tileY);
+            if (gid != 0) return true;
+            else return false;
+        }
+    }
+    return false;
+}
+
+
 MapLayer* Map::GetNavigationLayer() {
     for (const auto& layer : mapData.layers) {
         if (layer->properties.GetProperty("Navigation") != NULL &&
@@ -709,6 +966,40 @@ MapLayer* Map::GetNavigationLayer() {
     }
 
     return nullptr;
+}
+
+MapLayer* Map::GetNavigationLayerByName(const std::string& name) {
+    for (const auto& layer : mapData.layers) {
+        if (layer->name == name &&
+            layer->properties.GetProperty("Navigation") != nullptr &&
+            layer->properties.GetProperty("Navigation")->value) {
+            return layer;
+        }
+    }
+    return nullptr;
+}
+
+void Map::SetNavigationTileRegion(int x, int y, int w, int h, uint32_t newTileId) {
+    for (const auto& layer : mapData.layers) {
+        if (layer->properties.GetProperty("Navigation") != nullptr &&
+            layer->properties.GetProperty("Navigation")->value) {
+
+            for (int j = 0; j < h; ++j) {
+                for (int i = 0; i < w; ++i) {
+                    int tileX = x + i;
+                    int tileY = y + j;
+
+                    if (tileX < 0 || tileY < 0 || tileX >= layer->width || tileY >= layer->height)
+                        continue;
+
+                    size_t index = tileY * layer->width + tileX;
+                    layer->tiles[index] = newTileId;
+                }
+            }
+
+            break;
+        }
+    }
 }
 
 Properties::Property* Properties::GetProperty(const char* name)

@@ -12,9 +12,12 @@
 #include "EntityManager.h"
 #include "DialogueManager.h"
 #include "ParticleManager.h"
+#include "PressureSystemController.h"
 #include "Map.h"
+#include "GameMap.h"
 #include "Physics.h"
 #include "GuiManager.h"
+#include "tracy/Tracy.hpp"
 
 // Constructor
 Engine::Engine() {
@@ -27,8 +30,6 @@ Engine::Engine() {
     frameTime = PerfTimer();
     lastSecFrameTime = PerfTimer();
     frames = 0;
-
-    // L4: TODO 1: Add the EntityManager Module to the Engine
     
     // Modules
     window = std::make_shared<Window>();
@@ -36,13 +37,14 @@ Engine::Engine() {
     render = std::make_shared<Render>();
     textures = std::make_shared<Textures>();
     audio = std::make_shared<Audio>();
-    // L08: TODO 2: Add Physics module
     physics = std::make_shared<Physics>();
     map = std::make_shared<Map>();
+    gameMap = std::make_shared<GameMap>();
     entityManager = std::make_shared<EntityManager>();
     particleManager = std::make_shared<ParticleManager>();
     scene = std::make_shared<Scene>();
     dialogueManager = std::make_shared<DialogueManager>();
+    pressureSystem = std::make_shared<PressureSystemController>();
     menus = std::make_shared<Menus>();
     guiManager = std::make_shared<GuiManager>();
 
@@ -54,11 +56,13 @@ Engine::Engine() {
     AddModule(std::static_pointer_cast<Module>(audio));
     // L08: TODO 2: Add Physics module
     AddModule(std::static_pointer_cast<Module>(physics));
-    AddModule(std::static_pointer_cast<Module>(scene));
     AddModule(std::static_pointer_cast<Module>(map));
+    AddModule(std::static_pointer_cast<Module>(gameMap));
+    AddModule(std::static_pointer_cast<Module>(scene));
     AddModule(std::static_pointer_cast<Module>(entityManager));
     AddModule(std::static_pointer_cast<Module>(particleManager));
     AddModule(std::static_pointer_cast<Module>(dialogueManager));
+    AddModule(std::static_pointer_cast<Module>(pressureSystem));
     AddModule(std::static_pointer_cast<Module>(menus));
     AddModule(std::static_pointer_cast<Module>(guiManager));
     // Render last 
@@ -128,6 +132,13 @@ bool Engine::Start() {
 
     LOG("Timer App Start(): %f", timer.ReadMSec());
 
+    SDL_Surface* icon = IMG_Load("Assets/Icono/iconTheApprentice.png");
+
+    if (icon != nullptr) {
+        SDL_SetWindowIcon(window->window, icon);
+        SDL_FreeSurface(icon);
+    }
+
     return result;
 }
 
@@ -178,12 +189,16 @@ bool Engine::CleanUp() {
 // ---------------------------------------------
 void Engine::PrepareUpdate()
 {
+    ZoneScoped;
+
     frameTime.Start();
 }
 
 // ---------------------------------------------
 void Engine::FinishUpdate()
 {
+    ZoneScoped;
+
     // L03: TODO 1: Cap the framerate of the gameloop
     double currentDt = frameTime.ReadMs();
     if (maxFrameDuration > 0 && currentDt < maxFrameDuration) {
@@ -219,11 +234,7 @@ void Engine::FinishUpdate()
     // Shows the time measurements in the window title
     // check sprintf formats here https://cplusplus.com/reference/cstdio/printf/
     std::stringstream ss;
-    ss << gameTitle << ": Av.FPS: " << std::fixed << std::setprecision(2) << averageFps
-        << " Last sec frames: " << framesPerSecond
-        << " Last dt: " << std::fixed << std::setprecision(3) << dt
-        << " Time since startup: " << secondsSinceStartup
-        << " Frame Count: " << frameCount;
+    ss << gameTitle;
 
     std::string titleStr = ss.str();
 
@@ -233,6 +244,8 @@ void Engine::FinishUpdate()
 // Call modules before each loop iteration
 bool Engine::PreUpdate()
 {
+    ZoneScoped;
+
     //Iterates the module list and calls PreUpdate on each module
     bool result = true;
     for (const auto& module : moduleList) {
@@ -248,6 +261,8 @@ bool Engine::PreUpdate()
 // Call modules on each loop iteration
 bool Engine::DoUpdate()
 {
+    ZoneScoped;
+
     //Iterates the module list and calls Update on each module
     bool result = true;
     for (const auto& module : moduleList) {
@@ -263,6 +278,8 @@ bool Engine::DoUpdate()
 // Call modules after each loop iteration
 bool Engine::PostUpdate()
 {
+    ZoneScoped;
+
     //Iterates the module list and calls PostUpdate on each module
     bool result = true;
     for (const auto& module : moduleList) {

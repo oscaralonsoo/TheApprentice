@@ -2,6 +2,7 @@
 
 #include "GuiControl.h"
 #include "Vector2D.h"
+#include <SDL2/SDL_gamecontroller.h>
 
 class GuiControlButton : public GuiControl
 {
@@ -15,6 +16,7 @@ public:
 	bool Update(float dt);
 
 	void ButtonNavigation();
+	bool Start();
 
 
 
@@ -22,6 +24,7 @@ private:
 
 	bool canClick = true;
 	bool drawBasic = false;
+	bool dpadUpHeld = false;
+	bool dpadDownHeld = false;
+	bool aHeld = false;
 };
-
-#pragma once

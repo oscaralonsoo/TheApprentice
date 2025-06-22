@@ -2,6 +2,8 @@
 
 #include "Entity.h"
 #include "SDL2/SDL.h"
+#include "Physics.h"
+#include "Timer.h"
 
 class PushableBox : public Entity
 {
@@ -14,17 +16,30 @@ public:
     bool Update(float dt) override;
     bool CleanUp() override;
 
-    void SetParameters(pugi::xml_node parameters);
     void SetPosition(Vector2D pos);
     void OnCollision(PhysBody* physA, PhysBody* physB) override;
     void OnCollisionEnd(PhysBody* physA, PhysBody* physB) override;
+
     Vector2D GetPosition() const;
 
-private:
+    void SetParameters(pugi::xml_node parameters) {
+        this->parameters = parameters;
+        position.x = parameters.attribute("x").as_int();
+        position.y = parameters.attribute("y").as_int();
+        width = parameters.attribute("w").as_int();
+        height = parameters.attribute("h").as_int();
+    }
+
+protected:
     PhysBody* pbody = nullptr;
     SDL_Texture* texture = nullptr;
-    int texW = 0;
-    int texH = 0;
-    Vector2D position;
-    bool touchingPlayer = false;
+    pugi::xml_node parameters;
+    Vector2D initPos;
+    bool hasTouchedSpike = false;
+    bool isPlayerPushing = false;
+    bool isEnemyPushing = false;
+
+    bool transitionToPush = false;
+    // En la cabecera (PushableBox.h)
+    bool wasPlayerPushingLastFrame = false;
 };

@@ -1,4 +1,4 @@
-#include "Noctilume.h"
+﻿#include "Noctilume.h"
 #include "Engine.h"
 #include "Physics.h"
 #include "Scene.h"
@@ -6,22 +6,18 @@
 #include "Textures.h"
 #include "Entity.h"
 #include "Log.h"
+#include "Audio.h"
 #include <cmath>
 
-Noctilume::Noctilume() : Enemy(EntityType::NOCTILUME)
-{
-    waveOffset = static_cast<float>(rand() % 628) / 100.0f;
+Noctilume::Noctilume() : Enemy(EntityType::NOCTILUME) {}
+
+Noctilume::~Noctilume() {}
+
+bool Noctilume::Awake() {
+    return true;
 }
 
-Noctilume::~Noctilume() = default;
-
-bool Noctilume::Awake()
-{
-    return false;
-}
-
-bool Noctilume::Start()
-{
+bool Noctilume::Start() {
     pugi::xml_document configDoc;
     if (!configDoc.load_file("config.xml")) return false;
 
@@ -29,199 +25,266 @@ bool Noctilume::Start()
     for (auto node : configDoc.child("config").child("scene").child("animations").child("enemies").children("enemy")) {
         if (node.attribute("type").as_string() == typeName) {
             texture = Engine::GetInstance().textures->Load(node.attribute("texture").as_string());
-            idleAnim.LoadAnimations(node.child("idle"));
-            currentAnimation = &idleAnim;
+            flyingAnim.LoadAnimations(node.child("idle"));
+            attackAnim.LoadAnimations(node.child("attack"));
+            crashAnim.LoadAnimations(node.child("crash"));
+            dieAnim.LoadAnimations(node.child("die"));
+            currentAnimation = &flyingAnim;
             break;
         }
     }
 
-    pbody = Engine::GetInstance().physics->CreateCircleSensor(
-        static_cast<int>(position.getX() + texH / 2),
-        static_cast<int>(position.getY() + texH / 2),
-        texH / 2,
+    int verticalOffset = 50; 
+    pbody = Engine::GetInstance().physics->CreateCircle(
+        static_cast<int>(position.x + texH / 2),
+        static_cast<int>(position.y + texH / 2 - verticalOffset),
+        texH / 4,
         bodyType::DYNAMIC
     );
 
-    pbody->ctype = ColliderType::ENEMY;
-    pbody->listener = this;
+    originalPosition = position;
+    smoothedPosition = position;
+    maxSteps = 20;
 
-    if (!gravity) pbody->body->SetGravityScale(0);
+    soundAttackId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Noctilume/noctilume_attack.ogg", 1.0f);
+    soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Noctilume/noctilume_death.ogg", 1.0f);
+    soundCrashId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Noctilume/noctilume_crash.ogg", 1.0f);
+    soundWalkId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Noctilume/noctilume_walk.ogg", 1.0f);
 
-    pathfinding = new Pathfinding();
-    ResetPath();
-
-    return true;
+    pbody->body->GetFixtureList()->SetSensor(true);
+    return Enemy::Start();
 }
-bool Noctilume::Update(float dt)
-{
-    if (pathfinding->HasFoundPlayer())
-    {
-        HandleStateTransition();
-        TryInitiateDiveAttack(dt);
+
+bool Noctilume::Update(float dt) {
+    CheckState();
+
+    playerPos = Engine::GetInstance().scene->GetPlayerPosition();
+
+    if (playerPos.x < position.x) direction = -1;
+    else direction = 1;
+
+    switch (currentState) {
+    case NoctilumeState::IDLE: Idle(dt); break;
+    case NoctilumeState::CHASING: 
+        walkSoundTimer -= dt;
+        if (walkSoundTimer <= 0.0f) {
+            Engine::GetInstance().audio->PlayFx(soundWalkId, 0.5f, 0);
+            walkSoundTimer = walkSoundInterval;
+        }
+        deadSoundPlayed = false;
+        crashSoundPlayed = false;
+        attackSoundPlayed = false;
+        Chasing(dt); break;
+    case NoctilumeState::PRE_ATTACK: PreAttack(dt); break;
+    case NoctilumeState::ATTACK:
+
+        if (!attackSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundAttackId, 0.5f, 0);
+            attackSoundPlayed = true;
+        }
+        deadSoundPlayed = false;
+        crashSoundPlayed = false;
+        walkSoundPlayed = false;
+        Attack(dt); break;
+    case NoctilumeState::CRASH:
+        if (!crashSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundCrashId, 0.5f, 0);
+            crashSoundPlayed = true;
+        }
+        deadSoundPlayed = false;
+        attackSoundPlayed = false;
+        walkSoundPlayed = false;
+        Crash(dt); break;
+    case NoctilumeState::DEAD: 
+        if (!deadSoundPlayed) {
+            Engine::GetInstance().audio->PlayFx(soundDeadId, 0.5f, 0);
+            deadSoundPlayed = true;
+        }
+        attackSoundPlayed = false;
+        crashSoundPlayed = false;
+        walkSoundPlayed = false;
+        
+        Die(); break;
     }
 
-    switch (currentState)
-    {
-    case NoctilumeState::IDLE:
-        IdleFlying(dt);
-        break;
-    case NoctilumeState::FLYING:
-        Flying(dt);
-        break;
-    case NoctilumeState::DIVE:
-        Dive(dt);
-        break;
-    case NoctilumeState::DEAD:
-        break;
+    if (currentState != NoctilumeState::CRASH && currentState != NoctilumeState::DEAD) {
+        smoothedPosition = smoothedPosition + (position - smoothedPosition) * smoothingSpeed * dt;
     }
-
-    if (pbody)
-    {
-        pbody->body->SetTransform(
-            b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)),
-            0.0f
-        );
-    }
+    pbody->body->SetTransform(b2Vec2(smoothedPosition.x / PIXELS_PER_METER, smoothedPosition.y / PIXELS_PER_METER),0);
 
     return Enemy::Update(dt);
 }
 
-void Noctilume::OnCollision(PhysBody* physA, PhysBody* physB)
-{
-    switch (physB->ctype)
+bool Noctilume::PostUpdate() {
+    if (currentState == NoctilumeState::DEAD && currentAnimation && currentAnimation->HasFinished())
     {
-    case ColliderType::PLAYER:
+        pbody->body->GetFixtureList()->SetSensor(true);
+        Engine::GetInstance().entityManager->DestroyEntity(this);
+    }
+    return true;
+}
+
+bool Noctilume::CleanUp() {
+    return Enemy::CleanUp();
+}
+
+void Noctilume::OnCollision(PhysBody* physA, PhysBody* physB) {
+    Enemy::OnCollision(physA, physB);
+
+    switch (physB->ctype) {
+    case ColliderType::PLATFORM:
+        if (currentState == NoctilumeState::ATTACK && isDiving) {
+            currentState = NoctilumeState::CRASH;
+            crashTimer = 0.0f;
+            isDiving = false;
+        }
+        break;
+    case ColliderType::PLAYER_DAMAGE:
+        if (currentState == NoctilumeState::ATTACK && isDiving)
+            isDiving = false;
+        break;
     case ColliderType::ATTACK:
+        if (currentState == NoctilumeState::CRASH)
+            currentState = NoctilumeState::DEAD;
         break;
     }
 }
 
-bool Noctilume::CleanUp()
-{
-    return false;
-}
+void Noctilume::Idle(float dt) {
 
-void Noctilume::IdleFlying(float dt)
-{
+    currentAnimation = &flyingAnim;
     timePassed += dt;
-
-    const float horizontalRange = 500.0f;
-    const float waveAmplitude = 4.5f;
-    const float waveFrequency = 0.00035f;
 
     float pingPong = fmod(timePassed * waveFrequency * 2 * horizontalRange, 2 * horizontalRange);
     float x = (pingPong < horizontalRange) ? pingPong : (2 * horizontalRange - pingPong);
 
-    position.x = 1200 + x;
-    position.y = 500 + sin(timePassed * waveFrequency + waveOffset) * waveAmplitude;
+    position.x = originalPosition.x + x;
+    position.y = originalPosition.y + sin(timePassed * waveFrequency + waveOffset) * waveAmplitude;
 }
 
-void Noctilume::Flying(float dt)
-{
+void Noctilume::Chasing(float dt) { 
+    currentAnimation = &flyingAnim;
     timePassed += dt;
 
-    const Vector2D playerPos = Engine::GetInstance().scene->GetPlayerPosition();
-    Vector2D noctPos = (pbody)
-        ? Vector2D{ static_cast<float>(METERS_TO_PIXELS(pbody->body->GetPosition().x)),
-                    static_cast<float>(METERS_TO_PIXELS(pbody->body->GetPosition().y)) }
-    : position;
+    Vector2D currentPos = GetBodyPosition();
 
-    delayedPlayerX += (playerPos.x - delayedPlayerX) * 0.02f;
-    delayedPlayerY += (playerPos.y - delayedPlayerY) * 0.02f;
+    delayedPlayerX += (playerPos.x - delayedPlayerX);
+    delayedPlayerY += (playerPos.y - delayedPlayerY);
 
-    const float hoverHeight = 300.0f;
-    noctPos.y += (delayedPlayerY - hoverHeight - noctPos.y) * 0.5f;
-
-    const float oscillationAmplitude = 200.0f;
-    const float oscillationSpeed = 0.002f;
+    currentPos.y += (delayedPlayerY - hoverHeight - currentPos.y) * 0.5f;
 
     float sinValue = sin(oscillationSpeed * timePassed + 2.0f);
-    noctPos.x = delayedPlayerX + oscillationAmplitude * sinValue;
+    currentPos.x = delayedPlayerX + oscillationAmplitude * sinValue;
 
+    if (lastSinValue < 0 && sinValue >= 0 && !passedZero) {
+        oscillationCount++;
+        passedZero = true;
+
+        if (oscillationCount >= oscillationsBeforeAttack) {
+            currentState = NoctilumeState::PRE_ATTACK;
+            anticipationTimer = 0.0f;
+            oscillationCount = 0;
+            return;
+        }
+    }
+
+    if (sinValue < 0) passedZero = false;
+
+    originalPosition = position;
     lastSinValue = sinValue;
-    position = noctPos;
+    position = currentPos;
 }
 
-void Noctilume::Dive(float dt)
-{
-    timePassed += dt;
+void Noctilume::PreAttack(float dt) {
+    currentAnimation = &flyingAnim;
+    anticipationTimer += dt;
 
-    const float horizontalDistance = fabs(diveTargetPos.x - diveStartPos.x);
-    const float diveDuration = std::max(800.0f, 800.0f + horizontalDistance * 0.5f);
+    if (anticipationTimer == dt) {
+        preAttackStartPos = GetBodyPosition();
+        preAttackEndPos = preAttackStartPos + Vector2D(0.0f, -4.0f);
 
-    diveElapsedTime += dt;
-    float t = diveElapsedTime / diveDuration;
-
-    if (t > 1.0f)
-    {
-        currentState = NoctilumeState::FLYING;
-        diveElapsedTime = 0.0f;
-        return;
+        float jumpSpeed = (preAttackEndPos.y - preAttackStartPos.y) / (anticipationDuration / 2.0f);
+        pbody->body->SetLinearVelocity(b2Vec2(0, jumpSpeed / PIXELS_PER_METER));
     }
 
-    const Vector2D p0 = diveStartPos;
-    const Vector2D p2 = diveTargetPos;
-    const Vector2D p1 = { delayedPlayerX, delayedPlayerY + 175 };
+    if (anticipationTimer >= anticipationDuration) {
+        pbody->body->SetLinearVelocity(b2Vec2_zero);
 
-    float u = 1.0f - t;
-    position = p0 * (u * u) + p1 * (2 * u * t) + p2 * (t * t);
-}
-
-float Noctilume::DistanceToPlayer()
-{
-    auto playerPos = Engine::GetInstance().scene->GetPlayerPosition();
-    float dx = playerPos.x - position.x;
-    float dy = playerPos.y - position.y;
-    return sqrt(dx * dx + dy * dy);
-}
-void Noctilume::HandleStateTransition()
-{
-    float distance = DistanceToPlayer();
-
-    if (currentState == NoctilumeState::IDLE && distance <= 700.0f)
-        currentState = NoctilumeState::FLYING;
-    else if (currentState == NoctilumeState::FLYING && distance > 700.0f)
-        currentState = NoctilumeState::IDLE;
-}
-void Noctilume::TryInitiateDiveAttack(float dt)
-{
-    float distance = DistanceToPlayer();
-
-    if (currentState != NoctilumeState::FLYING || distance > 400.0f)
-    {
-        proximityTimer = 0.0f;
-        return;
+        currentState = NoctilumeState::ATTACK;
+        attackTarget = playerPos;
+        diveStartPos = GetBodyPosition();
+        diveDirection = (attackTarget - diveStartPos).Normalized();
+        isDiving = true;
+        diveProgress = 0.0f;
     }
+}
 
-    proximityTimer += dt;
-    attackTimer += dt;
+void Noctilume::Attack(float dt) {
+    currentAnimation = &attackAnim;
+    pbody->body->GetFixtureList()->SetSensor(false);
+    if (isDiving) {
+        position = position + diveDirection * attackSpeed * dt * 100.0f;
+    }
+    else {
+        Vector2D currentPos = GetBodyPosition();
+        currentPos.y -= returnSpeed * dt * 100.0f;
 
-    if (proximityTimer >= proximityDuration && attackTimer >= attackCooldown && fabs(lastSinValue) > 0.5f)
-    {
-        const Vector2D playerPos = Engine::GetInstance().scene->GetPlayerPosition();
-        const float horizontalOffset = 200.0f;
-        const float hoverHeight = 250.0f;
-
-        delayedPlayerX += (playerPos.x - delayedPlayerX) * 0.02f;
-
-        if (position.x < playerPos.x)
-        {
-            diveStartPos = { delayedPlayerX - horizontalOffset, playerPos.y - hoverHeight };
-            diveTargetPos = { delayedPlayerX + horizontalOffset, playerPos.y - hoverHeight };
+        if (currentPos.y <= diveStartPos.y) {
+            currentPos.y = diveStartPos.y;
+            currentState = NoctilumeState::CHASING;
         }
-        else
-        {
-            diveStartPos = { delayedPlayerX + horizontalOffset, playerPos.y - hoverHeight };
-            diveTargetPos = { delayedPlayerX - horizontalOffset, playerPos.y - hoverHeight };
-        }
-
-        position = diveStartPos;
-        divingDown = true;
-
-        delayedPlayerX = playerPos.x;
-        delayedPlayerY = playerPos.y;
-
-        currentState = NoctilumeState::DIVE;
-        attackTimer = proximityTimer = diveElapsedTime = 0.0f;
+        position = currentPos;
     }
+
+}
+
+void Noctilume::Crash(float dt) {
+    currentAnimation = &crashAnim;
+
+    pbody->body->SetLinearVelocity(b2Vec2_zero);
+    pbody->body->SetAngularVelocity(0);
+
+    crashTimer += dt;
+
+    if (crashTimer >= 3000.0f) {
+        pbody->body->GetFixtureList()->SetSensor(true);
+        currentState = pathfinding->HasFoundPlayer() ? NoctilumeState::CHASING : NoctilumeState::IDLE;
+        crashTimer = 0.0f;
+    }
+}
+
+void Noctilume::Die() {
+    currentAnimation = &dieAnim;
+
+    if (pbody && pbody->body) {
+        pbody->body->SetLinearVelocity(b2Vec2_zero);
+        pbody->body->SetAngularVelocity(0);
+
+        if (pbody->body->GetFixtureList())
+            pbody->body->GetFixtureList()->SetSensor(true);
+    }
+}
+
+void Noctilume::CheckState() {
+    if (currentState == NoctilumeState::ATTACK ||
+        currentState == NoctilumeState::CRASH ||
+        currentState == NoctilumeState::DEAD ||
+        currentState == NoctilumeState::PRE_ATTACK) return;
+
+    if (pathfinding->HasFoundPlayer()) {
+        currentState = NoctilumeState::CHASING;
+    }
+    else {
+        if (currentState != NoctilumeState::IDLE) {
+            currentState = NoctilumeState::IDLE;
+            pbody->body->SetLinearVelocity(b2Vec2_zero);
+            pbody->body->SetAngularVelocity(0);
+        }
+    }
+}
+
+Vector2D Noctilume::GetBodyPosition() const {
+    if (pbody && pbody->body)
+        return Vector2D(METERS_TO_PIXELS(pbody->body->GetPosition().x), METERS_TO_PIXELS(pbody->body->GetPosition().y));
+    return position;
 }

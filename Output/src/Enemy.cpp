@@ -26,9 +26,6 @@ bool Enemy::Awake() {
 }
 
 bool Enemy::Start() {
-	//Add a physics to an item - initialize the physics body
-	pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, bodyType::DYNAMIC);
-
 	//Assign collider type
 	pbody->ctype = ColliderType::ENEMY;
 
@@ -55,7 +52,6 @@ bool Enemy::Start() {
 bool Enemy::Update(float dt)
 {
 	// Propagate the pathfinding algorithm using A* with the selected heuristic
-
 	ResetPath();	
 
 	steps = 0;
@@ -68,12 +64,21 @@ bool Enemy::Update(float dt)
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
-	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() - 15, &currentAnimation->GetCurrentFrame(),
+	SDL_RendererFlip flip = SDL_FLIP_NONE;
+	if (direction > 0) flip = (SDL_RendererFlip)(flip | SDL_FLIP_HORIZONTAL);
+	if (rotationAngle == 180)    flip = (SDL_RendererFlip)(flip | SDL_FLIP_NONE);
+
+	Engine::GetInstance().render.get()->DrawTexture(texture,
+		(int)position.getX(),
+		(int)position.getY() - 15,
+		&currentAnimation->GetCurrentFrame(),
 		1.0f,
-		0.0,
+		(double)rotationAngle,
 		INT_MAX,
 		INT_MAX,
-		(direction < 0) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
+		flip,
+		scale
+	);
 	currentAnimation->Update();
 
 	//Show|Hide Path
@@ -89,7 +94,6 @@ bool Enemy::Update(float dt)
 
 bool Enemy::PostUpdate()
 {
-
 	return true;
 }
 
@@ -122,9 +126,10 @@ void Enemy::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
 	{
 	case ColliderType::ATTACK:
-		LOG("Collided with player - DESTROY");
-		Engine::GetInstance().entityManager.get()->DestroyEntity(this);
-
+		b2Fixture* fixture = pbody->body->GetFixtureList();
+		b2Filter filter = fixture->GetFilterData();
+		filter.maskBits &= ~CATEGORY_PLAYER_DAMAGE;
+		fixture->SetFilterData(filter);
 		break;
 	}
 }
@@ -134,7 +139,6 @@ void Enemy::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
 	switch (physB->ctype)
 	{
 	case ColliderType::ATTACK:
-		LOG("Collided with player - DESTROY");
 
 		break;
 	}

@@ -58,4 +58,7 @@ private:
 	Animation idleAnim;
 
 	int dialogueId;
+
+	float alpha = 255.0f;
+	bool hitWall = false;
 };

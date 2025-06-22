@@ -1,6 +1,7 @@
 #include "Audio.h"
 #include "Log.h"
-
+#include "Engine.h"
+#include "Scene.h"
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_mixer.h"
 
@@ -50,6 +51,23 @@ bool Audio::Awake()
 		ret = true;
 	}
 
+	pugi::xml_document loadFile;
+	pugi::xml_parse_result result = loadFile.load_file("config.xml");
+
+	pugi::xml_node configParameters = loadFile.child("config"); 
+	pugi::xml_node audioConfig = configParameters.child("audio");
+
+	if (!audioConfig.empty())
+	{
+		masterVolume = Clamp(audioConfig.child("master").attribute("value").as_float(1.0f), 0.0f, 1.0f);
+		musicVolume = Clamp(audioConfig.child("music").attribute("value").as_float(1.0f), 0.0f, 1.0f);
+		sfxVolume = Clamp(audioConfig.child("sfx").attribute("value").as_float(1.0f), 0.0f, 1.0f);
+	}
+
+	// Aplica los volúmenes ya cargados
+	Mix_VolumeMusic(static_cast<int>(musicVolume * masterVolume * MIX_MAX_VOLUME));
+	Mix_Volume(-1, static_cast<int>(sfxVolume * masterVolume * MIX_MAX_VOLUME));
+
 	return ret;
 }
 
@@ -59,7 +77,11 @@ bool Audio::CleanUp()
 		return true;
 
 	LOG("Freeing sound FX, closing Mixer and Audio subsystem");
+	pugi::xml_node audioConfig = configParameters.child("audio");
 
+	audioConfig.child("master").attribute("value") = masterVolume;
+	audioConfig.child("music").attribute("value") = musicVolume;
+	audioConfig.child("sfx").attribute("value") = sfxVolume;
 	if (music != NULL)
 	{
 		Mix_FreeMusic(music);
@@ -81,6 +103,8 @@ bool Audio::CleanUp()
 bool Audio::PlayMusic(const char* path, float fadeTime, float customVolume)
 {
 	if (!active) return false;
+
+	currentMusicPath = path;
 
 	if (music != NULL) {
 		if (fadeTime > 0.0f)
@@ -169,6 +193,41 @@ Mix_Chunk* Audio::GetFx(int id) const
 	std::advance(it, id - 1);
 	return *it;
 }
+bool Audio::Save(pugi::xml_node& config)
+{
+	pugi::xml_node audioConfig = config.append_child("audio");
+
+	audioConfig.append_child("master").append_attribute("value") = masterVolume;
+	audioConfig.append_child("music").append_attribute("value") = musicVolume;
+	audioConfig.append_child("sfx").append_attribute("value") = sfxVolume;
+
+	return true;
+}
+bool Audio::Load(pugi::xml_node& config)
+{
+	pugi::xml_node audioConfig = config.child("audio");
+	if (!audioConfig.empty())
+	{
+		masterVolume = Clamp(audioConfig.child("master").attribute("value").as_float(1.0f), 0.0f, 1.0f);
+		musicVolume = Clamp(audioConfig.child("music").attribute("value").as_float(1.0f), 0.0f, 1.0f);
+		sfxVolume = Clamp(audioConfig.child("sfx").attribute("value").as_float(1.0f), 0.0f, 1.0f);
+	}
+
+	return true;
+}
+float Audio::GetFinalFxVolume(int id) const
+{
+	if (id <= 0 || id > fx.size()) return 0.0f;
+
+	auto volIt = fxVolumes.begin();
+	std::advance(volIt, id - 1);
+	return Clamp((*volIt) * sfxVolume * masterVolume, 0.0f, 1.0f);
+}
+
+float Audio::GetFinalMusicVolume() const
+{
+	return Clamp(musicVolume * masterVolume, 0.0f, 1.0f);
+}
 
 int Audio::PlayFxReturnChannel(int id, float relativeVolume, int repeat)
 {
@@ -184,4 +243,13 @@ int Audio::PlayFxReturnChannel(int id, float relativeVolume, int repeat)
 	Mix_VolumeChunk(*fxIt, finalVolume);
 
 	return Mix_PlayChannel(-1, *fxIt, repeat);
+}
+void Audio::StopMusic()
+{
+	if (!active || music == nullptr)
+		return;
+
+	Mix_HaltMusic();
+	Mix_FreeMusic(music);
+	music = nullptr;
 }

@@ -8,10 +8,13 @@
 #include "GuiControlButton.h"
 #include "GuiControl.h"
 #include "GuiManager.h"
+#include "MenuParticle.h"
+#include "VideoPlayer.h"
 #include <unordered_map> 
+#include <SDL2/SDL_gamecontroller.h>
 
 enum class MenusState {
-    NONE, INTRO, MAINMENU, GAME, PAUSE, SETTINGS, CREDITS, DEAD, GAMEOVER, EXIT, ABILITIES
+    NONE, INTRO, MAINMENU, GAME, PAUSE, SETTINGS,CONTROLS, CREDITS, DEAD, GAMEOVER, EXIT, ABILITIES, PLAYING_VIDEO
 };
 
 struct ButtonInfo {
@@ -29,6 +32,7 @@ struct ButtonInfo {
         : text(text), bounds(bounds), id(id), isCheckBox(isCheckBox),
         unhoveredTexturePath(unhoveredPath), hoveredTexturePath(hoveredPath) {}
 };
+
 
 class Menus : public Module {
 public:
@@ -55,32 +59,41 @@ public:
     void ApplyTransitionEffect();
     void StartTransition(bool fast, MenusState newState);
     void Transition(float dt);
+    void SyncSlidersWithVolumes();
     void CreateButtons();
     std::vector<std::string> GetButtonNamesForCurrentState() const;
     void Intro(float dt);
     void MainMenu(float dt);
     void NewGame();
     void Pause(float dt);
+    void Controls(float dt);
     void Settings();
     void HandleSettingsSelection();
-    void ToggleFullScreen();
     void ToggleVSync();
     void HandleVolumeSliders();
-    void AdjustVolume(int& sliderX);
-    void UpdateVolume(int sliderX);
+    void AdjustVolume(int& sliderX, int minX, int maxX);
+    void UpdateVolume(int sliderX, int minX, int maxX);
     void Credits();
+    void UpdateVideoPlayer();
     void CreateButton(const std::string& name, int startX, int startY, int buttonWidth, int buttonHeight, int index);
     void DrawButtons();
     void DrawCheckBox(const ButtonInfo& button, bool isSelected);
     void DrawAbilities();
     void DrawSliders();
-
+    void SetController(SDL_GameController* controller);
+    void SpawnMenuParticles();
+    void UpdateMenuParticles();
+    void DestroyAllParticles();
+    void DestroyMenuParticle(MenuParticle* particle);
+    bool ContinueLoadingScreen();
     void DrawSlider(int minX, int y, int& sliderX, bool isSelected, const std::string& label);
+    void DrawPlayerLives();
 
 public:
     MenusState currentState = MenusState::INTRO;
     MenusState nextState = MenusState::NONE;
     MenusState previousState = MenusState::NONE;
+    bool loadSaveOnNextGame = false;
 
     bool isPaused = false;
     bool isExit = false;
@@ -92,9 +105,23 @@ public:
     bool drawingAbilityBackground = false;
     int isSaved = 0;
     int selectedButton = 0;
+    int sceneIndex = 0;
     std::vector<ButtonInfo> buttons;
     std::vector<std::string> buttonNames;
     std::string abilityName;
+    int baseWidth, baseHeight, width, height;
+
+    SDL_GameController* controller = nullptr;
+    bool aHeld = false;
+    bool startHeld = false;
+    bool dpadUpHeld = false;
+    bool dpadDownHeld = false;
+    int musicVolumeSliderX = SLIDER_MIN;
+    int fxVolumeSliderX = SLIDER_MIN;
+    int masterVolumeSliderX = SLIDER_MAX;
+
+
+
 private:
     const std::string CONFIG_FILE = "config.xml";
     const std::string ART_FILE = "art.xml";
@@ -107,20 +134,18 @@ private:
     const int SLIDER_MAX = 1510;
     const int BUTTON_WIDTH = 200;
     const int BUTTON_HEIGHT = 15;
-    const int BUTTON_SPACING = 70;
+    const int BUTTON_SPACING = 50;
 
-    int musicVolumeSliderX = SLIDER_MIN;
-    int fxVolumeSliderX = SLIDER_MIN;
-    int masterVolumeSliderX = SLIDER_MAX;
 
     std::unordered_map<std::string, SDL_Texture*> backgroundTextures;
     std::unordered_map<std::string, SDL_Texture*> buttonTextures;
     std::unordered_map<std::string, SDL_Texture*> loadedAbilityTextures;
     SDL_Texture* checkboxTexture = nullptr;
     SDL_Texture* fillTexture = nullptr;
+    SDL_Texture* sliderTexture = nullptr;
 
     std::unordered_map<MenusState, int> previousSelectedButton; 
-    int baseWidth, baseHeight, width, height;
+
     float scaleX = 1.0f;
     float scaleY = 1.0f;
     float transitionAlpha = 0.0f;
@@ -142,9 +167,18 @@ private:
     SDL_Color WHITE = { 255, 255, 255, 255 };
     SDL_Color GRAY = { 200, 200, 200, 255 };
 
-    void DrawPlayerLives();
 
     SDL_Texture* lifeTexture = nullptr;
+    SDL_Texture* offLifeTexture = nullptr;
     int lifeW = 32;
     int lifeH = 32;
+
+    bool bHeld = false;
+
+    bool dpadLeftHeld = false;
+    bool dpadRightHeld = false;
+
+    std::vector<MenuParticle*> menuParticles;
+
+    VideoPlayer* videoPlayer = nullptr;
 };

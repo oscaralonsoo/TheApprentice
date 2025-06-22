@@ -15,10 +15,17 @@ bool DestructibleWall::Awake() { return true; }
 
 bool DestructibleWall::Start()
 {
+    pugi::xml_document loadFile;
+    pugi::xml_parse_result result = loadFile.load_file("config.xml");
+    pugi::xml_node destructibleWallNode = loadFile.child("config").child("scene").child("animations").child("props").child("destructible_wall");
+
+    // Cargar textura y animaciones
+    texture = Engine::GetInstance().textures->Load(destructibleWallNode.attribute("texture").as_string());
     // Inicializar cuerpo físico como estático
     pbody = Engine::GetInstance().physics->CreateRectangle(position.getX() + texW / 2, position.getY() + texH / 2, texW, texH, STATIC);
     pbody->ctype = ColliderType::DESTRUCTIBLE_WALL;
     pbody->listener = this;
+
 
     return true;
 }
@@ -72,7 +79,7 @@ void DestructibleWall::OnCollision(PhysBody* physA, PhysBody* physB)
         if (otherEntity != nullptr)
         {
             Bloodrusher* bloodrusher = dynamic_cast<Bloodrusher*>(otherEntity);
-            if (bloodrusher && bloodrusher->GetCurrentState() == BloodrusherState::ATTACKING)
+            if (bloodrusher && bloodrusher->GetCurrentState() == BloodrusherState::ATTACKING || bloodrusher->GetCurrentState() == BloodrusherState::DEAD)
             {
                 LOG("Bloodrusher en estampida rompió la pared. Cambiando a SLIDING.");
                 destroyed = true;

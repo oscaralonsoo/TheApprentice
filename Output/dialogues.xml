@@ -1,30 +1,407 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dialogues>
-	<dialogue id="1">
-		<speaker>Castor</speaker>
-		<line>Ah, traveler. It's been quite some time since a new face wandered into these parts. Most who pass through are either lost, fleeing from something they dare not name, or searching for answers buried so deep they no longer remember the questions. This land remembers every step, every whisper, and every regret. Tread carefully—some doors, once opened, never truly close.</line>
-		<line>Many have come seeking glory, but few have returned alive.</line>
-		<line>If your steps have brought you to me, it's because fate has something in store for you.</line>
-		<line>They say that in the northern ruins lies an ancient power—but also a curse.</line>
-		<line>Be careful. And if you choose to go, take this stone. It will show you the way when the moon is high.</line>
+	<dialogue id="11">
+		<speaker>Beaver</speaker>
+		<line>Ah... you are finally awake. What a peculiar miracle you are... and what perfect timing.</line>
+		<line>Allow me to introduce myself. They call me Marvin, though some in these woods remember me as the sage of the mangrove. I have walked among roots and ashes longer than I can count... but never have I seen a creature like you.</line>
+		<line>Listen. This forest, this home, this world... it is withering. Life is fading. The flora is sick. The fauna, maddened. Do you know why?</line>
+		<line>Not long ago, a gem fell from the sky. A cursed stone, corrupted, alien to all natural form. It shattered, and its energy... spread like poison.</line>
+		<line>Two fragments. Two cores of power that now pulse uncontrollably, causing mutations, disease... death.</line>
+		<line>Through my years of study in science, I have learned more than you can imagine. I am sure that with my knowledge, I could reverse the damage but not with my own qualities. Someone like me cannot move forward against this.</line>
+		<line>But you... you are not like the others. You could... endure. You could... restore.</line>
+		<line>If we manage to gather those fragments... we could rebuild the gem. Not to unleash its power, no... but to seal it. To lock the darkness away again. To heal the forest.</line>
+		<line>Help me, creature. I am not asking for violence. Just... do what you already do. What your instinct tells you. Gather what has been lost.</line>
 	</dialogue>
 
-	<dialogue id="2">
-		<speaker>Hare</speaker>
-		<line>Are you also looking to face the beasts of the valley?</line>
-		<line>I've lost more comrades than I can count in those cursed lands.</line>
-		<line>If you're still determined, take this spear. It's not new, but it's killed more monsters than you've ever seen.</line>
+	<dialogue id="12">
+		<speaker>Marvin</speaker>
+		<line>Ah... there you are. Just in time. I knew you would not stop. You are... persistent.</line>
+		<line>I see you have already found one of the fragments. I felt it... from afar. Its energy resonates with you. It is... perfect.</line>
+		<line>You must continue. Further west... in the heart of the high forest lies the second one. Protected, hidden... corrupted. You must not fail.</line>
+		<line>The creatures there... are wilder. The corruption runs deep. But you, you only act when necessary, right?</line>
+		<line>Just keep going. Look for the high places, the hollow canopies. The fragment will find you... just like the first.</line>
+		<line>But you must hurry, we must act at once or it will be the end of the forest.</line>
+		<line>Do not delay.</line>
 	</dialogue>
 
-	<dialogue id="3">
-		<speaker></speaker>
-		<line></line>
-		<line></line>
+	<dialogue id="13">
+		<speaker>Marvin</speaker>
+		<line>Do you have them?</line>
+		<line>The fragments, give them to me!</line>
+		<line>Now is not the time for stalling, slime!</line>
+		<line>Do not be alarmed if you see signs... of battle on me. Sometimes... trees give way, or animals... fight among themselves. It is chaos. The forest is sick. Nothing more.</line>
+		<line>Everything depends on this. Hand them over!</line>
 	</dialogue>
 
-	<dialogue id="4">
-		<speaker></speaker>
-		<line></line>
-		<line></line>
+	<dialogue id="14">
+		<speaker>Marvin Note</speaker>
+		<line>DAY 147 OF THE DRY-STEM CYCLE</line>
+		<line>Location: Temporary lab, Inner Mangrove</line>
+		<line>Log Type: Observation Record 004-B</line>
+		<line>The fragment emits a steady pulse.</line>
+		<line>Energy oscillates at 11.2 per short cycle.</line>
+		<line>Surface temperature remains stable,</line>
+		<line>even in harsh conditions.</line>
+		<line>When exposed to strong mental stimuli,</line>
+		<line>especially grief, creation, or longing,</line>
+		<line>the core shifts in color spectrum.</line>
+		<line>From deep purple to greenish amber.</line>
+		<line>It may reflect emotional echoes,</line>
+		<line>or resonant memory reactions.</line>
+		<line>This is no crystal. No lifeform either.</line>
+		<line>It is not of this world.</line>
+		<line>Its internal geometry is unnatural,</line>
+		<line>following patterns that defy replication.</line>
+		<line>Was it discovered by another species?</line>
+		<line>Or built by them?</line>
+		<line>Either way, its design surpasses ours</line>
+		<line>by centuries maybe millennia.</line>
+		<line>This changes everything.</line>
+		<line>I remember why I was called a researcher.</line>
+		<line>This time... I will fix what was broken.</line>
 	</dialogue>
+
+	<dialogue id="15">
+		<speaker>Marvin Note</speaker>
+		<line>Day 163 of the Dry Stem Cycle</line>
+		<line>Location: Observation Ridge, Deep Roots Sector</line>
+		<line>Classification: Incident Note 007-A</line>
+		<line>Something unexpected occurred today.</line>
+		<line>A hare approached the artifact chamber.</line>
+		<line>She crossed the wards undetected</line>
+		<line>even the scent traps and sound echoes failed.</line>
+		<line>She touched the core. Just briefly.</line>
+		<line>But I saw it: the pulse reacted violently.</line>
+		<line>It bent toward her like a root seeking water.</line>
+		<line>Then light. Sharp. Sudden. Gone.</line>
+		<line>The hare screamed and collapsed,</line>
+		<line>then stood... changed.</line>
+		<line>She wandered away in silence.</line>
+		<line>I followed. For days, I observed.</line>
+		<line>She now speaks nonsense</line>
+		<line>phrases from different seasons,</line>
+		<line>events not yet happened, or long past.</line>
+		<line>Her mind, I believe, is no longer fixed in time.</line>
+		<line>The artifact has severed her sequence.</line>
+		<line>This proves the core is reach over temporality.</line>
+		<line>Time, to it, is flexible. Subjective. Mutable.</line>
+		<line>If it can untether memory</line>
+		<line>perhaps it can untether death.</line>
+	</dialogue>
+
+	<dialogue id="16">
+		<speaker>Marvin Note</speaker>
+		<line>Day 174 of the Dry Stem Cycle</line>
+		<line>Location: Rootfall Sanctuary (sealed chamber)</line>
+		<line>Classification: Private Entry 011-X</line>
+		<line>I have stopped sleeping.</line>
+		<line>The artifact hums even when silent.</line>
+		<line>It enters dreams I no longer have.</line>
+		<line>Its angles</line>
+		<line>they continue to grow inside my sketches,</line>
+		<line>twisting into new dimensions.</line>
+		<line>I see them now behind leaves and stone.</line>
+		<line>The forest rejects me, yes, but it does not matter.</line>
+		<line>What lives inside this core is perfect.</line>
+		<line>A pattern, recursive and infinite.</line>
+		<line>Not magic. Not life. Something... prior.</line>
+		<line>I was never meant to understand it fully,</line>
+		<line>but that will not stop me.</line>
+		<line>Each pulse, each shift, each resonance</line>
+		<line>they bring me closer.</line>
+		<line>Closer to what was lost.</line>
+		<line>Closer to what must return.</line>
+		<line>This world is not ready for it.</line>
+		<line>But I am.</line>
+		<line>And I will not let them take this from me again.</line>
+	</dialogue>
+
+	<dialogue id="21">
+		<speaker>Lepus</speaker>
+		<line>Ah! I heard you. Smells like warm mud. It is you, right? I am Eira.</line>
+		<line>Hey. Do you know how to open that plug? I have been stuck here for a while... Maybe you can lift it from above mhm... what should I call you?</line>
+		<line> ...</line>
+		<line>You and I... it always ends the same way... I hope this time hurts less.</line>
+		<line> ...</line>
+		<line>Are you helping or not? If we try to lift it... it might open. When you are done, I will see you on the other side.</line>
+	</dialogue>
+
+	<dialogue id="22">
+		<speaker>Eira</speaker>
+		<line>Brrr! This is a mess! Who put this burrow here? There is no way to find safety like this.</line>
+		<line>Do not think I am hiding in there, friend slime. I am not afraid of those monsters. I am searching for and opening every burrow in the forest so animals can take shelter.</line>
+		<line>Still...</line>
+		<line> do not let the darkness consume you again.</line>
+		<line>Come on slime. Help me unlock it. Who knows, you might even find something interesting. Burrows are where treasures are kept, you know. I will see you on the other side.</line>
+	</dialogue>
+
+	<dialogue id="23">
+		<speaker>Eira</speaker>
+		<line>Who are you? You look like someone. Or maybe you are the same person. I don't know... Friend slime? Oh, I did not realize it was you.</line>
+		<line>Are you going to help me or... just stand there like the others? If you feel like being altruistic, get ready to work. We need to reach that burrow but it is all collapsed. Maybe you can make a path, friend. I will see you on the other side.</line>
+		<line>Thank you, you are the best. You are going to help so many of us who live in the forest. Who would not trust you? Thanks for always using your time to help me. You are...</line>
+		<line>You are the crack... or the seal. The remnant of hope... or the final step toward oblivion.</line>
+		<line>...</line>
+		<line>After this I will head to the Boreal Forest. Follow me if you want to keep helping.</line>
+		<line>Don not do it! Don not look for me in the Boreal Forest!</line>
+		<line>...</line>
+		<line>Come on slime, hurry up! Those shelters wont open themselves.</line>
+	</dialogue>
+
+	<dialogue id="24">
+		<speaker>Eira</speaker>
+		<line>Fresh carrots, crunch in my mouth, I run through the field, I will never be alone.</line>
+		<line>It hurts... it hurt before. Not now. Not... after.</line>
+		<line>Hello friend slime. You caught me just as I was looking for an injured one in this burrow. I know I ask a lot, but I need your help one more time.</line>
+		<line>We are still in time to save many.</line>
+		<line>...</line>
+		<line>I heard someone groaning and calling for help down the right path. There are lots of obstacles I can not move, but maybe you can. I will keep looking for shelters or injured animals down below while you take care of this.</line>
+		<line> she wont survive. She will be a prisoner of his obsession. He is lying to you, he did this to us... You can still stop him.</line>
+		<line>...</line>
+		<line>Hey slime, I trust you. See you on the other side, friend!</line>
+	</dialogue>
+
+	<dialogue id="25">
+		<speaker>Eira</speaker>
+		<line>Huh? What are you doing in here? This was my spot...</line>
+		<line>Ah... Sorry, friend slime. I took shelter wherever I could. I like this place, it is spacious and warm. Feels like before everything. Dont you think? I know you wont talk, but I am sure you agree ha, ha, ha.</line>
+		<line>We did not have to meet, but something led me here. I guess our future pulled me to our past. You were not like this. At the beginning. Or maybe you were. I do not know. Maybe next time will be different...</line>
+		<line>I want to run... I want to go back to when everything was green...</line>
+		<line>It wont work...</line>
+		<line>You will have to be careful. You can still change things, friend slime. This time</line>
+		<line>...</line>
+		<line>I guess... see you on the other side... I am ready for before. And you?</line>
+		<line>...</line>
+		<line>Got it! I will call you slime, friend slime, or slime friend. Do you like it?</line>
+		<line>...</line>
+	</dialogue>
+
+	<dialogue id="31">
+		<speaker>Squirrel</speaker>
+		<line>Woah! That was close! That moldy smelling specter almost swallowed me whole... They are huge, and honestly, they freak me out. Ah! And what are you? A mutant jelly or a slime with a soul? You are not gonna try to absorb me like they do, right?</line>
+		<line>Nah, just kidding. Name is Flik. King of the heights! And you? Not much of a talker, huh?</line>
+		<line>Well then, keep it that way, slippery silence. Sometimes it is better to listen than to babble. I dont know what a slimy blob like you is doing here, but if you are looking for the entrance to the Boreal Forest, you’re on the right track. Just be careful easy to slip up ahead. Good luck, little snot!</line>
+	</dialogue>
+
+	<dialogue id="32">
+		<speaker>Flik</speaker>
+		<line>Oh, slippery slime! You are looking good hope you did not run into any big monsters. Scary, right? Honestly, it is amazing you made it through all that with such style. But the style show is not over yet. You hve arrived just in time to help me. I need... something... muscular. Or slimy.</line>
+		<line>Look, there is a chamber continuing through the right. I can feel a fresh breeze coming in. But that rock—oof. It is blocking the entrance. Can you push it?</line>
+		<line>My sister would dive right in without a second thought. Always first. Always faster. Always slipperier...</line>
+	</dialogue>
+
+	<dialogue id="33">
+		<speaker>Flik</speaker>
+		<line>Hey, finally! I thought you got stuck to some log.</line>
+		<line>I know you are wondering what I am doing in a place like this. I will be honest. When all this started, I lost my little sister. I have been looking for her ever since. This place... I knew it. My sister used to say that stones carry energy.</line>
+		<line>Do you think rocks really hold energy? Sometimes I feel like I can sense... my sister.</line>
+		<line>Alright, enough drama. below here there is a spot you might be able to go. I bet there is a hole, and I had wager my tail there is something awesome hidden in it. Shall we find out?</line>
+	</dialogue>
+
+	<dialogue id="34">
+		<speaker>Flik</speaker>
+		<line>Hehe! Hey there, flying slime!</line>
+		<line>Everything is under control.</line>
+		<line>This is part of the aerial training... Flik Style.</line>
+		<line>Okay, okay. I am stuck. Dont laugh!</line>
+		<line>If you untangle that knot,</line>
+		<line>I promise to show you a shortcut.</line>
+		<line>Hey... Do you think if someone falls…</line>
+		<line>they can fly again?</line>
+		<line>My dad used to say a squirrel on a branch</line>
+		<line>should never fear the branch breaking,</line>
+		<line>because their trust isnt in the branch...</line>
+		<line>it is in their wings.</line>
+		<line>Forget it. Look, you have got two paths.</line>
+		<line>That hole leads to a hidden chamber.</line>
+		<line>The other way is a steep exit.</line>
+		<line>Or you can go back if you are not sure.</line>
+		<line>You choose.</line>
+		<line>I try to stay positive, you know...</line>
+		<line>But I am running out of places to look, Slimey.</line>
+		<line>I am losing hope.</line>
+		<line>But she must be out there, safe.</line>
+		<line>She has to be.</line>
+		<line>She always beat me in races...</line>
+		<line>I know she is okay.</line>
+		<line>But where could she</line>
+		<line>Slimey, if you find her,</line>
+		<line>make sure she is safe...</line>
+		<line>and lead me to her. Please, buddy.</line>
+	</dialogue>
+
+	<dialogue id="35">
+		<speaker>Flik</speaker>
+		<line>You again. Weird...</line>
+		<line>I dont mind this time.</line>
+		<line>You know?</line>
+		<line>I dont want to run anymore.</line>
+		<line>Or hide.</line>
+		<line>I found her.</line>
+		<line>Or what was left...</line>
+		<line>It was her. She had her flower.</line>
+		<line>The one she wore behind her ear.</line>
+		<line>Why didnt I hear her sooner?</line>
+		<line>Why didnt I protect her?</line>
+		<line>I found a message she left me.</line>
+		<line>It said:</line>
+		<line>“Do not follow me this time.</line>
+		<line>I do not want you to see me.</line>
+		<line>Just... dont come. Dont come where I am going.”</line>
+		<line>So of course I followed.</line>
+		<line>If she saw you...</line>
+		<line>I think she had call you a friend.</line>
+		<line>You feel different, Slimey.</line>
+		<line>I dont know if I want to,</line>
+		<line>but since I couldn’t help her...</line>
+		<line>I will try to help others.</line>
+		<line>Will you help me up, buddy?</line>
+	</dialogue>
+
+	<dialogue id="41">
+		<speaker>Partridge</speaker>
+		<line>Stop right there, slimeball!</line>
+		<line>You... what in the roots are you? Not a plant, not a bug, not one of us.</line>
+		<line>That stench... that rotten slime same as the specters when they burst through our kin.</line>
+		<line>What foul pit spat you out? You think you belong here, roaming like some forest dweller?</line>
+		<line>You know what? I don't care. Do as you please.</line>
+		<line>But hear this: if you keep swallowing everything, this forest might just swallow you too.</line>
+		<line>And stars know I hope I’m there to watch it happen.</line>
+	</dialogue>
+
+	<dialogue id="42">
+		<speaker>Partridge</speaker>
+		<line>Oh no... not you.</line>
+		<line>Of course... is this some cosmic joke?</line>
+		<line>I am trapped... and the only breathing thing around is you?</line>
+		<line>Dont flatter yourself, goo pile. It is not trust.</line>
+		<line>But help me, and maybe—just maybe you’ll redeem a single slimy speck of your repulsive existence.</line>
+		<line>Don't get the wrong idea I am not thanking you. Just because you are oozing around doesnt mean you are useful.</line>
+		<line>Now move it. I don’t have time to wait for a talking puddle.</line>
+	</dialogue>
+
+	<dialogue id="51">
+		<speaker>Oscar</speaker>
+		<line>Oh... Look at that. Another blob rolling through the woods. What a surprise.</line>
+		<line>Dont worry. I dont scream. I dont run. I dont attack. But I dont cheer either.</line>
+		<line>Do you even know what is happening here?</line>
+		<line>Have you heard the whispers in the branches? The meetings by the old oak?</line>
+		<line>The council... our glorious ancestral council... is falling apart.</line>
+		<line>The forest families want to seal the borders.</line>
+		<line>The weasels are raiding the west. And the hares...</line>
+		<line>...the hares dont come anymore. That says it all.</line>
+		<line>Some blame the Beaver. Pulling strings. Playing god. Vanishing when the curse fell.</line>
+		<line>Others blame the frogs. Poisoning the wells in the glade.</line>
+		<line>Meanwhile, the roots rot. No one talks about that.</line>
+		<line>You… You are new. Foreign. But not unseen.</line>
+		<line>Some say you are needed. Others say you are a mistake.</line>
+		<line>Either way... keep going, but don’t say you werent warned.</line>
+		<line>No council ever voted for your existence.</line>
+	</dialogue>
+
+	<dialogue id="61">
+		<speaker>Unknown Sender</speaker>
+		<line>Day 19 of the Fallen Ferns Cycle</line>
+		<line>Dear N.,</line>
+		<line>Sorry for the damp paper and green ink.</line>
+		<line>Supplies have been low since the last storm.</line>
+		<line>But I couldnt stay silent anymore.</line>
+		<line>I havent heard from Marvin in days.</line>
+		<line>Someone saw him near the eastern edge of the mangrove,</line>
+		<line>but no ones managed to get close.</line>
+		<line>I am not surprised, really.</line>
+		<line>He spent a whole cycle locked in his workshop,</line>
+		<line>barely stepping into the sunlight.</line>
+		<line>The last thing he told me was:</line>
+		<line>I am close to something big.</line>
+		<line>I laughed. You know how he was with discoveries.</line>
+		<line>They were always just about to change the world.</line>
+		<line>Then the council shut his lab down.</line>
+		<line>That place was the last thing holding him together.</line>
+		<line>Days later, youngsters broke in.</line>
+		<line>They burned and stole everything.</line>
+		<line>They called it dangerous trash. Maybe they were right.</line>
+		<line>Still... no one deserves that.</line>
+		<line>His wife died five cycles ago,</line>
+		<line>from some irreversible condition.</line>
+		<line>His daughter followed three cycles later.</line>
+		<line>I dont know how he didnt break sooner.</line>
+		<line>Or maybe he did, and no one noticed.</line>
+		<line>I tried. I swear I did.</line>
+		<line>But he always seemed to talk more to his flasks than to us.</line>
+		<line>Still.. I worry.</line>
+		<line>Because when someone that smart is left alone,</line>
+		<line>that is when the dark convinces them they can still fix it all.</line>
+		<line>If you hear anything, please write back.</line>
+		<line>Warmly,</line>
+		<line>Y.</line>
+	</dialogue>
+
+	<dialogue id="62">
+		<speaker>Loma</speaker>
+		<line>Day 22 of the Fallen Ferns Cycle</line>
+		<line>My love,</line>
+		<line>I dont know if this letter will ever reach you,</line>
+		<line>but I had to write it... just to feel close to you.</line>
+		<line>They say you climbed to the top of the Boreal Forest,</line>
+		<line>looking for shelter... but why, my dear?</line>
+		<line>Why didnt you come back?</line>
+		<line>The kids are okay. Tired, yes. Hungry, sometimes. But okay.</line>
+		<line>Little Kele keeps asking questions.</line>
+		<line>Today he asked if heroes also have tough scales like yours.</line>
+		<line>And if he will see them again soon.</line>
+		<line>I... didnt know what to say.</line>
+		<line>So I told him you are building something amazing</line>
+		<line>at the top of the forest. That you will return flying like a bird!</line>
+		<line>But with a cape!</line>
+		<line>Then I hid behind the hollow trunk and cried.</line>
+		<line>I do my best. I sing him your termite-dancing song every night.</line>
+		<line>Sometimes I mess up on purpose,</line>
+		<line>just like you did with that awful voice to make us laugh.</line>
+		<line>Do you remember?</line>
+		<line>I still keep your clay cup. The one shaped like an acorn.</line>
+		<line>You said it brought you luck.</line>
+		<line>No one else touches it.</line>
+		<line>I just want you to be safe.</line>
+		<line>If you can’t come back,</line>
+		<line>then read this and remember how much I love you.</line>
+		<line>Come home if you can.</line>
+		<line>If not... may the earth hold you,</line>
+		<line>and may you think of us as you sleep.</line>
+		<line>Always yours,</line>
+		<line>Loma</line>
+	</dialogue>
+
+	<dialogue id="63">
+		<speaker>Rulo</speaker>
+		<line>Day 15 of the Fallen Ferns Cycle</line>
+		<line>Jumito!</line>
+		<line>You know what I got yesterday?</line>
+		<line>An order for thirty two sacks of fermented manure!</line>
+		<line>Thirty two!</line>
+		<line>What kind of sane creature needs that much?</line>
+		<line>Are they sealing themselves in dung for the winter?</line>
+		<line>Is there a spa trend I missed?</line>
+		<line>The sender didn’t even sign.</line>
+		<line>Just a frog drawing and a leafy stamp.</line>
+		<line>I’m taking it as a threat.</line>
+		<line>The best part?</line>
+		<line>While half the forest falls apart,</line>
+		<line>someone out there thinks:</line>
+		<line>Yes... now is the perfect time to bathe in shit.</line>
+		<line>If this keeps up, I will start selling pangolin musk perfume.</line>
+		<line>At least that market is picky.</line>
+		<line>Write if you survive the week.</line>
+		<line>I will be here… literally neck deep.</line>
+		<line>Smelly love,</line>
+		<line>Rulo</line>
+	</dialogue>
+
+	<dialogue id="71">
+		<speaker>¿?</speaker>
+		<line>You are the crack... or the seal.</line>
+		<line>The trace of hope... or the final step into forgetting.</line>
+	</dialogue>
+
 </dialogues>
+

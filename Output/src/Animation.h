@@ -73,4 +73,12 @@ public:
 	void SetPaused(bool value) {
 		paused = value;
 	}
+
+	bool IsLoop() const { return loop; }
+
+	int GetLoopCount() const { return loopCount; }
+
+	float GetSpeed() const { return speed; }
+
+	int GetFrameCount() const { return totalFrames; }
 };

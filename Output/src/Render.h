@@ -25,7 +25,7 @@ public:
 	void SetViewPort(const SDL_Rect& rect);
 	void ResetViewPort();
 
-	bool DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SDL_Rect* section = NULL, float speed = 1.0f, double angle = 0, uint32_t pivotX = INT_MAX, uint32_t pivotY = INT_MAX, SDL_RendererFlip flip = SDL_FLIP_NONE, float scale = 1.0f) const;
+	bool DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SDL_Rect* section = NULL, float speed = 1.0f, double angle = 0, uint32_t pivotX = INT_MAX, uint32_t pivotY = INT_MAX, SDL_RendererFlip flip = SDL_FLIP_NONE, float scale = 1.0f, float alpha = 1.0) const;
 	bool DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool filled = true, bool useCamera = true) const;
 	bool DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool useCamera = true) const;
 	bool DrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool useCamera = true) const;
@@ -33,7 +33,7 @@ public:
 	void SetBackgroundColor(SDL_Color color);
 
 	void UpdateCamera(const Vector2D& targetPosition, int movementDirection, float smoothing);
-	bool DrawText(const char* text, int posx, int posy, SDL_Color color, int fontSize) const;
+	bool DrawText(const char* text, int posx, int posy, SDL_Color color, int fontSize, bool useGaramond = false) const;
 	int GetTextWidth(const std::string& text, int fontSize);
 
 	float EaseInOut(float current, float target, float t);
@@ -43,8 +43,11 @@ public:
 	float GetCameraZoom() const;
 
 	void DashCameraImpulse(int direction, int intensity);
-	void StartCameraShake(int durationSec, int intensity);
-	void ToggleCameraLock();
+	void StartCameraShake(float durationSec, int intensity);
+	void ToggleCameraLock(float fovFactor = 1.0f);
+	void SetCameraPosition(int x, int y);
+	int GetExtraCameraOffsetY() const;
+	void SetExtraCameraOffsetY(int offset);
 
 public:
 
@@ -68,7 +71,7 @@ public:
 	//Camera Shake
 	Timer shakeTimer;
 	bool isShaking = false;
-	int shakeDurationSec = 0;
+	float shakeDurationSec = 0;
 	int shakeIntensity = 0;
 	int shakeOffsetX = 0;
 	int shakeOffsetY = 0;
@@ -87,5 +90,11 @@ public:
 
 	TTF_Font* font;
 
-	int cameraOffsetY = 400;
+	float cameraVerticalOffsetFactor = 0.45f; // valor base
+	int extraCameraOffsetY = 0;
+	int extraCameraOffsetX = 0;
+
+	float currentFovFactor = 1.0f;
+
+	bool downCameraActivated = false;
 };

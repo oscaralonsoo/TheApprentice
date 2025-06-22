@@ -16,7 +16,7 @@ public:
 
 	bool Start();
 
-	bool Update(float dt);
+	bool PostUpdate();
 
 	bool CleanUp();
 
@@ -34,13 +34,11 @@ public:
 
 private:
 	PhysBody* pbody;
-	int width;
-	int height;
 
 	int alpha = 255;
 	bool fadingIn = false;
 	bool fadingOut = false;
-	float fadeSpeed = 1.0f;
+	float fadeSpeed = 16.0f;
 
 	bool alreadyRevealed = false;
 };

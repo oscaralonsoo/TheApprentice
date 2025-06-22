@@ -32,4 +32,13 @@ private:
     Animation deadAnim;
 
     Timer hitTimer;
+
+    int soundSleepId = 0;
+    int soundDeadId = 0;
+
+    bool sleepSoundPlayed = false;
+    bool deadSoundPlayed = false;
+
+    float sleepSoundTimer = 0.0f;
+    const float sleepSoundInterval = 0.5f;
 };

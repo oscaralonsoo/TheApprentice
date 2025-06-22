@@ -6,6 +6,7 @@
 #include "Map.h"
 #include <SDL2/SDL_image.h>
 #include "SDL2/SDL_ttf.h"
+#include "Scene.h"
 
 #define VSYNC true
 
@@ -113,8 +114,7 @@ void Render::ResetViewPort()
 	SDL_RenderSetViewport(renderer, &viewport);
 }
 
-// Blit to screen
-bool  Render::DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SDL_Rect* section, float speed, double angle, uint32_t pivotX, uint32_t pivotY, SDL_RendererFlip flip, float scale) const
+bool Render::DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SDL_Rect* section, float speed, double angle, uint32_t pivotX, uint32_t pivotY, SDL_RendererFlip flip, float scale, float alpha) const
 {
 	bool ret = true;
 	float windowScale = Engine::GetInstance().window->GetScale() * cameraZoom;
@@ -123,8 +123,7 @@ bool  Render::DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SD
 	rect.x = static_cast<int>(camera.x * speed + x * windowScale);
 	rect.y = static_cast<int>(camera.y * speed + y * windowScale);
 
-
-	if(section != NULL)
+	if (section != NULL)
 	{
 		rect.w = section->w;
 		rect.h = section->h;
@@ -137,11 +136,16 @@ bool  Render::DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SD
 	rect.w = static_cast<int>(rect.w * windowScale * scale);
 	rect.h = static_cast<int>(rect.h * windowScale * scale);
 
+	// Aplicar opacidad solo si no es completamente opaco
+	if (alpha < 1.0f)
+	{
+		SDL_SetTextureAlphaMod(texture, static_cast<Uint8>(alpha * 255.0f));
+	}
 
 	SDL_Point* p = NULL;
 	SDL_Point pivot;
 
-	if(pivotX != INT_MAX && pivotY != INT_MAX)
+	if (pivotX != INT_MAX && pivotY != INT_MAX)
 	{
 		pivot.x = pivotX;
 		pivot.y = pivotY;
@@ -150,7 +154,6 @@ bool  Render::DrawTexture(SDL_Texture* texture, uint32_t x, uint32_t y, const SD
 
 	if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, flip) != 0)
 	{
-		//LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
 		ret = false;
 	}
 
@@ -251,10 +254,12 @@ bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uin
 	return ret;
 }
 
-void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection, float smoothing)
+void Render::UpdateCamera(const Vector2D& /*unused*/, int movementDirection, float smoothing)
 {
 	if (cameraLocked)
+	{
 		return;
+	}
 
 	if (cameraZoom != targetCameraZoom)
 		cameraZoom += (targetCameraZoom - cameraZoom) * cameraZoomSmoothing;
@@ -268,10 +273,23 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 	mapWidthPx = Engine::GetInstance().map->GetMapWidth();
 	mapHeightPx = Engine::GetInstance().map->GetMapHeight();
 
-	targetX = static_cast<int>(targetPosition.x);
-	targetY = static_cast<int>(targetPosition.y);
+	Scene* scene = Engine::GetInstance().scene.get();
+	if (!scene) return;
 
-	// Cámara look-ahead horizontal
+	Player* player = scene->GetPlayer();
+	if (!player) return;
+
+	Vector2D playerPos = player->GetPosition();
+	targetX = static_cast<int>(playerPos.x);
+	targetY = static_cast<int>(playerPos.y);
+
+	// Adaptar offsets a resolución
+	float horizontalOffsetFactor = 0.15f; // 15% del ancho de cámara
+
+	int offsetX = static_cast<int>(camera.w * horizontalOffsetFactor);
+	int offsetY = static_cast<int>(camera.h * cameraVerticalOffsetFactor) + extraCameraOffsetY;
+
+	// Look-ahead horizontal
 	if (movementDirection != 0) {
 		if (movementDirection == lastMoveDir) {
 			lookAheadCounter++;
@@ -293,27 +311,23 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 
 	cameraLookAheadOffset = EaseInOut(cameraLookAheadOffset, cameraLookAheadTarget, lookAheadSmoothing);
 
-	int targetCamX = -targetX + camera.w / 2 - static_cast<int>(cameraLookAheadOffset) + cameraImpulseX;
+	// Centrado más offset horizontal dinámico
+	int centerCamX = -targetX + camera.w / 2;
+	int targetCamX = centerCamX - static_cast<int>(cameraLookAheadOffset) + cameraImpulseX + offsetX;
 	camera.x += static_cast<int>((targetCamX - camera.x) * smoothing);
-
 	cameraImpulseX = static_cast<int>(cameraImpulseX * (1.0f - cameraImpulseSmoothing));
 
-	// Coordenadas de la cámara en el mundo
-	int cameraTop = -camera.y;
+	// Vertical con offset dinámico
 	int cameraBottom = -camera.y + camera.h;
-
-	// Margen de anticipación (antes de que el player se salga)
 	int anticipationMargin = 100;
-
 	float dynamicSmoothing = smoothing;
 
-	// Si el player está cerca del borde inferior (a punto de salirse)
 	if (targetY > cameraBottom - anticipationMargin) {
-		dynamicSmoothing = smoothing * 2.0f; // acelerar seguimiento vertical
+		dynamicSmoothing = smoothing * 2.0f;
 	}
 
-	int targetCamY = -targetY + camera.h / 2 + cameraOffsetY;
-	camera.y += static_cast<int>((targetCamY - camera.y) * dynamicSmoothing);
+	int centerCamY = -targetY + camera.h / 2;
+	int targetCamY = centerCamY + offsetY;
 
 	// Shake
 	if (isShaking) {
@@ -332,8 +346,20 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 		shakeOffsetY = 0;
 	}
 
-	camera.x += shakeOffsetX;
-	camera.y += shakeOffsetY;
+	float escala = Engine::GetInstance().window->GetScale() * cameraZoom;
+	extraCameraOffsetX = static_cast<int>(shakeOffsetX * escala);
+	extraCameraOffsetY = static_cast<int>(shakeOffsetY * escala);
+
+	camera.x += extraCameraOffsetX;
+	if (downCameraActivated)
+	{
+		camera.y += static_cast<int>((targetCamY - camera.y) * dynamicSmoothing) - 10;
+
+	}
+	else
+	{
+		camera.y += static_cast<int>((targetCamY - camera.y) * dynamicSmoothing);
+	}
 
 	if (camera.x > 0) camera.x = 0;
 	if (camera.y > 0) camera.y = 0;
@@ -341,8 +367,10 @@ void Render::UpdateCamera(const Vector2D& targetPosition, int movementDirection,
 	if (camera.y < -(mapHeightPx - camera.h)) camera.y = -(mapHeightPx - camera.h);
 }
 
-bool Render::DrawText(const char* text, int posx, int posy, SDL_Color color, int fontSize) const {
-	TTF_Font* customFont = TTF_OpenFont("Assets/Fonts/The-Apprentice-F1.ttf", fontSize);
+bool Render::DrawText(const char* text, int posx, int posy, SDL_Color color, int fontSize, bool useGaramond) const {
+	const char* fontPath = useGaramond ? "Assets/Fonts/EBGaramond-Regular.ttf" : "Assets/Fonts/The-Apprentice-F1.ttf";
+
+	TTF_Font* customFont = TTF_OpenFont(fontPath, fontSize);
 	if (!customFont) {
 		LOG("Failed to load font: %s", TTF_GetError());
 		return false;
@@ -374,6 +402,7 @@ bool Render::DrawText(const char* text, int posx, int posy, SDL_Color color, int
 	return true;
 }
 
+
 int Render::GetTextWidth(const std::string& text, int fontSize) {
 	int w = 0;
 	TTF_Font* font = TTF_OpenFont("Assets/Fonts/The-Apprentice-F1.ttf", fontSize);
@@ -398,7 +427,7 @@ void Render::DashCameraImpulse(int direction, int intensity)
 	cameraImpulseX = -direction * intensity;
 }
 
-void Render::StartCameraShake(int durationSec, int intensity)
+void Render::StartCameraShake(float durationSec, int intensity)
 {
 	isShaking = true;
 	shakeDurationSec = durationSec;
@@ -406,20 +435,30 @@ void Render::StartCameraShake(int durationSec, int intensity)
 	shakeTimer.Start();
 }
 
-void Render::ToggleCameraLock()
+void Render::ToggleCameraLock(float fovFactor)
 {
 	cameraLocked = !cameraLocked;
+	currentFovFactor = fovFactor;
 
 	if (cameraLocked)
 	{
-		// Centrar la cámara en el centro del mapa (o donde prefieras)
 		mapWidthPx = Engine::GetInstance().map->GetMapWidth();
 		mapHeightPx = Engine::GetInstance().map->GetMapHeight();
 
-		camera.x = -(mapWidthPx / 2 - camera.w / 2);
-		camera.y = -(mapHeightPx / 2 - camera.h / 2);
+		float windowScale = Engine::GetInstance().window->GetScale();
+		cameraZoom = targetCameraZoom = 1.0f;  // Opcional: asegurarte de que zoom no está causando desajuste
+
+		camera.w = static_cast<int>(Engine::GetInstance().window->width * currentFovFactor);
+		camera.h = static_cast<int>(Engine::GetInstance().window->height * currentFovFactor);
+
+		int centerX = mapWidthPx / 2;
+		int centerY = mapHeightPx / 2;
+
+		camera.x = -centerX + camera.w / 2 + 250;
+		camera.y = -centerY + camera.h / 2;
 	}
 }
+
 float Render::EaseInOut(float current, float target, float t)
 {
 	float delta = target - current;
@@ -440,4 +479,18 @@ void Render::SetVSync(bool enable)
 float Render::GetCameraZoom() const
 {
 	return cameraZoom;
+}
+
+void Render::SetCameraPosition(int x, int y)
+{
+	camera.x = x;
+	camera.y = y;
+}
+
+void Render::SetExtraCameraOffsetY(int offset) {
+	extraCameraOffsetY = offset;
+}
+
+int Render::GetExtraCameraOffsetY() const {
+	return extraCameraOffsetY;
 }

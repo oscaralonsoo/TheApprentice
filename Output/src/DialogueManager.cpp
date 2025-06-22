@@ -2,6 +2,8 @@
 #include "LOG.h"
 #include "Render.h"
 #include "Engine.h"
+#include "Textures.h"
+#include "Scene.h"
 
 #include <sstream> 
 #include <string>
@@ -31,14 +33,30 @@ bool DialogueManager::Start() {
 		WrapLines(id, boxWidth, dialogueFontSize);
 	}
 
+	listenTexture = Engine::GetInstance().textures->Load("Assets/Textures/UI/Help/listen.png");
+	dialogueTexture = Engine::GetInstance().textures->Load("Assets/Textures/UI/Dialogue/dialogue.png");
+
 	return true;
 }
 
-bool DialogueManager::Update(float dt) {
+bool DialogueManager::PostUpdate() {
+	SDL_GameController* controller = Engine::GetInstance().scene->GetPlayer()->GetMechanics()->GetMovementHandler()->GetController();
+	bool l1PressedNow = false;
+	bool l1JustPressed = false;
+
+	if (controller && SDL_GameControllerGetAttached(controller)) {
+		l1PressedNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == 1;
+		l1JustPressed = (l1PressedNow && !prevL1State);
+		prevL1State = l1PressedNow;
+	}
+
 	if (dialogueAvailable && !dialogueStarted) {
 		ShowInteractionPrompt();
 
-		if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
+		bool interactKeyPressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_E) == KEY_DOWN;
+
+		if (interactKeyPressed || l1JustPressed) {
+			SetPlayerMovement(true);
 			dialogueStarted = true;
 			currentLineIndex = 0;
 			ResetTyping();
@@ -46,7 +64,9 @@ bool DialogueManager::Update(float dt) {
 	}
 
 	if (dialogueStarted && activeDialogueId != -1) {
-		if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+		bool nextKeyPressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN;
+
+		if (nextKeyPressed || l1JustPressed) {
 			if (!typingFinished) {
 				forceTypingFinish = true;
 			}
@@ -61,7 +81,7 @@ bool DialogueManager::Update(float dt) {
 	return true;
 }
 
-bool DialogueManager::PostUpdate() {
+bool DialogueManager::Update(float dt) {
 	return true;
 }
 
@@ -101,6 +121,7 @@ void DialogueManager::RenderDialogue(int dialogueId) {
     const DialogueEvent& event = it->second;
 
     if (event.wrappedLines.empty() || currentLineIndex >= event.wrappedLines.size()) {
+		SetPlayerMovement(false);
         dialogueStarted = false;
         currentLineIndex = 0;
         return;
@@ -108,19 +129,19 @@ void DialogueManager::RenderDialogue(int dialogueId) {
 
     SDL_Rect camera = Engine::GetInstance().render->camera;
 
-    int boxWidth = windowWidth * 0.8f;
+    int boxWidth = windowWidth * 0.87f;
     int boxHeight = windowHeight * 0.2f;
     int boxX = (windowWidth - boxWidth) / 2;
-    int boxY = windowHeight - boxHeight - (windowHeight * 0.05f);
+    int boxY = windowHeight - boxHeight - (windowHeight * 0.12f);
 
     SDL_Rect dialogueBox = { -camera.x + boxX, -camera.y + boxY, boxWidth, boxHeight };
-    Engine::GetInstance().render->DrawRectangle(dialogueBox, 0, 0, 0, 180, true, true);
+	Engine::GetInstance().render->DrawTexture(dialogueTexture, dialogueBox.x, dialogueBox.y);
 
     int marginX = boxWidth * 0.05f;
     int marginTop = boxHeight * 0.15f;
-    int lineSpacing = boxHeight * 0.2f;
+    int lineSpacing = boxHeight * 0.21f;
 
-    int speakerFontSize = boxHeight * 0.25f;
+    int speakerFontSize = boxHeight * 0.3f;
     int dialogueFontSize = boxHeight * 0.15f;
 
     int speakerX = boxX + marginX;
@@ -129,7 +150,7 @@ void DialogueManager::RenderDialogue(int dialogueId) {
     int dialogueX = boxX + marginX;
     int dialogueY = speakerY + lineSpacing;
 
-    Engine::GetInstance().render->DrawText(event.speaker.c_str(), speakerX, speakerY, { 255, 255, 100, 255 }, speakerFontSize);
+    Engine::GetInstance().render->DrawText(event.speaker.c_str(), speakerX + 185, speakerY, { 255, 255, 255, 255 }, speakerFontSize, true);
 
 	const std::vector<std::string>& lines = event.wrappedLines[currentLineIndex];
 
@@ -147,7 +168,7 @@ void DialogueManager::RenderDialogue(int dialogueId) {
 	for (const std::string& l : lines) {
 		int charsInLine = std::min((int)l.length(), charsToDisplay - displayedChars);
 		std::string textToDisplay = l.substr(0, charsInLine);
-		Engine::GetInstance().render->DrawText(textToDisplay.c_str(), dialogueX, dialogueY, { 255, 255, 255, 255 }, dialogueFontSize);
+		Engine::GetInstance().render->DrawText(textToDisplay.c_str(), dialogueX, dialogueY + 50, { 255, 255, 255, 255 }, dialogueFontSize, true);
 		dialogueY += lineSpacing;
 		displayedChars += charsInLine;
 
@@ -163,8 +184,7 @@ void DialogueManager::WrapLines(int dialogueId, int boxWidth, int dialogueFontSi
 	auto& event = dialogueMap[dialogueId];
 	event.wrappedLines.clear();
 
-	int marginX = boxWidth * 0.05f;
-	int maxLineWidth = boxWidth - 2 * marginX;
+	int maxLineWidth = boxWidth - boxWidth * 0.02;
 
 	for (const std::string& line : event.lines) {
 		std::istringstream words(line);
@@ -192,10 +212,12 @@ void DialogueManager::WrapLines(int dialogueId, int boxWidth, int dialogueFontSi
 	}
 }
 
-void DialogueManager::SetDialogueAvailable(int dialogueId, bool active) {
+void DialogueManager::SetDialogueAvailable(int dialogueId, Vector2D npcPos, bool active) {
 	dialogueAvailable = active;
+	SetPlayerMovement(false);
 	dialogueStarted = false;
 	activeDialogueId = active ? dialogueId : -1;
+	promptPos = npcPos;
 
 	if (active) {
 		currentLineIndex = 0;
@@ -204,7 +226,7 @@ void DialogueManager::SetDialogueAvailable(int dialogueId, bool active) {
 }
 
 void DialogueManager::ShowInteractionPrompt() {
-	Engine::GetInstance().render->DrawText("Press E to talk", 600, 400, { 255, 255, 255, 255 }, 40);
+	Engine::GetInstance().render.get()->DrawTexture(listenTexture, promptPos.x - 295/2, promptPos.y);
 }
 
 void DialogueManager::ResetTyping() {
@@ -212,4 +234,13 @@ void DialogueManager::ResetTyping() {
 	currentCharIndex = 0;
 	typingFinished = false;
 	forceTypingFinish = false;
+}
+
+void DialogueManager::SetPlayerMovement(bool isMoving) {
+	Player* player = Engine::GetInstance().scene.get()->GetPlayer();
+	player->GetMechanics()->GetMovementHandler()->SetCantMove(isMoving);
+	player->GetMechanics()->GetJumpMechanic()->Enable(!isMoving);
+	//player->GetMechanics()->GetMovementHandler()->EnableJump(isMoving);
+	//player->GetMechanics()->GetMovementHandler()->EnableDoubleJump(isMoving);
+	//player->GetMechanics()->GetMovementHandler()->EnableDash(isMoving);
 }

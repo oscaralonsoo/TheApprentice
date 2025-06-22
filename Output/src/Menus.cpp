@@ -563,7 +563,7 @@ void Menus::CreateButtons() {
     int spacing = static_cast<int>(BUTTON_SPACING * scale);
     int totalHeight = names.size() * (buttonHeight + spacing) - spacing;
 
-    int startX = (width - buttonWidth) / 2 - 20;
+    int startX = (width - buttonWidth) / 2 - 40;
 
     int startY;
     if (currentState == MenusState::PAUSE) {

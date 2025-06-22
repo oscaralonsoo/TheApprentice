@@ -22,11 +22,6 @@ bool GameMap::Start() {
 
 bool GameMap::Update(float dt) {
 
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-	{
-		showGameMap = !showGameMap;
-	}
-
 	return true;
 }
 

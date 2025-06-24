@@ -563,13 +563,9 @@ void Menus::CreateButtons() {
     int spacing = static_cast<int>(BUTTON_SPACING * scale);
     int totalHeight = names.size() * (buttonHeight + spacing) - spacing;
 
-    int startX = (width - buttonWidth) / 2 - 40;
+    int startX = (width - buttonWidth) / 2 - 20;
 
     int startY;
-    if (currentState == MenusState::MAINMENU) {
-        spacing = static_cast<int>(BUTTON_SPACING * scale * 1.2f);
-        startY = (height - totalHeight) / 2 + static_cast<int>(100 * scale);
-    }
     if (currentState == MenusState::PAUSE) {
         spacing = static_cast<int>(BUTTON_SPACING * scale * 1.5f);
         startY = (height - totalHeight) / 2 - static_cast<int>(20 * scale); 
@@ -603,11 +599,9 @@ void Menus::CreateButton(const std::string& name, int startX, int startY, int bu
 
     int customOffsetX = 0;
     // Aplica un offset solo a BackToMenu para centrarlo mejor
-    if ((currentState == MenusState::MAINMENU||currentState == MenusState::PAUSE) && name == "exit") {
-        customOffsetX = -5;
-    }
     if (currentState == MenusState::PAUSE && name == "controls") {
-        customOffsetX = +25    ;
+        customOffsetX = +25
+            ;
     }
     if (currentState == MenusState::PAUSE && name == "backToMenu") {
         customOffsetX = -21; 

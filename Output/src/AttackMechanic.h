@@ -26,7 +26,7 @@ private:
     PhysBody* attackSensor = nullptr;
 
     Timer attackTimer;
-    float attackDuration = 500.0f; // en milisegundos
+    float attackDuration = 350.0f;
 
     bool isAttacking = false;
 

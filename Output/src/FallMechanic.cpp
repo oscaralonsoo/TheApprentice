@@ -46,7 +46,7 @@ void FallMechanic::CheckLanding() {
         if (verticalVelocity > fallStunThreshold) {
             isStunned = true;
             stunTimer.Start();
-            Engine::GetInstance().render->StartCameraShake(0.2f, 2);
+            Engine::GetInstance().render->StartCameraShake(0.2f, 4);
         }
     }
 }
@@ -70,7 +70,7 @@ void FallMechanic::OnLanding() {
             isStunned = true;
             Engine::GetInstance().audio->PlayFx(soundStunId, 1.0f, 0);
             stunTimer.Start();
-            Engine::GetInstance().render->StartCameraShake(0.2f, 2);
+            Engine::GetInstance().render->StartCameraShake(0.2f, 4);
         }
         if (!player->GetMechanics()->GetMovementHandler()->GetAttackMechanic().IsAttacking())
         {

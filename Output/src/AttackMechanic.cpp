@@ -46,6 +46,7 @@ void AttackMechanic::Update(float dt) {
 
         if (attackPressed) {
             StartAttack();
+            Engine::GetInstance().render->StartCameraShake(0.001f, 1);
         }
     }
     else {

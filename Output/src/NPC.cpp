@@ -62,7 +62,7 @@ bool NPC::Update(float dt)
 
 			MapLayer* layer = Engine::GetInstance().map.get()->GetNavigationLayer();
 
-			if (layer->Get(frontX + 1, posMap.y))
+			if (layer->Get(frontX - 1, posMap.y - 1))
 			{
 				hitWall = true;
 				pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
@@ -96,8 +96,8 @@ bool NPC::Update(float dt)
 	if (type == "caracol") {
 		Engine::GetInstance().render.get()->DrawTexture(
 			texture,
-			(int)position.getX() + width / 2 - texW / 2,
-			(int)position.getY() + height - texH,
+			(int)position.getX(),
+			(int)position.getY(),
 			&currentAnimation->GetCurrentFrame(),
 			1.0f, 0.0, 0, 0,
 			flip, 0, alpha / 255.0f

@@ -42,6 +42,9 @@ void DashMechanic::Update(float dt) {
 
     if (dashPressed && canDash) {
         StartDash();
+        if (controller && SDL_GameControllerGetAttached(controller)) {
+            SDL_GameControllerRumble(controller, 0x7000, 0x7000, 100);
+        }
     }
 
     if (isDashing) {

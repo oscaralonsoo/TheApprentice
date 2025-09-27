@@ -126,6 +126,7 @@ void Enemy::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
 	{
 	case ColliderType::ATTACK:
+		Engine::GetInstance().render->StartCameraShake(0.001f, 1);
 		b2Fixture* fixture = pbody->body->GetFixtureList();
 		b2Filter filter = fixture->GetFilterData();
 		filter.maskBits &= ~CATEGORY_PLAYER_DAMAGE;

@@ -131,10 +131,18 @@ bool AbilityZone::Update(float dt)
 			stopVelocity.x = 0.0f;
 			player->pbody->body->SetLinearVelocity(stopVelocity);
 			player->GetMechanics()->GetMovementHandler()->SetCantMove(true);
+			if (controller && SDL_GameControllerGetAttached(controller)) {
+				SDL_GameControllerRumble(controller, 0x9999, 0x9999, 100);
+			}
 		}
 		else {
 			float maxDistance = pbody->width * 1.5f; // empieza a frenar antes si el collider es m�s ancho
 			float t = 1.0f - std::min(distance / maxDistance, 1.0f);
+			if (controller && SDL_GameControllerGetAttached(controller)) {
+				float vibrationFactor = t; // 0 lejos, 1 cerca
+				Uint16 intensity = static_cast<Uint16>(0xFFFF * vibrationFactor);
+				SDL_GameControllerRumble(controller, intensity, intensity, 100);
+			}
 			b2Vec2 velocity = player->pbody->body->GetLinearVelocity();
 			float slowdownFactor = std::max(0.3f, pow(1.0f - t, 1.0f));
 			velocity.x *= slowdownFactor;
@@ -150,7 +158,7 @@ bool AbilityZone::Update(float dt)
 			}
 
 			if (controller && SDL_GameControllerGetAttached(controller)) {
-				bool r1Now = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
+				bool r1Now = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_X);
 
 				LOG("AbilityZone: mando conectado: %s", SDL_GameControllerName(controller));
 				LOG("AbilityZone: botón R1 estado actual: %d", r1Now);

@@ -39,7 +39,7 @@ private:
     Vector2D dashStartPosition;
 
     Timer dashCooldownTimer;
-    float dashCooldownTime = 1.0f;
+    float dashCooldownTime = 0.5f;
 
     SDL_GameController* controller = nullptr; // en private
     bool rtHeldPreviously = false;

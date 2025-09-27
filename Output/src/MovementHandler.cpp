@@ -129,6 +129,9 @@ void MovementHandler::Update(float dt) {
         bool hookDown = false;
         if (triggerNow && !ltHeldPreviously) {
             hookDown = true;
+            if (controller && SDL_GameControllerGetAttached(controller)) {
+                SDL_GameControllerRumble(controller, 0x7000, 0x7000, 100);
+            }
         }
 
         ltHeldPreviously = triggerNow;

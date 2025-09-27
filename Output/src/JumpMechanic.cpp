@@ -72,6 +72,9 @@ void JumpMechanic::HandleJumpInput(float dt) {
             // Impulso inicial para garantizar altura m�nima
             b2Vec2 impulse(0, -minJumpForce);
             player->pbody->body->ApplyForceToCenter(impulse, true);
+            if (controller && SDL_GameControllerGetAttached(controller)) {
+                SDL_GameControllerRumble(controller, 0x7000, 0x7000, 100);
+            }
         }
         else if (doubleJumpUnlocked && jumpCount < maxJumpCount && !player->GetMechanics()->IsWallSliding()) {
             jumpHoldTimer.Start();
@@ -91,6 +94,9 @@ void JumpMechanic::HandleJumpInput(float dt) {
 
             b2Vec2 impulse(0, -minJumpForce);
             player->pbody->body->ApplyForceToCenter(impulse, true);
+            if (controller && SDL_GameControllerGetAttached(controller)) {
+                SDL_GameControllerRumble(controller, 0x8000, 0x8000, 100);
+            }
         }
         else if (glideUnlocked && jumpCount == 2 && !player->GetMechanics()->IsOnGround() && !player->GetMechanics()->IsWallSliding()) {
             jumpCount = 3;
@@ -102,6 +108,9 @@ void JumpMechanic::HandleJumpInput(float dt) {
             b2Vec2 vel = player->pbody->body->GetLinearVelocity();
             vel.y = 0.0f;
             player->pbody->body->SetLinearVelocity(vel);
+            if (controller && SDL_GameControllerGetAttached(controller)) {
+                SDL_GameControllerRumble(controller, 0x7000, 0x7000, 100);
+            }
         }
         if (jumpCount == 0 && wallJumpUnlocked && player->GetMechanics()->IsWallSliding()) {
             isJumping = true;
@@ -129,6 +138,9 @@ void JumpMechanic::HandleJumpInput(float dt) {
             // Bloqueo de input horizontal
             wallJumpLockActive = true;
             wallJumpLockTimer.Start();
+            if (controller && SDL_GameControllerGetAttached(controller)) {
+                SDL_GameControllerRumble(controller, 0x7000, 0x7000, 100);
+            }
         }
 
     }

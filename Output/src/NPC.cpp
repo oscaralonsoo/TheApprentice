@@ -79,21 +79,12 @@ bool NPC::Update(float dt)
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - width / 2);
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - height / 2);
 
-	Engine::GetInstance().render.get()->DrawTexture(
-		texture,
-		(int)position.getX() + width / 2 - texW / 2,
-		(int)position.getY() + height - texH,
-		&currentAnimation->GetCurrentFrame(),
-		1.0f, 0.0f,
-		INT_MAX, INT_MAX,
-		flip
-	);
+
 	if (type == "bichopalo") {
 		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + width / 2 - texW / 2, 
 			(int)position.getY() + height - texH, &currentAnimation->GetCurrentFrame(), 
 			1.0f, 0.0f, INT_MAX, INT_MAX, SDL_FLIP_HORIZONTAL);
-	}
-	if (type == "caracol") {
+	} else if (type == "caracol") {
 		Engine::GetInstance().render.get()->DrawTexture(
 			texture,
 			(int)position.getX(),
@@ -101,6 +92,17 @@ bool NPC::Update(float dt)
 			&currentAnimation->GetCurrentFrame(),
 			1.0f, 0.0, 0, 0,
 			flip, 0, alpha / 255.0f
+		);
+	}
+	else {
+		Engine::GetInstance().render.get()->DrawTexture(
+			texture,
+			(int)position.getX() + width / 2 - texW / 2,
+			(int)position.getY() + height - texH,
+			&currentAnimation->GetCurrentFrame(),
+			1.0f, 0.0f,
+			INT_MAX, INT_MAX,
+			flip
 		);
 	}
 	

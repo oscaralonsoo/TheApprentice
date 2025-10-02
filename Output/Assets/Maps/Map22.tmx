@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="155" height="99" tilewidth="64" tileheight="64" infinite="0" nextlayerid="73" nextobjectid="4587">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="155" height="99" tilewidth="64" tileheight="64" infinite="0" nextlayerid="73" nextobjectid="4592">
  <tileset firstgid="1" name="PropMala1" tilewidth="64" tileheight="64" tilecount="4" columns="2">
   <image source="../Props/PropMala1.png" width="128" height="128"/>
  </tileset>
@@ -117847,7 +117847,7 @@
    <tile gid="15071"/>
    <tile gid="15074"/>
    <tile gid="15075"/>
-   <tile/>
+   <tile gid="15055"/>
    <tile/>
    <tile/>
    <tile/>
@@ -118000,10 +118000,10 @@
    <tile/>
    <tile/>
    <tile gid="15083"/>
-   <tile gid="15061"/>
-   <tile gid="15075"/>
-   <tile gid="15055"/>
-   <tile/>
+   <tile gid="15060"/>
+   <tile gid="2684369687"/>
+   <tile gid="15065"/>
+   <tile gid="2147498701"/>
    <tile/>
    <tile/>
    <tile/>
@@ -118156,10 +118156,10 @@
    <tile/>
    <tile gid="15093"/>
    <tile gid="15094"/>
+   <tile gid="15083"/>
    <tile gid="2684369687"/>
    <tile gid="15065"/>
    <tile gid="15055"/>
-   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -118312,9 +118312,9 @@
    <tile gid="15053"/>
    <tile gid="15055"/>
    <tile/>
-   <tile gid="1610627863"/>
+   <tile gid="15073"/>
+   <tile gid="15079"/>
    <tile gid="15065"/>
-   <tile gid="15055"/>
    <tile/>
    <tile/>
    <tile/>
@@ -118467,9 +118467,9 @@
    <tile gid="15063"/>
    <tile gid="15065"/>
    <tile/>
-   <tile gid="15073"/>
-   <tile gid="15079"/>
-   <tile gid="15065"/>
+   <tile gid="15083"/>
+   <tile gid="15084"/>
+   <tile gid="15085"/>
    <tile/>
    <tile gid="13703"/>
    <tile gid="13704"/>
@@ -118619,10 +118619,10 @@
    <tile gid="15055"/>
    <tile gid="15063"/>
    <tile gid="15064"/>
-   <tile gid="15127"/>
+   <tile gid="15081"/>
+   <tile gid="15075"/>
+   <tile/>
    <tile gid="15053"/>
-   <tile gid="15054"/>
-   <tile gid="15057"/>
    <tile gid="15067"/>
    <tile gid="15054"/>
    <tile gid="15055"/>
@@ -118774,10 +118774,10 @@
    <tile gid="15064"/>
    <tile gid="15081"/>
    <tile gid="15074"/>
-   <tile gid="15079"/>
-   <tile gid="15064"/>
-   <tile gid="15064"/>
-   <tile gid="15064"/>
+   <tile gid="15074"/>
+   <tile gid="15069"/>
+   <tile/>
+   <tile gid="15063"/>
    <tile gid="15064"/>
    <tile gid="15064"/>
    <tile gid="15064"/>
@@ -118930,9 +118930,9 @@
    <tile gid="15074"/>
    <tile gid="15074"/>
    <tile gid="15074"/>
-   <tile gid="15074"/>
-   <tile gid="15074"/>
-   <tile gid="15074"/>
+   <tile gid="15079"/>
+   <tile gid="2684369631"/>
+   <tile gid="15081"/>
    <tile gid="15074"/>
    <tile gid="15074"/>
    <tile gid="15074"/>
@@ -164060,7 +164060,7 @@
    <tile gid="13749"/>
    <tile gid="13749"/>
    <tile gid="13749"/>
-   <tile/>
+   <tile gid="13749"/>
    <tile/>
    <tile/>
    <tile/>
@@ -164216,7 +164216,7 @@
    <tile/>
    <tile gid="13749"/>
    <tile gid="13749"/>
-   <tile/>
+   <tile gid="13749"/>
    <tile/>
    <tile/>
    <tile/>
@@ -164372,7 +164372,7 @@
    <tile/>
    <tile gid="13749"/>
    <tile gid="13749"/>
-   <tile/>
+   <tile gid="13749"/>
    <tile/>
    <tile/>
    <tile/>
@@ -164678,7 +164678,7 @@
    <tile gid="13749"/>
    <tile gid="13749"/>
    <tile gid="13749"/>
-   <tile/>
+   <tile gid="13749"/>
    <tile/>
    <tile/>
    <tile/>
@@ -164834,7 +164834,7 @@
    <tile gid="13749"/>
    <tile gid="13749"/>
    <tile gid="13749"/>
-   <tile gid="13749"/>
+   <tile/>
    <tile gid="13749"/>
    <tile gid="13749"/>
    <tile gid="13749"/>
@@ -169024,17 +169024,12 @@
   <object id="4086" name="Hook" x="2688" y="2240" width="384" height="128"/>
  </objectgroup>
  <objectgroup id="69" name="NPC">
-  <object id="4456" name="Liebre" x="3904" y="4288" width="320" height="320">
-   <properties>
-    <property name="dialogueId" type="int" value="21"/>
-   </properties>
-  </object>
   <object id="4560" name="Ardilla" x="6528" y="2112" width="320" height="320">
    <properties>
     <property name="dialogueId" type="int" value="31"/>
    </properties>
   </object>
-  <object id="4585" name="Caracol" x="6080" y="3648" width="64" height="128"/>
+  <object id="4585" name="Caracol" x="6080" y="3712" width="64" height="64"/>
   <object id="4586" name="Carta" x="2944" y="4416" width="192" height="192">
    <properties>
     <property name="dialogueId" type="int" value="14"/>
@@ -169094,7 +169089,6 @@
   <object id="4017" x="7680" y="4544" height="64"/>
   <object id="4018" x="8128" y="4544" height="64"/>
   <object id="4019" x="7680" y="4608" width="448"/>
-  <object id="4083" x="3392" y="4542.73" height="65.2727"/>
   <object id="4094" x="7808" y="3870.5" width="192" height="33.5"/>
   <object id="4095" x="8000" y="3840" height="64"/>
   <object id="4096" x="7808" y="3840" height="64"/>
@@ -169128,9 +169122,8 @@
   <object id="4223" x="3840" y="5248" height="64"/>
   <object id="4224" x="3520" y="5184" height="64"/>
   <object id="4227" x="4608" y="5120" height="64"/>
-  <object id="4242" x="3648" y="4416" height="64"/>
-  <object id="4243" x="3584" y="4352" height="64"/>
-  <object id="4245" x="3520" y="4160" height="192"/>
+  <object id="4243" x="3584" y="4288" height="64"/>
+  <object id="4245" x="3520" y="4160" height="128"/>
   <object id="4246" x="3584" y="4096" height="64"/>
   <object id="4247" x="3648" y="4032" height="64"/>
   <object id="4248" x="4032" y="4032" height="64"/>
@@ -169140,7 +169133,6 @@
   <object id="4252" x="5568" y="3968" height="64"/>
   <object id="4253" x="5824" y="3904" height="64"/>
   <object id="4254" x="6080" y="3840" height="64"/>
-  <object id="4260" x="3712" y="4480" height="61.2727"/>
   <object id="4261" x="4864" y="5696" height="64"/>
   <object id="4262" x="5184" y="5696" height="64"/>
   <object id="4263" x="5248" y="5504" height="64"/>
@@ -169173,11 +169165,10 @@
   <object id="4348" x="8064" y="2816" height="64"/>
   <object id="4353" x="7488" y="2752" height="64"/>
   <object id="4354" x="7808" y="3072" height="64"/>
-  <object id="4356" x="3392" y="4542.73" width="64"/>
-  <object id="4357" x="3456" y="4480" height="62.7273"/>
+  <object id="4357" x="3453.33" y="4484" height="188"/>
   <object id="4360" x="3328" y="4480" height="64"/>
   <object id="4361" x="3200" y="4544" height="64"/>
-  <object id="4365" x="3520" y="4416" height="125.273"/>
+  <object id="4365" x="3520" y="4416" height="120.606"/>
   <object id="4367" x="3456" y="4352" height="64"/>
   <object id="4369" x="3328" y="4224" height="128"/>
   <object id="4373" x="2944" y="4160" height="64"/>
@@ -169254,6 +169245,9 @@
   <object id="4567" x="1792" y="704" width="128"/>
   <object id="4568" x="1920" y="704" height="448"/>
   <object id="4570" x="1920" y="1152" width="128"/>
+  <object id="4588" x="3522.67" y="4611.33" height="60.6667"/>
+  <object id="4589" x="3648" y="4352" height="64"/>
+  <object id="4590" x="3712" y="4416" height="124"/>
  </objectgroup>
  <objectgroup id="65" name="Spikes">
   <object id="3902" x="7178" y="1920" width="64" height="384"/>
@@ -169313,9 +169307,8 @@
   <object id="3446" x="7872" y="3200" width="128"/>
   <object id="3629" x="3584" y="4544" width="64"/>
   <object id="3875" x="1408" y="3200" width="1344"/>
-  <object id="3609" x="3648" y="4416" height="64"/>
-  <object id="3610" x="3520" y="4352" width="64"/>
-  <object id="3879" x="3392" y="4608" width="1088"/>
+  <object id="3610" x="3520" y="4288" width="64"/>
+  <object id="3879" x="3524" y="4608" width="956"/>
   <object id="3969" x="4864" y="2816" width="2624"/>
   <object id="4081" x="2880" y="6144" width="320"/>
   <object id="4097" x="7808" y="3840" width="192"/>
@@ -169343,9 +169336,8 @@
   <object id="4210" x="4224" y="4928" width="64"/>
   <object id="4211" x="4224" y="4800" width="64"/>
   <object id="4212" x="4288" y="4736" width="384"/>
-  <object id="4228" x="3648" y="4480" width="64"/>
-  <object id="4229" x="3584" y="4416" width="64"/>
-  <object id="4230" x="3520" y="4352" width="64"/>
+  <object id="4229" x="3584" y="4352" width="64"/>
+  <object id="4230" x="3520" y="4288" width="64"/>
   <object id="4233" x="3520" y="4160" width="64"/>
   <object id="4234" x="3584" y="4096" width="64"/>
   <object id="4235" x="3648" y="4032" width="384"/>
@@ -169387,7 +169379,7 @@
   <object id="4346" x="8064" y="2880" width="64"/>
   <object id="4349" x="7680" y="2812" width="384"/>
   <object id="4352" x="7488" y="2752" width="128"/>
-  <object id="4358" x="3328" y="4480" width="128"/>
+  <object id="4358" x="3328" y="4480" width="123.333"/>
   <object id="4359" x="3200" y="4544" width="128"/>
   <object id="4366" x="3456" y="4416" width="64"/>
   <object id="4368" x="3328" y="4352" width="128"/>
@@ -169467,6 +169459,8 @@
   <object id="4582" x="4608" y="384" height="64"/>
   <object id="4583" x="4544" y="256" height="128"/>
   <object id="4584" x="4544" y="384" width="64"/>
+  <object id="4587" x="3450" y="4672" width="75.3333"/>
+  <object id="4591" x="3648" y="4416" width="64"/>
  </objectgroup>
  <objectgroup id="57" name="WallSlide">
   <object id="3394" x="2816" y="4224" height="320"/>
@@ -169505,18 +169499,17 @@
  <objectgroup id="60" name="Enemies">
   <object id="4049" name="Creebler" x="4992" y="5248" width="64" height="64"/>
   <object id="4077" name="Thumpod" x="5696" y="2752" width="64" height="64"/>
-  <object id="4112" name="Thumpod" x="6016" y="4672" width="64" height="64"/>
+  <object id="4112" name="Thumpod" x="6336" y="4672" width="64" height="64"/>
   <object id="4134" name="Dreadspire" x="8192" y="4160" width="64" height="64">
    <properties>
     <property name="rotationAngle" type="int" value="180"/>
    </properties>
   </object>
-  <object id="4315" name="Dreadspire" x="6400" y="3008" width="64" height="64">
+  <object id="4315" name="Dreadspire" x="6336" y="3008" width="64" height="64">
    <properties>
     <property name="rotationAngle" type="int" value="180"/>
    </properties>
   </object>
-  <object id="4335" name="Dreadspire" x="7859" y="3776" width="64" height="64"/>
   <object id="4438" name="Dreadspire" x="3328" y="2624" width="64" height="64">
    <properties>
     <property name="rotationAngle" type="int" value="180"/>
@@ -169525,7 +169518,6 @@
   <object id="4439" name="Creebler" x="3520" y="3456" width="64" height="64"/>
   <object id="4440" name="Creebler" x="4224" y="3456" width="64" height="64"/>
   <object id="4441" name="Creebler" x="3840" y="3264" width="64" height="64"/>
-  <object id="4454" name="Thumpod" x="4672" y="3648" width="64" height="64"/>
-  <object id="4550" name="Creebler" x="7168" y="6080" width="64" height="64"/>
+  <object id="4550" name="Thumpod" x="8064" y="6016" width="64" height="64"/>
  </objectgroup>
 </map>

@@ -96,6 +96,7 @@ void LifePlant::OnCollision(PhysBody* physA, PhysBody* physB) {
             state = LifePlantStates::CONSUMED;
             Engine::GetInstance().scene->GetPlayer()->GetMechanics()->GetHealthSystem()->AddLife();
             Engine::GetInstance().scene->TriggerVignetteFlash();
+            Engine::GetInstance().render->StartCameraShake(0.001f, 1);
         }
         break;
     }

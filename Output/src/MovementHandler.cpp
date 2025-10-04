@@ -394,6 +394,10 @@ void MovementHandler::OnCollision(PhysBody* physA, PhysBody* physB) {
             player->GetMechanics()->UpdateLastSafePosition(lastPlatformCollider);
         }
         break;
+    case ColliderType::RIGHT_CAMERA:
+        LOG("RIGHT_CAMERA collision detected, moviendo cámara a la derecha");
+        Engine::GetInstance().render->rightCameraActivated = true;
+        break;
     default:
         break;
     }
@@ -444,6 +448,10 @@ void MovementHandler::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
             jumpMechanic.OnLanding();
             player->SetState("idle"); // o lo que corresponda si se mueve
         }
+        break;
+    case ColliderType::RIGHT_CAMERA:
+        LOG("RIGHT_CAMERA collision ended, reseteando offset cámara");
+        Engine::GetInstance().render->rightCameraActivated = false;
         break;
     default:
         break;

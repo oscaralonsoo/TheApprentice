@@ -470,6 +470,29 @@ bool Map::Load(std::string path, std::string fileName)
                     Engine::GetInstance().physics->listToDelete.push_back(downCameraCollider);
                 }
             }
+            else if (objectGroupName == "RightCamera")
+            {
+                for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
+                {
+                    int x = objectNode.attribute("x").as_int();
+                    int y = objectNode.attribute("y").as_int();
+                    int width = objectNode.attribute("width").as_int();
+                    int height = objectNode.attribute("height").as_int();
+
+                    PhysBody* rightCameraCollider = Engine::GetInstance().physics->CreateRectangleSensor(
+                        x + (width / 2),
+                        y + (height / 2),
+                        width, height,
+                        STATIC,
+                        CATEGORY_RIGHT_CAMERA,
+                        CATEGORY_PLAYER
+                    );
+                    rightCameraCollider->ctype = ColliderType::RIGHT_CAMERA;
+
+                    Engine::GetInstance().physics->listToDelete.push_back(rightCameraCollider);
+                }
+                }
+
             else if (objectGroupName == "Abilities") //Abilities from object layer "Abilities"
             {
                 for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))

@@ -354,7 +354,10 @@ void Render::UpdateCamera(const Vector2D& /*unused*/, int movementDirection, flo
 	if (downCameraActivated)
 	{
 		camera.y += static_cast<int>((targetCamY - camera.y) * dynamicSmoothing) - 10;
-
+	}
+	else if (rightCameraActivated)
+	{
+		camera.x += static_cast<int>((targetCamX - camera.x) * dynamicSmoothing) - 20; 
 	}
 	else
 	{

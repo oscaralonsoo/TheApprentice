@@ -45,7 +45,7 @@ bool HelpZone::Start() {
         width, height,
         bodyType::STATIC,
         CATEGORY_HELPZONE,
-        CATEGORY_PLAYER
+        CATEGORY_PLAYER | CATEGORY_PLATFORM
     );
 
     pbody->ctype = ColliderType::HELPZONE;

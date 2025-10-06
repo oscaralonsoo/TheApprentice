@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="171" height="67" tilewidth="64" tileheight="64" infinite="0" nextlayerid="74" nextobjectid="5618">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="171" height="67" tilewidth="64" tileheight="64" infinite="0" nextlayerid="74" nextobjectid="5621">
  <tileset firstgid="1" name="Mangrove_background" tilewidth="64" tileheight="64" tilecount="480" columns="30">
   <image source="../Environment/Mangrove_background.png" width="1920" height="1080"/>
  </tileset>
@@ -91050,9 +91050,9 @@
    <tile gid="17999"/>
    <tile gid="17995"/>
    <tile gid="18007"/>
-   <tile gid="17985"/>
-   <tile gid="17985"/>
-   <tile gid="17986"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile gid="17984"/>
@@ -126340,9 +126340,7 @@
   <object id="4882" x="3200" y="1792" height="64"/>
   <object id="4883" x="3200" y="1856" width="64"/>
   <object id="4886" x="3200" y="1664" width="64"/>
-  <object id="4890" x="2752" y="1856" width="128"/>
   <object id="4891" x="2752" y="1792" width="256"/>
-  <object id="4892" x="2560" y="1856" width="192"/>
   <object id="4893" x="2752" y="1728" height="64"/>
   <object id="4895" x="3264" y="1664" width="192"/>
   <object id="4896" x="3456" y="1664" height="64"/>
@@ -126537,8 +126535,6 @@
   <object id="5554" x="6272" y="4032" width="192"/>
   <object id="5555" x="6464" y="3904" height="128"/>
   <object id="5556" x="6464" y="3904" width="128"/>
-  <object id="5558" x="5632" y="3968" height="64"/>
-  <object id="5559" x="5440" y="3968" width="192"/>
   <object id="5560" x="5760" y="3968" height="64"/>
   <object id="5561" x="5760" y="3968" width="192"/>
   <object id="5563" x="5952" y="3904" height="64"/>
@@ -126587,6 +126583,9 @@
   <object id="5610" x="8064" y="2368" height="128"/>
   <object id="5615" x="8064" y="2496" height="64"/>
   <object id="5616" x="7936" y="2560" width="128"/>
+  <object id="5618" x="5440" y="4032" width="192"/>
+  <object id="5619" x="5440" y="3968" height="64"/>
+  <object id="5620" x="2560" y="1856" width="320"/>
  </objectgroup>
  <objectgroup id="67" name="HookAnchors">
   <object id="4748" name="Hook" x="7104" y="1984" width="64" height="64"/>

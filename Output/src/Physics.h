@@ -43,6 +43,7 @@
 #define CATEGORY_BROOD			  24
 #define	CATEGORY_PROJECTILE		  25
 #define CATEGORY_PRESSURE_DOOR    26
+#define CATEGORY_RIGHT_CAMERA     27
 
 // types of bodies
 enum bodyType {
@@ -60,6 +61,7 @@ enum class ColliderType {
 	WALL_SLIDE,
 	WALL,
 	DOWN_CAMERA,
+	RIGHT_CAMERA,
 	ATTACK,
 	GEYSER,
 	CAVE_DROP,

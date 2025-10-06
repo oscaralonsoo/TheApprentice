@@ -97,4 +97,6 @@ public:
 	float currentFovFactor = 1.0f;
 
 	bool downCameraActivated = false;
+
+	bool rightCameraActivated = false;
 };

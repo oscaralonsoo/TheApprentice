@@ -127,6 +127,12 @@ void Enemy::OnCollision(PhysBody* physA, PhysBody* physB) {
 	{
 	case ColliderType::ATTACK:
 		Engine::GetInstance().render->StartCameraShake(0.001f, 1);
+		Scene* scene = Engine::GetInstance().scene.get();
+		Player* player = scene->GetPlayer();
+		if (player && player->GetMechanics()->GetMovementHandler()->GetController()) {
+			SDL_GameController* controller = player->GetMechanics()->GetMovementHandler()->GetController();
+			SDL_GameControllerRumble(controller, 0x9000, 0x9000, 300);
+		}
 		b2Fixture* fixture = pbody->body->GetFixtureList();
 		b2Filter filter = fixture->GetFilterData();
 		filter.maskBits &= ~CATEGORY_PLAYER_DAMAGE;

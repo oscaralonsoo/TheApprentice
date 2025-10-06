@@ -21,25 +21,11 @@
 	</window>
 	<scene>
 		<maps>
-			<Map_0 path="Assets/Maps/" name="Map0.tmx" />
 			<Map_1 path="Assets/Maps/" name="Map1.tmx" />
-			<Map_12 path="Assets/Maps/" name="Map12.tmx" />
-			<Map_13 path="Assets/Maps/" name="Map13.tmx" />
-			<Map_14 path="Assets/Maps/" name="Map14.tmx" />
-			<Map_21 path="Assets/Maps/" name="Map21.tmx" />
-			<Map_22 path="Assets/Maps/" name="Map22.tmx" />
-			<Map_23 path="Assets/Maps/" name="Map23.tmx" />
-			<Map_31 path="Assets/Maps/" name="Map31.tmx" />
-			<Map_41 path="Assets/Maps/" name="Map41.tmx" />
-			<Map_42 path="Assets/Maps/" name="Map42.tmx" />
-			<Map_43 path="Assets/Maps/" name="Map43.tmx" />
-			<Map_51 path="Assets/Maps/" name="Map51.tmx" />
-			<Map_52 path="Assets/Maps/" name="Map52.tmx" />
+			<Map_2 path="Assets/Maps/" name="Map2.tmx" />
+			<Map_3 path="Assets/Maps/" name="Map3.tmx" />
+			<Map_4 path="Assets/Maps/" name="Map4.tmx" />
 			<Map_69 path="Assets/Maps/" name="Map69.tmx" />
-			<Map_99 path="Assets/Maps/" name="Map99.tmx" />
-			<Map_6666 path="Assets/Maps/" name="Map6666.tmx" />
-			<Map_66662 path="Assets/Maps/" name="Map66662.tmx" />
-			<Map_66663 path="Assets/Maps/" name="Map66663.tmx" />
 		</maps>
 		<animations>
 			<loadingScreen w="100" h="100" texture=" loadScreen.png">
@@ -1349,10 +1335,10 @@
 				<ability type="Dash" w="124" h="124" texture="Assets/Textures/Abilities/jump.png" />
 			</abilities>
 		</animations>
-		<save_data isSaved="0">
-			<player x="1152" y="970" w="44" h="54" lives="2" maxlives="2" />
-			<abilities jump="false" doublejump="false" dash="false" />
-			<scene actualScene="1" />
+		<save_data isSaved="1">
+			<player x="2455" y="486" w="44" h="54" lives="5" maxlives="5" />
+			<abilities jump="true" doublejump="false" dash="true" />
+			<scene actualScene="3" />
 			<enemies />
 		</save_data>
 	</scene>

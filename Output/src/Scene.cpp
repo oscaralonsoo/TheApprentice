@@ -208,35 +208,19 @@ void Scene::ChangeScene(int nextScene)
 		if (!path.empty() && !name.empty()) {
 			Engine::GetInstance().map->Load(path, name);
 			switch (nextScene) {
-			case 0:
 			case 1:
-			case 12:
-			case 13:
-			case 14:
 				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 0.0f, 0.5f);
 				break;
-			case 21:
-			case 22:
-			case 23:
+			case 2:
 				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/manglar_music.ogg", 0.0f, 0.5f);
 				break;
-			case 31:
-			case 41: 
-			case 42:
-			case 43:
+			case 3:
 				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/snowforest_music.ogg", 0.0f, 0.5f);
-				break;
-			case 51:
-			case 52:
-				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/shadowforest_music.ogg", 0.0f, 0.5f);
 				break;
 			case 69:
 				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/stick.ogg", 0.0f, 0.5f);
 				break;
-			case 99:
-				Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/nullwarden_music.ogg", 0.0f, 0.5f);
-				break;
-			case 6666:
+			case 4:
 				Engine::GetInstance().audio->PlayMusic("Assets/Audio/Music/dungbeetle_music.ogg", 0.0f, 0.5f);
 				break;
 			}

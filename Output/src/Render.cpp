@@ -357,7 +357,7 @@ void Render::UpdateCamera(const Vector2D& /*unused*/, int movementDirection, flo
 	}
 	else if (rightCameraActivated)
 	{
-		camera.x += static_cast<int>((targetCamX - camera.x) * dynamicSmoothing) - 20; 
+		camera.x += static_cast<int>((targetCamX - camera.x) * dynamicSmoothing) - 10; 
 	}
 	else
 	{

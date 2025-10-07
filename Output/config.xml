@@ -9,8 +9,8 @@
 	</render>
 	<audio>
 		<master value="0.5" />
-		<music value="0.270000011" />
-		<sfx value="0.995000005" />
+		<music value="0.119999997" />
+		<sfx value="1" />
 	</audio>
 	<window>
 		<resolution width="1280" height="720" scale="1" />
@@ -75,13 +75,13 @@
 					<frame x="896" y="420" w="112" h="112" />
 					<frame x="1008" y="420" w="112" h="112" />
 				</eat>
-				<attack loop="false" speed="0.15">
-					<frame x="0" y="308" w="112" h="112" />
-					<frame x="112" y="308" w="112" h="112" />
-					<frame x="224" y="308" w="112" h="112" />
-					<frame x="336" y="308" w="112" h="112" />
-					<frame x="448" y="308" w="112" h="112" />
-					<frame x="560" y="308" w="112" h="112" />
+				<attack loop="false" speed="0.30">
+					<frame x="0" y="308" w="144" h="112" />
+					<frame x="144" y="308" w="144" h="112" />
+					<frame x="288" y="308" w="144" h="112" />
+					<frame x="432" y="308" w="144" h="112" />
+					<frame x="576" y="308" w="144" h="112" />
+					<frame x="720" y="308" w="144" h="112" />
 				</attack>
 				<hit loop="false" speed="0.17">
 					<frame x="0" y="516" w="112" h="120" />
@@ -1336,7 +1336,7 @@
 			</abilities>
 		</animations>
 		<save_data isSaved="1">
-			<player x="2437" y="486" w="44" h="54" lives="3" maxlives="3" />
+			<player x="2448" y="486" w="44" h="54" lives="3" maxlives="4" />
 			<abilities jump="true" doublejump="false" dash="true" />
 			<scene actualScene="3" />
 			<enemies />

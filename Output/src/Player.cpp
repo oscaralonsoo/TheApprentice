@@ -74,11 +74,12 @@ bool Player::Start() {
 	Vector2D(832, 3904),
 	Vector2D(448, 576),
 	Vector2D(128, 960),
+	Vector2D(1728, 704),
 	};
 
 	intArray = {1, 2, 3, 4, 69};
 
-	currentIndex = 1;
+	currentIndex = 0;
 
 	return true;
 }

@@ -73,7 +73,7 @@ bool Dreadspire::Start() {
     b2Vec2 center = pbody->body->GetPosition(); // centro actual
     pbody->body->SetTransform(center, radians);
 
-    maxSteps = 25;
+    maxSteps = 15;
 
     soundAttackId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Dreadspire/dreadspire_recharge.ogg", 1.0f);
     soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Dreadspire/dreadspire_death.ogg", 1.0f);

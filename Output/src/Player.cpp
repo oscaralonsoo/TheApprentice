@@ -70,25 +70,13 @@ bool Player::Start() {
 	pbody->body->SetGravityScale(2.0f);
 
 	positionArray = {
-	Vector2D(1461, 753),
-	Vector2D(1082, 908),
-	Vector2D(760, 3826),
-	Vector2D(448, 1856),
-	Vector2D(3402, 4020),
-	Vector2D(3392, 6080),
-	Vector2D(428, 620),
-	Vector2D(1152, 1088),
-	Vector2D(276, 2824),
-	Vector2D(7038, 446),
-	Vector2D(4372, 1150),
-	Vector2D(7939, 4656),
-	Vector2D(5578, 4486),
-	Vector2D(1510, 732),
-	Vector2D(449, 932),
-	Vector2D(446, 928),
+	Vector2D(960, 1728),
+	Vector2D(832, 3904),
+	Vector2D(448, 576),
+	Vector2D(128, 960),
 	};
 
-	intArray = {0, 1, 12, 14, 21, 22, 23, 31, 41, 42, 43, 51, 52, 69, 99, 6666};
+	intArray = {1, 2, 3, 4, 69};
 
 	currentIndex = 1;
 

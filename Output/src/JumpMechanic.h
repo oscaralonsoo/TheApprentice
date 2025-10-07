@@ -48,8 +48,8 @@ private:
     bool isJumping = false;
     bool jumpInterrupted = false;
 
-    float minJumpForce = 1000.0f;            // Fuerza inicial para garantizar altura m�nima
-    float progressiveJumpForce = 15.0f;    // Fuerza para el salto sostenido
+    float minJumpForce = 15.0f;            // Fuerza inicial para garantizar altura m�nima
+    float progressiveJumpForce = 55.0f;    // Fuerza para el salto sostenido
     float jumpHoldForceFactor = 1.0f;       // Factor inicial de fuerza sostenida
     float jumpDecayRate = 10.5f;             // Qu� tan r�pido decae la fuerza sostenida
     float fallAccelerationFactor = 15.0f;   // Fuerza que empuja hacia abajo al soltar el salto

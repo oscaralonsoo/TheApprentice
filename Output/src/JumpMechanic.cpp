@@ -71,7 +71,7 @@ void JumpMechanic::HandleJumpInput(float dt) {
 
             // Impulso inicial para garantizar altura m�nima
             b2Vec2 impulse(0, -minJumpForce);
-            player->pbody->body->ApplyForceToCenter(impulse, true);
+            player->pbody->body->ApplyLinearImpulseToCenter(impulse, true);
         }
         else if (doubleJumpUnlocked && jumpCount < maxJumpCount && !player->GetMechanics()->IsWallSliding()) {
             jumpHoldTimer.Start();
@@ -90,7 +90,7 @@ void JumpMechanic::HandleJumpInput(float dt) {
             player->pbody->body->SetLinearVelocity(vel);
 
             b2Vec2 impulse(0, -minJumpForce);
-            player->pbody->body->ApplyForceToCenter(impulse, true);
+            player->pbody->body->ApplyLinearImpulseToCenter(impulse, true);
             if (controller && SDL_GameControllerGetAttached(controller)) {
                 SDL_GameControllerRumble(controller, 0x8000, 0x8000, 100);
             }

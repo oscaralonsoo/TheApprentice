@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="43" height="21" tilewidth="64" tileheight="64" infinite="0" nextlayerid="91" nextobjectid="1887">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="43" height="21" tilewidth="64" tileheight="64" infinite="0" nextlayerid="91" nextobjectid="1908">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -8056,22 +8056,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="9062"/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile gid="9063"/>
    <tile/>
    <tile/>
    <tile/>
@@ -8087,7 +8071,23 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="9063"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -11918,60 +11918,45 @@
     <property name="TargetScene" type="int" value="42"/>
    </properties>
   </object>
-  <object id="1885" x="448" y="1024" width="64"/>
  </objectgroup>
  <objectgroup id="79" name="Props"/>
  <objectgroup id="26" name="Collisions">
   <object id="1600" x="-128" y="1024" width="384"/>
-  <object id="1592" x="256" y="448" height="384"/>
   <object id="1775" x="1088" y="768" width="768"/>
   <object id="1794" x="1088" y="640" width="768"/>
   <object id="1817" x="-128" y="832" width="384"/>
   <object id="1830" x="2688" y="192" height="960"/>
   <object id="1831" x="256" y="1152" width="320"/>
   <object id="1832" x="256" y="1024" height="128"/>
-  <object id="1852" x="1344" y="1152" width="192"/>
   <object id="1856" x="2304" y="1152" width="384"/>
   <object id="1861" x="1792" y="192" width="896"/>
   <object id="1792" x="1088" y="640" height="128"/>
   <object id="1841" x="960" y="512" width="192"/>
-  <object id="1842" x="960" y="512" height="384"/>
-  <object id="1843" x="960" y="896" width="1024"/>
-  <object id="1844" x="1984" y="512" height="384"/>
   <object id="1845" x="1792" y="512" width="192"/>
-  <object id="1839" x="1792" y="192" height="320"/>
-  <object id="1840" x="1152" y="192" height="320"/>
   <object id="1867" x="256" y="384" width="256"/>
   <object id="1876" x="448" y="896" width="128"/>
-  <object id="1883" x="256" y="192" height="192"/>
   <object id="1884" x="3154.55" y="793.939"/>
  </objectgroup>
  <objectgroup id="85" name="Wall">
   <object id="1617" x="256" y="192" width="896"/>
-  <object id="1689" x="1408" y="1024" width="64"/>
   <object id="1793" x="1856" y="640" height="128"/>
-  <object id="1878" x="576" y="896" height="64"/>
+  <object id="1878" x="576" y="898" height="62"/>
   <object id="1879" x="448" y="960" width="128"/>
-  <object id="1880" x="448" y="896" height="64"/>
-  <object id="1851" x="1344" y="1152" height="64"/>
-  <object id="1853" x="1536" y="1152" height="64"/>
-  <object id="1857" x="2304" y="1152" height="64"/>
+  <object id="1880" x="448" y="899" height="61"/>
   <object id="1872" x="576" y="1152" height="64"/>
   <object id="1881" x="512" y="384" height="64"/>
   <object id="1882" x="256" y="448" width="256"/>
+  <object id="1890" x="960" y="512" height="384"/>
+  <object id="1891" x="1152" y="192" height="320"/>
+  <object id="1892" x="960" y="896" width="1024"/>
+  <object id="1893" x="1984" y="512" height="384"/>
+  <object id="1894" x="1792" y="192" height="320"/>
+  <object id="1895" x="256" y="192" height="192"/>
+  <object id="1896" x="256" y="448" height="384"/>
  </objectgroup>
- <objectgroup id="89" name="Liana">
-  <object id="1846" x="2368" y="192" width="64" height="832"/>
- </objectgroup>
- <objectgroup id="90" name="HookAnchors">
-  <object id="1848" x="2432" y="1024" width="64" height="64"/>
-  <object id="1850" x="1408" y="1024" width="64" height="64"/>
-  <object id="1886" x="448" y="1024" width="64" height="64"/>
- </objectgroup>
- <objectgroup id="84" name="Spikes">
-  <object id="1858" x="1536" y="1173.67" width="768" height="42.3333"/>
-  <object id="1859" x="576" y="1171.33" width="768" height="44.6667"/>
- </objectgroup>
+ <objectgroup id="89" name="Liana"/>
+ <objectgroup id="90" name="HookAnchors"/>
+ <objectgroup id="84" name="Spikes"/>
  <objectgroup id="80" name="Enemies">
   <object id="1701" name="DungBeetle" x="1344" y="192" width="64" height="64"/>
   <object id="1783" name="Creebler" x="1408" y="704" width="64" height="64">
@@ -11982,11 +11967,6 @@
   <object id="1784" name="Creebler" x="1677.5" y="704" width="64" height="64">
    <properties>
     <property name="navigationLayer" value="Path2"/>
-   </properties>
-  </object>
-  <object id="1873" name="Dreadspire" x="2560" y="192" width="64" height="64">
-   <properties>
-    <property name="rotation" type="int" value="90"/>
    </properties>
   </object>
  </objectgroup>
@@ -12036,6 +12016,11 @@
   <object id="1868" name="Plate" x="256" y="320" width="64" height="64">
    <properties>
     <property name="groupId" type="int" value="3"/>
+   </properties>
+  </object>
+  <object id="1900" name="Door" x="764" y="830" width="192" height="64">
+   <properties>
+    <property name="groupId" type="int" value="0"/>
    </properties>
   </object>
  </objectgroup>

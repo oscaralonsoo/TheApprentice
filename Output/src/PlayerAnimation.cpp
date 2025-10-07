@@ -58,7 +58,11 @@ void PlayerAnimation::Update(const std::string& state, int x, int y, bool visibl
     if (state == "push") drawY = y - 10;
     if (state == "run_right") drawY = y - 19;
     if (state == "idle") drawY = y - 4;
-    if (state == "attack") drawY = y - 20;
+    if (state == "attack") {
+        drawY = y - 20;
+        if (adjustedFlip)
+            drawX = x - 40;
+    }
     if (state == "eat") drawY = y - 10;
     if (state == "hit") drawY = y - 10;
     if (state == "landing_stun") drawY = y + 18;

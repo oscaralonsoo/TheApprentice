@@ -248,31 +248,20 @@ void ParticleManager::SpawnSnowParticles() {
 void ParticleManager::SetParticlesByMap(int scene) {
 
 	switch (scene) {
-	case 0:
-	case 666:
-	case 6666:
-	case 99:
+	case 4:
 		SpawnDustParticles(DustParticleVariant::CRYSTAL_CAVE);
 		break;
 	case 1:
-	case 12:
-	case 13:
-	case 14:
 		SpawnDustParticles(DustParticleVariant::CAVE);
 		break;
-	case 21:
-	case 22:
-	case 23:
+	case 2:
 		SpawnRainParticles();
 		SpawnFireflyParticles();
 		break;
 	case 69:
 		SpawnFireflyParticles();
 		break;
-	case 31:
-	case 41:
-	case 42:
-	case 43:
+	case 3:
 		SpawnSnowParticles();
 		break;
 	default:

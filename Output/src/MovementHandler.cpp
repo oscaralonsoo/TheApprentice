@@ -295,10 +295,22 @@ void MovementHandler::UpdateAnimation() {
 
 void MovementHandler::EnableJump(bool enable) {
     jumpMechanic.Enable(enable);
+    if (enable) {
+        // Si desbloqueas estando en el suelo, deja el salto listo ya
+        if (player->IsTouchingPlatform()) {                 // grounded ahora
+            jumpMechanic.OnLanding();                       // resetea contadores/flags
+        }
+    }
 }
 
 void MovementHandler::EnableDoubleJump(bool enable) {
     jumpMechanic.EnableDoubleJump(enable);
+    if (enable) {
+        // Igual que arriba: si lo activas en el suelo, recarga los saltos ya
+        if (player->IsTouchingPlatform()) {
+            jumpMechanic.OnLanding();
+        }
+    }
 }
 
 void MovementHandler::EnableDash(bool enable) {

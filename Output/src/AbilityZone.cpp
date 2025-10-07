@@ -422,6 +422,12 @@ void AbilityZone::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 		playerInsideDoubleJump = false;
 		playerInsideDash = false;
 		mechanics->GetHealthSystem()->SetVignetteSize(Engine::GetInstance().scene->previousVignetteSize);
+		player->GetMechanics()->GetMovementHandler()->disableAbilities = false; 
+		player->GetMechanics()->GetMovementHandler()->SetCantMove(false);       
+		xHeld = false;                                                         
+		if (controller && SDL_GameControllerGetAttached(controller)) {
+			SDL_GameControllerRumble(controller, 0, 0, 0);                     
+		}
 		break;
 	default:
 		break;

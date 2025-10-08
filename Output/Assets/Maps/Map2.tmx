@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="118" height="72" tilewidth="64" tileheight="64" infinite="0" nextlayerid="74" nextobjectid="6115">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="118" height="72" tilewidth="64" tileheight="64" infinite="0" nextlayerid="74" nextobjectid="6119">
  <tileset firstgid="1" name="Mangrove_background" tilewidth="64" tileheight="64" tilecount="480" columns="30">
   <image source="../Environment/Mangrove_background.png" width="1920" height="1080"/>
  </tileset>
@@ -61645,10 +61645,10 @@
    <tile gid="17866"/>
    <tile gid="17869"/>
    <tile gid="17867"/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="17866"/>
+   <tile gid="17866"/>
+   <tile gid="17866"/>
+   <tile gid="17866"/>
    <tile gid="17995"/>
    <tile gid="17995"/>
    <tile gid="17995"/>
@@ -61763,10 +61763,10 @@
    <tile gid="17876"/>
    <tile gid="17876"/>
    <tile gid="17876"/>
-   <tile gid="19250"/>
-   <tile gid="19250"/>
-   <tile gid="19250"/>
-   <tile gid="17886"/>
+   <tile gid="17876"/>
+   <tile gid="17876"/>
+   <tile gid="17876"/>
+   <tile gid="17876"/>
    <tile gid="17995"/>
    <tile gid="17995"/>
    <tile gid="17995"/>
@@ -80123,8 +80123,8 @@
    <tile gid="16944"/>
    <tile gid="16945"/>
    <tile/>
-   <tile gid="17306"/>
-   <tile gid="17307"/>
+   <tile/>
+   <tile/>
    <tile gid="17308"/>
    <tile gid="17309"/>
    <tile gid="17310"/>
@@ -93660,19 +93660,27 @@
   <object id="5825" name="Spikes" x="5184" y="3594.67" width="192" height="102.666"/>
   <object id="6072" x="3712" y="2185" width="832" height="119"/>
   <object id="6073" x="5760" y="2314" width="384" height="118"/>
+  <object id="6118" x="1344" y="1741" width="128" height="115"/>
  </objectgroup>
  <objectgroup id="64" name="Abilities">
   <object id="4914" name="Hook" x="3195" y="1065" width="384" height="128"/>
   <object id="5789" name="Dash" x="4979" y="4012" width="384" height="128"/>
  </objectgroup>
- <objectgroup id="65" name="NPC"/>
+ <objectgroup id="65" name="NPC">
+  <object id="6115" name="Caracol" x="4032" y="3520" width="64" height="64"/>
+  <object id="6116" name="Pangolin" x="1792" y="3712" width="448" height="256">
+   <properties>
+    <property name="dialogueId" type="int" value="1"/>
+   </properties>
+  </object>
+ </objectgroup>
  <objectgroup id="25" name="Doors">
   <properties>
    <property name="Doors" type="bool" value="true"/>
   </properties>
   <object id="4654" name="Map69" x="1408" y="2112" width="64" height="193.333">
    <properties>
-    <property name="PlayerPosX" type="int" value="256"/>
+    <property name="PlayerPosX" type="int" value="1728"/>
     <property name="PlayerPosY" type="int" value="704"/>
     <property name="TargetScene" type="int" value="69"/>
    </properties>
@@ -93737,8 +93745,8 @@
   <object id="5296" x="2624" y="1344" width="128"/>
   <object id="5389" x="2432" y="2816" height="64"/>
   <object id="5390" x="2432" y="2816" width="64"/>
-  <object id="5393" x="2176" y="2625.5" height="62.5"/>
-  <object id="5395" x="2112" y="2690" height="62"/>
+  <object id="5393" x="2176" y="2629.5" height="58.5"/>
+  <object id="5395" x="2112" y="2693" height="59"/>
   <object id="5397" x="1664" y="2688.73" height="63.2727"/>
   <object id="5407" x="2816" y="2468" width="191" height="28"/>
   <object id="5409" x="2688" y="2560" width="128"/>
@@ -93794,19 +93802,19 @@
   <object id="5811" x="5696" y="3392" width="64"/>
   <object id="5812" x="5760" y="3392" height="192"/>
   <object id="5816" x="4800" y="3328" height="64"/>
-  <object id="5820" x="4736" y="3648" height="64"/>
+  <object id="5820" x="4736" y="3651.33" height="60.6667"/>
   <object id="5821" x="5376" y="3392" height="64"/>
   <object id="5822" x="5440" y="3328" height="64"/>
   <object id="5823" x="5696" y="3328" height="64"/>
-  <object id="5826" x="5184" y="3584.38" height="127.625"/>
-  <object id="5827" x="5376" y="3584.63" height="127.375"/>
+  <object id="5826" x="5184" y="3589.05" height="122.958"/>
+  <object id="5827" x="5376" y="3588.63" height="123.375"/>
   <object id="5828" x="5184" y="3712" width="192"/>
   <object id="5833" x="4736" y="3961.25" height="66.75"/>
-  <object id="5834" x="4608" y="4032" height="64"/>
-  <object id="5835" x="4864" y="4096" height="64"/>
+  <object id="5834" x="4608" y="4036.67" height="59.3333"/>
+  <object id="5835" x="4864" y="4099.33" height="60.6667"/>
   <object id="5836" x="4800" y="3392" width="64"/>
   <object id="5837" x="4864" y="3392" height="64"/>
-  <object id="5838" x="4992" y="3584" height="64"/>
+  <object id="5838" x="4992" y="3587.33" height="60.6667"/>
   <object id="5849" x="2624" y="3200" width="640"/>
   <object id="5850" x="3264" y="3136" width="320"/>
   <object id="5852" x="2304" y="2880" width="128"/>
@@ -93881,7 +93889,7 @@
   <object id="5949" x="1664" y="2112" height="64"/>
   <object id="5950" x="1408" y="2112" width="256"/>
   <object id="5951" x="1408" y="2112" height="192"/>
-  <object id="5955" x="1728" y="2304.36" height="63.6364"/>
+  <object id="5955" x="1728" y="2306.86" height="61.1364"/>
   <object id="5970" x="1281.25" y="1664" width="189"/>
   <object id="5971" x="1472" y="1600" width="256"/>
   <object id="5972" x="1728" y="1600" height="128"/>
@@ -94042,7 +94050,7 @@
  </objectgroup>
  <objectgroup id="57" name="WallSlide">
   <object id="4847" x="3392" y="2881.33" height="62.6667"/>
-  <object id="5624" x="2560" y="2624" height="127.636"/>
+  <object id="5624" x="2560" y="2627.5" height="124.136"/>
   <object id="4898" x="1152" y="1601" height="127"/>
   <object id="5259" x="1088" y="1472" height="128"/>
   <object id="5261" x="1152" y="1344" height="128"/>
@@ -94051,7 +94059,7 @@
   <object id="5399" x="1600" y="2560" height="128"/>
   <object id="5412" x="2624" y="2368" height="128"/>
   <object id="5414" x="2560" y="2178" height="190"/>
-  <object id="5511" x="5952" y="2048" height="128"/>
+  <object id="5511" x="5952" y="2049.67" height="126.333"/>
   <object id="5534" x="4288" y="3136" height="128"/>
   <object id="5536" x="4096" y="3008" height="128"/>
   <object id="5568" x="2176" y="2373.38" height="122.625"/>

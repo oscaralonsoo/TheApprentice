@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="140" height="71" tilewidth="64" tileheight="64" infinite="0" nextlayerid="82" nextobjectid="1736">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="140" height="71" tilewidth="64" tileheight="64" infinite="0" nextlayerid="82" nextobjectid="1743">
  <tileset firstgid="1" name="rocas1" tilewidth="64" tileheight="64" tilecount="480" columns="30">
   <image source="../Environment/rocas1.png" width="1920" height="1080"/>
  </tileset>
@@ -72375,7 +72375,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="7895"/>
+   <tile/>
    <tile/>
    <tile gid="1073749492"/>
    <tile gid="1073749493"/>
@@ -73800,7 +73800,7 @@
    <tile gid="7896"/>
    <tile gid="7897"/>
    <tile gid="7875"/>
-   <tile gid="7417"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -99530,7 +99530,7 @@
   </data>
  </layer>
  <objectgroup id="57" name="WallSlide">
-  <object id="847" x="6592" y="1664" height="245.556"/>
+  <object id="847" x="6591.33" y="1664" height="255.889"/>
   <object id="848" x="7616" y="1472" height="59.7778"/>
   <object id="956" x="3328" y="2055.33" height="376.667"/>
   <object id="957" x="3456" y="1920" height="191.997"/>
@@ -99556,7 +99556,7 @@
  </objectgroup>
  <objectgroup id="26" name="Collisions">
   <object id="775" x="6400" y="3008" width="384"/>
-  <object id="800" x="6592" y="1920" width="256"/>
+  <object id="800" x="6594.33" y="1920" width="253.667"/>
   <object id="942" x="1472" y="1792" width="1472"/>
   <object id="975" x="3456" y="1920" width="64"/>
   <object id="976" x="2944" y="1856" width="128"/>
@@ -99582,7 +99582,7 @@
   <object id="1429" x="576" y="1792" width="896"/>
   <object id="1472" x="3520" y="1792" width="128"/>
   <object id="1473" x="3648" y="1728" width="256"/>
-  <object id="1507" x="5824" y="1792" width="704"/>
+  <object id="1507" x="5824" y="1792" width="702"/>
   <object id="1508" x="5760" y="1856" width="64"/>
   <object id="1509" x="6528" y="1984" width="448"/>
   <object id="1510" x="6976" y="1920" width="256"/>
@@ -99714,7 +99714,7 @@
   <object id="1514" x="6464" y="1600" height="64"/>
   <object id="1515" x="6912" y="1792" height="64"/>
   <object id="1516" x="6848" y="1856" width="64"/>
-  <object id="1517" x="6528" y="1792" height="128"/>
+  <object id="1517" x="6526.33" y="1792" height="128"/>
   <object id="1519" x="5824" y="1792" height="64"/>
   <object id="1521" x="5760" y="1920" width="64"/>
   <object id="1522" x="5760" y="1856" height="64"/>
@@ -99828,7 +99828,7 @@
   <object id="1721" x="6336" y="3392" width="64"/>
   <object id="1722" x="6400" y="3392" height="128"/>
   <object id="1724" x="6784" y="2752" height="256"/>
-  <object id="1725" x="6208" y="1920" width="320"/>
+  <object id="1725" x="6208" y="1920" width="316.667"/>
   <object id="1726" x="6208" y="1920" height="64"/>
   <object id="1727" x="5824" y="1984" width="384"/>
   <object id="1728" x="5824" y="1920" height="64"/>
@@ -99839,7 +99839,7 @@
   <object id="1729" name="Attack" x="4513.33" y="3448" width="192" height="192"/>
  </objectgroup>
  <objectgroup id="61" name="DestructibleWalls" visible="0"/>
- <objectgroup id="64" name="Props" visible="0">
+ <objectgroup id="64" name="Props">
   <object id="1301" name="LifePlant" x="5120" y="2560" width="64" height="64"/>
   <object id="1365" name="CaveDrop" x="6336" y="3264" width="64" height="64"/>
   <object id="1366" name="CaveDrop" x="5376" y="2368" width="64" height="64"/>
@@ -99855,11 +99855,18 @@
   <object id="1382" name="CaveDrop" x="3072" y="2880" width="64" height="64"/>
   <object id="1383" name="CaveDrop" x="3776" y="2944" width="64" height="64"/>
   <object id="1385" name="CaveDrop" x="4416" y="3520" width="64" height="64"/>
-  <object id="1386" name="CaveDrop" x="5888" y="3520" width="64" height="64"/>
+  <object id="1386" name="CaveDrop" x="5952" y="3520" width="64" height="64"/>
   <object id="1415" name="CaveDrop" x="6144" y="1856" width="64" height="64"/>
   <object id="1470" name="LifePlantMax" x="3712" y="1536" width="64" height="64"/>
   <object id="1573" name="CaveDrop" x="4480" y="1664" width="64" height="64"/>
   <object id="1574" name="CaveDrop" x="4736" y="1728" width="64" height="64"/>
+  <object id="1736" name="CaveDrop" x="1792" y="1216" width="64" height="64"/>
+  <object id="1737" name="CaveDrop" x="1280" y="1216" width="64" height="64"/>
+  <object id="1738" name="CaveDrop" x="3584" y="2304" width="64" height="64"/>
+  <object id="1739" name="CaveDrop" x="4096" y="3136" width="64" height="64"/>
+  <object id="1740" name="CaveDrop" x="5312" y="3456" width="64" height="64"/>
+  <object id="1741" name="CaveDrop" x="5056" y="3520" width="64" height="64"/>
+  <object id="1742" name="CaveDrop" x="5952" y="3008" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="60" name="Enemies">
   <object id="1191" name="Hypnoviper" x="4736" y="3432" width="64" height="64"/>

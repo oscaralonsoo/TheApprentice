@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="118" height="72" tilewidth="64" tileheight="64" infinite="0" nextlayerid="74" nextobjectid="6135">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="118" height="72" tilewidth="64" tileheight="64" infinite="0" nextlayerid="74" nextobjectid="6138">
  <tileset firstgid="1" name="Mangrove_background" tilewidth="64" tileheight="64" tilecount="480" columns="30">
   <image source="../Environment/Mangrove_background.png" width="1920" height="1080"/>
  </tileset>
@@ -65253,7 +65253,7 @@
    <tile gid="17881"/>
    <tile gid="17906"/>
    <tile gid="17906"/>
-   <tile gid="17699"/>
+   <tile gid="17684"/>
    <tile gid="17906"/>
    <tile gid="17906"/>
    <tile gid="17906"/>
@@ -65371,7 +65371,7 @@
    <tile gid="17897"/>
    <tile/>
    <tile/>
-   <tile gid="17714"/>
+   <tile gid="17699"/>
    <tile/>
    <tile/>
    <tile/>
@@ -65489,7 +65489,7 @@
    <tile gid="17907"/>
    <tile/>
    <tile/>
-   <tile gid="17699"/>
+   <tile gid="17714"/>
    <tile/>
    <tile/>
    <tile/>
@@ -65607,7 +65607,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="17714"/>
+   <tile gid="17699"/>
    <tile/>
    <tile/>
    <tile/>
@@ -65725,7 +65725,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="17699"/>
+   <tile gid="17714"/>
    <tile/>
    <tile/>
    <tile/>
@@ -65843,7 +65843,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="17714"/>
+   <tile gid="17699"/>
    <tile/>
    <tile/>
    <tile/>
@@ -65961,7 +65961,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="17699"/>
+   <tile gid="17714"/>
    <tile/>
    <tile/>
    <tile/>
@@ -66079,7 +66079,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="17714"/>
+   <tile gid="17699"/>
    <tile/>
    <tile/>
    <tile/>
@@ -66197,7 +66197,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="17729"/>
+   <tile gid="17714"/>
    <tile/>
    <tile/>
    <tile/>
@@ -66313,13 +66313,13 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
+   <tile/>
+   <tile gid="17729"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="17984"/>
-   <tile gid="17985"/>
-   <tile gid="17985"/>
-   <tile gid="17985"/>
-   <tile gid="17985"/>
-   <tile gid="17985"/>
-   <tile gid="17985"/>
    <tile gid="17986"/>
    <tile/>
    <tile/>
@@ -66431,13 +66431,13 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="18004"/>
-   <tile gid="17989"/>
-   <tile gid="17995"/>
-   <tile gid="17995"/>
-   <tile gid="17995"/>
-   <tile gid="17995"/>
-   <tile gid="17995"/>
+   <tile gid="17984"/>
+   <tile gid="17985"/>
+   <tile gid="17985"/>
+   <tile gid="17985"/>
+   <tile gid="17985"/>
+   <tile gid="17985"/>
+   <tile gid="18009"/>
    <tile gid="18007"/>
    <tile gid="17985"/>
    <tile gid="17986"/>
@@ -66549,10 +66549,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
    <tile gid="18004"/>
-   <tile gid="18005"/>
    <tile gid="17989"/>
+   <tile gid="17995"/>
+   <tile gid="17995"/>
    <tile gid="17995"/>
    <tile gid="17995"/>
    <tile gid="17995"/>
@@ -66668,9 +66668,9 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile gid="17994"/>
+   <tile gid="18004"/>
+   <tile gid="18005"/>
+   <tile gid="17989"/>
    <tile gid="17995"/>
    <tile gid="17995"/>
    <tile gid="17995"/>
@@ -85155,7 +85155,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="69" name="Navigation" width="118" height="72" visible="0">
+ <layer id="69" name="Navigation" width="118" height="72">
   <properties>
    <property name="Navigation" type="bool" value="true"/>
   </properties>
@@ -91824,12 +91824,12 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="2684370225"/>
-   <tile gid="2684370225"/>
-   <tile gid="2684370225"/>
-   <tile gid="2684370225"/>
-   <tile gid="2684370225"/>
-   <tile gid="2684370225"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="2684370225"/>
    <tile gid="2684370225"/>
    <tile/>
@@ -92023,7 +92023,6 @@
    <tile gid="15665"/>
    <tile gid="15665"/>
    <tile gid="15665"/>
-   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -92061,6 +92060,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="15665"/>
    <tile gid="2684370225"/>
    <tile gid="15665"/>
    <tile gid="15665"/>
@@ -92134,7 +92134,6 @@
    <tile gid="2684370225"/>
    <tile gid="2684370225"/>
    <tile gid="2684370225"/>
-   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -92180,7 +92179,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="15665"/>
+   <tile gid="15665"/>
    <tile gid="15665"/>
    <tile gid="15665"/>
    <tile gid="15665"/>
@@ -93674,7 +93674,7 @@
   <object id="5789" name="Dash" x="4979" y="4012" width="384" height="128"/>
  </objectgroup>
  <objectgroup id="65" name="NPC">
-  <object id="6115" name="Caracol" x="4032" y="3520" width="64" height="64"/>
+  <object id="6115" name="Caracol" x="3584" y="3584" width="64" height="64"/>
   <object id="6116" name="Pangolin" x="1792" y="3712" width="448" height="256">
    <properties>
     <property name="dialogueId" type="int" value="11"/>
@@ -93717,7 +93717,7 @@
   <object id="5736" name="Checkpoint" x="768" y="3712" width="384" height="320"/>
  </objectgroup>
  <objectgroup id="62" name="Liana">
-  <object id="3922" x="3712" y="3008" width="64" height="576"/>
+  <object id="3922" x="3712" y="3008" width="64" height="640"/>
   <object id="3935" x="2496" y="2746.67" width="64" height="581.333"/>
   <object id="4676" x="2880" y="2490.67" width="64" height="453.333"/>
   <object id="4908" x="2176" y="896" width="64" height="576"/>
@@ -93788,11 +93788,11 @@
   <object id="5759" x="4416" y="3960.75" width="320"/>
   <object id="5764" x="4224" y="3649.13" height="312.208"/>
   <object id="5766" x="4096" y="3584.25" height="63.75"/>
-  <object id="5772" x="3584" y="3584.75" height="127.25"/>
-  <object id="5773" x="3584" y="3712" width="64"/>
-  <object id="5774" x="3648" y="3712" height="64"/>
-  <object id="5775" x="3648" y="3776" width="128"/>
-  <object id="5776" x="3776" y="3776" height="128"/>
+  <object id="5772" x="3584" y="3648" height="127.25"/>
+  <object id="5773" x="3584" y="3775.25" width="64"/>
+  <object id="5774" x="3648" y="3775.25" height="64"/>
+  <object id="5775" x="3648" y="3839.25" width="128"/>
+  <object id="5776" x="3776" y="3840" height="64"/>
   <object id="5777" x="3776" y="3904" width="64"/>
   <object id="5778" x="3840" y="3904" height="57.3333"/>
   <object id="5784" x="4544" y="3842.25" height="61.75"/>
@@ -93981,6 +93981,7 @@
   <object id="6128" x="6912" y="128" width="64"/>
   <object id="6129" x="6912" y="0" height="128"/>
   <object id="6130" x="7360" y="768" height="320"/>
+  <object id="6137" x="3968" y="3584" height="64"/>
  </objectgroup>
  <objectgroup id="26" name="Collisions">
   <object id="3869" x="2688" y="4160" width="256"/>
@@ -94005,7 +94006,7 @@
   <object id="5577" x="1856" y="1984" width="576"/>
   <object id="5623" x="2176" y="2624" width="384"/>
   <object id="4848" x="3392" y="2880" width="64"/>
-  <object id="5664" x="3584" y="3584" width="512"/>
+  <object id="5664" x="3584" y="3648" width="384"/>
   <object id="5738" x="1152" y="3968" width="1536"/>
   <object id="5739" x="768" y="4032" width="384"/>
   <object id="5765" x="4096" y="3648" width="128"/>
@@ -94050,6 +94051,7 @@
   <object id="6049" x="5248" y="2304" width="512"/>
   <object id="6108" x="6720" y="1664" width="64"/>
   <object id="6109" x="6784" y="1280" width="64"/>
+  <object id="6136" x="3968" y="3584" width="128"/>
  </objectgroup>
  <objectgroup id="73" name="Zones">
   <object id="5824" name="HiddenZone" x="4992" y="3200" width="1152" height="640"/>
@@ -94105,7 +94107,7 @@
   </object>
  </objectgroup>
  <objectgroup id="66" name="HelpZone">
-  <object id="4638" name="Climb" x="3584" y="3392" width="320" height="192"/>
+  <object id="4638" name="Climb" x="3584" y="3456" width="320" height="192"/>
   <object id="5735" name="Save" x="768" y="3840" width="384" height="192"/>
  </objectgroup>
  <objectgroup id="71" name="Zones"/>

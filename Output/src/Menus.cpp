@@ -246,8 +246,8 @@ void Menus::NewGame() {
     auto saveData = config.child("config").child("scene").child("save_data");
 
     auto playerNode = saveData.child("player");
-    playerNode.attribute("x") = 1152;
-    playerNode.attribute("y") = 970;
+    playerNode.attribute("x") = 960;
+    playerNode.attribute("y") = 1728;
     playerNode.attribute("lives") = 2;
     playerNode.attribute("maxlives") = 2;
 

@@ -102,6 +102,7 @@ bool DungBeetle::PostUpdate() {
 
         Engine::GetInstance().pressureSystem->OpenDoor(2);
         Engine::GetInstance().entityManager->DestroyEntity(this);
+        Engine::GetInstance().menus->StartTransition(true, MenusState::ENDING);
     }
 
     return true;

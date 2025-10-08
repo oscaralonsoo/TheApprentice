@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="131" height="68" tilewidth="64" tileheight="64" infinite="0" nextlayerid="78" nextobjectid="6540">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="131" height="68" tilewidth="64" tileheight="64" infinite="0" nextlayerid="78" nextobjectid="6544">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -98272,7 +98272,6 @@
   <object id="5535" x="320" y="1984" height="128"/>
   <object id="5536" x="512" y="1984" height="128"/>
   <object id="5705" x="5504" y="1089.25" height="126.75"/>
-  <object id="5831" x="4416" y="2053.33" height="442.667"/>
   <object id="5863" x="3776" y="2435.33" height="444.667"/>
   <object id="5889" x="3136" y="2310" height="378"/>
  </objectgroup>
@@ -98338,7 +98337,6 @@
   <object id="5618" x="4352" y="1280" width="128"/>
   <object id="5620" x="4480" y="1216" width="192"/>
   <object id="5629" x="2624" y="448" width="64"/>
-  <object id="5733" x="4416" y="2048" width="128"/>
   <object id="5707" x="6272" y="960" width="128"/>
   <object id="5708" x="6400" y="960" width="64"/>
   <object id="5742" x="6464" y="960" width="128"/>
@@ -98357,8 +98355,7 @@
   <object id="5865" x="2624" y="2944" width="1152"/>
   <object id="5888" x="3136" y="2304" width="192"/>
   <object id="5904" x="2432" y="2176" width="64"/>
-  <object id="5923" x="4544" y="2112" width="64"/>
-  <object id="5926" x="4608" y="2240" width="1088"/>
+  <object id="5926" x="4544" y="2240" width="1152"/>
   <object id="5928" x="5696" y="2048" width="64"/>
   <object id="6302" x="320" y="2112" height="64"/>
   <object id="6404" x="3520" y="2752" width="192"/>
@@ -98379,6 +98376,7 @@
   <object id="6525" x="2496" y="2240" width="128"/>
   <object id="6526" x="1024" y="1728" width="256"/>
   <object id="6527" x="2112" y="512" width="512"/>
+  <object id="6542" x="4416" y="1984" width="128"/>
  </objectgroup>
  <objectgroup id="66" name="Liana"/>
  <objectgroup id="77" name="DownCamera" visible="0">
@@ -98586,8 +98584,6 @@
   <object id="5908" x="2688" y="2048" width="128"/>
   <object id="5909" x="2560" y="1856" height="64"/>
   <object id="5910" x="2496" y="1856" width="64"/>
-  <object id="5922" x="4544" y="2048" height="64"/>
-  <object id="5924" x="4608" y="2112" height="128"/>
   <object id="5927" x="5696" y="2052.67" height="187.333"/>
   <object id="5811" x="2624" y="2240" height="512"/>
   <object id="5940" x="3136" y="2688" width="64"/>
@@ -98654,6 +98650,8 @@
   <object id="6537" x="384" y="256" height="64"/>
   <object id="6538" x="1536" y="901.5" height="186.5"/>
   <object id="6539" x="1728" y="1155.33" height="124.667"/>
+  <object id="6540" x="4416" y="1987.67" height="508.333"/>
+  <object id="6541" x="4544" y="1986.58" height="253.417"/>
  </objectgroup>
  <objectgroup id="61" name="Props">
   <object id="5455" name="Checkpoint" x="2240" y="192" width="382" height="320"/>
@@ -98692,6 +98690,7 @@
     <property name="variant" type="int" value="2"/>
    </properties>
   </object>
+  <object id="6543" name="Box" x="4992" y="2176" width="60" height="64"/>
  </objectgroup>
  <objectgroup id="70" name="Abilities">
   <object id="5748" name="Push" x="6592" y="1600" width="512" height="256"/>

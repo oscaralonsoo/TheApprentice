@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="140" height="71" tilewidth="64" tileheight="64" infinite="0" nextlayerid="82" nextobjectid="1731">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="140" height="71" tilewidth="64" tileheight="64" infinite="0" nextlayerid="82" nextobjectid="1736">
  <tileset firstgid="1" name="rocas1" tilewidth="64" tileheight="64" tilecount="480" columns="30">
   <image source="../Environment/rocas1.png" width="1920" height="1080"/>
  </tileset>
@@ -75957,7 +75957,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="7944"/>
+   <tile/>
    <tile gid="7883"/>
    <tile gid="7884"/>
    <tile gid="7884"/>
@@ -76097,8 +76097,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="7873"/>
-   <tile gid="7898"/>
+   <tile/>
+   <tile gid="7883"/>
    <tile gid="7884"/>
    <tile gid="7884"/>
    <tile gid="7884"/>
@@ -76235,10 +76235,10 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
+   <tile/>
    <tile gid="7944"/>
-   <tile gid="7873"/>
-   <tile gid="7898"/>
-   <tile gid="7884"/>
+   <tile gid="7883"/>
    <tile gid="7884"/>
    <tile gid="7884"/>
    <tile gid="7884"/>
@@ -76376,9 +76376,9 @@
    <tile gid="7874"/>
    <tile gid="7874"/>
    <tile gid="7874"/>
+   <tile gid="7874"/>
+   <tile gid="7874"/>
    <tile gid="7898"/>
-   <tile gid="7884"/>
-   <tile gid="7884"/>
    <tile gid="7884"/>
    <tile gid="7884"/>
    <tile gid="7884"/>
@@ -86044,7 +86044,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="7973"/>
+   <tile/>
    <tile gid="7973"/>
    <tile gid="7973"/>
    <tile gid="7973"/>
@@ -86183,8 +86183,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="7973"/>
-   <tile gid="7973"/>
+   <tile/>
+   <tile/>
    <tile gid="7973"/>
    <tile gid="7973"/>
    <tile gid="7973"/>
@@ -99555,7 +99555,7 @@
   </object>
  </objectgroup>
  <objectgroup id="26" name="Collisions">
-  <object id="775" x="6400" y="3008" width="258"/>
+  <object id="775" x="6400" y="3008" width="384"/>
   <object id="800" x="6592" y="1920" width="256"/>
   <object id="942" x="1472" y="1792" width="1472"/>
   <object id="975" x="3456" y="1920" width="64"/>
@@ -99566,8 +99566,6 @@
   <object id="989" x="3008" y="3328" width="64"/>
   <object id="1064" x="6400" y="2368" width="128"/>
   <object id="1065" x="6272" y="2304" width="128"/>
-  <object id="1089" x="6720" y="2880" width="64"/>
-  <object id="1090" x="6656" y="2944" width="64"/>
   <object id="1091" x="6656" y="2496" width="128"/>
   <object id="1101" x="3264" y="2048" width="64"/>
   <object id="1115" x="4928" y="2176" width="64"/>
@@ -99661,8 +99659,6 @@
   <object id="1063" x="6528" y="2368" height="64"/>
   <object id="1066" x="6400" y="2304" height="64"/>
   <object id="1067" x="6272" y="2240" height="64"/>
-  <object id="1081" x="6656" y="2944" height="64"/>
-  <object id="1082" x="6720" y="2880" height="64"/>
   <object id="1085" x="6720" y="2688" height="64"/>
   <object id="1087" x="6656" y="2688" width="64"/>
   <object id="1088" x="6720" y="2752" width="64"/>
@@ -99831,7 +99827,7 @@
   <object id="1720" x="6336" y="3328" height="64"/>
   <object id="1721" x="6336" y="3392" width="64"/>
   <object id="1722" x="6400" y="3392" height="128"/>
-  <object id="1724" x="6784" y="2752" height="128"/>
+  <object id="1724" x="6784" y="2752" height="256"/>
   <object id="1725" x="6208" y="1920" width="320"/>
   <object id="1726" x="6208" y="1920" height="64"/>
   <object id="1727" x="5824" y="1984" width="384"/>
@@ -99867,11 +99863,13 @@
  </objectgroup>
  <objectgroup id="60" name="Enemies">
   <object id="1191" name="Hypnoviper" x="4736" y="3432" width="64" height="64"/>
-  <object id="1417" name="Creebler" x="6464" y="2944" width="64" height="64"/>
+  <object id="1417" name="Creebler" x="6336" y="2560" width="64" height="64"/>
+  <object id="1733" name="Creebler" x="5568" y="2624" width="64" height="64"/>
+  <object id="1735" name="Creebler" x="5248" y="1984" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="62" name="PushableBoxes"/>
- <objectgroup id="80" name="NPC">
-  <object id="1730" name="Caracol" x="5824" y="2624" width="64" height="64"/>
+ <objectgroup id="80" name="NPC" opacity="0.97">
+  <object id="1730" name="Caracol" x="6400" y="2944" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="63" name="Zones" visible="0">
   <object id="1289" name="HiddenZone" x="4318.06" y="2412.97" width="1661.94" height="1511.03"/>

@@ -12,7 +12,6 @@ void HealthSystem::Init(Player* player) {
     soundDamageId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Slime/slime_damage.ogg", 1.0f);
     soundDeadId = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/Slime/slime_dead.ogg", 1.0f);
 }
-
 void HealthSystem::Update(float dt) {
     UpdateVignette();
     CheckDeath();
@@ -28,7 +27,6 @@ void HealthSystem::Update(float dt) {
 
     if (isDying && player->GetAnimation()->GetCurrentState() == "die" && player->GetAnimation()->HasFinished()) {
         isDying = false;
-        lives = maxlives;
         if (Engine::GetInstance().render->cameraLocked) {
             Engine::GetInstance().render->ToggleCameraLock();
         }

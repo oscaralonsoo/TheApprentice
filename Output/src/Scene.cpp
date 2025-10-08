@@ -69,28 +69,52 @@ bool Scene::PreUpdate()
 
 bool Scene::Update(float dt)
 {
-	if (Engine::GetInstance().menus->currentState != MenusState::GAME || isLoading) {
-		return true;
-	}
+    if (Engine::GetInstance().menus->currentState != MenusState::GAME || isLoading) {
+        return true;
+    }
 
-	if (pendingLoadAfterDeath) {
-		pendingLoadAfterDeath = false;
-		LoadGameXML();
-	}
+    if (pendingLoadAfterDeath) {
+        pugi::xml_document config;
+        pugi::xml_parse_result result = config.load_file("config.xml");
+        if (result) {
+            pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
+            if (saveData) {
+                pugi::xml_node playerNode = saveData.child("player");
+                if (playerNode) {
+                    playerNode.attribute("maxlives") = player->GetMechanics()->GetHealthSystem()->GetMaxLives();
+                    playerNode.attribute("lives") = player->GetMechanics()->GetHealthSystem()->GetMaxLives();
+                }
+                pugi::xml_node abilitiesNode = saveData.child("abilities");
+                if (abilitiesNode) {
+                    abilitiesNode.attribute("jump") = player->GetMechanics()->GetMovementHandler()->IsJumpUnlocked();
+                    abilitiesNode.attribute("doublejump") = player->GetMechanics()->GetMovementHandler()->IsDoubleJumpUnlocked();
+                    abilitiesNode.attribute("dash") = player->GetMechanics()->GetMovementHandler()->IsDashUnlocked();
+                    abilitiesNode.attribute("glide") = player->GetMechanics()->GetMovementHandler()->IsGlideUnlocked();
+                    abilitiesNode.attribute("walljump") = player->GetMechanics()->GetMovementHandler()->IsWallJumpUnlocked();
+                    abilitiesNode.attribute("hook") = player->GetMechanics()->GetMovementHandler()->IsHookUnlocked();
+                    abilitiesNode.attribute("push") = player->GetMechanics()->GetMovementHandler()->CanPush();
+                }
+                config.save_file("config.xml");
+                LOG("Save actualizado para respawn: maxlives=%d, lives=%d", player->GetMechanics()->GetHealthSystem()->GetMaxLives(), player->GetMechanics()->GetHealthSystem()->GetMaxLives());
+            }
+        }
 
-	VignetteChanges(dt);
+        pendingLoadAfterDeath = false;
+        LoadGameXML();
+    }
 
-	// Realizar la transición entre escenas
-	UpdateTransition(dt);
+    VignetteChanges(dt);
 
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
-		SaveGameXML();
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
-		LoadGameXML();
+    // Realizar la transición entre escenas
+    UpdateTransition(dt);
 
-	return true;
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
+        SaveGameXML();
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
+        LoadGameXML();
+
+    return true;
 }
-
 
 // Called each loop iteration
 bool Scene::PostUpdate()
@@ -305,30 +329,32 @@ void Scene::SaveGameXML() {
 
 }
 void Scene::LoadGameXML() {
-	if (isLoading||transitioning) return;
-    isLoading = true;
+	if (isLoading || transitioning) return;
+	isLoading = true;
 
-    pugi::xml_document config;
+	pugi::xml_document config;
 
-    pugi::xml_parse_result result = config.load_file("config.xml");
+	pugi::xml_parse_result result = config.load_file("config.xml");
 
-    pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
+	pugi::xml_node saveData = config.child("config").child("scene").child("save_data");
 
-    if (saveData) {
-        pugi::xml_node playerNode = saveData.child("player");
+	if (saveData) {
+		pugi::xml_node playerNode = saveData.child("player");
 		if (playerNode) {
-			int offset = 100;	//Position
+			int offset = 100;    // Position
 			float playerX = playerNode.attribute("x").as_float();
 			float playerY = playerNode.attribute("y").as_float() - offset;
 			newPosition = Vector2D(playerX, playerY);
 
-			int loadedLives = playerNode.attribute("lives").as_int(); //Lives
+			int loadedLives = playerNode.attribute("lives").as_int(); // Lives
 			int loadedMaxLives = playerNode.attribute("maxlives").as_int();
 			player->GetMechanics()->GetHealthSystem()->SetMaxLives(loadedMaxLives);
+
 			if (loadedLives <= 0 || loadedLives > loadedMaxLives) {
-				loadedLives = loadedMaxLives; 
+				loadedLives = loadedMaxLives;
 			}
 			player->GetMechanics()->GetHealthSystem()->SetLives(loadedLives);
+			LOG("Cargando: lives=%d, maxlives=%d", loadedLives, loadedMaxLives);
 		}
 
 		pugi::xml_node abilitiesNode = saveData.child("abilities"); // Abilities
@@ -355,13 +381,12 @@ void Scene::LoadGameXML() {
 				mechanics->GetMovementHandler()->EnablePush(true);
 			}
 		}
-        pugi::xml_node sceneNode = saveData.child("scene");
+		pugi::xml_node sceneNode = saveData.child("scene");
 		if (sceneNode) {
 			int savedScene = sceneNode.attribute("actualScene").as_int();
 			nextScene = savedScene;
 			ChangeScene(savedScene);
 		}
-		// Cargar configuración de audio
 		pugi::xml_node audioNode = config.child("config").child("audio");
 		if (audioNode) {
 			float masterVol = audioNode.child("master").attribute("value").as_float(1.0f);
@@ -377,6 +402,7 @@ void Scene::LoadGameXML() {
 	player->GetMechanics()->GetHealthSystem()->SetIsDying(false);
 	isLoading = false;
 }
+
 void Scene::Vignette(int size, float strength, SDL_Color color)
 {
 	renderer = Engine::GetInstance().render->renderer;

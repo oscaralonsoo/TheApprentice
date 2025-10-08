@@ -49,8 +49,8 @@ private:
     int ballsThrown = 0;
     int currentStatePuzzle = 0;
     int lastPuzzleState = 0;
-    float throwSpeed = 19.0f; 
-    float ballModeSpeed = 20.0f;
+    float throwSpeed = 14.0f; 
+    float ballModeSpeed = 15.0f;
     float time= 0.0;
     Vector2D playerPos;
     Vector2D currentTileMap;

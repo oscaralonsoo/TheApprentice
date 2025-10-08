@@ -80,7 +80,7 @@ bool NPC::Update(float dt)
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - height / 2);
 
 
-	if (type == "caracol") {
+	if (type == "Caracol") {
 		Engine::GetInstance().render.get()->DrawTexture(
 			texture,
 			(int)position.getX(),

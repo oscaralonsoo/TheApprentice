@@ -64,7 +64,7 @@ private:
     float timePassed = 0.0f;
     float lastSinValue = 0.0f;
     float oscillationCount = 0.0f;
-    int oscillationsBeforeAttack = 3;
+    int oscillationsBeforeAttack = 2;
     bool passedZero = false;
 
     // Pre-attack

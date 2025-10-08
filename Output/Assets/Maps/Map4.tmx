@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="43" height="21" tilewidth="64" tileheight="64" infinite="0" nextlayerid="91" nextobjectid="1938">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="43" height="21" tilewidth="64" tileheight="64" infinite="0" nextlayerid="91" nextobjectid="1939">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -9177,7 +9177,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="81" name="Navigation" width="43" height="21" visible="0">
+ <layer id="81" name="Navigation" width="43" height="21">
   <properties>
    <property name="Navigation" type="bool" value="true"/>
   </properties>
@@ -11925,14 +11925,12 @@
   <object id="1775" x="1088" y="768" width="768"/>
   <object id="1794" x="1088" y="640" width="768"/>
   <object id="1817" x="0" y="832" width="192"/>
-  <object id="1830" x="2688" y="192" height="960"/>
   <object id="1831" x="384" y="1152" width="256"/>
   <object id="1832" x="384" y="1024" height="128"/>
   <object id="1856" x="1984" y="1152" width="704"/>
   <object id="1861" x="1792" y="192" width="896"/>
   <object id="1792" x="1088" y="640" height="128"/>
   <object id="1841" x="960" y="512" width="192"/>
-  <object id="1884" x="3154.55" y="793.939"/>
   <object id="1908" x="1984" y="1154.67" height="61.3333"/>
   <object id="1910" x="1472" y="1216" width="512"/>
   <object id="1911" x="1472" y="1153.75" height="62.0859"/>
@@ -11955,6 +11953,7 @@
   <object id="1895" x="192" y="192" height="640"/>
   <object id="1932" x="1984" y="448" width="512"/>
   <object id="1933" x="2496" y="384" height="64"/>
+  <object id="1938" x="2688" y="192" height="960"/>
  </objectgroup>
  <objectgroup id="89" name="Liana"/>
  <objectgroup id="90" name="HookAnchors">

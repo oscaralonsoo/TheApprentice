@@ -366,8 +366,16 @@ void Render::UpdateCamera(const Vector2D& /*unused*/, int movementDirection, flo
 
 	if (camera.x > 0) camera.x = 0;
 	if (camera.y > 0) camera.y = 0;
-	if (camera.x < -(mapWidthPx - camera.w)) camera.x = -(mapWidthPx - camera.w);
-	if (camera.y < -(mapHeightPx - camera.h)) camera.y = -(mapHeightPx - camera.h);
+
+	int minCameraX = -(mapWidthPx - camera.w);
+	int minCameraY = -(mapHeightPx - camera.h);
+
+	if (camera.x < minCameraX) camera.x = minCameraX;
+	if (camera.y < minCameraY) camera.y = minCameraY;
+
+	// Opcional: redondear para evitar pequeños jitterings flotantes
+	camera.x = static_cast<int>(camera.x);
+	camera.y = static_cast<int>(camera.y);
 }
 
 bool Render::DrawText(const char* text, int posx, int posy, SDL_Color color, int fontSize, bool useGaramond) const {

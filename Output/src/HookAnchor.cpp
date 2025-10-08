@@ -54,6 +54,11 @@ bool HookAnchor::Update(float dt)
     {
         if (player && player->pbody && player->pbody->body)
         {
+            if (!player || !player->pbody || !player->pbody->body || player->GetState() == "die") {
+                EndHook();
+                return true;
+            }
+
             if (player->GetState() != "hook") {
                 player->GetAnimation()->SetOverlayState("transition");
                 player->GetAnimation()->ForceSetState("hook");

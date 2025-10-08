@@ -55,14 +55,14 @@ bool NPC::Update(float dt)
 	{
 		if (!hitWall)
 		{
-			pbody->body->SetLinearVelocity(b2Vec2(-0.3f, pbody->body->GetLinearVelocity().y));
+			pbody->body->SetLinearVelocity(b2Vec2(0.3f, pbody->body->GetLinearVelocity().y));
 
-			Vector2D posMap = Engine::GetInstance().map.get()->WorldToMap(position.getX() + texW / 2, position.getY() + texH / 2);
+			Vector2D posMap = Engine::GetInstance().map.get()->WorldToMap((int)position.getX(), position.getY() + texH / 2);
 			int frontX = posMap.x;
 
 			MapLayer* layer = Engine::GetInstance().map.get()->GetNavigationLayer();
 
-			if (layer->Get(frontX - 1, posMap.y - 1))
+			if (layer->Get(frontX + 1, posMap.y - 1))
 			{
 				hitWall = true;
 				pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
@@ -80,14 +80,15 @@ bool NPC::Update(float dt)
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - height / 2);
 
 
-	if (type == "Caracol") {
+	if (type == "caracol") {
 		Engine::GetInstance().render.get()->DrawTexture(
 			texture,
-			(int)position.getX(),
-			(int)position.getY(),
+			(int)position.getX() + width / 2 - texW / 2,
+			(int)position.getY() + height - texH,
 			&currentAnimation->GetCurrentFrame(),
-			1.0f, 0.0, 0, 0,
-			flip, 0, alpha / 255.0f
+			1.0f, 0,
+			INT_MAX, INT_MAX,
+			SDL_FLIP_HORIZONTAL, 1.0f, alpha / 255.0f
 		);
 	}
 	else {

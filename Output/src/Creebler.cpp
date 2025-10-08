@@ -53,7 +53,7 @@ bool Creebler::Update(float dt) {
 
         walkSoundTimer -= dt;
         if (walkSoundTimer <= 0.0f) {
-            Engine::GetInstance().audio->PlayFx(soundWalkId, 0.5f, 0);
+            //Engine::GetInstance().audio->PlayFx(soundWalkId, 0.5f, 0);
             walkSoundTimer = walkSoundInterval;  
         }
 

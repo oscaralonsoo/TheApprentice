@@ -68,7 +68,7 @@ bool Hypnoviper::Update(float dt) {
         if (!sleepSoundPlayed) {
             sleepSoundTimer -= dt;
             if (sleepSoundTimer <= 0.0f) {
-                Engine::GetInstance().audio->PlayFx(soundSleepId, 0.5f, 0);
+                //Engine::GetInstance().audio->PlayFx(soundSleepId, 0.5f, 0);
                 sleepSoundTimer = sleepSoundInterval;
             }
         }

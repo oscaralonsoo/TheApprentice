@@ -49910,8 +49910,8 @@
    <tile gid="7131"/>
    <tile gid="2479"/>
    <tile gid="2477"/>
-   <tile gid="7196"/>
-   <tile gid="7197"/>
+   <tile/>
+   <tile/>
    <tile gid="7198"/>
    <tile gid="7199"/>
    <tile gid="7200"/>
@@ -66317,12 +66317,12 @@
    <tile/>
    <tile gid="17729"/>
    <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="18055"/>
+   <tile gid="18056"/>
    <tile gid="17984"/>
+   <tile gid="17985"/>
+   <tile gid="17985"/>
    <tile gid="17986"/>
-   <tile/>
-   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -66438,9 +66438,9 @@
    <tile gid="17985"/>
    <tile gid="17985"/>
    <tile gid="18009"/>
-   <tile gid="18007"/>
-   <tile gid="17985"/>
-   <tile gid="17986"/>
+   <tile gid="17995"/>
+   <tile gid="17995"/>
+   <tile gid="17996"/>
    <tile/>
    <tile/>
    <tile/>
@@ -85155,7 +85155,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="69" name="Navigation" width="118" height="72">
+ <layer id="69" name="Navigation" width="118" height="72" visible="0">
   <properties>
    <property name="Navigation" type="bool" value="true"/>
   </properties>
@@ -93786,9 +93786,8 @@
   <object id="5757" x="5824" y="4032" width="64"/>
   <object id="5758" x="5888" y="4032" height="128"/>
   <object id="5759" x="4416" y="3960.75" width="320"/>
-  <object id="5764" x="4224" y="3649.13" height="312.208"/>
-  <object id="5766" x="4096" y="3584.25" height="63.75"/>
-  <object id="5772" x="3584" y="3648" height="127.25"/>
+  <object id="5764" x="4224" y="3586.18" height="375.156"/>
+  <object id="5772" x="3584" y="3649.64" height="125.614"/>
   <object id="5773" x="3584" y="3775.25" width="64"/>
   <object id="5774" x="3648" y="3775.25" height="64"/>
   <object id="5775" x="3648" y="3839.25" width="128"/>
@@ -93981,7 +93980,7 @@
   <object id="6128" x="6912" y="128" width="64"/>
   <object id="6129" x="6912" y="0" height="128"/>
   <object id="6130" x="7360" y="768" height="320"/>
-  <object id="6137" x="3968" y="3584" height="64"/>
+  <object id="6137" x="3968" y="3586" height="62"/>
  </objectgroup>
  <objectgroup id="26" name="Collisions">
   <object id="3869" x="2688" y="4160" width="256"/>
@@ -94009,7 +94008,6 @@
   <object id="5664" x="3584" y="3648" width="384"/>
   <object id="5738" x="1152" y="3968" width="1536"/>
   <object id="5739" x="768" y="4032" width="384"/>
-  <object id="5765" x="4096" y="3648" width="128"/>
   <object id="5781" x="4416" y="3904" width="128"/>
   <object id="5782" x="4544" y="3840" width="64"/>
   <object id="5783" x="4608" y="3712" width="128"/>
@@ -94051,7 +94049,7 @@
   <object id="6049" x="5248" y="2304" width="512"/>
   <object id="6108" x="6720" y="1664" width="64"/>
   <object id="6109" x="6784" y="1280" width="64"/>
-  <object id="6136" x="3968" y="3584" width="128"/>
+  <object id="6136" x="3968" y="3584" width="256"/>
  </objectgroup>
  <objectgroup id="73" name="Zones">
   <object id="5824" name="HiddenZone" x="4992" y="3200" width="1152" height="640"/>

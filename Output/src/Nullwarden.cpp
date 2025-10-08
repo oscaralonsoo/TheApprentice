@@ -181,9 +181,9 @@ bool Nullwarden::PostUpdate() {
     if (currentState == NullwardenState::DEATH && currentAnimation == &deathAnim && currentAnimation->HasFinished()) {
         Engine::GetInstance().audio->PlayFx(soundDeadId, 1.0f, 0);
         Engine::GetInstance().render->ToggleCameraLock();
-        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         Engine::GetInstance().pressureSystem->OpenDoor(2);
-
+        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+        Engine::GetInstance().menus->StartTransition(true, MenusState::ENDING);
     }
     return true;
 }

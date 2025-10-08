@@ -22,7 +22,7 @@ T Clamp(T value, T min, T max)
     return value;
 }
 
-Menus::Menus() : currentState(MenusState::MAINMENU), transitionAlpha(0.0f), inTransition(false), fadingIn(false), nextState(MenusState::NONE),
+Menus::Menus() : currentState(MenusState::INTRO), transitionAlpha(0.0f), inTransition(false), fadingIn(false), nextState(MenusState::NONE),
 fastTransition(false), menuBackground(nullptr), pauseBackground(nullptr) {}
 
 Menus::~Menus() {}
@@ -160,6 +160,7 @@ std::string Menus::GetBackgroundKey() const {
     case MenusState::CREDITS: return "credits";
     case MenusState::CONTROLS: return "controls";
     case MenusState::ABILITIES: return "abilities";
+    case MenusState::ENDING: return "ending";
     default: return "";
     }
 }
@@ -187,6 +188,7 @@ void Menus::CheckCurrentState(float dt) {
     case MenusState::CREDITS: Credits(); break;
     case MenusState::PLAYING_VIDEO: break;
     case MenusState::EXIT: isExit = true; break;
+    case MenusState::ENDING: Ending(); break;
     }
 }
 void Menus::Intro(float dt) {
@@ -473,6 +475,41 @@ void Menus::Credits() {
     }
 
 }
+void Menus::Ending() {
+
+    static bool creditMusicStarted = false;
+
+    if (!creditMusicStarted) {
+        Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/credit_music.ogg", 0.0f, 0.5f);
+        creditMusicStarted = true;
+    }
+    bool escapePressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN;
+    bool spacePressed = Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN;
+
+    if (controller && SDL_GameControllerGetAttached(controller)) {
+        bool bNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_B);
+        bool aNow = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A);
+
+        if (bNow && !bHeld) {
+            escapePressed = true;
+        }
+        if (aNow && !aHeld) {
+            spacePressed = true;
+        }
+
+        bHeld = bNow;
+        aHeld = aNow;
+    }
+
+    if (escapePressed || spacePressed) {
+        creditMusicStarted = false;
+        Engine::GetInstance().audio->StopMusic();
+        Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/mainmenu_music.ogg", 2.0f, 0.5f);
+        StartTransition(true, MenusState::MAINMENU);
+    }
+}
+
+
 void Menus::UpdateVideoPlayer() {
     if (videoPlayer) {
         bool videoFinished = !videoPlayer->Update();

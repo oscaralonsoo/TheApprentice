@@ -14,7 +14,7 @@
 #include <SDL2/SDL_gamecontroller.h>
 
 enum class MenusState {
-    NONE, INTRO, MAINMENU, GAME, PAUSE, SETTINGS,CONTROLS, CREDITS, DEAD, GAMEOVER, EXIT, ABILITIES, PLAYING_VIDEO
+    NONE, INTRO, MAINMENU, GAME, PAUSE, SETTINGS,CONTROLS, CREDITS, DEAD, GAMEOVER, EXIT, ABILITIES, PLAYING_VIDEO, ENDING
 };
 
 struct ButtonInfo {
@@ -80,6 +80,7 @@ public:
     void DrawCheckBox(const ButtonInfo& button, bool isSelected);
     void DrawAbilities();
     void DrawSliders();
+    void Ending();
     void SetController(SDL_GameController* controller);
     void SpawnMenuParticles();
     void UpdateMenuParticles();

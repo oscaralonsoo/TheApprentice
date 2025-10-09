@@ -13,7 +13,7 @@
 #include "MenuParticle.h"
 #include "ParticleManager.h"
 #include "GuiControlButton.h"
-
+#include "EntityManager.h"
 template<typename T>
 T Clamp(T value, T min, T max)
 {
@@ -299,7 +299,16 @@ void Menus::Pause(float dt) {
         case 0: isPaused = false; StartTransition(true, MenusState::GAME); break;
         case 1: inConfig = true; StartTransition(true, MenusState::SETTINGS); break;
         case 2:  StartTransition(true, MenusState::CONTROLS); break;
-        case 3: StartTransition(true, MenusState::MAINMENU); Engine::GetInstance().audio->StopMusic(); Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/mainmenu_music.ogg", 2.0f, 1.0f);  break;
+        case 3:
+            Engine::GetInstance().map->CleanUp();
+            Engine::GetInstance().entityManager.get()->DestroyAllEntities();
+            Engine::GetInstance().audio->StopMusic();
+            Engine::GetInstance().scene->hookManager->ClearHooks();
+            Engine::GetInstance().scene->SetActiveHook(nullptr);
+            StartTransition(true, MenusState::MAINMENU);
+            Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/mainmenu_music.ogg", 2.0f, 1.0f);
+            break;
+
         case 4: currentState = MenusState::EXIT; break;
         }
     }
@@ -508,18 +517,15 @@ void Menus::Ending() {
         StartTransition(true, MenusState::MAINMENU);
     }
 }
-
-
 void Menus::UpdateVideoPlayer() {
     if (videoPlayer) {
         bool videoFinished = !videoPlayer->Update();
-
         if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) videoFinished = true;
-        
+
         if (videoFinished) {
             videoPlayer->CleanUp();
             videoPlayer = nullptr;
-
+            Engine::GetInstance().scene->LoadGameXML();
             Engine::GetInstance().audio->PlayMusic("Assets/Audio/music/cave_music.ogg", 1.0f, 0.5f);
             StartTransition(false, MenusState::GAME);
         }

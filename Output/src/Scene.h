@@ -111,7 +111,7 @@ public:
 	int soundUI2Id = 0;
 	bool ui1SoundPlayed = false;
 	bool ui2SoundPlayed = false;
-
+	HookManager* hookManager = nullptr;
 private:
 	SDL_Texture* img;
 	//L03: TODO 3b: Declare a Player attribute
@@ -137,5 +137,5 @@ private:
 
 	HookAnchor* activeHook = nullptr;
 
-	HookManager* hookManager = nullptr;
+
 };

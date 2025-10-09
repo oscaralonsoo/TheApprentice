@@ -241,5 +241,4 @@ void DialogueManager::SetPlayerMovement(bool freeze)
 	player->pbody->body->SetLinearVelocity(b2Vec2_zero);
 
 	player->GetMechanics()->GetMovementHandler()->SetCantMove(freeze);
-	player->GetMechanics()->GetJumpMechanic()->Enable(!freeze);
 }

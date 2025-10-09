@@ -166,8 +166,16 @@ void HookManager::MarkHookAsUsed(IHookable* hook) {
 
 void HookManager::ResetUsedHooks() {
     for (IHookable* hook : usedHooks) {
-        hook->ResetHook();
-        RegisterHook(hook);
+        // Si es un HookAnchor, aplica un reset profundo
+        if (auto* anchor = dynamic_cast<HookAnchor*>(hook)) {
+            anchor->FullReset();
+            RegisterHook(anchor);
+        }
+        else {
+            // Fallback para otros IHookable
+            hook->ResetHook();
+            RegisterHook(hook);
+        }
     }
     usedHooks.clear();
 }

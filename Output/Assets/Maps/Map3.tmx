@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="131" height="68" tilewidth="64" tileheight="64" infinite="0" nextlayerid="78" nextobjectid="6551">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="131" height="68" tilewidth="64" tileheight="64" infinite="0" nextlayerid="78" nextobjectid="6555">
  <tileset firstgid="1" name="tiles_cave" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../Props/tiles_cave.png" width="640" height="640"/>
  </tileset>
@@ -98267,10 +98267,6 @@
  </layer>
  <objectgroup id="57" name="WallSlide">
   <object id="5608" x="3520" y="1408" height="256"/>
-  <object id="5538" x="256" y="1856" height="128"/>
-  <object id="5541" x="256" y="1792" height="64"/>
-  <object id="5535" x="320" y="1984" height="128"/>
-  <object id="5536" x="512" y="1984" height="128"/>
   <object id="5705" x="5504" y="1089.25" height="126.75"/>
   <object id="5863" x="3776" y="2435.33" height="316.67"/>
   <object id="5889" x="3136" y="2310" height="378"/>
@@ -98291,7 +98287,7 @@
   <object id="6504" name="Hook" x="1600" y="1152" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="63" name="Spikes">
-  <object id="5753" name="Spikes" x="6016" y="1218.36" width="128" height="61.6364"/>
+  <object id="5753" name="Spikes" x="6016" y="1224.36" width="128" height="55.6364"/>
   <object id="5839" x="3968" y="2434.67" width="448" height="61.3333"/>
   <object id="5867" x="2624" y="2816" width="1024" height="128"/>
  </objectgroup>
@@ -98337,9 +98333,6 @@
   <object id="5618" x="4352" y="1280" width="128"/>
   <object id="5620" x="4480" y="1216" width="192"/>
   <object id="5629" x="2624" y="448" width="64"/>
-  <object id="5707" x="6272" y="960" width="128"/>
-  <object id="5708" x="6400" y="960" width="64"/>
-  <object id="5742" x="6464" y="960" width="128"/>
   <object id="5661" x="6144" y="1152" width="128"/>
   <object id="5697" x="6016" y="1280" width="128"/>
   <object id="5700" x="5952" y="1216" width="64"/>
@@ -98357,7 +98350,6 @@
   <object id="5904" x="2432" y="2176" width="64"/>
   <object id="5926" x="4544" y="2240" width="1152"/>
   <object id="5928" x="5696" y="2048" width="64"/>
-  <object id="6302" x="320" y="2112" height="64"/>
   <object id="6404" x="3648" y="2752" width="128"/>
   <object id="6424" x="6592" y="1792" width="960"/>
   <object id="6426" x="7552" y="1728" width="64"/>
@@ -98377,6 +98369,7 @@
   <object id="6526" x="1024" y="1728" width="256"/>
   <object id="6527" x="2112" y="512" width="512"/>
   <object id="6542" x="4416" y="1984" width="128"/>
+  <object id="6554" x="6272" y="960" width="320"/>
  </objectgroup>
  <objectgroup id="66" name="Liana"/>
  <objectgroup id="77" name="DownCamera" visible="0">
@@ -98446,10 +98439,10 @@
   <object id="5495" x="2048" y="1664" height="128"/>
   <object id="5498" x="2240" y="1664" height="128"/>
   <object id="5500" x="2240" y="1792" width="128"/>
-  <object id="5521" x="1280" y="1664" height="64"/>
-  <object id="5583" x="1024" y="1728" height="64"/>
-  <object id="5552" x="960" y="1792" height="128"/>
-  <object id="5554" x="896" y="1920" height="64"/>
+  <object id="5521" x="1280" y="1665.09" height="62.9091"/>
+  <object id="5583" x="1024" y="1729.27" height="62.7273"/>
+  <object id="5552" x="960" y="1793.18" height="126.818"/>
+  <object id="5554" x="896" y="1921.75" height="62.25"/>
   <object id="5518" x="896" y="1472" width="128"/>
   <object id="5519" x="896" y="1472" height="64"/>
   <object id="5520" x="832" y="1536" width="64"/>
@@ -98484,7 +98477,7 @@
   <object id="5740" x="6464" y="768" width="128"/>
   <object id="5741" x="6592" y="768" height="192"/>
   <object id="5662" x="6144" y="1154.5" height="125.5"/>
-  <object id="5698" x="6016" y="1216" height="64"/>
+  <object id="5698" x="6016" y="1216.45" height="63.5455"/>
   <object id="5701" x="5952" y="1153.25" height="62.75"/>
   <object id="5703" x="5760" y="1089.25" height="62.75"/>
   <object id="5667" x="5760" y="1536" width="192"/>
@@ -98649,11 +98642,14 @@
   <object id="6545" x="4736" y="2048" width="128"/>
   <object id="6549" x="3712" y="2304" height="256"/>
   <object id="6550" x="3648" y="2754" height="190"/>
+  <object id="6551" x="512" y="1984.63" height="127.375"/>
+  <object id="6552" x="320" y="1987" height="189"/>
+  <object id="6553" x="256" y="1795.5" height="188.5"/>
  </objectgroup>
  <objectgroup id="61" name="Props">
   <object id="5455" name="Checkpoint" x="2240" y="192" width="382" height="320"/>
   <object id="5561" name="Box" x="640" y="1920" width="64" height="64"/>
-  <object id="5812" name="Box" x="2304" y="1984" width="60" height="64"/>
+  <object id="5812" name="Box" x="2304" y="1985.67" width="60" height="62.3333"/>
   <object id="5815" name="Box" x="5632" y="1024" width="64" height="64"/>
   <object id="5913" name="Stalactite" x="4352" y="512" width="64" height="64">
    <properties>
@@ -98666,12 +98662,7 @@
    </properties>
   </object>
   <object id="6370" name="LifePlant" x="6080" y="1600" width="64" height="64"/>
-  <object id="6423" name="Stalactite" x="1024" y="1408" width="64" height="64">
-   <properties>
-    <property name="variant" type="int" value="2"/>
-   </properties>
-  </object>
-  <object id="6494" name="Stalactite" x="4416" y="1728" width="64" height="64">
+  <object id="6423" name="Stalactite" x="1088" y="1408" width="64" height="64">
    <properties>
     <property name="variant" type="int" value="2"/>
    </properties>
@@ -98708,7 +98699,7 @@
     <property name="groupId" type="int" value="4"/>
    </properties>
   </object>
-  <object id="5819" name="Door" x="6340" y="768" width="64" height="192">
+  <object id="5819" name="Door" x="6336" y="768" width="64" height="192">
    <properties>
     <property name="groupId" type="int" value="4"/>
    </properties>
@@ -98741,7 +98732,7 @@
  </objectgroup>
  <objectgroup id="65" name="DestructibleWalls"/>
  <objectgroup id="73" name="NPC">
-  <object id="5743" name="CaracolMail" x="6405" y="768" width="187" height="192">
+  <object id="5743" name="CaracolMail" x="6400" y="768" width="192" height="192">
    <properties>
     <property name="dialogueId" type="int" value="62"/>
    </properties>

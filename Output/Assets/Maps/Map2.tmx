@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="118" height="72" tilewidth="64" tileheight="64" infinite="0" nextlayerid="74" nextobjectid="6138">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="118" height="72" tilewidth="64" tileheight="64" infinite="0" nextlayerid="74" nextobjectid="6139">
  <tileset firstgid="1" name="Mangrove_background" tilewidth="64" tileheight="64" tilecount="480" columns="30">
   <image source="../Environment/Mangrove_background.png" width="1920" height="1080"/>
  </tileset>
@@ -93981,6 +93981,7 @@
   <object id="6129" x="6912" y="0" height="128"/>
   <object id="6130" x="7360" y="768" height="320"/>
   <object id="6137" x="3968" y="3586" height="62"/>
+  <object id="6138" x="1088" y="1472" height="128"/>
  </objectgroup>
  <objectgroup id="26" name="Collisions">
   <object id="3869" x="2688" y="4160" width="256"/>
@@ -94068,7 +94069,6 @@
   <object id="4847" x="3392" y="2881.33" height="62.6667"/>
   <object id="5624" x="2560" y="2627.5" height="124.136"/>
   <object id="4898" x="1152" y="1601" height="127"/>
-  <object id="5259" x="1088" y="1472" height="128"/>
   <object id="5261" x="1152" y="1344" height="128"/>
   <object id="5267" x="1472" y="1088" height="128"/>
   <object id="5275" x="2368" y="706" height="190"/>
@@ -94106,7 +94106,7 @@
  </objectgroup>
  <objectgroup id="66" name="HelpZone">
   <object id="4638" name="Climb" x="3584" y="3456" width="320" height="192"/>
-  <object id="5735" name="Save" x="768" y="3840" width="384" height="192"/>
+  <object id="5735" name="Save" x="786.5" y="3904" width="415" height="128"/>
  </objectgroup>
  <objectgroup id="71" name="Zones"/>
 </map>

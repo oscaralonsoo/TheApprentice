@@ -130,7 +130,6 @@ bool Noctilume::CleanUp() {
 
 void Noctilume::OnCollision(PhysBody* physA, PhysBody* physB) {
     Enemy::OnCollision(physA, physB);
-
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
         if (currentState == NoctilumeState::ATTACK && isDiving) {
@@ -144,8 +143,13 @@ void Noctilume::OnCollision(PhysBody* physA, PhysBody* physB) {
             isDiving = false;
         break;
     case ColliderType::ATTACK:
-        if (currentState == NoctilumeState::CRASH)
+        if (currentState != NoctilumeState::DEAD) {
             currentState = NoctilumeState::DEAD;
+            if (!deadSoundPlayed) {
+                Engine::GetInstance().audio->PlayFx(soundDeadId, 0.5f, 0);
+                deadSoundPlayed = true;
+            }
+        }
         break;
     }
 }
@@ -252,19 +256,23 @@ void Noctilume::Crash(float dt) {
         crashTimer = 0.0f;
     }
 }
-
 void Noctilume::Die() {
     currentAnimation = &dieAnim;
-
     if (pbody && pbody->body) {
-        pbody->body->SetLinearVelocity(b2Vec2_zero);
         pbody->body->SetAngularVelocity(0);
-
+      
+        if (previousState != NoctilumeState::CRASH && previousState != NoctilumeState::DEAD) { 
+         
+            pbody->body->SetLinearVelocity(b2Vec2(0, -500.0f / PIXELS_PER_METER));
+            pbody->body->SetGravityScale(1.0f);  
+        }
+        else {
+            pbody->body->SetLinearVelocity(b2Vec2_zero);
+        }
         if (pbody->body->GetFixtureList())
             pbody->body->GetFixtureList()->SetSensor(true);
     }
 }
-
 void Noctilume::CheckState() {
     if (currentState == NoctilumeState::ATTACK ||
         currentState == NoctilumeState::CRASH ||
@@ -280,6 +288,9 @@ void Noctilume::CheckState() {
             pbody->body->SetLinearVelocity(b2Vec2_zero);
             pbody->body->SetAngularVelocity(0);
         }
+    }
+    if (currentState != previousState) {
+        previousState = currentState;  
     }
 }
 

@@ -63467,7 +63467,7 @@
    <tile gid="5224"/>
    <tile gid="5171"/>
    <tile gid="5172"/>
-   <tile gid="5173"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -73965,10 +73965,10 @@
    <tile gid="7884"/>
    <tile gid="7884"/>
    <tile gid="7885"/>
-   <tile gid="7947"/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="7906"/>
+   <tile gid="7907"/>
+   <tile gid="7911"/>
+   <tile gid="7912"/>
    <tile/>
    <tile/>
    <tile/>
@@ -74105,11 +74105,11 @@
    <tile gid="7884"/>
    <tile gid="7884"/>
    <tile gid="7896"/>
-   <tile gid="7874"/>
-   <tile gid="7874"/>
-   <tile gid="7874"/>
-   <tile gid="7874"/>
-   <tile gid="7923"/>
+   <tile gid="7916"/>
+   <tile gid="7917"/>
+   <tile gid="7921"/>
+   <tile gid="7922"/>
+   <tile gid="1610620660"/>
    <tile gid="7915"/>
    <tile/>
    <tile/>
@@ -97519,11 +97519,11 @@
    <tile/>
    <tile/>
    <tile gid="3341"/>
-   <tile gid="3342"/>
-   <tile gid="3343"/>
-   <tile gid="3344"/>
-   <tile gid="3345"/>
-   <tile gid="3346"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="3347"/>
    <tile/>
    <tile/>
@@ -99628,8 +99628,8 @@
   <object id="965" x="3200" y="2496" width="64"/>
   <object id="966" x="3264" y="2432" width="64"/>
   <object id="967" x="3584" y="2304" width="128"/>
-  <object id="968" x="3520" y="2240" width="64"/>
-  <object id="969" x="3456" y="2112" width="64"/>
+  <object id="968" x="3522.33" y="2240" width="61.6667"/>
+  <object id="969" x="3458.33" y="2112" width="61.6667"/>
   <object id="979" x="3136" y="2816" width="62.75"/>
   <object id="980" x="3008" y="2880" width="128"/>
   <object id="981" x="3136" y="2816" height="64"/>
@@ -99841,13 +99841,13 @@
  <objectgroup id="61" name="DestructibleWalls" visible="0"/>
  <objectgroup id="64" name="Props">
   <object id="1301" name="LifePlant" x="5120" y="2560" width="64" height="64"/>
-  <object id="1365" name="CaveDrop" x="6336" y="3264" width="64" height="64"/>
+  <object id="1365" name="CaveDrop" x="6272" y="3328" width="64" height="64"/>
   <object id="1366" name="CaveDrop" x="5247" y="2496" width="64" height="64"/>
   <object id="1367" name="CaveDrop" x="5952" y="2432" width="64" height="64"/>
   <object id="1368" name="CaveDrop" x="6208" y="2496" width="64" height="64"/>
-  <object id="1369" name="CaveDrop" x="6656" y="2304" width="64" height="64"/>
+  <object id="1369" name="CaveDrop" x="6656" y="2176" width="64" height="64"/>
   <object id="1370" name="CaveDrop" x="5632" y="1600" width="64" height="64"/>
-  <object id="1371" name="CaveDrop" x="5312" y="1664" width="64" height="64"/>
+  <object id="1371" name="CaveDrop" x="5376" y="1664" width="64" height="64"/>
   <object id="1373" name="CaveDrop" x="7104" y="1728" width="64" height="64"/>
   <object id="1374" name="CaveDrop" x="7360" y="1600" width="64" height="64"/>
   <object id="1375" name="CaveDrop" x="6208" y="1600" width="64" height="64"/>
@@ -99856,7 +99856,7 @@
   <object id="1383" name="CaveDrop" x="3776" y="2944" width="64" height="64"/>
   <object id="1385" name="CaveDrop" x="4416" y="3520" width="64" height="64"/>
   <object id="1386" name="CaveDrop" x="5952" y="3520" width="64" height="64"/>
-  <object id="1415" name="CaveDrop" x="6144" y="1856" width="64" height="64"/>
+  <object id="1415" name="CaveDrop" x="6272" y="1920" width="64" height="64"/>
   <object id="1470" name="LifePlantMax" x="3712" y="1536" width="64" height="64"/>
   <object id="1573" name="CaveDrop" x="4480" y="1664" width="64" height="64"/>
   <object id="1574" name="CaveDrop" x="4736" y="1728" width="64" height="64"/>
@@ -99878,9 +99878,9 @@
  <objectgroup id="80" name="NPC" opacity="0.97">
   <object id="1730" name="Caracol" x="6400" y="2944" width="64" height="64"/>
  </objectgroup>
- <objectgroup id="63" name="Zones" visible="0">
-  <object id="1289" name="HiddenZone" x="4318.06" y="2412.97" width="1661.94" height="1511.03"/>
-  <object id="1500" name="HiddenZone" x="3904" y="1344" width="1024" height="768"/>
+ <objectgroup id="63" name="Zones">
+  <object id="1289" name="HiddenZone" x="4318.06" y="3136.97" width="1661.94" height="787.03"/>
+  <object id="1500" name="HiddenZone" x="3904" y="1344" width="996.333" height="768"/>
  </objectgroup>
  <objectgroup id="65" name="DownCamera" visible="0">
   <object id="1136" x="2752" y="1472" width="1024" height="1536"/>

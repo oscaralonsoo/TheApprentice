@@ -272,3 +272,27 @@ void HookAnchor::Use()
     }
 }
 
+void HookAnchor::FullReset()
+{
+    // Si estaba en medio del hook, ciérralo limpiamente
+    if (isHooking) {
+        EndHook();
+    }
+    else {
+        // Asegura que el jugador no quede bloqueado ni con gravedad 0 si algo se interrumpió
+        Player* player = Engine::GetInstance().scene->GetPlayer();
+        if (player && player->pbody && player->pbody->body) {
+            player->GetMechanics()->GetMovementHandler()->SetCantMove(false);
+            player->pbody->body->SetGravityScale(2.0f);
+        }
+    }
+
+    // Restablece completamente el estado interno del gancho
+    hookUsed = false;
+    cancelledByProximity = false;
+    wasOnGroundAtHookStart = false;
+    isHooking = false;
+
+    // Si usas un Timer con Stop/Reset puedes llamarlo aquí; si no, lo dejamos así.
+    // hookTimer.Stop();  // <- solo si tu Timer lo soporta
+}

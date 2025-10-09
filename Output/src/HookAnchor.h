@@ -31,6 +31,7 @@ public:
     Vector2D GetRenderPosition() const override { return position; }
     int GetRenderWidth() const override { return width; }
     int GetRenderHeight() const override { return height; }
+    void FullReset();
 
 private:
     PhysBody* pbody = nullptr;

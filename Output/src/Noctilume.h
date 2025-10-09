@@ -37,6 +37,7 @@ private:
 
 private:
     NoctilumeState currentState = NoctilumeState::IDLE;
+    NoctilumeState previousState = NoctilumeState::IDLE;
 
     Vector2D originalPosition;
     Vector2D smoothedPosition;

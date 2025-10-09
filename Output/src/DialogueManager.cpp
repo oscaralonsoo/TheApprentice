@@ -235,12 +235,11 @@ void DialogueManager::ResetTyping() {
 	forceTypingFinish = false;
 }
 
-void DialogueManager::SetPlayerMovement(bool isMoving) {
+void DialogueManager::SetPlayerMovement(bool freeze)
+{
 	Player* player = Engine::GetInstance().scene.get()->GetPlayer();
 	player->pbody->body->SetLinearVelocity(b2Vec2_zero);
-	player->GetMechanics()->GetMovementHandler()->SetCantMove(isMoving);
-	player->GetMechanics()->GetJumpMechanic()->Enable(!isMoving);
-	//player->GetMechanics()->GetMovementHandler()->EnableJump(isMoving);
-	//player->GetMechanics()->GetMovementHandler()->EnableDoubleJump(isMoving);
-	//player->GetMechanics()->GetMovementHandler()->EnableDash(isMoving);
+
+	player->GetMechanics()->GetMovementHandler()->SetCantMove(freeze);
+	player->GetMechanics()->GetJumpMechanic()->Enable(!freeze);
 }

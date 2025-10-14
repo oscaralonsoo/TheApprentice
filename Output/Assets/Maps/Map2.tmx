@@ -93711,7 +93711,7 @@
   <object id="4179" name="CaveDrop" x="3840" y="3008" width="64" height="64"/>
   <object id="4249" name="CaveDrop" x="3584" y="3008" width="64" height="64"/>
   <object id="4931" name="LifePlant" x="5376" y="2112" width="192" height="192"/>
-  <object id="5540" name="LifePlantMax" x="5475" y="3392" width="192" height="192"/>
+  <object id="5540" name="LifePlantMax" x="5440" y="3328" width="256" height="256"/>
   <object id="4999" name="LifePlant" x="1748.67" y="2559.33" width="192" height="192"/>
   <object id="4968" name="LifePlantMax" x="1856" y="384" width="192" height="192"/>
   <object id="5736" name="Checkpoint" x="768" y="3712" width="384" height="320"/>
@@ -93801,15 +93801,15 @@
   <object id="5792" x="5056" y="3968" width="192"/>
   <object id="5793" x="5248" y="3904" height="64"/>
   <object id="5807" x="4864" y="3456" width="512"/>
-  <object id="5809" x="5376" y="3392" width="64"/>
-  <object id="5810" x="5440" y="3328" width="256"/>
-  <object id="5811" x="5696" y="3392" width="64"/>
+  <object id="5809" x="5376" y="3392" width="57.3333"/>
+  <object id="5810" x="5440" y="3322.67" width="256"/>
+  <object id="5811" x="5700.67" y="3392" width="59.3333"/>
   <object id="5812" x="5760" y="3392" height="192"/>
   <object id="5816" x="4800" y="3328" height="64"/>
   <object id="5820" x="4736" y="3651.33" height="60.6667"/>
   <object id="5821" x="5376" y="3392" height="64"/>
-  <object id="5822" x="5440" y="3328" height="64"/>
-  <object id="5823" x="5696" y="3328" height="64"/>
+  <object id="5822" x="5436.67" y="3328" height="64"/>
+  <object id="5823" x="5698" y="3328" height="64"/>
   <object id="5826" x="5184" y="3589.05" height="122.958"/>
   <object id="5827" x="5376" y="3588.63" height="123.375"/>
   <object id="5828" x="5184" y="3712" width="192"/>
@@ -94052,7 +94052,7 @@
   <object id="6109" x="6784" y="1280" width="64"/>
   <object id="6136" x="3968" y="3584" width="256"/>
  </objectgroup>
- <objectgroup id="73" name="Zones">
+ <objectgroup id="73" name="Zones" visible="0">
   <object id="5824" name="HiddenZone" x="4992" y="3200" width="1152" height="640"/>
   <object id="5956" name="HiddenZone" x="1088" y="1991" width="1036" height="505"/>
  </objectgroup>
@@ -94105,7 +94105,7 @@
   </object>
  </objectgroup>
  <objectgroup id="66" name="HelpZone">
-  <object id="4638" name="Climb" x="3584" y="3456" width="320" height="192"/>
+  <object id="4638" name="Climb" x="3520" y="3456" width="347" height="192"/>
   <object id="5735" name="Save" x="786.5" y="3904" width="415" height="128"/>
  </objectgroup>
  <objectgroup id="71" name="Zones"/>
